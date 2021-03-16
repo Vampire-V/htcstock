@@ -3,6 +3,7 @@
 namespace App\Services\KPI\Service;
 
 use App\Models\KPI\Evaluate;
+use App\Models\User;
 use App\Services\BaseService;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,6 +30,15 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
         }
     }
 
+    public function byStaff(User $staff)
+    {
+        try {
+            return Evaluate::where('user_id', $staff->id)->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     public function dropdown(): Collection
     {
         try {
@@ -37,4 +47,25 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
             throw $th;
         }
     }
+
+    public function isDuplicate(int $user, int $period)
+    {
+        try {
+            $evaluation = Evaluate::firstWhere(['user_id' => $user, 'period_id' => $period]);
+            return \is_null($evaluation) ? false : $evaluation;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function findKeyEvaluate(int $user, int $period, int $evaluate)
+    {
+        try {
+            $evaluation = Evaluate::firstWhere(['user_id' => $user, 'period_id' => $period, 'id' => $evaluate]);
+            return \is_null($evaluation) ? false : $evaluation;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
 }

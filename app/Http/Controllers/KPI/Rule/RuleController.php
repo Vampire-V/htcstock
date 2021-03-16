@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\KPI\Rule;
 
+use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\KPI\StoreRulePost;
 use App\Http\Requests\KPI\UpdateRulePost;
+use App\Http\Resources\KPI\RuleResource;
 use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\TargetUnitServiceInterface;
@@ -47,7 +49,8 @@ class RuleController extends Controller
     {
         $category = $this->ruleCategoryService->dropdown();
         $unit = $this->targetUnitService->dropdown();
-        return \view('kpi.RuleList.create', \compact('category', 'unit'));
+        $calcuTypes = [KPIEnum::percent, KPIEnum::amount];
+        return \view('kpi.RuleList.create', \compact('category', 'unit', 'calcuTypes'));
     }
 
     /**
@@ -82,7 +85,12 @@ class RuleController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $rule = $this->ruleService->find($id);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        return new RuleResource($rule);
     }
 
     /**
@@ -97,10 +105,11 @@ class RuleController extends Controller
             $rule = $this->ruleService->find($id);
             $category = $this->ruleCategoryService->dropdown();
             $unit = $this->targetUnitService->dropdown();
+            $calcuTypes = [KPIEnum::percent, KPIEnum::amount];
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \view('kpi.RuleList.edit', \compact('rule', 'category', 'unit'));
+        return \view('kpi.RuleList.edit', \compact('rule', 'category', 'unit', 'calcuTypes'));
     }
 
     /**
@@ -144,8 +153,12 @@ class RuleController extends Controller
      */
     public function dropdown($group)
     {
-        $rule = $this->ruleService->dropdown($group);
-        return response()
-            ->json($rule);
+        try {
+            $rule = $this->ruleService->dropdown($group);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
+        return RuleResource::collection($rule);
     }
 }

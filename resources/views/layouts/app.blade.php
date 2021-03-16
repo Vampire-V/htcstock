@@ -39,16 +39,15 @@
 <body>
     <div id="app" class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
         @include('includes.navbar.navigationbar')
-        
+
         <div class="app-main">
             @yield('sidebar')
             <div class="app-main__outer">
                 {{-- <div class="bs-example"> --}}
-                    
+
                 {{-- </div> --}}
                 @include('partials.alerts')
                 <div class="app-main__inner">
-                    
                     @yield('content')
                 </div>
                 {{-- @include('includes.footer') --}}
@@ -66,6 +65,7 @@
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
     @yield('second-script')
+
 </body>
 
 </html>

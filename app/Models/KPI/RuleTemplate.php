@@ -37,20 +37,20 @@ class RuleTemplate extends Model
         'max_result'
     ];
     // code for $this->rule attribute
-    public function getRulesAttribute($value)
-    {
-        $rule = null;
-        if ($this->rule) {
-            $rule = $this->rule;
-        }
-        return $rule;
-    }
+    // public function getRulesAttribute($value)
+    // {
+    //     $rule = null;
+    //     if ($this->rule) {
+    //         $rule = $this->rule;
+    //     }
+    //     return $rule;
+    // }
 
     // override the toArray function (called by toJson)
-    public function toArray()
-    {
-        return parent::toArray();
-    }
+    // public function toArray()
+    // {
+    //     return parent::toArray();
+    // }
 
     public function template()
     {

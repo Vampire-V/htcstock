@@ -44,21 +44,21 @@
                         <div class="col-md-3 mb-3">
                             <label for="staffName">Staff Name :</label>
                             <input type="text" class="form-control form-control-sm" id="staffName"
-                                placeholder="Staff Name" disabled>
+                                placeholder="Staff Name" value="{{$staff->name}}" disabled>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="department">Department :</label>
                             <input type="text" class="form-control form-control-sm" id="department"
-                                placeholder="Department" disabled>
+                                placeholder="Department" value="{{$staff->department->name}}" disabled>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="position">Position :</label>
                             <input type="text" class="form-control form-control-sm" id="position"
-                                placeholder="Position" disabled>
+                                placeholder="Position" value="{{$staff->positions->name}}" disabled>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="position">Year :</label>
-                            <select name="year" id="validationYear" class="form-control-sm form-control">
+                            <label for="year">Year :</label>
+                            <select name="year" id="validationYear" class="form-control-sm form-control" onchange="this.form.submit()">
                                 @foreach (range(date('Y'), $start_year) as $year)
                                 <option value="{{$year}}">{{$year}}</option>
                                 @endforeach
@@ -86,11 +86,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        @isset($periods)
+                            @foreach ($periods as $key => $row)
+                            <tr>
+                                <th scope="row">{{$key+1}}</th>
+                                <td>{{$row->name}}</td>
+                                <td>{{$row->evaluate->status}}</td>
+                                <td>
+                                    <a href="{{$row->evaluate->status ? route('kpi.evaluate.edit',[$staff->id,$row->id,$row->evaluate->id]) : route('kpi.evaluate.create',[$staff->id,$row->id]) }}"
+                                        class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">{{$row->evaluate->status ? "Edit" : "Create"}}
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        @endisset
+                        {{-- <tr>
                             <th scope="row">1</th>
                             <td>January</td>
                             <td></td>
-                            <td><a href="{{route('kpi.evaluation-form.edit',[1,2])}}"
+                            <td><a href="{{route('kpi.evaluate.edit',[1,2])}}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Create
                                 </a></td>
                         </tr>
@@ -98,10 +112,10 @@
                             <th scope="row">2</th>
                             <td>February</td>
                             <td>New</td>
-                            <td><a href="{{route('kpi.evaluation-form.edit',[1,2])}}"
+                            <td><a href="{{route('kpi.evaluate.edit',[1,2])}}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
                                 </a></td>
-                        </tr>
+                        </tr> --}}
                     </tbody>
                 </table>
             </div>

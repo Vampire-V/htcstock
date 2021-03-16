@@ -16,6 +16,7 @@ class CreateEvaluateDetailsTable extends Migration
         Schema::create('kpi_evaluate_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('evaluate_id')->nullable()->constrained('kpi_evaluates')->comment('Id ของ evaluates');
+            $table->unsignedInteger('rule_id')->nullable()->comment('Id ของ rule ได้มาจาก template');
             $table->decimal('target', 13, 2)->nullable()->comment('ค่า target');
             $table->decimal('actual', 13, 2)->nullable()->comment('ค่า actual');
             $table->decimal('weight', 5, 2)->nullable()->comment('ค่าถ่วงน้ำหนัก');

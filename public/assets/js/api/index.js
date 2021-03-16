@@ -49,31 +49,62 @@ function ISOtoDate(isoString, locale = "en-US") {
 
 // api KPI-System
 
-const getRuleDropdown = (group) => fetch(`/kpi/rule-dropdown/${group.id}`).then(status).then(json)
+const getRuleDropdown = (group) => axios({
+    method: 'GET',
+    responseType: 'json',
+    url: `/kpi/rule-dropdown/${group.id}`
+})
+
+const getRule = (rule) => axios({
+    method: 'GET',
+    responseType: 'json',
+    url: `/kpi/rule-list/${rule}`
+})
 
 const postRuleTemplate = (template, form) => axios({
     method: 'POST',
     responseType: 'json',
-    url: `/kpi/template/${template.id}/edit/rule-template`,
+    url: `/kpi/template/${template}/edit/rule-template`,
     data: form
 })
 
 const getRuleTemplate = (template) => axios({
     method: 'GET',
     responseType: 'json',
-    url: `/kpi/template/${template.id}/edit/ruletemplate/bytemplate`
+    url: `/kpi/template/${template}/edit/ruletemplate/bytemplate`
 })
 
 const switRuleTemplate = (template, form) => axios({
     method: 'PUT',
     responseType: 'json',
-    url: `/kpi/template/${template.id}/edit/ruletemplate/switch`,
+    url: `/kpi/template/${template}/edit/ruletemplate/switch`,
     data: form
 })
 
 const deleteRuleTemplate = (template, form) => axios({
     method: 'DELETE',
     responseType: 'json',
-    url: `/kpi/template/${template.id}/edit/ruletemplate/destroy`,
+    url: `/kpi/template/${template}/edit/ruletemplate/destroy`,
     data: form
 })
+
+const postEvaluate = (staff,period,form) => axios({
+    method: 'POST',
+    responseType: 'json',
+    url: `/kpi/evaluation-form/staff/${staff}/edit/period/${period}/evaluate`,
+    data: form
+})
+
+const putEvaluate = (staff,period,evaluate,form) => axios({
+    method: 'PUT',
+    responseType: 'json',
+    url: `/kpi/evaluation-form/staff/${staff}/edit/period/${period}/evaluate/${evaluate}`,
+    data: form
+})
+
+const getEvaluate = (staff,period,evaluate) => axios({
+    method: 'GET',
+    responseType: 'json',
+    url: `/kpi/evaluation-form/staff/${staff}/edit/period/${period}/evaluate/${evaluate}`
+})
+// kpi/evaluation-form/staff/{staff}/edit/period/{period}/evaluate/{evaluate}

@@ -79,8 +79,8 @@
                 <label for="department" class="mb-2 mr-2">Weight :</label>
                 <div class="btn-actions-pane">
                     <div role="group" class="btn-group-sm btn-group">
-                        <input class="mb-2 mr-2 form-control-sm form-control" type="text" id="weight-{{$group->name}}"
-                            name="weight_{{$group->name}}">
+                        <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
+                            id="weight-{{$group->name}}" name="weight_{{$group->name}}">
                     </div>
                 </div>
                 <div class="btn-actions-pane-right">
@@ -252,6 +252,27 @@
             </div>
         </div>
     </div>
+    <script>
+        (function () {
+            'use strict';
+
+            document.addEventListener('DOMContentLoaded', function () {
+                // Supporting Documents
+                // $("#validationDepartment").select2({
+                //     placeholder: 'Select department',
+                //     allowClear: true
+                // });
+                console.log('edit');
+                $("#validationRuleTemplate").select2({
+                    placeholder: 'Select RuleTemplate',
+                    allowClear: true
+                });
+                
+            })
+
+
+        })();
+    </script>
 </div>
 @endsection
 
@@ -287,8 +308,8 @@
     })
 
 const setOptionModal = (group) => {
-            getRuleDropdown().then(result => {
-                let newArray = result.filter(value => value.category_id == group.id)
+            getRuleDropdown(group).then(result => {
+                let newArray = result.data.data.filter(value => value.category_id == group.id)
                 newArray.forEach(element => {
                     let option = document.createElement("option")
                     option.text = element.name

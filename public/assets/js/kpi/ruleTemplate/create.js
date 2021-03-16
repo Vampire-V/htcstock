@@ -3,17 +3,14 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         // Supporting Documents
-        // $("#validationDepartment").select2({
-        //     placeholder: 'Select department',
-        //     allowClear: true
-        // });
-        // $("#validationRuleTemplate").select2({
-        //     placeholder: 'Select RuleTemplate',
-        //     allowClear: true
-        // });
 
-        getRuleTemplate(template).then(res => {
-            createRow(res.data)
+        $("#validationRuleName").select2({
+            dropdownParent: $('#exampleModal'),
+            placeholder: 'Select Rules',
+            allowClear: true
+        });
+        getRuleTemplate(template.id).then(res => {
+            createRow(res.data.data)
         })
     })
 
@@ -22,6 +19,7 @@
         let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         validationForm(forms)
+        // console.log('load...');
     }, false);
 })();
 

@@ -7,6 +7,14 @@
     .bs-example {
         margin: 20px;
     }
+
+    .select2-hidden-accessible {
+        position: inherit !important;
+    }
+
+    .select2 ,.select2-containe {
+            display: inherit !important;
+        }
 </style>
 @endsection
 @section('content')
@@ -81,12 +89,15 @@
                     <div class="btn-actions-pane">
                         <div role="group" class="btn-group-sm btn-group">
                             <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
-                                id="weight-{{$group->name}}" name="weight_{{$group->name}}">
+                                max="100" id="weight-{{$group->name}}" name="weight_{{$group->name}}">
                         </div>
                     </div>
+                    <label for="department" class="mb-2 mr-2">%</label>
                     <div class="btn-actions-pane-right">
                         <div role="group" class="btn-group-sm btn-group">
-                            <button class="mb-2 mr-2 btn btn-danger" onclick="deleterule(this)" data-group="{{$group->name}}" data-group-id="{{$group->id}}">Delete Selected Rule</button>
+                            <button class="mb-2 mr-2 btn btn-danger" onclick="deleterule(this)"
+                                data-group="{{$group->name}}" data-group-id="{{$group->id}}">Delete Selected
+                                Rule</button>
                             <button class="mb-2 mr-2 btn btn-primary" data-toggle="modal" data-target="#exampleModal"
                                 data-group="{{$group}}">Add new rule</button>
                         </div>
@@ -102,7 +113,7 @@
                                 <th>Base line</th>
                                 <th>Max</th>
                                 <th>Target config</th>
-                                <th>weight</th>
+                                <th>weight %</th>
                                 <th>Sort numbers</th>
                             </tr>
                         </thead>
@@ -128,6 +139,7 @@
     @endforeach
 </div>
 @endisset
+
 {{-- Button --}}
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -157,10 +169,14 @@
                     <input type="hidden" name="parent_rule_template_id" value="">
                     <div class="form-row">
                         <div class="col-md-6">
-                            <div class="position-relative form-group"><label for="rule-name" class="">Rule Name
-                                    :</label><select id="validationRuleName" class="form-control form-control-sm"
-                                    name="rule_id" onchange="getValue(this)" required>
-                                </select></div>
+                            <div class="position-relative form-group">
+                                <label for="rule-name" class="">Rule Name :</label>
+                                
+                                <select id="validationRuleName" class="form-control-sm form-control"
+                                    name="rule_id"  required>
+                                    <option value="">Choose...</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="position-relative form-group"><label for="base-line" class="">Base line
@@ -183,18 +199,19 @@
                                     config
                                     :</label><input name="target_config" id="validationTargetConfig"
                                     placeholder="Target config" type="number" min="0" step="0.1"
-                                    class="form-control form-control-sm" required></div>
+                                    class="form-control form-control-sm"  required></div>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="col-md-6">
-                            <div class="position-relative form-group"><label for="weight" class="">Weight
-                                    :</label>
+                            <div class="position-relative form-group"><label for="weight" class="">Weight limit
+                                    100%:</label>
                                 <input name="weight" id="validationWeight" placeholder="Weight" type="number" min="0"
-                                    step="0.1" class="form-control form-control-sm" required>
+                                    step="0.1" max="100" class="form-control form-control-sm"  required>
                             </div>
                         </div>
+
                         <div class="col-md-6">
                             <div class="position-relative form-group"><label for="weight-category" class="">Weight
                                     category
@@ -215,10 +232,11 @@
 @endsection
 
 @section('second-script')
+
 <script src="{{asset('assets\js\kpi\ruleTemplate\create.js')}}" defer></script>
 <script>
     var template = {!!json_encode($template)!!}
-
+    
     $('#exampleModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var group = button.data('group') // Extract info from data-* attributes
@@ -226,12 +244,25 @@
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
         setOptionModal(group)
+        let weight = modal.find('.modal-body input[name ="weight"]')[0]
+        let maxW = setMaxWeight(group)
+        if (maxW <= 0) {
+            weight.disabled = true
+            weight.previousElementSibling.textContent = `Weight limit ${maxW}%`
+            modal.find('.modal-footer')[0].lastElementChild.disabled = true
+            weight.max = maxW
+        }else{
+            weight.disabled = false
+            weight.previousElementSibling.textContent = `Weight limit ${maxW}%`
+            modal.find('.modal-footer')[0].lastElementChild.disabled = false
+            weight.max = maxW
+        }
         
         let row = document.getElementById(`table-${group.name}`).getElementsByTagName('tbody')[0].lastChild
-        // modal.find('.modal-title').text('New Rule to : ' + recipient)
         modal.find('.modal-body input[name ="parent_rule_template_id"]').val(getLastRowNum(row))
-        // modal.find('.modal-body input[name ="field"]').val(getLastRowNum(row))
         modal.find('.modal-body input[name ="weight_category"]').val(document.getElementById(`weight-${group.name}`).value)
+        // console.log(modal)
+        
     })
 
     $('#exampleModal').on('hide.bs.modal', function (event) {
@@ -240,26 +271,44 @@
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
-        document.getElementById('validationRuleName').innerHTML = ''
-        modal.find('.modal-body input[name ="base_line"]').val('')
-        modal.find('.modal-body input[name ="max_result"]').val('')
-        modal.find('.modal-body input[name ="target_config"]').val('')
-        modal.find('.modal-body input[name ="weight"]').val('')
-        modal.find('.modal-body input[name ="weight_category"]').val('')
+        document.getElementById('form-ruletemplate').reset()
     })
 
     const setOptionModal = (group) => {
-                getRuleDropdown(group).then(result => {
-                    result.forEach(element => {
-                        let option = document.createElement("option")
-                        option.text = element.name
-                        option.value = element.id
-                        document.getElementById('validationRuleName').appendChild(option)
-                    })
-                })
+        let table = document.getElementById(`table-${group.name}`)
+        rows = table.tBodies[0].rows
+        getRuleDropdown(group).then(result => {
+            for (const row of rows) {
+                for (let i = 0; i < result.data.data.length; i++) {
+                    const element = result.data.data[i]
+                    if (element.name === row.children[1].textContent) {
+                        result.data.data.splice(i,1)
+                        i--
+                    }
+                }
             }
+            result.data.data.forEach(element => {
+                let option = document.createElement("option")
+                option.text = element.name
+                option.value = element.id
+                document.getElementById('validationRuleName').appendChild(option)
+            })
+        }).catch(error => console.log(error.response)).finally(() => {
+            // console.log(datas);
+        })
+    }
     const getValue = (sel) => {
         // console.log(sel,sel.options[sel.selectedIndex].value,sel.options[sel.selectedIndex].text)
+    }
+
+    const setMaxWeight = (group) => {
+        let table = document.getElementById(`table-${group.name}`)
+        rows = table.tBodies[0].rows
+        let acc = 0
+        for (const iterator of rows) {
+            acc += parseInt(iterator.cells[6].textContent)
+        }
+        return 100 - acc
     }
     
     const subMitForm = () => {
@@ -271,28 +320,29 @@
             formData.append('template_id',template.id)
         // api post 
         // get template id in html
-        postRuleTemplate(template,formData).then(res => {
-            createRow(res.data)
+
+        postRuleTemplate(template.id,formData).then(res => {
+            createRow(res.data.data)
             // close modal
+            document.getElementById('exampleModal').getElementsByClassName("close")[0].click()
         }).catch(error => {
             error.response.data.messages.forEach(value => {
                 toastError(value)
             })
             toastClear()
-        }).finally(res => {
-            // zdfdf
-        });
+        })
+        
+        
     }
 
-    const createRow = (data) => {
+    const createRow = async (data) => {
         let tables = document.getElementById("all-table").querySelectorAll('table')
-        tables.forEach(intable => {
+        await tables.forEach(intable => {
             intable.getElementsByTagName('tbody')[0].innerHTML = ''
+            intable.getElementsByTagName('tfoot')[0].lastElementChild.cells[6].textContent = 0
         });
-        // console.log(data);
-        tables.forEach(intable => {
-            // console.log(intable.getElementsByTagName('tbody')[0]);
-            let newArray = data.filter(value => value.rule.category.name === intable.id.substring(6))
+        await tables.forEach(intable => {
+            let newArray = data.filter(value => value.rules.categorys.name === intable.id.substring(6))
             let sumWeight = newArray.reduce((accumulator, currentValue) => accumulator + currentValue.weight,0)
             newArray.forEach((element, key, array) => {
                 let table = document.getElementById(intable.id)
@@ -319,10 +369,10 @@
                 newCellCheck.appendChild(div)
 
                 let newCellName = newRow.insertCell()
-                newCellName.textContent = element.id+' '+element.rule.name
+                newCellName.textContent = element.rules.name
 
                 let newCellMeasurement = newRow.insertCell()
-                newCellMeasurement.textContent = element.rule.measurement
+                newCellMeasurement.textContent = element.rules.measurement
 
                 let newCellBaseLine = newRow.insertCell()
                 newCellBaseLine.textContent = element.base_line.toFixed(2)
@@ -342,7 +392,7 @@
                 if (key === array.length - 1){ 
                     let footter = table.getElementsByTagName('tfoot')[0]
                     footter.children[0].children[newCellWeight.cellIndex].textContent = sumWeight.toFixed(2)
-                    document.getElementById(`weight-${element.rule.category.name}`).value = element.weight_category.toFixed(2)
+                    document.getElementById(`weight-${element.rules.categorys.name}`).value = element.weight_category.toFixed(2)
                 }
             })
         })
@@ -364,7 +414,7 @@
                 option.defaultSelected = obj.parent_rule_template_id === element.parent_rule_template_id ? true : false
                 select.appendChild(option)
         });
-        select.setAttribute(`onchange`, `switchRow(this,${obj.rule.category_id})`)
+        select.setAttribute(`onchange`, `switchRow(this,${obj.rules.category_id})`)
         return select
     }
 
@@ -374,9 +424,9 @@
             rule_to_id : e.options[e.selectedIndex].value,
             group_id : group
         }
-        switRuleTemplate(template,formSwitch)
+        switRuleTemplate(template.id,formSwitch)
         .then(res => {
-            createRow(res.data)
+            createRow(res.data.data)
         })
         .catch(error => {
             console.log(error.response.data)
@@ -398,9 +448,9 @@
                 form.rule.push(element.id)
             }
         }
-        deleteRuleTemplate(template,form)
+        deleteRuleTemplate(template.id,form)
         .then(res => {
-            createRow(res.data)
+            createRow(res.data.data)
         }).catch(error => {
 
         }).finally(() => {})

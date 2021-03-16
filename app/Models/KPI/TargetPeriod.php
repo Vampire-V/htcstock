@@ -16,4 +16,12 @@ class TargetPeriod extends Model
         'name',
         'year'
     ];
+
+    /**
+     * Get the TargetPeriod that owns the Evaluate.
+     */
+    public function evaluate()
+    {
+        return $this->hasOne(Evaluate::class,'period_id')->withDefault();
+    }
 }

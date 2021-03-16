@@ -18,6 +18,6 @@ class RuleCategory extends Model
 
     public function rule()
     {
-        return $this->hasOne(Rule::class)->withDefault();
+        return $this->hasMany(Rule::class,'category_id');
     }
 }

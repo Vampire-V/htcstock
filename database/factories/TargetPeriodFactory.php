@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(TargetPeriod::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'year' => $faker->year()
+        'name' => $faker->monthName,
+        'year' => date('Y')
     ];
 });

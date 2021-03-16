@@ -4,6 +4,7 @@ namespace App\Services\KPI\Service;
 
 use App\Models\KPI\Rule;
 use App\Models\KPI\RuleTemplate;
+use App\Models\KPI\Template;
 use App\Services\BaseService;
 use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -40,7 +41,7 @@ class RuleTemplateService extends BaseService implements RuleTemplateServiceInte
         }
     }
 
-    public function byTemplate($template)
+    public function byTemplate(Template $template): Collection
     {
         try {
             $ruleTem = RuleTemplate::where('template_id', $template->id)->orderBy('parent_rule_template_id')->get();
@@ -50,7 +51,7 @@ class RuleTemplateService extends BaseService implements RuleTemplateServiceInte
         }
     }
 
-    public function byTemplateGroup($template, $group)
+    public function byTemplateGroup(Template $template, string $group) : Collection
     {
         try {
             return RuleTemplate::leftJoin('kpi_rules', 'kpi_rules.id', '=', 'kpi_rule_templates.rule_id')

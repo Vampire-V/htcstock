@@ -17,16 +17,16 @@ class DatabaseSeeder extends Seeder
             // TargetUnitTableSeeder::class,
             // TemplateSeeder::class,
             // TargetPeriodSeeder::class,
-            // RuleSeeder::class,
-            EvaluateSeeder::class,
-            EvaluateDetailSeeder::class
+            RuleSeeder::class,
+            // EvaluateSeeder::class,
+            // EvaluateDetailSeeder::class
         ]);
         // $this->call([
-        //     // AccessoriesTableSeeder::class,
+        //     AccessoriesTableSeeder::class,
         //     PermissionTableSeeder::class,
         //     RoleTableSeeder::class,
         //     DepartmentSeeder::class,
-        //     // UsersTableSeeder::class,
+        //     UsersTableSeeder::class,
         //     DivisionSeeder::class,
         //     PositionSeeder::class,
 

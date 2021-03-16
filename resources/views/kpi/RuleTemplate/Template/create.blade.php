@@ -95,5 +95,15 @@
 @endsection
 
 @section('second-script')
-<script src="{{asset('assets\js\kpi\ruleTemplate\create.js')}}" defer></script>
+{{-- <script src="{{asset('assets\js\kpi\ruleTemplate\create.js')}}" defer></script> --}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Supporting Documents
+        $("#validationDepartment").select2({
+            placeholder: 'Select department',
+            allowClear: true
+        });
+    })
+</script>
 @endsection

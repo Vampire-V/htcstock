@@ -40,7 +40,7 @@ class BaseService implements BaseServiceInterface
      * @param $id
      * @return Model
      */
-    public function find(int $id): Model
+    public function find($id): Model
     {
         try {
             return $this->model->find($id);
@@ -97,6 +97,7 @@ class BaseService implements BaseServiceInterface
         try {
             return $this->model->destroy($id);
         } catch (\Throwable $th) {
+            // return $th->getMessage();
             throw $th;
         }
     }

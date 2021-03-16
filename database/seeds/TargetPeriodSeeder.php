@@ -12,6 +12,22 @@ class TargetPeriodSeeder extends Seeder
      */
     public function run()
     {
-        factory(TargetPeriod::class,10)->create();
+        $month = [
+            ['name' => 'January', 'year' => date('Y')],
+            ['name' => 'February', 'year' => date('Y')],
+            ['name' => 'March', 'year' => date('Y')],
+            ['name' => 'April', 'year' => date('Y')],
+            ['name' => 'May', 'year' => date('Y')],
+            ['name' => 'June', 'year' => date('Y')],
+            ['name' => 'July', 'year' => date('Y')],
+            ['name' => 'August', 'year' => date('Y')],
+            ['name' => 'September', 'year' => date('Y')],
+            ['name' => 'October', 'year' => date('Y')],
+            ['name' => 'November', 'year' => date('Y')],
+            ['name' => 'December', 'year' => date('Y')],
+        ];
+        foreach ($month as $key => $value) {
+            TargetPeriod::firstOrCreate($value);
+        }
     }
 }

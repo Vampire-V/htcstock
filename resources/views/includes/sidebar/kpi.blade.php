@@ -59,7 +59,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{route('kpi.evaluation-form.index')}}" class="{{Helper::isActive('kpi/evaluation-form*')}}">
+                    <a href="{{route('kpi.staff.index')}}" class="{{Helper::isActive('kpi/evaluation-form/staff*')}}">
                         <i class="metismenu-icon"></i>
                         Evaluation Form
                     </a>

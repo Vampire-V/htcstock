@@ -65,8 +65,10 @@
                             <label for="mesurement">Mesurement :</label>
                             <select id="validationMesurement" class="form-control-sm form-control" name="measurement"
                                 required>
-                                <option value="mesurement_1" {{$rule->measurement === "mesurement_1" ? 'selected' : ''}}>Mesurement 1</option>
-                                <option value="mesurement_2" {{$rule->measurement === "mesurement_2" ? 'selected' : ''}}>Mesurement 2</option>
+                                <option value="mesurement_1"
+                                    {{$rule->measurement === "mesurement_1" ? 'selected' : ''}}>Mesurement 1</option>
+                                <option value="mesurement_2"
+                                    {{$rule->measurement === "mesurement_2" ? 'selected' : ''}}>Mesurement 2</option>
                             </select>
                         </div>
                         <div class="col-md-4 mb-3">
@@ -82,11 +84,19 @@
                             </select>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="calculationType">Calculation Type :</label>
-                            <select id="validationCalculationType" class="form-control-sm form-control">
-                                <option value="Normal">Normal</option>
-                                <option value="Round Down">Round Down</option>
-                            </select>
+                            <div class="position-relative form-group"><label for="Calculate-type" class="">Calculate
+                                    Type
+                                    :</label>
+                                <select id="validationCalculateType" class="form-control form-control-sm"
+                                    name="calculate_type" placeholder="Calculate Type" required>
+                                    <option value="">Choose...</option>
+                                    @isset($calcuTypes)
+                                    @foreach ($calcuTypes as $item)
+                                    <option value="{{$item}}" {{$rule->calculate_type === $item ? "selected" : ""}}>{{$item}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">

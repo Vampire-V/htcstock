@@ -82,12 +82,27 @@
                             </select>
                         </div>
                         <div class="col-md-4 mb-3">
+                            <div class="position-relative form-group"><label for="Calculate-type" class="">Calculate
+                                    Type
+                                    :</label>
+                                <select id="validationCalculateType" class="form-control form-control-sm"
+                                    name="calculate_type" placeholder="Calculate Type" required>
+                                    <option value="">Choose...</option>
+                                    @isset($calcuTypes)
+                                    @foreach ($calcuTypes as $item)
+                                    <option value="{{$item}}">{{$item}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                            </div>
+                        </div>
+                        {{-- <div class="col-md-4 mb-3">
                             <label for="calculationType">Calculation Type :</label>
                             <select id="validationCalculationType" class="form-control-sm form-control">
                                 <option value="Normal">Normal</option>
                                 <option value="Round Down">Round Down</option>
                             </select>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="form-row">
                         <div class="col-md-4 mb-3">

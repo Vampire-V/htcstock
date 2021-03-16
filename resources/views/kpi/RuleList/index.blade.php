@@ -79,6 +79,7 @@
                             <th>#</th>
                             <th>Rule Name</th>
                             <th>Rule Category</th>
+                            <th>Calculate Type</th>
                             <th>#</th>
                         </tr>
                     </thead>
@@ -89,6 +90,7 @@
                             <th scope="row">{{$key + 1}}</th>
                             <td>{{$item->name}}</td>
                             <td>{{$item->category->name}}</td>
+                            <td>{{$item->calculate_type}}</td>
                             <td><a href="{{route('kpi.rule-list.edit',$item->id)}}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
                                 </a></td>

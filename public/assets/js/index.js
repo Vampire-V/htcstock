@@ -177,12 +177,54 @@ function toastError(text) {
     document.getElementById("toast-container").appendChild(divToast)
 }
 
+function toastSuccess(text) {
+    let divToast = document.createElement("div")
+    let divMessage = document.createElement("div")
+    divToast.classList.add('toast')
+    divToast.classList.add('toast-success')
+    divMessage.classList.add('toast-message')
+    divMessage.textContent = text
+    divToast.appendChild(divMessage);
+    document.getElementById("toast-container").appendChild(divToast)
+}
+
 function toastClear() {
-    let el = document.querySelectorAll('.toast-error')
+    let error = document.querySelectorAll('.toast-error')
+    let success = document.querySelectorAll('.toast-success')
     setTimeout(() => {
-        document.querySelector('.toast-error').remove()
-        if (el.length != 1) {
-            toastClear();
+        if (error.length >= 1) {
+            document.querySelector('.toast-error').remove()
+            toastClear()
         }
-    }, 3000)
+        if (success.length >= 1) {
+            document.querySelector('.toast-success').remove()
+            toastClear()
+        }
+    }, 5000)
+}
+
+var createInput = (element, type, classList = '',name = '', value = '',id = '') => {
+    element.setAttribute(`type`, type)
+    element.setAttribute(`name`, name)
+    element.setAttribute(`id`, id)
+    element.value = value
+    if (type === 'number') {
+        element.setAttribute(`min`, 0)
+        element.setAttribute(`step`, 0.01)
+    }
+    if (Array.isArray(classList)) {
+        classList.forEach(name => {
+            element.classList.add(name)
+        })
+    } else {
+        element.className = classList
+    }
+
+    return element
+}
+
+var createOption = (element, value = '',name = '') => {
+    element.value = value
+    element.textContent = name
+    return element
 }

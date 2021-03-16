@@ -24,14 +24,20 @@ use App\Services\IT\Service\SystemService;
 use App\Services\IT\Service\TransactionsService;
 use App\Services\IT\Service\UserService;
 use App\Services\IT\Service\VendorService;
+use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
+use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
+use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Interfaces\TargetUnitServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
+use App\Services\KPI\Service\EvaluateDetailService;
+use App\Services\KPI\Service\EvaluateService;
 use App\Services\KPI\Service\RuleCategoryService;
 use App\Services\KPI\Service\RuleService;
 use App\Services\KPI\Service\RuleTemplateService;
+use App\Services\KPI\Service\TargetPeriodService;
 use App\Services\KPI\Service\TargetUnitService;
 use App\Services\KPI\Service\TemplateService;
 use App\Services\Legal\Interfaces\ActionServiceInterface;
@@ -56,6 +62,7 @@ use App\Services\Legal\Service\ContractRequestService;
 use App\Services\Legal\Service\PaymentTermService;
 use App\Services\Legal\Service\PaymentTypeService;
 use App\Services\Legal\Service\SubtypeContractService;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -80,6 +87,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+        // JsonResource::withoutWrapping();
         // IT
         $this->app->bind(AccessoriesServiceInterface::class, AccessoriesService::class);
         $this->app->bind(TransactionsServiceInterface::class, TransactionsService::class);
@@ -112,5 +120,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RuleServiceInterface::class,RuleService::class);
         $this->app->bind(RuleTemplateServiceInterface::class,RuleTemplateService::class);
         $this->app->bind(TemplateServiceInterface::class,TemplateService::class);
+        $this->app->bind(EvaluateServiceInterface::class,EvaluateService::class);
+        $this->app->bind(TargetPeriodServiceInterface::class,TargetPeriodService::class);
+        $this->app->bind(EvaluateDetailServiceInterface::class,EvaluateDetailService::class);
+        
     }
 }

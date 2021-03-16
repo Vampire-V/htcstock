@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Filters\All\Filter\UserFilter;
 use App\Http\Filters\IT\UserManagementFilter;
 use App\Models\Department;
 use App\Models\IT\Transactions;
@@ -47,7 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function scopeFilter(Builder $builder, $request)
     {
-        return (new UserManagementFilter($request))->filter($builder);
+        return (new UserFilter($request))->filter($builder);
     }
 
     public function systems()

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\KPI\RuleTemplate;
 
+use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\KPI\StoreRuleTemplatePost;
+use App\Http\Resources\KPI\RuleTemplateCollection;
+use App\Http\Resources\KPI\RuleTemplateResource;
 use App\Models\KPI\RuleCategory;
+use App\Models\KPI\RuleTemplate;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
@@ -57,6 +61,7 @@ class RuleTemplateController extends Controller
         try {
             $category = $this->categoryService->all();
             $template = $this->templateService->find($template);
+            
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -91,9 +96,8 @@ class RuleTemplateController extends Controller
             DB::rollBack();
             throw $th;
         }
-        // \dd(new JsonResponse($new->toArray()));
         DB::commit();
-        return new JsonResponse($ruleTemplates);
+        return RuleTemplateResource::collection($ruleTemplates);
     }
 
     /**
@@ -155,7 +159,9 @@ class RuleTemplateController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
-        return new JsonResponse($ruleTemplates);
+        return RuleTemplateResource::collection($ruleTemplates);
+
+        // return new JsonResponse($ruleTemplates);
     }
 
     public function switchrow(Request $request, $id)
@@ -174,13 +180,13 @@ class RuleTemplateController extends Controller
             $second->save();
 
             $template = $this->templateService->find($id);
-            $responses = $this->ruleTemplateService->byTemplate($template);
+            $ruleTemplates = $this->ruleTemplateService->byTemplate($template);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
         DB::commit();
-        return new JsonResponse($responses);
+        return RuleTemplateResource::collection($ruleTemplates);
     }
 
     public function deleteRuleTemplate(Request $request, $id)
@@ -194,12 +200,12 @@ class RuleTemplateController extends Controller
                 $value->parent_rule_template_id = $key + 1;
                 $value->save();
             }
-            $responses = $this->ruleTemplateService->byTemplate($template);
+            $ruleTemplates = $this->ruleTemplateService->byTemplate($template);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
         DB::commit();
-        return new JsonResponse($responses);
+        return RuleTemplateResource::collection($ruleTemplates);
     }
 }

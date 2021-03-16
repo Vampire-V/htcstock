@@ -43,14 +43,23 @@
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
                             <label for="department">Department :</label>
-                            <select id="validationDepartment" class="form-control-sm form-control">
-                                <option value="">Department</option>
+                            <select class="form-control form-control-sm" id="department" name="department_id[]"
+                                multiple>
+                                @isset($departments)
+                                @foreach ($departments as $dept)
+                                <option value="{{$dept->id}}">{{$dept->name}}</option>
+                                @endforeach
+                                @endisset
                             </select>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="position">Position :</label>
-                            <select id="validationPosition" class="form-control-sm form-control">
-                                <option value="">Position</option>
+                            <select class="form-control-sm form-control" id="position" name="position_id[]" multiple>
+                                @isset($positions)
+                                @foreach ($positions as $position)
+                                <option value="{{$position->id}}">{{$position->name}}</option>
+                                @endforeach
+                                @endisset
                             </select>
                         </div>
                         <div class="col-md-4 mb-3">
@@ -79,14 +88,27 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @isset($users)
+                        @foreach ($users as $key => $user)
                         <tr>
+                            <th scope="row">{{$key+1}}</th>
+                            <td>{{$user->name}}</td>
+                            <td>{{$user->department->name}}</td>
+                            <td>{{$user->positions->name}}</td>
+                            <td><a href="{{route('kpi.staff.edit',$user->id)}}"
+                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Detail
+                                </a></td>
+                        </tr>
+                        @endforeach
+                        @endisset
+                        {{-- <tr>
                             <th scope="row">1</th>
                             <td>Mr. Pipat</td>
                             <td>Head</td>
                             <td>IT</td>
                             <td><a href="{{route('kpi.staff-data.edit',1)}}"
-                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Detail
-                                </a></td>
+                        class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Detail
+                        </a></td>
                         </tr>
                         <tr>
                             <th scope="row">2</th>
@@ -96,11 +118,16 @@
                             <td><a href="{{route('kpi.staff-data.edit',1)}}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Detail
                                 </a></td>
-                        </tr>
+                        </tr> --}}
                     </tbody>
                 </table>
+                {{ $users->appends($query)->links() }}
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('second-script')
+<script src="{{asset('assets\js\kpi\evaluationForm\index.js')}}" defer></script>
 @endsection

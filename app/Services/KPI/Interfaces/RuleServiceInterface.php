@@ -11,10 +11,10 @@ interface RuleServiceInterface
 {
     public function all(): Builder;
     public function create(array $attributes): Model;
-    public function find(int $id): Model;
+    public function find($id): Model;
 
     public function update(array $attributes, int $id): bool;
-    public function destroy(int $id);
+    public function destroy($id);
 
     public function dropdown($group = null): Collection;
 

@@ -157,21 +157,24 @@ class UsersController extends Controller
                 return back();
             }
             $role = Role::where('name', 'user')->first();
+            \dd(ENV('USERS_UPDATE'));
             $response = Http::retry(2, 100)->get(ENV('USERS_UPDATE'))->json();
             \dd($response);
-
-            foreach ($response as $value) {
-                $user = User::firstOrNew(['username' => $value['username']]);
-                $user->name = $value['name'];
-                $user->email = $value['email'];
-                $user->password = Hash::make(\substr($value['email'], 0, 1) . $value['username']);
-                $user->save();
-                if (!$user) {
-                    $request->session()->flash('error', 'error update username' . $value['username']);
-                    return back();
+            if (!\is_null($response)) {
+                foreach ($response as $value) {
+                    $user = User::firstOrNew(['username' => $value['username']]);
+                    $user->name = $value['name'];
+                    $user->email = $value['email'];
+                    $user->password = Hash::make(\substr($value['email'], 0, 1) . $value['username']);
+                    $user->save();
+                    if (!$user) {
+                        $request->session()->flash('error', 'error update username' . $value['username']);
+                        return back();
+                    }
+                    $user->roles()->attach($role);
                 }
-                $user->roles()->attach($role);
             }
+            
             $request->session()->flash('success', 'has been update user');
         } catch (\Throwable $th) {
             DB::rollBack();

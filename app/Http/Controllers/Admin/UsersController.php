@@ -158,6 +158,7 @@ class UsersController extends Controller
             }
             $role = Role::where('name', 'user')->first();
             $response = Http::retry(2, 100)->get(ENV('USERS_UPDATE'))->json();
+            \dd($response);
 
             foreach ($response as $value) {
                 $user = User::firstOrNew(['username' => $value['username']]);

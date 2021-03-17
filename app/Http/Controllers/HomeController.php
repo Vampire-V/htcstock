@@ -17,7 +17,7 @@ class HomeController extends Controller
     public function index()
     {
         try {
-            $systems = User::find(Auth::id())->systems()->get();
+            $systems = Auth::user()->systems;
         } catch (\Throwable $th) {
             throw $th;
         }

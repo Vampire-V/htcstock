@@ -156,11 +156,10 @@ class UsersController extends Controller
             if (Gate::denies('for-superadmin-admin')) {
                 return back();
             }
-            $role = Role::where('name', 'user')->first();
-            \dd(ENV('USERS_UPDATE'));
+            
             $response = Http::retry(2, 100)->get(ENV('USERS_UPDATE'))->json();
-            \dd($response);
             if (!\is_null($response)) {
+                $role = Role::where('name', 'user')->first();
                 foreach ($response as $value) {
                     $user = User::firstOrNew(['username' => $value['username']]);
                     $user->name = $value['name'];
@@ -173,9 +172,12 @@ class UsersController extends Controller
                     }
                     $user->roles()->attach($role);
                 }
+                $request->session()->flash('success', 'has been update user');
+            }else{
+                $request->session()->flash('error', 'ติดต่อ กับ ' . ENV('USERS_UPDATE') . "ไม่ได้");
             }
             
-            $request->session()->flash('success', 'has been update user');
+           
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

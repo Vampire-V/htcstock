@@ -9,9 +9,10 @@
         position: inherit !important;
     }
 
-    .select2 ,.select2-containe {
-            display: inherit !important;
-        }
+    .select2,
+    .select2-containe {
+        display: inherit !important;
+    }
 </style>
 @endsection
 @section('sidebar')
@@ -89,7 +90,18 @@
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
         <div class="card-body">
-            <h5 class="card-title">{{$period->name}} {{$period->year}}</h5>
+            <div class="card-header">
+                <h5 class="card-title">{{$period->name}} {{$period->year}}</h5>
+                <div class="btn-actions-pane">
+                    <div role="group" class="btn-group-sm btn-group">
+                    </div>
+                </div>
+                <div class="btn-actions-pane-right">
+                    <div role="group" class="btn-group-sm btn-group">
+                        <h5>Status <span class="badge badge-info">New</span></h5>
+                    </div>
+                </div>
+            </div>
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
@@ -151,32 +163,33 @@
         </div>
     </div>
 </div>
+
 @isset($category)
 <div id="all-table">
     @foreach ($category as $group)
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-body">
-                <h5 class="card-title">{{$group->name}}</h5>
-                @if ($group->name === 'key-task')
                 <div class="card-header">
-                    {{-- <label for="department" class="mb-2 mr-2">Weight :</label> --}}
+                    <h5 class="card-title">{{$group->name}}</h5>
                     <div class="btn-actions-pane">
                         <div role="group" class="btn-group-sm btn-group">
-                            {{-- <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
-                                id="weight-{{$group->name}}" name="weight_{{$group->name}}"> --}}
                         </div>
                     </div>
                     <div class="btn-actions-pane-right">
                         <div role="group" class="btn-group-sm btn-group">
-                            <button class="mb-2 mr-2 btn btn-danger" onclick="deleteRuleTemp()">Delete Selected
+                            @if ($group->name === 'key-task')
+                            <button class="mb-2 mr-2 btn btn-danger" id="rule-remove-modal" onclick="deleteRuleTemp()"
+                                disabled>Delete Selected
                                 Rule</button>
-                            <button class="mb-2 mr-2 btn btn-primary" data-toggle="modal" data-target="#ruleModal">Add
-                                new rule</button>
+                            <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal" data-target="#ruleModal"
+                                id="rule-add-modal" disabled>Add
+                                New Rule</button>
+                            @endif
                         </div>
                     </div>
                 </div>
-                @endif
+
                 <div class="table-responsive">
                     <table class="mb-0 table table-sm" id="table-{{$group->name}}">
                         <thead>
@@ -186,7 +199,7 @@
                                 <th>Description</th>
                                 <th>Base Line</th>
                                 <th>Max</th>
-                                <th>Weight</th>
+                                <th>Weight %</th>
                                 <th>Target</th>
                                 @if ($group->name === 'key-task')
                                 <th>#</th>
@@ -195,15 +208,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- <tr>
-                                <th scope="row"></th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr> --}}
+                            {{--  --}}
                         </tbody>
                         <tfoot>
                             <tr>
@@ -292,9 +297,10 @@
         <div class="page-title-heading">
         </div>
         <div class="page-title-actions">
-            <button class="mb-2 mr-2 btn btn-primary" onclick="submit()">Save</button>
-            <button class="mb-2 mr-2 btn btn-success" onclick="submitToUser()">Submit to staff</button>
-            <button class="mb-2 mr-2 btn btn-danger">Delete</button>
+            <button class="mb-2 mr-2 btn btn-primary" id="submit" onclick="submit()" disabled>Save</button>
+            <button class="mb-2 mr-2 btn btn-success" id="submit-to-user" onclick="submitToUser()" disabled>Submit to
+                staff</button>
+            {{-- <button class="mb-2 mr-2 btn btn-danger">Delete</button> --}}
         </div>
     </div>
 </div>
@@ -319,11 +325,11 @@
                                 <select id="validationRuleName" class="form-control form-control-sm" name="rule_id_add"
                                     onchange="setRuleToTemp(this)">
                                     <option value="">Choose...</option>
-                                    @isset($rules)
+                                    {{-- @isset($rules)
                                     @foreach ($rules as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
                                     @endforeach
-                                    @endisset
+                                    @endisset --}}
                                 </select></div>
                         </div>
                     </div>
@@ -358,6 +364,8 @@
                 next : false
             },
             className = ['form-control','form-control-sm']
+            
+            // 
 
 </script>
 <script src="{{asset('assets\js\kpi\evaluationForm\create.js')}}" defer></script>
@@ -378,12 +386,12 @@
         formEvaluate.detail = []
         formEvaluate.next = false
 
-    let tables = document.getElementById("all-table").querySelectorAll('table')
-        document.getElementById('mainRule').innerHTML = ''
-        tables.forEach(intable => {
-            intable.getElementsByTagName('tbody')[0].innerHTML = ''
-            intable.getElementsByTagName('tfoot')[0].lastElementChild.cells[5].textContent = 0
-        })
+        let tables = document.getElementById("all-table").querySelectorAll('table')
+            document.getElementById('mainRule').innerHTML = ''
+            tables.forEach(intable => {
+                intable.getElementsByTagName('tbody')[0].innerHTML = ''
+                intable.getElementsByTagName('tfoot')[0].lastElementChild.cells[5].textContent = 0
+            })
     }
     
     const validityForm = () => {
@@ -402,62 +410,95 @@
 
             setTotalWeight()
             formEvaluate.next = true
-            postEvaluate(staff.id,period.id,formEvaluate).then(res => {
-                if (res.status === 200) {
-                    toastSuccess(`create evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`)
-                    toastClear()
-                }
-            }).catch(error => {
-                    console.log(error);
-            }).finally(() => {
-                
-            })
+            if (formEvaluate.total_weight_kpi <= 100.00 && formEvaluate.total_weight_key_task <= 100.00 && formEvaluate.total_weight_omg <= 100.00) {
+                postEvaluate(staff.id,period.id,formEvaluate).then(res => {
+                    if (res.status === 201) {
+                        toastSuccess(`create evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`)
+                        toastClear()
+                        setTimeout(function () {
+                            window.location.replace(`/kpi/evaluation-form/staff/${res.data.data.user_id}/edit/period/${res.data.data.period_id}/evaluate/${res.data.data.id}/edit`)
+                        } 
+                        ,2000)
+                    }
+                }).catch(error => {
+                        console.log(error);
+                }).finally(() => {
+                    
+                })
+            }else{
+                let tables = document.getElementById('all-table').querySelectorAll('table')
+                let text = []
+                tables.forEach(table => {
+                    let obj = table.tFoot.rows[0].cells
+                    for (const iterator of obj) {
+                        if (iterator.textContent === 'Total Weight :') {
+                            if (parseFloat(obj[iterator.cellIndex + 1].textContent) > 100) {
+                                text.push(table.id.substring(6))
+                            }
+                        }
+                    }
+                });
+                sweetalert(`Limit Total Weight 100`,`${text.join()} Overweight`)
+            }
         }
     }
 
     const submit = () => {
         if (validityForm() && Array.isArray(formEvaluate.detail) && formEvaluate.detail.length > 0) {
-
             setTotalWeight()
-            postEvaluate(staff.id,period.id,formEvaluate).then(res => {
-                console.log(res);
-                if (res.status === 200) {
-                    toastSuccess(`create evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`)
-                    toastClear()
-                }
-            }).catch(error => {
-                    console.log(error);
-            }).finally(() => {
-                
-            })
+            formEvaluate.next = false
+            if (formEvaluate.total_weight_kpi <= 100.00 && formEvaluate.total_weight_key_task <= 100.00 && formEvaluate.total_weight_omg <= 100.00) {
+                postEvaluate(staff.id,period.id,formEvaluate).then(res => {
+                    if (res.status === 201) {
+                        toastSuccess(`create evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`)
+                        toastClear()
+                        setTimeout(function () {
+                            window.location.replace(`/kpi/evaluation-form/staff/${res.data.data.user_id}/edit/period/${res.data.data.period_id}/evaluate/${res.data.data.id}/edit`)
+                        } 
+                        ,2000)
+                    }
+                }).catch(error => {
+                        console.log(error);
+                }).finally(() => {
+                    
+                })
+            }else{
+                let tables = document.getElementById('all-table').querySelectorAll('table')
+                let text = []
+                tables.forEach(table => {
+                    let obj = table.tFoot.rows[0].cells
+                    for (const iterator of obj) {
+                        if (iterator.textContent === 'Total Weight :') {
+                            if (parseFloat(obj[iterator.cellIndex + 1].textContent) > 100) {
+                                text.push(table.id.substring(6))
+                            }
+                        }
+                    }
+                });
+                sweetalert(`Limit Total Weight 100`,`${text.join()} Overweight`)
+            }
         }
     }
+
     const setTotalWeight = () => {
         if (formEvaluate.detail.length > 0) {
-            let kpi = formEvaluate.detail.filter(value => value.rules.categorys.name === 'kpi')
-            let task = formEvaluate.detail.filter(value => value.rules.categorys.name === 'key-task')
-            let omg = formEvaluate.detail.filter(value => value.rules.categorys.name === 'omg')
-            formEvaluate.total_weight_kpi = kpi.reduce((accumulator, currentValue) => accumulator + currentValue.weight,0)
-            formEvaluate.total_weight_key_task = task.reduce((accumulator, currentValue) => accumulator + currentValue.weight,0)
-            formEvaluate.total_weight_omg = omg.reduce((accumulator, currentValue) => accumulator + currentValue.weight,0)
+            formEvaluate.total_weight_kpi = formEvaluate.detail.reduce((accumulator, currentValue) => currentValue.rules.categorys.name === 'kpi' ? accumulator + currentValue.weight : accumulator ,0)
+            formEvaluate.total_weight_key_task = formEvaluate.detail.reduce((accumulator, currentValue) => currentValue.rules.categorys.name === 'key-task' ? accumulator + currentValue.weight : accumulator ,0)
+            formEvaluate.total_weight_omg = formEvaluate.detail.reduce((accumulator, currentValue) => currentValue.rules.categorys.name === 'omg' ? accumulator + currentValue.weight : accumulator ,0)
         }
     }
 
     const changeValue = async (e) => {
         let object = formEvaluate.detail.find(obj => obj.rules.name === e.offsetParent.parentNode.dataset.id)
+        e.value = e.value
         for (const key in object) {
             object[key] = (key === e.name) ? parseFloat(e.value) : object[key]
         }
         if (e.name === 'weight') {
-            let sum = formEvaluate.detail.reduce((total,cur) => {
-                if (cur.rules.category_id === object.rules.category_id) {
-                    return total += cur.weight
-                }else{
-                    return total
-                }
-            },0)
+            let sum = formEvaluate.detail.reduce((total,cur) => cur.rules.category_id === object.rules.category_id ? total += parseFloat(cur.weight) : total ,0)
             // change total weight
             e.offsetParent.parentNode.parentNode.parentNode.tFoot.lastElementChild.cells[e.offsetParent.cellIndex].textContent = sum.toFixed(2)
+            e.max = (100.00 - parseFloat(sum)) + parseFloat(e.value)
         }
     }
 
@@ -470,7 +511,7 @@
     const selectTemplate = async (e) => {
         if (e.selectedIndex > 0) {
             formEvaluate.template = parseInt(e.options[e.selectedIndex].value)
-            await getRuleTemplate(e.options[e.selectedIndex].value).then( async res => {
+                await getRuleTemplate(e.options[e.selectedIndex].value).then( async res => {
                     let mainRule = document.getElementById('mainRule')
                     mainRule.innerHTML = ''
                     formEvaluate.detail = []
@@ -487,8 +528,16 @@
                 }).finally(() => {
                     // 
                 })
+            document.getElementById('rule-remove-modal').removeAttribute('disabled')
+            document.getElementById('rule-add-modal').removeAttribute('disabled')
+            document.getElementById('submit').removeAttribute('disabled')
+            document.getElementById('submit-to-user').removeAttribute('disabled')
         }else{
             clearData()
+            document.getElementById('rule-remove-modal').setAttribute('disabled',true)
+            document.getElementById('rule-add-modal').setAttribute('disabled',true)
+            document.getElementById('submit').setAttribute('disabled',true)
+            document.getElementById('submit-to-user').setAttribute('disabled',true)
         }
     }
 
@@ -539,7 +588,7 @@
                 let newCellWeight = newRow.insertCell()
                 let inputWeight = document.createElement(`input`)
                 inputWeight.setAttribute(`onchange`,'changeValue(this)')
-                newCellWeight.appendChild(createInput(inputWeight,'number',className,`weight`,element.weight.toFixed(2)))
+                newCellWeight.appendChild(createInput(inputWeight,'number',className,`weight`,element.weight))
 
                 let newCellTarget = newRow.insertCell()
                 let inputTarget = document.createElement(`input`)
@@ -674,17 +723,38 @@
         })
     }
 
+    const setOptionModal = (group) => {
+        let table = document.getElementById(`table-${group.name}`)
+        rows = table.tBodies[0].rows
+        getRuleDropdown(group).then(result => {
+            for (const row of rows) {
+                for (let i = 0; i < result.data.data.length; i++) {
+                    const element = result.data.data[i]
+                    if (element.name === row.children[1].textContent) {
+                        result.data.data.splice(i,1)
+                        i--
+                    }
+                }
+            }
+            // console.log(result.data.data);
+            
+            result.data.data.forEach(element => {
+                let option = document.createElement("option")
+                option.text = element.name
+                option.value = element.id
+                document.getElementById('validationRuleName').appendChild(option)
+            })
+        }).catch(error => console.log(error.response)).finally()
+    }
+
     $('#ruleModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
-        // var group = button.data('group') // Extract info from data-* attributes
+        var group = button.data('group') // Extract info from data-* attributes
+        setOptionModal(group)
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
-        // let row = document.getElementById(`table-${group.name}`).getElementsByTagName('tbody')[0].lastChild
-        // modal.find('.modal-title').text('New Rule to : ' + recipient)
-        // modal.find('.modal-body input[name ="parent_rule_template_id"]').val(getLastRowNum(row))
-        // modal.find('.modal-body input[name ="field"]').val(getLastRowNum(row))
-        // modal.find('.modal-body input[name ="weight_category"]').val(document.getElementById(`weight-${group.name}`).value)
+        // fetch rules filter
     })
 
     $('#ruleModal').on('hide.bs.modal', function (event) {
@@ -692,6 +762,11 @@
         // var group = button.data('group') // Extract info from data-* attributes
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        document.getElementById('validationRuleName').innerHTML=''
+        let optionD = document.createElement("option")
+            optionD.text = "Choose..."
+            optionD.value = ""
+            document.getElementById('validationRuleName').appendChild(optionD)
         var modal = $(this)
         // modal.find('.modal-body input[name ="base_line"]').val('')
         document.getElementById('form-rule').reset()

@@ -48,6 +48,12 @@
                                 @endforeach
                                 @endisset
                             </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid Rule Category.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="ruleName">Rule Name :</label>
@@ -57,7 +63,7 @@
                         <div class="col-md-4 mb-3">
                             <label for="description">Description :</label>
                             <input type="text" class="form-control form-control-sm" id="description"
-                                placeholder="Description" value="{{$rule->description}}" name="description" required>
+                                placeholder="Description" value="{{$rule->description}}" name="description">
                         </div>
                     </div>
                     <div class="form-row">
@@ -70,6 +76,12 @@
                                 <option value="mesurement_2"
                                     {{$rule->measurement === "mesurement_2" ? 'selected' : ''}}>Mesurement 2</option>
                             </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid Mesurement.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="targetUnit">Target Unit :</label>
@@ -82,6 +94,12 @@
                                 @endforeach
                                 @endisset
                             </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid Target Unit.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="position-relative form-group"><label for="Calculate-type" class="">Calculate
@@ -92,17 +110,23 @@
                                     <option value="">Choose...</option>
                                     @isset($calcuTypes)
                                     @foreach ($calcuTypes as $item)
-                                    <option value="{{$item}}" {{$rule->calculate_type === $item ? "selected" : ""}}>{{$item}}</option>
+                                    <option value="{{$item}}" {{$rule->calculate_type === $item ? "selected" : ""}}>
+                                        {{$item}}</option>
                                     @endforeach
                                     @endisset
                                 </select>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Calculate Type.
+                                </div>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
                             <button class="mb-2 mr-2 btn btn-success">Save</button>
-                            <button class="mb-2 mr-2 btn btn-danger">Delete</button>
                         </div>
                     </div>
                 </form>
@@ -110,4 +134,7 @@
         </div>
     </div>
 </div>
+@endsection
+@section('second-script')
+<script src="{{asset('assets\js\kpi\rule\create.js')}}" defer></script>
 @endsection

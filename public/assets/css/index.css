@@ -70,3 +70,12 @@
     font-style: italic;
     color: #96a2a7;
 }
+
+/* select2 UI */
+.select2-hidden-accessible {
+    position: inherit !important;
+}
+
+.select2 ,.select2-containe {
+        display: inherit !important;
+    }

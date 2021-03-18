@@ -208,9 +208,10 @@ class EvaluationFormController extends Controller
         try {
             $evaluate = $this->evaluateService->findKeyEvaluate($staff, $period, $evaluate);
             if ($evaluate) {
+                // Update Header
                 $evaluate->template_id = $request->template;
                 $evaluate->main_rule_id = $request->mainRule;
-                // $evaluate->status = $evaluate->status ? KPIEnum::ready : KPIEnum::new;
+                $evaluate->status = $evaluate->status ? KPIEnum::ready : KPIEnum::new;
                 $evaluate->main_rule_condition_1_min = $request->minone;
                 $evaluate->main_rule_condition_1_max = $request->maxone;
                 $evaluate->main_rule_condition_2_min = $request->mintwo;
@@ -222,6 +223,7 @@ class EvaluationFormController extends Controller
                 $evaluate->total_weight_omg = $request->total_weight_omg;
                 $evaluate->save();
 
+                // Insert or Update Detail
                 foreach ($request->detail as $key => $value) {
                     $rule_id = $value['rule_id'];
                     $target = $value['target'];
@@ -238,9 +240,25 @@ class EvaluationFormController extends Controller
                     }
                     $base_line = $value['base_line'];
                     $max_result = $value['max_result'];
-                    $attr = compact("rule_id", "target", "actual", "weight", "weight_category", "base_line", "max_result");
+
                     // success return 1
-                    $this->evaluateDetailService->updateForEvaluate($attr, $value['id'], $evaluate->id, $value['rule_id']);
+                    if (!isset($value['id'])) {
+                        $evaluate_id = $evaluate->id;
+                        $attr = compact("evaluate_id", "rule_id", "target", "actual", "weight", "weight_category", "base_line", "max_result");
+                        $this->evaluateDetailService->create($attr);
+                    } else {
+                        $attr = compact("rule_id", "target", "actual", "weight", "weight_category", "base_line", "max_result");
+                        $this->evaluateDetailService->updateForEvaluate($attr, $evaluate->id, $rule_id);
+                    }
+                }
+
+                // Remove row
+                if (isset($request->remove)) {
+                    foreach ($request->remove as $key => $value) {
+                        if (isset($value['id'])) {
+                            $this->evaluateDetailService->destroy($value['id']);
+                        }
+                    }
                 }
             }
         } catch (\Throwable $th) {

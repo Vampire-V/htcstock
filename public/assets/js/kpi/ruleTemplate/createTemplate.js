@@ -3,22 +3,12 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         // Supporting Documents
-        $("#validationRuleCategory").select2({
-            placeholder: 'Select status',
+
+        $("#validationDepartment").select2({
+            placeholder: 'Select department',
             allowClear: true
         });
-        $("#validationMesurement").select2({
-            placeholder: 'Select agreements',
-            allowClear: true
-        });
-        $("#validationTargetUnit").select2({
-            placeholder: 'Select status',
-            allowClear: true
-        });
-        $("#validationCalculateType").select2({
-            placeholder: 'Select agreements',
-            allowClear: true
-        });
+
     })
 
     window.addEventListener('load', function () {
@@ -26,6 +16,11 @@
         let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         validationForm(forms)
+        // console.log('load...');
     }, false);
-
 })();
+
+
+// function formSubmit() {
+//     document.getElementById('form-template').submit()
+// }

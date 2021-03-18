@@ -7,14 +7,6 @@
     .bs-example {
         margin: 20px;
     }
-
-    .select2-hidden-accessible {
-        position: inherit !important;
-    }
-
-    .select2 ,.select2-containe {
-            display: inherit !important;
-        }
 </style>
 @endsection
 @section('content')
@@ -270,6 +262,11 @@
         var group = button.data('group') // Extract info from data-* attributes
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        document.getElementById('validationRuleName').innerHTML=''
+        let optionD = document.createElement("option")
+            optionD.text = "Choose..."
+            optionD.value = ""
+            document.getElementById('validationRuleName').appendChild(optionD)
         var modal = $(this)
         document.getElementById('form-ruletemplate').reset()
     })
@@ -287,6 +284,7 @@
                     }
                 }
             }
+            
             result.data.data.forEach(element => {
                 let option = document.createElement("option")
                 option.text = element.name
@@ -297,6 +295,7 @@
             // console.log(datas);
         })
     }
+
     const getValue = (sel) => {
         // console.log(sel,sel.options[sel.selectedIndex].value,sel.options[sel.selectedIndex].text)
     }

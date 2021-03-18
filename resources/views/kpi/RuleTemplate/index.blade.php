@@ -21,12 +21,7 @@
                 <i class="fa fa-star"></i>
             </button> --}}
             <div class="d-inline-block dropdown">
-                <a href="{{route('kpi.template.create')}}" class="btn-shadow btn btn-info">
-                    <span class="btn-icon-wrapper pr-2 opacity-7">
-                        <i class="fa fa-business-time fa-w-20"></i>
-                    </span>
-                    Create
-                </a>
+
             </div>
         </div>
     </div>
@@ -77,7 +72,27 @@
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
         <div class="card-body">
-            <h5 class="card-title">Rule Template List</h5>
+            <div class="card-header">
+                <h5 class="card-title">Rule Template List</h5>
+                <div class="btn-actions-pane">
+                    <div role="group" class="btn-group-sm btn-group">
+                    </div>
+                </div>
+                <div class="btn-actions-pane-right">
+                    <div role="group" class="btn-group-sm btn-group">
+                        {{-- <button class="mb-2 mr-2 btn btn-danger" onclick="deleteRuleTemp()">Delete Selected
+                            Rule</button>
+                        <button class="mb-2 mr-2 btn btn-primary" data-toggle="modal" data-target="#ruleModal">Add
+                            new rule</button> --}}
+                        <a href="{{route('kpi.template.create')}}" class="btn-shadow btn btn-info mb-2 mr-2">
+                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="fa fa-business-time fa-w-20"></i>
+                            </span>
+                            Create
+                        </a>
+                    </div>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="mb-0 table table-sm">
                     <thead>

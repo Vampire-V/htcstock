@@ -203,11 +203,11 @@ function toastClear() {
     }, 5000)
 }
 
-var createInput = (element, type, classList = '',name = '', value = '',id = '') => {
+var createInput = (element, type, classList = '', name = '', value = '', id = '') => {
     element.setAttribute(`type`, type)
     element.setAttribute(`name`, name)
     element.setAttribute(`id`, id)
-    element.value = value
+    element.setAttribute(`value`, value)
     if (type === 'number') {
         element.setAttribute(`min`, 0)
         element.setAttribute(`step`, 0.01)
@@ -223,8 +223,38 @@ var createInput = (element, type, classList = '',name = '', value = '',id = '') 
     return element
 }
 
-var createOption = (element, value = '',name = '') => {
+var createOption = (element, value = '', name = '') => {
     element.value = value
     element.textContent = name
     return element
+}
+
+var sweetalert = (title,text) => {
+    let timerInterval
+    Swal.fire({
+        title: text,
+        html: title,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+                // const content = Swal.getContent()
+                // if (content) {
+                //     const b = content.querySelector('b')
+                //     if (b) {
+                //         b.textContent = Swal.getTimerLeft()
+                //     }
+                // }
+            }, 100)
+        },
+        willClose: () => {
+            clearInterval(timerInterval)
+        }
+    }).then((result) => {
+        /* Read more about handling dismissals below */
+        if (result.dismiss === Swal.DismissReason.timer) {
+            console.log('I was closed by the timer')
+        }
+    })
 }

@@ -40,6 +40,7 @@
                             <label for="ruleCategory">Rule Category :</label>
                             <select id="validationRuleCategory" class="form-control-sm form-control" name="category_id"
                                 required>
+                                <option value="">Choose...</option>
                                 @isset($category)
                                 @forelse ($category as $item)
                                 <option value="{{$item->id}}">{{$item->name}}</option>
@@ -48,6 +49,12 @@
                                 @endforelse
                                 @endisset
                             </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid Rule Category.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="ruleName">Rule Name :</label>
@@ -64,14 +71,22 @@
                         <div class="col-md-4 mb-3">
                             <label for="mesurement">Mesurement :</label>
                             <select id="validationMesurement" class="form-control-sm form-control" name="measurement" required>
+                                <option value="">Choose...</option>
                                 <option value="mesurement_1">Mesurement 1</option>
                                 <option value="mesurement_2">Mesurement 2</option>
                             </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid Mesurement.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="targetUnit">Target Unit :</label>
                             <select id="validationTargetUnit" class="form-control-sm form-control"
                                 name="target_unit_id" required>
+                                <option value="">Choose...</option>
                                 @isset($unit)
                                 @forelse ($unit as $item)
                                 <option value="{{$item->id}}">{{$item->name}}</option>
@@ -80,6 +95,12 @@
                                 @endforelse
                                 @endisset
                             </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid Target Unit.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="position-relative form-group"><label for="Calculate-type" class="">Calculate
@@ -94,15 +115,14 @@
                                     @endforeach
                                     @endisset
                                 </select>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Calculate Type.
+                                </div>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
                             </div>
                         </div>
-                        {{-- <div class="col-md-4 mb-3">
-                            <label for="calculationType">Calculation Type :</label>
-                            <select id="validationCalculationType" class="form-control-sm form-control">
-                                <option value="Normal">Normal</option>
-                                <option value="Round Down">Round Down</option>
-                            </select>
-                        </div> --}}
                     </div>
                     <div class="form-row">
                         <div class="col-md-4 mb-3">

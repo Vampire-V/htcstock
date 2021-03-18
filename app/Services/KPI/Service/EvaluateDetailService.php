@@ -38,10 +38,11 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
         }
     }
 
-    public function updateForEvaluate(array $datas, int $id,int $evaluate,int $rule_id)
+    public function updateForEvaluate(array $datas, int $evaluate,int $rule_id)
     {
         try {
-            return EvaluateDetail::where(['id' => $id,'evaluate_id' => $evaluate,'rule_id' => $rule_id])->update($datas);
+            $row = EvaluateDetail::firstWhere(['evaluate_id' => $evaluate,'rule_id' => $rule_id]);
+            return EvaluateDetail::where(['id' => $row->id])->update($datas);
         } catch (\Throwable $th) {
             throw $th;
         }

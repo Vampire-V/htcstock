@@ -4,14 +4,6 @@
     .bs-example {
         margin: 20px;
     }
-
-    .select2-hidden-accessible {
-        position: inherit !important;
-    }
-
-    .select2 ,.select2-containe {
-            display: inherit !important;
-        }
 </style>
 @endsection
 @section('sidebar')
@@ -89,7 +81,18 @@
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
         <div class="card-body">
-            <h5 class="card-title">{{$period->name}} {{$period->year}}</h5>
+            <div class="card-header">
+                <h5 class="card-title">{{$period->name}} {{$period->year}}</h5>
+                <div class="btn-actions-pane">
+                    <div role="group" class="btn-group-sm btn-group">
+                    </div>
+                </div>
+                <div class="btn-actions-pane-right">
+                    <div role="group" class="btn-group-sm btn-group">
+                        <h5>Status <span class="badge badge-info">{{$evaluate->status}}</span></h5>
+                    </div>
+                </div>
+            </div>
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
@@ -130,7 +133,8 @@
                                 <option value="">Choose...</option>
                                 @isset($templates)
                                 @foreach ($templates as $item)
-                                <option value="{{$item->id}}" {{$evaluate->template_id === $item->id ? "selected" : ""}}>
+                                <option value="{{$item->id}}"
+                                    {{$evaluate->template_id === $item->id ? "selected" : ""}}>
                                     {{$item->name}}</option>
                                 @endforeach
                                 @endisset
@@ -157,26 +161,25 @@
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-body">
-                <h5 class="card-title">{{$group->name}}</h5>
-                @if ($group->name === 'key-task')
                 <div class="card-header">
-                    {{-- <label for="department" class="mb-2 mr-2">Weight :</label> --}}
+                    <h5 class="card-title">{{$group->name}}</h5>
                     <div class="btn-actions-pane">
                         <div role="group" class="btn-group-sm btn-group">
-                            {{-- <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
-                                id="weight-{{$group->name}}" name="weight_{{$group->name}}"> --}}
                         </div>
                     </div>
                     <div class="btn-actions-pane-right">
+                        @if ($group->name === 'key-task')
                         <div role="group" class="btn-group-sm btn-group">
                             <button class="mb-2 mr-2 btn btn-danger" onclick="deleteRuleTemp()">Delete Selected
                                 Rule</button>
-                            <button class="mb-2 mr-2 btn btn-primary" data-toggle="modal" data-target="#ruleModal">Add
-                                new rule</button>
+                            <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
+                                data-target="#ruleModal">Add
+                                New Rule</button>
                         </div>
+                        @endif
                     </div>
                 </div>
-                @endif
+
                 <div class="table-responsive">
                     <table class="mb-0 table table-sm" id="table-{{$group->name}}">
                         <thead>
@@ -294,7 +297,7 @@
         <div class="page-title-actions">
             <button class="mb-2 mr-2 btn btn-primary" onclick="submit()">Save</button>
             <button class="mb-2 mr-2 btn btn-success" onclick="submitToUser()">Submit to staff</button>
-            <button class="mb-2 mr-2 btn btn-danger">Delete</button>
+            {{-- <button class="mb-2 mr-2 btn btn-danger">Delete</button> --}}
         </div>
     </div>
 </div>
@@ -319,11 +322,11 @@
                                 <select id="validationRuleName" class="form-control form-control-sm" name="rule_id_add"
                                     onchange="setRuleToTemp(this)">
                                     <option value="">Choose...</option>
-                                    @isset($rules)
+                                    {{-- @isset($rules)
                                     @foreach ($rules as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
                                     @endforeach
-                                    @endisset
+                                    @endisset --}}
                                 </select></div>
                         </div>
                     </div>
@@ -357,6 +360,7 @@
                 total_weight_key_task: 0,
                 total_weight_omg: 0,
                 detail : [],
+                remove : [],
                 next : false
             },
             className = ['form-control','form-control-sm']
@@ -378,6 +382,7 @@
         formEvaluate.total_weight_key_task = 0
         formEvaluate.total_weight_omg = 0
         formEvaluate.detail = []
+        formEvaluate.remove = []
         formEvaluate.next = false
 
         let tables = document.getElementById("all-table").querySelectorAll('table')
@@ -441,7 +446,8 @@
     }
 
     const validityForm = () => {
-        let forms = document.getElementsByClassName('app-main__inner')[0].querySelectorAll('form'), status = true
+        let forms = document.getElementsByClassName('app-main__inner')[0].querySelectorAll('form'),
+            status = true
         forms.forEach(form => {
             if (!form.checkValidity()) {
                 form.classList.add('was-validated')
@@ -453,48 +459,60 @@
 
     const submitToUser = () => {
         if (validityForm() && Array.isArray(formEvaluate.detail) && formEvaluate.detail.length > 0) {
-
             setTotalWeight()
             formEvaluate.next = true
-            putEvaluate(staff.id,period.id,evaluate.id,formEvaluate).then(res => {
-                if (res.status === 200) {
-                    toastSuccess(`update evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`)
-                    toastClear()
-                }
-            }).catch(error => {
-                    console.log(error);
-            }).finally(() => {
-                
-            })
+            if (formEvaluate.total_weight_kpi <= 100 && formEvaluate.total_weight_key_task <= 100 && formEvaluate.total_weight_omg <= 100) {
+                putEvaluate(staff.id,period.id,evaluate.id,formEvaluate).then(res => {
+                    if (res.status === 200) {
+                        toastSuccess(`update evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`)
+                        toastClear()
+                        setTimeout(function () {
+                            window.location.replace(`/kpi/evaluation-form/staff/${res.data.data.user_id}/edit/period/${res.data.data.period_id}/evaluate/${res.data.data.id}/edit`)
+                        } 
+                        ,2000)
+                    }
+                }).catch(error => {
+                        console.log(error);
+                }).finally(() => {
+                    
+                })
+            }else{
+
+            }
+            
         }
     }
 
     const submit = () => {
         if (validityForm() && Array.isArray(formEvaluate.detail) && formEvaluate.detail.length > 0) {
-
             setTotalWeight()
-            console.log(formEvaluate);
-            putEvaluate(staff.id,period.id,evaluate.id,formEvaluate).then(res => {
-                if (res.status === 200) {
-                    createRowEvaluate(res.data.data.detail)
-                    setData(res.data.data)
-                    setMainRule(res.data.data)
-                    toastSuccess(`update evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`)
-                    toastClear()
-                }
-            }).catch(error => {
-                    console.log(error);
-            }).finally(() => {
-                
-            })
+            formEvaluate.next = false
+            if (formEvaluate.total_weight_kpi <= 100.00 && formEvaluate.total_weight_key_task <= 100.00 && formEvaluate.total_weight_omg <= 100.00) {
+                putEvaluate(staff.id,period.id,evaluate.id,formEvaluate).then(res => {
+                    if (res.status === 200) {
+                        // createRowEvaluate(res.data.data.detail)
+                        // setData(res.data.data)
+                        // setMainRule(res.data.data)
+                        toastSuccess(`update evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`)
+                        toastClear()
+                        setTimeout(function () {
+                            window.location.replace(`/kpi/evaluation-form/staff/${res.data.data.user_id}/edit/period/${res.data.data.period_id}/evaluate/${res.data.data.id}/edit`)
+                        } 
+                        ,2000)
+                    }
+                }).catch(error => {
+                        console.log(error);
+                }).finally(() => {
+                    
+                })
+            }else{
+
+            }
         }
     }
 
     const setTotalWeight = () => {
         if (formEvaluate.detail.length > 0) {
-            // let kpi = formEvaluate.detail.filter(value => value.rules.categorys.name === 'kpi')
-            // let task = formEvaluate.detail.filter(value => value.rules.categorys.name === 'key-task')
-            // let omg = formEvaluate.detail.filter(value => value.rules.categorys.name === 'omg')
             formEvaluate.total_weight_kpi = formEvaluate.detail.reduce((accumulator, currentValue) => currentValue.rules.categorys.name === 'kpi' ? accumulator + currentValue.weight : accumulator ,0)
             formEvaluate.total_weight_key_task = formEvaluate.detail.reduce((accumulator, currentValue) => currentValue.rules.categorys.name === 'key-task' ? accumulator + currentValue.weight : accumulator ,0)
             formEvaluate.total_weight_omg = formEvaluate.detail.reduce((accumulator, currentValue) => currentValue.rules.categorys.name === 'omg' ? accumulator + currentValue.weight : accumulator ,0)
@@ -507,15 +525,10 @@
             object[key] = (key === e.name) ? parseFloat(e.value) : object[key]
         }
         if (e.name === 'weight') {
-            let sum = formEvaluate.detail.reduce((total,cur) => {
-                if (cur.rules.category_id === object.rules.category_id) {
-                    return total += cur.weight
-                }else{
-                    return total
-                }
-            },0)
+            let sum = formEvaluate.detail.reduce((total,cur) => cur.rules.category_id === object.rules.category_id ? total += cur.weight : total ,0)
             // change total weight
-            e.offsetParent.parentNode.parentNode.parentNode.tFoot.lastElementChild.cells[e.offsetParent.cellIndex].textContent = sum.toFixed(2)
+            e.offsetParent.parentNode.parentNode.parentNode.tFoot.lastElementChild.cells[e.offsetParent.cellIndex].textContent = Number(sum.toFixed(2));
+            e.max = Number(((100.00 - parseFloat(sum)) + parseFloat(e.value)).toFixed(2))
         }
     }
 
@@ -622,18 +635,23 @@
 
     const deleteRuleTemp = () => {
         let table = document.getElementById(`table-key-task`),
-        rows = table.tBodies[0],
+        body = table.tBodies[0],
         removeDetailIndex = []
-        for (const row of rows.rows) {
-            if (row.lastChild.lastChild.firstChild.checked) {
-                let indexDetail = formEvaluate.detail.findIndex(object => object.rules.name === row.dataset.id)
+        for (let index = 0; index < body.rows.length; index++) {
+            const element = body.rows[index]
+            if (element.lastChild.lastChild.firstChild.checked) {
+                let indexDetail = formEvaluate.detail.findIndex(object => object.rules.name === element.dataset.id)
                 removeDetailIndex.push(indexDetail)
-                // remove row in table
-                rows.deleteRow(row.rowIndex - 1)
+                // list row remove in BackEnd
+                formEvaluate.remove.push(formEvaluate.detail[indexDetail])
             }
         }
-         // remove detail temp
+
+        // remove detail temp
         formEvaluate.detail = formEvaluate.detail.filter((value, index) => removeDetailIndex.indexOf(index) == -1)
+
+        keyTaskNew(formEvaluate.detail.filter(value => value.rules.categorys.name === 'key-task'))
+        table.tFoot.lastElementChild.cells[5].textContent = formEvaluate.detail.reduce((accumulator, currentValue) => currentValue.rules.categorys.name === 'key-task' ? accumulator + currentValue.weight : accumulator ,0).toFixed(2)
     }
 
     const displayForTemplate = async (template) => {
@@ -692,12 +710,11 @@
             let json = {
                 base_line: 0,
                 field: null,
-                // id: null,​​​
                 max_result: 0,
                 parent_rule_template_id: Math.max.apply(null,ruleKPI.map(o => o.parent_rule_template_id ))+1,
                 rule_id: obj.id,
                 rules: obj,
-                target_config: 0,
+                target: 0,
                 template_id: null,
                 weight: 0,
                 weight_category: 0
@@ -735,7 +752,7 @@
             let newCellTarget = newRow.insertCell()
             let inputTarget = document.createElement(`input`)
                 inputTarget.setAttribute(`onchange`,'changeValue(this)')
-                newCellTarget.appendChild(createInput(inputTarget,'number',className,`target_config`,json.target_config.toFixed(2)))
+                newCellTarget.appendChild(createInput(inputTarget,'number',className,`target`,json.target.toFixed(2)))
 
             let newCellCheck = newRow.insertCell()
             let div = document.createElement('div')
@@ -755,24 +772,103 @@
                 div.appendChild(label)
                 
                 newCellCheck.appendChild(div)
+
             formEvaluate.detail.push(json)
             document.getElementById('ruleModal').getElementsByClassName("close")[0].click()
         }).catch(error => {
             console.log(error)
-        })
+        }).finally(() => console.log('tr : ',formEvaluate.detail))
+    }
+
+    const keyTaskNew = (datas) => {
+            let tables = document.getElementById(`table-key-task`)
+            tables.tBodies[0].innerHTML = ''
+            datas.forEach((element,index) => {
+                let newRow = tables.tBodies[0].insertRow()
+                newRow.setAttribute("data-id", element.rules.name)
+
+                let newCellIndex = newRow.insertCell()
+                    newCellIndex.textContent = index + 1
+
+                let newCellName = newRow.insertCell()
+                    newCellName.textContent = element.rules.name
+
+                let newCellDescription = newRow.insertCell()
+                    newCellDescription.textContent = element.rules.description
+
+                let newCellBaseLine = newRow.insertCell()
+                let inputBaseLine = document.createElement(`input`)
+                    inputBaseLine.setAttribute(`onchange`,'changeValue(this)')
+                    newCellBaseLine.appendChild(createInput(inputBaseLine,'number',className,`base_line`,element.base_line.toFixed(2)))
+
+                let newCellMax = newRow.insertCell()
+                let inputMax = document.createElement(`input`)
+                    inputMax.setAttribute(`onchange`,'changeValue(this)')
+                    newCellMax.appendChild(createInput(inputMax,'number',className,`max_result`,element.max_result.toFixed(2)))
+
+                let newCellWeight = newRow.insertCell()
+                let inputWeight = document.createElement(`input`)
+                    inputWeight.setAttribute(`onchange`,'changeValue(this)')
+                    newCellWeight.appendChild(createInput(inputWeight,'number',className,`weight`,element.weight.toFixed(2)))
+
+                let newCellTarget = newRow.insertCell()
+                let inputTarget = document.createElement(`input`)
+                    inputTarget.setAttribute(`onchange`,'changeValue(this)')
+                    newCellTarget.appendChild(createInput(inputTarget,'number',className,`target`,element.target.toFixed(2)))
+
+                let newCellCheck = newRow.insertCell()
+                let div = document.createElement('div')
+                    div.className = 'custom-checkbox custom-control'
+
+                let checkbox = document.createElement('input')
+                    checkbox.type = `checkbox`
+                    checkbox.name = `rule-${element.rules.name}`
+                    checkbox.className = `custom-control-input`
+                    checkbox.id = element.rules.name
+
+                let label = document.createElement('label')
+
+                    label.classList.add('custom-control-label')
+                    label.htmlFor = element.rules.name
+                    div.appendChild(checkbox)
+                    div.appendChild(label)
+                    
+                    newCellCheck.appendChild(div)
+            });
+            // console.log('delete and new tr : ',formEvaluate.detail);
+    }
+
+    const setOptionModal = (group) => {
+        let table = document.getElementById(`table-${group.name}`)
+        rows = table.tBodies[0].rows
+        getRuleDropdown(group).then(result => {
+            for (const row of rows) {
+                for (let i = 0; i < result.data.data.length; i++) {
+                    const element = result.data.data[i]
+                    if (element.name === row.children[1].textContent) {
+                        result.data.data.splice(i,1)
+                        i--
+                    }
+                }
+            }
+            result.data.data.forEach(element => {
+                let option = document.createElement("option")
+                option.text = element.name
+                option.value = element.id
+                document.getElementById('validationRuleName').appendChild(option)
+            })
+        }).catch(error => console.log(error.response)).finally()
     }
 
     $('#ruleModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
-        // var group = button.data('group') // Extract info from data-* attributes
+        var group = button.data('group') // Extract info from data-* attributes
+        setOptionModal(group)
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
-        // let row = document.getElementById(`table-${group.name}`).getElementsByTagName('tbody')[0].lastChild
-        // modal.find('.modal-title').text('New Rule to : ' + recipient)
-        // modal.find('.modal-body input[name ="parent_rule_template_id"]').val(getLastRowNum(row))
-        // modal.find('.modal-body input[name ="field"]').val(getLastRowNum(row))
-        // modal.find('.modal-body input[name ="weight_category"]').val(document.getElementById(`weight-${group.name}`).value)
+        // fetch rules filter
+       
     })
 
     $('#ruleModal').on('hide.bs.modal', function (event) {
@@ -781,6 +877,11 @@
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
+        document.getElementById('validationRuleName').innerHTML=''
+        let optionD = document.createElement("option")
+            optionD.text = "Choose..."
+            optionD.value = ""
+            document.getElementById('validationRuleName').appendChild(optionD)
         // modal.find('.modal-body input[name ="base_line"]').val('')
         document.getElementById('form-rule').reset()
     })

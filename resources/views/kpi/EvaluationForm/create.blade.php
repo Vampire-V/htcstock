@@ -492,13 +492,13 @@
         let object = formEvaluate.detail.find(obj => obj.rules.name === e.offsetParent.parentNode.dataset.id)
         e.value = e.value
         for (const key in object) {
-            object[key] = (key === e.name) ? parseFloat(e.value) : object[key]
+            object[key] = (key === e.name) ? Number(parseFloat(e.value).toFixed(2)) : object[key]
         }
         if (e.name === 'weight') {
             let sum = formEvaluate.detail.reduce((total,cur) => cur.rules.category_id === object.rules.category_id ? total += parseFloat(cur.weight) : total ,0)
             // change total weight
             e.offsetParent.parentNode.parentNode.parentNode.tFoot.lastElementChild.cells[e.offsetParent.cellIndex].textContent = sum.toFixed(2)
-            e.max = (100.00 - parseFloat(sum)) + parseFloat(e.value)
+            e.max = (100.00 - Number(parseFloat(sum).toFixed(2))) + Number(parseFloat(e.value).toFixed(2))
         }
     }
 
@@ -626,18 +626,22 @@
 
     const deleteRuleTemp = () => {
         let table = document.getElementById(`table-key-task`),
-        rows = table.tBodies[0],
+        body = table.tBodies[0],
         removeDetailIndex = []
-        for (const row of rows.rows) {
-            if (row.lastChild.lastChild.firstChild.checked) {
-                let indexDetail = formEvaluate.detail.findIndex(object => object.rules.name === row.dataset.id)
+        for (let index = 0; index < body.rows.length; index++) {
+            const element = body.rows[index]
+            if (element.lastChild.lastChild.firstChild.checked) {
+                let indexDetail = formEvaluate.detail.findIndex(object => object.rules.name === element.dataset.id)
                 removeDetailIndex.push(indexDetail)
-                // remove row in table
-                rows.deleteRow(row.rowIndex - 1)
+                // list row remove in BackEnd
+                formEvaluate.remove.push(formEvaluate.detail[indexDetail])
             }
         }
          // remove detail temp
         formEvaluate.detail = formEvaluate.detail.filter((value, index) => removeDetailIndex.indexOf(index) == -1)
+
+        keyTaskNew(formEvaluate.detail.filter(value => value.rules.categorys.name === 'key-task'))
+        table.tFoot.lastElementChild.cells[5].textContent = formEvaluate.detail.reduce((accumulator, currentValue) => currentValue.rules.categorys.name === 'key-task' ? accumulator + currentValue.weight : accumulator ,0).toFixed(2)
     }
     
 // modal method

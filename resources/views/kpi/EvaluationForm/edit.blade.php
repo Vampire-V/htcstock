@@ -528,7 +528,7 @@
             let sum = formEvaluate.detail.reduce((total,cur) => cur.rules.category_id === object.rules.category_id ? total += cur.weight : total ,0)
             // change total weight
             e.offsetParent.parentNode.parentNode.parentNode.tFoot.lastElementChild.cells[e.offsetParent.cellIndex].textContent = Number(sum.toFixed(2));
-            e.max = Number(((100.00 - parseFloat(sum)) + parseFloat(e.value)).toFixed(2))
+            e.max = (100.00 - Number(parseFloat(sum).toFixed(2))) + Number(parseFloat(e.value).toFixed(2))
         }
     }
 

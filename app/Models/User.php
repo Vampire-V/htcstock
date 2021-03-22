@@ -3,12 +3,6 @@
 namespace App\Models;
 
 use App\Http\Filters\All\Filter\UserFilter;
-use App\Http\Filters\IT\UserManagementFilter;
-use App\Models\Department;
-use App\Models\IT\Transactions;
-use App\Models\Legal\LegalApproval;
-use App\Models\Legal\LegalApprovalDetail;
-use App\Models\Legal\LegalContract;
 use App\Permissions\HasPermissionsTrait;
 use App\Relations\UserTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;

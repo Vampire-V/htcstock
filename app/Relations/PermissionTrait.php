@@ -3,6 +3,7 @@
 namespace App\Relations;
 
 use App\Models\Role;
+use App\Models\System;
 use App\Models\User;
 
 trait PermissionTrait
@@ -15,5 +16,10 @@ trait PermissionTrait
     public function users()
     {
        return $this->belongsToMany(User::class, 'user_permission');
+    }
+
+    public function system()
+    {
+       return $this->belongsTo(System::class)->withDefault();
     }
 }

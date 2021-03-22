@@ -10,4 +10,9 @@ trait SystemTrait
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class, 'system_id')->withDefault();
+    }
 }

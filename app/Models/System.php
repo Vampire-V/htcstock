@@ -15,5 +15,16 @@ class System extends Model
      */
     protected $table = 'system';
 
+       /**
+    * The attributes that are mass assignable.
+    *
+    * @var array
+    */
+   protected $fillable = [
+    'name',
+    'slug',
+    'icon'
+ ];
+
 
 }

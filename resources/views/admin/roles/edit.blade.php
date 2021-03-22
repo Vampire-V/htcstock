@@ -17,18 +17,7 @@
             </div>
         </div>
         <div class="page-title-actions">
-            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
-                class="btn-shadow mr-3 btn btn-dark">
-                <i class="fa fa-star"></i>
-            </button> --}}
             <div class="d-inline-block">
-                {{-- <button type="button" data-toggle="modal" data-target="#accessoriesModal"
-                    class="btn-shadow  btn btn-info" data-param="">
-                    <span class="btn-icon-wrapper pr-2 opacity-7">
-                        <i class="fa fa-business-time fa-w-20"></i>
-                    </span>
-                    เพิ่ม
-                </button> --}}
             </div>
         </div>
     </div>
@@ -65,7 +54,7 @@
                                 class="form-control-sm form-control role-select2" multiple="multiple" required>
                                 <option value="">--เลือก--</option>
                                 @foreach ($permissions as $permission)
-                                <option value="{{$permission->id}}" {{$role->permissions->pluck('id')->contains($permission->id)? "selected" : "" }} >{{$permission->name}}</option>
+                                <option value="{{$permission->id}}" {{$role->permissions->pluck('id')->contains($permission->id)? "selected" : "" }} >{{$permission->name}} For {{$permission->system->name}}</option>
                                 @endforeach
                             </select>
                             <div class="valid-feedback">

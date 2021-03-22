@@ -229,7 +229,7 @@ var createOption = (element, value = '', name = '') => {
     return element
 }
 
-var sweetalert = (title,text) => {
+var sweetalert = (title, text) => {
     let timerInterval
     Swal.fire({
         title: text,

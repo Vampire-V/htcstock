@@ -54,7 +54,7 @@
                                 class="form-control-sm form-control role-select2" multiple="multiple" required>
                                 <option value="">--เลือก--</option>
                                 @foreach ($permissions as $permission)
-                                <option value="{{$permission->id}}" {{$role->permissions->pluck('id')->contains($permission->id)? "selected" : "" }} >{{$permission->name}} For {{$permission->system->name}}</option>
+                                <option value="{{$permission->id}}" {{$role->permissions->pluck('id')->contains($permission->id)? "selected" : "" }} >{{$permission->name}}</option>
                                 @endforeach
                             </select>
                             <div class="valid-feedback">

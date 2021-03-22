@@ -2,11 +2,12 @@
 
 namespace App\Models\Legal;
 
-use Carbon\Carbon;
+use App\Relations\LegalComercialTermTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class LegalComercialTerm extends Model
 {
+    use LegalComercialTermTrait;
     /**
      * The attributes that are mass assignable.
      *
@@ -17,13 +18,7 @@ class LegalComercialTerm extends Model
         'delivery_date', 'to_manufacture', 'of', 'working_day', 'working_time', 'number_of_cook', 'comercial_ot',
         'number_of_doctor', 'number_of_sercurity_guard', 'number_of_subcontractor', 'number_of_agent', 'route', 'to',
         'dry_container_size', 'the_number_of_truck', 'purpose', 'promote_a_product',
-        'road','building','toilet','canteen','washing','water','mowing','general'
+        'road', 'building', 'toilet', 'canteen', 'washing', 'water', 'mowing', 'general'
     ];
     protected $dates = ['dated', 'contract_period', 'untill', 'delivery_date'];
-    
-    public function legalContractDest()
-    {
-        return $this->hasOne(LegalContractDest::class, 'comercial_term_id');
-    }
-
 }

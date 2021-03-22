@@ -3,10 +3,12 @@
 namespace App\Models\KPI;
 
 use App\Models\User;
+use App\Relations\EvaluateTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Evaluate extends Model
 {
+    use EvaluateTrait;
     protected $table = 'kpi_evaluates';
     protected $casts = [
         'user_id' => 'int',
@@ -46,36 +48,4 @@ class Evaluate extends Model
         'total_weight_key_task',
         'total_weight_omg'
     ];
-
-    /**
-     * Get the TargetPeriod that owns the Evaluate.
-     */
-    public function targetperiod()
-    {
-        return $this->belongsTo(TargetPeriod::class, 'period_id')->withDefault();
-    }
-
-    /**
-     * Get the User that owns the Evaluate.
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id')->withDefault();
-    }
-
-    /**
-     * Get the Template that owns the Evaluate.
-     */
-    public function template()
-    {
-        return $this->belongsTo(Template::class, 'template_id')->withDefault();
-    }
-
-    /**
-     * Get the EvaluateDetail that owns the Evaluate.
-     */
-    public function evaluateDetail()
-    {
-        return $this->hasMany(EvaluateDetail::class);
-    }
 }

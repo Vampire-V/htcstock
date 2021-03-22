@@ -10,6 +10,7 @@ use App\Models\Legal\LegalApproval;
 use App\Models\Legal\LegalApprovalDetail;
 use App\Models\Legal\LegalContract;
 use App\Permissions\HasPermissionsTrait;
+use App\Relations\UserTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -17,7 +18,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable, HasPermissionsTrait;
+    use Notifiable, HasPermissionsTrait, UserTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -51,59 +52,4 @@ class User extends Authenticatable implements MustVerifyEmail
         return (new UserFilter($request))->filter($builder);
     }
 
-    public function systems()
-    {
-        return $this->belongsToMany(System::class, 'users_has_systems', 'user_id', 'system_id');
-    }
-    public function divisions()
-    {
-        return $this->belongsTo(Division::class, 'divisions_id')->withDefault();
-    }
-    public function department()
-    {
-        return $this->belongsTo(Department::class, 'department_id')->withDefault();
-    }
-    public function positions()
-    {
-        return $this->belongsTo(Position::class, 'positions_id')->withDefault();
-    }
-
-
-    // ITSTOCK
-    public function transaction()
-    {
-        return $this->belongsTo(Transactions::class, 'trans_by')->withDefault();
-    }
-
-    public function createdTransaction()
-    {
-        return $this->belongsTo(Transactions::class, 'created_by')->withDefault();
-    }
-
-
-    // Legal
-    public function requestorContract()
-    {
-        return $this->hasMany(LegalContract::class);
-    }
-
-    public function checkedContract()
-    {
-        return $this->hasMany(LegalContract::class, 'checked_by');
-    }
-
-    public function createdContract()
-    {
-        return $this->hasMany(LegalContract::class);
-    }
-
-    public function legalApprove()
-    {
-        return $this->hasMany(LegalApproval::class);
-    }
-
-    public function approvalDetail()
-    {
-        return $this->hasMany(LegalApprovalDetail::class);
-    }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Relations\PositionTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Position extends Model
 {
+    use PositionTrait;
     /**
      * The attributes that are mass assignable.
      *
@@ -14,9 +16,4 @@ class Position extends Model
     protected $fillable = [
         'name'
     ];
-
-    public function users()
-    {
-        return $this->hasMany(\App\Models\User::class, 'posisions_id');
-    }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Models\Legal;
 
+use App\Relations\LegalPaymentTypeTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class LegalPaymentType extends Model
 {
+    use LegalPaymentTypeTrait;
     /**
      * The attributes that are mass assignable.
      *
@@ -14,9 +16,4 @@ class LegalPaymentType extends Model
     protected $fillable = [
         'name', 'agreement_id'
     ];
-
-    public function legalContractDest()
-    {
-        return $this->hasOne(LegalContractDest::class, 'payment_type_id');
-    }
 }

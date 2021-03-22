@@ -2,10 +2,12 @@
 
 namespace App\Models\Legal;
 
+use App\Relations\LegalActionTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class LegalAction extends Model
 {
+    use LegalActionTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -16,8 +18,4 @@ class LegalAction extends Model
         'name'
     ];
 
-    public function legalcontract()
-    {
-        return $this->hasMany(LegalContract::class);
-    }
 }

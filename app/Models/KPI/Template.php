@@ -4,11 +4,13 @@ namespace App\Models\KPI;
 
 use App\Http\Filters\KPI\TemplateFilter;
 use App\Models\Department;
+use App\Relations\TemplateTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Template extends Model
 {
+    use TemplateTrait;
     protected $table = 'kpi_templates';
     /**
      * The attributes that are mass assignable.
@@ -24,15 +26,5 @@ class Template extends Model
     public function scopeFilter(Builder $builder, $request)
     {
         return (new TemplateFilter($request))->filter($builder);
-    }
-
-    public function category()
-    {
-        return $this->hasOne(RuleCategory::class)->withDefault();
-    }
-
-    public function department()
-    {
-        return $this->belongsTo(Department::class, 'department_id')->withDefault();
     }
 }

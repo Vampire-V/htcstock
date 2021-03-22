@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Http\Filters\IT\RoleManagementFilter;
-use App\Models\User;
+use App\Relations\RoleTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
+   use RoleTrait;
    /**
     * The attributes that are mass assignable.
     *
@@ -21,16 +22,6 @@ class Role extends Model
    public function scopeFilter(Builder $builder, $request)
    {
        return (new RoleManagementFilter($request))->filter($builder);
-   }
-   public function permissions()
-   {
-
-      return $this->belongsToMany(Permission::class, 'role_permission','role_id');
-   }
-
-   public function users()
-   {
-      return $this->belongsToMany(User::class, 'user_role');
    }
 
    public function hasPermission($permission)

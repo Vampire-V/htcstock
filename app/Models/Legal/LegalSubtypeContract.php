@@ -2,10 +2,12 @@
 
 namespace App\Models\Legal;
 
+use App\Relations\LegalSubtypeContractTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class LegalSubtypeContract extends Model
 {
+    use LegalSubtypeContractTrait;
     /**
      * The attributes that are mass assignable.
      *
@@ -14,9 +16,4 @@ class LegalSubtypeContract extends Model
     protected $fillable = [
         'name', 'slug', 'agreement_id'
     ];
-
-    public function legalContractDest()
-    {
-        return $this->hasOne(LegalContractDest::class);
-    }
 }

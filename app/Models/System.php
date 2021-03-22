@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Relations\SystemTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class System extends Model
 {
+    use SystemTrait;
     /**
      * The table associated with the model.
      *
@@ -13,8 +15,5 @@ class System extends Model
      */
     protected $table = 'system';
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class);
-    }
+
 }

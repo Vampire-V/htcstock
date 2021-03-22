@@ -4,11 +4,13 @@ namespace App\Models\Legal;
 
 use App\Http\Filters\Legal\ContractRequestFilter;
 use App\Models\User;
+use App\Relations\LegalContractTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class LegalContract extends Model
 {
+    use LegalContractTrait;
     /**
      * The attributes that are mass assignable.
      *
@@ -31,40 +33,5 @@ class LegalContract extends Model
     public function scopeFilter(Builder $builder, $request)
     {
         return (new ContractRequestFilter($request))->filter($builder);
-    }
-
-    public function legalAction()
-    {
-        return $this->belongsTo(legalAction::class, 'action_id')->withDefault();
-    }
-
-    public function legalAgreement()
-    {
-        return $this->belongsTo(LegalAgreement::class, 'agreement_id')->withDefault();
-    }
-
-    public function legalContractDest()
-    {
-        return $this->belongsTo(LegalContractDest::class, 'contract_dest_id')->withDefault();
-    }
-
-    public function requestorBy()
-    {
-        return $this->belongsTo(\App\Models\User::class, 'requestor_by')->withDefault();
-    }
-
-    public function checkedBy()
-    {
-        return $this->belongsTo(\App\Models\User::class, 'checked_by')->withDefault();
-    }
-
-    public function createdBy()
-    {
-        return $this->belongsTo(\App\Models\User::class, 'created_by')->withDefault();
-    }
-
-    public function approvalDetail()
-    {
-        return $this->hasOne(LegalApprovalDetail::class);
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Relations\DivisionTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Division extends Model
 {
+    use DivisionTrait;
     /**
      * The attributes that are mass assignable.
      *
@@ -15,9 +17,4 @@ class Division extends Model
         'name'
     ];
 
-
-    public function users()
-    {
-        return $this->hasMany(\App\Models\User::class, 'divisions_id');
-    }
 }

@@ -3,11 +3,13 @@
 namespace App\Models\IT;
 
 use App\Http\Filters\IT\TransactionManagementFilter;
+use App\Relations\TransactionsTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Transactions extends Model
 {
+    use TransactionsTrait;
     /**
      * The attributes that are mass assignable.
      *
@@ -18,20 +20,7 @@ class Transactions extends Model
     ];
 
     protected $dates = ['ir_date'];
-
-    public function user()
-    {
-        return $this->hasOne(\App\Models\User::class, 'id', 'trans_by');
-    }
-    public function transactionCreated()
-    {
-        return $this->hasOne(\App\Models\User::class, 'id', 'created_by');
-    }
-    public function accessorie()
-    {
-        return $this->hasOne(Accessories::class, 'access_id', 'access_id');
-    }
-
+    
     public function scopeFilter(Builder $builder, $request)
     {
         return (new TransactionManagementFilter($request))->filter($builder);

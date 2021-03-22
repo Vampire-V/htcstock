@@ -3,11 +3,12 @@
 namespace App\Models\Legal;
 
 use App\Models\User;
+use App\Relations\LegalApprovalDetailTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class LegalApprovalDetail extends Model
 {
-
+    use LegalApprovalDetailTrait;
     /**
      * The table associated with the model.
      *
@@ -22,14 +23,4 @@ class LegalApprovalDetail extends Model
     protected $fillable = [
         'contract_id', 'user_id', 'status', 'levels', 'comment'
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id')->withDefault();
-    }
-
-    public function contract()
-    {
-        return $this->belongsTo(LegalContract::class, 'contract_id')->withDefault();
-    }
 }

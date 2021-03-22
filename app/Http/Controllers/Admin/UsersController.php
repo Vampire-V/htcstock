@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Department;
+use App\Models\Division;
 use App\Models\Role;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\IT\Interfaces\RoleServiceInterface;
@@ -156,28 +158,34 @@ class UsersController extends Controller
             if (Gate::denies('for-superadmin-admin')) {
                 return back();
             }
-            
+
             $response = Http::retry(2, 100)->get(ENV('USERS_UPDATE'))->json();
             if (!\is_null($response)) {
-                $role = Role::where('name', 'user')->first();
+                
                 foreach ($response as $value) {
                     $user = User::firstOrNew(['username' => $value['username']]);
-                    $user->name = $value['name'];
-                    $user->email = $value['email'];
-                    $user->password = Hash::make(\substr($value['email'], 0, 1) . $value['username']);
-                    $user->save();
+                    $department = Department::where('process_id',$value['department_id'])->first();
+                    $division = Division::where('division_id',$value['division_id'])->first();
+
                     if (!$user) {
                         $request->session()->flash('error', 'error update username' . $value['username']);
                         return back();
                     }
-                    $user->roles()->attach($role);
+
+                    $user->name = $value['name'];
+                    $user->email = $value['email'];
+                    if (!$user->exists) {
+                        $user->password = Hash::make(\substr($value['email'], 0, 1) . $value['username']);
+                    }
+                    $user->department_id = $department ? $department->id : null;
+                    $user->divisions_id = $division ? $division->id : null;
+                    $user->save();
+                    // $user->roles()->attach($role);
                 }
                 $request->session()->flash('success', 'has been update user');
-            }else{
+            } else {
                 $request->session()->flash('error', 'ติดต่อ กับ ' . ENV('USERS_UPDATE') . "ไม่ได้");
             }
-            
-           
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

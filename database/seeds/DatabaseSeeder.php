@@ -13,11 +13,22 @@ class DatabaseSeeder extends Seeder
     {
         // KPI
         $this->call([
+            DepartmentSeeder::class,
+            DivisionSeeder::class,
+            PositionSeeder::class,
+            RoleTableSeeder::class,
+            SystemSeeder::class,
+            TargetPeriodSeeder::class,
+            RuleCategoryTableSeeder::class,
+            PermissionTableSeeder::class,
+            RuleSeeder::class,
+            GroupDivisionSeeder::class,
+            UsersTableSeeder::class,
             // RuleCategoryTableSeeder::class,
             // TargetUnitTableSeeder::class,
             // TemplateSeeder::class,
             // TargetPeriodSeeder::class,
-            RuleSeeder::class,
+            // RuleSeeder::class,
             // EvaluateSeeder::class,
             // EvaluateDetailSeeder::class
         ]);

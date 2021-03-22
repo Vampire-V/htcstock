@@ -15,7 +15,7 @@ class CreateTransactionsTable extends Migration
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('access_id');
             $table->integer('qty');
             $table->enum('trans_type', [
@@ -29,6 +29,7 @@ class CreateTransactionsTable extends Migration
             $table->integer('trans_by');
             $table->string('trans_desc')->nullable();
             $table->string('ir_no')->nullable();
+            $table->dateTime('ir_date')->nullable();
             $table->string('po_no')->nullable();
             $table->string('invoice_no')->nullable();
             $table->double('unit_cost')->nullable();

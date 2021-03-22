@@ -14,8 +14,8 @@ class CreateLegalPaymentTermsTable extends Migration
     public function up()
     {
         Schema::create('legal_payment_terms', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('payment_type_id')->nullable();
+            $table->id();
+            $table->foreignId('payment_type_id')->nullable()->constrained('legal_payment_types')->comment('Id ของ legal_payment_types');
             $table->text('detail_payment_list')->nullable();
             $table->float('monthly')->nullable();
             $table->float('route_change')->nullable();
@@ -26,8 +26,6 @@ class CreateLegalPaymentTermsTable extends Migration
             $table->text('price_of_service')->nullable();
             $table->text('detail_payment_term')->nullable();
             $table->timestamps();
-
-            $table->foreign('payment_type_id')->references('id')->on('legal_payment_types')->onDelete('cascade');
         });
     }
 

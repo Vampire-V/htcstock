@@ -16,15 +16,12 @@ class CreateLegalApprovalDetailsTable extends Migration
     {
         Schema::create('legal_approval_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('contract_id');
-            $table->unsignedInteger('user_id');
+            $table->foreignId('contract_id')->nullable()->constrained('legal_contracts')->comment('Id ของ legal_contracts');
+            $table->foreignId('user_id')->nullable()->constrained('users')->comment('Id ของ users');
             $table->integer('levels');
             $table->enum('status', [ApprovalEnum::A, ApprovalEnum::R])->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();
-
-            $table->foreign('contract_id')->references('id')->on('legal_contracts')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

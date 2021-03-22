@@ -14,7 +14,7 @@ class CreateLegalActionsTable extends Migration
     public function up()
     {
         Schema::create('legal_actions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
         });
     }

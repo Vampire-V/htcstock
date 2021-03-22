@@ -14,7 +14,7 @@ class CreateBudgetsTable extends Migration
     public function up()
     {
         Schema::create('budgets', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->double('budgets_of_month');
             $table->string('month');
             $table->string('year');

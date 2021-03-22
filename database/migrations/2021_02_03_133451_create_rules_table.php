@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\KPIEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,6 +21,10 @@ class CreateRulesTable extends Migration
             $table->string('description',255)->nullable()->comment('คำอธิบาย');
             $table->string('measurement',255)->nullable()->comment('การวัดผล <= หรือ >=');
             $table->foreignId('target_unit_id')->nullable()->constrained('kpi_target_units')->comment('Code ของ target_units');
+            $table->enum('calculate_type', [
+                KPIEnum::percent,
+                KPIEnum::amount
+            ])->nullable();
             $table->timestamps();
         });
     }

@@ -16,11 +16,9 @@ class CreateEvaluatesTable extends Migration
     {
         Schema::create('kpi_evaluates', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id')->nullable()->comment('Id ของ users');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->comment('Id ของ users');
             $table->foreignId('period_id')->nullable()->constrained('kpi_target_periods')->comment('Id ของ kpi_target_periods');
-            $table->unsignedInteger('head_id')->nullable()->comment('Id ของ users head');
-            $table->foreign('head_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('head_id')->nullable()->constrained('users')->comment('Id ของ users head');
             $table->enum('status',[
                 KPIEnum::new,
                 KPIEnum::ready,

@@ -23,6 +23,11 @@ class SystemSeeder extends Seeder
                 'name' => 'Contract Legal',
                 'slug' => 'legal',
                 'icon' => 'fa fa-gavel fa-5x'
+            ],
+            [
+                'name' => 'Haier KPI',
+                'slug' => 'kpi',
+                'icon' => 'fa fa-bar-chart fa-5x'
             ]
         ];
 
@@ -30,9 +35,9 @@ class SystemSeeder extends Seeder
             System::firstOrCreate($value);
         }
         $it = System::where('slug','it')->first();
-        $user = User::where('username','70037539')->first();
-        $author = User::where('username','70002172')->first();
-        $user->systems()->attach($it);
-        $author->systems()->attach($it);
+        $users = User::all();
+        foreach ($users as $key => $user) {
+            $user->systems()->attach($it);
+        }
     }
 }

@@ -14,7 +14,7 @@ class CreateLegalComercialTermsTable extends Migration
     public function up()
     {
         Schema::create('legal_comercial_terms', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('scope_of_work')->nullable();
             $table->string('location')->nullable();
             $table->string('purchase_order_no')->nullable();

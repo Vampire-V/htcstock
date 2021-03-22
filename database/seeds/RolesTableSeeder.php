@@ -16,27 +16,30 @@ class RoleTableSeeder extends Seeder
             [
                 'name' => 'Super Admin',
                 'slug' => 'super-admin',
-                
             ],
             [
                 'name' => 'Admin IT Stock',
-                'slug' => 'admin',
-                
+                'slug' => 'admin-it',
             ],
             [
                 'name' => 'User IT Stock',
-                'slug' => 'user',
-                
+                'slug' => 'user-it',
             ],
             [
                 'name' => 'Admin Legal',
                 'slug' => 'admin-legal',
-                
             ],
             [
                 'name' => 'User Legal',
                 'slug' => 'user-legal',
-                
+            ],
+            [
+                'name' => 'Admin KPI',
+                'slug' => 'admin-kpi',
+            ],
+            [
+                'name' => 'User KPI',
+                'slug' => 'user-kpi',
             ],
         ];
 

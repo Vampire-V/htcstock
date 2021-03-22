@@ -14,12 +14,10 @@ class CreateLegalSubtypeContractsTable extends Migration
     public function up()
     {
         Schema::create('legal_subtype_contracts', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
             $table->string('slug')->nullable();
-            $table->unsignedInteger('agreement_id')->nullable();
-
-            $table->foreign('agreement_id')->references('id')->on('legal_agreements')->onDelete('cascade');
+            $table->foreignId('agreement_id')->nullable()->constrained('legal_agreements')->comment('Id ของ legal_agreements');
         });
     }
 

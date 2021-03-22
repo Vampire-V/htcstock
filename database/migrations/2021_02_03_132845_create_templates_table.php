@@ -16,9 +16,8 @@ class CreateTemplatesTable extends Migration
         Schema::create('kpi_templates', function (Blueprint $table) {
             $table->id();
             $table->string('name',255)->comment('ชื่อ kpi_templates');
-            $table->unsignedInteger('department_id')->nullable();
+            $table->foreignId('department_id')->nullable()->constrained('departments');
             $table->timestamps();
-            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
         });
     }
 

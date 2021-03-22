@@ -14,7 +14,7 @@ class CreateLegalAgreementsTable extends Migration
     public function up()
     {
         Schema::create('legal_agreements', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
         });
     }

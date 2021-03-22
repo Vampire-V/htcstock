@@ -16,12 +16,9 @@ class CreateLegalApprovalsTable extends Migration
         Schema::create('legal_approvals', function (Blueprint $table) {
             $table->id();
             $table->integer('levels');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('department_id');
+            $table->foreignId('user_id')->nullable()->constrained('users')->comment('Id ของ users');
+            $table->foreignId('department_id')->nullable()->constrained('departments')->comment('Id ของ departments');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
         });
     }
 

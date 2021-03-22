@@ -361,6 +361,7 @@
                 total_weight_key_task: 0,
                 total_weight_omg: 0,
                 detail : [],
+                remove : [],
                 next : false
             },
             className = ['form-control','form-control-sm']

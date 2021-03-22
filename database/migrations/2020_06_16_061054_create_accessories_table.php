@@ -17,6 +17,7 @@ class CreateAccessoriesTable extends Migration
             $table->increments('access_id');
             $table->string('access_name');
             $table->string('unit');
+            $table->text('image')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->timestamps();

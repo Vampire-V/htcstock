@@ -18,30 +18,33 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $adminRole = Role::where('slug', 'super-admin')->first();
-        $authorRole = Role::where('slug', 'admin')->first();
-        $userRole = Role::where('slug', 'user')->first();
+        $authorRole = Role::where('slug', 'admin-it')->first();
+        $userRole = Role::where('slug', 'user-it')->first();
         // $response = Http::get(ENV('USERS_INFO'));
 
-        $per = Permission::all();
-        foreach ($per as $key => $value) {
-            if (substr($value->slug,0,6) === 'delete') {
-                $adminRole->permissions()->attach($value);
-            }else{
-                $adminRole->permissions()->attach($value);
-                $authorRole->permissions()->attach($value);
-                $userRole->permissions()->attach($value);
+        $users = User::all();
+        if ($users) {
+            foreach ($users as $key => $item) {
+                if ($item->email === 'pipat.p@haier.co.th') {
+                    $item->roles()->attach($adminRole);
+                    $item->roles()->attach($authorRole);
+                }
+                if ($item->email === 'tanapat.k@haier.co.th') {
+                    $item->roles()->attach($authorRole);
+                }
+                $item->roles()->attach($userRole);
             }
         }
-        $users = User::all();
-        foreach ($users as $key => $item) {
-            if ($item->email === 'Pipat.p@haier.co.th') {
-                $item->roles()->attach($adminRole);
-                $item->roles()->attach($authorRole);
+
+        $per = Permission::all();
+        if ($per) {
+            foreach ($per as $key => $value) {
+                if (substr($value->slug, 0, 6) !== 'delete') {
+                    $authorRole->permissions()->attach($value);
+                    $userRole->permissions()->attach($value);
+                }
+                $adminRole->permissions()->attach($value);
             }
-            if ($item->email === 'tanapat.k@haier.co.th') {
-                $item->roles()->attach($authorRole);
-            }
-            $item->roles()->attach($userRole);
         }
     }
 }

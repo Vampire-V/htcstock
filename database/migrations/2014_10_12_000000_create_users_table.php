@@ -14,12 +14,23 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
+            $table->string('name_en')->nullable()->comment('ชื่อภาษาอังกฤษ');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('username');
             $table->string('password');
+            $table->foreignId('department_id')->nullable()->constrained('departments')->comment('Id ของ Departments');
+            $table->string('locale')->nullable();
+            $table->string('phone')->nullable();
+            
+            $table->integer('head_id')->nullable()->comment('id หัวหน้า');
+            $table->string('incentive_type', 255)->nullable()->comment('ประเภทแรงจูงใจ Quarter หรือ Month');
+            
+            $table->foreignId('positions_id')->nullable()->constrained('positions')->comment('Id ของ positions');
+            $table->foreignId('divisions_id')->nullable()->constrained('divisions')->comment('Id ของ divisions');
+            
             $table->rememberToken();
             $table->timestamps();
         });

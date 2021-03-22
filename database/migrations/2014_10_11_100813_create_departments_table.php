@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTrashToLegalContractsTable extends Migration
+class CreateDepartmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddTrashToLegalContractsTable extends Migration
      */
     public function up()
     {
-        Schema::table('legal_contracts', function (Blueprint $table) {
-            $table->boolean('trash')->default(false);
+        Schema::create('departments', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->string('process_id')->unique()->nullable()->comment('id ของ DB Hrpotal');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddTrashToLegalContractsTable extends Migration
      */
     public function down()
     {
-        Schema::table('legal_contracts', function (Blueprint $table) {
-            $table->boolean('trash');
-        });
+        Schema::dropIfExists('departments');
     }
 }

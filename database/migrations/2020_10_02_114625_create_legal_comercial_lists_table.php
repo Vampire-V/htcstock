@@ -14,7 +14,7 @@ class CreateLegalComercialListsTable extends Migration
     public function up()
     {
         Schema::create('legal_comercial_lists', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('description')->nullable();
             $table->float('unit_price')->nullable();
             $table->float('discount')->nullable();
@@ -28,10 +28,9 @@ class CreateLegalComercialListsTable extends Migration
             $table->integer('water')->nullable();
             $table->integer('mowing')->nullable();
             $table->integer('general')->nullable();
-            $table->unsignedInteger('contract_dests_id');
-            $table->timestamps();
+            $table->foreignId('contract_dests_id')->nullable()->constrained('legal_contract_dests')->comment('Id ของ legal_contract_dests');
 
-            $table->foreign('contract_dests_id')->references('id')->on('legal_contract_dests')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

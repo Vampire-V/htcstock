@@ -14,8 +14,8 @@ class CreateLegalContractDestsTable extends Migration
     public function up()
     {
         Schema::create('legal_contract_dests', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('sub_type_contract_id')->nullable();
+            $table->id();
+            $table->foreignId('sub_type_contract_id')->nullable()->constrained('legal_subtype_contracts')->comment('Id ของ legal_subtype_contracts');
             $table->longText('purchase_order')->nullable();
             $table->longText('quotation')->nullable();
             $table->longText('coparation_sheet')->nullable();
@@ -34,17 +34,15 @@ class CreateLegalContractDestsTable extends Migration
             $table->longText('security_service_certification')->nullable();
             $table->longText('security_guard_license')->nullable();
 
-            $table->unsignedInteger('comercial_term_id')->nullable();
-            $table->unsignedInteger('payment_term_id')->nullable();
-            $table->unsignedInteger('payment_type_id')->nullable();
-            $table->string('value_of_contract',50)->nullable();
+            $table->foreignId('comercial_term_id')->nullable()->constrained('legal_comercial_terms')->comment('Id ของ legal_comercial_terms');
+
+            $table->foreignId('payment_term_id')->nullable()->constrained('legal_payment_terms')->comment('Id ของ legal_payment_terms');
+
+            $table->foreignId('payment_type_id')->nullable()->constrained('legal_payment_types')->comment('Id ของ legal_payment_types');
+
+            $table->string('value_of_contract', 50)->nullable();
             $table->integer('warranty')->nullable();
             $table->timestamps();
-
-            $table->foreign('sub_type_contract_id')->references('id')->on('legal_subtype_contracts')->onDelete('cascade');
-            $table->foreign('comercial_term_id')->references('id')->on('legal_comercial_terms')->onDelete('cascade');
-            $table->foreign('payment_term_id')->references('id')->on('legal_payment_terms')->onDelete('cascade');
-            $table->foreign('payment_type_id')->references('id')->on('legal_payment_types')->onDelete('cascade');
         });
     }
 

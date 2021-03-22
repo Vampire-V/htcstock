@@ -14,11 +14,9 @@ class CreateLegalPaymentTypesTable extends Migration
     public function up()
     {
         Schema::create('legal_payment_types', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
-            $table->unsignedInteger('agreement_id')->nullable();
-
-            $table->foreign('agreement_id')->references('id')->on('legal_agreements')->onDelete('cascade');
+            $table->foreignId('agreement_id')->nullable()->constrained('legal_agreements')->comment('Id ของ legal_agreements');
         });
     }
 

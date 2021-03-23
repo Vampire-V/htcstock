@@ -2,6 +2,9 @@
 
 namespace App\Relations;
 
+use App\Models\KPI\Rule;
+use App\Models\KPI\Template;
+
 trait RuleTemplateTrait
 {
     public function template()

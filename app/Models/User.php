@@ -20,7 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'name_en', 'head_id', 'email', 'phone', 'username', 'password', 'department_id', 'incentive_type', 'locale'
+        'name', 'name_en', 'head_id', 'email', 'phone', 'username', 'password', 'department_id', 'incentive_type', 'locale', 'divisions_id', 'positions_id'
     ];
 
     /**
@@ -45,5 +45,4 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return (new UserFilter($request))->filter($builder);
     }
-
 }

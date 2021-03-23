@@ -24,7 +24,7 @@ class UserService extends BaseService implements UserServiceInterface
     public function all(): Builder
     {
         try {
-            return User::whereNotNull('username');
+            return User::query();
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -56,13 +56,26 @@ class UserService extends BaseService implements UserServiceInterface
 
     public function filter(Request $request)
     {
-        return User::filter($request)->orderBy('department_id', 'desc')->paginate(10);
+        return User::filter($request)->orderBy('divisions_id', 'desc')->paginate(10);
     }
 
     public function email(string $email)
     {
         try {
             return User::where('email',$email)->first();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function division(...$division_id) :Collection
+    {
+        try {
+            if ($division_id) {
+                return User::whereIn('divisions_id',[...$division_id])->get();
+            } else {
+                return User::all();
+            }
         } catch (\Throwable $th) {
             throw $th;
         }

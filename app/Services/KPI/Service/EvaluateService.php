@@ -8,6 +8,7 @@ use App\Services\BaseService;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 
 class EvaluateService extends BaseService implements EvaluateServiceInterface
 {
@@ -68,4 +69,10 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
         }
     }
 
+    public function filter(Request $request)
+    {
+        return Evaluate::with(['user' => function ($query) {
+            $query->select('id', 'name', 'department_id', 'positions_id')->where('department_id', \auth()->user()->department_id);
+        }, 'targetperiod'])->filter($request)->orderBy('created_at', 'desc')->get();
+    }
 }

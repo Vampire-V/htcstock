@@ -2,12 +2,11 @@
 
 namespace App\Services\KPI\Interfaces;
 
-use App\Models\KPI\Evaluate;
-use App\Models\KPI\TargetPeriod;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 interface EvaluateServiceInterface
 {
@@ -21,4 +20,5 @@ interface EvaluateServiceInterface
     public function dropdown(): Collection;
     public function isDuplicate(int $user, int $period);
     public function findKeyEvaluate(int $user, int $period, int $evaluate);
+    public function filter(Request $request);
 }

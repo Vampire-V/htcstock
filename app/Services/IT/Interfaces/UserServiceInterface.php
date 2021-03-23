@@ -16,10 +16,12 @@ interface UserServiceInterface
     public function update(array $attributes, int $id): bool;
 
     public function delete(int $id): bool;
-    
-    public function create(array $attributes ): Model;
+
+    public function create(array $attributes): Model;
 
     public function dropdownUser(...$username): Collection;
     public function filter(Request $request);
     public function email(string $email);
+
+    public function division(...$division_id): Collection;
 }

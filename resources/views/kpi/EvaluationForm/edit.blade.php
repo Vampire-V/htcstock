@@ -129,7 +129,7 @@
                         <div class="col-md-3 mb-3">
                             <label for="template">Template</label>
                             <select id="validationTemplate" class="form-control-sm form-control" name="template_id"
-                                required onchange="selectTemplate(this)">
+                                required onchange="selectTemplate(this)" {{$isView ? "disabled" : ""}}>
                                 <option value="">Choose...</option>
                                 @isset($templates)
                                 @foreach ($templates as $item)
@@ -170,10 +170,10 @@
                     <div class="btn-actions-pane-right">
                         @if ($group->name === 'key-task')
                         <div role="group" class="btn-group-sm btn-group">
-                            <button class="mb-2 mr-2 btn btn-danger" onclick="deleteRuleTemp()">Delete Selected
+                            <button class="mb-2 mr-2 btn btn-danger" onclick="deleteRuleTemp()" {{$isView ? "disabled" : ""}}>Delete Selected
                                 Rule</button>
                             <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
-                                data-target="#ruleModal">Add
+                                data-target="#ruleModal" {{$isView ? "disabled" : ""}}>Add
                                 New Rule</button>
                         </div>
                         @endif
@@ -239,7 +239,7 @@
                         <div class="col-md-4 mb-3">
                             <label for="mainRule">Main Rule :</label>
                             <select id="mainRule" class="form-control-sm form-control" name="rule_id" required
-                                onchange="selectMainRule(this)">
+                                onchange="selectMainRule(this)" {{$isView ? "disabled" : ""}}>
                                 {{-- <option value="">Please select</option> --}}
                             </select>
                             <div class="invalid-feedback">
@@ -289,15 +289,16 @@
         </div>
     </div>
 </div>
+
 {{-- Button --}}
 <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
         </div>
         <div class="page-title-actions">
-            <button class="mb-2 mr-2 btn btn-primary" onclick="submit()">Save</button>
-            <button class="mb-2 mr-2 btn btn-success" onclick="submitToUser()">Submit to staff</button>
-            {{-- <button class="mb-2 mr-2 btn btn-danger">Delete</button> --}}
+            <button class="mb-2 mr-2 btn btn-primary" onclick="submit()" {{$isView ? "disabled" : ""}}>Save</button>
+            <button class="mb-2 mr-2 btn btn-success" onclick="submitToUser()" {{$isView ? "disabled" : ""}}>Submit to
+                staff</button>
         </div>
     </div>
 </div>
@@ -490,9 +491,6 @@
             if (formEvaluate.total_weight_kpi <= 100.00 && formEvaluate.total_weight_key_task <= 100.00 && formEvaluate.total_weight_omg <= 100.00) {
                 putEvaluate(staff.id,period.id,evaluate.id,formEvaluate).then(res => {
                     if (res.status === 200) {
-                        // createRowEvaluate(res.data.data.detail)
-                        // setData(res.data.data)
-                        // setMainRule(res.data.data)
                         toastSuccess(`update evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`)
                         toastClear()
                         setTimeout(function () {

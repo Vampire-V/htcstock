@@ -5,6 +5,7 @@ namespace App\Relations;
 use App\Models\Department;
 use App\Models\Division;
 use App\Models\IT\Transactions;
+use App\Models\KPI\Evaluate;
 use App\Models\Legal\LegalApproval;
 use App\Models\Legal\LegalApprovalDetail;
 use App\Models\Legal\LegalContract;
@@ -76,5 +77,11 @@ trait UserTrait
     public function approvalDetail()
     {
         return $this->hasMany(LegalApprovalDetail::class);
+    }
+
+    // KPI
+    public function evaluate()
+    {
+        return $this->hasMany(Evaluate::class);
     }
 }

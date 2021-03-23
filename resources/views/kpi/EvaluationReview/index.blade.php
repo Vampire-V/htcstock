@@ -81,37 +81,47 @@
                     <div class="form-row">
                         <div class="col-md-2 mb-3">
                             <label for="department">Department :</label>
-                            <select name="department" id="validationDepartment" class="form-control-sm form-control">
-                                <option value="">department</option>
-                            </select>
+                            <input type="text" class="form-control form-control-sm" id="validationDepartment"
+                                value="{{$user->department->name}}" readonly>
                         </div>
                         <div class="col-md-2 mb-3">
                             <label for="position">Position :</label>
-                            <select name="position" id="validationPosition" class="form-control-sm form-control">
-                                <option value="">Position</option>
-                            </select>
+                            <input type="text" class="form-control form-control-sm" id="validationPosition"
+                                value="{{$user->positions->name}}" readonly>
                         </div>
                         <div class="col-md-2 mb-3">
                             <label for="status">Status :</label>
-                            <select name="status" id="validationStatus" class="form-control-sm form-control">
-                                <option value="">Submit to manager</option>
+                            <select name="status[]" id="validationStatus" class="form-control-sm form-control" multiple>
+                                <option value="">Choose...</option>
+                                @isset($status_list)
+                                @foreach ($status_list as $status)
+                                <option value="{{$status}}" @if($selectedStatus->contains($status))
+                                    selected @endif>{{$status}}</option>
+                                @endforeach
+                                @endisset
                             </select>
                         </div>
 
                         <div class="col-md-2 mb-3">
                             <label for="year">Year :</label>
-                            <select name="year" id="validationYear" class="form-control-sm form-control">
+                            <select name="year[]" id="validationYear" class="form-control-sm form-control" multiple>
+                                <option value="">Choose...</option>
                                 @foreach (range(date('Y'),$start_year) as $year)
-                                <option value="">{{$year}}</option>
+                                <option value="{{$year}}" @if($selectedYear->contains($year))
+                                    selected @endif>{{$year}}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-2 mb-3">
                             <label for="period">Period :</label>
-                            <select name="period" id="validationPeriod" class="form-control-sm form-control">
-                                @foreach (range(1,12) as $month)
-                                <option value="{{date('m',mktime(0, 0, 0, $month, 1, 2011))}}">{{date('F',mktime(0, 0, 0, $month, 1, 2011))}}</option>
+                            <select name="period[]" id="validationPeriod" class="form-control-sm form-control" multiple>
+                                <option value="">Choose...</option>
+                                @isset($period)
+                                @foreach ($period as $item)
+                                <option value="{{$item->id}}" @if($selectedPeriod->contains($item->id))
+                                    selected @endif>{{$item->name}}</option>
                                 @endforeach
+                                @endisset
                             </select>
                         </div>
                         <div class="col-md-2 mb-3">
@@ -143,30 +153,24 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @isset($evaluates)
+                        @foreach ($evaluates as $key => $evaluate)
+                        @isset($evaluate->user)
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Mr.Pipat</td>
-                            <td>IT</td>
-                            <td>Program</td>
-                            <td>2021</td>
-                            <td>January</td>
-                            <td>Submit to Manager</td>
-                            <td><a href="{{route('kpi.evaluation-review.edit',1)}}"
+                            <th scope="row">{{$key+1}}</th>
+                            <td>{{$evaluate->user->name}}</td>
+                            <td>{{$evaluate->user->department->name}}</td>
+                            <td>{{$evaluate->user->positions->name}}</td>
+                            <td>{{$evaluate->targetperiod->year}}</td>
+                            <td>{{$evaluate->targetperiod->name}}</td>
+                            <td>{{$evaluate->status}}</td>
+                            <td><a href="{{route('kpi.evaluation-review.edit',$evaluate->id)}}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Review
                                 </a></td>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Mr.Test</td>
-                            <td>IT</td>
-                            <td>Program</td>
-                            <td>2021</td>
-                            <td>January</td>
-                            <td>Submit to Manager</td>
-                            <td><a href="{{route('kpi.evaluation-review.edit',1)}}"
-                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Review
-                                </a></td>
-                        </tr>
+                        @endisset
+                        @endforeach
+                        @endisset
                     </tbody>
                 </table>
             </div>
@@ -174,4 +178,8 @@
     </div>
 </div>
 
+@endsection
+
+@section('second-script')
+<script src="{{asset('assets\js\kpi\evaluationReview\index.js')}}" defer></script>
 @endsection

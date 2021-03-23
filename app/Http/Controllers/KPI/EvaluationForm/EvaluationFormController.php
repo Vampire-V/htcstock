@@ -189,10 +189,11 @@ class EvaluationFormController extends Controller
                 return $value->name === "key-task";
             })->id);
             $evaluate = $this->evaluateService->find($evaluate);
+            $isView = $evaluate->status === KPIEnum::ready ? true : false;
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \view('kpi.EvaluationForm.edit', \compact('user', 'period', 'templates', 'category', 'rules', 'evaluate'));
+        return \view('kpi.EvaluationForm.edit', \compact('user', 'period', 'templates', 'category', 'rules', 'evaluate', 'isView'));
     }
 
     /**
@@ -211,7 +212,7 @@ class EvaluationFormController extends Controller
                 // Update Header
                 $evaluate->template_id = $request->template;
                 $evaluate->main_rule_id = $request->mainRule;
-                $evaluate->status = $evaluate->status ? KPIEnum::ready : KPIEnum::new;
+                $evaluate->status = $request->next ? KPIEnum::ready : KPIEnum::new;
                 $evaluate->main_rule_condition_1_min = $request->minone;
                 $evaluate->main_rule_condition_1_max = $request->maxone;
                 $evaluate->main_rule_condition_2_min = $request->mintwo;

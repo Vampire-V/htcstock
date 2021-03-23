@@ -13,7 +13,7 @@ class DepartmentSeeder extends Seeder
     public function run()
     {
         $departments = [
-            ['id' => 1, 'name' => 'Management Administration', 'process_id' => '001'],
+            ['id' => 1, 'name' => 'Management Administration', 'process_id' => '254'],
             ['id' => 2, 'name' => 'President', 'process_id' => '002'],
             ['id' => 3, 'name' => 'Strategy & Operation', 'process_id' => '003'],
             ['id' => 4, 'name' => 'RICA', 'process_id' => '004'],

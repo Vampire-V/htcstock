@@ -2,8 +2,9 @@
 
 namespace App\Models\KPI;
 
-use App\Models\User;
+use App\Http\Filters\KPI\EvaluationReviewFilter;
 use App\Relations\EvaluateTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Evaluate extends Model
@@ -48,4 +49,11 @@ class Evaluate extends Model
         'total_weight_key_task',
         'total_weight_omg'
     ];
+
+
+    // service เรียกใช้ Filter
+    public function scopeFilter(Builder $builder, $request)
+    {
+        return (new EvaluationReviewFilter($request))->filter($builder);
+    }
 }

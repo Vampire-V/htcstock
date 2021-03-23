@@ -7,6 +7,16 @@
     .bs-example {
         margin: 20px;
     }
+
+    /* select2 UI */
+    .select2-hidden-accessible {
+        position: inherit !important;
+    }
+
+    .select2,
+    .select2-containe {
+        display: inherit !important;
+    }
 </style>
 @endsection
 @section('content')
@@ -163,9 +173,9 @@
                         <div class="col-md-6">
                             <div class="position-relative form-group">
                                 <label for="rule-name" class="">Rule Name :</label>
-                                
-                                <select id="validationRuleName" class="form-control-sm form-control"
-                                    name="rule_id"  required>
+
+                                <select id="validationRuleName" class="form-control-sm form-control" name="rule_id"
+                                    required>
                                     <option value="">Choose...</option>
                                 </select>
                             </div>
@@ -191,7 +201,7 @@
                                     config
                                     :</label><input name="target_config" id="validationTargetConfig"
                                     placeholder="Target config" type="number" min="0" step="0.1"
-                                    class="form-control form-control-sm"  required></div>
+                                    class="form-control form-control-sm" required></div>
                         </div>
                     </div>
 
@@ -200,7 +210,7 @@
                             <div class="position-relative form-group"><label for="weight" class="">Weight limit
                                     100%:</label>
                                 <input name="weight" id="validationWeight" placeholder="Weight" type="number" min="0"
-                                    step="0.1" max="100" class="form-control form-control-sm"  required>
+                                    step="0.1" max="100" class="form-control form-control-sm" required>
                             </div>
                         </div>
 

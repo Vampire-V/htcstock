@@ -76,6 +76,7 @@
     position: inherit !important;
 }
 
-.select2 ,.select2-containe {
-        display: inherit !important;
-    }
+.select2,
+.select2-containe {
+    display: inherit !important;
+}

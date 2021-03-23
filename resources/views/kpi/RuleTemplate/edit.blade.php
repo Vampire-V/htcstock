@@ -2,6 +2,23 @@
 @section('sidebar')
 @include('includes.sidebar.kpi');
 @stop
+@section('style')
+<style>
+    .bs-example {
+        margin: 20px;
+    }
+
+    /* select2 UI */
+    .select2-hidden-accessible {
+        position: inherit !important;
+    }
+
+    .select2,
+    .select2-containe {
+        display: inherit !important;
+    }
+</style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">

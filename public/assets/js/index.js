@@ -270,15 +270,18 @@ var formulaRuleDetail = (e, key) => {
     if (evaluateDetail[key].rule.calculate_type !== null) {
         let ach = parseFloat((actual / target) * 100)
         evaluateDetail[key].actual = e.value
+        // รอ ตัวแปรเพิ่มจากพี่ปัด เพื่อเขียนสูตร
+        tr.cells[index + 1].firstChild.textContent = ach.toFixed(2) + '%'
+        evaluateDetail[key].ach = ach
 
-        if (evaluateDetail[key].rule.calculate_type === 'Amount') {
-            tr.cells[index + 1].firstChild.textContent = ach.toFixed(2) + '%'
-            evaluateDetail[key].ach = ach
-        }
-        if (evaluateDetail[key].rule.calculate_type === 'Percent') {
-            tr.cells[index + 1].firstChild.textContent = actual.toFixed(2) + '%'
-            evaluateDetail[key].ach = actual
-        }
+        // if (evaluateDetail[key].rule.calculate_type === 'Amount') {
+        //     tr.cells[index + 1].firstChild.textContent = ach.toFixed(2) + '%'
+        //     evaluateDetail[key].ach = ach
+        // }
+        // if (evaluateDetail[key].rule.calculate_type === 'Percent') {
+        //     tr.cells[index + 1].firstChild.textContent = actual.toFixed(2) + '%'
+        //     evaluateDetail[key].ach = actual
+        // }
 
         if (evaluateDetail[key].ach < 70) {
             tr.cells[index + 2].firstChild.textContent = '0.00%'

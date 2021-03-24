@@ -2,6 +2,7 @@
 
 namespace App\Relations;
 
+use App\Models\Legal\LegalAction;
 use App\Models\Legal\LegalAgreement;
 use App\Models\Legal\LegalApprovalDetail;
 use App\Models\Legal\LegalContractDest;
@@ -11,7 +12,7 @@ trait LegalContractTrait
 {
    public function legalAction()
    {
-      return $this->belongsTo(legalAction::class, 'action_id')->withDefault();
+      return $this->belongsTo(LegalAction::class, 'action_id')->withDefault();
    }
 
    public function legalAgreement()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\KPI\EvaluateReview;
 use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Services\IT\Interfaces\UserServiceInterface;
+use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
@@ -13,15 +14,17 @@ use Illuminate\Support\Facades\DB;
 
 class EvaluateReviewController extends Controller
 {
-    protected $userService, $targetPeriodService, $evaluateService;
+    protected $userService, $targetPeriodService, $evaluateService, $evaluateDetailService;
     public function __construct(
         UserServiceInterface $userServiceInterface,
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
-        EvaluateServiceInterface $evaluateServiceInterface
+        EvaluateServiceInterface $evaluateServiceInterface,
+        EvaluateDetailServiceInterface $evaluateDetailServiceInterface
     ) {
         $this->userService = $userServiceInterface;
         $this->targetPeriodService = $targetPeriodServiceInterface;
         $this->evaluateService = $evaluateServiceInterface;
+        $this->evaluateDetailService = $evaluateDetailServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -35,16 +38,15 @@ class EvaluateReviewController extends Controller
         $selectedYear = collect($request->year);
         $selectedPeriod = collect($request->period);
         $start_year = date('Y', strtotime('-10 years'));
-        $status_list = [KPIEnum::new, KPIEnum::ready, KPIEnum::draft, KPIEnum::submit, KPIEnum::approved];
+        $status_list = [KPIEnum::submit, KPIEnum::approved];
         try {
             $user = Auth::user();
             $period = $this->targetPeriodService->dropdown();
-            $evaluates = $this->evaluateService->filter($request);
+            $evaluates = $this->evaluateService->reviewfilter($request);
         } catch (\Throwable $th) {
             throw $th;
         }
 
-        // \dd($evaluates[0]->user,\auth()->user()->department->id);
         return \view(
             'kpi.EvaluationReview.index',
             \compact('start_year', 'user', 'status_list', 'period', 'evaluates', 'query', 'selectedStatus', 'selectedYear', 'selectedPeriod')
@@ -91,7 +93,31 @@ class EvaluateReviewController extends Controller
      */
     public function edit($id)
     {
-        return \view('kpi.EvaluationReview.evaluate');
+        $calMainRule = 0;
+        try {
+            $evaluate = $this->evaluateService->find($id);
+            // $evaluate->mainRul;
+
+            $kpi = $evaluate->evaluateDetail->filter(function ($value, $key) {
+                return $this->evaluateDetailService->formulaKeyTask($value)->rule->category->name === "kpi";
+            });
+            $key_task = $evaluate->evaluateDetail->filter(function ($value, $key) {
+                return $this->evaluateDetailService->formulaKeyTask($value)->rule->category->name === "key-task";
+            });
+            $omg = $evaluate->evaluateDetail->filter(function ($value, $key) {
+                return $this->evaluateDetailService->formulaKeyTask($value)->rule->category->name === "omg";
+            });
+            $indexMainRule = $evaluate->evaluateDetail->search(function ($row, $key) use ($evaluate) {
+                return $row->rule_id === $evaluate->main_rule_id;
+            });
+
+            if ($indexMainRule) {
+                $calMainRule = $evaluate->evaluateDetail[$indexMainRule]->cal;
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'kpi', 'key_task', 'omg', 'calMainRule'));
     }
 
     /**

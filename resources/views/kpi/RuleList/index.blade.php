@@ -22,10 +22,10 @@
             </button> --}}
             <div class="d-inline-block dropdown">
                 {{-- <a href="{{route('kpi.rule-list.create')}}" class="btn-shadow btn btn-info">
-                    <span class="btn-icon-wrapper pr-2 opacity-7">
-                        <i class="fa fa-business-time fa-w-20"></i>
-                    </span>
-                    Create
+                <span class="btn-icon-wrapper pr-2 opacity-7">
+                    <i class="fa fa-business-time fa-w-20"></i>
+                </span>
+                Create
                 </a> --}}
             </div>
         </div>
@@ -43,18 +43,17 @@
                         <div class="col-md-4 mb-3">
                             <label for="ruleName">Rule Name :</label>
                             <input type="text" class="form-control form-control-sm" id="ruleName"
-                                placeholder="Rule Name" name="name">
+                                placeholder="Rule Name" name="ruleName" value="{{$searchRuleName}}">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="ruleCategory">Rule Category :</label>
-                            <select id="validationRuleCategory" class="form-control-sm form-control" name="category_id[]" multiple>
-                                <option value="">-----</option>
+                            <select id="validationRuleCategory" class="form-control-sm form-control"
+                                name="category_id[]" multiple>
                                 @isset($category)
-                                @forelse ($category as $item)
-                                <option value="{{$item->id}}">{{$item->name}}</option>
-                                @empty
-                                <p>No Rule Category</p>
-                                @endforelse
+                                @foreach ($category as $item)
+                                <option value="{{$item->id}}" @if ($selectedCategory->contains($item->id))
+                                    selected @endif>{{$item->name}}</option>
+                                @endforeach
                                 @endisset
                             </select>
                         </div>
@@ -71,7 +70,7 @@
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
         <div class="card-body">
-            
+
             <div class="card-header">
                 <h5 class="card-title">Rule List</h5>
                 <div class="btn-actions-pane">
@@ -123,8 +122,8 @@
                             <td>Seller Target</td>
                             <td></td>
                             <td><a href="{{route('kpi.rule-list.edit',1)}}"
-                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
-                                </a></td>
+                        class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
+                        </a></td>
                         </tr>
                         <tr>
                             <th scope="row">2</th>

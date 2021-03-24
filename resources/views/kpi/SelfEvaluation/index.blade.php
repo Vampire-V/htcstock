@@ -57,10 +57,10 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a disabled href="javascript:void(0);" class="nav-link disabled">
+                            <a readonly href="javascript:void(0);" class="nav-link readonly">
                                 <i class="nav-link-icon lnr-file-empty"></i>
                                 <span>
-                                    File Disabled
+                                    File readonly
                                 </span>
                             </a>
                         </li>
@@ -79,55 +79,48 @@
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label for="staffName">Staff Name</label>
                             <input type="text" class="form-control form-control-sm" id="staffName"
-                                placeholder="Staff Name" value="{{Auth::user()->name}}" disabled>
+                                placeholder="Staff Name" value="{{$user->name}}" readonly>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="Type">Type</label>
-                            <input type="text" class="form-control form-control-sm" id="type" placeholder="Type"
-                                value="" disabled>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label for="Department">Department</label>
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm" id="Department"
-                                    value="{{Auth::user()->department->name}}" placeholder="Department"
-                                    aria-describedby="inputGroupPrepend" disabled>
+                                    value="{{$user->department->name}}" placeholder="Department"
+                                    aria-describedby="inputGroupPrepend" readonly>
                                 <div class="invalid-feedback">
                                     Please choose a username.
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-4 mb-3">
+
+                        <div class="col-md-3 mb-3">
                             <label for="Position">Position</label>
                             <input type="text" class="form-control form-control-sm" id="Position" placeholder="Position"
-                                value="{{Auth::user()->positions->name}}" disabled>
+                                value="{{$user->positions->name}}" readonly>
                             <div class="invalid-feedback">
                                 Please provide a valid city.
                             </div>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-1 mb-1">
                             <label for="Year">Year</label>
-                            <select name="year" id="validationYear" class="form-control-sm form-control" >
+                            <select name="year[]" id="validationYear" class="form-control-sm form-control" multiple>
                                 @foreach (range(date('Y'), $start_year) as $year)
-                                <option value="{{$year}}">{{$year}}</option>
+                                <option value="{{$year}}" @if ($selectedYear->contains($year))
+                                    selected
+                                    @endif>{{$year}}</option>
                                 @endforeach
                             </select>
                             <div class="invalid-feedback">
                                 Please provide a valid state.
                             </div>
                         </div>
-                        <div class="col-md-3 mb-3 text-center">
+                        <div class="col-md-1 mb-1 text-center">
                             <button class="btn btn-primary mt-4" type="submit">Search</button>
                         </div>
                     </div>
@@ -148,46 +141,25 @@
                             <th>#</th>
                             <th>Period</th>
                             <th>Status</th>
-                            <th></th>
+                            <th>#</th>
                             {{-- <th>Table heading</th>
                             <th>Table heading</th>
                             <th>Table heading</th> --}}
                         </tr>
                     </thead>
                     <tbody>
+                        @isset($evaluates)
+                        @foreach ($evaluates as $key => $evaluate)
                         <tr>
-                            <th scope="row">1</th>
-                            <td>January</td>
-                            <td>Approved</td>
-                            <td><a href="{{route('kpi.self-evaluation.edit',1)}}"
+                            <th scope="row">{{$key+1}}</th>
+                            <td>{{$evaluate->targetperiod->name}}</td>
+                            <td>{{$evaluate->status}}</td>
+                            <td><a href="{{route('kpi.self-evaluation.edit',$evaluate->id)}}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">view
                                 </a></td>
-                            {{-- <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td> --}}
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>February</td>
-                            <td>Ready</td>
-                            <td><a href="{{route('kpi.self-evaluation.edit',1)}}"
-                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-primary">Evaluate
-                                </a></td>
-                            {{-- <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td> --}}
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>March</td>
-                            <td>Ready</td>
-                            <td><a href="{{route('kpi.self-evaluation.edit',1)}}"
-                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-primary">Evaluate
-                                </a></td>
-                            {{-- <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td> --}}
-                        </tr>
+                        @endforeach
+                        @endisset
                     </tbody>
                 </table>
             </div>
@@ -195,4 +167,8 @@
     </div>
 </div>
 
+@endsection
+
+@section('second-script')
+<script src="{{asset('assets\js\kpi\evaluationSelf\index.js')}}" defer></script>
 @endsection

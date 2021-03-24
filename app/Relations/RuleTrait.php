@@ -2,6 +2,7 @@
 
 namespace App\Relations;
 
+use App\Models\KPI\Evaluate;
 use App\Models\KPI\EvaluateDetail;
 use App\Models\KPI\RuleCategory;
 use App\Models\KPI\RuleTemplate;
@@ -23,6 +24,11 @@ trait RuleTrait
     public function targetUnit()
     {
         return $this->belongsTo(TargetUnit::class, 'target_unit_id')->withDefault();
+    }
+
+    public function evaluate()
+    {
+        return $this->hasOne(Evaluate::class)->withDefault();
     }
 
     public function evaluateDetail()

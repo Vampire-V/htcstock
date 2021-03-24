@@ -39,10 +39,11 @@
                             <label for="ruleTemplateName">Rule template name :</label>
                             <select id="validationRuleTemplate" class="form-control-sm form-control"
                                 name="template_id[]" multiple>
-                                <option value="">-----</option>
                                 @isset($dropdowntem)
                                 @foreach ($dropdowntem as $item)
-                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                <option value="{{$item->id}}" @if ($selectRuleTemp->contains($item->id))
+                                    selected
+                                    @endif>{{$item->name}}</option>
                                 @endforeach
                                 @endisset
                             </select>
@@ -51,10 +52,11 @@
                             <label for="department">Department :</label>
                             <select id="validationDepartment" class="form-control-sm form-control"
                                 name="department_id[]" multiple>
-                                <option value="">-----</option>
                                 @isset($departments)
                                 @foreach ($departments as $item)
-                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                <option value="{{$item->id}}" @if ($selectDepartment->contains($item->id))
+                                    selected
+                                    @endif>{{$item->name}}</option>
                                 @endforeach
                                 @endisset
                             </select>

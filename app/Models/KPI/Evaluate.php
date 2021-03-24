@@ -2,7 +2,7 @@
 
 namespace App\Models\KPI;
 
-use App\Http\Filters\KPI\EvaluationReviewFilter;
+use App\Http\Filters\KPI\EvaluationFilter;
 use App\Relations\EvaluateTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -54,6 +54,6 @@ class Evaluate extends Model
     // service เรียกใช้ Filter
     public function scopeFilter(Builder $builder, $request)
     {
-        return (new EvaluationReviewFilter($request))->filter($builder);
+        return (new EvaluationFilter($request))->filter($builder);
     }
 }

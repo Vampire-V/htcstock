@@ -3,6 +3,7 @@
 namespace App\Relations;
 
 use App\Models\KPI\EvaluateDetail;
+use App\Models\KPI\Rule;
 use App\Models\KPI\TargetPeriod;
 use App\Models\KPI\Template;
 use App\Models\User;
@@ -39,5 +40,10 @@ trait EvaluateTrait
     public function evaluateDetail()
     {
         return $this->hasMany(EvaluateDetail::class);
+    }
+
+    public function mainRule()
+    {
+        return $this->belongsTo(Rule::class, 'main_rule_id')->withDefault();
     }
 }

@@ -20,53 +20,6 @@
                 class="btn-shadow mr-3 btn btn-dark">
                 <i class="fa fa-star"></i>
             </button>
-            {{-- <div class="d-inline-block dropdown">
-                <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                    class="btn-shadow dropdown-toggle btn btn-info">
-                    <span class="btn-icon-wrapper pr-2 opacity-7">
-                        <i class="fa fa-business-time fa-w-20"></i>
-                    </span>
-                    Buttons
-                </button>
-                <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a href="javascript:void(0);" class="nav-link">
-                                <i class="nav-link-icon lnr-inbox"></i>
-                                <span>
-                                    Inbox
-                                </span>
-                                <div class="ml-auto badge badge-pill badge-secondary">86</div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="javascript:void(0);" class="nav-link">
-                                <i class="nav-link-icon lnr-book"></i>
-                                <span>
-                                    Book
-                                </span>
-                                <div class="ml-auto badge badge-pill badge-danger">5</div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="javascript:void(0);" class="nav-link">
-                                <i class="nav-link-icon lnr-picture"></i>
-                                <span>
-                                    Picture
-                                </span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a disabled href="javascript:void(0);" class="nav-link disabled">
-                                <i class="nav-link-icon lnr-file-empty"></i>
-                                <span>
-                                    File Disabled
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div> --}}
         </div>
     </div>
 </div>
@@ -74,14 +27,25 @@
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
         <div class="card-body">
-            <h5 class="card-title">Annual 2021 Month</h5>
+            <div class="card-header">
+                <h5 class="card-title">{{$evaluate->targetperiod->name}} {{$evaluate->targetperiod->year}}</h5>
+                <div class="btn-actions-pane">
+                    <div role="group" class="btn-group-sm btn-group">
+                    </div>
+                </div>
+                <div class="btn-actions-pane-right">
+                    <div role="group" class="btn-group-sm btn-group">
+                        <h5>Status <span class="badge badge-info">{{$evaluate->status}}</span></h5>
+                    </div>
+                </div>
+            </div>
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
                             <label for="staffName">Staff Name</label>
                             <input type="text" class="form-control form-control-sm" id="staffName"
-                                placeholder="Staff Name" value="{{Auth::user()->name}}" disabled>
+                                placeholder="Staff Name" value="{{$evaluate->user->name}}" readonly>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
@@ -90,8 +54,8 @@
                             <label for="Department">Department</label>
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm" id="Department"
-                                    value="{{Auth::user()->department->name}}" placeholder="Department"
-                                    aria-describedby="inputGroupPrepend" disabled>
+                                    value="{{$evaluate->user->department->name}}" placeholder="Department"
+                                    aria-describedby="inputGroupPrepend" readonly>
                                 <div class="invalid-feedback">
                                     Please choose a username.
                                 </div>
@@ -100,7 +64,7 @@
                         <div class="col-md-3 mb-3">
                             <label for="Position">Position</label>
                             <input type="text" class="form-control form-control-sm" id="Position" placeholder="Position"
-                                value="{{Auth::user()->positions->name}}" disabled>
+                                value="{{$evaluate->user->positions->name}}" disabled>
                             <div class="invalid-feedback">
                                 Please provide a valid city.
                             </div>
@@ -129,62 +93,41 @@
                             <th>Max</th>
                             <th>Weight</th>
                             <th>Target</th>
-                            <th>Actual</th>
+                            <th style="width: 10%;">Actual</th>
                             <th>%Ach</th>
                             <th>%Cal</th>
-                            <th>Result</th>
+                            {{-- <th>Result</th> --}}
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Rule 1</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
+                        @isset($kpi)
+                        @foreach ($kpi->values() as $key => $item)
+                        <tr data-id="{{$item->id}}">
+                            <th scope="row">{{$key+1}}</th>
+                            <td>{{$item->rule->name}} - {{$item->rule->calculate_type}}</td>
+                            <td>{{number_format($item->base_line,2,'.','')}}</td>
+                            <td>{{number_format($item->max_result,2,'.','')}}</td>
+                            <td>{{number_format($item->weight,2,'.','')}}%</td>
+                            <td>{{number_format($item->target,2,'.','')}}</td>
+                            <td><input type="number" class="form-control form-control-sm" value="{{$item->actual}}"
+                                    step="0.01" onchange="changeValue(this)"></td>
+                            <td>{{number_format($item->ach,2,'.','')}}%</td>
+                            <td>{{number_format($item->cal,2,'.','')}}%</td>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Rule 2</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Rule 3</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
+                        @endforeach
+                        @endisset
                     </tbody>
                     <tfoot>
                         <tr>
                             <th scope="row"></th>
                             <td></td>
                             <td></td>
-                            <td>Total Weight :</td>
-                            <td>0</td>
+                            <td>Total :</td>
+                            <td>{{number_format($kpi->sum('weight'),2,'.','')}}%</td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>Total Result :</td>
-                            <td>0</td>
+                            <td>{{number_format($kpi->sum('cal'),2,'.','')}}%</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -207,62 +150,40 @@
                             <th>Max</th>
                             <th>Weight</th>
                             <th>Target</th>
-                            <th>Actual</th>
+                            <th style="width: 10%;">Actual</th>
                             <th>%Ach</th>
                             <th>%Cal</th>
-                            <th>Result</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Rule 1</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
+                        @isset($key_task)
+                        @foreach ($key_task->values() as $key => $item)
+                        <tr data-id="{{$item->id}}">
+                            <th scope="row">{{$key+1}}</th>
+                            <td>{{$item->rule->name}} - {{$item->rule->calculate_type}}</td>
+                            <td>{{number_format($item->base_line,2,'.','')}}</td>
+                            <td>{{number_format($item->max_result,2,'.','')}}</td>
+                            <td>{{number_format($item->weight,2,'.','')}}%</td>
+                            <td>{{number_format($item->target,2,'.','')}}</td>
+                            <td><input type="number" class="form-control form-control-sm" value="{{$item->actual}}"
+                                    step="0.01" onchange="changeValue(this)"></td>
+                            <td>{{number_format($item->ach,2,'.','')}}%</td>
+                            <td>{{number_format($item->cal,2,'.','')}}%</td>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Rule 2</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Rule 3</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
+                        @endforeach
+                        @endisset
                     </tbody>
                     <tfoot>
                         <tr>
                             <th scope="row"></th>
                             <td></td>
                             <td></td>
-                            <td>Total Weight :</td>
-                            <td>0</td>
+                            <td>Total :</td>
+                            <td>{{number_format($key_task->sum('weight'),2,'.','')}}%</td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>Total Result :</td>
-                            <td>0</td>
+                            <td>{{number_format($key_task->sum('cal'),2,'.','')}}%</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -285,62 +206,41 @@
                             <th>Max</th>
                             <th>Weight</th>
                             <th>Target</th>
-                            <th>Actual</th>
+                            <th style="width: 10%;">Actual</th>
                             <th>%Ach</th>
                             <th>%Cal</th>
-                            <th>Result</th>
+                            {{-- <th>Result</th> --}}
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Rule 1</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
+                        @isset($omg)
+                        @foreach ($omg->values() as $key => $item)
+                        <tr data-id="{{$item->id}}">
+                            <th scope="row">{{$key+1}}</th>
+                            <td>{{$item->rule->name}} - {{$item->rule->calculate_type}}</td>
+                            <td>{{number_format($item->base_line,2,'.','')}}</td>
+                            <td>{{number_format($item->max_result,2,'.','')}}</td>
+                            <td>{{number_format($item->weight,2,'.','')}}%</td>
+                            <td>{{number_format($item->target,2,'.','')}}</td>
+                            <td><input type="number" class="form-control form-control-sm" value="{{$item->actual}}"
+                                    step="0.01" onchange="changeValue(this)"></td>
+                            <td>{{number_format($item->ach,2,'.','')}}%</td>
+                            <td>{{number_format($item->cal,2,'.','')}}%</td>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Rule 2</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Rule 3</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
+                        @endforeach
+                        @endisset
                     </tbody>
                     <tfoot>
                         <tr>
                             <th scope="row"></th>
                             <td></td>
                             <td></td>
-                            <td>Total Weight :</td>
-                            <td>0</td>
+                            <td>Total :</td>
+                            <td>{{number_format($omg->sum('weight'),2,'.','')}}%</td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>Total Result :</td>
-                            <td>0</td>
+                            <td>{{number_format($omg->sum('cal'),2,'.','')}}%</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -359,14 +259,15 @@
                         <div class="col-md-4 mb-3">
                             <label for="mainRule">Main Rule :</label>
                             <input type="text" class="form-control form-control-sm" id="mainRule"
-                                placeholder="Main Rule">
+                                placeholder="Main Rule" value="{{$evaluate->mainRule->name}}" readonly>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="Cal">%Cal :</label>
-                            <input type="text" class="form-control form-control-sm" id="Cal" placeholder="%Cal">
+                            <input type="text" class="form-control form-control-sm" id="Cal" placeholder="%Cal"
+                                value="{{$calMainRule}}" readonly>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
@@ -461,13 +362,35 @@
 {{-- Button --}}
 <div class="app-page-title">
     <div class="page-title-wrapper">
-        <div class="page-title-heading">
-        </div>
+        <div class="page-title-heading"></div>
         <div class="page-title-actions">
-            <button class="mb-2 mr-2 btn btn-primary">Save</button>
+            <button class="mb-2 mr-2 btn btn-primary" onclick="submit()">Save</button>
             <button class="mb-2 mr-2 btn btn-success">Submit to Manager</button>
         </div>
     </div>
 </div>
 
+@endsection
+
+@section('second-script')
+<script>
+    var evaluateDetail  = {!!json_encode($evaluate->evaluateDetail)!!}
+    
+</script>
+<script src="{{asset('assets\js\kpi\evaluationSelf\evaluate.js')}}" defer></script>
+<script>
+    const changeValue = (e) => {
+        evaluateDetail.forEach((element,index) => {
+            if (parseInt(e.offsetParent.parentNode.dataset.id) === element.id) {
+                // element.actual = e.value
+                // element.cal = e.value
+                formulaRuleDetail(e,index)
+            }
+        });
+    }
+
+    const submit = () => {
+        console.log(evaluateDetail);
+    }
+</script>
 @endsection

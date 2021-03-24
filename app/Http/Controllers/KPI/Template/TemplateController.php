@@ -31,11 +31,17 @@ class TemplateController extends Controller
      */
     public function index(Request $request)
     {
-        $departments = $this->departmentService->dropdown();
-        $dropdowntem = $this->templateService->dropdown();
-        $templates = $this->templateService->filter($request);
-
-        return \view('kpi.RuleTemplate.index', \compact('departments', 'templates', 'dropdowntem'));
+        $query = $request->all();
+        $selectRuleTemp = \collect($request->template_id);
+        $selectDepartment = \collect($request->department_id);
+        try {
+            $departments = $this->departmentService->dropdown();
+            $dropdowntem = $this->templateService->dropdown();
+            $templates = $this->templateService->filter($request);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        return \view('kpi.RuleTemplate.index', \compact('departments', 'templates', 'dropdowntem', 'query', 'selectRuleTemp', 'selectDepartment'));
     }
 
     /**

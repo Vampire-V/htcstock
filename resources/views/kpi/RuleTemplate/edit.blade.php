@@ -148,25 +148,6 @@
                                     <option value="">Field</option>
                                 </select></td>
                         </tr>
-                        {{-- <tr>
-                            <th scope="row">
-                                <div class="custom-checkbox custom-control"><input type="checkbox"
-                                        id="exampleCheckboxKpi2" class="custom-control-input"><label
-                                        class="custom-control-label" for="exampleCheckboxKpi2"></label></div>
-                            </th>
-                            <td>Rule 2</td>
-                            <td></td>
-                            <td><input class="mb-2 form-control-sm form-control" type="text" id=""></td>
-                            <td><input class="mb-2 form-control-sm form-control" type="text" id=""></td>
-                            <td><input class="mb-2 form-control-sm form-control" type="text" id=""></td>
-                            <td><input class="mb-2 form-control-sm form-control" type="text" id=""></td>
-                            <td><select class="mb-2 form-control-sm form-control" id="">
-                                    <option value="">Parent rule</option>
-                                </select></td>
-                            <td><select class="mb-2 form-control-sm form-control" id="">
-                                    <option value="">Field</option>
-                                </select></td>
-                        </tr> --}}
                     </tbody>
                     <tfoot>
                         <tr>
@@ -279,7 +260,6 @@
                 //     placeholder: 'Select department',
                 //     allowClear: true
                 // });
-                console.log('edit');
                 $("#validationRuleTemplate").select2({
                     placeholder: 'Select RuleTemplate',
                     allowClear: true

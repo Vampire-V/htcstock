@@ -258,3 +258,55 @@ var sweetalert = (title, text) => {
         }
     })
 }
+
+// KPI
+var formulaRuleDetail = (e, key) => {
+    let index = e.offsetParent.cellIndex
+    let tr = e.offsetParent.parentNode
+    let foot = tr.parentNode.parentNode.tFoot
+    let actual = parseFloat(tr.cells[index].firstChild.value)
+    let target = parseFloat(tr.cells[index - 1].firstChild.textContent)
+
+    if (evaluateDetail[key].rule.calculate_type !== null) {
+        let ach = parseFloat((actual / target) * 100)
+        evaluateDetail[key].actual = e.value
+
+        if (evaluateDetail[key].rule.calculate_type === 'Amount') {
+            tr.cells[index + 1].firstChild.textContent = ach.toFixed(2) + '%'
+            evaluateDetail[key].ach = ach
+        }
+        if (evaluateDetail[key].rule.calculate_type === 'Percent') {
+            tr.cells[index + 1].firstChild.textContent = actual.toFixed(2) + '%'
+            evaluateDetail[key].ach = actual
+        }
+
+        if (evaluateDetail[key].ach < 70) {
+            tr.cells[index + 2].firstChild.textContent = '0.00%'
+            evaluateDetail[key].cal = 0
+        } else if (evaluateDetail[key].ach > evaluateDetail[key].base_line) {
+            let c = parseFloat(evaluateDetail[key].base_line) * parseFloat(evaluateDetail[key].weight) / 100
+            tr.cells[index + 2].firstChild.textContent = c.toFixed(2) + '%'
+            evaluateDetail[key].cal = c
+        } else {
+            let d = evaluateDetail[key].ach * parseFloat(evaluateDetail[key].weight) / 100
+            tr.cells[index + 2].firstChild.textContent = d.toFixed(2) + '%'
+            evaluateDetail[key].cal = d
+        }
+
+        let sumCal = evaluateDetail.filter(item => {
+            return item.rule.category.name === evaluateDetail[key].rule.category.name
+        }).reduce(function (total, currentValue) {
+            return total + currentValue.cal
+        }, 0)
+        foot.lastElementChild.cells[foot.lastElementChild.childElementCount - 1].textContent = parseFloat(sumCal).toFixed(2) + '%'
+    } else {
+        evaluateDetail[key].actual = 0
+        tr.cells[index].firstChild.value = 0
+        // alert(`${tr.cells[1].firstChild.textContent} ไม่ทราบ calculate type แจ้ง Admin`)
+        e.focus()
+    }
+
+
+    // console.log(evaluateDetail[key].rule)
+    // console.log(tr.cells[index],tr.cells[index-1]);
+}

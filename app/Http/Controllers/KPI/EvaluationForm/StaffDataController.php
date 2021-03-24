@@ -40,6 +40,8 @@ class StaffDataController extends Controller
     public function index(Request $request)
     {
         $query = $request->all();
+        $selectDepartment = \collect($request->department_id);
+        $selectPosition = \collect($request->position_id);
         try {
             $users = $this->userService->filter($request);
             $departments = $this->departmentService->dropdown();
@@ -47,19 +49,8 @@ class StaffDataController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \view('kpi.EvaluationForm.index', \compact('users', 'departments', 'positions', 'query'));
+        return \view('kpi.EvaluationForm.index', \compact('users', 'departments', 'positions', 'query', 'selectDepartment', 'selectPosition'));
     }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    // public function index()
-    // {
-    //     $start_year = date('Y', strtotime('-10 years'));
-    //     return \view('kpi.EvaluationForm.staffdata', \compact('start_year'));
-    // }
 
     /**
      * Show the form for creating a new resource.

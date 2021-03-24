@@ -47,7 +47,9 @@
                                 multiple>
                                 @isset($departments)
                                 @foreach ($departments as $dept)
-                                <option value="{{$dept->id}}">{{$dept->name}}</option>
+                                <option value="{{$dept->id}}" @if ($selectDepartment->contains($dept->id))
+                                    selected
+                                    @endif>{{$dept->name}}</option>
                                 @endforeach
                                 @endisset
                             </select>
@@ -57,7 +59,9 @@
                             <select class="form-control-sm form-control" id="position" name="position_id[]" multiple>
                                 @isset($positions)
                                 @foreach ($positions as $position)
-                                <option value="{{$position->id}}">{{$position->name}}</option>
+                                <option value="{{$position->id}}" @if ($selectPosition->contains($position->id))
+                                    selected
+                                    @endif>{{$position->name}}</option>
                                 @endforeach
                                 @endisset
                             </select>

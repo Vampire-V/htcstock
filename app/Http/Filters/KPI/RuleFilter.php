@@ -10,6 +10,6 @@ class RuleFilter extends AbstractFilter
 {
     protected $filters = [
         'category_id' => CategoryWhereIn::class,
-        'name' => NameLike::class
+        'ruleName' => NameLike::class
     ];
 }

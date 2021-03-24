@@ -5,6 +5,6 @@ class PeriodIn
 {
     public function filter($builder, $value)
     {
-        return $builder->whereIn('id', [...$value]);
+        return $builder->whereIn('period_id', [...$value]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services\KPI\Service;
 
+use App\Enum\KPIEnum;
 use App\Models\KPI\Evaluate;
 use App\Models\User;
 use App\Services\BaseService;
@@ -69,10 +70,22 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
         }
     }
 
-    public function filter(Request $request)
+    public function reviewFilter(Request $request)
     {
         return Evaluate::with(['user' => function ($query) {
             $query->select('id', 'name', 'department_id', 'positions_id')->where('department_id', \auth()->user()->department_id);
-        }, 'targetperiod'])->filter($request)->orderBy('created_at', 'desc')->get();
+        }, 'targetperiod'])
+            ->whereIn('status', [KPIEnum::submit, KPIEnum::approved])
+            ->filter($request)->orderBy('created_at', 'desc')
+            ->get();
+    }
+
+    public function selfFilter(Request $request)
+    {
+        return Evaluate::with(['targetperiod'])
+            ->where('user_id', \auth()->user()->id)
+            ->whereNotIn('status', [KPIEnum::new])
+            ->filter($request)
+            ->orderBy('created_at', 'desc')->get();
     }
 }

@@ -16,9 +16,7 @@ use Illuminate\Support\Facades\DB;
 class RuleController extends Controller
 {
 
-    protected $ruleCategoryService;
-    protected $targetUnitService;
-    protected $ruleService;
+    protected $ruleCategoryService, $targetUnitService, $ruleService;
     public function __construct(
         RuleCategoryServiceInterface $ruleCategoryServiceInterface,
         TargetUnitServiceInterface $targetUnitServiceInterface,
@@ -35,9 +33,17 @@ class RuleController extends Controller
      */
     public function index(Request $request)
     {
-        $category = $this->ruleCategoryService->dropdown();
-        $rules = $this->ruleService->filter($request);
-        return \view('kpi.RuleList.index', \compact('rules', 'category'));
+        $query = $request->all();
+        $searchRuleName = $request->ruleName;
+        $selectedCategory = collect($request->category_id);
+        try {
+            $category = $this->ruleCategoryService->dropdown();
+            $rules = $this->ruleService->filter($request);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
+        return \view('kpi.RuleList.index', \compact('rules', 'category', 'query', 'searchRuleName', 'selectedCategory'));
     }
 
     /**

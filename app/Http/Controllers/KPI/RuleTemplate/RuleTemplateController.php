@@ -44,11 +44,17 @@ class RuleTemplateController extends Controller
      */
     public function index(Request $request)
     {
-        $departments = $this->departmentService->dropdown();
-        $templates = $this->templateService->dropdown();
-        $ruleTemplates = $this->templateService->filter($request);
-
-        return \view('kpi.RuleTemplate.index', \compact('departments', 'templates', 'ruleTemplates'));
+        $query = $request->all();
+        $selectRuleTemp = \collect($request->template_id);
+        $selectDepartment = \collect($request->department_id);
+        try {
+            $departments = $this->departmentService->dropdown();
+            $templates = $this->templateService->dropdown();
+            $ruleTemplates = $this->templateService->filter($request);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        return \view('kpi.RuleTemplate.index', \compact('departments', 'templates', 'ruleTemplates', 'selectRuleTemp', 'selectDepartment', 'query'));
     }
 
     /**
@@ -61,7 +67,6 @@ class RuleTemplateController extends Controller
         try {
             $category = $this->categoryService->all();
             $template = $this->templateService->find($template);
-            
         } catch (\Throwable $th) {
             throw $th;
         }

@@ -182,8 +182,8 @@
                             <button class="mb-2 mr-2 btn btn-danger" id="rule-remove-modal" onclick="deleteRuleTemp()"
                                 disabled>Delete Selected
                                 Rule</button>
-                            <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal" data-target="#ruleModal"
-                                id="rule-add-modal" disabled>Add
+                            <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
+                                data-target="#ruleModal" id="rule-add-modal" disabled>Add
                                 New Rule</button>
                             @endif
                         </div>
@@ -640,7 +640,6 @@
         }
          // remove detail temp
         formEvaluate.detail = formEvaluate.detail.filter((value, index) => removeDetailIndex.indexOf(index) == -1)
-
         keyTaskNew(formEvaluate.detail.filter(value => value.rules.categorys.name === 'key-task'))
         table.tFoot.lastElementChild.cells[5].textContent = formEvaluate.detail.reduce((accumulator, currentValue) => currentValue.rules.categorys.name === 'key-task' ? accumulator + currentValue.weight : accumulator ,0).toFixed(2)
     }
@@ -726,6 +725,64 @@
         }).catch(error => {
             console.log(error)
         })
+    }
+
+    const keyTaskNew = (datas) => {
+            let tables = document.getElementById(`table-key-task`)
+            tables.tBodies[0].innerHTML = ''
+            datas.forEach((element,index) => {
+                let newRow = tables.tBodies[0].insertRow()
+                newRow.setAttribute("data-id", element.rules.name)
+
+                let newCellIndex = newRow.insertCell()
+                    newCellIndex.textContent = index + 1
+
+                let newCellName = newRow.insertCell()
+                    newCellName.textContent = element.rules.name
+
+                let newCellDescription = newRow.insertCell()
+                    newCellDescription.textContent = element.rules.description
+
+                let newCellBaseLine = newRow.insertCell()
+                let inputBaseLine = document.createElement(`input`)
+                    inputBaseLine.setAttribute(`onchange`,'changeValue(this)')
+                    newCellBaseLine.appendChild(createInput(inputBaseLine,'number',className,`base_line`,element.base_line.toFixed(2)))
+
+                let newCellMax = newRow.insertCell()
+                let inputMax = document.createElement(`input`)
+                    inputMax.setAttribute(`onchange`,'changeValue(this)')
+                    newCellMax.appendChild(createInput(inputMax,'number',className,`max_result`,element.max_result.toFixed(2)))
+
+                let newCellWeight = newRow.insertCell()
+                let inputWeight = document.createElement(`input`)
+                    inputWeight.setAttribute(`onchange`,'changeValue(this)')
+                    newCellWeight.appendChild(createInput(inputWeight,'number',className,`weight`,element.weight.toFixed(2)))
+
+                let newCellTarget = newRow.insertCell()
+                let inputTarget = document.createElement(`input`)
+                    inputTarget.setAttribute(`onchange`,'changeValue(this)')
+                    newCellTarget.appendChild(createInput(inputTarget,'number',className,`target`,element.target.toFixed(2)))
+
+                let newCellCheck = newRow.insertCell()
+                let div = document.createElement('div')
+                    div.className = 'custom-checkbox custom-control'
+
+                let checkbox = document.createElement('input')
+                    checkbox.type = `checkbox`
+                    checkbox.name = `rule-${element.rules.name}`
+                    checkbox.className = `custom-control-input`
+                    checkbox.id = element.rules.name
+
+                let label = document.createElement('label')
+
+                    label.classList.add('custom-control-label')
+                    label.htmlFor = element.rules.name
+                    div.appendChild(checkbox)
+                    div.appendChild(label)
+                    
+                    newCellCheck.appendChild(div)
+            });
+            // console.log('delete and new tr : ',formEvaluate.detail);
     }
 
     const setOptionModal = (group) => {

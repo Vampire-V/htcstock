@@ -175,7 +175,7 @@
                                 <label for="rule-name" class="">Rule Name :</label>
 
                                 <select id="validationRuleName" class="form-control-sm form-control" name="rule_id"
-                                    required>
+                                    required placeholder="placeholder">
                                     <option value="">Choose...</option>
                                 </select>
                             </div>
@@ -297,7 +297,7 @@
             
             result.data.data.forEach(element => {
                 let option = document.createElement("option")
-                option.text = element.name
+                option.text = element.name+" - "+element.calculate_type
                 option.value = element.id
                 document.getElementById('validationRuleName').appendChild(option)
             })

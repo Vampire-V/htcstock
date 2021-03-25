@@ -93,8 +93,8 @@ class ProjectBasedAgreementController extends Controller
     {
         try {
             $projectBased = $this->contractDescService->find($id);
-            $subtypeContract = $this->subtypeContractService->dropdownSubtypeContract($projectBased->legalcontract->agreement_id);
-            $paymentType = $this->paymentTypeService->dropdownPaymentType($projectBased->legalcontract->agreement_id);
+            $subtypeContract = $this->subtypeContractService->dropdown($projectBased->legalcontract->agreement_id);
+            $paymentType = $this->paymentTypeService->dropdown($projectBased->legalcontract->agreement_id);
         } catch (\Throwable $th) {
             throw $th;
         }

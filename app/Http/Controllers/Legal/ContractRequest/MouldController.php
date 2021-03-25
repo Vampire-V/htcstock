@@ -89,7 +89,7 @@ class MouldController extends Controller
             if ($mould->value_of_contract) {
                 $mould->value_of_contract = explode(",", $mould->value_of_contract);
             }
-            $paymentType = $this->paymentTypeService->dropdownPaymentType($mould->legalcontract->agreement_id);
+            $paymentType = $this->paymentTypeService->dropdown($mould->legalcontract->agreement_id);
         } catch (\Throwable $th) {
             throw $th;
         }

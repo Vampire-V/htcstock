@@ -89,8 +89,8 @@ class MarketingAgreementController extends Controller
     {
         try {
             $marketing = $this->contractDescService->find($id);
-            $subtypeContract = $this->subtypeContractService->dropdownSubtypeContract($marketing->legalcontract->agreement_id);
-            $paymentType = $this->paymentTypeService->dropdownPaymentType($marketing->legalcontract->agreement_id);
+            $subtypeContract = $this->subtypeContractService->dropdown($marketing->legalcontract->agreement_id);
+            $paymentType = $this->paymentTypeService->dropdown($marketing->legalcontract->agreement_id);
         } catch (\Throwable $th) {
             throw $th;
         }

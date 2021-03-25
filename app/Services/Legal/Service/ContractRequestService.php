@@ -71,7 +71,7 @@ class ContractRequestService extends BaseService implements ContractRequestServi
         }
     }
 
-    public function statusPromised(string $status): int
+    public function countStatus(string $status): int
     {
         try {
             return LegalContract::where(['trash'=>false,'status' => $status])->count();

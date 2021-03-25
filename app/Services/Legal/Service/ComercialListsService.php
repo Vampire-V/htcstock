@@ -5,7 +5,6 @@ namespace App\Services\Legal\Service;
 use App\Models\Legal\LegalComercialList;
 use App\Services\BaseService;
 use App\Services\Legal\Interfaces\ComercialListsServiceInterface;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class ComercialListsService extends BaseService implements ComercialListsServiceInterface

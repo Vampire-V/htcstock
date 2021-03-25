@@ -19,7 +19,7 @@ class SubtypeContractService extends BaseService implements SubtypeContractServi
         parent::__construct($model);
     }
 
-    public function dropdownSubtypeContract(int $agreement): Collection
+    public function dropdown(int $agreement): Collection
     {
         try {
             return LegalSubtypeContract::whereIn('agreement_id',[$agreement])->get();

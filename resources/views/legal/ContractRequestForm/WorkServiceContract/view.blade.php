@@ -99,16 +99,16 @@
                     <div class="col-md-6 mb-6">
                         <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> </label>
                         <div>
-                            <a href="{{url('storage/'.$contractDest->purchase_order)}}" target="_blank"
-                                rel="noopener noreferrer">{{$contractDest->purchase_order ? 'view file' : ""}}</a>
+                            <a href="{{url('storage/'.$legalContract->legalContractDest->purchase_order)}}" target="_blank"
+                                rel="noopener noreferrer">{{$legalContract->legalContractDest->purchase_order ? 'view file' : ""}}</a>
                         </div>
                     </div>
                     <div class="col-md-6 mb-6">
                         <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                 style="color: red;">*</span></label>
                         <div>
-                            <a href="{{url('storage/'.$contractDest->quotation)}}" target="_blank"
-                                rel="noopener noreferrer">{{$contractDest->quotation ? 'view file' : ""}}</a>
+                            <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}" target="_blank"
+                                rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
                         </div>
                     </div>
                 </div>
@@ -117,16 +117,16 @@
                         <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                 style="color: red;">*</span></label>
                         <div>
-                            <a href="{{url('storage/'.$contractDest->coparation_sheet)}}" target="_blank"
-                                rel="noopener noreferrer">{{$contractDest->coparation_sheet ? 'view file' : ""}}</a>
+                            <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}" target="_blank"
+                                rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
                         </div>
                     </div>
                     <div class="col-md-6 mb-6">
                         <label for="validationWorkPlan"><strong>Work Plan</strong> <span
                                 style="color: red;">*</span></label>
                         <div>
-                            <a href="{{url('storage/'.$contractDest->work_plan)}}" target="_blank"
-                                rel="noopener noreferrer">{{$contractDest->work_plan ? 'view file' : ""}}</a>
+                            <a href="{{url('storage/'.$legalContract->legalContractDest->work_plan)}}" target="_blank"
+                                rel="noopener noreferrer">{{$legalContract->legalContractDest->work_plan ? 'view file' : ""}}</a>
                         </div>
                     </div>
                 </div>
@@ -134,13 +134,13 @@
                 <hr>
 
                 <span class="badge badge-primary">Comercial Terms</span>
-                <input type="hidden" name="comercial_term_id" value="{{$contractDest->comercial_term_id}}">
+                <input type="hidden" name="comercial_term_id" value="{{$legalContract->legalContractDest->comercial_term_id}}">
                 <div class="form-row">
                     <div class="col-md-4 mb-4">
                         <label for="validationScope"><strong>Scope of Work</strong> <span
                                 style="color: red;">*</span></label>
                         <input type="text" class="form-control-sm form-control" id="validationScope" name="scope_of_work"
-                            value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->scope_of_work : ""}}"
+                            value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                             readonly>
                         <div class="invalid-feedback">
                             Please provide a valid Ivoice No.
@@ -150,7 +150,7 @@
                         <label for="validationLocation"><strong>Location</strong> <span
                                 style="color: red;">*</span></label>
                         <input type="text" class="form-control-sm form-control" id="validationLocation" name="location"
-                            value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->location : ""}}"
+                            value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->location : ""}}"
                             readonly>
                         <div class="invalid-feedback">
                             Please provide a valid Ivoice No.
@@ -159,7 +159,7 @@
                     <div class="col-md-4 mb-4">
                         <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong> </label>
                         <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo" name="purchase_order_no"
-                            value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->purchase_order_no : ""}}"
+                            value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->purchase_order_no : ""}}"
                             readonly>
                         <div class="invalid-feedback">
                             Please provide a valid Ivoice No.
@@ -171,7 +171,7 @@
                         <label for="validationQuotationNo"><strong>Quotation No</strong> <span
                                 style="color: red;">*</span></label>
                         <input type="text" class="form-control-sm form-control" id="validationQuotationNo" name="quotation_no"
-                            value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->quotation_no : ""}}"
+                            value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
                             readonly>
                         <div class="invalid-feedback">
                             Please provide a valid Ivoice No.
@@ -180,7 +180,7 @@
                     <div class="col-md-6 mb-6">
                         <label for="validationDated"><strong>Dated</strong> <span style="color: red;">*</span></label>
                         <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                            value="{{isset($contractDest->legalComercialTerm->dated) ? $contractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
+                            value="{{isset($legalContract->legalContractDest->legalComercialTerm->dated) ? $legalContract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                             readonly>
                         <div class="invalid-feedback">
                             Please provide a valid Ivoice No.
@@ -192,7 +192,7 @@
                         <label for="validationContractPeriod"><strong>Contract period</strong> <span
                                 style="color: red;">*</span></label>
                         <input type="date" class="form-control-sm form-control" id="validationContractPeriod" name="contract_period"
-                            value="{{isset($contractDest->legalComercialTerm->contract_period) ? $contractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
+                            value="{{isset($legalContract->legalContractDest->legalComercialTerm->contract_period) ? $legalContract->legalContractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
                             readonly>
                         <div class="invalid-feedback">
                             Please provide a valid Ivoice No.
@@ -201,7 +201,7 @@
                     <div class="col-md-6 mb-6">
                         <label for="validationUntill"><strong>Untill</strong> <span style="color: red;">*</span></label>
                         <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
-                            value="{{isset($contractDest->legalComercialTerm->untill) ? $contractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
+                            value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
                             readonly>
                         <div class="invalid-feedback">
                             Please provide a valid Ivoice No.
@@ -210,7 +210,7 @@
                 </div>
                 <hr>
                 <span class="badge badge-primary">Purchase list</span>
-                @isset($contractDest->legalComercialList)
+                @isset($legalContract->legalContractDest->legalComercialList)
                 <div class="form-row">
                     <table class="table table-bordered" id="table-comercial-lists">
                         <thead>
@@ -224,7 +224,7 @@
                         </thead>
                         <tbody>
 
-                            @foreach ($contractDest->legalComercialList as $key => $item)
+                            @foreach ($legalContract->legalContractDest->legalComercialList as $key => $item)
                             <tr>
                                 <td>{{$key+1}}</td>
                                 <td>{{$item->description}}</td>
@@ -239,7 +239,7 @@
                             <tr>
                                 <th colspan="3"></th>
                                 <th>Total</th>
-                                <th id="total">{{$contractDest->legalComercialList->reduce(function ($ac,$item) {
+                                <th id="total">{{$legalContract->legalContractDest->legalComercialList->reduce(function ($ac,$item) {
                                 return $ac+=$item->amount;
                             },0)}}</th>
                             </tr>
@@ -262,7 +262,7 @@
                             @isset($paymentType)
                             @foreach ($paymentType as $item)
                             <option value="{{$item->id}}"
-                                {{$contractDest->payment_type_id == $item->id ? "selected" : "" }}>
+                                {{$legalContract->legalContractDest->payment_type_id == $item->id ? "selected" : "" }}>
                                 {{$item->name}}
                             </option>
                             @endforeach
@@ -275,7 +275,7 @@
                     <div class="col-md-8 mb-8 hide-contract" id="contractType1">
                         <ul>
                             <li class="li-none-type"><input type="number"
-                                    value="{{isset($contractDest->value_of_contract)?$contractDest->value_of_contract[0]:30}}"
+                                    value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[0]:30}}"
                                     class="type-contract-input" min="0" max="100" onchange="changeContractValue(this)"
                                     readonly>
                                 <span>% of
@@ -283,14 +283,14 @@
                                     contract</span>
                             </li>
                             <li class="li-none-type"><input type="number"
-                                    value="{{isset($contractDest->value_of_contract)?$contractDest->value_of_contract[1]:40}}"
+                                    value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[1]:40}}"
                                     class="type-contract-input" min="0" max="100" onchange="changeContractValue(this)"
                                     readonly>
                                 <span>% of
                                     the total value of a contract within 30 days from the date of accomplishment and
                                     approval by HTC </span></li>
                             <li class="li-none-type"><input type="number"
-                                    value="{{isset($contractDest->value_of_contract)?$contractDest->value_of_contract[2]:30}}"
+                                    value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[2]:30}}"
                                     class="type-contract-input" min="0" max="100" readonly> <span>% of
                                     the total value of a contract within 30 days from the date of inspection and
                                     approval by HTC
@@ -301,7 +301,7 @@
                     <div class="col-md-8 mb-8 hide-contract" id="contractType2">
                         <ul>
                             <li class="li-none-type"><input type="number"
-                                    value="{{isset($contractDest->value_of_contract)?$contractDest->value_of_contract[0]:30}}"
+                                    value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[0]:30}}"
                                     class="type-contract-input" min="0" max="100" onchange="changeContractValue(this)"
                                     readonly>
                                 <span>% of
@@ -309,14 +309,14 @@
                                     contract</span>
                             </li>
                             <li class="li-none-type"><input type="number"
-                                    value="{{isset($contractDest->value_of_contract)?$contractDest->value_of_contract[1]:60}}"
+                                    value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[1]:60}}"
                                     class="type-contract-input" min="0" max="100" onchange="changeContractValue(this)"
                                     readonly>
                                 <span>% of
                                     the total value of a contract within 30 days from the date of accomplishment and
                                     approval by HTC </span></li>
                             <li class="li-none-type"><input type="number"
-                                    value="{{isset($contractDest->value_of_contract)?$contractDest->value_of_contract[2]:10}}"
+                                    value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[2]:10}}"
                                     class="type-contract-input" min="0" max="100" readonly> <span>% of
                                     the total value of a contract within 30 days from the date of inspection and
                                     approval by HTC
@@ -332,7 +332,7 @@
                         <label for="validationWarranty"><strong>Month</strong> <span
                                 style="color: red;">*</span></label>
                         <input type="number" class="form-control-sm form-control" id="validationWarranty" name="warranty" min="0"
-                            step="1" value="{{$contractDest->warranty}}" onchange="calMonthToYear(this)" readonly>
+                            step="1" value="{{$legalContract->legalContractDest->warranty}}" onchange="calMonthToYear(this)" readonly>
                         <div class="invalid-feedback">
                             Please provide a valid Ivoice No.
                         </div>
@@ -364,8 +364,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @isset($approvalDetail)
-                            @foreach ($approvalDetail as $key => $item)
+                            @isset($legalContract->approvalDetail)
+                            @foreach ($legalContract->approvalDetail as $key => $item)
                             <tr>
                                 <th scope="row">{{$key+1}}</th>
                                 <td>{{$item->user->name}} {{$item->user->email}}</td>

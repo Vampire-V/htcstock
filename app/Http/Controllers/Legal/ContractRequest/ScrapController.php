@@ -89,7 +89,7 @@ class ScrapController extends Controller
             if ($scrap->value_of_contract) {
                 $scrap->value_of_contract = explode(",", $scrap->value_of_contract);
             }
-            $paymentType = $this->paymentTypeService->dropdownPaymentType($scrap->legalcontract->agreement_id);
+            $paymentType = $this->paymentTypeService->dropdown($scrap->legalcontract->agreement_id);
         } catch (\Throwable $th) {
             throw $th;
         }

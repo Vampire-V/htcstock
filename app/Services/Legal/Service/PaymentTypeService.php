@@ -5,7 +5,6 @@ namespace App\Services\Legal\Service;
 use App\Models\Legal\LegalPaymentType;
 use App\Services\BaseService;
 use App\Services\Legal\Interfaces\PaymentTypeServiceInterface;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class PaymentTypeService extends BaseService implements PaymentTypeServiceInterface
@@ -20,7 +19,7 @@ class PaymentTypeService extends BaseService implements PaymentTypeServiceInterf
         parent::__construct($model);
     }
 
-    public function dropdownPaymentType(int $agreement): Collection
+    public function dropdown(int $agreement): Collection
     {
         try {
             return LegalPaymentType::whereIn('agreement_id',[$agreement])->get();

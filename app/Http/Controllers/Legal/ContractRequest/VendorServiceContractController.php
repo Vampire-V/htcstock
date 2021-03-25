@@ -92,8 +92,8 @@ class VendorServiceContractController extends Controller
     {
         try {
             $vendorservice = $this->contractDescService->find($id);
-            $subtypeContract = $this->subtypeContractService->dropdownSubtypeContract($vendorservice->legalcontract->agreement_id);
-            $paymentType = $this->paymentTypeService->dropdownPaymentType($vendorservice->legalcontract->agreement_id);
+            $subtypeContract = $this->subtypeContractService->dropdown($vendorservice->legalcontract->agreement_id);
+            $paymentType = $this->paymentTypeService->dropdown($vendorservice->legalcontract->agreement_id);
         } catch (\Throwable $th) {
             throw $th;
         }

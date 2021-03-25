@@ -23,13 +23,13 @@ class ActionService extends BaseService implements ActionServiceInterface
     public function all(): Builder
     {
         try {
-            return LegalAction::whereNotNull('id');
+            return LegalAction::query();
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function dropdownAction(): Collection
+    public function dropdown(): Collection
     {
         try {
             return LegalAction::all();

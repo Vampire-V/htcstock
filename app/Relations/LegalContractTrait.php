@@ -42,6 +42,6 @@ trait LegalContractTrait
 
    public function approvalDetail()
    {
-      return $this->hasOne(LegalApprovalDetail::class);
+      return $this->hasMany(LegalApprovalDetail::class,'contract_id');
    }
 }

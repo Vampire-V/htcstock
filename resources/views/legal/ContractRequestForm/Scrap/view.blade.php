@@ -100,16 +100,16 @@
                         <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                 style="color: red;">*</span> </label>
                         <div>
-                            <a href="{{url('storage/'.$contractDest->quotation)}}" target="_blank"
-                                rel="noopener noreferrer">{{$contractDest->quotation ? 'view file' : ""}}</a>
+                            <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}" target="_blank"
+                                rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
                         </div>
                     </div>
                     <div class="col-md-6 mb-6">
                         <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                 style="color: red;">*</span> </label>
                         <div>
-                            <a href="{{url('storage/'.$contractDest->coparation_sheet)}}" target="_blank"
-                                rel="noopener noreferrer">{{$contractDest->coparation_sheet ? 'view file' : ""}}</a>
+                            <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}" target="_blank"
+                                rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
                         </div>
                     </div>
                 </div>
@@ -118,16 +118,16 @@
                         <label for="validationFactoryPermission"><strong>Factory Permission</strong> <span
                                 style="color: red;">*</span> </label>
                         <div>
-                            <a href="{{url('storage/'.$contractDest->factory_permission)}}" target="_blank"
-                                rel="noopener noreferrer">{{$contractDest->factory_permission ? 'view file' : ""}}</a>
+                            <a href="{{url('storage/'.$legalContract->legalContractDest->factory_permission)}}" target="_blank"
+                                rel="noopener noreferrer">{{$legalContract->legalContractDest->factory_permission ? 'view file' : ""}}</a>
                         </div>
                     </div>
                     <div class="col-md-6 mb-6">
                         <label for="validationWastePermission"><strong>Waste Permission</strong> <span
                                 style="color: red;">*</span> </label>
                         <div>
-                            <a href="{{url('storage/'.$contractDest->waste_permission)}}" target="_blank"
-                                rel="noopener noreferrer">{{$contractDest->waste_permission ? 'view file' : ""}}</a>
+                            <a href="{{url('storage/'.$legalContract->legalContractDest->waste_permission)}}" target="_blank"
+                                rel="noopener noreferrer">{{$legalContract->legalContractDest->waste_permission ? 'view file' : ""}}</a>
                         </div>
                     </div>
                 </div>
@@ -140,7 +140,7 @@
                         <label for="validationScope"><strong>Scope of Work</strong> <span
                                 style="color: red;">*</span></label>
                         <input type="text" class="form-control-sm form-control" id="validationScope" name="scope_of_work"
-                            value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->scope_of_work : ""}}"
+                            value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                             readonly>
                         <div>
                             Please provide a valid Scope of Work.
@@ -150,7 +150,7 @@
                         <label for="validationLocation"><strong>Location</strong> <span
                                 style="color: red;">*</span></label>
                         <input type="text" class="form-control-sm form-control" id="validationLocation" name="location"
-                            value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->location : ""}}"
+                            value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->location : ""}}"
                             readonly>
                         <div>
                             Please provide a valid Location.
@@ -162,7 +162,7 @@
                         <label for="validationQuotationNo"><strong>Quotation No</strong> <span
                                 style="color: red;">*</span></label>
                         <input type="text" class="form-control-sm form-control" id="validationQuotationNo" name="quotation_no"
-                            value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->quotation_no : ""}}"
+                            value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
                             readonly>
                         <div>
                             Please provide a valid Quotation No.
@@ -171,7 +171,7 @@
                     <div class="col-md-4 mb-4">
                         <label for="validationDated"><strong>Dated</strong> <span style="color: red;">*</span></label>
                         <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                            value="{{isset($contractDest->legalComercialTerm->dated) ? $contractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
+                            value="{{isset($legalContract->legalContractDest->legalComercialTerm->dated) ? $legalContract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                             readonly>
                         <div>
                             Please provide a valid Dated.
@@ -181,7 +181,7 @@
                         <label for="validationDeliveryDate"><strong>Delivery Date</strong> <span
                                 style="color: red;">*</span></label>
                         <input type="date" class="form-control-sm form-control" id="validationDeliveryDate" name="delivery_date"
-                            value="{{isset($contractDest->legalComercialTerm->delivery_date) ? $contractDest->legalComercialTerm->delivery_date->format('Y-m-d') : ""}}"
+                            value="{{isset($legalContract->legalContractDest->legalComercialTerm->delivery_date) ? $legalContract->legalContractDest->legalComercialTerm->delivery_date->format('Y-m-d') : ""}}"
                             readonly>
                         <div>
                             Please provide a valid Delivery Date.
@@ -191,7 +191,7 @@
                 <hr>
 
                 <span class="badge badge-primary">Scrap list</span>
-                @isset($contractDest->legalComercialList)
+                @isset($legalContract->legalContractDest->legalComercialList)
                 <div class="form-row">
                     <table class="table table-bordered" id="table-comercial-lists">
                         <thead>
@@ -204,7 +204,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($contractDest->legalComercialList as $key => $item)
+                            @foreach ($legalContract->legalContractDest->legalComercialList as $key => $item)
                             <tr>
                                 <td>{{$key+1}}</td>
                                 <td>{{$item->description}}</td>
@@ -218,7 +218,7 @@
                             <tr>
                                 <th colspan="3"></th>
                                 <th>Total</th>
-                                <th id="total">{{$contractDest->legalComercialList->reduce(function ($ac,$item) {
+                                <th id="total">{{$legalContract->legalContractDest->legalComercialList->reduce(function ($ac,$item) {
                                     return $ac+=$item->amount;
                                 },0)}}</th>
                             </tr>
@@ -240,7 +240,7 @@
                             @isset($paymentType)
                             @foreach ($paymentType as $item)
                             <option value="{{$item->id}}"
-                                {{$contractDest->payment_type_id == $item->id ? "selected" : "" }}>
+                                {{$legalContract->legalContractDest->payment_type_id == $item->id ? "selected" : "" }}>
                                 {{$item->name}}
                             </option>
                             @endforeach
@@ -254,7 +254,7 @@
                         <ul>
                             <li class="li-none-type">
                                 <input type="number"
-                                    value="{{isset($contractDest->value_of_contract)?$contractDest->value_of_contract[0]:100}}"
+                                    value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[0]:100}}"
                                     class="type-contract-input" min="0" max="100" onchange="changeContractValue(this)"
                                     readonly>
                                 <span>% of the total value of a contract from the date of delivered the
@@ -285,8 +285,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @isset($approvalDetail)
-                            @foreach ($approvalDetail as $key => $item)
+                            @isset($legalContract->approvalDetail)
+                            @foreach ($legalContract->approvalDetail as $key => $item)
                             <tr>
                                 <th scope="row">{{$key+1}}</th>
                                 <td>{{$item->user->name}} {{$item->user->email}}</td>

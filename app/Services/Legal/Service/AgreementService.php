@@ -23,13 +23,13 @@ class AgreementService extends BaseService implements AgreementServiceInterface
     public function all(): Builder
     {
         try {
-            return LegalAgreement::whereNotNull('id');
+            return LegalAgreement::query();
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function dropdownAgreement(): Collection
+    public function dropdown(): Collection
     {
         try {
             return LegalAgreement::all();

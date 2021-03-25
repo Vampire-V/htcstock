@@ -45,17 +45,17 @@ class HomeController extends Controller
             } else {
                 $contracts = null;
             }
-            $agreements = $this->agreementService->dropdownAgreement();
+            $agreements = $this->agreementService->dropdown();
             $allPromised = $this->contractRequestService->totalpromised();
             $ownPromise = $this->contractRequestService->ownpromised(\auth()->user());
-            $requestSum = $this->contractRequestService->statusPromised(ContractEnum::R);
-            $checking = $this->contractRequestService->statusPromised(ContractEnum::CK);
-            $providing = $this->contractRequestService->statusPromised(ContractEnum::P);
-            $complete = $this->contractRequestService->statusPromised(ContractEnum::CP);
+            $requestSum = $this->contractRequestService->countStatus(ContractEnum::R);
+            $checking = $this->contractRequestService->countStatus(ContractEnum::CK);
+            $providing = $this->contractRequestService->countStatus(ContractEnum::P);
+            $complete = $this->contractRequestService->countStatus(ContractEnum::CP);
         } catch (\Throwable $th) {
             throw $th;
         }
-        
+
         if ($allPromised > 0) {
             $requestCal = round(($requestSum / $allPromised) * 100, 1);
             $checking = round(($checking / $allPromised) * 100, 1);

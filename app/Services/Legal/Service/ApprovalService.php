@@ -22,7 +22,7 @@ class ApprovalService extends BaseService implements ApprovalServiceInterface
         parent::__construct($model);
     }
 
-    public function query(): Builder
+    public function all(): Builder
     {
         try {
             return LegalApproval::query();
@@ -40,7 +40,7 @@ class ApprovalService extends BaseService implements ApprovalServiceInterface
         }
     }
 
-    public function dropdownApproval(): Collection
+    public function dropdown(): Collection
     {
         try {
             return LegalApproval::all();

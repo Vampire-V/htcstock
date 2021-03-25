@@ -97,7 +97,7 @@
                         @isset($subtypeContract)
                         @foreach ($subtypeContract as $item)
                         <option value="{{$item->id}}"
-                            {{$item->id === $contractDest->sub_type_contract_id ? "selected" : ""}}
+                            {{$item->id === $legalContract->legalContractDest->sub_type_contract_id ? "selected" : ""}}
                             data-id="{{$item->slug}}">
                             {{$item->name}}</option>
                         @endforeach
@@ -115,30 +115,30 @@
                 <form class="needs-validation" novalidate method="POST" enctype="multipart/form-data" id="form-bus">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="sub_type_contract_id" value="{{$contractDest->sub_type_contract_id}}">
+                    <input type="hidden" name="sub_type_contract_id" value="{{$legalContract->legalContractDest->sub_type_contract_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span></label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->quotation)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->quotation ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->coparation_sheet)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
                             <label for="validationTransportationPermission"><strong>Transportation Permission</strong>
                                 <span style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->transportation_permission)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->transportation_permission ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->transportation_permission)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->transportation_permission ? 'view file' : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -147,25 +147,25 @@
                             <label for="validationVehicleRegistration"><strong>Vehicle Registration</strong>
                                 <span style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->vehicle_registration_certificate)}}"
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->vehicle_registration_certificate)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->vehicle_registration_certificate ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->vehicle_registration_certificate ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
                             <label for="validationRoute"><strong>Route</strong> <span style="color: red;">*</span>
                             </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->route)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->route ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->route)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->route ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
                             <label for="validationInsurance"><strong>Insurance</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->insurance)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->insurance ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->insurance)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->insurance ? 'view file' : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -174,8 +174,8 @@
                             <label for="validationDriverLicense"><strong>Driver License</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->driver_license)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->driver_license ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->driver_license)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->driver_license ? 'view file' : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -187,7 +187,7 @@
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope" name="scope_of_work"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->scope_of_work : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Scope of Work. --}}
@@ -197,7 +197,7 @@
                             <label for="validationLocation"><strong>Location</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationLocation" name="location"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->location : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->location : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Location No. --}}
@@ -207,7 +207,7 @@
                             <label for="validationQuotationNo"><strong>Quotation No</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo" name="quotation_no"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->quotation_no : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Quotation No. --}}
@@ -219,7 +219,7 @@
                             <label for="validationDated"><strong>Dated</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                                value="{{isset($contractDest->legalComercialTerm->dated) ? $contractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->dated) ? $legalContract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Dated --}}
@@ -229,7 +229,7 @@
                             <label for="validationContractPeriod"><strong>Contract period</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationContractPeriod" name="contract_period"
-                                value="{{isset($contractDest->legalComercialTerm->contract_period) ? $contractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->contract_period) ? $legalContract->legalContractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Contract period. --}}
@@ -239,7 +239,7 @@
                             <label for="validationUntill"><strong>Untill</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
-                                value="{{isset($contractDest->legalComercialTerm->untill) ? $contractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Untill. --}}
@@ -249,14 +249,14 @@
                     <hr>
 
                     <span class="badge badge-primary">Payment Terms</span>
-                    <input type="hidden" name="payment_term_id" value="{{$contractDest->payment_term_id}}">
+                    <input type="hidden" name="payment_term_id" value="{{$legalContract->legalContractDest->payment_term_id}}">
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
                             <label for="validationMonthly"><strong>Monthly</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationMonthly" name="monthly" step="0.1"
                                 min="0"
-                                value="{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->monthly : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->monthly : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Monthly. --}}
@@ -267,7 +267,7 @@
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationRouteChange" name="route_change"
                                 step="0.1" min="0"
-                                value="{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->route_change : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->route_change : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Route Change. --}}
@@ -277,7 +277,7 @@
                             <label for="validationOT"><strong>OT</strong> <span style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationOT" name="payment_ot" step="0.1"
                                 min="0"
-                                value="{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->payment_ot : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->payment_ot : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid OT. --}}
@@ -288,7 +288,7 @@
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationHolidayPay" name="holiday_pay"
                                 step="0.1" min="0"
-                                value="{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->holiday_pay : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->holiday_pay : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Holiday Pay. --}}
@@ -299,7 +299,7 @@
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationOTDriver" name="ot_driver"
                                 step="0.1" min="0"
-                                value="{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->ot_driver : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->ot_driver : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Ivoice No. --}}
@@ -315,22 +315,22 @@
                     id="form-cleaning">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="sub_type_contract_id" value="{{$contractDest->sub_type_contract_id}}">
+                    <input type="hidden" name="sub_type_contract_id" value="{{$legalContract->legalContractDest->sub_type_contract_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{asset('storage/'.$contractDest->quotation)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->quotation ? 'view file' : ""}}</a>
+                                <a href="{{asset('storage/'.$legalContract->legalContractDest->quotation)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->coparation_sheet)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -342,7 +342,7 @@
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope" name="scope_of_work"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->scope_of_work : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Scope of Work. --}}
@@ -352,7 +352,7 @@
                             <label for="validationQuotationNo"><strong>Quotation No</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo" name="quotation_no"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->quotation_no : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Quotation No. --}}
@@ -362,7 +362,7 @@
                             <label for="validationDated"><strong>Dated</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                                value="{{isset($contractDest->legalComercialTerm->dated) ? $contractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->dated) ? $legalContract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Dated No. --}}
@@ -374,7 +374,7 @@
                             <label for="validationContractPeriod"><strong>Contract period</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationContractPeriod" name="contract_period"
-                                value="{{isset($contractDest->legalComercialTerm->contract_period) ? $contractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->contract_period) ? $legalContract->legalContractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Contract period. --}}
@@ -384,7 +384,7 @@
                             <label for="validationUntill"><strong>Untill</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
-                                value="{{isset($contractDest->legalComercialTerm->untill) ? $contractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Untill. --}}
@@ -396,7 +396,7 @@
                             <label for="validationWorkingDay"><strong>Working Day</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingDay" name="working_day"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_day : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_day : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Day. --}}
@@ -406,7 +406,7 @@
                             <label for="validationWorkingTime"><strong>Working Time</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingTime" name="working_time"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_time : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_time : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Time. --}}
@@ -419,7 +419,7 @@
                             <label for="validationRoad"><strong>Road</strong> </label>
                             <input type="number" class="form-control-sm form-control" id="validationRoad" name="road" min="0"
                                 onchange="totalOfMaid()"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->road : 0}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->road : 0}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Road. --}}
@@ -429,7 +429,7 @@
                             <label for="validationBuilding"><strong>Building</strong></label>
                             <input type="number" class="form-control-sm form-control" id="validationBuilding" name="building" min="0"
                                 onchange="totalOfMaid()"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->building : 0}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->building : 0}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Building. --}}
@@ -439,7 +439,7 @@
                             <label for="validationToilet"><strong>Toilet</strong></label>
                             <input type="number" class="form-control-sm form-control" id="validationToilet" name="toilet" min="0"
                                 onchange="totalOfMaid()"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->toilet : 0}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->toilet : 0}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Toilet. --}}
@@ -449,7 +449,7 @@
                             <label for="validationCanteen"><strong>Canteen</strong></label>
                             <input type="number" class="form-control-sm form-control" id="validationCanteen" name="canteen" min="0"
                                 onchange="totalOfMaid()"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->canteen : 0}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->canteen : 0}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Canteen. --}}
@@ -461,7 +461,7 @@
                             <label for="validationWashing"><strong>Washing</strong></label>
                             <input type="number" class="form-control-sm form-control" id="validationWashing" name="washing" min="0"
                                 onchange="totalOfMaid()"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->washing : 0}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->washing : 0}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Washing. --}}
@@ -471,7 +471,7 @@
                             <label for="validationWater"><strong>Water</strong></label>
                             <input type="number" class="form-control-sm form-control" id="validationWater" name="water" min="0"
                                 onchange="totalOfMaid()"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->water : 0}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->water : 0}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Water. --}}
@@ -481,7 +481,7 @@
                             <label for="validationMowing"><strong>Mowing</strong></label>
                             <input type="number" class="form-control-sm form-control" id="validationMowing" name="mowing" min="0"
                                 onchange="totalOfMaid()"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->mowing : 0}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->mowing : 0}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Mowing. --}}
@@ -491,7 +491,7 @@
                             <label for="validationGeneral"><strong>General</strong></label>
                             <input type="number" class="form-control-sm form-control" id="validationGeneral" name="general" min="0"
                                 onchange="totalOfMaid()"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->general : 0}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->general : 0}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid General. --}}
@@ -508,13 +508,13 @@
                     <hr>
 
                     <span class="badge badge-primary">Payment Terms</span>
-                    <input type="hidden" name="payment_term_id" value="{{$contractDest->payment_term_id}}">
+                    <input type="hidden" name="payment_term_id" value="{{$legalContract->legalContractDest->payment_term_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationMonthly"><strong>Monthly</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationMonthly" name="monthly" min="0"
-                                value="{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->monthly : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->monthly : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Monthly. --}}
@@ -523,7 +523,7 @@
                         <div class="col-md-4 mb-4">
                             <label for="validationOT"><strong>OT</strong> <span style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationOT" name="payment_ot" min="0"
-                                value="{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->payment_ot : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->payment_ot : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid OT. --}}
@@ -534,7 +534,7 @@
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationHolidayPay" name="holiday_pay"
                                 min="0"
-                                value="{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->holiday_pay : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->holiday_pay : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Holiday Pay. --}}
@@ -549,35 +549,35 @@
                 <form class="needs-validation" novalidate method="POST" enctype="multipart/form-data" id="form-cook">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="sub_type_contract_id" value="{{$contractDest->sub_type_contract_id}}">
+                    <input type="hidden" name="sub_type_contract_id" value="{{$legalContract->legalContractDest->sub_type_contract_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->quotation)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->quotation ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->coparation_sheet)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
                             </div>
                         </div>
                     </div>
                     <hr>
 
                     <span class="badge badge-primary">Comercial Terms</span>
-                    <input type="hidden" name="comercial_term_id" value="{{$contractDest->comercial_term_id}}">
+                    <input type="hidden" name="comercial_term_id" value="{{$legalContract->legalContractDest->comercial_term_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope" name="scope_of_work"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->scope_of_work : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Scope of Work. --}}
@@ -587,7 +587,7 @@
                             <label for="validationQuotationNo"><strong>Quotation No</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo" name="quotation_no"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->quotation_no : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Quotation No. --}}
@@ -597,7 +597,7 @@
                             <label for="validationDated"><strong>Dated</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                                value="{{isset($contractDest->legalComercialTerm->dated) ? $contractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->dated) ? $legalContract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Dated No. --}}
@@ -609,7 +609,7 @@
                             <label for="validationContractPeriod"><strong>Contract period</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationContractPeriod" name="contract_period"
-                                value="{{isset($contractDest->legalComercialTerm->contract_period) ? $contractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->contract_period) ? $legalContract->legalContractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Contract period. --}}
@@ -619,7 +619,7 @@
                             <label for="validationUntill"><strong>Untill</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
-                                value="{{isset($contractDest->legalComercialTerm->untill) ? $contractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Untill. --}}
@@ -630,7 +630,7 @@
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationNumberOfCook" name="number_of_cook"
                                 min="0"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->number_of_cook : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->number_of_cook : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Number of cook. --}}
@@ -642,7 +642,7 @@
                             <label for="validationWorkingDay"><strong>Working Day</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingDay" name="working_day"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_day: ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_day: ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Day. --}}
@@ -652,7 +652,7 @@
                             <label for="validationWorkingTime"><strong>Working Time</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingTime" name="working_time"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_time: ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_time: ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Time. --}}
@@ -662,7 +662,7 @@
                             <label for="validationOT"><strong>OT</strong> <span style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationOT" name="comercial_ot" min="0"
                                 step="0.1"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->comercial_ot : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->comercial_ot : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid OT. --}}
@@ -672,13 +672,13 @@
                     <hr>
 
                     <span class="badge badge-primary">Payment Terms</span>
-                    <input type="hidden" name="payment_term_id" value="{{$contractDest->payment_term_id}}">
+                    <input type="hidden" name="payment_term_id" value="{{$legalContract->legalContractDest->payment_term_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationMonthly"><strong>Monthly</strong><span
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationMonthly" name="monthly" min="0"
-                                value="{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->monthly : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->monthly : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Monthly. --}}
@@ -688,7 +688,7 @@
                             <label for="validationOtherExpense"><strong>Other Expense</strong><span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationOtherExpense" name="other_expense"
-                                value="{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->other_expense : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->other_expense : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Other Expense. --}}
@@ -703,30 +703,30 @@
                 <form class="needs-validation" novalidate method="POST" enctype="multipart/form-data" id="form-doctor">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="sub_type_contract_id" value="{{$contractDest->sub_type_contract_id}}">
+                    <input type="hidden" name="sub_type_contract_id" value="{{$legalContract->legalContractDest->sub_type_contract_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->quotation)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->quotation ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->coparation_sheet)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
                             <label for="validationDoctorLicense"><strong>Doctor License</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->doctor_license)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->doctor_license ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->doctor_license)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->doctor_license ? 'view file' : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -738,7 +738,7 @@
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope" name="scope_of_work"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->scope_of_work : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Scope of Work. --}}
@@ -748,7 +748,7 @@
                             <label for="validationQuotationNo"><strong>Quotation No</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo" name="quotation_no"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->quotation_no : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Quotation No. --}}
@@ -758,7 +758,7 @@
                             <label for="validationDated"><strong>Dated</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                                value="{{isset($contractDest->legalComercialTerm->dated) ? $contractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->dated) ? $legalContract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Dated No. --}}
@@ -770,7 +770,7 @@
                             <label for="validationContractPeriod"><strong>Contract period</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationContractPeriod" name="contract_period"
-                                value="{{isset($contractDest->legalComercialTerm->contract_period) ? $contractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->contract_period) ? $legalContract->legalContractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Contract period. --}}
@@ -780,7 +780,7 @@
                             <label for="validationUntill"><strong>Untill</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
-                                value="{{isset($contractDest->legalComercialTerm->untill) ? $contractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Untill. --}}
@@ -791,7 +791,7 @@
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationNumberOfDoctor"
                                 name="number_of_doctor" min="0"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->number_of_doctor : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->number_of_doctor : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Number of doctor. --}}
@@ -803,7 +803,7 @@
                             <label for="validationWorkingDay"><strong>Working Day</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingDay" name="working_day"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_day: ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_day: ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Day. --}}
@@ -813,7 +813,7 @@
                             <label for="validationWorkingTime"><strong>Working Time</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingTime" name="working_time"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_time: ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_time: ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Time. --}}
@@ -823,13 +823,13 @@
                     <hr>
 
                     <span class="badge badge-primary">Payment Terms</span>
-                    <input type="hidden" name="payment_term_id" value="{{$contractDest->payment_term_id}}">
+                    <input type="hidden" name="payment_term_id" value="{{$legalContract->legalContractDest->payment_term_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationMonthly"><strong>Monthly</strong><span
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationMonthly" name="monthly" min="0"
-                                value="{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->monthly : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->monthly : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Monthly. --}}
@@ -844,43 +844,43 @@
                 <form class="needs-validation" novalidate method="POST" enctype="multipart/form-data" id="form-nurse">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="sub_type_contract_id" value="{{$contractDest->sub_type_contract_id}}">
+                    <input type="hidden" name="sub_type_contract_id" value="{{$legalContract->legalContractDest->sub_type_contract_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->quotation)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->quotation ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->coparation_sheet)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
                             <label for="validationNurseLicense"><strong>Nurse License</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->nurse_license)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->nurse_license ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->nurse_license)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->nurse_license ? 'view file' : ""}}</a>
                             </div>
                         </div>
                     </div>
                     <hr>
 
                     <span class="badge badge-primary">Comercial Terms</span>
-                    <input type="hidden" name="comercial_term_id" value="{{$contractDest->comercial_term_id}}">
+                    <input type="hidden" name="comercial_term_id" value="{{$legalContract->legalContractDest->comercial_term_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope" name="scope_of_work"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->scope_of_work : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Scope of Work. --}}
@@ -890,7 +890,7 @@
                             <label for="validationQuotationNo"><strong>Quotation No</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo" name="quotation_no"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->quotation_no : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Quotation No. --}}
@@ -900,7 +900,7 @@
                             <label for="validationDated"><strong>Dated</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                                value="{{isset($contractDest->legalComercialTerm->dated) ? $contractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->dated) ? $legalContract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Dated No. --}}
@@ -912,7 +912,7 @@
                             <label for="validationContractPeriod"><strong>Contract period</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationContractPeriod" name="contract_period"
-                                value="{{isset($contractDest->legalComercialTerm->contract_period) ? $contractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->contract_period) ? $legalContract->legalContractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Contract period. --}}
@@ -922,7 +922,7 @@
                             <label for="validationUntill"><strong>Untill</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
-                                value="{{isset($contractDest->legalComercialTerm->untill) ? $contractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Untill. --}}
@@ -933,7 +933,7 @@
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationNumberOfDoctor"
                                 name="number_of_doctor" min="0"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->number_of_doctor : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->number_of_doctor : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Number of doctor. --}}
@@ -945,7 +945,7 @@
                             <label for="validationWorkingDay"><strong>Working Day</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingDay" name="working_day"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_day: ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_day: ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Day. --}}
@@ -955,7 +955,7 @@
                             <label for="validationWorkingTime"><strong>Working Time</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingTime" name="working_time"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_time: ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_time: ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Time. --}}
@@ -965,13 +965,13 @@
                     <hr>
 
                     <span class="badge badge-primary">Payment Terms</span>
-                    <input type="hidden" name="payment_term_id" value="{{$contractDest->payment_term_id}}">
+                    <input type="hidden" name="payment_term_id" value="{{$legalContract->legalContractDest->payment_term_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationMonthly"><strong>Monthly</strong><span
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationMonthly" name="monthly" min="0"
-                                value="{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->monthly : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->monthly : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Monthly. --}}
@@ -987,39 +987,39 @@
                     id="form-security">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="sub_type_contract_id" value="{{$contractDest->sub_type_contract_id}}">
+                    <input type="hidden" name="sub_type_contract_id" value="{{$legalContract->legalContractDest->sub_type_contract_id}}">
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span></label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->quotation)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->quotation ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->coparation_sheet)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="validationSecurityService"><strong>Security Service
                                     Certification</strong> <span style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->security_service_certification)}}"
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->security_service_certification)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->security_service_certification ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->security_service_certification ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="validationSecurityGuardLicense"><strong>Security Guard License</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->security_guard_license)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->security_guard_license ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->security_guard_license)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->security_guard_license ? 'view file' : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -1031,7 +1031,7 @@
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope" name="scope_of_work"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->scope_of_work : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 readonly>
                             <div>
                             </div>
@@ -1040,7 +1040,7 @@
                             <label for="validationQuotationNo"><strong>Quotation No</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo" name="quotation_no"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->quotation_no : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Quotation No. --}}
@@ -1050,7 +1050,7 @@
                             <label for="validationDated"><strong>Dated</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                                value="{{isset($contractDest->legalComercialTerm->dated) ? $contractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->dated) ? $legalContract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Dated No. --}}
@@ -1062,7 +1062,7 @@
                             <label for="validationContractPeriod"><strong>Contract period</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationContractPeriod" name="contract_period"
-                                value="{{isset($contractDest->legalComercialTerm->contract_period) ? $contractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->contract_period) ? $legalContract->legalContractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Contract period. --}}
@@ -1072,7 +1072,7 @@
                             <label for="validationUntill"><strong>Untill</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
-                                value="{{isset($contractDest->legalComercialTerm->untill) ? $contractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Untill. --}}
@@ -1083,7 +1083,7 @@
                                 <span style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationNumberOfSercurityGuard"
                                 name="number_of_sercurity_guard" min="0"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->number_of_sercurity_guard : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->number_of_sercurity_guard : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Number of sercurity guard. --}}
@@ -1095,7 +1095,7 @@
                             <label for="validationWorkingDay"><strong>Working Day</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingDay" name="working_day"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_day: ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_day: ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Day. --}}
@@ -1105,7 +1105,7 @@
                             <label for="validationWorkingTime"><strong>Working Time</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingTime" name="working_time"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_time: ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_time: ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Time. --}}
@@ -1115,13 +1115,13 @@
                     <hr>
 
                     <span class="badge badge-primary">Payment Terms</span>
-                    <input type="hidden" name="payment_term_id" value="{{$contractDest->payment_term_id}}">
+                    <input type="hidden" name="payment_term_id" value="{{$legalContract->legalContractDest->payment_term_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationMonthly"><strong>Monthly</strong><span
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationMonthly" name="monthly" min="0"
-                                value="{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->monthly : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->monthly : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Monthly. --}}
@@ -1137,22 +1137,22 @@
                     id="form-subcontractor">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="sub_type_contract_id" value="{{$contractDest->sub_type_contract_id}}">
+                    <input type="hidden" name="sub_type_contract_id" value="{{$legalContract->legalContractDest->sub_type_contract_id}}">
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->quotation)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->quotation ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->coparation_sheet)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -1164,7 +1164,7 @@
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope" name="scope_of_work"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->scope_of_work : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Scope of Work. --}}
@@ -1174,7 +1174,7 @@
                             <label for="validationQuotationNo"><strong>Quotation No</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo" name="quotation_no"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->quotation_no : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Quotation No. --}}
@@ -1184,7 +1184,7 @@
                             <label for="validationDated"><strong>Dated</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                                value="{{isset($contractDest->legalComercialTerm->dated) ? $contractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->dated) ? $legalContract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Dated No. --}}
@@ -1196,7 +1196,7 @@
                             <label for="validationContractPeriod"><strong>Contract period</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationContractPeriod" name="contract_period"
-                                value="{{isset($contractDest->legalComercialTerm->contract_period) ? $contractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->contract_period) ? $legalContract->legalContractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Contract period. --}}
@@ -1206,7 +1206,7 @@
                             <label for="validationUntill"><strong>Untill</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
-                                value="{{isset($contractDest->legalComercialTerm->untill) ? $contractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Untill. --}}
@@ -1217,7 +1217,7 @@
                                 <span style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationNumberOfSubcontractor"
                                 name="number_of_subcontractor" min="0"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->number_of_subcontractor : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->number_of_subcontractor : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Number of subcontractor. --}}
@@ -1231,7 +1231,7 @@
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationNumberOfAgent"
                                 name="number_of_agent" min="0"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->number_of_agent: ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->number_of_agent: ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Day. --}}
@@ -1241,7 +1241,7 @@
                             <label for="validationWorkingDay"><strong>Working Day</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingDay" name="working_day"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_day: ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_day: ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Day. --}}
@@ -1251,7 +1251,7 @@
                             <label for="validationWorkingTime"><strong>Working Time</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingTime" name="working_time"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_time: ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_time: ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Time. --}}
@@ -1261,14 +1261,14 @@
                     <hr>
 
                     <span class="badge badge-primary">Payment Terms</span>
-                    <input type="hidden" name="payment_term_id" value="{{$contractDest->payment_term_id}}">
+                    <input type="hidden" name="payment_term_id" value="{{$legalContract->legalContractDest->payment_term_id}}">
                     <div class="form-row">
                         <div class="col-md-12 mb-12">
                             <label for="validationDetailPaymentTerm"><strong>Monthly</strong><span
                                     style="color: red;">*</span></label>
                             <textarea class="form-control-sm form-control" name="detail_payment_term" id="validationDetailPaymentTerm"
                                 rows="4" readonly>
-                                        {{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->detail_payment_term : ""}}
+                                        {{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->detail_payment_term : ""}}
                                     </textarea>
                             <div>
                                 {{-- Please provide a valid Detail Payment Term. --}}
@@ -1284,35 +1284,35 @@
                     id="form-transportation">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="sub_type_contract_id" value="{{$contractDest->sub_type_contract_id}}">
+                    <input type="hidden" name="sub_type_contract_id" value="{{$legalContract->legalContractDest->sub_type_contract_id}}">
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->quotation)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->quotation ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                     style="color: red;">*</span></label>
                             <div>
-                                <a href="{{url('storage/'.$contractDest->coparation_sheet)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
                             </div>
                         </div>
                     </div>
                     <hr>
 
                     <span class="badge badge-primary">Comercial Terms</span>
-                    <input type="hidden" name="comercial_term_id" value="{{$contractDest->comercial_term_id}}">
+                    <input type="hidden" name="comercial_term_id" value="{{$legalContract->legalContractDest->comercial_term_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope" name="scope_of_work"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->scope_of_work : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Scope of Work. --}}
@@ -1324,7 +1324,7 @@
                             <label for="validationQuotationNo"><strong>Quotation No</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo" name="quotation_no"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->quotation_no : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Quotation No. --}}
@@ -1334,7 +1334,7 @@
                             <label for="validationDated"><strong>Dated</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                                value="{{isset($contractDest->legalComercialTerm->dated) ? $contractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->dated) ? $legalContract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Dated No. --}}
@@ -1344,14 +1344,14 @@
                             <label for="validationContractPeriod"><strong>Contract period</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationContractPeriod" name="contract_period"
-                                value="{{isset($contractDest->legalComercialTerm->contract_period) ? $contractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->contract_period) ? $legalContract->legalContractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
                                 readonly>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="validationUntill"><strong>Untill</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
-                                value="{{isset($contractDest->legalComercialTerm->untill) ? $contractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Untill. --}}
@@ -1363,7 +1363,7 @@
                             <label for="validationRoute"><strong>Route</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationRoute" name="route"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->route : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->route : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Route. --}}
@@ -1372,7 +1372,7 @@
                         <div class="col-md-3 mb-3">
                             <label for="validationTo"><strong>To</strong> <span style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationTo" name="to"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->to : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->to : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid To. --}}
@@ -1383,7 +1383,7 @@
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationDryContainerSize"
                                 name="dry_container_size" step="0.01" min="0"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->dry_container_size : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->dry_container_size : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Dry Container Size. --}}
@@ -1394,7 +1394,7 @@
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationThenumberoftruck"
                                 name="the_number_of_truck" min="0"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->the_number_of_truck : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->the_number_of_truck : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid The number of truck. --}}
@@ -1406,7 +1406,7 @@
                             <label for="validationWorkingDay"><strong>Working Day</strong><span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingDay" name="working_day"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_day : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_day : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Day. --}}
@@ -1416,7 +1416,7 @@
                             <label for="validationWorkingTime"><strong>Working Time</strong><span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationWorkingTime" name="working_time"
-                                value="{{isset($contractDest->legalComercialTerm) ? $contractDest->legalComercialTerm->working_time : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->working_time : ""}}"
                                 readonly>
                             <div>
                                 {{-- Please provide a valid Working Time. --}}
@@ -1426,7 +1426,7 @@
                     <hr>
 
                     <span class="badge badge-primary">Payment Terms</span>
-                    <input type="hidden" name="payment_term_id" value="{{$contractDest->payment_term_id}}">
+                    <input type="hidden" name="payment_term_id" value="{{$legalContract->legalContractDest->payment_term_id}}">
                     <div class="form-row">
                         <div class="col-md-12 mb-12">
                             <label for="validationPriceOfService"><strong>Price of service</strong><span
@@ -1434,7 +1434,7 @@
 
                             <textarea class="form-control-sm form-control" name="price_of_service" id="validationPriceOfService"
                                 rows="4"
-                                readonly>{{isset($contractDest->legalPaymentTerm) ? $contractDest->legalPaymentTerm->price_of_service : ""}}</textarea>
+                                readonly>{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->price_of_service : ""}}</textarea>
                             <div>
                                 {{-- Please provide a valid Price of service. --}}
                             </div>

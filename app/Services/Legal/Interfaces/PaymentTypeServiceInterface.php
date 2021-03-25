@@ -2,7 +2,6 @@
 
 namespace App\Services\Legal\Interfaces;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,5 +13,5 @@ interface PaymentTypeServiceInterface
     public function update(array $attributes, int $id): bool;
     public function destroy(int $id);
 
-    public function dropdownPaymentType(int $agreement): Collection;
+    public function dropdown(int $agreement): Collection;
 }

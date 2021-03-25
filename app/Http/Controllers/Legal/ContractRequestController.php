@@ -74,7 +74,7 @@ class ContractRequestController extends Controller
         $selectedAgree = collect($request->agreement);
         try {
 
-            $agreements = $this->agreementService->dropdownAgreement();
+            $agreements = $this->agreementService->dropdown();
             $contracts = $this->contractRequestService->filter($request);
 
             return \view('legal.ContractRequestForm.index', \compact('contracts', 'status', 'agreements', 'selectedStatus', 'selectedAgree', 'query'));
@@ -91,8 +91,8 @@ class ContractRequestController extends Controller
     public function create()
     {
         try {
-            $actions = $this->actionService->dropdownAction();
-            $agreements = $this->agreementService->dropdownAgreement();
+            $actions = $this->actionService->dropdown();
+            $agreements = $this->agreementService->dropdown();
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -138,21 +138,17 @@ class ContractRequestController extends Controller
     public function show($id)
     {
         try {
+            $agreements = $this->agreementService->dropdown();
             $legalContract = $this->contractRequestService->find($id);
-            $contractDest = $this->contractDescService->find($legalContract->legalContractDest->id);
-            $agreements = $this->agreementService->dropdownAgreement();
-            if ($contractDest->value_of_contract) {
-                $contractDest->value_of_contract = explode(",", $contractDest->value_of_contract);
-            }
-            $paymentType = $this->paymentTypeService->dropdownPaymentType($legalContract->agreement_id);
+            $paymentType = $this->paymentTypeService->dropdown($legalContract->agreement_id);
 
-            $levelApproval = $this->approvalService->approvalByDepartment($legalContract->createdBy->department);
-            $approvalList = [];
-            foreach ($levelApproval as $key => $value) {
-                \array_push($approvalList, $value->user_id);
+            if ($legalContract->legalContractDest->value_of_contract) {
+                $legalContract->legalContractDest->value_of_contract = explode(",", $legalContract->legalContractDest->value_of_contract);
             }
-            $permission = array_search(\auth()->id(), $approvalList, \false) === false ? 'Read' : 'Write';
-            $approvalDetail = $this->approvalDetailService->byContract($legalContract);
+
+            $permission = $legalContract->createdBy->department->legalApprove->search(function ($item, $key) {
+                return $item->user_id === \auth()->id();
+            }, \true) === false ? 'Read' : 'Write';
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -160,76 +156,58 @@ class ContractRequestController extends Controller
             case $agreements[0]->id:
                 return \view('legal.ContractRequestForm.WorkServiceContract.view')
                     ->with(\compact('legalContract'))
-                    ->with(\compact('contractDest'))
                     ->with(\compact('paymentType'))
-                    ->with(\compact('permission'))
-                    ->with(\compact('approvalDetail'));
+                    ->with(\compact('permission'));
                 break;
             case $agreements[1]->id:
                 return \view('legal.ContractRequestForm.PurchaseEquipment.view')
                     ->with(\compact('legalContract'))
-                    ->with(\compact('contractDest'))
                     ->with(\compact('paymentType'))
-                    ->with(\compact('permission'))
-                    ->with(\compact('approvalDetail'));
+                    ->with(\compact('permission'));
                 break;
             case $agreements[2]->id:
                 return \view('legal.ContractRequestForm.PurchaseEquipmentInstall.view')
                     ->with(\compact('legalContract'))
-                    ->with(\compact('contractDest'))
                     ->with(\compact('paymentType'))
-                    ->with(\compact('permission'))
-                    ->with(\compact('approvalDetail'));
+                    ->with(\compact('permission'));
                 break;
             case $agreements[3]->id:
                 return \view('legal.ContractRequestForm.Mould.view')
                     ->with(\compact('legalContract'))
-                    ->with(\compact('contractDest'))
                     ->with(\compact('paymentType'))
-                    ->with(\compact('permission'))
-                    ->with(\compact('approvalDetail'));
+                    ->with(\compact('permission'));
                 break;
             case $agreements[4]->id:
                 return \view('legal.ContractRequestForm.Scrap.view')
                     ->with(\compact('legalContract'))
-                    ->with(\compact('contractDest'))
                     ->with(\compact('paymentType'))
-                    ->with(\compact('permission'))
-                    ->with(\compact('approvalDetail'));
+                    ->with(\compact('permission'));
                 break;
             case $agreements[5]->id:
-                $subtypeContract = $this->subtypeContractService->dropdownSubtypeContract($legalContract->agreement_id);
+                $subtypeContract = $this->subtypeContractService->dropdown($legalContract->agreement_id);
                 return \view('legal.ContractRequestForm.VendorServiceContract.view')
                     ->with(\compact('legalContract'))
-                    ->with(\compact('contractDest'))
                     ->with(\compact('paymentType'))
                     ->with(\compact('subtypeContract'))
-                    ->with(\compact('permission'))
-                    ->with(\compact('approvalDetail'));
+                    ->with(\compact('permission'));
                 break;
             case $agreements[6]->id:
                 return \view('legal.ContractRequestForm.LeaseContract.view')
                     ->with(\compact('legalContract'))
-                    ->with(\compact('contractDest'))
                     ->with(\compact('paymentType'))
-                    ->with(\compact('permission'))
-                    ->with(\compact('approvalDetail'));
+                    ->with(\compact('permission'));
                 break;
             case $agreements[7]->id:
                 return \view('legal.ContractRequestForm.ProjectBasedAgreement.view')
                     ->with(\compact('legalContract'))
-                    ->with(\compact('contractDest'))
                     ->with(\compact('paymentType'))
-                    ->with(\compact('permission'))
-                    ->with(\compact('approvalDetail'));
+                    ->with(\compact('permission'));
                 break;
             case $agreements[8]->id:
                 return \view('legal.ContractRequestForm.MarketingAgreement.view')
                     ->with(\compact('legalContract'))
-                    ->with(\compact('contractDest'))
                     ->with(\compact('paymentType'))
-                    ->with(\compact('permission'))
-                    ->with(\compact('approvalDetail'));
+                    ->with(\compact('permission'));
                 break;
             default:
                 \abort(404);
@@ -247,8 +225,8 @@ class ContractRequestController extends Controller
     {
         try {
             $contract = $this->contractRequestService->find($id);
-            $actions = $this->actionService->dropdownAction();
-            $agreements = $this->agreementService->dropdownAgreement();
+            $actions = $this->actionService->dropdown();
+            $agreements = $this->agreementService->dropdown();
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -420,7 +398,7 @@ class ContractRequestController extends Controller
     public function redirectContractByAgreement(LegalContract $contractRequest)
     {
         try {
-            $agreements = $this->agreementService->dropdownAgreement();
+            $agreements = $this->agreementService->dropdown();
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -467,7 +445,7 @@ class ContractRequestController extends Controller
     public function loadViewContractByAgreement(LegalContract $contractRequest)
     {
         try {
-            $agreements = $this->agreementService->dropdownAgreement();
+            $agreements = $this->agreementService->dropdown();
         } catch (\Throwable $th) {
             throw $th;
         }

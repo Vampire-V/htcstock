@@ -44,7 +44,6 @@ class ReportController extends Controller
         try {
             $accessories = $this->accessoriesService->dropdown();
             $transactions = $this->transactionsService->filterForStock($request);
-            // \dd($transactions);
             return \view('it.reports.stocks', \compact('transactions', 'accessories', 'query', 'access_id'));
         } catch (\Throwable $th) {
             throw $th;

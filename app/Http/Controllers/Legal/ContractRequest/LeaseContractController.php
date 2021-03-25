@@ -97,8 +97,8 @@ class LeaseContractController extends Controller
             if ($leaseContract->value_of_contract) {
                 $leaseContract->value_of_contract = explode(",", $leaseContract->value_of_contract);
             }
-            $subtypeContract = $this->subtypeContractService->dropdownSubtypeContract($leaseContract->legalcontract->agreement_id);
-            $paymentType = $this->paymentTypeService->dropdownPaymentType($leaseContract->legalcontract->agreement_id);
+            $subtypeContract = $this->subtypeContractService->dropdown($leaseContract->legalcontract->agreement_id);
+            $paymentType = $this->paymentTypeService->dropdown($leaseContract->legalcontract->agreement_id);
         } catch (\Throwable $th) {
             throw $th;
         }

@@ -88,7 +88,7 @@ class PurchaseEquipmentController extends Controller
             if ($purchaseequipment->value_of_contract) {
                 $purchaseequipment->value_of_contract = explode(",", $purchaseequipment->value_of_contract);
             }
-            $paymentType = $this->paymentTypeService->dropdownPaymentType($purchaseequipment->legalcontract->agreement_id);
+            $paymentType = $this->paymentTypeService->dropdown($purchaseequipment->legalcontract->agreement_id);
         } catch (\Throwable $th) {
             throw $th;
         }

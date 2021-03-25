@@ -2,7 +2,6 @@
 
 namespace App\Models\Legal;
 
-use App\Models\User;
 use App\Relations\LegalApprovalDetailTrait;
 use Illuminate\Database\Eloquent\Model;
 

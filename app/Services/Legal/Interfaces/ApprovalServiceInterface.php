@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 interface ApprovalServiceInterface
 {
-    public function query(): Builder;
+    public function all(): Builder;
     public function create(array $attributes): Model;
     public function find(int $id): Model;
 
@@ -17,7 +17,7 @@ interface ApprovalServiceInterface
     public function destroy(int $id);
 
     public function approvalByDepartment(Department $department): Collection;
-    public function dropdownApproval(): Collection;
+    public function dropdown(): Collection;
     public function approvalLevelLess(int $levels,int $department) : Model;
     public function approvalLevelOver(int $levels,int $department) : Model;
     public function approvalLevelAllOver(int $levels,int $department) : Collection;

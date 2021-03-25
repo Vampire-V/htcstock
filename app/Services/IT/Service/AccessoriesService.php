@@ -24,7 +24,7 @@ class AccessoriesService extends BaseService implements AccessoriesServiceInterf
     public function all(): Builder
     {
         try {
-            return Accessories::whereNotNull('access_id');
+            return Accessories::query();
         } catch (\Throwable $th) {
             throw $th;
         }

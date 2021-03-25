@@ -20,7 +20,6 @@ class ReportController extends Controller
     {
         $this->transactionsService = $transactionsServiceInterface;
         $this->accessoriesService = $accessoriesServiceInterface;
-        $this->accessories = $this->accessoriesService->dropdown();
     }
 
     public function reportTransactions(Request $request)
@@ -43,8 +42,9 @@ class ReportController extends Controller
         $query = $request->all();
         $access_id = $request->access_id;
         try {
-            $accessories = $this->accessories;
+            $accessories = $this->accessoriesService->dropdown();
             $transactions = $this->transactionsService->filterForStock($request);
+            // \dd($transactions);
             return \view('it.reports.stocks', \compact('transactions', 'accessories', 'query', 'access_id'));
         } catch (\Throwable $th) {
             throw $th;

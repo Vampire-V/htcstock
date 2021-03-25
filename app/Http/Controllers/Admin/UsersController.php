@@ -62,6 +62,7 @@ class UsersController extends Controller
             $departments = $this->departmentService->dropdown();
             $positions = $this->positionService->dropdown();
             $roles = $this->rolesService->dropdown();
+            // \dd($users[0]->roles);
         } catch (\Throwable $th) {
             throw $th;
         }

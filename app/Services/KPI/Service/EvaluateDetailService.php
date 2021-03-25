@@ -53,12 +53,12 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
         $ach = $object->actual <= 0 ? 0 : ($object->actual / $object->target) * 100;
         $object->ach = 0;
         $object->cal = 0;
-        if ($object->rule->calculate_type === 'Amount') {
-            $object->ach = $ach;
-        }
-        if ($object->rule->calculate_type === 'Percent') {
-            $object->ach = $object->actual;
-        }
+        // if ($object->rule->calculate_type === 'Amount') {
+        //     $object->ach = $ach;
+        // }
+        // if ($object->rule->calculate_type === 'Percent') {
+        //     $object->ach = $object->actual;
+        // }
         if ($object->ach < 70) {
             $object->cal = 0;
         } else if ($object->ach > $object->base_line) {

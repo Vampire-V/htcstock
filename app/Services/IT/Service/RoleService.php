@@ -47,13 +47,13 @@ class RoleService extends BaseService implements RoleServiceInterface
 
     public function filter(Request $request)
     {
-        return Role::filter($request)->paginate(10);
+        return Role::with('users')->filter($request)->paginate(10);
     }
 
     public function roleIn(...$slug): Collection
     {
         try {
-            return Role::whereIn('slug',...$slug)->get();
+            return Role::with('users')->whereIn('slug',...$slug)->get();
         } catch (\Throwable $th) {
             throw $th;
         }

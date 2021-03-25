@@ -82,10 +82,12 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
 
     public function selfFilter(Request $request)
     {
-        return Evaluate::with(['targetperiod'])
+        return Evaluate::with(['targetperiod' => function ($query) {
+            $query->orderBy('id', 'desc');
+        }])
             ->where('user_id', \auth()->user()->id)
             ->whereNotIn('status', [KPIEnum::new])
             ->filter($request)
-            ->orderBy('created_at', 'desc')->get();
+            ->get();
     }
 }

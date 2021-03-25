@@ -25,7 +25,7 @@ class TransactionsService extends BaseService implements TransactionsServiceInte
     public function all(): Builder
     {
         try {
-            return Transactions::whereNotNull('id');
+            return Transactions::query();
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -68,23 +68,23 @@ class TransactionsService extends BaseService implements TransactionsServiceInte
 
     public function filterForStock(Request $request)
     {
-        return Transactions::filter($request)->select('access_id', DB::raw('sum(qty) as quantity'))->groupBy('access_id')->groupBy('access_id')->orderBy('quantity', 'asc')->paginate(10);
+        return Transactions::with(['accessorie'])->filter($request)->select('access_id', DB::raw('sum(qty) as quantity'))->groupBy('access_id')->groupBy('access_id')->orderBy('quantity', 'asc')->paginate(10);
     }
 
     public function filterForBuy(Request $request)
     {
-        return Transactions::filter($request)->whereIn('trans_type', [TransactionTypeEnum::B])->whereNull('ref_no')->orderBy('created_at', 'desc')->paginate(10);
+        return Transactions::with(['accessorie','user'])->filter($request)->whereIn('trans_type', [TransactionTypeEnum::B])->whereNull('ref_no')->orderBy('created_at', 'desc')->paginate(10);
     }
     public function filterForRequest(Request $request)
     {
-        return Transactions::filter($request)->whereIn('trans_type', [TransactionTypeEnum::R])->whereNull('ref_no')->orderBy('created_at', 'desc')->paginate(10);
+        return Transactions::with(['accessorie','user'])->filter($request)->whereIn('trans_type', [TransactionTypeEnum::R])->whereNull('ref_no')->orderBy('created_at', 'desc')->paginate(10);
     }
     public function filterForLending(Request $request)
     {
-        return Transactions::filter($request)->whereIn('trans_type', [TransactionTypeEnum::L])->whereNull('ref_no')->orderBy('created_at', 'desc')->paginate(10);
+        return Transactions::with(['accessorie','user'])->filter($request)->whereIn('trans_type', [TransactionTypeEnum::L])->whereNull('ref_no')->orderBy('created_at', 'desc')->paginate(10);
     }
     public function filterForHistory(Request $request)
     {
-        return Transactions::filter($request)->whereNull('ref_no')->orderBy('created_at', 'desc')->paginate(10);
+        return Transactions::with(['accessorie','user','transactionCreated'])->filter($request)->whereNull('ref_no')->orderBy('created_at', 'desc')->paginate(10);
     }
 }

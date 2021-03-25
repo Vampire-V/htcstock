@@ -141,11 +141,9 @@
                                 <td>{{$user->username}}</td>
                                 <td>{{$user->email}}</td>
                                 <td>
-                                    @if ($user->roles()->get()->pluck('name'))
-                                    @foreach ($user->roles()->get()->pluck('name') as $item)
-                                    <div class="badge badge-warning">{{$item}}</div>
+                                    @foreach ($user->roles->pluck('name') as $item)
+                                    <span class="badge badge-warning">{{$item}}</span>
                                     @endforeach
-                                    @endif
                                 </td>
                                 <td>
                                     {{ $user->divisions->name}}

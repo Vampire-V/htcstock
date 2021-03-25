@@ -38,8 +38,8 @@
                 <div class="form-row">
                     <div class="col-md-4 mb-4">
                         <label for="validationAccess_id" class="">{{ __('itstock.buy-accessorie.equipment') }}</label>
-                        <select class="form-control-sm form-control js-select-accessory-multiple" style="width: 100%" name="accessory[]"
-                            multiple>
+                        <select class="form-control-sm form-control js-select-accessory-multiple" style="width: 100%"
+                            name="accessory[]" multiple>
                             @isset($accessorys)
                             @foreach ($accessorys as $item)
                             <option value="{{$item->access_id}}" @if($selectedAccessorys->contains($item->access_id))
@@ -51,16 +51,18 @@
                     </div>
                     <div class="col-md-2 mb-2">
                         <label for="validationIr_no">{{ __('itstock.buy-accessorie.ir-no') }}</label>
-                        <input type="text" class="form-control-sm form-control" id="validationIr_no" name="ir_no" value="{{$ir_no}}">
+                        <input type="text" class="form-control-sm form-control" id="validationIr_no" name="ir_no"
+                            value="{{$ir_no}}">
                     </div>
                     <div class="col-md-2 mb-2">
                         <label for="validationPo_no">{{ __('itstock.buy-accessorie.po-no') }}</label>
-                        <input type="text" class="form-control-sm form-control" id="validationPo_no" name="po_no" value="{{$po_no}}">
+                        <input type="text" class="form-control-sm form-control" id="validationPo_no" name="po_no"
+                            value="{{$po_no}}">
                     </div>
                     <div class="col-md-2 mb-2">
                         <label for="validationCreated_at">{{ __('itstock.buy-accessorie.a-date') }}</label>
-                        <input type="date" class="form-control-sm form-control" id="validationSCreated_at" name="start_at"
-                            oninput="changeValue(this)" value="{{$start_at}}">
+                        <input type="date" class="form-control-sm form-control" id="validationSCreated_at"
+                            name="start_at" oninput="changeValue(this)" value="{{$start_at}}">
                     </div>
                     <div class="col-md-2 mb-2">
                         <label for="validationCreated_at">{{ __('itstock.buy-accessorie.up-to-date') }}</label>
@@ -116,8 +118,10 @@
                             <td>{{$item->po_no}}</td>
                             <td>{{$item->user->name}}</td>
                             <td>{{$item->created_at}}</td>
-                            <td><a href="{{route('it.equipment.buy.edit',$item->id)}}"><button type="button"
-                                        class="btn btn-primary btn-sm float-left">{{ __('itstock.buy-accessorie.detail') }}</button></a></td>
+                            <td><a href="{{route('it.equipment.buy.edit',$item->id)}}"
+                                    class="btn btn-primary btn-sm float-left"> {{ __('itstock.buy-accessorie.detail') }}
+                                </a>
+                            </td>
                         </tr>
                         @endforeach
                         @endisset

@@ -50,8 +50,7 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
 
     public function formulaKeyTask(EvaluateDetail $object): EvaluateDetail
     {
-        $ach = $object->actual <= 0 ? 0 : ($object->actual / $object->target) * 100;
-        $object->ach = 0;
+        $object->ach = $object->actual <= 0 ? 0 : ($object->actual / $object->target) * 100;
         $object->cal = 0;
         // if ($object->rule->calculate_type === 'Amount') {
         //     $object->ach = $ach;

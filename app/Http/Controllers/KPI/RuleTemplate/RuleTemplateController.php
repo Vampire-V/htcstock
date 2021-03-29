@@ -200,7 +200,7 @@ class RuleTemplateController extends Controller
         try {
             $this->ruleTemplateService->destroy($request->rule);
             $template = $this->templateService->find($id);
-            $ruleTemplate = $this->ruleTemplateService->byTemplateGroup($template, $request->group['id']);
+            $ruleTemplate = $this->ruleTemplateService->byTemplateAndGroup($template, $request->group['id']);
             foreach ($ruleTemplate as $key => $value) {
                 $value->parent_rule_template_id = $key + 1;
                 $value->save();

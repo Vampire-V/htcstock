@@ -185,15 +185,13 @@ class EvaluationFormController extends Controller
             $period = $this->targetPeriodService->find($period);
             $category = $this->categoryService->all();
             $templates = $this->templateService->dropdown();
-            $rules = $this->ruleService->dropdown($category->first(function ($value, $key) {
-                return $value->name === "key-task";
-            })->id);
+
             $evaluate = $this->evaluateService->find($evaluate);
             $isView = $evaluate->status === KPIEnum::ready ? true : false;
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \view('kpi.EvaluationForm.edit', \compact('user', 'period', 'templates', 'category', 'rules', 'evaluate', 'isView'));
+        return \view('kpi.EvaluationForm.edit', \compact('user', 'period', 'templates', 'category', 'evaluate', 'isView'));
     }
 
     /**

@@ -88,23 +88,36 @@ const deleteRuleTemplate = (template, form) => axios({
     data: form
 })
 
-const postEvaluate = (staff,period,form) => axios({
+const postEvaluateForm = (staff,period,form) => axios({
     method: 'POST',
     responseType: 'json',
     url: `/kpi/evaluation-form/staff/${staff}/edit/period/${period}/evaluate`,
     data: form
 })
 
-const putEvaluate = (staff,period,evaluate,form) => axios({
+const putEvaluateForm = (staff,period,evaluate,form) => axios({
     method: 'PUT',
     responseType: 'json',
     url: `/kpi/evaluation-form/staff/${staff}/edit/period/${period}/evaluate/${evaluate}`,
     data: form
 })
 
-const getEvaluate = (staff,period,evaluate) => axios({
+const getEvaluateForm = (staff,period,evaluate) => axios({
     method: 'GET',
     responseType: 'json',
     url: `/kpi/evaluation-form/staff/${staff}/edit/period/${period}/evaluate/${evaluate}`
 })
-// kpi/evaluation-form/staff/{staff}/edit/period/{period}/evaluate/{evaluate}
+
+
+const putEvaluateSelf = (self_evaluation,form) => axios({
+    method: 'PUT',
+    responseType: 'json',
+    url: `/kpi/self-evaluation/${self_evaluation}`,
+    data: form
+})
+
+const getEvaluateSelf = (staff,period,evaluate) => axios({
+    method: 'GET',
+    responseType: 'json',
+    url: `/kpi/evaluation-form/staff/${staff}/edit/period/${period}/evaluate/${evaluate}`
+})

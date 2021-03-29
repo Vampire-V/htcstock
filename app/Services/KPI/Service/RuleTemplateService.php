@@ -44,14 +44,14 @@ class RuleTemplateService extends BaseService implements RuleTemplateServiceInte
     public function byTemplate(Template $template): Collection
     {
         try {
-            $ruleTem = RuleTemplate::where('template_id', $template->id)->orderBy('parent_rule_template_id')->get();
+            $ruleTem = RuleTemplate::with(['template', 'rule' => fn ($query) => $query->with('category')])->where('template_id', $template->id)->orderBy('parent_rule_template_id')->get();
             return $ruleTem;
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function byTemplateGroup(Template $template, string $group) : Collection
+    public function byTemplateAndGroup(Template $template, string $group): Collection
     {
         try {
             return RuleTemplate::leftJoin('kpi_rules', 'kpi_rules.id', '=', 'kpi_rule_templates.rule_id')

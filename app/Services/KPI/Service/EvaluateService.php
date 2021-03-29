@@ -23,19 +23,24 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
         parent::__construct($model);
     }
 
-    public function all(): Builder
+    public function findId($id)
     {
         try {
-            return Evaluate::query();
+            return Evaluate::with([
+                'user',
+                'targetperiod',
+                'template' => fn($q) => $q->with(['ruleTemplate' => fn($q) => $q->with(['rule' => fn($q) => $q->with('category') ]) ]),
+                'evaluateDetail' => fn ($q) => $q->with(['rule' => fn ($q) => $q->with('category')])
+            ])->find($id);
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function byStaff(User $staff)
+    public function all(): Builder
     {
         try {
-            return Evaluate::where('user_id', $staff->id)->get();
+            return Evaluate::query();
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -72,22 +77,30 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
 
     public function reviewFilter(Request $request)
     {
-        return Evaluate::with(['user' => function ($query) {
-            $query->select('id', 'name', 'department_id', 'positions_id')->where('department_id', \auth()->user()->department_id);
-        }, 'targetperiod'])
-            ->whereIn('status', [KPIEnum::submit, KPIEnum::approved])
-            ->filter($request)->orderBy('created_at', 'desc')
-            ->get();
+        try {
+            return Evaluate::with(['user' => function ($query) {
+                $query->select('id', 'name', 'department_id', 'positions_id')->where('department_id', \auth()->user()->department_id);
+            }, 'targetperiod'])
+                ->whereIn('status', [KPIEnum::submit, KPIEnum::approved])
+                ->filter($request)->orderBy('created_at', 'desc')
+                ->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     public function selfFilter(Request $request)
     {
-        return Evaluate::with(['targetperiod' => function ($query) {
-            $query->orderBy('id', 'desc');
-        }])
-            ->where('user_id', \auth()->user()->id)
-            ->whereNotIn('status', [KPIEnum::new])
-            ->filter($request)
-            ->get();
+        try {
+            return Evaluate::with(['targetperiod' => function ($query) {
+                $query->orderBy('id', 'desc');
+            }])
+                ->where('user_id', \auth()->user()->id)
+                ->whereNotIn('status', [KPIEnum::new])
+                ->filter($request)
+                ->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

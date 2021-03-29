@@ -2,21 +2,33 @@
 
 namespace App\Http\Controllers\KPI\SelfEvaluation;
 
+use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\KPI\EvaluateResource;
+use App\Models\KPI\Evaluate;
+use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
+use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class SelfEvaluationController extends Controller
 {
-    protected $evaluateService,$evaluateDetailService;
+    protected $evaluateService, $evaluateDetailService, $userService, $categoryService;
     public function __construct(
         EvaluateServiceInterface $evaluateServiceInterface,
-        EvaluateDetailServiceInterface $evaluateDetailServiceInterface
+        EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
+        UserServiceInterface $userServiceInterface,
+        RuleCategoryServiceInterface $ruleCategoryServiceInterface
+
     ) {
         $this->evaluateService = $evaluateServiceInterface;
         $this->evaluateDetailService = $evaluateDetailServiceInterface;
+        $this->userService = $userServiceInterface;
+        $this->categoryService = $ruleCategoryServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -26,12 +38,11 @@ class SelfEvaluationController extends Controller
     public function index(Request $request)
     {
         $query = $request->all();
-        $selectedYear = collect(empty($request->year) ? date('Y') : $request->year );
+        $selectedYear = collect(empty($request->year) ? date('Y') : $request->year);
         $start_year = date('Y', strtotime('-10 years'));
         try {
             $user = Auth::user();
             $evaluates = $this->evaluateService->selfFilter($request);
-            
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -78,30 +89,33 @@ class SelfEvaluationController extends Controller
      */
     public function edit($id)
     {
-        $calMainRule = 0;
         try {
-            $evaluate = $this->evaluateService->find($id);
+            $evaluate = $this->evaluateService->findId($id);
+            $evaluate->evaluateDetail->each(fn ($item) => $this->evaluateDetailService->formulaKeyTask($item));
 
-            $kpi = $evaluate->evaluateDetail->filter(function ($value, $key) {
-                return $this->evaluateDetailService->formulaKeyTask($value)->rule->category->name === "kpi";
-            });
-            $key_task = $evaluate->evaluateDetail->filter(function ($value, $key) {
-                return $this->evaluateDetailService->formulaKeyTask($value)->rule->category->name === "key-task";
-            });
-            $omg = $evaluate->evaluateDetail->filter(function ($value, $key) {
-                return $this->evaluateDetailService->formulaKeyTask($value)->rule->category->name === "omg";
-            });
-            $indexMainRule = $evaluate->evaluateDetail->search(function ($row, $key) use ($evaluate) {
-                return $row->rule_id === $evaluate->main_rule_id;
-            });
+            $kpi = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === "kpi");
+            $key_task = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === "key-task");
+            $omg = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === "omg");
 
-            if ($indexMainRule) {
-                $calMainRule = $evaluate->evaluateDetail[$indexMainRule]->cal;
+            $mainRule = $evaluate->evaluateDetail->filter(fn ($row) => $row->rule_id === $evaluate->main_rule_id)->first();
+
+            $category = $this->categoryService->dropdown();
+            $summary = [];
+            foreach ($category as $key => $cat) {
+                $weight = $evaluate->template->ruleTemplate->filter(fn ($value) => $value->rule->category->name === $cat->name)->first()->weight_category;
+                $ach = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === $cat->name)->sum('ach');
+                $calsummary = new stdClass;
+                $calsummary->name = $cat->name;
+                $calsummary->weight = $weight;
+                $calsummary->ach = $ach;
+                $calsummary->total =  ($ach * $weight) / 100;
+
+                \array_push($summary, $calsummary);
             }
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'kpi', 'key_task', 'omg', 'calMainRule'));
+        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'kpi', 'key_task', 'omg', 'mainRule', 'summary'));
     }
 
     /**
@@ -113,7 +127,20 @@ class SelfEvaluationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $status = $request->next ? KPIEnum::submit : $request->form['status'];
+        DB::beginTransaction();
+        try {
+            $this->evaluateService->update(['status' => $status], $id);
+            foreach ($request->form['evaluate_detail'] as $value) {
+                $this->evaluateDetailService->update(['actual' => $value['actual']], $value['id']);
+            }
+            $evaluate = $this->evaluateService->find($id);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        DB::commit();
+        return new EvaluateResource($evaluate);
     }
 
     /**

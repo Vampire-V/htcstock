@@ -336,7 +336,7 @@
             document.getElementById('exampleModal').getElementsByClassName("close")[0].click()
         }).catch(error => {
             error.response.data.messages.forEach(value => {
-                toastError(value)
+                toast(value,'error')
             })
             toastClear()
         })
@@ -437,9 +437,7 @@
         .then(res => {
             createRow(res.data.data)
         })
-        .catch(error => {
-            console.log(error.response.data)
-        })
+        .catch(error => console.log(error.response.data))
     }
 
     const deleterule = e => {
@@ -460,9 +458,7 @@
         deleteRuleTemplate(template.id,form)
         .then(res => {
             createRow(res.data.data)
-        }).catch(error => {
-
-        }).finally(() => {})
+        }).catch(error => console.log(error.response.data)).finally()
     }
 </script>
 @endsection

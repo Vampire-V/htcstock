@@ -80,4 +80,13 @@ class UserService extends BaseService implements UserServiceInterface
             throw $th;
         }
     }
+
+    public function user($id) :User
+    {
+        try {
+            return User::with(['department','divisions','positions','roles'])->find($id);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

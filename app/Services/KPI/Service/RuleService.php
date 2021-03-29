@@ -35,10 +35,10 @@ class RuleService extends BaseService implements RuleServiceInterface
         try {
             if (is_null($group)) {
                 return Rule::all();
-            }else{
-                return Rule::where('category_id',$group)->get();
+            } else {
+                return Rule::with('category')
+                    ->where('category_id', $group)->get();
             }
-            
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -47,8 +47,8 @@ class RuleService extends BaseService implements RuleServiceInterface
     public function filter(Request $request)
     {
         return Rule::with('category')
-        ->filter($request)
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->filter($request)
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 }

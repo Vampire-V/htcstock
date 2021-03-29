@@ -41,7 +41,7 @@ class TemplateService extends BaseService implements TemplateServiceInterface
 
     public function filter(Request $request)
     {
-        return Template::filter($request)->orderBy('created_at', 'desc')
+        return Template::with(['department'])->filter($request)->orderBy('created_at', 'desc')
             ->get();
     }
 }

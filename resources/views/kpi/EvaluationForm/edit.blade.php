@@ -276,11 +276,6 @@
                                 <select id="validationRuleName" class="form-control form-control-sm" name="rule_id_add"
                                     onchange="setRuleToTemp(this)">
                                     <option value="">Choose...</option>
-                                    {{-- @isset($rules)
-                                    @foreach ($rules as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                    @endforeach
-                                    @endisset --}}
                                 </select></div>
                         </div>
                     </div>
@@ -416,9 +411,9 @@
             setTotalWeight()
             formEvaluate.next = true
             if (formEvaluate.total_weight_kpi <= 100 && formEvaluate.total_weight_key_task <= 100 && formEvaluate.total_weight_omg <= 100) {
-                putEvaluate(staff.id,period.id,evaluate.id,formEvaluate).then(res => {
+                putEvaluateForm(staff.id,period.id,evaluate.id,formEvaluate).then(res => {
                     if (res.status === 200) {
-                        toastSuccess(`update evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`)
+                        toast(`update evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`,'success')
                         toastClear()
                         setTimeout(function () {
                             window.location.replace(`/kpi/evaluation-form/staff/${res.data.data.user_id}/edit/period/${res.data.data.period_id}/evaluate/${res.data.data.id}/edit`)
@@ -426,10 +421,8 @@
                         ,2000)
                     }
                 }).catch(error => {
-                        console.log(error);
-                }).finally(() => {
-                    
-                })
+                    console.log(error.response.data)
+                }).finally()
             }else{
 
             }
@@ -442,9 +435,9 @@
             setTotalWeight()
             formEvaluate.next = false
             if (formEvaluate.total_weight_kpi <= 100.00 && formEvaluate.total_weight_key_task <= 100.00 && formEvaluate.total_weight_omg <= 100.00) {
-                putEvaluate(staff.id,period.id,evaluate.id,formEvaluate).then(res => {
+                putEvaluateForm(staff.id,period.id,evaluate.id,formEvaluate).then(res => {
                     if (res.status === 200) {
-                        toastSuccess(`update evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`)
+                        toast(`update evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`,'success')
                         toastClear()
                         setTimeout(function () {
                             window.location.replace(`/kpi/evaluation-form/staff/${res.data.data.user_id}/edit/period/${res.data.data.period_id}/evaluate/${res.data.data.id}/edit`)
@@ -452,10 +445,8 @@
                         ,2000)
                     }
                 }).catch(error => {
-                        console.log(error);
-                }).finally(() => {
-                    
-                })
+                        console.log(error.response.data)
+                }).finally()
             }else{
 
             }
@@ -618,7 +609,7 @@
     }
 
     const displayForEvaluate = (evaluate) => {
-        getEvaluate(staff.id,period.id,evaluate).then(res => {
+        getEvaluateForm(staff.id,period.id,evaluate).then(res => {
                 createRowEvaluate(res.data.data.detail)
                 setData(res.data.data)
                 setMainRule(res.data.data)

@@ -35,7 +35,7 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <h5>Status <span class="badge badge-info">{{$evaluate->status}}</span></h5>
+                        <h5>status : <span class="badge badge-info">{{$evaluate->status}}</span></h5>
                     </div>
                 </div>
             </div>
@@ -110,7 +110,7 @@
                             <td>{{number_format($item->weight,2,'.','')}}%</td>
                             <td>{{number_format($item->target,2,'.','')}}</td>
                             <td><input type="number" class="form-control form-control-sm" value="{{$item->actual}}"
-                                    step="0.01" onchange="changeValue(this)"></td>
+                                    step="0.01" min="0" onchange="changeValue(this)"></td>
                             <td>{{number_format($item->ach,2,'.','')}}%</td>
                             <td>{{number_format($item->cal,2,'.','')}}%</td>
                         </tr>
@@ -126,7 +126,7 @@
                             <td>{{number_format($kpi->sum('weight'),2,'.','')}}%</td>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            <td>{{number_format($kpi->sum('ach'),2,'.','')}}%</td>
                             <td>{{number_format($kpi->sum('cal'),2,'.','')}}%</td>
                         </tr>
                     </tfoot>
@@ -166,7 +166,7 @@
                             <td>{{number_format($item->weight,2,'.','')}}%</td>
                             <td>{{number_format($item->target,2,'.','')}}</td>
                             <td><input type="number" class="form-control form-control-sm" value="{{$item->actual}}"
-                                    step="0.01" onchange="changeValue(this)"></td>
+                                    step="0.01" min="0" onchange="changeValue(this)"></td>
                             <td>{{number_format($item->ach,2,'.','')}}%</td>
                             <td>{{number_format($item->cal,2,'.','')}}%</td>
                         </tr>
@@ -182,7 +182,7 @@
                             <td>{{number_format($key_task->sum('weight'),2,'.','')}}%</td>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            <td>{{number_format($key_task->sum('ach'),2,'.','')}}%</td>
                             <td>{{number_format($key_task->sum('cal'),2,'.','')}}%</td>
                         </tr>
                     </tfoot>
@@ -223,7 +223,7 @@
                             <td>{{number_format($item->weight,2,'.','')}}%</td>
                             <td>{{number_format($item->target,2,'.','')}}</td>
                             <td><input type="number" class="form-control form-control-sm" value="{{$item->actual}}"
-                                    step="0.01" onchange="changeValue(this)"></td>
+                                    step="0.01" min="0" onchange="changeValue(this)"></td>
                             <td>{{number_format($item->ach,2,'.','')}}%</td>
                             <td>{{number_format($item->cal,2,'.','')}}%</td>
                         </tr>
@@ -239,7 +239,7 @@
                             <td>{{number_format($omg->sum('weight'),2,'.','')}}%</td>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            <td>{{number_format($omg->sum('ach'),2,'.','')}}%</td>
                             <td>{{number_format($omg->sum('cal'),2,'.','')}}%</td>
                         </tr>
                     </tfoot>
@@ -259,7 +259,7 @@
                         <div class="col-md-4 mb-3">
                             <label for="mainRule">Main Rule :</label>
                             <input type="text" class="form-control form-control-sm" id="mainRule"
-                                placeholder="Main Rule" value="{{$evaluate->mainRule->name}}" readonly>
+                                placeholder="Main Rule" value="{{$mainRule->rule->name}}" readonly>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
@@ -267,7 +267,7 @@
                         <div class="col-md-4 mb-3">
                             <label for="Cal">%Cal :</label>
                             <input type="text" class="form-control form-control-sm" id="Cal" placeholder="%Cal"
-                                value="{{$calMainRule}}" readonly>
+                                value="{{number_format($mainRule->cal,2,'.','')}}%" readonly>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
@@ -276,38 +276,26 @@
                 </form>
             </div>
             <div class="table-responsive">
-                <table class="mb-0 table table-sm">
+                <table class="mb-0 table table-sm" id="table-calculation">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Weight</th>
-                            <th>Total Reslt</th>
-                            <th>Total Result With Main Rule</th>
-                            <th>Summary</th>
+                            <th>%Ach</th>
+                            <th>Total</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @isset($summary)
+                        @foreach ($summary as $item)
                         <tr>
-                            <th scope="row">KPI</th>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
+                            <th scope="row">{{$item->name}}</th>
+                            <td>{{number_format($item->weight,2,'.','')}}%</td>
+                            <td>{{number_format($item->ach,2,'.','')}}%</td>
+                            <td>{{number_format($item->total,2,'.','')}}%</td>
                         </tr>
-                        <tr>
-                            <th scope="row">Key Task</th>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">OMG</th>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
+                        @endforeach
+                        @endisset
                     </tbody>
                     <tfoot>
                         <tr>
@@ -364,8 +352,13 @@
     <div class="page-title-wrapper">
         <div class="page-title-heading"></div>
         <div class="page-title-actions">
-            <button class="mb-2 mr-2 btn btn-primary" onclick="submit()">Save</button>
-            <button class="mb-2 mr-2 btn btn-success">Submit to Manager</button>
+            <button class="mb-2 mr-2 btn btn-primary" onclick="submit()" @if ($evaluate->status !== "Ready")
+                disabled
+                @endif>Save</button>
+            <button class="mb-2 mr-2 btn btn-success" onclick="submitToManager(this)" @if ($evaluate->status !==
+                "Ready")
+                disabled
+                @endif>Submit to Manager</button>
         </div>
     </div>
 </div>
@@ -374,23 +367,57 @@
 
 @section('second-script')
 <script>
-    var evaluateDetail  = {!!json_encode($evaluate->evaluateDetail)!!}
-    
+    var formEvaluate = {
+        form:{!!json_encode($evaluate)!!},
+        next:false
+    }
+    var main = {!!json_encode($mainRule)!!}
 </script>
 <script src="{{asset('assets\js\kpi\evaluationSelf\evaluate.js')}}" defer></script>
 <script>
     const changeValue = (e) => {
-        evaluateDetail.forEach((element,index) => {
+        formEvaluate.form.evaluate_detail.forEach((element,index) => {
             if (parseInt(e.offsetParent.parentNode.dataset.id) === element.id) {
-                // element.actual = e.value
-                // element.cal = e.value
                 formulaRuleDetail(e,index)
             }
         });
     }
 
     const submit = () => {
-        console.log(evaluateDetail);
+        putEvaluateSelf(formEvaluate.form.id,formEvaluate).then(res => {
+            if (res.status === 200) {
+                status.textContent = res.data.data.status
+                window.scrollTo(500, 0)
+                toast(`Save evaluate-form.`,'success')
+                toastClear()
+            }
+        })
+        .catch(error => {
+            toast(error.response.data.message,'error')
+            toastClear()
+            console.log(error.response.data.message)
+        }).finally()
+    }
+
+    const submitToManager = (e) => {
+        formEvaluate.next = !formEvaluate.next
+        // Save & send to manager 
+        putEvaluateSelf(formEvaluate.form.id,formEvaluate).then(res => {
+            let status = document.getElementsByClassName('card-header')[0].querySelector('span')
+            if (res.status === 200) {
+                status.textContent = res.data.data.status
+                e.previousElementSibling.setAttribute('disabled',true)
+                e.setAttribute('disabled',true)
+                window.scrollTo(500, 0)
+                toast(`Sent evaluate-form To Manager.`,'success')
+                toastClear()
+            }
+        })
+        .catch(error => {
+            toast(error.response.data.message,'error')
+            toastClear()
+            console.log(error.response.data.message)
+        }).finally( () => formEvaluate.next = !formEvaluate.next)
     }
 </script>
 @endsection

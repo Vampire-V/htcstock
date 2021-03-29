@@ -36,53 +36,6 @@
                 class="btn-shadow mr-3 btn btn-dark">
                 <i class="fa fa-star"></i>
             </button>
-            {{-- <div class="d-inline-block dropdown">
-                <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                    class="btn-shadow dropdown-toggle btn btn-info">
-                    <span class="btn-icon-wrapper pr-2 opacity-7">
-                        <i class="fa fa-business-time fa-w-20"></i>
-                    </span>
-                    Buttons
-                </button>
-                <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a href="javascript:void(0);" class="nav-link">
-                                <i class="nav-link-icon lnr-inbox"></i>
-                                <span>
-                                    Inbox
-                                </span>
-                                <div class="ml-auto badge badge-pill badge-secondary">86</div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="javascript:void(0);" class="nav-link">
-                                <i class="nav-link-icon lnr-book"></i>
-                                <span>
-                                    Book
-                                </span>
-                                <div class="ml-auto badge badge-pill badge-danger">5</div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="javascript:void(0);" class="nav-link">
-                                <i class="nav-link-icon lnr-picture"></i>
-                                <span>
-                                    Picture
-                                </span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a disabled href="javascript:void(0);" class="nav-link disabled">
-                                <i class="nav-link-icon lnr-file-empty"></i>
-                                <span>
-                                    File Disabled
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div> --}}
         </div>
     </div>
 </div>
@@ -208,7 +161,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{--  --}}
+                            
                         </tbody>
                         <tfoot>
                             <tr>
@@ -325,11 +278,6 @@
                                 <select id="validationRuleName" class="form-control form-control-sm" name="rule_id_add"
                                     onchange="setRuleToTemp(this)">
                                     <option value="">Choose...</option>
-                                    {{-- @isset($rules)
-                                    @foreach ($rules as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                    @endforeach
-                                    @endisset --}}
                                 </select></div>
                         </div>
                     </div>
@@ -412,9 +360,9 @@
             setTotalWeight()
             formEvaluate.next = true
             if (formEvaluate.total_weight_kpi <= 100.00 && formEvaluate.total_weight_key_task <= 100.00 && formEvaluate.total_weight_omg <= 100.00) {
-                postEvaluate(staff.id,period.id,formEvaluate).then(res => {
+                postEvaluateForm(staff.id,period.id,formEvaluate).then(res => {
                     if (res.status === 201) {
-                        toastSuccess(`create evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`)
+                        toast(`create evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`,'success')
                         toastClear()
                         setTimeout(function () {
                             window.location.replace(`/kpi/evaluation-form/staff/${res.data.data.user_id}/edit/period/${res.data.data.period_id}/evaluate/${res.data.data.id}/edit`)
@@ -422,10 +370,8 @@
                         ,2000)
                     }
                 }).catch(error => {
-                        console.log(error);
-                }).finally(() => {
-                    
-                })
+                    console.log(error.response.data)
+                }).finally()
             }else{
                 let tables = document.getElementById('all-table').querySelectorAll('table')
                 let text = []
@@ -449,9 +395,9 @@
             setTotalWeight()
             formEvaluate.next = false
             if (formEvaluate.total_weight_kpi <= 100.00 && formEvaluate.total_weight_key_task <= 100.00 && formEvaluate.total_weight_omg <= 100.00) {
-                postEvaluate(staff.id,period.id,formEvaluate).then(res => {
+                postEvaluateForm(staff.id,period.id,formEvaluate).then(res => {
                     if (res.status === 201) {
-                        toastSuccess(`create evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`)
+                        toast(`create evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`,'success')
                         toastClear()
                         setTimeout(function () {
                             window.location.replace(`/kpi/evaluation-form/staff/${res.data.data.user_id}/edit/period/${res.data.data.period_id}/evaluate/${res.data.data.id}/edit`)
@@ -459,10 +405,8 @@
                         ,2000)
                     }
                 }).catch(error => {
-                        console.log(error);
-                }).finally(() => {
-                    
-                })
+                    console.log(error.response.data)
+                }).finally()
             }else{
                 let tables = document.getElementById('all-table').querySelectorAll('table')
                 let text = []
@@ -525,10 +469,8 @@
                     
                     await createRowEvaluate(formEvaluate.detail)
                 }).catch(error => {
-                    console.log(error);
-                }).finally(() => {
-                    // 
-                })
+                    console.log(error.response.data)
+                }).finally()
             document.getElementById('rule-remove-modal').removeAttribute('disabled')
             document.getElementById('rule-add-modal').removeAttribute('disabled')
             document.getElementById('submit').removeAttribute('disabled')
@@ -723,7 +665,7 @@
             formEvaluate.detail.push(json)
             document.getElementById('ruleModal').getElementsByClassName("close")[0].click()
         }).catch(error => {
-            console.log(error)
+            console.log(error.response.data)
         })
     }
 
@@ -806,7 +748,7 @@
                 option.value = element.id
                 document.getElementById('validationRuleName').appendChild(option)
             })
-        }).catch(error => console.log(error.response)).finally()
+        }).catch(error => console.log(error.response.data)).finally()
     }
 
     $('#ruleModal').on('show.bs.modal', function (event) {

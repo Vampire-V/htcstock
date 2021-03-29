@@ -45,7 +45,7 @@ class UserService extends BaseService implements UserServiceInterface
     {
         try {
             if ($username) {
-                return User::whereNotIn('username',...$username)->get();
+                return User::whereNotIn('username', ...$username)->get();
             } else {
                 return User::all();
             }
@@ -56,23 +56,23 @@ class UserService extends BaseService implements UserServiceInterface
 
     public function filter(Request $request)
     {
-        return User::with(['department','positions','roles','divisions','permissions'])->filter($request)->orderBy('divisions_id', 'desc')->paginate(10);
+        return User::with(['department', 'positions', 'roles', 'divisions', 'permissions'])->filter($request)->orderBy('divisions_id', 'desc')->paginate(10);
     }
 
     public function email(string $email)
     {
         try {
-            return User::where('email',$email)->first();
+            return User::where('email', $email)->first();
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function division(...$division_id) :Collection
+    public function division(...$division_id): Collection
     {
         try {
             if ($division_id) {
-                return User::whereIn('divisions_id',[...$division_id])->get();
+                return User::whereIn('divisions_id', [...$division_id])->get();
             } else {
                 return User::all();
             }
@@ -81,10 +81,10 @@ class UserService extends BaseService implements UserServiceInterface
         }
     }
 
-    public function user($id) :User
+    public function user($id): User
     {
         try {
-            return User::with(['department','divisions','positions','roles'])->find($id);
+            return User::with(['department', 'divisions', 'positions', 'roles'])->find($id);
         } catch (\Throwable $th) {
             throw $th;
         }

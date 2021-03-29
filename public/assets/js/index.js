@@ -166,7 +166,7 @@ btn.on('click', function (e) {
     }, '300');
 });
 
-function toast(text,type) {
+function toast(text, type) {
     let divToast = document.createElement("div")
     let divMessage = document.createElement("div")
     divToast.classList.add('toast')
@@ -247,3 +247,4 @@ var sweetalert = (title, text) => {
         }
     })
 }
+

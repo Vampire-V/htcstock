@@ -121,3 +121,10 @@ const getEvaluateSelf = (staff,period,evaluate) => axios({
     responseType: 'json',
     url: `/kpi/evaluation-form/staff/${staff}/edit/period/${period}/evaluate/${evaluate}`
 })
+
+const putEvaluateReview = (review_evaluation,form) => axios({
+    method: 'PUT',
+    responseType: 'json',
+    url: `/kpi/evaluation-review/${review_evaluation}`,
+    data: form
+})

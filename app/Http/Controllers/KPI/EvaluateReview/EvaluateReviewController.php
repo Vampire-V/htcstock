@@ -4,27 +4,32 @@ namespace App\Http\Controllers\KPI\EvaluateReview;
 
 use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\KPI\EvaluateResource;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
+use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class EvaluateReviewController extends Controller
 {
-    protected $userService, $targetPeriodService, $evaluateService, $evaluateDetailService;
+    protected $userService, $targetPeriodService, $evaluateService, $evaluateDetailService, $categoryService;
     public function __construct(
         UserServiceInterface $userServiceInterface,
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
         EvaluateServiceInterface $evaluateServiceInterface,
-        EvaluateDetailServiceInterface $evaluateDetailServiceInterface
+        EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
+        RuleCategoryServiceInterface $ruleCategoryServiceInterface
     ) {
         $this->userService = $userServiceInterface;
         $this->targetPeriodService = $targetPeriodServiceInterface;
         $this->evaluateService = $evaluateServiceInterface;
         $this->evaluateDetailService = $evaluateDetailServiceInterface;
+        $this->categoryService = $ruleCategoryServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -93,31 +98,34 @@ class EvaluateReviewController extends Controller
      */
     public function edit($id)
     {
-        $calMainRule = 0;
+        $status = \collect([KPIEnum::submit, KPIEnum::approved]);
         try {
-            $evaluate = $this->evaluateService->find($id);
-            // $evaluate->mainRul;
+            $evaluate = $this->evaluateService->findId($id);
+            $evaluate->evaluateDetail->each(fn ($item) => $this->evaluateDetailService->formulaKeyTask($item));
 
-            $kpi = $evaluate->evaluateDetail->filter(function ($value, $key) {
-                return $this->evaluateDetailService->formulaKeyTask($value)->rule->category->name === "kpi";
-            });
-            $key_task = $evaluate->evaluateDetail->filter(function ($value, $key) {
-                return $this->evaluateDetailService->formulaKeyTask($value)->rule->category->name === "key-task";
-            });
-            $omg = $evaluate->evaluateDetail->filter(function ($value, $key) {
-                return $this->evaluateDetailService->formulaKeyTask($value)->rule->category->name === "omg";
-            });
-            $indexMainRule = $evaluate->evaluateDetail->search(function ($row, $key) use ($evaluate) {
-                return $row->rule_id === $evaluate->main_rule_id;
-            });
+            $kpi = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === "kpi");
+            $key_task = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === "key-task");
+            $omg = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === "omg");
 
-            if ($indexMainRule) {
-                $calMainRule = $evaluate->evaluateDetail[$indexMainRule]->cal;
+            $mainRule = $evaluate->evaluateDetail->filter(fn ($row) => $row->rule_id === $evaluate->main_rule_id)->first();
+
+            $category = $this->categoryService->dropdown();
+            $summary = collect([]);
+            foreach ($category as $key => $cat) {
+                $weight = $evaluate->template->ruleTemplate->filter(fn ($value) => $value->rule->category->name === $cat->name)->first()->weight_category;
+                $ach = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === $cat->name)->sum('ach');
+                $calsummary = new stdClass;
+                $calsummary->name = $cat->name;
+                $calsummary->weight = $weight;
+                $calsummary->ach = $ach;
+                $calsummary->total =  ($ach * $weight) / 100;
+
+                $summary->push($calsummary);
             }
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'kpi', 'key_task', 'omg', 'calMainRule'));
+        return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'kpi', 'key_task', 'omg', 'mainRule', 'summary','status'));
     }
 
     /**
@@ -129,7 +137,19 @@ class EvaluateReviewController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $this->evaluateService->update(['comment' => $request->form['comment'] ,'status' => $request->next ? KPIEnum::approved : KPIEnum::draft], $id);
+            foreach ($request->form['evaluate_detail'] as $value) {
+                $this->evaluateDetailService->update(['actual' => $value['actual']], $value['id']);
+            }
+            $evaluate = $this->evaluateService->find($id);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        DB::commit();
+        return new EvaluateResource($evaluate);
     }
 
     /**

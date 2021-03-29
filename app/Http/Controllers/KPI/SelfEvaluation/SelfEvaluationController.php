@@ -89,6 +89,7 @@ class SelfEvaluationController extends Controller
      */
     public function edit($id)
     {
+        $status = \collect([KPIEnum::draft, KPIEnum::ready]);
         try {
             $evaluate = $this->evaluateService->findId($id);
             $evaluate->evaluateDetail->each(fn ($item) => $this->evaluateDetailService->formulaKeyTask($item));
@@ -100,7 +101,7 @@ class SelfEvaluationController extends Controller
             $mainRule = $evaluate->evaluateDetail->filter(fn ($row) => $row->rule_id === $evaluate->main_rule_id)->first();
 
             $category = $this->categoryService->dropdown();
-            $summary = [];
+            $summary = collect([]);
             foreach ($category as $key => $cat) {
                 $weight = $evaluate->template->ruleTemplate->filter(fn ($value) => $value->rule->category->name === $cat->name)->first()->weight_category;
                 $ach = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === $cat->name)->sum('ach');
@@ -110,12 +111,12 @@ class SelfEvaluationController extends Controller
                 $calsummary->ach = $ach;
                 $calsummary->total =  ($ach * $weight) / 100;
 
-                \array_push($summary, $calsummary);
+                $summary->push($calsummary);
             }
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'kpi', 'key_task', 'omg', 'mainRule', 'summary'));
+        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'kpi', 'key_task', 'omg', 'mainRule', 'summary', 'status'));
     }
 
     /**
@@ -127,10 +128,9 @@ class SelfEvaluationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $status = $request->next ? KPIEnum::submit : $request->form['status'];
         DB::beginTransaction();
         try {
-            $this->evaluateService->update(['status' => $status], $id);
+            $this->evaluateService->update(['status' => $request->next ? KPIEnum::submit : $request->form['status']], $id);
             foreach ($request->form['evaluate_detail'] as $value) {
                 $this->evaluateDetailService->update(['actual' => $value['actual']], $value['id']);
             }

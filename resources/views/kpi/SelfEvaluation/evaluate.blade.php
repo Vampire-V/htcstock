@@ -302,8 +302,7 @@
                             <th scope="row"></th>
                             <td></td>
                             <td></td>
-                            <td>Total :</td>
-                            <td>0</td>
+                            <td>{{number_format($summary->sum('total'),2,'.','')}}%</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -352,11 +351,10 @@
     <div class="page-title-wrapper">
         <div class="page-title-heading"></div>
         <div class="page-title-actions">
-            <button class="mb-2 mr-2 btn btn-primary" onclick="submit()" @if ($evaluate->status !== "Ready")
+            <button class="mb-2 mr-2 btn btn-primary" onclick="submit()" @if (!$status->contains($evaluate->status))
                 disabled
                 @endif>Save</button>
-            <button class="mb-2 mr-2 btn btn-success" onclick="submitToManager(this)" @if ($evaluate->status !==
-                "Ready")
+            <button class="mb-2 mr-2 btn btn-success" onclick="submitToManager(this)" @if (!$status->contains($evaluate->status))
                 disabled
                 @endif>Submit to Manager</button>
         </div>

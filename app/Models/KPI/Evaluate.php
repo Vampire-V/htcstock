@@ -47,7 +47,8 @@ class Evaluate extends Model
         'main_rule_condition_3_max',
         'total_weight_kpi',
         'total_weight_key_task',
-        'total_weight_omg'
+        'total_weight_omg',
+        'comment'
     ];
 
 

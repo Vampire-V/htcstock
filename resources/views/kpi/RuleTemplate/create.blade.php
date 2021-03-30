@@ -90,18 +90,19 @@
                     <label for="department" class="mb-2 mr-2">Weight :</label>
                     <div class="btn-actions-pane">
                         <div role="group" class="btn-group-sm btn-group">
-                            <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
-                                max="100" id="weight-{{$group->name}}" name="weight_{{$group->name}}">
+                            <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0.00" step="0.01"
+                                max="100" id="weight-{{$group->name}}" name="weight_{{$group->name}}" value="0.00"
+                                onchange="changeWeight(this)">
                         </div>
                     </div>
                     <label for="department" class="mb-2 mr-2">%</label>
                     <div class="btn-actions-pane-right">
                         <div role="group" class="btn-group-sm btn-group">
                             <button class="mb-2 mr-2 btn btn-danger" onclick="deleterule(this)"
-                                data-group="{{$group->name}}" data-group-id="{{$group->id}}">Delete Selected
+                                data-group="{{$group->name}}" data-group-id="{{$group->id}}" disabled>Delete Selected
                                 Rule</button>
                             <button class="mb-2 mr-2 btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                                data-group="{{$group}}">Add new rule</button>
+                                data-group="{{$group}}" disabled>Add new rule</button>
                         </div>
                     </div>
                 </div>
@@ -263,7 +264,6 @@
         let row = document.getElementById(`table-${group.name}`).getElementsByTagName('tbody')[0].lastChild
         modal.find('.modal-body input[name ="parent_rule_template_id"]').val(getLastRowNum(row))
         modal.find('.modal-body input[name ="weight_category"]').val(document.getElementById(`weight-${group.name}`).value)
-        // console.log(modal)
         
     })
 
@@ -306,8 +306,9 @@
         })
     }
 
-    const getValue = (sel) => {
-        // console.log(sel,sel.options[sel.selectedIndex].value,sel.options[sel.selectedIndex].text)
+    const changeWeight = (sel) => {
+        let btn_header = sel.offsetParent.parentElement.parentElement.lastElementChild.firstElementChild.children;
+        turnOnAddRule(sel.valueAsNumber,btn_header[1])
     }
 
     const setMaxWeight = (group) => {
@@ -340,8 +341,6 @@
             })
             toastClear()
         })
-        
-        
     }
 
     const createRow = async (data) => {
@@ -368,6 +367,7 @@
                 checkbox.name = `rule-${element.id}`
                 checkbox.className = `custom-control-input`
                 checkbox.id = element.id
+                checkbox.setAttribute('onclick','turnOnDeleteRule(this)')
 
                 let label = document.createElement('label')
 
@@ -378,7 +378,7 @@
                 newCellCheck.appendChild(div)
 
                 let newCellName = newRow.insertCell()
-                newCellName.textContent = element.rules.name
+                newCellName.textContent = element.rules.name +" - "+element.rules.calculate_type
 
                 let newCellMeasurement = newRow.insertCell()
                 newCellMeasurement.textContent = element.rules.measurement
@@ -400,16 +400,18 @@
 
                 if (key === array.length - 1){ 
                     let footter = table.getElementsByTagName('tfoot')[0]
-                    footter.children[0].children[newCellWeight.cellIndex].textContent = sumWeight.toFixed(2)
-                    document.getElementById(`weight-${element.rules.categorys.name}`).value = element.weight_category.toFixed(2)
+                    let config_weight = document.getElementById(`weight-${element.rules.categorys.name}`)
+                    let btn_header = config_weight.offsetParent.parentElement.parentElement.lastElementChild.firstElementChild.children
+
+                    turnOnAddRule(element.weight_category,btn_header[1])
+                    footter.children[0].children[newCellWeight.cellIndex].textContent = sumWeight.toFixed(2) + '%'
+                    config_weight.value = element.weight_category.toFixed(2)
                 }
             })
         })
     }
 
-    const getLastRowNum = (row) => {
-            return row ? row.rowIndex + 1: 1
-        }
+    const getLastRowNum = (row) =>  row ? row.rowIndex + 1: 1
     
     const makeOption = (obj,key,array) => {
         let select = document.createElement('select')
@@ -439,6 +441,25 @@
         })
         .catch(error => console.log(error.response.data))
     }
+
+    const turnOnDeleteRule = (e) => {
+        let btn = e.offsetParent.offsetParent.lastElementChild.children[1].lastElementChild.firstElementChild.firstElementChild
+        let bodie = e.offsetParent.parentNode.parentNode.parentNode
+        if (e.checked) {
+            btn.disabled = e.checked ? false : true
+        }else{
+            if (bodie.rows.length > 1) {
+                let enable = false
+                for (let index = 0; index < bodie.rows.length; index++) {
+                    const element = bodie.rows[index].firstChild.firstChild.firstChild;
+                    enable = element.checked ? true : false
+                }
+                btn.disabled = enable ? false : true
+            }
+        }
+    }
+
+    const turnOnAddRule = (weight ,btn) => btn.disabled = weight > 0.00 ? false : true
 
     const deleterule = e => {
         let table = document.getElementById(`table-${e.dataset.group}`)

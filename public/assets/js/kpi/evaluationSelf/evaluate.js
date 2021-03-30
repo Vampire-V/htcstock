@@ -31,14 +31,16 @@ var formulaRuleDetail = (e, key) => {
         tr.cells[index + 1].firstChild.textContent = ach.toFixed(2) + '%'
         formEvaluate.form.evaluate_detail[key].ach = ach
 
-        // if (formEvaluate.form.evaluate_detail[key].rule.calculate_type === 'Amount') {
-        //     tr.cells[index + 1].firstChild.textContent = ach.toFixed(2) + '%'
-        //     formEvaluate.form.evaluate_detail[key].ach = ach
-        // }
-        // if (formEvaluate.form.evaluate_detail[key].rule.calculate_type === 'Percent') {
-        //     tr.cells[index + 1].firstChild.textContent = actual.toFixed(2) + '%'
-        //     formEvaluate.form.evaluate_detail[key].ach = actual
-        // }
+        if (formEvaluate.form.evaluate_detail[key].rule.calculate_type === 'Amount') {
+            tr.cells[index + 1].firstChild.textContent = actual <= actual ? `100%` : `0.00%`
+            // ach.toFixed(2) + '%'
+            formEvaluate.form.evaluate_detail[key].ach = actual <= actual ? 100 : 0
+        }
+        if (formEvaluate.form.evaluate_detail[key].rule.calculate_type === 'Percent') {
+            tr.cells[index + 1].firstChild.textContent = (2 - (actual/target) ) * 100
+            // actual.toFixed(2) + '%'
+            formEvaluate.form.evaluate_detail[key].ach = (2 - (actual/target) ) * 100
+        }
 
         if (formEvaluate.form.evaluate_detail[key].ach < 70) {
             tr.cells[index + 2].firstChild.textContent = '0.00%'

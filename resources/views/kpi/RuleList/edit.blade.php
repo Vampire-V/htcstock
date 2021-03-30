@@ -69,8 +69,7 @@
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
                             <label for="mesurement">Mesurement :</label>
-                            <select id="validationMesurement" class="form-control-sm form-control" name="measurement"
-                                required>
+                            <select id="validationMesurement" class="form-control-sm form-control" name="measurement">
                                 <option value="mesurement_1"
                                     {{$rule->measurement === "mesurement_1" ? 'selected' : ''}}>Mesurement 1</option>
                                 <option value="mesurement_2"
@@ -85,8 +84,8 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="targetUnit">Target Unit :</label>
-                            <select id="validationTargetUnit" class="form-control-sm form-control" name="target_unit_id"
-                                required>
+                            <select id="validationTargetUnit" class="form-control-sm form-control"
+                                name="target_unit_id">
                                 @isset($unit)
                                 @foreach ($unit as $item)
                                 <option value="{{$item->id}}" {{$item->id === $rule->targetUnit->id ? 'selected' : ''}}>

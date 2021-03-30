@@ -12,6 +12,7 @@ abstract class KPIEnum extends BasicEnum
     const approved = 'Approved';
 
     // calculate_type
-    const percent = 'Percent';
-    const amount = 'Amount';
+    const positive = 'Positive';
+    const negative = 'Negative';
+    const zero_oriented_kpi = 'Zero Oriented KPI';
 }

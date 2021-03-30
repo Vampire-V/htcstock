@@ -4,7 +4,7 @@ namespace App\Http\Requests\KPI;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRulePost extends FormRequest
+class StoreRulePut extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +26,8 @@ class UpdateRulePost extends FormRequest
         return [
             'category_id' => 'required',
             'name' => 'required|max:255',
-            'measurement' => 'required',
-            'target_unit_id' => 'required',
+            // 'measurement' => 'required',
+            // 'target_unit_id' => 'required',
             'calculate_type' => 'required'
         ];
     }

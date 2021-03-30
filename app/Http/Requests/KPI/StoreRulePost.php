@@ -26,8 +26,8 @@ class StoreRulePost extends FormRequest
         return [
             'category_id' => 'required',
             'name' => 'required|unique:kpi_rules|max:255',
-            'measurement' => 'required',
-            'target_unit_id' => 'required',
+            // 'measurement' => 'required',
+            // 'target_unit_id' => 'required',
             'calculate_type' => 'required'
         ];
     }

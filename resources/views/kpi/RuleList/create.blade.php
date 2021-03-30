@@ -70,7 +70,7 @@
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
                             <label for="mesurement">Mesurement :</label>
-                            <select id="validationMesurement" class="form-control-sm form-control" name="measurement" required>
+                            <select id="validationMesurement" class="form-control-sm form-control" name="measurement">
                                 <option value="">Choose...</option>
                                 <option value="mesurement_1">Mesurement 1</option>
                                 <option value="mesurement_2">Mesurement 2</option>
@@ -85,7 +85,7 @@
                         <div class="col-md-4 mb-3">
                             <label for="targetUnit">Target Unit :</label>
                             <select id="validationTargetUnit" class="form-control-sm form-control"
-                                name="target_unit_id" required>
+                                name="target_unit_id">
                                 <option value="">Choose...</option>
                                 @isset($unit)
                                 @forelse ($unit as $item)

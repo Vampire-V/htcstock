@@ -5,7 +5,7 @@ namespace App\Http\Controllers\KPI\Rule;
 use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\KPI\StoreRulePost;
-use App\Http\Requests\KPI\UpdateRulePost;
+use App\Http\Requests\KPI\StoreRulePut;
 use App\Http\Resources\KPI\RuleResource;
 use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
@@ -55,7 +55,7 @@ class RuleController extends Controller
     {
         $category = $this->ruleCategoryService->dropdown();
         $unit = $this->targetUnitService->dropdown();
-        $calcuTypes = [KPIEnum::percent, KPIEnum::amount];
+        $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
         return \view('kpi.RuleList.create', \compact('category', 'unit', 'calcuTypes'));
     }
 
@@ -111,7 +111,7 @@ class RuleController extends Controller
             $rule = $this->ruleService->find($id);
             $category = $this->ruleCategoryService->dropdown();
             $unit = $this->targetUnitService->dropdown();
-            $calcuTypes = [KPIEnum::percent, KPIEnum::amount];
+            $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -125,7 +125,7 @@ class RuleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRulePost $request, $id)
+    public function update(StoreRulePut $request, $id)
     {
         DB::beginTransaction();
         $validated = $request->validated();

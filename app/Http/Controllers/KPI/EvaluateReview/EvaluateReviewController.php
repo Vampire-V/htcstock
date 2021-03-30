@@ -112,7 +112,9 @@ class EvaluateReviewController extends Controller
             $category = $this->categoryService->dropdown();
             $summary = collect([]);
             foreach ($category as $key => $cat) {
-                $weight = $evaluate->template->ruleTemplate->filter(fn ($value) => $value->rule->category->name === $cat->name)->first()->weight_category;
+                $ruleTemp = $evaluate->template->ruleTemplate->filter(fn ($value) => $value->rule->category->name === $cat->name)->first();
+                $weight = \is_null($ruleTemp) ? 0.00 : $ruleTemp->weight_category;
+
                 $ach = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === $cat->name)->sum('ach');
                 $calsummary = new stdClass;
                 $calsummary->name = $cat->name;
@@ -125,7 +127,7 @@ class EvaluateReviewController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'kpi', 'key_task', 'omg', 'mainRule', 'summary','status'));
+        return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'kpi', 'key_task', 'omg', 'mainRule', 'summary', 'status'));
     }
 
     /**
@@ -139,7 +141,7 @@ class EvaluateReviewController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->evaluateService->update(['comment' => $request->form['comment'] ,'status' => $request->next ? KPIEnum::approved : KPIEnum::draft], $id);
+            $this->evaluateService->update(['comment' => $request->form['comment'], 'status' => $request->next ? KPIEnum::approved : KPIEnum::draft], $id);
             foreach ($request->form['evaluate_detail'] as $value) {
                 $this->evaluateDetailService->update(['actual' => $value['actual']], $value['id']);
             }

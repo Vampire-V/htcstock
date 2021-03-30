@@ -2,6 +2,7 @@
 
 namespace App\Services\KPI\Service;
 
+use App\Enum\KPIEnum;
 use App\Models\KPI\EvaluateDetail;
 use App\Services\BaseService;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
@@ -50,14 +51,18 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
 
     public function formulaKeyTask(EvaluateDetail $object): EvaluateDetail
     {
-        $object->ach = $object->actual <= 0 ? 0 : ($object->actual / $object->target) * 100;
+        $object->ach = 0;
         $object->cal = 0;
-        // if ($object->rule->calculate_type === 'Amount') {
-        //     $object->ach = $ach;
-        // }
-        // if ($object->rule->calculate_type === 'Percent') {
-        //     $object->ach = $object->actual;
-        // }
+        if ($object->rule->calculate_type === KPIEnum::positive) {
+            $object->ach = ($object->actual / $object->target) * 100;
+        }
+        if ($object->rule->calculate_type === KPIEnum::negative) {
+            $object->ach = (2 - ($object->actual / $object->target)) * 100;
+        }
+        if ($object->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
+            $object->ach = $object->actual <= $object->target ? 100 : 0;
+        }
+        
         if ($object->ach < 70) {
             $object->cal = 0;
         } else if ($object->ach > $object->base_line) {
@@ -65,8 +70,7 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
         } else {
             $object->cal = $object->ach * $object->weight / 100;
         }
-        // $object->cal = $ach;
-        $object->result = 0; //$cal * $object->weight;
+        
         return $object;
     }
 }

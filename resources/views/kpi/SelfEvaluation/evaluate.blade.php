@@ -110,7 +110,7 @@
                             <td>{{number_format($item->weight,2,'.','')}}%</td>
                             <td>{{number_format($item->target,2,'.','')}}</td>
                             <td><input type="number" class="form-control form-control-sm" value="{{$item->actual}}"
-                                    step="0.01" min="0" onchange="changeValue(this)"></td>
+                                    step="{{Helper::setAttrActualStep($item->rule)}}" min="0" onchange="changeValue(this)"></td>
                             <td>{{number_format($item->ach,2,'.','')}}%</td>
                             <td>{{number_format($item->cal,2,'.','')}}%</td>
                         </tr>
@@ -166,7 +166,7 @@
                             <td>{{number_format($item->weight,2,'.','')}}%</td>
                             <td>{{number_format($item->target,2,'.','')}}</td>
                             <td><input type="number" class="form-control form-control-sm" value="{{$item->actual}}"
-                                    step="0.01" min="0" onchange="changeValue(this)"></td>
+                                    step="{{Helper::setAttrActualStep($item->rule)}}" min="0" onchange="changeValue(this)"></td>
                             <td>{{number_format($item->ach,2,'.','')}}%</td>
                             <td>{{number_format($item->cal,2,'.','')}}%</td>
                         </tr>
@@ -223,7 +223,7 @@
                             <td>{{number_format($item->weight,2,'.','')}}%</td>
                             <td>{{number_format($item->target,2,'.','')}}</td>
                             <td><input type="number" class="form-control form-control-sm" value="{{$item->actual}}"
-                                    step="0.01" min="0" onchange="changeValue(this)"></td>
+                                    step="{{Helper::setAttrActualStep($item->rule)}}" min="0" onchange="changeValue(this)"></td>
                             <td>{{number_format($item->ach,2,'.','')}}%</td>
                             <td>{{number_format($item->cal,2,'.','')}}%</td>
                         </tr>
@@ -364,6 +364,7 @@
 @endsection
 
 @section('second-script')
+<script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script>
     var formEvaluate = {
         form:{!!json_encode($evaluate)!!},

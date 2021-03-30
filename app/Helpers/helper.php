@@ -2,12 +2,14 @@
 
 namespace Helpers;
 
-use App\Models\System;
+use App\Enum\KPIEnum;
+use App\Models\KPI\Rule;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 
 class Helper
 {
+
     public static function changeDateFormate($date, $date_format)
     {
         return \Carbon\Carbon::createFromFormat('Y-m-d', $date)->format($date_format);
@@ -43,5 +45,17 @@ class Helper
     public static function makeRandomTokenKey()
     {
         return Str::random(32);
+    }
+
+    public static function setAttrActualStep(Rule $rule)
+    {
+        $step = 0.01;
+        if ($rule->calculate_type === KPIEnum::zero_oriented_kpi) {
+            $step = 1;
+        }
+        if ($rule->calculate_type === KPIEnum::positive || $rule->calculate_type === KPIEnum::negative) {
+            $step = 0.01;
+        }
+        return $step;
     }
 }

@@ -293,6 +293,7 @@
 @endsection
 
 @section('second-script')
+<script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script>
     const staff = {!!json_encode($user)!!},
             period = {!!json_encode($period)!!},
@@ -370,6 +371,8 @@
                         ,2000)
                     }
                 }).catch(error => {
+                    toast(error.response.data.message,'error')
+                    toastClear()
                     console.log(error.response.data)
                 }).finally()
             }else{
@@ -405,6 +408,8 @@
                         ,2000)
                     }
                 }).catch(error => {
+                    toast(error.response.data.message,'error')
+                    toastClear()
                     console.log(error.response.data)
                 }).finally()
             }else{

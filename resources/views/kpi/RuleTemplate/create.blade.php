@@ -183,7 +183,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="position-relative form-group"><label for="base-line" class="">Base line
-                                    :</label><input name="base_line" id="validationBaseLine" placeholder="BaseLine"
+                                    : %</label><input name="base_line" id="validationBaseLine" placeholder="BaseLine"
                                     type="number" min="0" step="0.1" class="form-control form-control-sm" required>
                             </div>
                         </div>
@@ -192,7 +192,7 @@
                     <div class="form-row">
                         <div class="col-md-6">
                             <div class="position-relative form-group"><label for="max-result" class="">Max
-                                    :</label>
+                                    : %</label>
                                 <input name="max_result" id="validationMax" placeholder="Max result" type="number"
                                     min="0" step="0.1" class="form-control form-control-sm" required>
                             </div>
@@ -218,7 +218,7 @@
                         <div class="col-md-6">
                             <div class="position-relative form-group"><label for="weight-category" class="">Weight
                                     category
-                                    :</label><input name="weight_category" id="validationWeightCategory"
+                                    : %</label><input name="weight_category" id="validationWeightCategory"
                                     placeholder="Weight category" type="number" min="0" step="0.1"
                                     class="form-control form-control-sm" readonly></div>
                         </div>

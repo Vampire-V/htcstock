@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 
 // Legal
-Route::get('legal/approval/verify/{id}/{contract}', 'Auth\LoginController@authenticatedById')->name('legal.approval.verify');
+Route::get('legal/approval/verify/{id}/{contract}', 'Auth\LoginController@authenticatedLegalById')->name('legal.approval.verify');
 Route::namespace('Legal')->prefix('legal')->name('legal.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', 'HomeController@index')->name('dashboard');
 

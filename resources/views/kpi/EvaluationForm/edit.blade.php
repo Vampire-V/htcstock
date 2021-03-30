@@ -291,6 +291,7 @@
 @endsection
 
 @section('second-script')
+<script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script>
     const staff = {!!json_encode($user)!!},
             period = {!!json_encode($period)!!},
@@ -316,7 +317,6 @@
 
 </script>
 <script src="{{asset('assets\js\kpi\evaluationForm\edit.js')}}" defer></script>
-
 <script>
     const clearData = () => {
         formEvaluate.template = null
@@ -421,6 +421,8 @@
                         ,2000)
                     }
                 }).catch(error => {
+                    toast(error.response.data.message,'error')
+                    toastClear()
                     console.log(error.response.data)
                 }).finally()
             }else{
@@ -445,6 +447,8 @@
                         ,2000)
                     }
                 }).catch(error => {
+                    toast(error.response.data.message,'error')
+                    toastClear()
                         console.log(error.response.data)
                 }).finally()
             }else{
@@ -661,7 +665,6 @@
                 weight: 0,
                 weight_category: 0
             }
-            
 
             let tables = document.getElementById(`table-key-task`)
             let newRow = tables.tBodies[0].insertRow()

@@ -25,6 +25,12 @@ class RedirectIfAuthenticated
                 $request->session()->regenerateToken();
                 return \redirect()->route('legal.approval.verify', $request->route()->parameters);
             }
+            if ($request->route()->getName() === 'kpi.evaluation.verify') {
+                Auth::guard()->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return \redirect()->route('kpi.evaluation.verify', $request->route()->parameters);
+            }
             return redirect(RouteServiceProvider::HOME);
         }
 

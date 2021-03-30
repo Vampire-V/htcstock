@@ -5,6 +5,7 @@ namespace App\Http\Controllers\KPI\EvaluationForm;
 use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\KPI\EvaluateResource;
+use App\Mail\KPI\EvaluationFormMail;
 use App\Models\KPI\EvaluateDetail;
 use App\Models\KPI\RuleCategory;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
@@ -18,6 +19,7 @@ use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class EvaluationFormController extends Controller
 {
@@ -147,6 +149,11 @@ class EvaluationFormController extends Controller
                     $attr = compact("evaluate_id", "rule_id", "target", "actual", "weight", "weight_category", "base_line", "max_result");
                     $this->evaluateDetailService->create($attr);
                 }
+                
+                if ($request->next) {
+                    # send mail to staff
+                    Mail::to($evaluate->user->email)->send(new EvaluationFormMail($evaluate));
+                }
             }
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -258,6 +265,11 @@ class EvaluationFormController extends Controller
                             $this->evaluateDetailService->destroy($value['id']);
                         }
                     }
+                }
+
+                if ($request->next) {
+                    # send mail to staff
+                    Mail::to($evaluate->user->email)->send(new EvaluationFormMail($evaluate));
                 }
             }
         } catch (\Throwable $th) {

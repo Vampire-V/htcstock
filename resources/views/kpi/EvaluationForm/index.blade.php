@@ -16,18 +16,7 @@
             </div>
         </div>
         <div class="page-title-actions">
-            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
-                class="btn-shadow mr-3 btn btn-dark">
-                <i class="fa fa-star"></i>
-            </button> --}}
             <div class="d-inline-block dropdown">
-                {{-- <a href="#"
-                    class="btn-shadow btn btn-info">
-                    <span class="btn-icon-wrapper pr-2 opacity-7">
-                        <i class="fa fa-business-time fa-w-20"></i>
-                    </span>
-                    Create
-                </a> --}}
             </div>
         </div>
     </div>
@@ -105,24 +94,6 @@
                         </tr>
                         @endforeach
                         @endisset
-                        {{-- <tr>
-                            <th scope="row">1</th>
-                            <td>Mr. Pipat</td>
-                            <td>Head</td>
-                            <td>IT</td>
-                            <td><a href="{{route('kpi.staff-data.edit',1)}}"
-                        class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Detail
-                        </a></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Mr. test</td>
-                            <td>employee</td>
-                            <td>IT</td>
-                            <td><a href="{{route('kpi.staff-data.edit',1)}}"
-                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Detail
-                                </a></td>
-                        </tr> --}}
                     </tbody>
                 </table>
                 {{ $users->appends($query)->links() }}
@@ -133,5 +104,6 @@
 @endsection
 
 @section('second-script')
+<script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script src="{{asset('assets\js\kpi\evaluationForm\index.js')}}" defer></script>
 @endsection

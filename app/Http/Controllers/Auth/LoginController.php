@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -30,15 +31,17 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
+    protected $evaluateService;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(EvaluateServiceInterface $evaluateServiceInterface)
     {
         $this->middleware('guest')->except('logout');
+        $this->evaluateService = $evaluateServiceInterface;
     }
 
     public function showLoginForm()
@@ -80,9 +83,20 @@ class LoginController extends Controller
         return \redirect()->back()->withErrors($errors)->withInput($input);
     }
 
-    public function authenticatedById($id, $contract)
+    public function authenticatedLegalById($id, $contract)
     {
         Auth::loginUsingId($id);
         return \redirect()->route('legal.contract-request.show', $contract);
+    }
+
+    public function authKpiEvaluation($id)
+    {
+        try {
+            $evaluate = $this->evaluateService->find($id);
+            Auth::loginUsingId($evaluate->user->id);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
     }
 }

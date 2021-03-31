@@ -17,8 +17,10 @@ use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
+// use Arcanedev\LogViewer\Entities\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class EvaluationFormController extends Controller
@@ -153,10 +155,12 @@ class EvaluationFormController extends Controller
                 if ($request->next) {
                     # send mail to staff
                     Mail::to($evaluate->user->email)->send(new EvaluationFormMail($evaluate));
+                    \dd(Mail::failures());
                 }
             }
         } catch (\Throwable $th) {
             DB::rollBack();
+            Log::emergency("Exception Message: ".$th->getMessage()." File: " . $th->getFile() . " Line: " . $th->getLine());
             throw $th;
         }
         DB::commit();
@@ -274,6 +278,7 @@ class EvaluationFormController extends Controller
             }
         } catch (\Throwable $th) {
             DB::rollBack();
+            Log::emergency("Exception Message: ".$th->getMessage()." File: " . $th->getFile() . " Line: " . $th->getLine());
             throw $th;
         }
         DB::commit();

@@ -35,6 +35,6 @@ class EvaluationFormMail extends Mailable
      */
     public function build()
     {
-        return $this->from(\auth()->user()->email)->markdown('emails.kpi.evaluate-form')->with(['evaluate' => $this->evaluate]);
+        return $this->markdown('emails.kpi.evaluate-form')->with(['evaluate' => $this->evaluate]);
     }
 }

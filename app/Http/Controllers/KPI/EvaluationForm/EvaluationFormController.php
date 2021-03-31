@@ -155,7 +155,7 @@ class EvaluationFormController extends Controller
                 if ($request->next) {
                     # send mail to staff
                     Mail::to($evaluate->user->email)->send(new EvaluationFormMail($evaluate));
-                    \dd(Mail::failures());
+                    // \dd(Mail::failures());
                 }
             }
         } catch (\Throwable $th) {

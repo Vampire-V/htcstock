@@ -419,7 +419,7 @@ var setTooltipAch = (e, data) => {
         })
     }
     if (data.rules.calculate_type === calculate.NEGATIVE) {
-        Setattributes(e, {
+        setAttributes(e, {
             "Data-Toggle": "Tooltip",
             "Title": "Rules Calculate Type = Negative : (2 - (actual / target)) * 100",
             "data-placement": "top"
@@ -442,7 +442,7 @@ var setTooltipCal = (e, data) => {
             "data-placement": "top"
         })
     } else if (data.ach > data.base_line) {
-        Setattributes(e, {
+        setAttributes(e, {
             "Data-Toggle": "Tooltip",
             "Title": "Ach% >= 70.00 && Ach% > Base Line  = (Base Line * Weight) / 100",
             "data-placement": "top"

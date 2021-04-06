@@ -52,6 +52,7 @@
                 </div>
                 {{-- @include('includes.footer') --}}
             </div>
+            <div id="loading"></div>
         </div>
     </div>
     <!-- JS, Popper.js, and jQuery -->
@@ -64,6 +65,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
+    <script src="{{asset('assets\js\index.js')}}" defer></script>
     @yield('second-script')
 
 </body>

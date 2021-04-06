@@ -8,9 +8,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class EvaluationFormMail extends Mailable
+class EvaluationReviewMail extends Mailable
 {
     use Queueable, SerializesModels;
+
     /**
      * The contract instance.
      *
@@ -35,6 +36,6 @@ class EvaluationFormMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.kpi.evaluate-form')->with(['evaluate' => $this->evaluate]);
+        return $this->markdown('emails.kpi.evaluate-review')->with(['evaluate' => $this->evaluate]);
     }
 }

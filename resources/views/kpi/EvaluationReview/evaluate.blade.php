@@ -9,7 +9,7 @@
             <div class="page-title-icon">
                 <i class="pe-7s-monitor icon-gradient bg-mean-fruit"> </i>
             </div>
-            <div>Evaluate Review
+            <div>Self Evaluate
                 <div class="page-title-subheading">This is an example self evaluate created using
                     build-in elements and components.
                 </div>
@@ -78,13 +78,15 @@
         </div>
     </div>
 </div>
-{{-- KPI --}}
+
+@isset($category)
+@foreach ($category as $group)
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
         <div class="card-body">
-            <h5 class="card-title">KPI</h5>
+            <h5 class="card-title">{{$group->name}}</h5>
             <div class="table-responsive">
-                <table class="mb-0 table table-sm">
+                <table class="mb-0 table table-sm" id="table-{{$group->name}}">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -100,22 +102,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @isset($kpi)
-                        @foreach ($kpi->values() as $key => $item)
-                        <tr data-id="{{$item->id}}">
-                            <th scope="row">{{$key+1}}</th>
-                            <td>{{$item->rule->name}} - {{$item->rule->calculate_type}}</td>
-                            <td>{{number_format($item->base_line,2,'.','')}}</td>
-                            <td>{{number_format($item->max_result,2,'.','')}}</td>
-                            <td>{{number_format($item->weight,2,'.','')}}%</td>
-                            <td>{{number_format($item->target,2,'.','')}}</td>
-                            <td><input type="number" class="form-control form-control-sm" value="{{$item->actual}}"
-                                    step="0.01" min="0" onchange="changeValue(this)"></td>
-                            <td>{{number_format($item->ach,2,'.','')}}%</td>
-                            <td>{{number_format($item->cal,2,'.','')}}%</td>
-                        </tr>
-                        @endforeach
-                        @endisset
+
                     </tbody>
                     <tfoot>
                         <tr>
@@ -123,11 +110,11 @@
                             <td></td>
                             <td></td>
                             <td>Total :</td>
-                            <td>{{number_format($kpi->sum('weight'),2,'.','')}}%</td>
+                            <td>%</td>
                             <td></td>
                             <td></td>
-                            <td>{{number_format($kpi->sum('ach'),2,'.','')}}%</td>
-                            <td>{{number_format($kpi->sum('cal'),2,'.','')}}%</td>
+                            <td>%</td>
+                            <td>%</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -135,119 +122,12 @@
         </div>
     </div>
 </div>
-{{-- Key Task --}}
-<div class="col-lg-12">
-    <div class="main-card mb-3 card">
-        <div class="card-body">
-            <h5 class="card-title">Key Task</h5>
-            <div class="table-responsive">
-                <table class="mb-0 table table-sm">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Rule Name</th>
-                            <th>Base Line</th>
-                            <th>Max</th>
-                            <th>Weight</th>
-                            <th>Target</th>
-                            <th style="width: 10%;">Actual</th>
-                            <th>%Ach</th>
-                            <th>%Cal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @isset($key_task)
-                        @foreach ($key_task->values() as $key => $item)
-                        <tr data-id="{{$item->id}}">
-                            <th scope="row">{{$key+1}}</th>
-                            <td>{{$item->rule->name}} - {{$item->rule->calculate_type}}</td>
-                            <td>{{number_format($item->base_line,2,'.','')}}</td>
-                            <td>{{number_format($item->max_result,2,'.','')}}</td>
-                            <td>{{number_format($item->weight,2,'.','')}}%</td>
-                            <td>{{number_format($item->target,2,'.','')}}</td>
-                            <td><input type="number" class="form-control form-control-sm" value="{{$item->actual}}"
-                                    step="0.01" min="0" onchange="changeValue(this)"></td>
-                            <td>{{number_format($item->ach,2,'.','')}}%</td>
-                            <td>{{number_format($item->cal,2,'.','')}}%</td>
-                        </tr>
-                        @endforeach
-                        @endisset
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th scope="row"></th>
-                            <td></td>
-                            <td></td>
-                            <td>Total :</td>
-                            <td>{{number_format($key_task->sum('weight'),2,'.','')}}%</td>
-                            <td></td>
-                            <td></td>
-                            <td>{{number_format($key_task->sum('ach'),2,'.','')}}%</td>
-                            <td>{{number_format($key_task->sum('cal'),2,'.','')}}%</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-{{-- OMG --}}
-<div class="col-lg-12">
-    <div class="main-card mb-3 card">
-        <div class="card-body">
-            <h5 class="card-title">OMG</h5>
-            <div class="table-responsive">
-                <table class="mb-0 table table-sm">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Rule Name</th>
-                            <th>Base Line</th>
-                            <th>Max</th>
-                            <th>Weight</th>
-                            <th>Target</th>
-                            <th style="width: 10%;">Actual</th>
-                            <th>%Ach</th>
-                            <th>%Cal</th>
-                            {{-- <th>Result</th> --}}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @isset($omg)
-                        @foreach ($omg->values() as $key => $item)
-                        <tr data-id="{{$item->id}}">
-                            <th scope="row">{{$key+1}}</th>
-                            <td>{{$item->rule->name}} - {{$item->rule->calculate_type}}</td>
-                            <td>{{number_format($item->base_line,2,'.','')}}</td>
-                            <td>{{number_format($item->max_result,2,'.','')}}</td>
-                            <td>{{number_format($item->weight,2,'.','')}}%</td>
-                            <td>{{number_format($item->target,2,'.','')}}</td>
-                            <td><input type="number" class="form-control form-control-sm" value="{{$item->actual}}"
-                                    step="0.01" min="0" onchange="changeValue(this)"></td>
-                            <td>{{number_format($item->ach,2,'.','')}}%</td>
-                            <td>{{number_format($item->cal,2,'.','')}}%</td>
-                        </tr>
-                        @endforeach
-                        @endisset
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th scope="row"></th>
-                            <td></td>
-                            <td></td>
-                            <td>Total :</td>
-                            <td>{{number_format($omg->sum('weight'),2,'.','')}}%</td>
-                            <td></td>
-                            <td></td>
-                            <td>{{number_format($omg->sum('ach'),2,'.','')}}%</td>
-                            <td>{{number_format($omg->sum('cal'),2,'.','')}}%</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+@endforeach
+@endisset
+
+
+
+
 {{-- Calculation Summary --}}
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
@@ -259,15 +139,15 @@
                         <div class="col-md-4 mb-3">
                             <label for="mainRule">Main Rule :</label>
                             <input type="text" class="form-control form-control-sm" id="mainRule"
-                                placeholder="Main Rule" value="{{$mainRule->rule->name}}" readonly>
+                                placeholder="Main Rule" value="" readonly>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="Cal">%Cal :</label>
-                            <input type="text" class="form-control form-control-sm" id="Cal" placeholder="%Cal"
-                                value="{{number_format($mainRule->cal,2,'.','')}}%" readonly>
+                            <input type="text" class="form-control form-control-sm" id="Cal" placeholder="%Cal" value=""
+                                readonly>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
@@ -286,13 +166,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @isset($summary)
-                        @foreach ($summary as $item)
+                        @isset($category)
+                        @foreach ($category as $item)
                         <tr>
-                            <th scope="row">{{$item->name}}</th>
-                            <td>{{number_format($item->weight,2,'.','')}}%</td>
-                            <td>{{number_format($item->ach,2,'.','')}}%</td>
-                            <td>{{number_format($item->total,2,'.','')}}%</td>
+                            <th>{{$item->name}}</th>
+                            <td>0.00%</td>
+                            <td>0.00%</td>
+                            <td>0.00%</td>
                         </tr>
                         @endforeach
                         @endisset
@@ -302,7 +182,7 @@
                             <th scope="row"></th>
                             <td></td>
                             <td></td>
-                            <td>{{number_format($summary->sum('total'),2,'.','')}}%</td>
+                            <td>%</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -311,7 +191,7 @@
     </div>
 </div>
 {{-- Main Rule Conditions --}}
-<div class="col-lg-12">
+{{-- <div class="col-lg-12">
     <div class="main-card mb-3 card">
         <div class="card-body">
             <h5 class="card-title">Main Rule Conditions</h5>
@@ -345,40 +225,34 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 {{-- Button --}}
 <div class="app-page-title">
     <div class="page-title-wrapper">
-        <div class="page-title-heading">
-        </div>
+        <div class="page-title-heading"></div>
         <div class="page-title-actions">
-            <button class="mb-2 mr-2 btn btn-primary" onclick="approve(this)" @if (!$status->contains($evaluate->status))
-                disabled
-                @endif>Approve</button>
-            <button class="mb-2 mr-2 btn btn-warning" onclick="reject(this)" @if (!$status->contains($evaluate->status))
-                disabled
-                @endif>Reject</button>
-            <div class="d-inline-block dropdown">
-
-            </div>
+            <button class="mb-2 mr-2 btn btn-primary" onclick="approve(this)" >Approve</button>
+            <button class="mb-2 mr-2 btn btn-warning" onclick="reject(this)" >Reject</button>
         </div>
     </div>
 </div>
 
 @endsection
+
 @section('second-script')
+<script src="{{asset('assets\js\index.js')}}" defer></script>
+<script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script>
-    var formEvaluate = {
-        form:{!!json_encode($evaluate)!!},
-        next:false
-    }
-    var main = {!!json_encode($mainRule)!!}
+</script>
+<script defer>
+    // variable
+    const evaluate = {!!json_encode($evaluate)!!}
 </script>
 <script src="{{asset('assets\js\kpi\evaluationReview\evaluate.js')}}" defer></script>
 <script>
-    const changeValue = (e) => {
-        formEvaluate.form.evaluate_detail.forEach((element,index) => {
-            if (parseInt(e.offsetParent.parentNode.dataset.id) === element.id) {
+    const changeActualValue = (e) => {
+        evaluateForm.detail.forEach((element,index) => {
+            if (e.offsetParent.parentNode.cells[1].textContent === element.rules.name) {
                 formulaRuleDetail(e,index)
             }
         });
@@ -442,5 +316,53 @@
             toastClear()
         }).finally( () => formEvaluate.next = !formEvaluate.next)
     }
+
+    // const submit = () => {
+    //     window.scrollTo(500, 0)
+    //     console.log(evaluateForm)
+    //     setVisible(true)
+    //     putEvaluateSelf(evaluate.id,evaluateForm).then(res => {
+    //         if (res.status === 200) {
+    //             status.textContent = res.data.data.status
+    //             toast(`Save evaluate-form.`,'success')
+    //             toastClear()
+    //         }
+    //     })
+    //     .catch(error => {
+    //         toast(error.response.data.message,'error')
+    //         toastClear()
+    //         console.log(error.response.data.message)
+    //     })
+    //     .finally( () => {
+    //         setVisible(false)
+    //     })
+    // }
+
+    // const submitToManager = (e) => {
+    //     evaluateForm.next = !evaluateForm.next
+    //     window.scrollTo(500, 0)
+    //     setVisible(true)
+    //     // Save & send to manager 
+    //     putEvaluateSelf(evaluate.id,evaluateForm).then(res => {
+    //         let label_status = document.getElementsByClassName('card-header')[0].querySelector('span')
+    //         if (res.status === 200) {
+    //             label_status.textContent = res.data.data.status
+    //             if (res.data.data.status === status.SUBMITTED) {
+    //                 pageDisable()
+    //             }
+    //             toast(`Sent evaluate-form To Manager.`,'success')
+    //             toastClear()
+    //         }
+    //     })
+    //     .catch(error => {
+    //         toast(error.response.data.message,'error')
+    //         toastClear()
+    //         console.log(error.response.data.message)
+    //     })
+    //     .finally( () => {
+    //         evaluateForm.next = !evaluateForm.next
+    //         setVisible(false)
+    //     })
+    // }
 </script>
 @endsection

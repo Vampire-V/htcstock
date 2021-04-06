@@ -116,8 +116,8 @@
                                 <th>Base line</th>
                                 <th>Max</th>
                                 <th>Target config</th>
-                                <th>weight %</th>
-                                <th>Sort numbers</th>
+                                <th>Weight %</th>
+                                <th>Numbers</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -151,7 +151,7 @@
         <div class="page-title-actions">
             {{-- <button class="mb-2 mr-2 btn btn-success">Save</button> --}}
             {{-- <button class="mb-2 mr-2 btn btn-danger">Delete</button> --}}
-            <a href="{{ URL::previous() }}" class="mb-2 mr-2 btn btn-warning">Go Back</a>
+            <a href="{{route('kpi.template.index')}}" class="mb-2 mr-2 btn btn-warning">Go Back</a>
         </div>
     </div>
 </div>
@@ -323,24 +323,20 @@
     
     const subMitForm = () => {
         let form = document.getElementById('form-ruletemplate')
-        if (!form.checkValidity()) {
-            form.requestSubmit()
-        }
-        let formData = new FormData(form)
+        if (form.checkValidity()) {
+            let formData = new FormData(form)
             formData.append('template_id',template.id)
-        // api post 
-        // get template id in html
-
-        postRuleTemplate(template.id,formData).then(res => {
-            createRow(res.data.data)
-            // close modal
-            document.getElementById('exampleModal').getElementsByClassName("close")[0].click()
-        }).catch(error => {
-            error.response.data.messages.forEach(value => {
-                toast(value,'error')
+            postRuleTemplate(template.id,formData).then(res => {
+                createRow(res.data.data)
+            }).catch(error => {
+                error.response.data.messages.forEach(value => {
+                    toast(value,'error')
+                })
+                toastClear()
+            }).finally( () => {
+                document.getElementById('exampleModal').getElementsByClassName("close")[0].click()
             })
-            toastClear()
-        })
+        }
     }
 
     const createRow = async (data) => {

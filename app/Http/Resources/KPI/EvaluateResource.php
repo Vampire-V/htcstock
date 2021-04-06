@@ -32,7 +32,7 @@ class EvaluateResource extends JsonResource
             'total_weight_kpi' => $this->total_weight_kpi,
             'total_weight_key_task' => $this->total_weight_key_task,
             'total_weight_omg' => $this->total_weight_omg,
-
+            'comment' => $this->comment,
             'created_at' => (string) $this->created_at,
             'updated_at' => (string) $this->updated_at,
             'user' => $this->user,

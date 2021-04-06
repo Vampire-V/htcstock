@@ -5,7 +5,8 @@ namespace App\Http\Controllers\KPI\SelfEvaluation;
 use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\KPI\EvaluateResource;
-use App\Models\KPI\Evaluate;
+use App\Mail\KPI\EvaluationSelfMail;
+use App\Models\KPI\EvaluateDetail;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
@@ -13,7 +14,7 @@ use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use stdClass;
+use Illuminate\Support\Facades\Mail;
 
 class SelfEvaluationController extends Controller
 {
@@ -38,7 +39,7 @@ class SelfEvaluationController extends Controller
     public function index(Request $request)
     {
         $query = $request->all();
-        $selectedYear = collect(empty($request->year) ? date('Y') : $request->year);
+        $selectedYear = empty($request->year) ? date('Y') : $request->year;
         $start_year = date('Y', strtotime('-10 years'));
         try {
             $user = Auth::user();
@@ -78,7 +79,12 @@ class SelfEvaluationController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $evaluate = $this->evaluateService->find($id);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        return new EvaluateResource($evaluate);
     }
 
     /**
@@ -89,36 +95,15 @@ class SelfEvaluationController extends Controller
      */
     public function edit($id)
     {
-        $status = \collect([KPIEnum::draft, KPIEnum::ready]);
         try {
-            $evaluate = $this->evaluateService->findId($id);
-            $evaluate->evaluateDetail->each(fn ($item) => $this->evaluateDetailService->formulaKeyTask($item));
-
-            $kpi = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === "kpi");
-            $key_task = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === "key-task");
-            $omg = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === "omg");
-
-            $mainRule = $evaluate->evaluateDetail->filter(fn ($row) => $row->rule_id === $evaluate->main_rule_id)->first();
-
             $category = $this->categoryService->dropdown();
-            $summary = collect([]);
-            foreach ($category as $key => $cat) {
-                $ruleTemp = $evaluate->template->ruleTemplate->filter(fn ($value) => $value->rule->category->name === $cat->name)->first();
-                $weight = \is_null($ruleTemp) ? 0.00 : $ruleTemp->weight_category;
-
-                $ach = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === $cat->name)->sum('ach');
-                $calsummary = new stdClass;
-                $calsummary->name = $cat->name;
-                $calsummary->weight = $weight;
-                $calsummary->ach = $ach;
-                $calsummary->total =  ($ach * $weight) / 100;
-
-                $summary->push($calsummary);
-            }
+            $f_evaluate = $this->evaluateService->find($id);
+            // $f_evaluate->evaluateDetail->each(fn ($item) => $this->evaluateDetailService->formulaKeyTask($item));
+            $evaluate  = new EvaluateResource($f_evaluate);
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'kpi', 'key_task', 'omg', 'mainRule', 'summary', 'status'));
+        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category'));
     }
 
     /**
@@ -132,11 +117,23 @@ class SelfEvaluationController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->evaluateService->update(['status' => $request->next ? KPIEnum::submit : $request->form['status']], $id);
-            foreach ($request->form['evaluate_detail'] as $value) {
-                $this->evaluateDetailService->update(['actual' => $value['actual']], $value['id']);
-            }
             $evaluate = $this->evaluateService->find($id);
+            foreach ($request->detail as $value) {
+                $evaluate->evaluateDetail()
+                    ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])
+                    ->update(['actual' => $value['actual']]);
+            }
+            $evaluate->status = $request->next ? KPIEnum::submit : KPIEnum::draft;
+            $evaluate->save();
+            if ($request->next) {
+                # send mail to Manger
+                if ($evaluate->user->head_id) {
+                    $manager = $this->userService->all()->where('username',$evaluate->user->head_id)->firstOrFail();
+                    Mail::to($manager->email)->send(new EvaluationSelfMail($evaluate));
+                }else{
+                    // $evaluate->user->head_id is null
+                }
+            }
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

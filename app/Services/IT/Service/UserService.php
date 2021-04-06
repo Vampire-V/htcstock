@@ -89,4 +89,13 @@ class UserService extends BaseService implements UserServiceInterface
             throw $th;
         }
     }
+
+    public function listOfTeamsOfEvaluate($department, $period): Collection
+    {
+        try {
+            return User::with(['evaluate' => fn ($query) => $query->where('period_id', $period)])->where('department_id', $department)->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

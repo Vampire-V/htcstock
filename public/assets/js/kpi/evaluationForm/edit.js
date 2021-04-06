@@ -12,12 +12,12 @@
             allowClear: true
         });
 
-        $("#validationRuleName").select2({
+        $("#rule-name").select2({
             placeholder: 'Select RuleTemplate',
             allowClear: true,
-            dropdownParent: $('#ruleModal')
+            dropdownParent: $('#rule-modal')
         });
-        $("#validationTemplate").val(evaluate.template_id);
+        // $("#validationTemplate").val(evaluate.template_id);
     })
 
     window.addEventListener('load', function () {
@@ -25,8 +25,25 @@
         // let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         // validationForm(forms)
-        displayForEvaluate(evaluate.id)
-        
+        // console.log(evaluate.template_id);
+        getEvaluateForm(staff.id,period.id,evaluate.id)
+        .then( async res => {
+            if (res.status === 200) {
+                await setEvaluateForm(res.data.data)
+                await displayDetail(evaluateForm)
+            }
+        })
+        .catch(error => {
+            console.log(error.response.data.message)
+        })
+        .finally(() => {
+            if (evaluate.status === status.READY || evaluate.status === status.APPROVED) {
+                pageDisable()
+            }else{
+                pageEnable()
+            }
+        })
     }, false);
 
 })();
+var evaluateForm = new EvaluateForm()

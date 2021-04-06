@@ -109,9 +109,9 @@
                         </div>
                         <div class="col-md-1 mb-1">
                             <label for="Year">Year</label>
-                            <select name="year[]" id="validationYear" class="form-control-sm form-control" multiple>
+                            <select name="year" id="validationYear" class="form-control-sm form-control">
                                 @foreach (range(date('Y'), $start_year) as $year)
-                                <option value="{{$year}}" @if ($selectedYear->contains($year))
+                                <option value="{{$year}}" @if ($selectedYear == $year)
                                     selected
                                     @endif>{{$year}}</option>
                                 @endforeach

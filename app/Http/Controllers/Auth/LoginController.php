@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
@@ -32,16 +34,18 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
     protected $evaluateService;
+    protected $userService;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(EvaluateServiceInterface $evaluateServiceInterface)
+    public function __construct(EvaluateServiceInterface $evaluateServiceInterface, UserServiceInterface $userServiceInterface)
     {
         $this->middleware('guest')->except('logout');
         $this->evaluateService = $evaluateServiceInterface;
+        $this->userService = $userServiceInterface;
     }
 
     public function showLoginForm()
@@ -93,10 +97,30 @@ class LoginController extends Controller
     {
         try {
             $evaluate = $this->evaluateService->find($id);
-            Auth::loginUsingId($evaluate->user->id);
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
+
+        
+        switch ($evaluate->status) {
+            case KPIEnum::ready:
+                $user = $evaluate->user;
+                Auth::login($user);
+                return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
+                break;
+            case KPIEnum::draft:
+                $user = $evaluate->user;
+                Auth::login($user);
+                return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
+                break;
+            case KPIEnum::submit:
+                $user = $this->userService->all()->where('username',$evaluate->user->head_id)->firstOrFail();
+                Auth::login($user);
+                return \redirect()->route('kpi.evaluation-review.edit', $evaluate->id);
+                break;
+            default:
+                return abort(404);
+                break;
+        }
     }
 }

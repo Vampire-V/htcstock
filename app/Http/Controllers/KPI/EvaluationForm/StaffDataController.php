@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\KPI\EvaluationForm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ALL\UserResource;
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\TargetPeriod;
+use App\Models\User;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\IT\Interfaces\PositionServiceInterface;
 use App\Services\IT\Interfaces\UserServiceInterface;
@@ -124,5 +126,24 @@ class StaffDataController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $staff
+     * @param  int  $period
+     * @return App\Http\Resources\ALL\UserResource
+     */
+    public function listOfTeamsOfEvaluate($staff,$period)
+    {
+        try {
+            $user = $this->userService->find($staff);
+            $team = $this->userService->listOfTeamsOfEvaluate($user->department_id,$period);
+
+            return new UserResource($team);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

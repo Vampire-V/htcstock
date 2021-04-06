@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('locale')->nullable();
             $table->string('phone')->nullable();
             
-            $table->integer('head_id')->nullable()->comment('id หัวหน้า');
+            $table->string('head_id')->nullable()->comment('id หัวหน้า');
             $table->string('incentive_type', 255)->nullable()->comment('ประเภทแรงจูงใจ Quarter หรือ Month');
             
             $table->foreignId('positions_id')->nullable()->constrained('positions')->comment('Id ของ positions');

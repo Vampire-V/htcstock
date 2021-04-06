@@ -68,7 +68,7 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function findKeyEvaluate(int $user, int $period, int $evaluate)
     {
         try {
-            $evaluation = Evaluate::firstWhere(['user_id' => $user, 'period_id' => $period, 'id' => $evaluate]);
+            $evaluation = Evaluate::with(['evaluateDetail'])->firstWhere(['user_id' => $user, 'period_id' => $period, 'id' => $evaluate]);
             return \is_null($evaluation) ? false : $evaluation;
         } catch (\Throwable $th) {
             throw $th;

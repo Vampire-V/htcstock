@@ -192,11 +192,41 @@ function toastClear() {
     }, 5000)
 }
 
-var createInput = (element, type, classList = '', name = '', value = '', id = '') => {
+function setVisible(visible) {
+    var intervalId = window.setInterval(function () {
+        if (document.getElementsByTagName('body')[0] !== undefined) {
+            window.clearInterval(intervalId);
+        }
+    }, 0);
+    document.querySelector('#loading').style.display = visible ? 'block' : 'none';
+}
+
+var pageDisable = (elements = '') => {
+    let inner_btn = document.getElementsByClassName('app-main__inner')[0].querySelectorAll(elements === '' ? `button,select,input` : elements)
+    for (let index = 0; index < inner_btn.length; index++) {
+        const element = inner_btn[index];
+        element.disabled = true
+    }
+}
+
+var pageEnable = () => {
+    let inner_btn = document.getElementsByClassName('app-main__inner')[0].querySelectorAll('button,select,input')
+    for (let index = 0; index < inner_btn.length; index++) {
+        const element = inner_btn[index];
+        element.disabled = false
+    }
+}
+
+var newInput = (type, classList = '', name = '', value = '', id = '', nameMethod = '') => {
+    let element = document.createElement(`input`)
     element.setAttribute(`type`, type)
     element.setAttribute(`name`, name)
     element.setAttribute(`id`, id)
     element.setAttribute(`value`, value)
+    if (nameMethod !== '') {
+        element.setAttribute(`onchange`, nameMethod)
+    }
+
     if (type === 'number') {
         element.setAttribute(`min`, 0)
         element.setAttribute(`step`, 0.01)
@@ -212,39 +242,8 @@ var createInput = (element, type, classList = '', name = '', value = '', id = ''
     return element
 }
 
-var createOption = (element, value = '', name = '') => {
-    element.value = value
-    element.textContent = name
-    return element
-}
-
-var sweetalert = (title, text) => {
-    let timerInterval
-    Swal.fire({
-        title: text,
-        html: title,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: () => {
-            Swal.showLoading()
-            timerInterval = setInterval(() => {
-                // const content = Swal.getContent()
-                // if (content) {
-                //     const b = content.querySelector('b')
-                //     if (b) {
-                //         b.textContent = Swal.getTimerLeft()
-                //     }
-                // }
-            }, 100)
-        },
-        willClose: () => {
-            clearInterval(timerInterval)
-        }
-    }).then((result) => {
-        /* Read more about handling dismissals below */
-        if (result.dismiss === Swal.DismissReason.timer) {
-            console.log('I was closed by the timer')
-        }
-    })
-}
-
+var setAttributes = (el, attrs) => {
+    for(var key in attrs) {
+      el.setAttribute(key, attrs[key]);
+    }
+  }

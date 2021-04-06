@@ -160,28 +160,27 @@ class UsersController extends Controller
                 return back();
             }
 
-            $response = Http::retry(2, 100)->get(ENV('USERS_UPDATE'))->json();
+            $response = Http::get(ENV('USERS_UPDATE'))->json();
             if (!\is_null($response)) {
-                
+
                 foreach ($response as $value) {
-                    $user = User::firstOrNew(['username' => $value['username']]);
-                    $department = Department::where('process_id',$value['department_id'])->first();
-                    $division = Division::where('division_id',$value['division_id'])->first();
 
-                    if (!$user) {
-                        $request->session()->flash('error', 'error update username' . $value['username']);
-                        return back();
-                    }
-
-                    $user->name = $value['name'];
-                    $user->email = $value['email'];
-                    if (!$user->exists) {
+                    $user = User::where('username', $value['username'])->first();
+                    if (\is_null($user)) {
+                        $user = new User;
                         $user->password = Hash::make(\substr($value['email'], 0, 1) . $value['username']);
                     }
-                    $user->department_id = $department ? $department->id : null;
-                    $user->divisions_id = $division ? $division->id : null;
+
+                    $department = Department::where('process_id', $value['department_id'])->first();
+                    $division = Division::where('division_id', $value['division_id'])->first();
+
+                    $user->username = $value['username'];
+                    $user->name = $value['name'];
+                    $user->email = $value['email'];
+                    $user->department_id = \is_null($department) ? null : $department->id;
+                    $user->divisions_id = \is_null($division) ? null : $division->id;
+                    $user->head_id = $value['leader'];
                     $user->save();
-                    // $user->roles()->attach($role);
                 }
                 $request->session()->flash('success', 'has been update user');
             } else {

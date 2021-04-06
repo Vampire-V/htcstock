@@ -27,4 +27,6 @@ interface UserServiceInterface
     public function division(...$division_id): Collection;
 
     public function user($id): User;
+
+    public function listOfTeamsOfEvaluate($department, $period): Collection;
 }

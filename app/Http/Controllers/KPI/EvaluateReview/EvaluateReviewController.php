@@ -98,36 +98,15 @@ class EvaluateReviewController extends Controller
      */
     public function edit($id)
     {
-        $status = \collect([KPIEnum::submit, KPIEnum::approved]);
         try {
-            $evaluate = $this->evaluateService->findId($id);
-            $evaluate->evaluateDetail->each(fn ($item) => $this->evaluateDetailService->formulaKeyTask($item));
-
-            $kpi = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === "kpi");
-            $key_task = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === "key-task");
-            $omg = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === "omg");
-
-            $mainRule = $evaluate->evaluateDetail->filter(fn ($row) => $row->rule_id === $evaluate->main_rule_id)->first();
-
             $category = $this->categoryService->dropdown();
-            $summary = collect([]);
-            foreach ($category as $key => $cat) {
-                $ruleTemp = $evaluate->template->ruleTemplate->filter(fn ($value) => $value->rule->category->name === $cat->name)->first();
-                $weight = \is_null($ruleTemp) ? 0.00 : $ruleTemp->weight_category;
-
-                $ach = $evaluate->evaluateDetail->filter(fn ($value) => $value->rule->category->name === $cat->name)->sum('ach');
-                $calsummary = new stdClass;
-                $calsummary->name = $cat->name;
-                $calsummary->weight = $weight;
-                $calsummary->ach = $ach;
-                $calsummary->total =  ($ach * $weight) / 100;
-
-                $summary->push($calsummary);
-            }
+            $f_evaluate = $this->evaluateService->find($id);
+            // $f_evaluate->evaluateDetail->each(fn ($item) => $this->evaluateDetailService->formulaKeyTask($item));
+            $evaluate  = new EvaluateResource($f_evaluate);
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'kpi', 'key_task', 'omg', 'mainRule', 'summary', 'status'));
+        return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'category'));
     }
 
     /**

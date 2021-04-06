@@ -43,7 +43,7 @@ class BaseService implements BaseServiceInterface
     public function find($id): Model
     {
         try {
-            return $this->model->find($id);
+            return $this->model->findOrFail($id);
         } catch (\Throwable $th) {
             throw $th;
         }

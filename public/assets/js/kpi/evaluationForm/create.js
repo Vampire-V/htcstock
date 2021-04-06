@@ -12,12 +12,11 @@
             allowClear: true
         });
 
-        $("#validationRuleName").select2({
+        $("#rule-name").select2({
             placeholder: 'Select RuleTemplate',
             allowClear: true,
-            dropdownParent: $('#ruleModal')
+            dropdownParent: $('#rule-modal')
         });
-        
     })
 
     window.addEventListener('load', function () {
@@ -28,3 +27,4 @@
     }, false);
 
 })();
+var evaluateForm = new EvaluateForm()

@@ -5,8 +5,7 @@ namespace App\Http\Controllers\KPI\EvaluationForm;
 use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\KPI\EvaluateResource;
-use App\Mail\KPI\EvaluationFormMail;
-use App\Models\KPI\EvaluateDetail;
+use App\Mail\KPI\EvaluationSelfMail;
 use App\Models\KPI\RuleCategory;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\IT\Interfaces\PositionServiceInterface;
@@ -108,7 +107,6 @@ class EvaluationFormController extends Controller
     {
         DB::beginTransaction();
         try {
-            // check Duplicate
             $evaluate = $this->evaluateService->isDuplicate($staff, $period);
             if (!$evaluate) {
                 $evaluate = $this->evaluateService->create(
@@ -134,36 +132,27 @@ class EvaluationFormController extends Controller
                 foreach ($request->detail as $key => $value) {
                     $evaluate_id = $evaluate->id;
                     $rule_id = $value['rule_id'];
-                    $target = $value['target_config'];
-                    $actual = 0;
+                    $target = $value['target'];
                     $weight = $value['weight'];
-                    if ($value['rules']['categorys']['name'] === 'kpi') {
-                        $weight_category = $request->total_weight_kpi;
-                    }
-                    if ($value['rules']['categorys']['name'] === 'key-task') {
-                        $weight_category = $request->total_weight_key_task;
-                    }
-                    if ($value['rules']['categorys']['name'] === 'omg') {
-                        $weight_category = $request->total_weight_omg;
-                    }
+                    $weight_category = $value['weight_category'];
                     $base_line = $value['base_line'];
-                    $max_result = $value['max_result'];
-                    $attr = compact("evaluate_id", "rule_id", "target", "actual", "weight", "weight_category", "base_line", "max_result");
+                    $max_result = $value['max'];
+                    $attr = compact("evaluate_id", "rule_id", "target", "weight", "weight_category", "base_line", "max_result");
                     $this->evaluateDetailService->create($attr);
                 }
-                
                 if ($request->next) {
                     # send mail to staff
-                    Mail::to($evaluate->user->email)->send(new EvaluationFormMail($evaluate));
-                    // \dd(Mail::failures());
+                    Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
                 }
+                Log::notice("User : " . \auth()->user()->id . " = Create evaluate form : id = " . $evaluate->id);
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::emergency("Exception Message: ".$th->getMessage()." File: " . $th->getFile() . " Line: " . $th->getLine());
+            Log::error("Exception Message: " . $th->getMessage() . " File: " . $th->getFile() . " Line: " . $th->getLine());
             throw $th;
         }
         DB::commit();
+        
         return new EvaluateResource($evaluate);
     }
 
@@ -198,11 +187,11 @@ class EvaluationFormController extends Controller
             $templates = $this->templateService->dropdown();
 
             $evaluate = $this->evaluateService->find($evaluate);
-            $isView = $evaluate->status === KPIEnum::ready ? true : false;
+            // $isView = $evaluate->status === KPIEnum::ready ? true : false;
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \view('kpi.EvaluationForm.edit', \compact('user', 'period', 'templates', 'category', 'evaluate', 'isView'));
+        return \view('kpi.EvaluationForm.edit', \compact('user', 'period', 'templates', 'category', 'evaluate'));
     }
 
     /**
@@ -233,52 +222,31 @@ class EvaluationFormController extends Controller
                 $evaluate->total_weight_omg = $request->total_weight_omg;
                 $evaluate->save();
 
-                // Insert or Update Detail
+                $evaluate->evaluateDetail()->delete();
+                // Insert new Detail
                 foreach ($request->detail as $key => $value) {
+                    $evaluate_id = $evaluate->id;
                     $rule_id = $value['rule_id'];
                     $target = $value['target'];
                     $actual = 0;
                     $weight = $value['weight'];
-                    if ($value['rules']['categorys']['name'] === 'kpi') {
-                        $weight_category = $request->total_weight_kpi;
-                    }
-                    if ($value['rules']['categorys']['name'] === 'key-task') {
-                        $weight_category = $request->total_weight_key_task;
-                    }
-                    if ($value['rules']['categorys']['name'] === 'omg') {
-                        $weight_category = $request->total_weight_omg;
-                    }
+                    $weight_category = $value['weight_category'];
                     $base_line = $value['base_line'];
-                    $max_result = $value['max_result'];
+                    $max_result = $value['max'];
 
-                    // success return 1
-                    if (!isset($value['id'])) {
-                        $evaluate_id = $evaluate->id;
-                        $attr = compact("evaluate_id", "rule_id", "target", "actual", "weight", "weight_category", "base_line", "max_result");
-                        $this->evaluateDetailService->create($attr);
-                    } else {
-                        $attr = compact("rule_id", "target", "actual", "weight", "weight_category", "base_line", "max_result");
-                        $this->evaluateDetailService->updateForEvaluate($attr, $evaluate->id, $rule_id);
-                    }
-                }
-
-                // Remove row
-                if (isset($request->remove)) {
-                    foreach ($request->remove as $key => $value) {
-                        if (isset($value['id'])) {
-                            $this->evaluateDetailService->destroy($value['id']);
-                        }
-                    }
+                    
+                    $attr = compact("evaluate_id", "rule_id", "target", "actual", "weight", "weight_category", "base_line", "max_result");
+                    $evaluate->evaluateDetail()->create($attr);
                 }
 
                 if ($request->next) {
                     # send mail to staff
-                    Mail::to($evaluate->user->email)->send(new EvaluationFormMail($evaluate));
+                    Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
                 }
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::emergency("Exception Message: ".$th->getMessage()." File: " . $th->getFile() . " Line: " . $th->getLine());
+            Log::error("Exception Message: " . $th->getMessage() . " File: " . $th->getFile() . " Line: " . $th->getLine());
             throw $th;
         }
         DB::commit();

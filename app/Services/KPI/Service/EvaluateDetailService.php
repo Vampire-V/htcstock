@@ -43,6 +43,7 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
     {
         try {
             $row = EvaluateDetail::firstWhere(['evaluate_id' => $evaluate, 'rule_id' => $rule_id]);
+            \dd($row, $datas, $evaluate, $rule_id);
             return EvaluateDetail::where(['id' => $row->id])->update($datas);
         } catch (\Throwable $th) {
             throw $th;
@@ -62,7 +63,7 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
         if ($object->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
             $object->ach = $object->actual <= $object->target ? 100 : 0;
         }
-        
+
         if ($object->ach < 70) {
             $object->cal = 0;
         } else if ($object->ach > $object->base_line) {
@@ -70,7 +71,7 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
         } else {
             $object->cal = $object->ach * $object->weight / 100;
         }
-        
+
         return $object;
     }
 }

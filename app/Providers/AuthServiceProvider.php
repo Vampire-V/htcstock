@@ -42,7 +42,7 @@ class AuthServiceProvider extends ServiceProvider
             // $user->hasRole('admin') True
             return $user->hasRole(UserEnum::SUPERADMIN);
         });
-
+            // Legal permission
         Gate::define('for-adminlegal', function ($user) {
             return $user->hasRole(UserEnum::ADMINLEGAL);
         });
@@ -50,10 +50,13 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasRole(UserEnum::USERLEGAL);
         });
         
+        Gate::define('admin-manager-kpi', function ($user) {
+            return $user->hasInRole(['admin-kpi','manager-kpi']);
+        });
         try {
             Role::get()->map(function ($role) {
                 Gate::define($role->slug, function ($user) use ($role) {
-                    return $user->hasRole($role);
+                    return $user->hasRole($role->slug);
                 });
             });
             Permission::get()->map(function ($permission) {
@@ -61,13 +64,12 @@ class AuthServiceProvider extends ServiceProvider
                     return $user->permissionsInRole($permission);
                 });
             });
-
         } catch (\Throwable $th) {
             report($th);
             return false;
         }
 
-        // Legal permission
+        
         
     }
 }

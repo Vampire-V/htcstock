@@ -246,4 +246,9 @@ var setAttributes = (el, attrs) => {
     for(var key in attrs) {
       el.setAttribute(key, attrs[key]);
     }
-  }
+}
+
+var round = (num) => {
+    var m = Number((Math.abs(num) * 100).toPrecision(15));
+    return Math.round(m) / 100 * Math.sign(num);
+}

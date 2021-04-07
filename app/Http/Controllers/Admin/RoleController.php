@@ -8,6 +8,7 @@ use App\Services\IT\Interfaces\RoleServiceInterface;
 use App\Models\Role;
 use App\Services\IT\Interfaces\SystemServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
@@ -57,12 +58,26 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required',
+            'permission_name' => 'required|nullable',
+        ]);
+        DB::beginTransaction();
         try {
-            $this->rolesService->create($request->except(['_token'])) ? $request->session()->flash('success', 'create permission success') : $request->session()->flash('error', 'create permission fail!');
-            return \redirect()->route('admin.roles.index');
+            $role = $this->rolesService->create(['name' => $request->name, 'slug' => $request->slug]);
+            if ($role->exists) {
+                $role->permissions()->sync($request->permission_name);
+                $request->session()->flash('success', 'create roles success');
+            } else {
+                $request->session()->flash('error', 'create roles fail!');
+            }
         } catch (\Throwable $th) {
+            DB::rollBack();
             throw $th;
         }
+        DB::commit();
+        return \redirect()->route('admin.roles.index');
     }
 
     /**
@@ -105,8 +120,10 @@ class RoleController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'slug' => 'required',
             'permission_name' => 'required|nullable',
         ]);
+        DB::beginTransaction();
         try {
             $role = $this->rolesService->find($id);
             if ($this->rolesService->update([$request->name], $id)) {
@@ -116,10 +133,13 @@ class RoleController extends Controller
                 $request->session()->flash('error', 'update roles fail!');
             }
             // $this->rolesService->update($request->except(['_token','_method']),$id) ? $request->session()->flash('success','update roles success') : $request->session()->flash('error','update roles fail!');
-            return \redirect()->route('admin.roles.edit', $id);
+
         } catch (\Throwable $th) {
+            DB::rollBack();
             throw $th;
         }
+        DB::commit();
+        return \redirect()->back();
     }
 
     /**

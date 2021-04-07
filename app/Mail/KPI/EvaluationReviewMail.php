@@ -3,6 +3,8 @@
 namespace App\Mail\KPI;
 
 use App\Models\KPI\Evaluate;
+use App\Models\User;
+use App\Services\IT\Interfaces\UserServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -36,6 +38,7 @@ class EvaluationReviewMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.kpi.evaluate-review')->with(['evaluate' => $this->evaluate]);
+        $manager = User::where('username',$this->evaluate->user->head_id)->firstOrFail();
+        return $this->markdown('emails.kpi.evaluate-review')->with(['evaluate' => $this->evaluate,'manager' => $manager]);
     }
 }

@@ -181,7 +181,7 @@ var displayDetail = (evaluateForm) => {
                     row.cells[2].textContent = achForSum[index].toFixed(2) + '%'
                     let total = (parseFloat(achForSum[index]) * parseFloat(weightForSum[index]) / 100)
                     row.cells[3].textContent = total.toFixed(2) + '%'
-                    sum_total += total
+                    sum_total += parseFloat(total)
                 }
                 table.tFoot.lastElementChild.cells[3].textContent = sum_total.toFixed(2) + '%'
             }

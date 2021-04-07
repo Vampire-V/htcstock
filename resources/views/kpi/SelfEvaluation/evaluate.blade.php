@@ -261,7 +261,6 @@
 
     const submit = () => {
         window.scrollTo(500, 0)
-        console.log(evaluateForm)
         setVisible(true)
         putEvaluateSelf(evaluate.id,evaluateForm).then(res => {
             if (res.status === 200) {

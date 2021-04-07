@@ -34,18 +34,25 @@
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Menu</li>
+                {{-- admin manager --}}
+                @can('admin-manager-kpi')
                 <li>
                     <a href="{{route('kpi.dashboard')}}" class="{{Helper::isActive('kpi/dashboard*')}}">
                         <i class="metismenu-icon pe-7s-monitor"></i>
                         Dashboard
                     </a>
                 </li>
+                @endcan
+                {{-- end admin manager --}}
                 <li>
-                    <a href="{{route('kpi.self-evaluation.index')}}" class="{{Helper::isActive('kpi/self-evaluation*')}}">
+                    <a href="{{route('kpi.self-evaluation.index')}}"
+                        class="{{Helper::isActive('kpi/self-evaluation*')}}">
                         <i class="metismenu-icon"></i>
                         Self Evaluation
                     </a>
                 </li>
+                {{-- admin --}}
+                @can('admin-kpi')
                 <li>
                     <a href="{{route('kpi.rule-list.index')}}" class="{{Helper::isActive('kpi/rule-list*')}}">
                         <i class="metismenu-icon"></i>
@@ -64,20 +71,13 @@
                         Evaluation Form
                     </a>
                 </li>
-                {{-- <li>
-                    <a href="{{route('kpi.set-target.index')}}" class="{{Helper::isActive('kpi/set-target*')}}">
-                        <i class="metismenu-icon"></i>
-                        Set Target
-                    </a>
-                </li>
+                @endcan
+                {{-- end admin --}}
+                {{-- admin manager --}}
+                @can('admin-manager-kpi')
                 <li>
-                    <a href="{{route('kpi.set-actual.index')}}" class="{{Helper::isActive('kpi/set-actual*')}}">
-                        <i class="metismenu-icon"></i>
-                        Set Actual
-                    </a>
-                </li> --}}
-                <li>
-                    <a href="{{route('kpi.evaluation-review.index')}}" class="{{Helper::isActive('kpi/evaluation-review*')}}">
+                    <a href="{{route('kpi.evaluation-review.index')}}"
+                        class="{{Helper::isActive('kpi/evaluation-review*')}}">
                         <i class="metismenu-icon"></i>
                         Evaluation Review
                     </a>
@@ -88,6 +88,8 @@
                         Report
                     </a>
                 </li>
+                @endcan
+                {{-- end admin manager --}}
             </ul>
         </div>
     </div>

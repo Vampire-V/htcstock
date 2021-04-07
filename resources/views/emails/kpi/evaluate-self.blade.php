@@ -1,10 +1,10 @@
 @component('mail::message')
-# KPI Request evaluate
+# KPI evaluate
 
-KPI evaluate self.  : {{$evaluate->user->email}}
+KPI self evaluate of {{$evaluate->user->email}}
 
 @component('mail::button', ['url' => route('kpi.evaluation.verify',$evaluate->id)])
-Go to KPI Evaluate Form
+Go to KPI Evaluate Self
 @endcomponent
 
 {{-- Thanks,<br> --}}

@@ -272,16 +272,14 @@
             showCancelButton: true
         })
         if (text) {
-            formEvaluate.form.comment = text
-            putEvaluateReview(formEvaluate.form.id,formEvaluate).then(res => {
+            evaluateForm.comment = text
+            window.scrollTo(500, 0)
+            setVisible(true)
+            putEvaluateReview(evaluate.id,evaluateForm).then(res => {
                 let status = document.getElementsByClassName('card-header')[0].querySelector('span')
                 if (res.status === 200) {
                     status.textContent = res.data.data.status
-                    for (let index = 0; index < e.parentNode.children.length; index++) {
-                        const element = e.parentNode.children[index];
-                        element.setAttribute('disabled',true)
-                    }
-                    window.scrollTo(500, 0)
+                    pageDisable()
                     toast(`Evaluate-review Reject.`,'success')
                     toastClear()
                 }
@@ -289,24 +287,23 @@
             .catch(error => {
                 toast(error.response.data.message,'error')
                 toastClear()
-            }).finally()
+            })
+            .finally(() => setVisible(false))
         }
         
     }
 
     const approve = (e) => {
-        formEvaluate.next = !formEvaluate.next
+        evaluateForm.next = !evaluateForm.next
         // Save & approved
         // /kpi/evaluation-review/update
-        putEvaluateReview(formEvaluate.form.id,formEvaluate).then(res => {
+        window.scrollTo(500, 0)
+        setVisible(true)
+        putEvaluateReview(evaluate.id,evaluateForm).then(res => {
             let status = document.getElementsByClassName('card-header')[0].querySelector('span')
             if (res.status === 200) {
                 status.textContent = res.data.data.status
-                for (let index = 0; index < e.parentNode.children.length; index++) {
-                    const element = e.parentNode.children[index];
-                    element.setAttribute('disabled',true)
-                }
-                window.scrollTo(500, 0)
+                pageDisable()
                 toast(`evaluate-review Approved.`,'success')
                 toastClear()
             }
@@ -314,7 +311,11 @@
         .catch(error => {
             toast(error.response.data.message,'error')
             toastClear()
-        }).finally( () => formEvaluate.next = !formEvaluate.next)
+        })
+        .finally( () => {
+            evaluateForm.next = !evaluateForm.next
+            setVisible(false)
+        })
     }
 
     // const submit = () => {

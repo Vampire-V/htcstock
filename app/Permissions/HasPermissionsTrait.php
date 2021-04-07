@@ -60,6 +60,12 @@ trait HasPermissionsTrait
         return false;
     }
 
+    public function hasInRole($roles)
+    {
+        $role = $this->roles()->whereIn('slug', $roles)->get();
+        return $role->count() > 0 ? \true : \false;
+    }
+
     protected function hasPermission($permission)
     {
         // \dd($this->permissions, 'sdf');

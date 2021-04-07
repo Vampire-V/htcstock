@@ -32,14 +32,25 @@
                     @method('PUT')
                     <div class="form-group row">
                         <label for="name"
-                            class="col-md-3 col-form-label text-md-right">{{ __('Name') }}</label>
-                        <div class="col-md-4">
+                            class="col-md-2 col-form-label text-md-right">{{ __('Name') }}</label>
+                        <div class="col-md-3">
                             <input id="name" type="text"
                                 class="form-control-sm form-control @error('name') is-invalid @enderror"
                                 name="name" value="{{$role->name}}"  required autocomplete="name"
                                 autofocus>
 
                             @error('name')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        <label for="slug" class="col-md-2 col-form-label text-md-right">{{ __('Slug') }}</label>
+                        <div class="col-md-3">
+                            <input id="slug" type="text" class="form-control-sm form-control @error('slug') is-invalid @enderror"
+                                name="slug" value="{{$role->slug}}" required autocomplete="slug" autofocus readonly>
+
+                            @error('slug')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>

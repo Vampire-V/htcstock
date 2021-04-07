@@ -5,6 +5,7 @@ namespace App\Http\Controllers\KPI\EvaluateReview;
 use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\KPI\EvaluateResource;
+use App\Mail\KPI\EvaluationReviewMail;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
@@ -13,6 +14,7 @@ use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use stdClass;
 
 class EvaluateReviewController extends Controller
@@ -120,11 +122,22 @@ class EvaluateReviewController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->evaluateService->update(['comment' => $request->form['comment'], 'status' => $request->next ? KPIEnum::approved : KPIEnum::draft], $id);
-            foreach ($request->form['evaluate_detail'] as $value) {
-                $this->evaluateDetailService->update(['actual' => $value['actual']], $value['id']);
-            }
             $evaluate = $this->evaluateService->find($id);
+            foreach ($request->detail as $value) {
+                $evaluate->evaluateDetail()
+                    ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])
+                    ->update(['actual' => $value['actual']]);
+            }
+            $evaluate->status = $request->next ? KPIEnum::approved : KPIEnum::draft;
+            $evaluate->comment = $request->comment;
+            $evaluate->save();
+            if ($evaluate->status === KPIEnum::approved) {
+                # send mail to approved
+            }
+            if ($evaluate->status === KPIEnum::draft) {
+                # send mail to reject
+                Mail::to($evaluate->user->email)->send(new EvaluationReviewMail($evaluate));
+            }
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

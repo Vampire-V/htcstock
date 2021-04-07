@@ -180,11 +180,14 @@ var displayDetail = (evaluateForm) => {
                     row.cells[1].textContent = weightForSum[index].toFixed(2) + '%'
                     row.cells[2].textContent = achForSum[index].toFixed(2) + '%'
                     let total = (parseFloat(achForSum[index]) * parseFloat(weightForSum[index]) / 100)
+
                     row.cells[3].textContent = total.toFixed(2) + '%'
                     sum_total += parseFloat(total)
                 }
+                // sumTotalCalculationSummary(body_cal)
                 table.tFoot.lastElementChild.cells[3].textContent = sum_total.toFixed(2) + '%'
             }
+
         }
         if (window.location.pathname.search("evaluation-form") > 0) {
             if (table.id) {
@@ -266,6 +269,21 @@ var displayDetail = (evaluateForm) => {
 
     }
 
+}
+
+var sumTotalCalculationSummary = (table) => {
+    let total = 0.00
+    for (let index = 0; index < table.length; index++) {
+        const row = table[index]
+        total += parseFloat(row.cells[row.childElementCount - 1].textContent)
+        // row.cells[1].textContent = weightForSum[index].toFixed(2) + '%'
+        // row.cells[2].textContent = achForSum[index].toFixed(2) + '%'
+        // let total = (parseFloat(achForSum[index]) * parseFloat(weightForSum[index]) / 100)
+        console.log(parseFloat(row.cells[row.childElementCount - 1].textContent));
+        // row.cells[3].textContent = total.toFixed(2) + '%'
+        // sum_total += parseFloat(total)
+    }
+    console.log(total);
 }
 
 var changeValueRule = (e) => {
@@ -364,14 +382,13 @@ var formulaRuleDetail = (e, key) => {
         let body = table.tBodies[0].rows
         let total_summary = 0.00
         for (let index = 0; index < body.length; index++) {
-            const element = body[index];
-            let total_text = element.cells[element.childElementCount - 1].textContent
+            const element = body[index]
             if (element.firstElementChild.textContent === evaluateForm.detail[key].rules.categorys.name) {
                 let weight = element.cells[1].textContent.substring(0, element.cells[1].textContent.length - 1)
                 element.cells[2].textContent = parseFloat(sumAch).toFixed(2) + '%'
                 element.cells[3].textContent = (parseFloat(sumAch) * parseFloat(weight) / 100).toFixed(2) + '%'
             }
-            total_summary += parseFloat(total_text.substring(0, total_text.length - 1))
+            total_summary += parseFloat(element.cells[3].textContent)
         }
         table.tFoot.rows[0].cells[table.tFoot.rows[0].childElementCount - 1].textContent = total_summary.toFixed(2) + '%'
 

@@ -12,7 +12,7 @@
         // validationForm(forms)
         evaluateForm = await setEvaluate(evaluate)
         await displayDetail(evaluateForm)
-        if (evaluate.status === status.READY && evaluate.status === status.DRAFT) {
+        if (evaluate.status !== status.SUBMITTED) {
             pageDisable()
         }
     }, false);

@@ -47,10 +47,10 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth', 
     Route::delete('{user}/removesystem', 'UsersController@removesystem')->name('users.removesystem');
     Route::post('uploadfileequipment', 'AccessoriesController@uploadfileequipment')->name('uploadfileequipment');
 });
-
-require __DIR__.'/itstock.php';
-require __DIR__.'/contractlegal.php';
-require __DIR__.'/kpi.php';
+Route::post('upload', 'UploadController@store');
+require __DIR__ . '/itstock.php';
+require __DIR__ . '/contractlegal.php';
+require __DIR__ . '/kpi.php';
 
 
 
@@ -58,8 +58,3 @@ require __DIR__.'/kpi.php';
 Route::namespace('Accounts')->prefix('accounts')->name('accounts.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', 'HomeController@index')->name('dashboard');
 });
-
-
-
-
-

@@ -2,6 +2,14 @@
 @section('sidebar')
 @include('includes.sidebar.kpi');
 @stop
+@section('style')
+<style>
+    .app-main,
+    div #loading {
+        background-position: 50% 2%;
+    }
+</style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -79,13 +87,14 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        {{-- <button class="mb-2 mr-2 btn btn-danger" onclick="deleteRuleTemp()">Delete Selected
-                            Rule</button>
-                        <button class="mb-2 mr-2 btn btn-primary" data-toggle="modal" data-target="#ruleModal">Add
-                            new rule</button> --}}
+                        <button class="mb-2 mr-2 btn-transition btn btn-outline-focus" data-toggle="modal"
+                            data-target="#modal-import"><span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="pe-7s-file"></i>
+                                Import
+                            </span></button>
                         <a href="{{route('kpi.rule-list.create')}}" class="btn-shadow btn btn-info mb-2 mr-2">
                             <span class="btn-icon-wrapper pr-2 opacity-7">
-                                <i class="fa fa-business-time fa-w-20"></i>
+                                <i class="pe-7s-plus"></i>
                             </span>
                             Create
                         </a>
@@ -139,7 +148,76 @@
         </div>
     </div>
 </div>
+
+{{-- Modal --}}
+<div class="modal fade" id="modal-import" tabindex="-1" role="dialog" aria-labelledby="modal-import-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-import-label">Import Rule</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-import-rule">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="rule-name">Template file :</label>&nbsp;
+                                <a href="{{asset($template)}}" target="_blank" rel="noopener noreferrer"><i
+                                        class="pe-7s-cloud-download"> </i></a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group"><label for="rules">Import data to system
+                                    :</label>
+                                <input type="file" class="filepond" name="rules" id="rules" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitFile(this)">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('second-script')
+<script src="{{asset('assets\js\index.js')}}" defer></script>
+<script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script src="{{asset('assets\js\kpi\rule\index.js')}}" defer></script>
+<script>
+    const inputElement = document.querySelector('input[type="file"]');
+    const pond = FilePond.create( inputElement );
+    FilePond.setOptions({
+        server: {
+            process:'/upload',
+            headers: {
+                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+            }
+        }
+    })
+
+    var submitFile = (e) => {
+        let path = document.querySelector('input[name="rules"]').value
+        e.offsetParent.offsetParent.offsetParent.getElementsByClassName("close")[0].click()
+        if (path) {
+            setVisible(true)
+            postRuleUpload({file:path})
+            .then(res => {
+                console.log(res);
+            })
+            .catch(error => {
+                console.log(error.response.message);
+            })
+            .finally(() => setVisible(false))
+        }
+        
+    }
+</script>
 @endsection

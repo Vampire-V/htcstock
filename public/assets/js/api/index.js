@@ -133,3 +133,10 @@ const putEvaluateReview = (review_evaluation, form) => axios({
     url: `/kpi/evaluation-review/${review_evaluation}`,
     data: form
 })
+
+const postRuleUpload = (form) => axios({
+    method: 'POST',
+    responseType: 'json',
+    url: `/kpi/rule-list/upload`,
+    data: form
+})

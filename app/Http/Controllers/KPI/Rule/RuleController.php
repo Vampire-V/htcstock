@@ -12,6 +12,7 @@ use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\TargetUnitServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class RuleController extends Controller
 {
@@ -36,14 +37,14 @@ class RuleController extends Controller
         $query = $request->all();
         $searchRuleName = $request->ruleName;
         $selectedCategory = collect($request->category_id);
+        $template = Storage::url('kpi/template/template-rule.xlsx');
         try {
             $category = $this->ruleCategoryService->dropdown();
             $rules = $this->ruleService->filter($request);
         } catch (\Throwable $th) {
             throw $th;
         }
-
-        return \view('kpi.RuleList.index', \compact('rules', 'category', 'query', 'searchRuleName', 'selectedCategory'));
+        return \view('kpi.RuleList.index', \compact('rules', 'category', 'query', 'searchRuleName', 'selectedCategory', 'template'));
     }
 
     /**
@@ -166,5 +167,15 @@ class RuleController extends Controller
         }
 
         return RuleResource::collection($rule);
+    }
+
+    public function upload(Request $request)
+    {
+        try {
+            //code...
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        return \true;
     }
 }

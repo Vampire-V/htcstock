@@ -242,8 +242,6 @@
 @section('second-script')
 <script src="{{asset('assets\js\index.js')}}" defer></script>
 <script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
-<script>
-</script>
 <script defer>
     // variable
     const evaluate = {!!json_encode($evaluate)!!}
@@ -317,53 +315,5 @@
             setVisible(false)
         })
     }
-
-    // const submit = () => {
-    //     window.scrollTo(500, 0)
-    //     console.log(evaluateForm)
-    //     setVisible(true)
-    //     putEvaluateSelf(evaluate.id,evaluateForm).then(res => {
-    //         if (res.status === 200) {
-    //             status.textContent = res.data.data.status
-    //             toast(`Save evaluate-form.`,'success')
-    //             toastClear()
-    //         }
-    //     })
-    //     .catch(error => {
-    //         toast(error.response.data.message,'error')
-    //         toastClear()
-    //         console.log(error.response.data.message)
-    //     })
-    //     .finally( () => {
-    //         setVisible(false)
-    //     })
-    // }
-
-    // const submitToManager = (e) => {
-    //     evaluateForm.next = !evaluateForm.next
-    //     window.scrollTo(500, 0)
-    //     setVisible(true)
-    //     // Save & send to manager 
-    //     putEvaluateSelf(evaluate.id,evaluateForm).then(res => {
-    //         let label_status = document.getElementsByClassName('card-header')[0].querySelector('span')
-    //         if (res.status === 200) {
-    //             label_status.textContent = res.data.data.status
-    //             if (res.data.data.status === status.SUBMITTED) {
-    //                 pageDisable()
-    //             }
-    //             toast(`Sent evaluate-form To Manager.`,'success')
-    //             toastClear()
-    //         }
-    //     })
-    //     .catch(error => {
-    //         toast(error.response.data.message,'error')
-    //         toastClear()
-    //         console.log(error.response.data.message)
-    //     })
-    //     .finally( () => {
-    //         evaluateForm.next = !evaluateForm.next
-    //         setVisible(false)
-    //     })
-    // }
 </script>
 @endsection

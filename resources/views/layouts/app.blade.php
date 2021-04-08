@@ -32,6 +32,7 @@
     <link href="{{ asset('assets/css/index.css') }}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
 
     @yield('style')
 </head>
@@ -65,9 +66,10 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
+    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
     <script src="{{asset('assets\js\index.js')}}" defer></script>
-    @yield('second-script')
 
+    @yield('second-script')
 </body>
 
 </html>

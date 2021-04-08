@@ -415,10 +415,10 @@ var findAchValue = (obj) => {
 }
 
 var findCalValue = (obj, ach) => {
-    if (ach < 70.00) {
+    if (ach < obj.base_line) {
         cal = 0.00
-    } else if (ach > obj.base_line) {
-        let c = parseFloat(obj.base_line) * parseFloat(obj.weight) / 100
+    } else if (ach >= obj.max) {
+        let c = parseFloat(obj.max) * parseFloat(obj.weight) / 100
         cal = c
     } else {
         let d = ach * parseFloat(obj.weight) / 100

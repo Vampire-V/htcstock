@@ -4,24 +4,47 @@ namespace App\Http\Controllers;
 
 use App\Models\TemporaryFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UploadController extends Controller
 {
 
     public function store(Request $request)
     {
-        if ($request->hasFile('rules')) {
-            $file = $request->file('rules');
-            $filename = $file->getClientOriginalName();
-            $folder = \uniqid() . '-' . \now()->timestamp;
-            $file->storeAs('kpi/' . $folder,$filename);
-            TemporaryFile::create([
-                'folder' => $folder,
-                'filename' => $filename
-            ]);
+        $request->validate([
+            'file' => 'required|mimes:csv,xlsx,xls|max:2048'
+        ]);
+        DB::beginTransaction();
+        try {
+            $fileModel = new TemporaryFile;
 
-            return $folder;
+            if ($request->file()) {
+                $file = $request->file('file');
+                $filename = $file->getClientOriginalName();
+                $folder = \uniqid() . '-' . \now()->timestamp;
+
+                $file->storeAs('kpi/' . $folder, $filename);
+
+                $fileModel->folder = $folder;
+                $fileModel->filename = $filename;
+                $fileModel->save();
+                DB::commit();
+                return \response()->json(['folder' => $folder]);
+            }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
         }
-        return '';
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 }

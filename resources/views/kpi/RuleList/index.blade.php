@@ -171,9 +171,10 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="position-relative form-group"><label for="rules">Import data to system
+                            <div class="position-relative form-group dropzone"><label for="rules">Import data to system
                                     :</label>
-                                <input type="file" class="filepond" name="rules" id="rules" />
+                                <input type="file" name="file_template" id="file_template" onchange="onFile(this)" />
+                                <input type="hidden" name="path_file" >
                             </div>
                         </div>
                     </div>
@@ -192,32 +193,74 @@
 <script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script src="{{asset('assets\js\kpi\rule\index.js')}}" defer></script>
 <script>
-    const inputElement = document.querySelector('input[type="file"]');
-    const pond = FilePond.create( inputElement );
-    FilePond.setOptions({
-        server: {
-            process:'/upload',
-            headers: {
-                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-            }
-        }
-    })
-
     var submitFile = (e) => {
-        let path = document.querySelector('input[name="rules"]').value
-        e.offsetParent.offsetParent.offsetParent.getElementsByClassName("close")[0].click()
+        // e.offsetParent.offsetParent.offsetParent.getElementsByClassName("close")[0].click()
+        let path = document.getElementsByName('path_file')[0].value
         if (path) {
             setVisible(true)
             postRuleUpload({file:path})
             .then(res => {
-                console.log(res);
+                if (res.status === 200) {
+                    if (res.data.errors.length > 0) {
+                        res.data.errors.forEach(element => {
+                            toast(`Row :${element.row} Col :${element.col} Message :${element.message}`,'error')
+                        })
+                    }
+                    if (res.data.status) {
+                        toast(`Import rule success!`,'success')
+                    }else{
+                        toast(`Import rule Fail!`,'error')
+                    }
+                }
             })
             .catch(error => {
-                console.log(error.response.message);
+                toast(error.response.data.message,'error')
             })
-            .finally(() => setVisible(false))
+            .finally(() => {
+                setVisible(false)
+                toastClear()
+            })
         }
         
     }
+
+    var onFile = (e) => {
+        const config = {
+            onUploadProgress: (progressEvent) => {
+                let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                console.log(percentCompleted,'% upload')
+            }
+        }
+
+        let data = new FormData()
+        data.append('file', e.files[0])
+        postUploadFile(data,config)
+        .then(res => {
+            if (res.status === 200) {
+                document.getElementsByName('path_file')[0].value = res.data.folder
+            }
+        })
+        .catch(error => {
+            toast(error.response.data.message,'error')
+            error.response.data.errors.file.forEach(element => {
+                toast(element,'error')
+            })
+        })
+        .finally(() => {
+            toastClear()
+        })
+    }
+
+    $('#modal-import').on('hide.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var modal = $(this)
+        // var group = button.data('group') // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        // removeAllChildNodes(modal.find('.modal-body #rule-name')[0])
+        modal.find('form')[0].reset();
+        modal.find('input[type="hidden"]').val('');
+    })
+
 </script>
 @endsection

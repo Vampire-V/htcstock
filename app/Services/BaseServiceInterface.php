@@ -16,6 +16,8 @@ interface BaseServiceInterface
      */
     public function create(array $attributes): Model;
 
+    public function insert(array $attributes): bool;
+
     /**
      * @param $id
      * @return Model

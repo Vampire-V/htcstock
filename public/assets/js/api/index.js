@@ -140,3 +140,5 @@ const postRuleUpload = (form) => axios({
     url: `/kpi/rule-list/upload`,
     data: form
 })
+
+const postUploadFile = (form, config) => axios.post('/upload', form, config)

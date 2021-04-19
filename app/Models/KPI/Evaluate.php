@@ -32,24 +32,25 @@ class Evaluate extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'user_id',
-        'period_id',
-        'head_id',
-        'status',
-        'template_id',
-        'main_rule_id',
-        'main_rule_condition_1_min',
-        'main_rule_condition_1_max',
-        'main_rule_condition_2_min',
-        'main_rule_condition_2_max',
-        'main_rule_condition_3_min',
-        'main_rule_condition_3_max',
-        'total_weight_kpi',
-        'total_weight_key_task',
-        'total_weight_omg',
-        'comment'
-    ];
+    // protected $fillable = [
+    //     'user_id',
+    //     'period_id',
+    //     'head_id',
+    //     'status',
+    //     'template_id',
+    //     'main_rule_id',
+    //     'main_rule_condition_1_min',
+    //     'main_rule_condition_1_max',
+    //     'main_rule_condition_2_min',
+    //     'main_rule_condition_2_max',
+    //     'main_rule_condition_3_min',
+    //     'main_rule_condition_3_max',
+    //     'total_weight_kpi',
+    //     'total_weight_key_task',
+    //     'total_weight_omg',
+    //     'comment'
+    // ];
+    protected $guarded = [];
 
 
     // service เรียกใช้ Filter

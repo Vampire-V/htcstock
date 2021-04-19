@@ -51,4 +51,16 @@ class RuleService extends BaseService implements RuleServiceInterface
             ->orderBy('created_at', 'desc')
             ->get();
     }
+
+    public function isName(string $var): bool
+    {
+        try {
+            if (Rule::where('name', $var)->first()) {
+                return \true;
+            }
+            return \false;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

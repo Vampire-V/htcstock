@@ -167,6 +167,7 @@ return [
          */
         // Barryvdh\Debugbar\ServiceProvider::class,
         Arcanedev\LogViewer\LogViewerServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -230,5 +231,6 @@ return [
         'Helper' => Helpers\Helper::class,
         // 'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 ];

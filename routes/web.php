@@ -48,6 +48,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth', 
     Route::post('uploadfileequipment', 'AccessoriesController@uploadfileequipment')->name('uploadfileequipment');
 });
 Route::post('upload', 'UploadController@store');
+Route::delete('upload', 'UploadController@destroy');
 require __DIR__ . '/itstock.php';
 require __DIR__ . '/contractlegal.php';
 require __DIR__ . '/kpi.php';

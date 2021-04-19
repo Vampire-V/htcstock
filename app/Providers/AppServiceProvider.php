@@ -29,6 +29,7 @@ use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
+use App\Services\KPI\Interfaces\RuleTypeServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Interfaces\TargetUnitServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
@@ -37,6 +38,7 @@ use App\Services\KPI\Service\EvaluateService;
 use App\Services\KPI\Service\RuleCategoryService;
 use App\Services\KPI\Service\RuleService;
 use App\Services\KPI\Service\RuleTemplateService;
+use App\Services\KPI\Service\RuleTypeService;
 use App\Services\KPI\Service\TargetPeriodService;
 use App\Services\KPI\Service\TargetUnitService;
 use App\Services\KPI\Service\TemplateService;
@@ -123,6 +125,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EvaluateServiceInterface::class,EvaluateService::class);
         $this->app->bind(TargetPeriodServiceInterface::class,TargetPeriodService::class);
         $this->app->bind(EvaluateDetailServiceInterface::class,EvaluateDetailService::class);
+        $this->app->bind(RuleTypeServiceInterface::class,RuleTypeService::class);
         
     }
 }

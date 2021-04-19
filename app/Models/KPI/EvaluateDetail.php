@@ -22,14 +22,16 @@ class EvaluateDetail extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'evaluate_id',
-        'rule_id',
-        'target',
-        'actual',
-        'weight',
-        'weight_category',
-        'base_line',
-        'max_result'
-    ];
+    // protected $fillable = [
+    //     'evaluate_id',
+    //     'rule_id',
+    //     'target',
+    //     'actual',
+    //     'weight',
+    //     'weight_category',
+    //     'base_line',
+    //     'max_result'
+    // ];
+
+    protected $guarded = [];
 }

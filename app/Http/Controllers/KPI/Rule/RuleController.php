@@ -9,6 +9,7 @@ use App\Http\Requests\KPI\StoreRulePut;
 use App\Http\Resources\KPI\RuleResource;
 use App\Imports\KPI\RulesImport;
 use App\Models\TemporaryFile;
+use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\RuleTypeServiceInterface;
@@ -23,17 +24,20 @@ use stdClass;
 class RuleController extends Controller
 {
 
-    protected $ruleCategoryService, $targetUnitService, $ruleService, $ruleTypeService, $excel_errors = [], $rule_attrs = [];
+    protected $ruleCategoryService, $targetUnitService, $ruleService, $ruleTypeService, $userService,
+        $excel_errors = [], $rule_attrs = [];
     public function __construct(
         RuleCategoryServiceInterface $ruleCategoryServiceInterface,
         TargetUnitServiceInterface $targetUnitServiceInterface,
         RuleServiceInterface $ruleServiceInterface,
-        RuleTypeServiceInterface $ruleTypeServiceInterface
+        RuleTypeServiceInterface $ruleTypeServiceInterface,
+        UserServiceInterface $userServiceInterface
     ) {
         $this->ruleCategoryService = $ruleCategoryServiceInterface;
         $this->targetUnitService = $targetUnitServiceInterface;
         $this->ruleService = $ruleServiceInterface;
         $this->ruleTypeService = $ruleTypeServiceInterface;
+        $this->userService = $userServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -64,8 +68,10 @@ class RuleController extends Controller
     {
         $category = $this->ruleCategoryService->dropdown();
         $unit = $this->targetUnitService->dropdown();
+        $rulesType = $this->ruleTypeService->dropdown();
+        $users = $this->userService->dropdown();
         $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
-        return \view('kpi.RuleList.create', \compact('category', 'unit', 'calcuTypes'));
+        return \view('kpi.RuleList.create', \compact('category', 'unit', 'calcuTypes', 'rulesType', 'users'));
     }
 
     /**
@@ -116,15 +122,17 @@ class RuleController extends Controller
      */
     public function edit($id)
     {
+        $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
         try {
             $rule = $this->ruleService->find($id);
             $category = $this->ruleCategoryService->dropdown();
             $unit = $this->targetUnitService->dropdown();
-            $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
+            $rulesType = $this->ruleTypeService->dropdown();
+            $users = $this->userService->dropdown();
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \view('kpi.RuleList.edit', \compact('rule', 'category', 'unit', 'calcuTypes'));
+        return \view('kpi.RuleList.edit', \compact('rule', 'category', 'unit', 'calcuTypes', 'rulesType', 'users'));
     }
 
     /**
@@ -137,13 +145,13 @@ class RuleController extends Controller
     public function update(StoreRulePut $request, $id)
     {
         DB::beginTransaction();
-        $validated = $request->validated();
+        $fromValue = $request->except(['_token','_method']);
         try {
-            // \dd($validated);
-            $rule = $this->ruleService->update($validated, $id);
-            // \dd($rule);
+            $this->ruleService->update($fromValue, $id);
+            $request->session()->flash('success', ' has been updated success');
         } catch (\Throwable $th) {
             DB::rollBack();
+            $request->session()->flash('error', ' has been update fail');
             throw $th;
         }
         DB::commit();
@@ -183,7 +191,7 @@ class RuleController extends Controller
 
         $temporaryFile = TemporaryFile::where('folder', $request->file)->first();
         if (!$temporaryFile) {
-            return \response()->json(["message" => "file not found!"],422);
+            return \response()->json(["message" => "file not found!"], 422);
         }
 
         $file = storage_path('app\\kpi\\' . $temporaryFile->folder . '\\' . $temporaryFile->filename);
@@ -226,7 +234,7 @@ class RuleController extends Controller
                 $error->message = 'ไม่มี';
                 array_push($this->excel_errors, $error);
             }
-            
+
             if ($c->count() > 0 && !is_null($value[4]) && $f->count() > 0 && !$checkName) {
                 \array_push(
                     $this->rule_attrs,
@@ -244,16 +252,15 @@ class RuleController extends Controller
         });
         DB::beginTransaction();
         try {
-            
+
             if ($this->rule_attrs) {
                 $status = $this->ruleService->insert($this->rule_attrs);
             }
-            
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
         DB::commit();
-        return \response()->json(['errors' => $this->excel_errors,'status' => $status]);
+        return \response()->json(['errors' => $this->excel_errors, 'status' => $status]);
     }
 }

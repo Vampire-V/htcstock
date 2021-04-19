@@ -7,12 +7,12 @@
             placeholder: 'Select status',
             allowClear: true
         });
-        $("#validationMesurement").select2({
-            placeholder: 'Select agreements',
+        $("#validationRuleType").select2({
+            placeholder: 'Select Rule Type',
             allowClear: true
         });
-        $("#validationTargetUnit").select2({
-            placeholder: 'Select status',
+        $("#validationUserActual").select2({
+            placeholder: 'Select User Actual',
             allowClear: true
         });
         $("#validationCalculateType").select2({

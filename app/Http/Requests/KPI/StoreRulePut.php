@@ -27,8 +27,9 @@ class StoreRulePut extends FormRequest
             'category_id' => 'required',
             'name' => 'required|max:255',
             // 'measurement' => 'required',
-            // 'target_unit_id' => 'required',
-            'calculate_type' => 'required'
+            'user_actual' => 'required',
+            'calculate_type' => 'required',
+            'kpi_rule_types_id' => 'required'
         ];
     }
 }

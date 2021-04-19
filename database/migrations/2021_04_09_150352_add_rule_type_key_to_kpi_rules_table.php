@@ -15,6 +15,7 @@ class AddRuleTypeKeyToKpiRulesTable extends Migration
     {
         Schema::table('kpi_rules', function (Blueprint $table) {
             $table->foreignId('kpi_rule_types_id')->nullable()->constrained('kpi_rule_types')->comment('Id ของ kpi_rule_types')->after('calculate_type');
+            $table->foreignId('user_actual')->nullable()->constrained('users')->comment('Id ของ user ที่ต้องใส่ Actual ที่ kpi_evaluates')->after('kpi_rule_types_id');
         });
     }
 
@@ -26,7 +27,8 @@ class AddRuleTypeKeyToKpiRulesTable extends Migration
     public function down()
     {
         Schema::table('kpi_rules', function (Blueprint $table) {
-            $table->dropForeign('kpi_rule_types_kpi_rule_types_id_foreign');
+            $table->dropForeign(['user_actual', 'kpi_rule_types_id']);
+            $table->dropColumn(['user_actual', 'kpi_rule_types_id']);
         });
     }
 }

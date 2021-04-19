@@ -32,8 +32,8 @@
         <div class="card-body">
             <h5 class="card-title">Rule Management</h5>
             <div class="position-relative form-group">
-                <form class="needs-validation" novalidate action="{{route('kpi.rule-list.store')}}"
-                    method="POST" enctype="multipart/form-data">
+                <form class="needs-validation" novalidate action="{{route('kpi.rule-list.store')}}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
@@ -69,34 +69,36 @@
                     </div>
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
-                            <label for="mesurement">Mesurement :</label>
-                            <select id="validationMesurement" class="form-control-sm form-control" name="measurement">
+                            <label for="mesurement">Rule Type :</label>
+                            <select id="validationRuleType" class="form-control-sm form-control"
+                                name="kpi_rule_types_id" required>
                                 <option value="">Choose...</option>
-                                <option value="mesurement_1">Mesurement 1</option>
-                                <option value="mesurement_2">Mesurement 2</option>
+                                @isset($rulesType)
+                                @foreach ($rulesType as $item)
+                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                @endforeach
+                                @endisset
                             </select>
                             <div class="invalid-feedback">
-                                Please provide a valid Mesurement.
+                                Please provide a valid Rule Type.
                             </div>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="targetUnit">Target Unit :</label>
-                            <select id="validationTargetUnit" class="form-control-sm form-control"
-                                name="target_unit_id">
+                            <label for="targetUnit">User actual :</label>
+                            <select id="validationUserActual" class="form-control-sm form-control"
+                                name="user_actual" required>
                                 <option value="">Choose...</option>
-                                @isset($unit)
-                                @forelse ($unit as $item)
+                                @isset($users)
+                                @foreach ($users as $item)
                                 <option value="{{$item->id}}">{{$item->name}}</option>
-                                @empty
-                                <p>No Target Unit</p>
-                                @endforelse
+                                @endforeach
                                 @endisset
                             </select>
                             <div class="invalid-feedback">
-                                Please provide a valid Target Unit.
+                                Please provide a valid User Actual.
                             </div>
                             <div class="valid-feedback">
                                 Looks good!

@@ -19,8 +19,8 @@ interface UserServiceInterface
     public function delete(int $id): bool;
 
     public function create(array $attributes): Model;
-
-    public function dropdownUser(...$username): Collection;
+    public function dropdownNotIn(array $username): Collection;
+    public function dropdown(): Collection;
     public function filter(Request $request);
     public function email(string $email);
 

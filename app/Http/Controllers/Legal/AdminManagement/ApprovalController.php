@@ -103,7 +103,7 @@ class ApprovalController extends Controller
 
         try {
             $department = $this->departmentService->find($id);
-            $users = $this->userService->dropdownUser();
+            $users = $this->userService->dropdown();
             $approvals = $this->approvalService->approvalByDepartment($department);
         } catch (\Throwable $th) {
             throw $th;

@@ -49,14 +49,16 @@ class RuleController extends Controller
         $query = $request->all();
         $searchRuleName = $request->ruleName;
         $selectedCategory = collect($request->category_id);
+        $selectedRuleType = collect($request->rule_type);
         $template = Storage::url('kpi/template/template-rule.xlsx');
+        $rulesType = $this->ruleTypeService->dropdown();
         try {
             $category = $this->ruleCategoryService->dropdown();
             $rules = $this->ruleService->filter($request);
         } catch (\Throwable $th) {
             throw $th;
         }
-        return \view('kpi.RuleList.index', \compact('rules', 'category', 'query', 'searchRuleName', 'selectedCategory', 'template'));
+        return \view('kpi.RuleList.index', \compact('rules', 'category', 'query', 'searchRuleName', 'selectedCategory', 'template', 'rulesType', 'selectedRuleType'));
     }
 
     /**
@@ -145,7 +147,7 @@ class RuleController extends Controller
     public function update(StoreRulePut $request, $id)
     {
         DB::beginTransaction();
-        $fromValue = $request->except(['_token','_method']);
+        $fromValue = $request->except(['_token', '_method']);
         try {
             $this->ruleService->update($fromValue, $id);
             $request->session()->flash('success', ' has been updated success');

@@ -46,7 +46,7 @@ class RuleService extends BaseService implements RuleServiceInterface
 
     public function filter(Request $request)
     {
-        return Rule::with(['category','user'])
+        return Rule::with(['category','user','ruleType'])
             ->filter($request)
             ->orderBy('created_at', 'desc')
             ->get();

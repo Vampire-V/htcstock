@@ -48,12 +48,12 @@
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 col-xl-3">
                             <label for="ruleName">Rule Name :</label>
                             <input type="text" class="form-control form-control-sm" id="ruleName"
                                 placeholder="Rule Name" name="ruleName" value="{{$searchRuleName}}">
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 col-xl-3">
                             <label for="ruleCategory">Rule Category :</label>
                             <select id="validationRuleCategory" class="form-control-sm form-control"
                                 name="category_id[]" multiple>
@@ -65,7 +65,19 @@
                                 @endisset
                             </select>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 col-xl-3">
+                            <label for="ruleType">Rule Type :</label>
+                            <select id="validationRuleType" class="form-control-sm form-control"
+                                name="rule_type[]" multiple>
+                                @isset($rulesType)
+                                @foreach ($rulesType as $item)
+                                <option value="{{$item->id}}" @if ($selectedRuleType->contains($item->id))
+                                    selected @endif>{{$item->name}}</option>
+                                @endforeach
+                                @endisset
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
                             <button class="mb-2 mr-2 btn btn-primary mt-4">Search</button>
                         </div>
                     </div>
@@ -109,6 +121,7 @@
                             <th>Rule Name</th>
                             <th>Rule Category</th>
                             <th>Calculate Type</th>
+                            <th>Rule Type</th>
                             <th>#</th>
                         </tr>
                     </thead>
@@ -120,6 +133,7 @@
                             <td>{{$item->name}}</td>
                             <td>{{$item->category->name}}</td>
                             <td>{{$item->calculate_type}}</td>
+                            <td>{{$item->ruletype->name}}</td>
                             <td><a href="{{route('kpi.rule-list.edit',$item->id)}}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
                                 </a></td>

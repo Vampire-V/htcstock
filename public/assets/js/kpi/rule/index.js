@@ -4,9 +4,14 @@
     document.addEventListener('DOMContentLoaded', function () {
         // Supporting Documents
         $("#validationRuleCategory").select2({
-            placeholder: 'Select department',
+            placeholder: 'Select Rule Category',
             allowClear: true
         });
+        $("#validationRuleType").select2({
+            placeholder: 'Select Rule Type',
+            allowClear: true
+        });
+        
     })
 
     window.addEventListener('load', function () {

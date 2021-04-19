@@ -4,6 +4,7 @@ namespace App\Relations;
 
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\EvaluateDetail;
+use App\Models\KPI\KpiRuleType;
 use App\Models\KPI\RuleCategory;
 use App\Models\KPI\RuleTemplate;
 use App\Models\KPI\TargetUnit;
@@ -11,7 +12,7 @@ use App\Models\User;
 
 trait RuleTrait
 {
-
+    
     public function category()
     {
         return $this->belongsTo(RuleCategory::class, 'category_id')->withDefault();
@@ -40,5 +41,10 @@ trait RuleTrait
     public function user()
     {
         return $this->belongsTo(User::class, 'user_actual')->withDefault();
+    }
+
+    public function ruleType()
+    {
+        return $this->belongsTo(KpiRuleType::class, 'kpi_rule_types_id')->withDefault();
     }
 }

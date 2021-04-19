@@ -174,7 +174,7 @@
                             <div class="position-relative form-group dropzone"><label for="rules">Import data to system
                                     :</label>
                                 <input type="file" name="file_template" id="file_template" onchange="onFile(this)" />
-                                <input type="hidden" name="path_file" >
+                                <input type="hidden" name="path_file">
                             </div>
                         </div>
                     </div>

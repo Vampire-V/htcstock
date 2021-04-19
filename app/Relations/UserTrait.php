@@ -6,6 +6,7 @@ use App\Models\Department;
 use App\Models\Division;
 use App\Models\IT\Transactions;
 use App\Models\KPI\Evaluate;
+use App\Models\KPI\Rule;
 use App\Models\Legal\LegalApproval;
 use App\Models\Legal\LegalApprovalDetail;
 use App\Models\Legal\LegalContract;
@@ -83,5 +84,10 @@ trait UserTrait
     public function evaluate()
     {
         return $this->hasMany(Evaluate::class);
+    }
+
+    public function rule()
+    {
+        return $this->hasOne(Rule::class);
     }
 }

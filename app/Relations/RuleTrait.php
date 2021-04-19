@@ -7,6 +7,7 @@ use App\Models\KPI\EvaluateDetail;
 use App\Models\KPI\RuleCategory;
 use App\Models\KPI\RuleTemplate;
 use App\Models\KPI\TargetUnit;
+use App\Models\User;
 
 trait RuleTrait
 {
@@ -34,5 +35,10 @@ trait RuleTrait
     public function evaluateDetail()
     {
         return $this->hasOne(EvaluateDetail::class)->withDefault();
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_actual')->withDefault();
     }
 }

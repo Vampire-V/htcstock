@@ -254,9 +254,11 @@ class RuleController extends Controller
         });
         DB::beginTransaction();
         try {
-
             if ($this->rule_attrs) {
                 $status = $this->ruleService->insert($this->rule_attrs);
+                if ($temporaryFile->delete()) {
+                    Storage::deleteDirectory('kpi/' . $temporaryFile->folder);
+                }
             }
         } catch (\Throwable $th) {
             DB::rollBack();

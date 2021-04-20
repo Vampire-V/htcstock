@@ -196,9 +196,7 @@ class RuleController extends Controller
             return \response()->json(["message" => "file not found!"], 422);
         }
 
-        $file = Storage::path('app/kpi/' . $temporaryFile->folder . '/' . $temporaryFile->filename);
-        // $folders = Storage::path('app/kpi/' . $temporaryFile->folder . '/' . $temporaryFile->filename);
-        // \dd($file, $folders);
+        $file = Storage::path('kpi/' . $temporaryFile->folder . '/' . $temporaryFile->filename);
         $read_data = Excel::toCollection(new RulesImport(), $file, null, \Maatwebsite\Excel\Excel::XLSX);
         $datas = $read_data[0]->filter(fn ($value) => $value[1] !== null);
         $category = $this->ruleCategoryService->dropdown();

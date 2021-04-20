@@ -12,10 +12,10 @@ interface VendorServiceInterface
     public function all(): Builder;
     public function filter(Request $request);
     public function create(array $attributes): Model;
-    public function findStr(string $code): Model;
+    // public function findStr(string $code): Model;
 
-    public function updateStr(array $attributes, string $code): bool;
-    public function destroyStr(string $code);
+    // public function updateStr(array $attributes, string $code): bool;
+    // public function destroyStr(string $code);
 
     public function dropdown(): Collection;
 }

@@ -197,6 +197,7 @@ class RuleController extends Controller
         }
 
         $file = storage_path('app\\kpi\\' . $temporaryFile->folder . '\\' . $temporaryFile->filename);
+        \dd($file);
         $read_data = Excel::toCollection(new RulesImport(), $file, null, \Maatwebsite\Excel\Excel::XLSX);
         $datas = $read_data[0]->filter(fn ($value) => $value[1] !== null);
         $category = $this->ruleCategoryService->dropdown();

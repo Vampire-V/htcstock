@@ -8,8 +8,9 @@ OverlayScrollbars.defaultOptions({
 document.addEventListener("DOMContentLoaded", function () {
     //The first argument are the elements to which the plugin shall be initialized
     //The second argument has to be at least a empty object or a object with your desired options
-    var scroll_body = OverlayScrollbars(document.body, {});
+    OverlayScrollbars(document.body, {});
 });
+
 
 function validationForm(forms) {
     Array.prototype.filter.call(forms, function (form) {

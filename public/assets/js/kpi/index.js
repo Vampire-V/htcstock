@@ -178,8 +178,10 @@ var displayDetail = (evaluateForm) => {
                 let body_cal = table.tBodies[0].rows
                 let main_rule = evaluateForm.detail.find(value => value.rule_id === evaluateForm.mainRule)
                 let sum_total = 0.00
-                table.offsetParent.firstElementChild.querySelector('#mainRule').value = main_rule.rules.name
-                table.offsetParent.firstElementChild.querySelector('#Cal').value = parseFloat(main_rule.cal).toFixed(2) + '%'
+                // table.offsetParent.firstElementChild.querySelector('#mainRule')
+                document.getElementById('mainRule').value = main_rule.rules.name
+                // table.offsetParent.firstElementChild.querySelector('#Cal')
+                document.getElementById('Cal').value = parseFloat(main_rule.cal).toFixed(2) + '%'
                 for (let index = 0; index < body_cal.length; index++) {
                     const row = body_cal[index]
                     row.cells[1].textContent = weightForSum[index].toFixed(2) + '%'
@@ -254,7 +256,8 @@ var displayDetail = (evaluateForm) => {
                     table.offsetParent.querySelector('.card-title').textContent = table.id.substring(6)
                 }
             } else {
-                let select = table.offsetParent.querySelector('#mainRule')
+                let select = document.getElementById('mainRule')
+                // table.offsetParent.querySelector('#mainRule') 
                 if (select) {
                     removeAllChildNodes(select)
                     if (evaluateForm.detail.length > 0) {

@@ -3,6 +3,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         // Supporting Documents
+        OverlayScrollbars(document.getElementsByClassName('table-responsive'), { });
     })
 
     window.addEventListener('load', async function () {

@@ -9,35 +9,77 @@
             <div class="page-title-icon">
                 <i class="pe-7s-monitor icon-gradient bg-mean-fruit"> </i>
             </div>
-            <div>Set Actual
+            <div>Eddy page
                 <div class="page-title-subheading">This is an example set target created using
                     build-in elements and components.
                 </div>
             </div>
         </div>
         <div class="page-title-actions">
-            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
-                class="btn-shadow mr-3 btn btn-dark">
-                <i class="fa fa-star"></i>
-            </button> --}}
-            {{-- <div class="d-inline-block dropdown">
-                <a href="#" class="btn-shadow btn btn-info">
-                    <span class="btn-icon-wrapper pr-2 opacity-7">
-                        <i class="fa fa-business-time fa-w-20"></i>
-                    </span>
-                    Create
-                </a>
-            </div> --}}
         </div>
     </div>
 </div>
 {{-- end title  --}}
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="main-card mb-3 card">
+            <div class="card-header-tab card-header-tab-animation card-header">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                    <h5 class="card-title">Set Actual for : {{Auth::user()->name}}</h5>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="position-relative form-group">
+                    <form class="needs-validation" novalidate>
+                        <div class="form-row">
+                            <div class="col-md-1 mb-1">
+                                <label for="Year">Year</label>
+                                <select name="year" id="validationYear" class="form-control-sm form-control">
+                                    @foreach (range(date('Y'), $start_year) as $year)
+                                    <option value="{{$year}}" @if ($selectedYear==$year) selected @endif>{{$year}}
+                                    </option>
+                                    @endforeach
+                                </select>
+                                {{-- <div class="invalid-feedback">
+                                    Please provide a valid state.
+                                </div> --}}
+                            </div>
+                            <div class="col-md-1 mb-1">
+                                <label for="Department">Department</label>
+                                <select name="department" id="department" class="form-control-sm form-control">
+                                    @foreach ($departments as $item)
+                                    <option value="">Choose...</option>
+                                    <option value="{{$item->id}}" @if ($selectedDept==$item->id)
+                                        selected
+                                        @endif>{{$item->name}}</option>
+                                    @endforeach
+                                </select>
+                                {{-- <div class="invalid-feedback">
+                                    Please provide a valid state.
+                                </div> --}}
+                            </div>
+                            <div class="col-md-1 mb-1 text-center">
+                                <button class="btn btn-primary mt-4" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
-    <div class="col-lg-12">
+    <div class="col-md-12 col-lg-12">
         <div class="main-card mb-3 card">
+            <div class="card-header-tab card-header-tab-animation card-header">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                    <h5 class="card-title">Set Actual for : {{Auth::user()->name}}</h5>
+                </div>
+            </div>
             <div class="card-body">
-                <h5 class="card-title">Set Actual for : {{Auth::user()->name}}</h5>
                 <div class="table-responsive">
                     <table class="mb-0 table table-sm" id="table-set-actual">
                         <thead>
@@ -60,7 +102,7 @@
                             @foreach ($evaluateDetail as $key => $item)
                             <tr>
                                 <th scope="row">{{$key+1}}</th>
-                                <td>{{$item->evaluate->user->name}} : {{$item->evaluate->status}}</td>
+                                <td>{{$item->evaluate->user->name}}</td>
                                 <td>{{$item->evaluate->targetperiod->name}} {{$item->evaluate->targetperiod->year}}</td>
                                 <td>{{$item->rule->name}}</td>
                                 <td>{{number_format($item->base_line,2)}}</td>
@@ -93,17 +135,6 @@
     </div>
 </div>
 
-
-{{-- Button --}}
-{{-- <div class="app-page-title">
-    <div class="page-title-wrapper">
-        <div class="page-title-heading">
-        </div>
-        <div class="page-title-actions">
-            <button class="mb-2 mr-2 btn btn-success">Save</button>
-        </div>
-    </div>
-</div> --}}
 @endsection
 
 @section('second-script')
@@ -117,6 +148,7 @@
 <script src="{{asset('assets\js\kpi\setActual\index.js')}}" defer></script>
 <script>
     var changeActual = (e) => {
+        console.log(detail);
         let button = document.getElementById('table-set-actual').querySelector('button')
         if (Array.isArray(e.value.match(/\w+/))) {
             for (let index = 0; index < detail.length; index++) {
@@ -139,7 +171,7 @@
         if (detail.length > 0) {
             if (validationActual()) {
                 setVisible(true)
-                putSetActual(detail,detail[0].rules.user_actual.id)
+                putSetActualForEddy(detail,detail[0].rules.user_actual.id)
                 .then(res => {
                     if (res.data.status) {
                         toast(`Set Actual Success!`,'success')

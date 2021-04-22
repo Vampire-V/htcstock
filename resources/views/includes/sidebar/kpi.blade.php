@@ -89,14 +89,19 @@
                         Evaluation Review
                     </a>
                 </li>
-                <li>
-                    <a href="#" class="{{Helper::isActive('kpi/report*')}}">
-                        <i class="metismenu-icon"></i>
-                        Report
-                    </a>
-                </li>
                 @endcan
                 {{-- end admin manager --}}
+
+                {{-- for eddy --}}
+                @if (auth()->user()->username === '70037455' || auth()->user()->username === '70037539')
+                <li>
+                    <a href="{{route('kpi.for-eddy.index')}}" class="{{Helper::isActive('kpi/for-eddy*')}}">
+                        <i class="metismenu-icon"></i>
+                        Menu for eddy
+                    </a>
+                </li>
+                @endif
+                {{-- end for eddy --}}
             </ul>
         </div>
     </div>

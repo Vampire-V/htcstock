@@ -21,5 +21,6 @@ interface EvaluateDetailServiceInterface
 
     // public function updateForEvaluate(array $datas, int $evaluate,int $rule_id);
     public function setActualFilter(Request $request);
+    public function setActualForEddyFilter(Request $request);
     // public function formulaKeyTask(EvaluateDetail $object) : EvaluateDetail;
 }

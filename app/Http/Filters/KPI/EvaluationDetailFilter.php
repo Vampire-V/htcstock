@@ -3,19 +3,19 @@
 namespace App\Http\Filters\KPI;
 
 use App\Http\Filters\AbstractFilter;
-use App\Http\Filters\KPI\Query\DepartmentWhereHas;
+use App\Http\Filters\KPI\Query\DepartmentForDetail;
 use App\Http\Filters\KPI\Query\PositionWhereHas;
 use App\Http\Filters\KPI\Query\PeriodIn;
 use App\Http\Filters\KPI\Query\StatusEvaluateIn;
-use App\Http\Filters\KPI\Query\YearPeriodWhereHas;
+use App\Http\Filters\KPI\Query\YearPeriodForDetail;
 
 class EvaluationDetailFilter extends AbstractFilter
 {
     protected $filters = [
         // 'position_id' => PositionWhereHas::class,
-        // 'department_id' => DepartmentWhereHas::class,
+        'department' => DepartmentForDetail::class,
         // 'status' => StatusEvaluateIn::class,
-        // 'year' => YearPeriodWhereHas::class,
+        'year' => YearPeriodForDetail::class,
         // 'period' => PeriodIn::class,
     ];
 }

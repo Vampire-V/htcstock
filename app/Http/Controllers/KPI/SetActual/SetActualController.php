@@ -2,20 +2,30 @@
 
 namespace App\Http\Controllers\KPI\SetActual;
 
+use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\KPI\EvaluateDetailResource;
+use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SetActualController extends Controller
 {
+    protected $evaluateDetailService;
+    public function __construct(EvaluateDetailServiceInterface $evaluateDetailServiceInterface)
+    {
+        $this->evaluateDetailService = $evaluateDetailServiceInterface;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $start_year = date('Y', strtotime('-10 years'));
-        return \view('kpi.SetActual.index',\compact('start_year'));
+        $evaluateDetail = EvaluateDetailResource::collection($this->evaluateDetailService->setActualFilter($request));
+        return \view('kpi.SetActual.index', \compact('start_year', 'evaluateDetail'));
     }
 
     /**
@@ -70,7 +80,27 @@ class SetActualController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $body = $request->all();
+        $status_contain = collect([KPIEnum::draft, KPIEnum::ready]);
+        $status = \false;
+        DB::beginTransaction();
+        try {
+            for ($i = 0; $i < count($body); $i++) {
+                $element = $body[$i];
+                $detail = $this->evaluateDetailService->find($element['id']);
+
+                if ($detail && $status_contain->contains($detail->evaluate->status)) {
+                    $detail->actual = floatval($element['actual']);
+                    $detail->save();
+                    $status = \true;
+                }
+            }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        DB::commit();
+        return \response()->json(["status" => $status]);
     }
 
     /**

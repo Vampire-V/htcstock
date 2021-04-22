@@ -10,6 +10,7 @@
         // let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         // validationForm(forms)
+
         evaluateForm = await setEvaluate(evaluate)
         await displayDetail(evaluateForm)
         if (evaluate.status !== status.SUBMITTED) {

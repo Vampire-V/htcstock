@@ -2,7 +2,9 @@
 
 namespace App\Models\KPI;
 
+use App\Http\Filters\KPI\EvaluationDetailFilter;
 use App\Relations\EvaluateDetailTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class EvaluateDetail extends Model
@@ -34,4 +36,10 @@ class EvaluateDetail extends Model
     // ];
 
     protected $guarded = [];
+
+    // service เรียกใช้ Filter
+    public function scopeSetActualFilter(Builder $builder, $request)
+    {
+        return (new EvaluationDetailFilter($request))->filter($builder);
+    }
 }

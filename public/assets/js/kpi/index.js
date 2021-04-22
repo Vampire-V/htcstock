@@ -11,6 +11,8 @@ var calculate = {
         APPROVED: "Approved"
     },
     className = ['form-control', 'form-control-sm']
+
+
 class EvaluateForm {
     constructor(template = null,
         mainRule = null,
@@ -44,6 +46,7 @@ class EvaluateForm {
         this.next = next
     }
 }
+
 class EvaluateDetail {
     constructor(evaluate_id = null,
         rule_id = null,
@@ -144,7 +147,9 @@ var displayDetail = (evaluateForm) => {
                     cellTarget.textContent = element.target
 
                     let cellActual = newRow.insertCell()
-                    cellActual.appendChild(newInput('number', className, 'actual', element.actual, '', `changeActualValue(this)`))
+                    // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
+                    let readonly = auth === element.rules.user_actual.id || window.location.pathname.includes("evaluation-review") ? false : true
+                    cellActual.appendChild(newInput('number', className, 'actual', element.actual, '', `changeActualValue(this)`, readonly))
 
                     let cellAch = newRow.insertCell()
                     element.ach = findAchValue(element)
@@ -437,8 +442,8 @@ var setTooltipAch = (e, data) => {
     }
     if (data.rules.calculate_type === calculate.NEGATIVE) {
         setAttributes(e, {
-            "Data-Toggle": "Tooltip",
-            "Title": "Rules Calculate Type = Negative : (2 - (actual / target)) * 100",
+            "data-toggle": "tooltip",
+            "title": "rules calculate type = Negative : (2 - (actual / target)) * 100",
             "data-placement": "top"
         })
     }
@@ -452,19 +457,21 @@ var setTooltipAch = (e, data) => {
 }
 
 var setTooltipCal = (e, data) => {
-    if (data.ach < 70.00) {
+    if (data.ach < data.base_line) {
         setAttributes(e, {
             "data-toggle": "tooltip",
-            "title": "Ach% < 70.00 : Cal = 0.00",
+            "title": "Ach% < Base Line : Cal = 0.00",
             "data-placement": "top"
         })
-    } else if (data.ach > data.base_line) {
+    }
+    if (data.ach > data.base_line) {
         setAttributes(e, {
-            "Data-Toggle": "Tooltip",
-            "Title": "Ach% >= 70.00 && Ach% > Base Line  = (Base Line * Weight) / 100",
+            "data-toggle": "tooltip",
+            "title": "Ach% > Base Line  = (Base Line * Weight) / 100",
             "data-placement": "top"
         })
-    } else {
+    }
+    if (data.ach === data.base_line) {
         setAttributes(e, {
             "data-toggle": "tooltip",
             "title": "(Ach% * Weight) / 100",
@@ -475,12 +482,14 @@ var setTooltipCal = (e, data) => {
 
 var changeTooltipCal = (befor, data) => {
     let newTitle = befor
-    if (data.ach < 70.00) {
-        newTitle = "Ach% < 70.00 : Cal = 0.00"
-    } else if (data.ach > data.base_line) {
-        newTitle = "Ach% >= 70.00 && Ach% > Base Line  = (Base Line * Weight) / 100"
-    } else {
-        newTitle = "(Ach% * Weight) / 100"
+    if (data.ach < data.base_line) {
+        newTitle = "Ach% < Base Line : Cal = 0.00"
+    }
+    if (data.ach > data.base_line) {
+        newTitle = "Ach% > Base Line : (Base Line * Weight) / 100"
+    }
+    if (data.ach === data.base_line) {
+        newTitle = "Ach% = Base Line : (Ach% * Weight) / 100"
     }
     return newTitle
 }

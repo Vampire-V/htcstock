@@ -6,6 +6,7 @@ use App\Models\KPI\EvaluateDetail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 interface EvaluateDetailServiceInterface
 {
@@ -18,7 +19,7 @@ interface EvaluateDetailServiceInterface
 
     public function dropdown(): Collection;
 
-    public function updateForEvaluate(array $datas, int $evaluate,int $rule_id);
-
-    public function formulaKeyTask(EvaluateDetail $object) : EvaluateDetail;
+    // public function updateForEvaluate(array $datas, int $evaluate,int $rule_id);
+    public function setActualFilter(Request $request);
+    // public function formulaKeyTask(EvaluateDetail $object) : EvaluateDetail;
 }

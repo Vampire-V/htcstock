@@ -134,6 +134,13 @@ const putEvaluateReview = (review_evaluation, form) => axios({
     data: form
 })
 
+const putSetActual = (form,id) => axios({
+    method: 'PUT',
+    responseType: 'json',
+    url: `/kpi/set-actual/${id}`,
+    data: form
+})
+
 const postRuleUpload = (form) => axios({
     method: 'POST',
     responseType: 'json',

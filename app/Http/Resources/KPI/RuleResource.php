@@ -22,10 +22,14 @@ class RuleResource extends JsonResource
             'measurement' => $this->measurement,
             'target_unit_id' => $this->target_unit_id,
             'calculate_type' => $this->calculate_type,
+            'kpi_rule_types_id' => $this->kpi_rule_types_id,
+            
 
             'created_at' => (string) $this->created_at,
             'updated_at' => (string) $this->updated_at,
-            'categorys' => $this->category
+            'categorys' => $this->category,
+            'rule_type' => $this->ruleType,
+            'user_actual' => $this->user
         ];
     }
 }

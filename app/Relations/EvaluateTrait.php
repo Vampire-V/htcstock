@@ -39,7 +39,7 @@ trait EvaluateTrait
      */
     public function evaluateDetail()
     {
-        return $this->hasMany(EvaluateDetail::class);
+        return $this->hasMany(EvaluateDetail::class,'evaluate_id','id');
     }
 
     public function mainRule()

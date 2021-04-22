@@ -244,6 +244,7 @@
 <script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script defer>
     // variable
+    const auth = {!!json_encode(Auth::id())!!}
     const evaluate = {!!json_encode($evaluate)!!}
 </script>
 <script src="{{asset('assets\js\kpi\evaluationReview\evaluate.js')}}" defer></script>

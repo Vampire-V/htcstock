@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\KPI\Rule\RuleController;
 use Illuminate\Support\Facades\Route;
 
 // KPI
@@ -31,4 +30,6 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
             Route::resource('period/{period}/evaluate', 'EvaluationForm\EvaluationFormController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
         });
     });
+
+    Route::resource('set-actual','SetActual\SetActualController',['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
 });

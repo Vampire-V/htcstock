@@ -1,4 +1,4 @@
-<div class="app-sidebar sidebar-shadow bg-premium-dark sidebar-text-light">
+<div class="app-sidebar sidebar-shadow">
     <div class="app-header__logo">
         <div class="logo-src"></div>
         <div class="header__pane ml-auto">
@@ -49,6 +49,13 @@
                         class="{{Helper::isActive('kpi/self-evaluation*')}}">
                         <i class="metismenu-icon"></i>
                         Self Evaluation
+                    </a>
+                </li>
+                <li>
+                    <a href="{{route('kpi.set-actual.index')}}"
+                        class="{{Helper::isActive('kpi/set-actual*')}}">
+                        <i class="metismenu-icon"></i>
+                        Set Actual
                     </a>
                 </li>
                 {{-- admin --}}

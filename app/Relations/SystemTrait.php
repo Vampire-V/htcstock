@@ -14,6 +14,6 @@ trait SystemTrait
 
     public function permissions()
     {
-        return $this->hasMany(Permission::class, 'system_id')->withDefault();
+        return $this->hasMany(Permission::class, 'system_id');
     }
 }

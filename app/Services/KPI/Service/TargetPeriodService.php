@@ -2,6 +2,7 @@
 
 namespace App\Services\KPI\Service;
 
+use App\Enum\KPIEnum;
 use App\Models\KPI\TargetPeriod;
 use App\Models\User;
 use App\Services\BaseService;
@@ -43,7 +44,7 @@ class TargetPeriodService extends BaseService implements TargetPeriodServiceInte
     {
         try {
             return TargetPeriod::with(['evaluate' => function ($query) use ($staff) {
-                $query->where(['user_id'=> $staff->id]);
+                $query->where(['user_id' => $staff->id]);
             }])->where('year', $year)->get();
         } catch (\Throwable $th) {
             throw $th;
@@ -54,6 +55,37 @@ class TargetPeriodService extends BaseService implements TargetPeriodServiceInte
     {
         try {
             return TargetPeriod::all();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function selfApprovedEvaluationOfyear(string $year): Collection
+    {
+        try {
+            return TargetPeriod::with([
+                'evaluates' => function ($query) {
+                    $query->select('id', 'user_id', 'period_id', 'status')
+                        ->with('evaluateDetail')
+                        ->where(['status' => KPIEnum::approved, 'user_id' => \auth()->id()]);
+                }
+            ])->where('year', $year)->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function deptApprovedEvaluationOfyear(string $year): Collection
+    {
+        try {
+            return TargetPeriod::with([
+                'evaluates' => function ($query) {
+                    $query->select('id', 'user_id', 'period_id', 'status')
+                        ->whereHas('user', fn ($user) => $user->where('department_id', \auth()->user()->department_id))
+                        ->with(['evaluateDetail'])
+                        ->where('status', KPIEnum::approved);
+                }
+            ])->where('year', $year)->get();
         } catch (\Throwable $th) {
             throw $th;
         }

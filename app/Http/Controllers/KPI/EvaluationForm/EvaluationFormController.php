@@ -233,7 +233,6 @@ class EvaluationFormController extends Controller
                     $weight_category = $value['weight_category'];
                     $base_line = $value['base_line'];
                     $max_result = $value['max'];
-
                     
                     $attr = compact("evaluate_id", "rule_id", "target", "actual", "weight", "weight_category", "base_line", "max_result");
                     $evaluate->evaluateDetail()->create($attr);

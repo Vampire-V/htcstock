@@ -13,9 +13,9 @@ class RuleTypeSeeder extends Seeder
     public function run()
     {
         $type = [
-            ['name' => 'finance'],
-            ['name' => 'market'],
-            ['name' => 'operation']
+            ['name' => 'Finance'],
+            ['name' => 'Market'],
+            ['name' => 'Operation']
         ];
         foreach ($type as $value) {
             KpiRuleType::updateOrCreate($value,['name' => $value["name"]]);

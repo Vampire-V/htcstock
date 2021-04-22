@@ -72,4 +72,105 @@
 </div>
 {{-- end title  --}}
 
+<div class="row">
+    <div class="col-md-12 col-lg-6">
+        <div class="mb-3 card">
+            <div class="card-header-tab card-header-tab-animation card-header">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                    Evaluation Report Your self
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="table-responsive" style="height: 110px;">
+                        @isset($ofSelf)
+                        <table class="mb-0 table table-sm" id="table-set-actual">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    @foreach ($ofSelf as $item)
+                                    <th style="width: 100px">{{$item->name}}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Traget</th>
+                                    @foreach ($ofSelf as $item)
+                                    <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}</td>
+                                    @endforeach
+                                </tr>
+                                <tr>
+                                    <th>Actual</th>
+                                    @foreach ($ofSelf as $item)
+                                    <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}</td>
+                                    @endforeach
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                        @endisset
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-6">
+        <div class="mb-3 card">
+            <div class="card-header-tab card-header-tab-animation card-header">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                    Evaluation Report Department
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="table-responsive" style="height: 110px;">
+                        @isset($ofDept)
+                        <table class="mb-0 table table-sm" id="table-set-actual">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    @foreach ($ofDept as $item)
+                                    <th style="width: 100px">{{$item->name}}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Traget</th>
+                                    @foreach ($ofDept as $item)
+                                    <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}</td>
+                                    @endforeach
+                                </tr>
+                                <tr>
+                                    <th>Actual</th>
+                                    @foreach ($ofDept as $item)
+                                    <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}</td>
+                                    @endforeach
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                        @endisset
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('second-script')
+<script src="{{asset('assets\js\index.js')}}" defer></script>
+<script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
+<script defer>
+    // variable
+</script>
+<script src="{{asset('assets\js\kpi\home.js')}}" defer></script>
+<script>
+</script>
 @endsection

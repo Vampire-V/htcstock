@@ -14,6 +14,6 @@ trait LegalApprovalDetailTrait
 
    public function contract()
    {
-      return $this->belongsToMany(LegalContract::class, 'contract_id')->withDefault();
+      return $this->belongsToMany(LegalContract::class, 'contract_id');
    }
 }

@@ -88,6 +88,6 @@ trait UserTrait
 
     public function rule()
     {
-        return $this->hasOne(Rule::class);
+        return $this->hasOne(Rule::class)->withDefault();
     }
 }

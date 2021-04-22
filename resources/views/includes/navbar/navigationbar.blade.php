@@ -1,4 +1,4 @@
-<div class="app-header header-shadow bg-premium-dark header-text-light">
+<div class="app-header header-shadow bg-light header-text-dark">
     <div class="app-header__logo">
         <a href="{{ url('/') }}">
             <div class="logo-src"></div>

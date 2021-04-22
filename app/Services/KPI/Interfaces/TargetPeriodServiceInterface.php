@@ -18,4 +18,6 @@ interface TargetPeriodServiceInterface
     public function byYear(string $year);
     public function byYearForEvaluate(string $year, User $staff): Collection;
     public function dropdown(): Collection;
+    public function selfApprovedEvaluationOfyear(string $year): Collection;
+    public function deptApprovedEvaluationOfyear(string $year): Collection;
 }

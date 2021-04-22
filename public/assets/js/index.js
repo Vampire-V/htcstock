@@ -1,3 +1,16 @@
+//get the current defaultOptions
+var defaultOptions = OverlayScrollbars.defaultOptions();
+//set new default options
+OverlayScrollbars.defaultOptions({
+    className: "os-theme-dark",
+    resize: "both"
+});
+document.addEventListener("DOMContentLoaded", function () {
+    //The first argument are the elements to which the plugin shall be initialized
+    //The second argument has to be at least a empty object or a object with your desired options
+    var scroll_body = OverlayScrollbars(document.body, {});
+});
+
 function validationForm(forms) {
     Array.prototype.filter.call(forms, function (form) {
         form.addEventListener('submit', function (event) {
@@ -166,6 +179,10 @@ btn.on('click', function (e) {
     }, '300');
 });
 
+/**
+ * @params {text} ข้อความที่จะให้แสดง
+ * @params {type} success , error
+ */
 function toast(text, type) {
     let divToast = document.createElement("div")
     let divMessage = document.createElement("div")
@@ -176,7 +193,9 @@ function toast(text, type) {
     divToast.appendChild(divMessage);
     document.getElementById("toast-container").appendChild(divToast)
 }
-
+/**
+ * @return run clear alert
+ */
 function toastClear() {
     let error = document.querySelectorAll('.toast-error')
     let success = document.querySelectorAll('.toast-success')
@@ -192,7 +211,11 @@ function toastClear() {
     }, 5000)
 }
 
-function setVisible(visible) {
+/**
+ * @params {visible} bool : true | false
+ * @return disable page
+ */
+var setVisible = (visible) => {
     var intervalId = window.setInterval(function () {
         if (document.getElementsByTagName('body')[0] !== undefined) {
             window.clearInterval(intervalId);
@@ -200,7 +223,10 @@ function setVisible(visible) {
     }, 0);
     document.querySelector('#loading').style.display = visible ? 'block' : 'none';
 }
-
+/**
+ * @params {elements} string : button,select,input
+ * @return disable page
+ */
 var pageDisable = (elements = '') => {
     let inner_btn = document.getElementsByClassName('app-main__inner')[0].querySelectorAll(elements === '' ? `button,select,input` : elements)
     for (let index = 0; index < inner_btn.length; index++) {
@@ -216,8 +242,16 @@ var pageEnable = () => {
         element.disabled = false
     }
 }
-
-var newInput = (type, classList = '', name = '', value = '', id = '', nameMethod = '') => {
+/**
+ * @params {type} string : number,text
+ * @params {classList} string||Array : "class_name" | ["class_name1","class_name2"]
+ * @params {name} string : "name"
+ * @params {value} string : "value"
+ * @params {id} string : "id"
+ * @params {nameMethod} string : "changeActualValue(this)"
+ * @return {HTMLElement} HTMLElement
+ */
+var newInput = (type, classList = '', name = '', value = '', id = '', nameMethod = '', readonly = false) => {
     let element = document.createElement(`input`)
     element.setAttribute(`type`, type)
     element.setAttribute(`name`, name)
@@ -238,13 +272,19 @@ var newInput = (type, classList = '', name = '', value = '', id = '', nameMethod
     } else {
         element.className = classList
     }
-
+    if (readonly) {
+        element.setAttribute(`readonly`, readonly)
+    }
     return element
 }
 
+/**
+ * @params {HTMLElement} element
+ * @params {Attribute} Object: {"key1" : "value1","key2" : "value2",}
+ */
 var setAttributes = (el, attrs) => {
-    for(var key in attrs) {
-      el.setAttribute(key, attrs[key]);
+    for (var key in attrs) {
+        el.setAttribute(key, attrs[key]);
     }
 }
 

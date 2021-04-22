@@ -34,6 +34,7 @@
             })
             .catch(error => {
                 console.log(error.response.data.message)
+                toast(error.response.data.message, 'error')
             })
             .finally(() => {
                 if (evaluate.status === status.NEW || evaluate.status === status.SUBMITTED) {
@@ -41,6 +42,7 @@
                 } else {
                     pageDisable()
                 }
+                toastClear()
             })
     }, false);
 })();

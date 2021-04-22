@@ -14,8 +14,10 @@ class TargetPeriod extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'year'
-    ];
+    // protected $fillable = [
+    //     'name',
+    //     'year'
+    // ];
+
+    protected $guarded = [];
 }

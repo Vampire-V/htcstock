@@ -247,7 +247,9 @@
 </script>
 <script defer>
     // variable
+    const auth = {!!json_encode(Auth::id())!!}
     const evaluate = {!!json_encode($evaluate)!!}
+    
 </script>
 <script src="{{asset('assets\js\kpi\evaluationSelf\evaluate.js')}}" defer></script>
 <script>
@@ -266,16 +268,15 @@
             if (res.status === 200) {
                 status.textContent = res.data.data.status
                 toast(`Save evaluate-form.`,'success')
-                toastClear()
             }
         })
         .catch(error => {
             toast(error.response.data.message,'error')
-            toastClear()
             console.log(error.response.data.message)
         })
         .finally( () => {
             setVisible(false)
+            toastClear()
         })
     }
 
@@ -292,17 +293,16 @@
                     pageDisable()
                 }
                 toast(`Sent evaluate-form To Manager.`,'success')
-                toastClear()
             }
         })
         .catch(error => {
             toast(error.response.data.message,'error')
-            toastClear()
             console.log(error.response.data.message)
         })
         .finally( () => {
             evaluateForm.next = !evaluateForm.next
             setVisible(false)
+            toastClear()
         })
     }
 </script>

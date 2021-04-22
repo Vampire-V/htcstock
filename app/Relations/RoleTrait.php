@@ -15,6 +15,7 @@ trait RoleTrait
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_role');
+        return $this->belongsToMany(User::class, 'user_role')->with('roles')
+        ->withPivot(['user_id','role_id']);
     }
 }

@@ -32,6 +32,73 @@
     </div>
 </div>
 {{-- end title  --}}
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="main-card mb-3 card">
+            <div class="card-header-tab card-header-tab-animation card-header">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                    <h5 class="card-title">Search</h5>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="position-relative form-group">
+                    <form class="needs-validation" novalidate>
+                        <div class="form-row">
+                            <div class="col-md-1 mb-1">
+                                <label for="Year">Target Period</label>
+                                <select name="period" id="period" class="form-control-sm form-control">
+                                    <option value="">Choose...</option>
+                                    @isset($periods)
+                                    @foreach ($periods as $item)
+                                    <option value="{{$item->name}}" @if ($selectedPeriod===$item->name)
+                                        selected
+                                        @endif>{{$item->name}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                                {{-- <div class="invalid-feedback">
+                                    Please provide a valid state.
+                                </div> --}}
+                            </div>
+                            <div class="col-md-1 mb-1">
+                                <label for="Year">Year</label>
+                                <select name="year" id="year" class="form-control-sm form-control">
+                                    @foreach (range(date('Y'), $start_year) as $year)
+                                    <option value="{{$year}}" @if ($selectedYear==$year) selected @endif>{{$year}}
+                                    </option>
+                                    @endforeach
+                                </select>
+                                {{-- <div class="invalid-feedback">
+                                    Please provide a valid state.
+                                </div> --}}
+                            </div>
+                            <div class="col-md-1 mb-1">
+                                <label for="Department">Department</label>
+                                <select name="department" id="department" class="form-control-sm form-control">
+                                    <option value="">Choose...</option>
+                                    @isset($departments)
+                                    @foreach ($departments as $item)
+                                    <option value="{{$item->id}}" @if ($selectedDept==$item->id)
+                                        selected
+                                        @endif>{{$item->name}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                                {{-- <div class="invalid-feedback">
+                                    Please provide a valid state.
+                                </div> --}}
+                            </div>
+                            <div class="col-md-1 mb-1 text-center">
+                                <button class="btn btn-primary mt-4" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-lg-12">
@@ -62,7 +129,7 @@
                                 <th scope="row">{{$key+1}}</th>
                                 <td>{{$item->evaluate->user->name}} : {{$item->evaluate->status}}</td>
                                 <td>{{$item->evaluate->targetperiod->name}} {{$item->evaluate->targetperiod->year}}</td>
-                                <td>{{$item->rule->name}}</td>
+                                <td class="truncate">{{$item->rule->name}}</td>
                                 <td>{{number_format($item->base_line,2)}}</td>
                                 <td>{{number_format($item->max_result,2)}}</td>
                                 <td>{{number_format($item->weight,2)}}%</td>

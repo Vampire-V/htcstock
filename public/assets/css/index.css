@@ -80,3 +80,11 @@
 .select2-containe {
     display: inherit !important;
 }
+
+/* limit text example.... */
+.truncate {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 150px;
+  }

@@ -5,17 +5,25 @@ namespace App\Http\Controllers\KPI\EddyMenu;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\KPI\EvaluateDetailResource;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
+use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
+use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AllEvaluationController extends Controller
 {
-    protected $evaluateDetailService, $departmentService;
-    public function __construct(EvaluateDetailServiceInterface $evaluateDetailServiceInterface, DepartmentServiceInterface $departmentServiceInterface)
-    {
+    protected $evaluateDetailService, $departmentService, $targetPeriodService, $userService;
+    public function __construct(
+        EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
+        DepartmentServiceInterface $departmentServiceInterface,
+        TargetPeriodServiceInterface $targetPeriodServiceInterface,
+        UserServiceInterface $userServiceInterface
+    ) {
         $this->evaluateDetailService = $evaluateDetailServiceInterface;
         $this->departmentService = $departmentServiceInterface;
+        $this->targetPeriodService = $targetPeriodServiceInterface;
+        $this->userService = $userServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -26,13 +34,17 @@ class AllEvaluationController extends Controller
     {
         $query = $request->all();
         $selectedYear = empty($request->year) ? date('Y') : $request->year;
-        $selectedDept = $request->department;
+        $selectedDept = intval($request->department);
+        $selectedPeriod = $request->period;
+        $selectedUser = intval($request->user);
         $start_year = date('Y', strtotime('-10 years'));
 
+        $periods = $this->targetPeriodService->dropdown();
         $departments = $this->departmentService->dropdown();
+        $users = $this->userService->dropdown();
         $evaluateDetail = EvaluateDetailResource::collection($this->evaluateDetailService->setActualForEddyFilter($request));
         // $evaluateDetail
-        return \view('kpi.Eddy.index', \compact('start_year', 'selectedYear', 'departments', 'selectedDept', 'evaluateDetail'));
+        return \view('kpi.Eddy.index', \compact('start_year', 'selectedYear', 'departments', 'selectedDept', 'periods', 'selectedPeriod', 'users', 'selectedUser', 'evaluateDetail'));
     }
 
     /**

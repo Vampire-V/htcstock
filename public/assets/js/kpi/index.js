@@ -287,11 +287,11 @@ var sumTotalCalculationSummary = (table) => {
         // row.cells[1].textContent = weightForSum[index].toFixed(2) + '%'
         // row.cells[2].textContent = achForSum[index].toFixed(2) + '%'
         // let total = (parseFloat(achForSum[index]) * parseFloat(weightForSum[index]) / 100)
-        console.log(parseFloat(row.cells[row.childElementCount - 1].textContent));
+        // console.log(parseFloat(row.cells[row.childElementCount - 1].textContent));
         // row.cells[3].textContent = total.toFixed(2) + '%'
         // sum_total += parseFloat(total)
     }
-    console.log(total);
+    // console.log(total);
 }
 
 var changeValueRule = (e) => {

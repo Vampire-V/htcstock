@@ -26,16 +26,48 @@
             <div class="card-header-tab card-header-tab-animation card-header">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                    <h5 class="card-title">Set Actual for : {{Auth::user()->name}}</h5>
+                    <h5 class="card-title">Search</h5>
                 </div>
             </div>
             <div class="card-body">
                 <div class="position-relative form-group">
                     <form class="needs-validation" novalidate>
                         <div class="form-row">
+                            <div class="col-md-2 mb-2">
+                                <label for="Year">Name</label>
+                                <select name="user" id="user" class="form-control-sm form-control">
+                                    <option value="">Choose...</option>
+                                    @isset($users)
+                                    @foreach ($users as $item)
+                                    <option value="{{$item->id}}" @if ($selectedUser===$item->id)
+                                        selected
+                                        @endif>{{$item->name}} </option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                                {{-- <div class="invalid-feedback">
+                                    Please provide a valid state.
+                                </div> --}}
+                            </div>
+                            <div class="col-md-1 mb-1">
+                                <label for="Year">Target Period</label>
+                                <select name="period" id="period" class="form-control-sm form-control">
+                                    <option value="">Choose...</option>
+                                    @isset($periods)
+                                    @foreach ($periods as $item)
+                                    <option value="{{$item->name}}" @if ($selectedPeriod===$item->name)
+                                        selected
+                                        @endif>{{$item->name}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                                {{-- <div class="invalid-feedback">
+                                    Please provide a valid state.
+                                </div> --}}
+                            </div>
                             <div class="col-md-1 mb-1">
                                 <label for="Year">Year</label>
-                                <select name="year" id="validationYear" class="form-control-sm form-control">
+                                <select name="year" id="year" class="form-control-sm form-control select-year">
                                     @foreach (range(date('Y'), $start_year) as $year)
                                     <option value="{{$year}}" @if ($selectedYear==$year) selected @endif>{{$year}}
                                     </option>
@@ -45,15 +77,18 @@
                                     Please provide a valid state.
                                 </div> --}}
                             </div>
-                            <div class="col-md-1 mb-1">
+                            <div class="col-md-2 mb-2">
                                 <label for="Department">Department</label>
-                                <select name="department" id="department" class="form-control-sm form-control">
-                                    @foreach ($departments as $item)
+                                <select name="department" id="department"
+                                    class="form-control-sm form-control select-dept">
                                     <option value="">Choose...</option>
-                                    <option value="{{$item->id}}" @if ($selectedDept==$item->id)
+                                    @isset($departments)
+                                    @foreach ($departments as $item)
+                                    <option value="{{$item->id}}" @if ($selectedDept===$item->id)
                                         selected
                                         @endif>{{$item->name}}</option>
                                     @endforeach
+                                    @endisset
                                 </select>
                                 {{-- <div class="invalid-feedback">
                                     Please provide a valid state.
@@ -76,7 +111,7 @@
             <div class="card-header-tab card-header-tab-animation card-header">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                    <h5 class="card-title">Set Actual for : {{Auth::user()->name}}</h5>
+                    <h5 class="card-title">Set Actual for</h5>
                 </div>
             </div>
             <div class="card-body">
@@ -104,7 +139,8 @@
                                 <th scope="row">{{$key+1}}</th>
                                 <td>{{$item->evaluate->user->name}}</td>
                                 <td>{{$item->evaluate->targetperiod->name}} {{$item->evaluate->targetperiod->year}}</td>
-                                <td>{{$item->rule->name}}</td>
+                                <td class="truncate" data-toggle="tooltip" data-placement="top"
+                                    title="{{$item->rule->name}}">{{$item->rule->name}}</td>
                                 <td>{{number_format($item->base_line,2)}}</td>
                                 <td>{{number_format($item->max_result,2)}}</td>
                                 <td>{{number_format($item->weight,2)}}%</td>
@@ -145,7 +181,7 @@
     const detail = {!!json_encode($evaluateDetail)!!}
     var all_data = [];
 </script>
-<script src="{{asset('assets\js\kpi\setActual\index.js')}}" defer></script>
+<script src="{{asset('assets\js\kpi\eddy\index.js')}}" defer></script>
 <script>
     var changeActual = (e) => {
         console.log(detail);

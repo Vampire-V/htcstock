@@ -163,6 +163,7 @@
                             <th>Weight</th>
                             <th>%Ach</th>
                             <th>Total</th>
+                            <th style="width: 10%;">For input</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -173,6 +174,7 @@
                             <td>0.00%</td>
                             <td>0.00%</td>
                             <td>0.00%</td>
+                            <td><input type="number" name="" id=""></td>
                         </tr>
                         @endforeach
                         @endisset
@@ -190,42 +192,7 @@
         </div>
     </div>
 </div>
-{{-- Main Rule Conditions --}}
-{{-- <div class="col-lg-12">
-    <div class="main-card mb-3 card">
-        <div class="card-body">
-            <h5 class="card-title">Main Rule Conditions</h5>
-            <div class="table-responsive">
-                <table class="mb-0 table table-sm">
-                    <thead>
-                        <tr>
-                            <th>Range Name</th>
-                            <th>Minimum</th>
-                            <th>Maximum</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Condition Range 1</th>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Condition Range 2</th>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Condition Range 3</th>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div> --}}
+
 {{-- Button --}}
 <div class="app-page-title">
     <div class="page-title-wrapper">

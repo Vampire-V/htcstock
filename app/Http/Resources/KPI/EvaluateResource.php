@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\KPI;
 
-use App\Http\Resources\ALL\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EvaluateResource extends JsonResource
@@ -32,6 +31,9 @@ class EvaluateResource extends JsonResource
             'total_weight_kpi' => $this->total_weight_kpi,
             'total_weight_key_task' => $this->total_weight_key_task,
             'total_weight_omg' => $this->total_weight_omg,
+            'ach_kpi' => $this->ach_kpi,
+            'ach_key_task' => $this->ach_key_task,
+            'ach_omg' => $this->ach_omg,
             'comment' => $this->comment,
             'created_at' => (string) $this->created_at,
             'updated_at' => (string) $this->updated_at,

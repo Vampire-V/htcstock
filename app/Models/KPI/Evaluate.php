@@ -25,7 +25,10 @@ class Evaluate extends Model
         'main_rule_condition_3_max' => 'float',
         'total_weight_kpi' => 'float',
         'total_weight_key_task' => 'float',
-        'total_weight_omg' => 'float'
+        'total_weight_omg' => 'float',
+        'ach_kpi' => 'float',
+        'ach_key_task' => 'float',
+        'ach_omg' => 'float',
     ];
     /**
      * The attributes that are mass assignable.

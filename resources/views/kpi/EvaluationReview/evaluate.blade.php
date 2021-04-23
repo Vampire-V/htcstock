@@ -162,8 +162,8 @@
                             <th>#</th>
                             <th>Weight</th>
                             <th>%Ach</th>
+                            <th style="width: 10%;">Set Ach%</th>
                             <th>Total</th>
-                            <th style="width: 10%;">For input</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -173,8 +173,8 @@
                             <th>{{$item->name}}</th>
                             <td>0.00%</td>
                             <td>0.00%</td>
+                            <td><input class="form-control form-control-sm" type="number" name="{{$item->name}}" step="0.01" min="0" onchange="changeAch(this)"></td>
                             <td>0.00%</td>
-                            <td><input type="number" name="" id=""></td>
                         </tr>
                         @endforeach
                         @endisset
@@ -184,7 +184,8 @@
                             <th scope="row"></th>
                             <td></td>
                             <td></td>
-                            <td>%</td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -222,6 +223,14 @@
                 formulaRuleDetail(e,index)
             }
         });
+    }
+
+    const changeAch = (e) => {
+        for (const [key, value] of Object.entries(evaluateForm)) {
+            if (e.name.substr(0,3) === key.substr(4,3)) {
+                evaluateForm,evaluateForm[key] = parseFloat(e.value)
+            }
+        }
     }
 
     const reject = async (e) => {
@@ -265,6 +274,8 @@
         // /kpi/evaluation-review/update
         window.scrollTo(500, 0)
         setVisible(true)
+        console.log(evaluateForm.ach_kpi);
+        debugger
         putEvaluateReview(evaluate.id,evaluateForm).then(res => {
             let status = document.getElementsByClassName('card-header')[0].querySelector('span')
             if (res.status === 200) {

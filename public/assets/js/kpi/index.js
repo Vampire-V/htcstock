@@ -25,6 +25,9 @@ class EvaluateForm {
         total_weight_kpi = 0.00,
         total_weight_key_task = 0.00,
         total_weight_omg = 0.00,
+        ach_kpi = 0.00,
+        ach_key_task = 0.00,
+        ach_omg = 0.00,
         comment = null,
         detail = [],
         remove = [],
@@ -40,6 +43,9 @@ class EvaluateForm {
         this.total_weight_kpi = total_weight_kpi
         this.total_weight_key_task = total_weight_key_task
         this.total_weight_omg = total_weight_omg
+        this.ach_kpi = ach_kpi
+        this.ach_key_task = ach_key_task
+        this.ach_omg = ach_omg
         this.comment = comment
         this.detail = detail
         this.remove = remove
@@ -87,6 +93,11 @@ var setEvaluate = (datas) => {
     evaluateForm.total_weight_kpi = datas.total_weight_kpi
     evaluateForm.total_weight_key_task = datas.total_weight_key_task
     evaluateForm.total_weight_omg = datas.total_weight_omg
+
+    evaluateForm.ach_kpi = datas.ach_kpi
+    evaluateForm.ach_key_task = datas.ach_key_task
+    evaluateForm.ach_omg = datas.ach_omg
+
     evaluateForm.comment = datas.comment
     evaluateForm.detail = setDetail(datas.detail).detail
     return evaluateForm
@@ -115,6 +126,7 @@ var displayDetail = (evaluateForm) => {
     let tables = document.getElementsByClassName('app-main__inner')[0].querySelectorAll('table')
     let weightForSum = []
     let achForSum = []
+    // console.log(evaluateForm);
     for (let i = 0; i < tables.length; i++) {
         const table = tables[i]
         let data_category = evaluateForm.detail.filter(value => value.rules.categorys.name === table.id.substring(6))
@@ -188,11 +200,25 @@ var displayDetail = (evaluateForm) => {
                     row.cells[2].textContent = achForSum[index].toFixed(2) + '%'
                     let total = (parseFloat(achForSum[index]) * parseFloat(weightForSum[index]) / 100)
 
-                    row.cells[3].textContent = total.toFixed(2) + '%'
+                    if (window.location.pathname.search("self-evaluation") > 0) {
+                        row.cells[3].textContent = total.toFixed(2) + '%'
+                    } else {
+                        for (const [key, value] of Object.entries(evaluateForm)) {
+                            if (row.cells[3].firstElementChild.name.substr(0,3) === key.substr(4,3)) {
+                                row.cells[3].firstElementChild.value = value.toFixed(2)
+                            }
+                        }
+                        row.cells[4].textContent = total.toFixed(2) + '%'
+                    }
                     sum_total += parseFloat(total)
                 }
                 // sumTotalCalculationSummary(body_cal)
-                table.tFoot.lastElementChild.cells[3].textContent = sum_total.toFixed(2) + '%'
+                if (window.location.pathname.search("self-evaluation") > 0) {
+                    table.tFoot.lastElementChild.cells[3].textContent = sum_total.toFixed(2) + '%'
+                } else {
+                    table.tFoot.lastElementChild.cells[4].textContent = sum_total.toFixed(2) + '%'
+                }
+
             }
 
         }

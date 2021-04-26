@@ -199,17 +199,8 @@ var displayDetail = (evaluateForm) => {
                     row.cells[1].textContent = weightForSum[index].toFixed(2) + '%'
                     row.cells[2].textContent = achForSum[index].toFixed(2) + '%'
                     let total = (parseFloat(achForSum[index]) * parseFloat(weightForSum[index]) / 100)
-
-                    if (window.location.pathname.search("self-evaluation") > 0) {
-                        row.cells[3].textContent = total.toFixed(2) + '%'
-                    } else {
-                        for (const [key, value] of Object.entries(evaluateForm)) {
-                            if (row.cells[3].firstElementChild.name.substr(0,3) === key.substr(4,3)) {
-                                row.cells[3].firstElementChild.value = value.toFixed(2)
-                            }
-                        }
-                        row.cells[4].textContent = total.toFixed(2) + '%'
-                    }
+                    row.cells[3].textContent = total.toFixed(2) + '%'
+                    
                     sum_total += parseFloat(total)
                 }
                 // sumTotalCalculationSummary(body_cal)

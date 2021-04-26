@@ -2,6 +2,10 @@
 @section('sidebar')
 @include('includes.sidebar.kpi');
 @stop
+@section('style')
+<style>
+</style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -156,6 +160,68 @@
                             </tfoot>
                         </table>
                         @endisset
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="mb-3 card">
+            <div class="card-header-tab card-header-tab-animation card-header">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                    Evaluation Report
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="table-responsive" style="height: 200px;">
+                        <table class="table table-sm" id="table-set-actual">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" style="vertical-align : middle;">#</th>
+                                    <th rowspan="2" style="vertical-align : middle;">full name</th>
+                                    @isset($periods)
+                                    @foreach ($periods as $item)
+                                    <th colspan="2">{{$item->name}}</th>
+                                    @endforeach
+                                    @endisset
+                                </tr>
+                                <tr>
+                                    @isset($periods)
+                                    @foreach ($periods as $item)
+                                    <th>target</th>
+                                    <th>actual</th>
+                                    @endforeach
+                                    @endisset
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @isset($users)
+                                @foreach ($users as $key => $item)
+                                <tr>
+                                    <td>{{$key+1}}</td>
+                                    <td>{{$item->name}}</td>
+                                    @isset($item->total)
+                                    @foreach ($item->total as $total)
+                                    <td>
+                                        {{$total->target}}
+                                    </td>
+                                    <td>
+                                        {{$total->actual}}
+                                    </td>
+                                    @endforeach
+                                    @endisset
+                                </tr>
+                                @endforeach
+                                @endisset
+                            </tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
             </div>

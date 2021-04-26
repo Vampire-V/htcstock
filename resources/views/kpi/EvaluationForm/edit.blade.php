@@ -311,7 +311,6 @@
 <script>
     // dropdown
     const changeTemplate = (e) => {
-        console.log('template change');
         evaluateForm.template = e.selectedIndex > 0 ? parseInt(e.options[e.selectedIndex].value) : null
         if (evaluateForm.template) {
             setVisible(true)

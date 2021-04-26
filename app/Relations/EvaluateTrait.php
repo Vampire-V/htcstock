@@ -2,6 +2,7 @@
 
 namespace App\Relations;
 
+use App\Models\KPI\Evaluate;
 use App\Models\KPI\EvaluateDetail;
 use App\Models\KPI\Rule;
 use App\Models\KPI\TargetPeriod;

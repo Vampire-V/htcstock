@@ -5,15 +5,19 @@ namespace App\Http\Controllers\KPI;
 use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Models\KPI\TargetPeriod;
+use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    protected $targetPeriodService;
-    public function __construct(TargetPeriodServiceInterface $targetPeriodServiceInterface)
-    {
+    protected $targetPeriodService, $userService;
+    public function __construct(
+        TargetPeriodServiceInterface $targetPeriodServiceInterface,
+        UserServiceInterface $userServiceInterface
+    ) {
         $this->targetPeriodService = $targetPeriodServiceInterface;
+        $this->userService = $userServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -24,8 +28,10 @@ class HomeController extends Controller
     {
         $ofSelf = $this->targetPeriodService->selfApprovedEvaluationOfyear(date('Y'));
         $ofDept = $this->targetPeriodService->deptApprovedEvaluationOfyear(date('Y'));
+        $periods = $this->targetPeriodService->dropdown();
+        $users = $this->userService->evaluationOfYear(date('Y'));
 
-        return \view('kpi.home', \compact('ofSelf','ofDept'));
+        return \view('kpi.home', \compact('ofSelf', 'ofDept', 'users','periods'));
     }
 
     /**

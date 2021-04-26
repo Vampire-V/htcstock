@@ -129,9 +129,6 @@ class EvaluateReviewController extends Controller
             }
             $evaluate->status = $request->next ? KPIEnum::approved : KPIEnum::draft;
             $evaluate->comment = $request->comment;
-            $evaluate->ach_kpi =  $request->ach_kpi;
-            $evaluate->ach_key_task =  $request->ach_key_task;
-            $evaluate->ach_omg =  $request->ach_omg;
             $evaluate->save();
             if ($evaluate->status === KPIEnum::approved) {
                 # send mail to approved

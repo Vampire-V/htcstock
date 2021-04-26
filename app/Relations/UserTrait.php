@@ -7,6 +7,7 @@ use App\Models\Division;
 use App\Models\IT\Transactions;
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\Rule;
+use App\Models\KPI\TargetPeriod;
 use App\Models\Legal\LegalApproval;
 use App\Models\Legal\LegalApprovalDetail;
 use App\Models\Legal\LegalContract;
@@ -82,6 +83,11 @@ trait UserTrait
 
     // KPI
     public function evaluate()
+    {
+        return $this->hasOne(Evaluate::class,'user_id')->withDefault();
+    }
+
+    public function evaluates()
     {
         return $this->hasMany(Evaluate::class);
     }

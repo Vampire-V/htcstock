@@ -162,7 +162,7 @@
                             <th>#</th>
                             <th>Weight</th>
                             <th>%Ach</th>
-                            <th style="width: 10%;">Set Ach%</th>
+                            {{-- <th style="width: 10%;">Set Ach%</th> --}}
                             <th>Total</th>
                         </tr>
                     </thead>
@@ -173,7 +173,7 @@
                             <th>{{$item->name}}</th>
                             <td>0.00%</td>
                             <td>0.00%</td>
-                            <td><input class="form-control form-control-sm" type="number" name="{{$item->name}}" step="0.01" min="0" onchange="changeAch(this)"></td>
+                            {{-- <td><input class="form-control form-control-sm" type="number" name="{{$item->name}}" step="0.01" min="0" onchange="changeAch(this)"></td> --}}
                             <td>0.00%</td>
                         </tr>
                         @endforeach
@@ -184,7 +184,7 @@
                             <th scope="row"></th>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            {{-- <td></td> --}}
                             <td></td>
                         </tr>
                     </tfoot>

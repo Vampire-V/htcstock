@@ -29,4 +29,5 @@ interface UserServiceInterface
     public function user($id): User;
 
     public function listOfTeamsOfEvaluate($department, $period): Collection;
+    public function evaluationOfYear(string $year): Collection;
 }

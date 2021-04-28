@@ -32,7 +32,7 @@
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-2 mb-2">
                             <label for="staffName">Staff Name</label>
                             <input type="text" class="form-control form-control-sm" id="staffName"
                                 placeholder="Staff Name" value="{{$user->name}}" readonly>
@@ -60,11 +60,11 @@
                                 Please provide a valid city.
                             </div>
                         </div>
-                        <div class="col-md-1 mb-1">
+                        <div class="col-md-2 mb-2">
                             <label for="Year">Year</label>
-                            <select name="year" id="validationYear" class="form-control-sm form-control">
+                            <select name="year[]" id="validationYear" class="form-control-sm form-control" multiple>
                                 @foreach (range(date('Y'), $start_year) as $year)
-                                <option value="{{$year}}" @if ($selectedYear == $year)
+                                <option value="{{$year}}" @if ($selectedYear->contains($year))
                                     selected
                                     @endif>{{$year}}</option>
                                 @endforeach
@@ -73,8 +73,8 @@
                                 Please provide a valid state.
                             </div>
                         </div>
-                        <div class="col-md-1 mb-1 text-center">
-                            <button class="btn btn-primary mt-4" type="submit">Search</button>
+                        <div class="col-md-1" style="display: flex; justify-content: center; align-items: center;  ">
+                            <button class="btn btn-primary " type="submit">Search</button>
                         </div>
                     </div>
                 </form>

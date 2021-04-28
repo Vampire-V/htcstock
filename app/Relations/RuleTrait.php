@@ -38,6 +38,11 @@ trait RuleTrait
         return $this->hasOne(EvaluateDetail::class)->withDefault();
     }
 
+    public function evaluatesDetail()
+    {
+        return $this->hasMany(EvaluateDetail::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_actual')->withDefault();

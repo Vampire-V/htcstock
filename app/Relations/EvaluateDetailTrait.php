@@ -22,4 +22,12 @@ trait EvaluateDetailTrait
     {
         return $this->belongsTo(Rule::class, 'rule_id')->withDefault();
     }
+
+        /**
+     * Get the Evaluate that owns the Rule.
+     */
+    public function rules()
+    {
+        return $this->belongsTo(Rule::class, 'rule_id');
+    }
 }

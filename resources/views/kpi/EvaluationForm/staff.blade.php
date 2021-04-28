@@ -42,14 +42,15 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="position">Position :</label>
-                            <input type="text" class="form-control form-control-sm" id="position"
-                                placeholder="Position" value="{{$staff->positions->name}}" disabled>
+                            <input type="text" class="form-control form-control-sm" id="position" placeholder="Position"
+                                value="{{$staff->positions->name}}" disabled>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="year">Year :</label>
-                            <select name="year" id="validationYear" class="form-control-sm form-control" onchange="this.form.submit()">
+                            <select name="year" id="validationYear" class="form-control-sm form-control"
+                                onchange="this.form.submit()">
                                 @foreach (range(date('Y'), $start_year) as $year)
-                                <option value="{{$year}}">{{$year}}</option>
+                                <option value="{{$year}}" @if ($selectedYear===$year) selected @endif>{{$year}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -76,18 +77,18 @@
                     </thead>
                     <tbody>
                         @isset($periods)
-                            @foreach ($periods as $key => $row)
-                            <tr>
-                                <th scope="row">{{$key+1}}</th>
-                                <td>{{$row->name}}</td>
-                                <td>{{$row->evaluate->status}}</td>
-                                <td>
-                                    <a href="{{$row->evaluate->status ? route('kpi.evaluate.edit',[$staff->id,$row->id,$row->evaluate->id]) : route('kpi.evaluate.create',[$staff->id,$row->id]) }}"
-                                        class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">{{$row->evaluate->status ? "Edit" : "Create"}}
-                                    </a>
-                                </td>
-                            </tr>
-                            @endforeach
+                        @foreach ($periods as $key => $row)
+                        <tr>
+                            <th scope="row">{{$key+1}}</th>
+                            <td>{{$row->name}}</td>
+                            <td>{{$row->evaluate->status}}</td>
+                            <td>
+                                <a href="{{$row->evaluate->status ? route('kpi.evaluate.edit',[$staff->id,$row->id,$row->evaluate->id]) : route('kpi.evaluate.create',[$staff->id,$row->id]) }}"
+                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">{{$row->evaluate->status ? "Edit" : "Create"}}
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
                         @endisset
                     </tbody>
                 </table>
@@ -95,4 +96,8 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('second-script')
+<script src="{{asset('assets\js\kpi\evaluationForm\index.js')}}" defer></script>
 @endsection

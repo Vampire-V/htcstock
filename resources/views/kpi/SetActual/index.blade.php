@@ -45,7 +45,7 @@
                 <div class="position-relative form-group">
                     <form class="needs-validation" novalidate>
                         <div class="form-row">
-                            <div class="col-md-1 mb-1">
+                            <div class="col-md-2 mb-2">
                                 <label for="Year">Target Period</label>
                                 <select name="period" id="period" class="form-control-sm form-control">
                                     <option value="">Choose...</option>
@@ -61,7 +61,7 @@
                                     Please provide a valid state.
                                 </div> --}}
                             </div>
-                            <div class="col-md-1 mb-1">
+                            <div class="col-md-2 mb-2">
                                 <label for="Year">Year</label>
                                 <select name="year" id="year" class="form-control-sm form-control">
                                     @foreach (range(date('Y'), $start_year) as $year)
@@ -73,7 +73,7 @@
                                     Please provide a valid state.
                                 </div> --}}
                             </div>
-                            <div class="col-md-1 mb-1">
+                            <div class="col-md-2 mb-2">
                                 <label for="Department">Department</label>
                                 <select name="department" id="department" class="form-control-sm form-control">
                                     <option value="">Choose...</option>

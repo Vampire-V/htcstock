@@ -236,7 +236,6 @@
     const reject = async (e) => {
         // Save & reject
         // /kpi/evaluation-review/update
-        
         const { value: text } = await Swal.fire({
             input: 'textarea',
             inputLabel: `Why evaluate reject!`,
@@ -248,9 +247,9 @@
         })
         if (text) {
             evaluateForm.comment = text
-            window.scrollTo(500, 0)
             setVisible(true)
-            putEvaluateReview(evaluate.id,evaluateForm).then(res => {
+            putEvaluateReview(evaluate.id,evaluateForm)
+            .then(res => {
                 let status = document.getElementsByClassName('card-header')[0].querySelector('span')
                 if (res.status === 200) {
                     status.textContent = res.data.data.status
@@ -272,26 +271,23 @@
         evaluateForm.next = !evaluateForm.next
         // Save & approved
         // /kpi/evaluation-review/update
-        window.scrollTo(500, 0)
         setVisible(true)
-        console.log(evaluateForm.ach_kpi);
-        debugger
+        // window.scroll({top: 0, behavior: "smooth"})
         putEvaluateReview(evaluate.id,evaluateForm).then(res => {
             let status = document.getElementsByClassName('card-header')[0].querySelector('span')
             if (res.status === 200) {
                 status.textContent = res.data.data.status
                 pageDisable()
                 toast(`evaluate-review Approved.`,'success')
-                toastClear()
             }
         })
         .catch(error => {
             toast(error.response.data.message,'error')
-            toastClear()
         })
         .finally( () => {
             evaluateForm.next = !evaluateForm.next
             setVisible(false)
+            toastClear()
         })
     }
 </script>

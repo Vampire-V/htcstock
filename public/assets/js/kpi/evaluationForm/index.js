@@ -6,11 +6,15 @@
         $("#department").select2({
             placeholder: 'Select Department',
             allowClear: true
-        });
+        })
         $("#position").select2({
             placeholder: 'Select Position',
             allowClear: true
-        });
+        })
+        $("#validationYear").select2({
+            placeholder: 'Select Position',
+            allowClear: true
+        })
         
     })
 

@@ -344,7 +344,7 @@
         if (evaluateForm.template && evaluateForm.mainRule) {
             setVisible(true)
             evaluateForm.next = true
-            window.scrollTo(500, 0)
+            // window.scroll({top: 0, behavior: "smooth"})
             postEvaluateForm(staff.id,period.id,evaluateForm).then(res => {
                 if (res.status === 201) {
                     toast(`create evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`,'success')
@@ -368,7 +368,7 @@
         validityForm()
         if (evaluateForm.template && evaluateForm.mainRule) {
             setVisible(true)
-            window.scrollTo(500, 0)
+            // window.scroll({top: 0, behavior: "smooth"})
             postEvaluateForm(staff.id,period.id,evaluateForm).then( async res => {
                 if (res.status === 201) {
                     toast(`create evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`,'success')

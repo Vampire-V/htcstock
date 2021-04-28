@@ -94,15 +94,15 @@ class StaffDataController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $year = isset($request->year) ? $request->year : \date('Y');
+        $selectedYear = empty($request->year) ? \date('Y') : $request->year;
         try {
             $staff = $this->userService->find($id);
-            $periods = $this->targetPeriodService->byYearForEvaluate($year, $staff);
+            $periods = $this->targetPeriodService->byYearForEvaluate($selectedYear, $staff);
         } catch (\Throwable $th) {
             throw $th;
         }
         $start_year = date('Y', strtotime('-10 years'));
-        return \view('kpi.EvaluationForm.staff', \compact('start_year', 'periods', 'staff'));
+        return \view('kpi.EvaluationForm.staff', \compact('start_year', 'periods', 'staff', 'selectedYear'));
     }
 
     /**
@@ -135,11 +135,11 @@ class StaffDataController extends Controller
      * @param  int  $period
      * @return App\Http\Resources\ALL\UserResource
      */
-    public function listOfTeamsOfEvaluate($staff,$period)
+    public function listOfTeamsOfEvaluate($staff, $period)
     {
         try {
             $user = $this->userService->find($staff);
-            $team = $this->userService->listOfTeamsOfEvaluate($user->department_id,$period);
+            $team = $this->userService->listOfTeamsOfEvaluateReport($user->department_id, $period);
 
             return new UserResource($team);
         } catch (\Throwable $th) {

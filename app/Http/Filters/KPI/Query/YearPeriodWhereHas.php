@@ -6,8 +6,6 @@ class YearPeriodWhereHas
 {
     public function filter($builder, $value)
     {
-        return $builder->whereHas('targetperiod', function ($query) use ($value) {
-            return $query->where('year', $value);
-        });
+        return $builder->whereHas('targetperiod', fn ($query) => $query->whereIn('year', [...$value]));
     }
 }

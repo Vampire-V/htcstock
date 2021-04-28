@@ -65,20 +65,6 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
         }
     }
 
-    public function setActualForEddyFilter(Request $request)
-    {
-        try {
-            return EvaluateDetail::with(['evaluate.user', 'evaluate.targetperiod', 'rule'])
-                // ->whereHas('rule', fn ($query) => $query->where('user_actual', \auth()->id()))
-                ->whereHas('evaluate', fn ($query) => $query->whereIn('status', [KPIEnum::approved]))
-                ->setActualFilter($request)
-                // ->orderBy('email', 'asc')
-                ->get();
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    }
-
     // public function formulaKeyTask(EvaluateDetail $object): EvaluateDetail
     // {
     //     $object->ach = 0;

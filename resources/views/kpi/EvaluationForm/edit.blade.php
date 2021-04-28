@@ -347,7 +347,7 @@
         if (evaluateForm.template && evaluateForm.mainRule) {
             setVisible(true)
             evaluateForm.next = true
-            window.scrollTo(500, 0)
+            // window.scroll({top: 0, behavior: "smooth"})
             putEvaluateForm(staff.id,period.id,evaluate.id,evaluateForm).then(res => {
                 if (res.status === 200) {
                     document.getElementsByClassName('app-main__inner')[0].querySelector('.badge').textContent = res.data.data.status
@@ -374,7 +374,7 @@
         validityForm()
         if (evaluateForm.template && evaluateForm.mainRule) {
             setVisible(true)
-            window.scrollTo(500, 0)
+            // window.scroll({top: 0, behavior: "smooth"})
             putEvaluateForm(staff.id,period.id,evaluate.id,evaluateForm).then( async res => {
                 if (res.status === 201) {
                     toast(`update evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`,'success')

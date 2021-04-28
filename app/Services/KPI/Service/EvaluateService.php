@@ -103,4 +103,18 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
             throw $th;
         }
     }
+
+    public function editEvaluateFilter(Request $request): Collection
+    {
+        try {
+            return Evaluate::with([
+                'user', 'targetperiod', 'evaluateDetail.rules.category', 'evaluateDetail.rules.ruleType', 'evaluateDetail.evaluate.user', 'evaluateDetail.evaluate.targetperiod'
+            ])
+                ->whereIn('status', [KPIEnum::approved])
+                ->filter($request)
+                ->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

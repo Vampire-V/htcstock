@@ -148,6 +148,13 @@ const putSetActualForEddy = (form,id) => axios({
     data: form
 })
 
+const putSetAchForEddy = (form,id) => axios({
+    method: 'PUT',
+    responseType: 'json',
+    url: `/kpi/for-eddy/${id}/updateAch`,
+    data: form
+})
+
 const postRuleUpload = (form) => axios({
     method: 'POST',
     responseType: 'json',

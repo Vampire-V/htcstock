@@ -39,7 +39,7 @@ class SelfEvaluationController extends Controller
     public function index(Request $request)
     {
         $query = $request->all();
-        $selectedYear = empty($request->year) ? date('Y') : $request->year;
+        $selectedYear = empty($request->year) ? collect(date('Y')) : collect($request->year);
         $start_year = date('Y', strtotime('-10 years'));
         try {
             $user = Auth::user();

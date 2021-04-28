@@ -3,10 +3,10 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         // Supporting Documents
-        // $("#validationYear").select2({
-        //     placeholder: 'Select Year',
-        //     allowClear: true
-        // });
+        $("#validationYear").select2({
+            placeholder: 'Select Year',
+            allowClear: true
+        });
 
 
     })

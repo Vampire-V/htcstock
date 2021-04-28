@@ -217,6 +217,10 @@ function toastClear() {
  * @return disable page
  */
 var setVisible = (visible) => {
+    window.scroll({
+        top: 0,
+        behavior: "smooth"
+    })
     var intervalId = window.setInterval(function () {
         if (document.getElementsByTagName('body')[0] !== undefined) {
             window.clearInterval(intervalId);

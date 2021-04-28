@@ -4,22 +4,26 @@ namespace App\Http\Controllers\KPI\EddyMenu;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\KPI\EvaluateDetailResource;
+use App\Http\Resources\KPI\EvaluateResource;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
+use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AllEvaluationController extends Controller
 {
-    protected $evaluateDetailService, $departmentService, $targetPeriodService, $userService;
+    protected $evaluateDetailService, $departmentService, $targetPeriodService, $userService, $evaluateService;
     public function __construct(
+        EvaluateServiceInterface $evaluateServiceInterface,
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
         DepartmentServiceInterface $departmentServiceInterface,
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
         UserServiceInterface $userServiceInterface
     ) {
+        $this->evaluateService = $evaluateServiceInterface;
         $this->evaluateDetailService = $evaluateDetailServiceInterface;
         $this->departmentService = $departmentServiceInterface;
         $this->targetPeriodService = $targetPeriodServiceInterface;
@@ -33,18 +37,24 @@ class AllEvaluationController extends Controller
     public function index(Request $request)
     {
         $query = $request->all();
-        $selectedYear = empty($request->year) ? date('Y') : $request->year;
-        $selectedDept = intval($request->department);
-        $selectedPeriod = $request->period;
-        $selectedUser = intval($request->user);
+        $tab = '';
+        $selectedYear = empty($request->year) ? collect(date('Y')) : collect($request->year);
+        $selectedDept = collect($request->department_id);
+        $selectedPeriod = collect($request->period);
+        $selectedUser = \intval($request->user);
         $start_year = date('Y', strtotime('-10 years'));
-
+        
         $periods = $this->targetPeriodService->dropdown();
         $departments = $this->departmentService->dropdown();
         $users = $this->userService->dropdown();
-        $evaluateDetail = EvaluateDetailResource::collection($this->evaluateDetailService->setActualForEddyFilter($request));
-        // $evaluateDetail
-        return \view('kpi.Eddy.index', \compact('start_year', 'selectedYear', 'departments', 'selectedDept', 'periods', 'selectedPeriod', 'users', 'selectedUser', 'evaluateDetail'));
+        $evaluates = $this->evaluateService->editEvaluateFilter($request);
+        $details = \collect();
+        $evaluates->each(fn($value) => $value->evaluateDetail->each(fn($detail) => $details->push($detail)));
+        $evaluate = EvaluateResource::collection($evaluates);
+        $evaluateDetail = EvaluateDetailResource::collection($details);
+
+        // \dd($selectedDept,$departments);
+        return \view('kpi.Eddy.index', \compact('start_year', 'selectedYear', 'departments', 'selectedDept', 'periods', 'selectedPeriod', 'users', 'selectedUser','evaluate','evaluateDetail'));
     }
 
     /**
@@ -111,6 +121,39 @@ class AllEvaluationController extends Controller
                 if ($detail) {
                     $detail->actual = floatval($element['actual']);
                     $detail->save();
+                    $status = \true;
+                }
+            }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        DB::commit();
+        return \response()->json(["status" => $status]);
+    }
+
+        /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateAch(Request $request, $id)
+    {
+        $body = $request->all();
+        // $status_contain = collect([KPIEnum::draft, KPIEnum::ready]);
+        $status = \false;
+        DB::beginTransaction();
+        try {
+            for ($i = 0; $i < count($body); $i++) {
+                $element = $body[$i];
+                $evaluate = $this->evaluateService->find($element['id']);
+                if ($evaluate) {
+                    $evaluate->ach_kpi = floatval($element['ach_kpi']);
+                    $evaluate->ach_key_task = floatval($element['ach_key_task']);
+                    $evaluate->ach_omg = floatval($element['ach_omg']);
+                    $evaluate->save();
                     $status = \true;
                 }
             }

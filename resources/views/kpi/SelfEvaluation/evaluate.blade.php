@@ -262,7 +262,7 @@
     }
 
     const submit = () => {
-        window.scrollTo(500, 0)
+        // window.scroll({top: 0, behavior: "smooth"})
         setVisible(true)
         putEvaluateSelf(evaluate.id,evaluateForm).then(res => {
             if (res.status === 200) {
@@ -282,7 +282,7 @@
 
     const submitToManager = (e) => {
         evaluateForm.next = !evaluateForm.next
-        window.scrollTo(500, 0)
+        // window.scroll({top: 0, behavior: "smooth"})
         setVisible(true)
         // Save & send to manager 
         putEvaluateSelf(evaluate.id,evaluateForm).then(res => {

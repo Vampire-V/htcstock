@@ -94,11 +94,21 @@
 
                 {{-- for eddy --}}
                 @if (auth()->user()->username === '70037455' || auth()->user()->username === '70037539')
-                <li>
-                    <a href="{{route('kpi.for-eddy.index')}}" class="{{Helper::isActive('kpi/for-eddy*')}}">
-                        <i class="metismenu-icon"></i>
-                        Menu for eddy
+                <li class="app-sidebar__heading">Menu For Eddy</li>
+                <li class="{{Helper::isActive('kpi/for-eddy*')}}">
+                    <a href="#" class="{{Helper::isActive('kpi/for-eddy*')}}">
+                        <i class="metismenu-icon pe-7s-diamond"></i>
+                        Edit Evaluate
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                     </a>
+                    <ul>
+                        <li>
+                            <a href="{{route('kpi.for-eddy.index')}}" class="{{Helper::isActive('kpi/for-eddy*')}}">
+                                <i class="metismenu-icon"></i>
+                                Edite actual / ach%
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 @endif
                 {{-- end for eddy --}}

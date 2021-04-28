@@ -2,23 +2,27 @@
 
 namespace App\Services\KPI\Service;
 
+use App\Enum\KPIEnum;
 use App\Models\KPI\Rule;
 use App\Services\BaseService;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
+use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class RuleService extends BaseService implements RuleServiceInterface
 {
+    protected $periodService;
     /**
      * UserService constructor.
      *
      * @param Rule $model
      */
-    public function __construct(Rule $model)
+    public function __construct(Rule $model, TargetPeriodServiceInterface $targetPeriodServiceInterface)
     {
         parent::__construct($model);
+        $this->periodService = $targetPeriodServiceInterface;
     }
 
     public function all(): Builder
@@ -46,7 +50,7 @@ class RuleService extends BaseService implements RuleServiceInterface
 
     public function filter(Request $request)
     {
-        return Rule::with(['category','user','ruleType'])
+        return Rule::with(['category', 'user', 'ruleType'])
             ->filter($request)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -59,6 +63,31 @@ class RuleService extends BaseService implements RuleServiceInterface
                 return \true;
             }
             return \false;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function rulesInEvaluationReport(string $year)
+    {
+        try {
+            $data = Rule::with('evaluatesDetail.evaluate')->get();
+            $periods = $this->periodService->dropdown();
+            foreach ($data as $key => $value) {
+                $total = \collect();
+                foreach ($periods as $period) {
+                    $data_for_sum = $value->evaluatesDetail->filter(function ($evaluate) use ($period) {
+                        return $evaluate->evaluate->status === KPIEnum::approved && $period->id === $evaluate->evaluate->period_id;
+                    });
+                    $data_for_sum->sum('target');
+                    $data_for_sum->sum('actual');
+                    $total_target = $data_for_sum->count() ? $data_for_sum->sum('target') : 0.00;
+                    $total_actual = $data_for_sum->count() ? $data_for_sum->sum('actual') : 0.00;
+                    $total->push((object)['target' => $total_target, 'actual' => $total_actual]);
+                }
+                $value->total = $total;
+            }
+            return $data;
         } catch (\Throwable $th) {
             throw $th;
         }

@@ -200,16 +200,15 @@ var displayDetail = (evaluateForm) => {
                     row.cells[2].textContent = achForSum[index].toFixed(2) + '%'
                     let total = (parseFloat(achForSum[index]) * parseFloat(weightForSum[index]) / 100)
                     row.cells[3].textContent = total.toFixed(2) + '%'
-                    
+                    setAttributes(row.cells[3], {
+                        "data-toggle": "tooltip",
+                        "title": "Total = (Ach% * Weight%) / 100",
+                        "data-placement": "top"
+                    })
+
                     sum_total += parseFloat(total)
                 }
-                // sumTotalCalculationSummary(body_cal)
-                if (window.location.pathname.search("self-evaluation") > 0) {
-                    table.tFoot.lastElementChild.cells[3].textContent = sum_total.toFixed(2) + '%'
-                } else {
-                    table.tFoot.lastElementChild.cells[4].textContent = sum_total.toFixed(2) + '%'
-                }
-
+                table.tFoot.lastElementChild.cells[3].textContent = sum_total.toFixed(2) + '%'
             }
 
         }
@@ -427,15 +426,21 @@ var formulaRuleDetail = (e, key) => {
 }
 
 var findAchValue = (obj) => {
-    if (obj.rules.calculate_type === calculate.POSITIVE) {
-        ach = parseFloat((obj.actual / obj.target) * 100)
+    if (typeof obj === `object`) {
+        if (obj.rules.calculate_type === calculate.POSITIVE) {
+            ach = parseFloat((obj.actual / obj.target) * 100)
+        }
+        if (obj.rules.calculate_type === calculate.NEGATIVE) {
+            ach = parseFloat((2 - (obj.actual / obj.target)) * 100)
+        }
+        if (obj.rules.calculate_type === calculate.ZERO) {
+            ach = obj.actual <= obj.target ? 100.00 : 0.00
+        }
     }
-    if (obj.rules.calculate_type === calculate.NEGATIVE) {
-        ach = parseFloat((2 - (obj.actual / obj.target)) * 100)
+    if (typeof obj === `number`) {
+        ach = obj
     }
-    if (obj.rules.calculate_type === calculate.ZERO) {
-        ach = obj.actual <= obj.target ? 100.00 : 0.00
-    }
+
     return ach
 }
 
@@ -452,6 +457,11 @@ var findCalValue = (obj, ach) => {
     return cal
 }
 
+/**
+ * @params {element} document.getElementById
+ * @params {EvaluateDetail} EvaluateDetail
+ * @return void
+ */
 var setTooltipAch = (e, data) => {
     if (data.rules.calculate_type === calculate.POSITIVE) {
         setAttributes(e, {
@@ -476,6 +486,11 @@ var setTooltipAch = (e, data) => {
     }
 }
 
+/**
+ * @params {element} document.getElementById
+ * @params {EvaluateDetail} EvaluateDetail
+ * @return void
+ */
 var setTooltipCal = (e, data) => {
     if (data.ach < data.base_line) {
         setAttributes(e, {
@@ -500,6 +515,11 @@ var setTooltipCal = (e, data) => {
     }
 }
 
+/**
+ * @params {text} sdfsdfds
+ * @params {EvaluateDetail} EvaluateDetail
+ * @return void
+ */
 var changeTooltipCal = (befor, data) => {
     let newTitle = befor
     if (data.ach < data.base_line) {

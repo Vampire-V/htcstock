@@ -98,7 +98,7 @@ class UserService extends BaseService implements UserServiceInterface
         }
     }
 
-    public function listOfTeamsOfEvaluate($department, $period): Collection
+    public function listOfTeamsOfEvaluateReport($department, $period): Collection
     {
         try {
             return User::with(['evaluate' => fn ($query) => $query->where('period_id', $period)])->where('department_id', $department)->get();
@@ -107,7 +107,7 @@ class UserService extends BaseService implements UserServiceInterface
         }
     }
 
-    public function evaluationOfYear(string $year): Collection
+    public function evaluationOfYearReport(string $year): Collection
     {
         try {
             $data = User::with(['evaluates.evaluateDetail'])->orderBy('department_id')->get();

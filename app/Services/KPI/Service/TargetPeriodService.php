@@ -40,12 +40,11 @@ class TargetPeriodService extends BaseService implements TargetPeriodServiceInte
         }
     }
 
-    public function byYearForEvaluate(string $year, User $staff): Collection
+    public function byYearForEvaluate($year, User $staff): Collection
     {
         try {
-            return TargetPeriod::with(['evaluate' => function ($query) use ($staff) {
-                $query->where(['user_id' => $staff->id]);
-            }])->where('year', $year)->get();
+            return TargetPeriod::with('evaluate', fn ($query) => $query->where(['user_id' => $staff->id]))
+                ->whereIn('year', [$year])->get();
         } catch (\Throwable $th) {
             throw $th;
         }

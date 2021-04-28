@@ -46,9 +46,6 @@
         <div class="app-main">
             @yield('sidebar')
             <div class="app-main__outer">
-                {{-- <div class="bs-example"> --}}
-
-                {{-- </div> --}}
                 @include('partials.alerts')
                 <div class="app-main__inner">
                     @yield('content')

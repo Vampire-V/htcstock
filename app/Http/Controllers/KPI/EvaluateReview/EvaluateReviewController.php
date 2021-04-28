@@ -53,8 +53,7 @@ class EvaluateReviewController extends Controller
             throw $th;
         }
 
-        return \view(
-            'kpi.EvaluationReview.index',
+        return \view('kpi.EvaluationReview.index',
             \compact('start_year', 'user', 'status_list', 'period', 'evaluates', 'query', 'selectedStatus', 'selectedYear', 'selectedPeriod')
         );
     }

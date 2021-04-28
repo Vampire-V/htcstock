@@ -17,13 +17,15 @@ class Localization
      */
     public function handle($request, Closure $next)
     {
-        if (session()->has('locale')) {
-            App::setlocale(session()->get('locale'));
+        $locale = 'en';
+        if (session('locale')) {
+            $locale = session('locale');
         } else if (Auth::user()) {
             if (Auth::user()->locale) {
-                App::setlocale(Auth::user()->locale);
+                $locale = (Auth::user()->locale) ? Auth::user()->locale : $locale;
             }
         }
+        App::setlocale($locale);
         return $next($request);
     }
 }

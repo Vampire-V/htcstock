@@ -45,7 +45,7 @@
                         <div class="col-md-3 mb-3">
                             <label for="staffName">Staff Name</label>
                             <input type="text" class="form-control form-control-sm" id="staffName"
-                                placeholder="Staff Name" value="{{$evaluate->user->name}}" readonly>
+                                placeholder="Staff Name" value="{{$evaluate->user->{'name_'.app()->getLocale()} }}" readonly>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>

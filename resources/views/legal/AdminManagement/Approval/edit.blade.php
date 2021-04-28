@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('sidebar')
-@include('includes.sidebar.legal');
+@include('includes.sidebar.legal')
 @stop
 @section('content')
-@include('legal.AdminManagement.Approval.create');
+@include('legal.AdminManagement.Approval.create')
 <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
@@ -160,7 +160,7 @@
                                     @method('DELETE')
                                 </form>
                             </td>
-                            <td class="text-center">{{$item->user->email}}</td>
+                            <td class="text-center">{{$item->user->{'name_'.app()->getLocale()} }}</td>
                             <td class="text-center">{{$item->levels}}</td>
                         </tr>
                         @endforeach

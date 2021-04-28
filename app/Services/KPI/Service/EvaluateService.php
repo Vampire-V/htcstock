@@ -79,7 +79,7 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     {
         try {
             return Evaluate::with(['user' => function ($query) {
-                $query->with(['department', 'positions'])->select('id', 'name', 'department_id', 'positions_id')->where('department_id', \auth()->user()->department_id);
+                $query->with(['department', 'positions'])->where('department_id', \auth()->user()->department_id);
             }, 'targetperiod'])
                 ->whereIn('status', [KPIEnum::submit, KPIEnum::approved])
                 ->filter($request)->orderBy('created_at', 'desc')

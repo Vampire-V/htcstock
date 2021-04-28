@@ -111,7 +111,7 @@ class UsersController extends Controller
             $user = $this->userService->find($id);
             if ($this->userService->update(['name' => $request->name], $id)) {
                 $user->roles()->sync($request->roles);
-                $request->session()->flash('success', $user->name . ' user has been update');
+                $request->session()->flash('success', $user->{'name_'.app()->getLocale()} . ' user has been update');
             } else {
                 $request->session()->flash('error', 'error flash message!');
             }
@@ -175,7 +175,7 @@ class UsersController extends Controller
                     $division = Division::where('division_id', $value['division_id'])->first();
 
                     $user->username = $value['username'];
-                    $user->name = $value['name'];
+                    $user->name_th = $value['name'];
                     $user->email = $value['email'];
                     $user->department_id = \is_null($department) ? null : $department->id;
                     $user->divisions_id = \is_null($division) ? null : $division->id;

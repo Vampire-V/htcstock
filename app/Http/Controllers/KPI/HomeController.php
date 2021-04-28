@@ -9,6 +9,7 @@ use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -34,7 +35,6 @@ class HomeController extends Controller
         $periods = $this->targetPeriodService->dropdown();
         $users = $this->userService->evaluationOfYearReport(date('Y'));
         $rules = $this->ruleService->rulesInEvaluationReport(\date('Y'));
-        // \dd($rules->first());
 
         return \view('kpi.home', \compact('ofSelf', 'ofDept', 'users','periods','rules'));
     }

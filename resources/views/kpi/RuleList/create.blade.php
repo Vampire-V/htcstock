@@ -93,7 +93,7 @@
                                 <option value="">Choose...</option>
                                 @isset($users)
                                 @foreach ($users as $item)
-                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                <option value="{{$item->id}}">{{$item->{'name_'.app()->getLocale()} }}</option>
                                 @endforeach
                                 @endisset
                             </select>

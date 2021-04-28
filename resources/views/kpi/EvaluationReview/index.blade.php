@@ -108,7 +108,7 @@
                         @isset($evaluate->user)
                         <tr>
                             <th scope="row">{{$key+1}}</th>
-                            <td>{{$evaluate->user->name}}</td>
+                            <td>{{$evaluate->user->{'name_'.app()->getLocale()} }}</td>
                             <td>{{$evaluate->user->department->name}}</td>
                             <td>{{$evaluate->user->positions->name}}</td>
                             <td>{{$evaluate->targetperiod->year}}</td>

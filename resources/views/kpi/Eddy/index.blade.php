@@ -62,7 +62,7 @@
                                             @foreach ($users as $item)
                                             <option value="{{$item->id}}" @if ($selectedUser===$item->id)
                                                 selected
-                                                @endif>{{$item->name}}</option>
+                                                @endif>{{$item->{'name_'.app()->getLocale()} }}</option>
                                             @endforeach
                                             @endisset
                                         </select>
@@ -148,7 +148,7 @@
 
                                     <tr>
                                         <th scope="row">{{$key+1}}</th>
-                                        <td>{{$item->evaluate->user->name}}</td>
+                                        <td>{{$item->evaluate->user->{'name_'.app()->getLocale()} }}</td>
                                         <td>{{$item->evaluate->targetperiod->name}}
                                             {{$item->evaluate->targetperiod->year}}</td>
                                         <td class="truncate" data-toggle="tooltip" data-placement="top"
@@ -193,7 +193,7 @@
                                             @foreach ($users as $item)
                                             <option value="{{$item->id}}" @if ($selectedUser===$item->id)
                                                 selected
-                                                @endif>{{$item->name}}</option>
+                                                @endif>{{$item->{'name_'.app()->getLocale()} }}</option>
                                             @endforeach
                                             @endisset
                                         </select>
@@ -278,7 +278,7 @@
                                     @foreach ($evaluate as $key => $item)
                                     <tr>
                                         <th id="{{$item->id}}">{{$key+1}}</th>
-                                        <td>{{$item->user->name}}</td>
+                                        <td>{{$item->user->{'name_'.app()->getLocale()} }}</td>
                                         <td>{{$item->targetperiod->name}} - {{$item->targetperiod->year}}</td>
                                         <td>{{$item->status}}</td>
                                         <td></td>

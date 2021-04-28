@@ -137,7 +137,7 @@
                                         <button type="button" class="btn btn-primary btn-sm float-center">Edit</button>
                                     </a>
                                 </td>
-                                <td>{{$user->name}}</td>
+                                <td>{{$user->{'name_'.app()->getLocale()} }}</td>
                                 <td>{{$user->username}}</td>
                                 <td>{{$user->email}}</td>
                                 <td>

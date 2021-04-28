@@ -1466,7 +1466,7 @@
                             @foreach ($approvalDetail as $key => $item)
                             <tr>
                                 <th scope="row">{{$key+1}}</th>
-                                <td>{{$item->user->name}} {{$item->user->email}}</td>
+                                <td>{{$item->user->{'name_'.app()->getLocale()} }} {{$item->user->email}}</td>
                                 <td>{{$item->status}}</td>
                                 <td>{{$item->comment}}</td>
                                 <td>{{$item->created_at}}</td>

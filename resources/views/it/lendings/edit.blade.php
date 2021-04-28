@@ -66,7 +66,7 @@
                             <option value="">--เลือก--</option>
                             @foreach ($users as $item)
                             <option value="{{$item->id}}" {{$transaction->trans_by == $item->id ? 'selected' : ''}}>
-                                {{$item->name}}</option>
+                                {{$item->{'name_'.app()->getLocale()} }}</option>
                             @endforeach
                         </select>
                         <div class="valid-feedback">

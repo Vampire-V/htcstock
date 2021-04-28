@@ -22,7 +22,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect()->back();
     })->name('optimize-clear');
 
-    Route::get('language/{locale}', 'LocalizationController@language')->name('switch.language');
+    Route::get('language/{locale}', 'LocalizationController@language')->name('switch.language')->where('locale','[a-zA-Z]{2}');
     Route::get('/', 'HomeController@index')->name('welcome');
     Route::get('/systemset/{name}', 'HomeController@systemset')->name('system-set');
 

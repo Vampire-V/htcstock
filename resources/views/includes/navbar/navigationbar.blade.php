@@ -123,7 +123,7 @@
                         </div>
                         <div class="widget-content-left  ml-3 header-user-info">
                             <div class="widget-heading">
-                                {{Auth::user()->name}}
+                                {{Auth::user()->{'name_'.app()->getLocale()} }}
                             </div>
                             <div class="widget-subheading">
                                 {{Auth::user()->email}}

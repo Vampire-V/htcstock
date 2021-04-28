@@ -34,7 +34,7 @@
                         <div class="col-md-3">
                             <input id="name" type="text"
                                 class="form-control-sm form-control @error('name') is-invalid @enderror" name="name"
-                                value="{{ $user->name }}" required autocomplete="name" readonly>
+                                value="{{ $user->{'name_'.app()->getLocale()} }}" required autocomplete="name" readonly>
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

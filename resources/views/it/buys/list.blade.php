@@ -116,7 +116,7 @@
                             <td>{{$item->qty}}</td>
                             <td>{{$item->ir_no}}</td>
                             <td>{{$item->po_no}}</td>
-                            <td>{{$item->user->name}}</td>
+                            <td>{{$item->user->{'name_'.app()->getLocale()} }}</td>
                             <td>{{$item->created_at}}</td>
                             <td><a href="{{route('it.equipment.buy.edit',$item->id)}}"
                                     class="btn btn-primary btn-sm float-left"> {{ __('itstock.buy-accessorie.detail') }}

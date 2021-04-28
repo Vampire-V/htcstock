@@ -127,7 +127,7 @@
                             @foreach ($evaluateDetail as $key => $item)
                             <tr>
                                 <th scope="row">{{$key+1}}</th>
-                                <td>{{$item->evaluate->user->name}} : {{$item->evaluate->status}}</td>
+                                <td>{{$item->evaluate->user->{'name_'.app()->getLocale()} }} : {{$item->evaluate->status}}</td>
                                 <td>{{$item->evaluate->targetperiod->name}} {{$item->evaluate->targetperiod->year}}</td>
                                 <td class="truncate">{{$item->rule->name}}</td>
                                 <td>{{number_format($item->base_line,2)}}</td>

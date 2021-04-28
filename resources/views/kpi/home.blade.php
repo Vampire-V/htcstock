@@ -4,9 +4,9 @@
 @stop
 @section('style')
 <style>
-.fiexd-layout {
-    flex: 0 0 50% !important;
-}
+    .fiexd-layout {
+        flex: 0 0 50% !important;
+    }
 </style>
 @endsection
 @section('content')
@@ -22,27 +22,22 @@
                 </div>
             </div>
         </div>
-        {{-- <div class="page-title-actions">
-            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
-                class="btn-shadow mr-3 btn btn-dark" onclick="getResolution()">
-                <i class="fa fa-star"></i>
-            </button>
-        </div> --}}
     </div>
 </div>
 <div class="row">
-    <div class="col-xl-10" style="flex: 0 0 50%;"> 
+    <div class="col-xl-10" style="flex: 0 0 50%;">
         <div class="mb-3 card" style="max-width: 82.5%">
             <div class="card-header-tab card-header-tab-animation card-header">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
                     Rule Evaluation Report
+                    &nbsp;&nbsp;&nbsp;<input type="text" onkeyup="search_table(this)" class="form-control-sm form-control" placeholder="Search for names..">
                 </div>
             </div>
             <div class="card-body">
                 <div class="tab-content">
                     <div class="table-responsive" style="height:300px">
-                        <table class="table table-sm table-bordered" id="table-set-actual">
+                        <table class="table table-sm table-bordered" >
                             <thead>
                                 <tr>
                                     <th rowspan="2" style="vertical-align : middle;">#</th>
@@ -56,8 +51,8 @@
                                 <tr>
                                     @isset($periods)
                                     @foreach ($periods as $item)
-                                    <th >target</th>
-                                    <th >actual</th>
+                                    <th>target</th>
+                                    <th>actual</th>
                                     @endforeach
                                     @endisset
                                 </tr>
@@ -66,12 +61,12 @@
                                 @isset($rules)
                                 @foreach ($rules as $key => $item)
                                 <tr>
-                                    <th scope="row" >{{$key+1}}</th>
+                                    <th scope="row">{{$key+1}}</th>
                                     <td class="truncate">{{$item->name}}</td>
                                     @isset($item->total)
                                     @foreach ($item->total as $total)
-                                    <td >{{$total->target}}</td>
-                                    <td >{{$total->actual}}</td>
+                                    <td>{{$total->target}}</td>
+                                    <td>{{$total->actual}}</td>
                                     @endforeach
                                     @endisset
                                 </tr>
@@ -90,7 +85,7 @@
 
 <div class="row">
     <div class="col-xl-4">
-        <div class="mb-3 card" >
+        <div class="mb-3 card">
             <div class="card-header-tab card-header-tab-animation card-header">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
@@ -134,7 +129,7 @@
         </div>
     </div>
     <div class="col-xl-4">
-        <div class="mb-3 card" >
+        <div class="mb-3 card">
             <div class="card-header-tab card-header-tab-animation card-header">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
@@ -186,12 +181,13 @@
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
                     Staff Evaluation Report
+                    &nbsp;&nbsp;&nbsp;<input type="text" onkeyup="search_table(this)" class="form-control-sm form-control" placeholder="Search for names..">
                 </div>
             </div>
             <div class="card-body">
                 <div class="tab-content">
                     <div class="table-responsive" style="height: 300px;">
-                        <table class="table table-sm table-bordered" id="table-set-actual">
+                        <table class="table table-sm table-bordered" >
                             <thead>
                                 <tr>
                                     <th rowspan="2" style="vertical-align : middle;">#</th>
@@ -213,12 +209,12 @@
                             </thead>
                             <tbody>
                                 @isset($users)
-                                @foreach ($users as $key => $item)
+                                @foreach ($users as $key => $user)
                                 <tr>
-                                    <td>{{$key+1}}</td>
-                                    <td class="truncate">{{$item->name}}</td>
-                                    @isset($item->total)
-                                    @foreach ($item->total as $total)
+                                    <th>{{$key+1}}</th>
+                                    <td class="truncate">{{ $user->{'name_'.app()->getLocale()} }}</td>
+                                    @isset($user->total)
+                                    @foreach ($user->total as $total)
                                     <td>
                                         {{$total->target}}
                                     </td>
@@ -250,10 +246,5 @@
 </script>
 <script src="{{asset('assets\js\kpi\home.js')}}" defer></script>
 <script>
-    function getResolution() {
-        alert("Your screen resolution is: " + window.screen.width * window.devicePixelRatio + "x" + window.screen.height * window.devicePixelRatio);
-    }
-    
-    
 </script>
 @endsection

@@ -63,7 +63,7 @@
                         <select name="trans_by" id="validationTrans_by" class="form-control-sm form-control select2" required>
                             <option value="">--เลือก--</option>
                             @foreach ($users as $item)
-                            <option value="{{$item->id}}" {{$transaction->trans_by == $item->id ? 'selected' : ''}}>{{$item->name}}</option>
+                            <option value="{{$item->id}}" {{$transaction->trans_by == $item->id ? 'selected' : ''}}>{{$item->{'name_'.app()->getLocale()} }}</option>
                             @endforeach
                         </select>
                         <div class="valid-feedback">

@@ -37,8 +37,8 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="department">Department :</label>
-                            <input type="text" class="form-control form-control-sm"
-                                placeholder="Department" value="{{$staff->department->name}}" disabled>
+                            <input type="text" class="form-control form-control-sm" placeholder="Department"
+                                value="{{$staff->department->name}}" disabled>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="position">Position :</label>
@@ -81,7 +81,10 @@
                         <tr>
                             <th scope="row">{{$key+1}}</th>
                             <td>{{$row->name}}</td>
-                            <td>{{$row->evaluate->status}}</td>
+                            <td>
+                                <span class="{{Helper::kpiStatusBadge($row->evaluate->status)}}"> {{$row->evaluate->status}}
+                                </span>
+                            </td>
                             <td>
                                 <a href="{{$row->evaluate->status ? route('kpi.evaluate.edit',[$staff->id,$row->id,$row->evaluate->id]) : route('kpi.evaluate.create',[$staff->id,$row->id]) }}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">{{$row->evaluate->status ? "Edit" : "Create"}}

@@ -3,6 +3,7 @@
 namespace Helpers;
 
 use App\Enum\KPIEnum;
+use App\Models\KPI\Evaluate;
 use App\Models\KPI\Rule;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
@@ -57,5 +58,29 @@ class Helper
             $step = 0.01;
         }
         return $step;
+    }
+
+    public static function kpiStatusBadge(string $status): string
+    {
+        switch ($status) {
+            case KPIEnum::new:
+                return "badge badge-pill badge-info";
+                break;
+            case KPIEnum::ready:
+                return "badge badge-pill badge-primary";
+                break;
+            case KPIEnum::draft:
+                return "badge badge-pill badge-dark";
+                break;
+            case KPIEnum::submit:
+                return "badge badge-pill badge-warning";
+                break;
+            case KPIEnum::approved:
+                return "badge badge-pill badge-success";
+                break;
+            default:
+                return "badge badge-pill badge-light";
+                break;
+        }
     }
 }

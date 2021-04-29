@@ -113,7 +113,7 @@
                             <td>{{$evaluate->user->positions->name}}</td>
                             <td>{{$evaluate->targetperiod->year}}</td>
                             <td>{{$evaluate->targetperiod->name}}</td>
-                            <td>{{$evaluate->status}}</td>
+                            <td><span class="{{Helper::kpiStatusBadge($evaluate->status)}}">{{$evaluate->status}}</span></td>
                             <td><a href="{{route('kpi.evaluation-review.edit',$evaluate->id)}}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Review
                                 </a></td>

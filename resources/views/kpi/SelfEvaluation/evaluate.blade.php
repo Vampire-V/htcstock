@@ -35,7 +35,7 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <h5>status : <span class="badge badge-info">{{$evaluate->status}}</span></h5>
+                        <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}} </span></h5>
                     </div>
                 </div>
             </div>
@@ -45,7 +45,8 @@
                         <div class="col-md-3 mb-3">
                             <label for="staffName">Staff Name</label>
                             <input type="text" class="form-control form-control-sm" id="staffName"
-                                placeholder="Staff Name" value="{{$evaluate->user->{'name_'.app()->getLocale()} }}" readonly>
+                                placeholder="Staff Name" value="{{$evaluate->user->{'name_'.app()->getLocale()} }}"
+                                readonly>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>

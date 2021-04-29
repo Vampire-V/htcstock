@@ -89,7 +89,8 @@
                                     </div>
                                     <div class="col-md-2 mb-2">
                                         <label for="Year">Year</label>
-                                        <select name="year[]" id="year" class="form-control-sm form-control select-year" multiple>
+                                        <select name="year[]" id="year" class="form-control-sm form-control select-year"
+                                            multiple>
                                             @foreach (range(date('Y'), $start_year) as $year)
                                             <option value="{{$year}}" @if ($selectedYear->contains($year)) selected
                                                 @endif>
@@ -280,7 +281,9 @@
                                         <th id="{{$item->id}}">{{$key+1}}</th>
                                         <td>{{$item->user->{'name_'.app()->getLocale()} }}</td>
                                         <td>{{$item->targetperiod->name}} - {{$item->targetperiod->year}}</td>
-                                        <td>{{$item->status}}</td>
+                                        <td><span
+                                                class="{{Helper::kpiStatusBadge($item->status)}}">{{$item->status}}</span>
+                                        </td>
                                         <td></td>
                                         <td><input type="number" name="kpi" value="{{$item->ach_kpi}}" min="0"
                                                 step="0.01" class="form-control form-control-sm input-sm"

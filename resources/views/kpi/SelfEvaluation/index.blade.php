@@ -91,13 +91,11 @@
                 <table class="mb-0 table table-sm">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th >#</th>
                             <th>Period</th>
+                            <th style="width: 10px;">Year</th>
                             <th>Status</th>
-                            <th>#</th>
-                            {{-- <th>Table heading</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th> --}}
+                            <th style="width: 10px;">#</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -106,9 +104,12 @@
                         <tr>
                             <th scope="row">{{$key+1}}</th>
                             <td>{{$evaluate->targetperiod->name}}</td>
-                            <td>{{$evaluate->status}}</td>
+                            <td>{{$evaluate->targetperiod->year}}</td>
+                            <td>
+                                <div class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}} </div>
+                            </td>
                             <td><a href="{{route('kpi.self-evaluation.edit',$evaluate->id)}}"
-                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">view
+                                    class="mb-2 mr-2 btn-transition btn btn-outline-info">view
                                 </a></td>
                         </tr>
                         @endforeach

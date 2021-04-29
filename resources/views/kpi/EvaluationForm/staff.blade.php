@@ -37,12 +37,12 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="department">Department :</label>
-                            <input type="text" class="form-control form-control-sm" id="department"
+                            <input type="text" class="form-control form-control-sm"
                                 placeholder="Department" value="{{$staff->department->name}}" disabled>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="position">Position :</label>
-                            <input type="text" class="form-control form-control-sm" id="position" placeholder="Position"
+                            <input type="text" class="form-control form-control-sm" placeholder="Position"
                                 value="{{$staff->positions->name}}" disabled>
                         </div>
                         <div class="col-md-3 mb-3">

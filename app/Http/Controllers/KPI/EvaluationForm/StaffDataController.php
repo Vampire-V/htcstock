@@ -96,7 +96,7 @@ class StaffDataController extends Controller
     {
         $selectedYear = empty($request->year) ? \date('Y') : $request->year;
         try {
-            $staff = $this->userService->find($id);
+            $staff = $this->userService->user($id);
             $periods = $this->targetPeriodService->byYearForEvaluate($selectedYear, $staff);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());

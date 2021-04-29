@@ -39,10 +39,9 @@
     @yield('style')
 </head>
 
-<body>
+<body >
     <div id="app" class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
         @include('includes.navbar.navigationbar')
-
         <div class="app-main">
             @yield('sidebar')
             <div class="app-main__outer">

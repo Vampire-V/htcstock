@@ -11666,7 +11666,7 @@ button,
 
 .fixed-sidebar .app-main .app-main__outer {
     z-index: 9;
-    padding-left: 280px
+    padding-left: 280px;
 }
 
 .fixed-sidebar.fixed-header .app-sidebar .app-header__logo {
@@ -25826,8 +25826,16 @@ input[type=number] {
     width: 100%;
     height: 100%;
     background-color: rgba(192, 192, 192, 0.5);
-    background-image: url("http://i.stack.imgur.com/MnyxU.gif");
+    background-image: url("../images/loading/tenor.gif");
+    /* background-image: url("http://i.stack.imgur.com/MnyxU.gif"); */
     background-repeat: no-repeat;
     background-position: 50% 25%;
 }
 
+@media only screen and (max-width: 1366px) {
+    .fixed-sidebar .app-main .app-main__outer {
+        z-index: 9;
+        padding-left: 280px;
+        max-width: 1366px;
+    }
+}

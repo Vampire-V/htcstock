@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('sidebar')
-@include('includes.sidebar.kpi');
+@include('includes.sidebar.kpi')
 @stop
 @section('content')
 <div class="app-page-title">

@@ -1,12 +1,12 @@
 @extends('layouts.app')
 @section('sidebar')
-@include('includes.sidebar.kpi');
+@include('includes.sidebar.kpi')
 @stop
 @section('style')
 <style>
-    .fiexd-layout {
+    /* .fiexd-layout {
         flex: 0 0 50% !important;
-    }
+    } */
 </style>
 @endsection
 @section('content')
@@ -25,19 +25,112 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-xl-10" style="flex: 0 0 50%;">
-        <div class="mb-3 card" style="max-width: 82.5%">
+    <div class="col-xl-6">
+        <div class="mb-3 card">
+            <div class="card-header-tab card-header-tab-animation card-header">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                    Evaluation Report Your self
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="table-responsive" style="height: 110px;">
+                        @isset($ofSelf)
+                        <table class="mb-0 table table-sm" id="table-set-actual">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    @foreach ($ofSelf as $item)
+                                    <th scope="col">{{$item->name}}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Traget</th>
+                                    @foreach ($ofSelf as $item)
+                                    <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}</td>
+                                    @endforeach
+                                </tr>
+                                <tr>
+                                    <th scope="row">Actual</th>
+                                    @foreach ($ofSelf as $item)
+                                    <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}</td>
+                                    @endforeach
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                        @endisset
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="mb-3 card">
+            <div class="card-header-tab card-header-tab-animation card-header">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                    Evaluation Report Department
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="table-responsive" style="height: 110px;">
+                        @isset($ofDept)
+                        <table class="mb-0 table table-sm" id="table-set-actual">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    @foreach ($ofDept as $item)
+                                    <th scope="col">{{$item->name}}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Traget</th>
+                                    @foreach ($ofDept as $item)
+                                    <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}</td>
+                                    @endforeach
+                                </tr>
+                                <tr>
+                                    <th scope="row">Actual</th>
+                                    @foreach ($ofDept as $item)
+                                    <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}</td>
+                                    @endforeach
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                        @endisset
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="mb-3 card">
             <div class="card-header-tab card-header-tab-animation card-header">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
                     Rule Evaluation Report
-                    &nbsp;&nbsp;&nbsp;<input type="text" onkeyup="search_table(this)" class="form-control-sm form-control" placeholder="Search for names..">
+                    &nbsp;&nbsp;&nbsp;<input type="text" onkeyup="search_table(this)"
+                        class="form-control-sm form-control" placeholder="Search for names..">
                 </div>
             </div>
             <div class="card-body">
                 <div class="tab-content">
                     <div class="table-responsive" style="height:300px">
-                        <table class="table table-sm table-bordered" >
+                        <table class="table table-sm table-bordered">
                             <thead>
                                 <tr>
                                     <th rowspan="2" style="vertical-align : middle;">#</th>
@@ -84,110 +177,20 @@
 </div>
 
 <div class="row">
-    <div class="col-xl-4">
+    <div class="col-xl-12">
         <div class="mb-3 card">
-            <div class="card-header-tab card-header-tab-animation card-header">
-                <div class="card-header-title">
-                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                    Evaluation Report Your self
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="tab-content">
-                    <div class="table-responsive" style="height: 110px;">
-                        @isset($ofSelf)
-                        <table class="mb-0 table table-sm" id="table-set-actual">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    @foreach ($ofSelf as $item)
-                                    <th scope="col">{{$item->name}}</th>
-                                    @endforeach
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">Traget</th>
-                                    @foreach ($ofSelf as $item)
-                                    <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}</td>
-                                    @endforeach
-                                </tr>
-                                <tr>
-                                    <th scope="row">Actual</th>
-                                    @foreach ($ofSelf as $item)
-                                    <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}</td>
-                                    @endforeach
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                            </tfoot>
-                        </table>
-                        @endisset
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-4">
-        <div class="mb-3 card">
-            <div class="card-header-tab card-header-tab-animation card-header">
-                <div class="card-header-title">
-                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                    Evaluation Report Department
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="tab-content">
-                    <div class="table-responsive" style="height: 110px;">
-                        @isset($ofDept)
-                        <table class="mb-0 table table-sm" id="table-set-actual">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    @foreach ($ofDept as $item)
-                                    <th scope="col">{{$item->name}}</th>
-                                    @endforeach
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">Traget</th>
-                                    @foreach ($ofDept as $item)
-                                    <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}</td>
-                                    @endforeach
-                                </tr>
-                                <tr>
-                                    <th scope="row">Actual</th>
-                                    @foreach ($ofDept as $item)
-                                    <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}</td>
-                                    @endforeach
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                            </tfoot>
-                        </table>
-                        @endisset
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-xl-10">
-        <div class="mb-3 card" style="max-width: 82.5%">
             <div class="card-header-tab card-header-tab-animation card-header">
                 <div class="card-header-title">
                     <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
                     Staff Evaluation Report
-                    &nbsp;&nbsp;&nbsp;<input type="text" onkeyup="search_table(this)" class="form-control-sm form-control" placeholder="Search for names..">
+                    &nbsp;&nbsp;&nbsp;<input type="text" onkeyup="search_table(this)"
+                        class="form-control-sm form-control" placeholder="Search for names..">
                 </div>
             </div>
             <div class="card-body">
                 <div class="tab-content">
                     <div class="table-responsive" style="height: 300px;">
-                        <table class="table table-sm table-bordered" >
+                        <table class="table table-sm table-bordered">
                             <thead>
                                 <tr>
                                     <th rowspan="2" style="vertical-align : middle;">#</th>

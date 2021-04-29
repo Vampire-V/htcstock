@@ -38,8 +38,8 @@ class TemplateController extends Controller
             $departments = $this->departmentService->dropdown();
             $dropdowntem = $this->templateService->dropdown();
             $templates = $this->templateService->filter($request);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.RuleTemplate.index', \compact('departments', 'templates', 'dropdowntem', 'query', 'selectRuleTemp', 'selectDepartment'));
     }
@@ -53,8 +53,8 @@ class TemplateController extends Controller
     {
         try {
             $departments = $this->departmentService->dropdown();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
         return \view('kpi.RuleTemplate.Template.create', \compact('departments'));
@@ -77,9 +77,9 @@ class TemplateController extends Controller
                 return \back();
             }
             $request->session()->flash('success', ' has been create success');
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->route('kpi.rule-template.create', $template->id);

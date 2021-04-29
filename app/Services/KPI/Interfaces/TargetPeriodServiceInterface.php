@@ -16,7 +16,7 @@ interface TargetPeriodServiceInterface
     public function update(array $attributes, int $id): bool;
     public function destroy($id);
     public function byYear(string $year);
-    public function byYearForEvaluate( $year, User $staff): Collection;
+    public function byYearForEvaluate($year, $staff): Collection;
     public function dropdown(): Collection;
     public function selfApprovedEvaluationOfyear(string $year): Collection;
     public function deptApprovedEvaluationOfyear(string $year): Collection;

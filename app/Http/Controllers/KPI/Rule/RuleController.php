@@ -55,8 +55,8 @@ class RuleController extends Controller
         try {
             $category = $this->ruleCategoryService->dropdown();
             $rules = $this->ruleService->filter($request);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.RuleList.index', \compact('rules', 'category', 'query', 'searchRuleName', 'selectedCategory', 'template', 'rulesType', 'selectedRuleType'));
     }
@@ -92,9 +92,9 @@ class RuleController extends Controller
                 return \back();
             }
             $request->session()->flash('success', ' has been create success');
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \back();
@@ -110,8 +110,8 @@ class RuleController extends Controller
     {
         try {
             $rule = $this->ruleService->find($id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return new RuleResource($rule);
     }
@@ -131,8 +131,8 @@ class RuleController extends Controller
             $unit = $this->targetUnitService->dropdown();
             $rulesType = $this->ruleTypeService->dropdown();
             $users = $this->userService->dropdown();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.RuleList.edit', \compact('rule', 'category', 'unit', 'calcuTypes', 'rulesType', 'users'));
     }
@@ -151,10 +151,10 @@ class RuleController extends Controller
         try {
             $this->ruleService->update($fromValue, $id);
             $request->session()->flash('success', ' has been updated success');
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
             $request->session()->flash('error', ' has been update fail');
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \back();
@@ -180,8 +180,8 @@ class RuleController extends Controller
     {
         try {
             $rule = $this->ruleService->dropdown($group);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
         return RuleResource::collection($rule);
@@ -260,9 +260,9 @@ class RuleController extends Controller
                     Storage::deleteDirectory('kpi/' . $temporaryFile->folder);
                 }
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \response()->json(['errors' => $this->excel_errors, 'status' => $status]);

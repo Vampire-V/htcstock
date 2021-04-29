@@ -48,8 +48,8 @@ class StaffDataController extends Controller
             $users = $this->userService->filter($request);
             $departments = $this->departmentService->dropdown();
             $positions = $this->positionService->dropdown();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.EvaluationForm.index', \compact('users', 'departments', 'positions', 'query', 'selectDepartment', 'selectPosition'));
     }
@@ -98,8 +98,8 @@ class StaffDataController extends Controller
         try {
             $staff = $this->userService->find($id);
             $periods = $this->targetPeriodService->byYearForEvaluate($selectedYear, $staff);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         $start_year = date('Y', strtotime('-10 years'));
         return \view('kpi.EvaluationForm.staff', \compact('start_year', 'periods', 'staff', 'selectedYear'));
@@ -142,8 +142,8 @@ class StaffDataController extends Controller
             $team = $this->userService->listOfTeamsOfEvaluateReport($user->department_id, $period);
 
             return new UserResource($team);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 }

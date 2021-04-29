@@ -49,8 +49,8 @@ class EvaluateReviewController extends Controller
             $user = Auth::user();
             $period = $this->targetPeriodService->dropdown();
             $evaluates = $this->evaluateService->reviewfilter($request);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
         return \view('kpi.EvaluationReview.index',
@@ -103,8 +103,8 @@ class EvaluateReviewController extends Controller
             $f_evaluate = $this->evaluateService->find($id);
             // $f_evaluate->evaluateDetail->each(fn ($item) => $this->evaluateDetailService->formulaKeyTask($item));
             $evaluate  = new EvaluateResource($f_evaluate);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'category'));
     }
@@ -136,9 +136,9 @@ class EvaluateReviewController extends Controller
                 # send mail to reject
                 Mail::to($evaluate->user->email)->send(new EvaluationReviewMail($evaluate));
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return new EvaluateResource($evaluate);

@@ -31,9 +31,9 @@ class UploadController extends Controller
                 DB::commit();
                 return \response()->json(['folder' => $folder]);
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            throw $e;
         }
     }
 

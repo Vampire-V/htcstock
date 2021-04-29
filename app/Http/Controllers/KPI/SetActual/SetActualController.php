@@ -109,9 +109,9 @@ class SetActualController extends Controller
                     $status = \true;
                 }
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \response()->json(["status" => $status]);

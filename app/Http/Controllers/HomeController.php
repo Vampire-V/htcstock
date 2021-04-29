@@ -18,8 +18,8 @@ class HomeController extends Controller
     {
         try {
             $systems = Auth::user()->systems;
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return view('welcome',\compact('systems'));
     }
@@ -95,8 +95,8 @@ class HomeController extends Controller
         try {
             $uri = System::where('slug',$name)->first();
             \session()->put('system',$name);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \redirect()->route($uri->slug.".dashboard");
         

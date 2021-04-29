@@ -44,8 +44,8 @@ class SelfEvaluationController extends Controller
         try {
             $user = Auth::user();
             $evaluates = $this->evaluateService->selfFilter($request);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.SelfEvaluation.index', \compact('start_year', 'user', 'selectedYear', 'evaluates'));
     }
@@ -81,8 +81,8 @@ class SelfEvaluationController extends Controller
     {
         try {
             $evaluate = $this->evaluateService->find($id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return new EvaluateResource($evaluate);
     }
@@ -100,8 +100,8 @@ class SelfEvaluationController extends Controller
             $f_evaluate = $this->evaluateService->find($id);
             // $f_evaluate->evaluateDetail->each(fn ($item) => $this->evaluateDetailService->formulaKeyTask($item));
             $evaluate  = new EvaluateResource($f_evaluate);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category'));
     }
@@ -134,9 +134,9 @@ class SelfEvaluationController extends Controller
                     // $evaluate->user->head_id is null
                 }
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return new EvaluateResource($evaluate);

@@ -4,7 +4,6 @@ namespace App\Services\KPI\Service;
 
 use App\Enum\KPIEnum;
 use App\Models\KPI\TargetPeriod;
-use App\Models\User;
 use App\Services\BaseService;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -40,11 +39,12 @@ class TargetPeriodService extends BaseService implements TargetPeriodServiceInte
         }
     }
 
-    public function byYearForEvaluate($year, User $staff): Collection
+    public function byYearForEvaluate($year, $user): Collection
     {
         try {
-            return TargetPeriod::with('evaluate', fn ($query) => $query->where(['user_id' => $staff->id]))
-                ->whereIn('year', [$year])->get();
+            return TargetPeriod::with(['evaluate' => function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            }])->where('year', $year)->get();
         } catch (\Throwable $th) {
             throw $th;
         }

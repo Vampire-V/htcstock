@@ -51,8 +51,8 @@ class RuleTemplateController extends Controller
             $departments = $this->departmentService->dropdown();
             $templates = $this->templateService->dropdown();
             $ruleTemplates = $this->templateService->filter($request);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.RuleTemplate.index', \compact('departments', 'templates', 'ruleTemplates', 'selectRuleTemp', 'selectDepartment', 'query'));
     }
@@ -67,8 +67,8 @@ class RuleTemplateController extends Controller
         try {
             $category = $this->categoryService->all();
             $template = $this->templateService->find($template);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.RuleTemplate.create', \compact('category', 'template'));
     }
@@ -97,9 +97,9 @@ class RuleTemplateController extends Controller
 
             $ruleTemplates = $this->ruleTemplateService->byTemplate($template);
             $request->session()->flash('success', ' has been create success');
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return RuleTemplateResource::collection($ruleTemplates);
@@ -128,8 +128,8 @@ class RuleTemplateController extends Controller
             $category = $this->categoryService->all();
             $departments = $this->departmentService->dropdown();
             $ruletemplate = $this->ruleTemplateService->find($id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.RuleTemplate.edit', \compact('ruletemplate', 'departments', 'category'));
     }
@@ -161,8 +161,8 @@ class RuleTemplateController extends Controller
         try {
             $template = $this->templateService->find($template);
             $ruleTemplates = $this->ruleTemplateService->byTemplate($template);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return RuleTemplateResource::collection($ruleTemplates);
 
@@ -186,9 +186,9 @@ class RuleTemplateController extends Controller
 
             $template = $this->templateService->find($id);
             $ruleTemplates = $this->ruleTemplateService->byTemplate($template);
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return RuleTemplateResource::collection($ruleTemplates);
@@ -206,9 +206,9 @@ class RuleTemplateController extends Controller
                 $value->save();
             }
             $ruleTemplates = $this->ruleTemplateService->byTemplate($template);
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return RuleTemplateResource::collection($ruleTemplates);

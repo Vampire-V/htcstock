@@ -69,8 +69,8 @@ class EvaluationFormController extends Controller
             $users = $this->userService->filter($request);
             $departments = $this->departmentService->dropdown();
             $positions = $this->positionService->dropdown();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.EvaluationForm.index', \compact('users', 'departments', 'positions', 'query'));
     }
@@ -91,8 +91,8 @@ class EvaluationFormController extends Controller
             $rules = $this->ruleService->dropdown($category->first(function ($value, $key) {
                 return $value->name === "key-task";
             })->id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.EvaluationForm.create', \compact('user', 'period', 'templates', 'category', 'rules'));
     }
@@ -146,10 +146,10 @@ class EvaluationFormController extends Controller
                 }
                 Log::notice("User : " . \auth()->user()->id . " = Create evaluate form : id = " . $evaluate->id);
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            Log::error("Exception Message: " . $th->getMessage() . " File: " . $th->getFile() . " Line: " . $th->getLine());
-            throw $th;
+            Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         
@@ -166,8 +166,8 @@ class EvaluationFormController extends Controller
     {
         try {
             $evaluate = $this->evaluateService->find($evaluate);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return new EvaluateResource($evaluate);
     }
@@ -188,8 +188,8 @@ class EvaluationFormController extends Controller
 
             $evaluate = $this->evaluateService->find($evaluate);
             // $isView = $evaluate->status === KPIEnum::ready ? true : false;
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.EvaluationForm.edit', \compact('user', 'period', 'templates', 'category', 'evaluate'));
     }
@@ -243,10 +243,10 @@ class EvaluationFormController extends Controller
                     Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
                 }
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            Log::error("Exception Message: " . $th->getMessage() . " File: " . $th->getFile() . " Line: " . $th->getLine());
-            throw $th;
+            Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return new EvaluateResource($evaluate);

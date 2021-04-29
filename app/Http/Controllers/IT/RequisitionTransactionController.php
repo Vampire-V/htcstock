@@ -44,8 +44,8 @@ class RequisitionTransactionController extends Controller
             $accessorys = $this->accessoriesService->dropdown();
             $transactions = $this->transactionsService->filterForRequest($request);
             return \view('it.requisition.list', \compact('query','selectedAccessorys','start_at','end_at','accessorys','transactions'));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -60,8 +60,8 @@ class RequisitionTransactionController extends Controller
             $users = $this->userService->dropdown();
             $accessories = $this->accessoriesService->dropdown();
             return \view('it.requisition.create',\compact('users','accessories'));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -83,8 +83,8 @@ class RequisitionTransactionController extends Controller
                 $request->session()->flash('success',  ' has been create');
             }
             return \redirect()->route('it.equipment.requisition.index');
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -112,8 +112,8 @@ class RequisitionTransactionController extends Controller
             $transaction = $this->transactionsService->find($id);
             $users = $this->userService->all()->get();
             return \view('it.requisition.edit')->with('transaction', $transaction)->with('accessories', $accessories)->with('users', $users);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -152,8 +152,8 @@ class RequisitionTransactionController extends Controller
                 }
             }
             return \redirect()->route('it.equipment.requisition.index');
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 

@@ -39,8 +39,8 @@ class HomeController extends Controller
             }
 
             return view('it.home')->with(['leadingTotal' => $leading, 'requisitionTotal' => $requisition]);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 }

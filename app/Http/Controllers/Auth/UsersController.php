@@ -66,8 +66,8 @@ class UsersController extends Controller
     {
         try {
             $user = $this->userService->find($id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('me.index')->with([
             'user' => $user
@@ -90,9 +90,9 @@ class UsersController extends Controller
             } else {
                 $request->session()->flash('error', 'error flash message!');
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->back();

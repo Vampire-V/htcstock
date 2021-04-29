@@ -90,8 +90,8 @@ class MouldController extends Controller
                 $mould->value_of_contract = explode(",", $mould->value_of_contract);
             }
             $paymentType = $this->paymentTypeService->dropdown($mould->legalcontract->agreement_id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('legal.ContractRequestForm.Mould.edit')->with(['mould' => $mould, 'paymentType' => $paymentType]);
     }
@@ -150,9 +150,9 @@ class MouldController extends Controller
                 Storage::delete($mould->drawing);
             }
             $request->session()->flash('success',  ' has been create');
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->route('legal.contract-request.index');

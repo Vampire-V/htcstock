@@ -94,8 +94,8 @@ class VendorServiceContractController extends Controller
             $vendorservice = $this->contractDescService->find($id);
             $subtypeContract = $this->subtypeContractService->dropdown($vendorservice->legalcontract->agreement_id);
             $paymentType = $this->paymentTypeService->dropdown($vendorservice->legalcontract->agreement_id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('legal.ContractRequestForm.VendorServiceContract.edit')->with([
             'vendorservice' => $vendorservice,
@@ -164,8 +164,8 @@ class VendorServiceContractController extends Controller
                 Storage::delete($vendorServiceContract->security_guard_license);
             }
             $request->session()->flash('success',  ' has been create');
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->route('legal.contract-request.index');
@@ -219,8 +219,8 @@ class VendorServiceContractController extends Controller
                 $this->validationTransportation($request);
                 $attr = $this->setAttributesTransportation($request);
             }
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return $attr;
     }

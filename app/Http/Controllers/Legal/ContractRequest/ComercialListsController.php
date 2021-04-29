@@ -51,8 +51,8 @@ class ComercialListsController extends Controller
         $attributes = $request->all();
         try {
             $comercialLists = $this->comercialListsService->create($attributes);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \response()->json(['id' => $comercialLists->contract_dests_id], 200);
     }
@@ -79,8 +79,8 @@ class ComercialListsController extends Controller
         try {
             $comercialLists = $this->comercialListsService->comercialByContractID($id);
             return \response()->json($comercialLists->toArray(), 200);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -106,8 +106,8 @@ class ComercialListsController extends Controller
     {
         try {
             $this->comercialListsService->destroy($id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \response()->json(['result' => 'delete success!','status' => true], 200);
     }

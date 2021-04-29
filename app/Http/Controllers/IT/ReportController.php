@@ -32,8 +32,8 @@ class ReportController extends Controller
             $accessorys = $this->accessoriesService->dropdown();
             $transactions = $this->transactionsService->filterForHistory($request);
             return \view('it.reports.transactions', \compact('selectedAccessorys', 'accessorys', 'transactions', 'start_at', 'end_at', 'query'));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -45,8 +45,8 @@ class ReportController extends Controller
             $accessories = $this->accessoriesService->dropdown();
             $transactions = $this->transactionsService->filterForStock($request);
             return \view('it.reports.stocks', \compact('transactions', 'accessories', 'query', 'access_id'));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -58,8 +58,8 @@ class ReportController extends Controller
                 return response()->json(['message' => "No data transactions"], 200);
             }
             return response()->json(['name' => $result->accessorie->access_name, 'qty' => (int) $result->quantity], 200);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -69,8 +69,8 @@ class ReportController extends Controller
             $accessories = $this->accessoriesService->sumAccessories()->get();
             $pdf = PDF::loadView('it.reports.pdf', compact('accessories', $accessories));
             return $pdf->stream();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 }

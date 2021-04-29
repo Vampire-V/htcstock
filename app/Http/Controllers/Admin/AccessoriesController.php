@@ -106,8 +106,8 @@ class AccessoriesController extends Controller
                 $segments[1] . '/' . $segments[2] . '/accessories/' . $date->isoFormat('YYYYMD'),
                 $request->file('file'),
             );
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
         return \response()->json(['path' => $path]);

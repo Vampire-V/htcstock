@@ -63,8 +63,8 @@ class UsersController extends Controller
             $positions = $this->positionService->dropdown();
             $roles = $this->rolesService->dropdown();
             // \dd($users[0]->roles);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('admin.users.index', \compact('users', 'divisions', 'departments', 'positions', 'roles', 'search', 'selectedDivision', 'selectedDept', 'selectedPosition', 'selectedRole', 'query'));
     }
@@ -87,8 +87,8 @@ class UsersController extends Controller
 
             $roles = $this->rolesService->dropdown($user->roles->pluck('slug')->toArray());
             $systems = $this->systemService->dropdown($user->systems()->pluck('slug')->toArray());
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('admin.users.edit', \compact('user', 'roles', 'systems', 'userRoles', 'userSystems'));
     }
@@ -115,9 +115,9 @@ class UsersController extends Controller
             } else {
                 $request->session()->flash('error', 'error flash message!');
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->back();
@@ -144,9 +144,9 @@ class UsersController extends Controller
             } else {
                 $request->session()->flash('error', 'error flash message!');
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->route('admin.users.index');
@@ -186,9 +186,9 @@ class UsersController extends Controller
             } else {
                 $request->session()->flash('error', 'ติดต่อ กับ ' . ENV('USERS_UPDATE') . "ไม่ได้");
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return back();
@@ -203,9 +203,9 @@ class UsersController extends Controller
             foreach ($roles as $value) {
                 $user->roles()->attach($value);
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \response($user->roles->toJson());
@@ -217,9 +217,9 @@ class UsersController extends Controller
         try {
             $user = $this->userService->find($id);
             $user->roles()->detach($request->role);
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \response($user->roles->toJson());
@@ -234,9 +234,9 @@ class UsersController extends Controller
             foreach ($systems as $value) {
                 $user->systems()->attach($value);
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \response($user->systems->toJson());
@@ -248,9 +248,9 @@ class UsersController extends Controller
         try {
             $user = $this->userService->find($id);
             $user->systems()->detach($request->system);
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \response($user->systems->toJson());

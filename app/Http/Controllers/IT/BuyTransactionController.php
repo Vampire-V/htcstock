@@ -49,8 +49,8 @@ class BuyTransactionController extends Controller
             $accessorys = $this->accessoriesService->dropdown();
             $transactions = $this->transactionsService->filterForBuy($request);
             return \view('it.buys.list', \compact('selectedAccessorys', 'accessorys', 'transactions', 'ir_no', 'po_no', 'start_at', 'end_at', 'query'));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -65,8 +65,8 @@ class BuyTransactionController extends Controller
             $accessories = $this->accessoriesService->all()->get();
             $vendorDropdown = $this->vendorService->dropdown();
             return \view('it.buys.create', \compact('accessories', 'vendorDropdown'));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -85,8 +85,8 @@ class BuyTransactionController extends Controller
                 $request->session()->flash('error', 'error create!');
                 return \back();
             }
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         $request->session()->flash('success',  ' has been create');
         return \redirect()->route('it.equipment.buy.index');
@@ -116,8 +116,8 @@ class BuyTransactionController extends Controller
             $vendorDropdown = $this->vendorService->dropdown();
             $transaction = $this->transactionsService->find($id);
             return \view('it.buys.edit',\compact('accessories','vendorDropdown','transaction'));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -162,8 +162,8 @@ class BuyTransactionController extends Controller
                 return \back();
             }
             return \redirect()->route('it.equipment.buy.index');
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 

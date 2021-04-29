@@ -22,8 +22,8 @@ class PermissionsController extends Controller
         try {
             $permissions = $this->permissionsService->all()->get();
             return \view('admin.permissions.index')->with('permissions',$permissions);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         
     }
@@ -49,8 +49,8 @@ class PermissionsController extends Controller
         try {
             $this->permissionsService->create($request->except(['_token'])) ? $request->session()->flash('success','create permission success') : $request->session()->flash('error','create permission fail!');
             return \redirect()->route('admin.permissions.index');
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -75,8 +75,8 @@ class PermissionsController extends Controller
     {
         try {
             return \view('admin.permissions.edit')->with('permission',$this->permissionsService->find($id));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -92,8 +92,8 @@ class PermissionsController extends Controller
         try {
             $this->permissionsService->update($request->except(['_token']),$id) ? $request->session()->flash('success','update permission success') : $request->session()->flash('error','update permission fail!');
             return \redirect()->route('admin.permissions.edit',$id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 

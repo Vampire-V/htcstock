@@ -97,8 +97,8 @@ class LoginController extends Controller
     {
         try {
             $evaluate = $this->evaluateService->find($id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            throw $e;
         }
 
         

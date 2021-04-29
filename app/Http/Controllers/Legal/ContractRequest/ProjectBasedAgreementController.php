@@ -95,8 +95,8 @@ class ProjectBasedAgreementController extends Controller
             $projectBased = $this->contractDescService->find($id);
             $subtypeContract = $this->subtypeContractService->dropdown($projectBased->legalcontract->agreement_id);
             $paymentType = $this->paymentTypeService->dropdown($projectBased->legalcontract->agreement_id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('legal.ContractRequestForm.ProjectBasedAgreement.edit')->with(['projectBased' => $projectBased, 'paymentType' => $paymentType, 'subtypeContract' => $subtypeContract]);
     }
@@ -167,9 +167,9 @@ class ProjectBasedAgreementController extends Controller
             }
 
             $request->session()->flash('success',  ' has been create');
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->route('legal.contract-request.index');

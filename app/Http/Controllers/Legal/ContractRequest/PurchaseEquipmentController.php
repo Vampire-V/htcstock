@@ -89,8 +89,8 @@ class PurchaseEquipmentController extends Controller
                 $purchaseequipment->value_of_contract = explode(",", $purchaseequipment->value_of_contract);
             }
             $paymentType = $this->paymentTypeService->dropdown($purchaseequipment->legalcontract->agreement_id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('legal.ContractRequestForm.PurchaseEquipment.edit')->with(['purchaseequipment' => $purchaseequipment, 'paymentType' => $paymentType]);
     }
@@ -145,9 +145,9 @@ class PurchaseEquipmentController extends Controller
                 Storage::delete($purchaseEquipment->purchase_order);
             }
             $request->session()->flash('success',  ' has been create');
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->route('legal.contract-request.index');

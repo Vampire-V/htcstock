@@ -99,8 +99,8 @@ class LeaseContractController extends Controller
             }
             $subtypeContract = $this->subtypeContractService->dropdown($leaseContract->legalcontract->agreement_id);
             $paymentType = $this->paymentTypeService->dropdown($leaseContract->legalcontract->agreement_id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('legal.ContractRequestForm.LeaseContract.edit')->with(['leaseContract' => $leaseContract, 'paymentType' => $paymentType, 'subtypeContract' => $subtypeContract]);
     }
@@ -165,9 +165,9 @@ class LeaseContractController extends Controller
                 Storage::delete($leaseContract->coparation_sheet);
             }
             $request->session()->flash('success',  ' has been create');
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->route('legal.contract-request.index');

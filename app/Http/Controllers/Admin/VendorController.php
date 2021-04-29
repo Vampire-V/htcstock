@@ -109,9 +109,9 @@ class VendorController extends Controller
                 $vendor->address = $data['address'];
                 $vendor->save();
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         $request->session()->flash('success', 'has been update vendor');
         DB::commit();

@@ -91,8 +91,8 @@ class MarketingAgreementController extends Controller
             $marketing = $this->contractDescService->find($id);
             $subtypeContract = $this->subtypeContractService->dropdown($marketing->legalcontract->agreement_id);
             $paymentType = $this->paymentTypeService->dropdown($marketing->legalcontract->agreement_id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('legal.ContractRequestForm.MarketingAgreement.edit')->with(['marketing' => $marketing, 'paymentType' => $paymentType, 'subtypeContract' => $subtypeContract]);
     }
@@ -153,9 +153,9 @@ class MarketingAgreementController extends Controller
                 Storage::delete($marketing->quotation);
             }
             $request->session()->flash('success',  ' has been create');
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->route('legal.contract-request.index');

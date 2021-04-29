@@ -44,8 +44,8 @@ class LendingsTransactionController extends Controller
             $accessorys = $this->accessoriesService->dropdown();
             $transactions = $this->transactionsService->filterForLending($request);
             return \view('it.lendings.list', \compact('selectedAccessorys', 'accessorys', 'transactions', 'start_at', 'end_at', 'query'));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -58,8 +58,8 @@ class LendingsTransactionController extends Controller
     {
         try {
             return \view('it.lendings.create')->with('accessories', $this->accessoriesService->all()->get())->with('users', $this->userService->all()->get());
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -81,8 +81,8 @@ class LendingsTransactionController extends Controller
                 $request->session()->flash('success',  ' has been create');
             }
             return \redirect()->route('it.equipment.lendings.index');
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -110,8 +110,8 @@ class LendingsTransactionController extends Controller
             $transaction = $this->transactionsService->find($id);
             $users = $this->userService->all()->get();
             return \view('it.lendings.edit')->with('transaction', $transaction)->with('accessories', $accessories)->with('users', $users);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -150,8 +150,8 @@ class LendingsTransactionController extends Controller
                 }
             }
             return \redirect()->route('it.equipment.lendings.index');
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 

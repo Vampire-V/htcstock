@@ -90,8 +90,8 @@ class ScrapController extends Controller
                 $scrap->value_of_contract = explode(",", $scrap->value_of_contract);
             }
             $paymentType = $this->paymentTypeService->dropdown($scrap->legalcontract->agreement_id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('legal.ContractRequestForm.Scrap.edit')->with(['scrap' => $scrap, 'paymentType' => $paymentType]);
     }
@@ -148,9 +148,9 @@ class ScrapController extends Controller
                 Storage::delete($scrap->waste_permission);
             }
             $request->session()->flash('success',  ' has been create');
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->route('legal.contract-request.index');

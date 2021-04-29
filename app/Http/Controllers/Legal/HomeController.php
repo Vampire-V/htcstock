@@ -52,8 +52,8 @@ class HomeController extends Controller
             $checking = $this->contractRequestService->countStatus(ContractEnum::CK);
             $providing = $this->contractRequestService->countStatus(ContractEnum::P);
             $complete = $this->contractRequestService->countStatus(ContractEnum::CP);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
         if ($allPromised > 0) {

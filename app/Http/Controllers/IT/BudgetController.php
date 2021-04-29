@@ -32,8 +32,8 @@ class BudgetController extends Controller
         try {
             $budgets = $this->budgetService->filterForBudget($request);
             return \view('it.budgets.index',\compact('budgets','query','months','earliest_year','selectedMonth','selectedYear'));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
     /**
@@ -46,8 +46,8 @@ class BudgetController extends Controller
     {
         try {
             return \view('it.budgets.create')->with(['months' => Helper::getMonth(), 'earliest_year' => 2020]);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
     /**
@@ -76,8 +76,8 @@ class BudgetController extends Controller
                 'amountTotal' => $amountTotal,
                 'remainBudget' => $budget->budgets_of_month - $amountTotal
             ]);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
     /**
@@ -99,8 +99,8 @@ class BudgetController extends Controller
                 $request->session()->flash('error', 'error budget create!');
             }
             return \redirect()->route('it.check.budgets.index');
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
     /**
@@ -124,8 +124,8 @@ class BudgetController extends Controller
                 $request->session()->flash('error', 'error budget update!');
             }
             return \redirect()->route('it.check.budgets.index');
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -139,8 +139,8 @@ class BudgetController extends Controller
     {
         try {
             //
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 }

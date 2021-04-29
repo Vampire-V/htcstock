@@ -78,8 +78,8 @@ class ContractRequestController extends Controller
             $contracts = $this->contractRequestService->filter($request);
 
             return \view('legal.ContractRequestForm.index', \compact('contracts', 'status', 'agreements', 'selectedStatus', 'selectedAgree', 'query'));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -93,8 +93,8 @@ class ContractRequestController extends Controller
         try {
             $actions = $this->actionService->dropdown();
             $agreements = $this->agreementService->dropdown();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('legal.ContractRequestForm.create')->with(['actions' => $actions, 'agreements' => $agreements]);
     }
@@ -121,9 +121,9 @@ class ContractRequestController extends Controller
             } else {
                 $request->session()->flash('success',  ' has been create');
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return $this->redirectContractByAgreement($contractRequest);
@@ -149,8 +149,8 @@ class ContractRequestController extends Controller
             $permission = $legalContract->createdBy->department->legalApprove->search(function ($item, $key) {
                 return $item->user_id === \auth()->id();
             }, \true) === false ? 'Read' : 'Write';
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         switch ($legalContract->agreement_id) {
             case $agreements[0]->id:
@@ -227,8 +227,8 @@ class ContractRequestController extends Controller
             $contract = $this->contractRequestService->find($id);
             $actions = $this->actionService->dropdown();
             $agreements = $this->agreementService->dropdown();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('legal.ContractRequestForm.edit')->with(['contract' => $contract, 'actions' => $actions, 'agreements' => $agreements]);
     }
@@ -254,9 +254,9 @@ class ContractRequestController extends Controller
             if ($contractRequest->representative_cer !== $attributes['representative_cer']) {
                 Storage::delete($contractRequest->representative_cer);
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return $this->redirectContractByAgreement($contractRequest);
@@ -280,16 +280,16 @@ class ContractRequestController extends Controller
                 Session::flash('error',  ' Cannot delete another user`s contract.');
                 return \redirect()->back();
             }
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
         DB::beginTransaction();
         try {
             $this->contractRequestService->update(['trash' => true], $id);
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         Session::flash('success',  ' has been delete');
         DB::commit();
@@ -334,9 +334,9 @@ class ContractRequestController extends Controller
                 Mail::to($alertReturn->email)->send(new ContractApproval($contractRequest, $alertReturn));
             }
             Mail::to($userApproval->email)->send(new ContractApproval($contractRequest, $userApproval));
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         Session::flash('success',  'Send email approval');
@@ -399,8 +399,8 @@ class ContractRequestController extends Controller
     {
         try {
             $agreements = $this->agreementService->dropdown();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
         switch ($contractRequest->agreement_id) {
@@ -446,8 +446,8 @@ class ContractRequestController extends Controller
     {
         try {
             $agreements = $this->agreementService->dropdown();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
         switch ($contractRequest->agreement_id) {
@@ -554,8 +554,8 @@ class ContractRequestController extends Controller
                 $segments[1] . '/' . $segments[2] . '/' . $date->isoFormat('YYYYMD'),
                 $request->file('file'),
             );
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
         return \response()->json(['path' => $path]);
@@ -574,8 +574,8 @@ class ContractRequestController extends Controller
                 $contract->legalContractDest->value_of_contract = explode(",", $contract->legalContractDest->value_of_contract);
             }
             $pdf = $this->loadViewContractByAgreement($contract);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
         return $pdf->stream();

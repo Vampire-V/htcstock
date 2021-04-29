@@ -35,8 +35,8 @@ class RoleController extends Controller
             $selectedRole = collect($request->role);
             $query = $request->all();
             return \view('admin.roles.index', \compact('roles', 'selectedRole', 'dropdown', 'query'));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -72,9 +72,9 @@ class RoleController extends Controller
             } else {
                 $request->session()->flash('error', 'create roles fail!');
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->route('admin.roles.index');
@@ -104,8 +104,8 @@ class RoleController extends Controller
             $system = $this->systemService->systemIn([substr($role->slug, strpos($role->slug, '-') + 1)])->first();
             $permissions = $this->permissionsService->systemIn([$system->id]);
             return \view('admin.roles.edit')->with(['role' => $role, 'permissions' => $permissions]);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -134,9 +134,9 @@ class RoleController extends Controller
             }
             // $this->rolesService->update($request->except(['_token','_method']),$id) ? $request->session()->flash('success','update roles success') : $request->session()->flash('error','update roles fail!');
 
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->back();

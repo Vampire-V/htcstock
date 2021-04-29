@@ -89,8 +89,8 @@ class WorkServiceContractController extends Controller
                 $workservicecontract->value_of_contract = explode(",", $workservicecontract->value_of_contract);
             }
             $paymentType = $this->paymentTypeService->dropdown($workservicecontract->legalcontract->agreement_id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('legal.ContractRequestForm.WorkServiceContract.edit')->with(['workservicecontract' => $workservicecontract, 'paymentType' => $paymentType]);
     }
@@ -149,9 +149,9 @@ class WorkServiceContractController extends Controller
                 Storage::delete($workServiceContract->purchase_order);
             }
             $request->session()->flash('success',  ' has been create');
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->route('legal.contract-request.show', $workServiceContract->legalContract->id);

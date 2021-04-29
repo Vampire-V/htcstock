@@ -34,8 +34,8 @@ class ApprovalController extends Controller
         try {
             $departments = $this->departmentService->all()->orderBy('name', 'asc')->get();
             // \dd($departments);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('legal.AdminManagement.Approval.index')->with(['departments' => $departments]);
     }
@@ -49,8 +49,8 @@ class ApprovalController extends Controller
     {
         try {
             //code...
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('legal.AdminManagement.Approval.create');
     }
@@ -73,9 +73,9 @@ class ApprovalController extends Controller
             } else {
                 $request->session()->flash('success',  ' has been create');
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->back();
@@ -105,8 +105,8 @@ class ApprovalController extends Controller
             $department = $this->departmentService->find($id);
             $users = $this->userService->dropdown();
             $approvals = $this->approvalService->approvalByDepartment($department);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('legal.AdminManagement.Approval.edit')->with(['approvals' => $approvals, 'department' => $department, 'users' => $users]);
     }
@@ -140,9 +140,9 @@ class ApprovalController extends Controller
                 $value->save();
             }
             $this->approvalService->destroy($id);
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->back();
@@ -167,9 +167,9 @@ class ApprovalController extends Controller
             $approvalup->save();
             $approvaldown->levels += 1;
             $approvaldown->save();
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->back();
@@ -194,9 +194,9 @@ class ApprovalController extends Controller
             $approvalup->save();
             $approvaldown->levels += 1;
             $approvaldown->save();
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw $th;
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return \redirect()->back();

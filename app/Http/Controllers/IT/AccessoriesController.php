@@ -32,8 +32,8 @@ class AccessoriesController extends Controller
             $accessories = $this->accessoriesService->filter($request);
             $accessorys = $this->accessoriesService->dropdown();
             return \view('it.accessorie.list', \compact('accessories', 'query', 'selectedAccessorys', 'accessorys'));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -50,8 +50,8 @@ class AccessoriesController extends Controller
             $accessories = $this->accessoriesService->filter($request);
             $accessorys = $this->accessoriesService->dropdown();
             return \view('it.all.index', \compact('accessories', 'query', 'selectedAccessorys', 'accessorys'));
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -64,8 +64,8 @@ class AccessoriesController extends Controller
     {
         try {
             return \view('it.accessorie.create');
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -85,8 +85,8 @@ class AccessoriesController extends Controller
             }
             $request->session()->flash('success', ' has been create success');
             return \redirect()->route('it.equipment.management.edit', $isCreate->access_id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -112,8 +112,8 @@ class AccessoriesController extends Controller
         try {
             $accessorie = $this->accessoriesService->find($id);
             return \view('it.accessorie.edit')->with('accessorie', $accessorie);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -135,8 +135,8 @@ class AccessoriesController extends Controller
             }
             $request->session()->flash('success', ' has been update success');
             return \redirect()->route('it.equipment.management.edit', $id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 
@@ -162,8 +162,8 @@ class AccessoriesController extends Controller
             }
             Session::flash('success',  ' has been delete');
             return \back();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }
 

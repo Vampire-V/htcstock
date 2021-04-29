@@ -25834,8 +25834,6 @@ input[type=number] {
 
 @media only screen and (max-width: 1366px) {
     .fixed-sidebar .app-main .app-main__outer {
-        z-index: 9;
-        padding-left: 280px;
-        max-width: 1366px;
+        max-width: 1340px;
     }
 }

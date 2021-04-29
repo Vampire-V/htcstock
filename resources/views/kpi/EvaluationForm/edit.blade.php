@@ -97,7 +97,7 @@
                                 @foreach ($templates as $item)
                                 <option value="{{$item->id}}" @if ($evaluate->template_id === $item->id)
                                     selected
-                                @endif>
+                                    @endif>
                                     {{$item->name}}</option>
                                 @endforeach
                                 @endisset

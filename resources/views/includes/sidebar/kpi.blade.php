@@ -47,14 +47,13 @@
                 <li>
                     <a href="{{route('kpi.self-evaluation.index')}}"
                         class="{{Helper::isActive('kpi/self-evaluation*')}}">
-                        <i class="metismenu-icon"></i>
+                        <i class="metismenu-icon pe-7s-file"></i>
                         Self Evaluation
                     </a>
                 </li>
                 <li>
-                    <a href="{{route('kpi.set-actual.index')}}"
-                        class="{{Helper::isActive('kpi/set-actual*')}}">
-                        <i class="metismenu-icon"></i>
+                    <a href="{{route('kpi.set-actual.index')}}" class="{{Helper::isActive('kpi/set-actual*')}}">
+                        <i class="metismenu-icon pe-7s-ticket"></i>
                         Set Actual
                     </a>
                 </li>
@@ -62,19 +61,19 @@
                 @can('admin-kpi')
                 <li>
                     <a href="{{route('kpi.rule-list.index')}}" class="{{Helper::isActive('kpi/rule-list*')}}">
-                        <i class="metismenu-icon"></i>
+                        <i class="metismenu-icon pe-7s-upload"></i>
                         Rule List
                     </a>
                 </li>
                 <li>
                     <a href="{{route('kpi.template.index')}}" class="{{Helper::isActive('kpi/template*')}}">
-                        <i class="metismenu-icon"></i>
+                        <i class="metismenu-icon pe-7s-box1"></i>
                         Rule Template
                     </a>
                 </li>
                 <li>
                     <a href="{{route('kpi.staff.index')}}" class="{{Helper::isActive('kpi/evaluation-form/staff*')}}">
-                        <i class="metismenu-icon"></i>
+                        <i class="metismenu-icon pe-7s-folder"></i>
                         Evaluation Form
                     </a>
                 </li>
@@ -85,7 +84,7 @@
                 <li>
                     <a href="{{route('kpi.evaluation-review.index')}}"
                         class="{{Helper::isActive('kpi/evaluation-review*')}}">
-                        <i class="metismenu-icon"></i>
+                        <i class="metismenu-icon pe-7s-display2"></i>
                         Evaluation Review
                     </a>
                 </li>

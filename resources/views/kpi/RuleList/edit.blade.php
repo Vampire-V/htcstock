@@ -99,7 +99,7 @@
                                 @foreach ($users as $item)
                                 <option value="{{$item->id}}" @if ($item->id === $rule->user_actual)
                                     selected
-                                    @endif>{{$item->{'name_'.app()->getLocale()} }} - {{$item->username}}</option>
+                                    @endif>{{$item->name }} - {{$item->username}}</option>
                                 @endforeach
                                 @endisset
                             </select>

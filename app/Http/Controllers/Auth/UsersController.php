@@ -3,16 +3,23 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUserPost;
+use App\Services\IT\Interfaces\DepartmentServiceInterface;
+use App\Services\IT\Interfaces\DivisionServiceInterface;
+use App\Services\IT\Interfaces\PositionServiceInterface;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
-    private $userService;
-    public function __construct(UserServiceInterface $userServiceInterface)
+    private $userService, $divisionsService, $departmentsService, $positionsService;
+    public function __construct(UserServiceInterface $userServiceInterface, DivisionServiceInterface $divisionsServiceInterface, DepartmentServiceInterface $departmentsServiceInterface, PositionServiceInterface $positionsServiceInterface)
     {
         $this->userService = $userServiceInterface;
+        $this->divisionsService = $divisionsServiceInterface;
+        $this->departmentsService = $departmentsServiceInterface;
+        $this->positionsService = $positionsServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -66,12 +73,13 @@ class UsersController extends Controller
     {
         try {
             $user = $this->userService->find($id);
+            $divisions = $this->divisionsService->dropdown();
+            $departments = $this->departmentsService->dropdown();
+            $positions = $this->positionsService->dropdown();
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('me.index')->with([
-            'user' => $user
-        ]);
+        return \view('me.index', \compact('user', 'divisions', 'departments', 'positions'));
     }
 
     /**
@@ -81,11 +89,11 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreUserPost $request, $id)
     {
         DB::beginTransaction();
         try {
-            if ($this->userService->update($request->except(['_token']), $id)) {
+            if ($this->userService->update($request->except(['_token', '_method']), $id)) {
                 $request->session()->flash('success', $request->name . ' user has been update');
             } else {
                 $request->session()->flash('error', 'error flash message!');

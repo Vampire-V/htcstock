@@ -6,8 +6,7 @@ class NameUsernameEmailLike
 {
     public function filter($builder, $value)
     {
-        return $builder->orWhere('name_th', 'like', '%' . $value . '%')
-            ->orWhere('name_en', 'like', '%' . $value . '%')
+        return $builder->orWhereTranslationLike('name', '%' . $value . '%')
             ->orWhere('username', 'like', '%' . $value . '%')
             ->orWhere('email', 'like', '%' . $value . '%');
     }

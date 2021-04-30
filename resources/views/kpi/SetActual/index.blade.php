@@ -127,7 +127,7 @@
                             @foreach ($evaluateDetail as $key => $item)
                             <tr>
                                 <th scope="row">{{$key+1}}</th>
-                                <td>{{$item->evaluate->user->{'name_'.app()->getLocale()} }} : <span
+                                <td>{{$item->evaluate->user->name }} : <span
                                         class="{{Helper::kpiStatusBadge($item->evaluate->status)}}">{{$item->evaluate->status}}</span>
                                 </td>
                                 <td>{{$item->evaluate->targetperiod->name}} {{$item->evaluate->targetperiod->year}}</td>

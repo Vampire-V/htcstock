@@ -68,11 +68,15 @@
                         {{ __('navigation.language') }}
                     </a>
                     <div class="dropdown-menu">
+                        @foreach (config('translatable.locales') as $locale)
                         <a class="dropdown-item "
+                            href="{{route('switch.language',$locale)}}">{{ __('navigation.'.$locale) }}</a>
+                        @endforeach
+                        {{-- <a class="dropdown-item "
                             href="{{route('switch.language','en')}}">{{ __('navigation.english') }}</a>
                         <a class="dropdown-item "
                             href="{{route('switch.language','th')}}">{{ __('navigation.thailand') }}
-                        </a>
+                        </a> --}}
                     </div>
                 </li>
             </ul>
@@ -123,7 +127,7 @@
                         </div>
                         <div class="widget-content-left  ml-3 header-user-info">
                             <div class="widget-heading">
-                                {{Auth::user()->{'name_'.app()->getLocale()} }}
+                                {{Auth::user()->name }}
                             </div>
                             <div class="widget-subheading">
                                 {{Auth::user()->email}}

@@ -100,7 +100,7 @@
                             <td>{{$item->trans_type}}</td>
                             <td>{{$item->qty}}</td>
                             <td>{{$item->created_at}}</td>
-                            <td>{{$item->transactionCreated->{'name_'.app()->getLocale()} }}</td>
+                            <td>{{$item->transactionCreated->name }}</td>
                         </tr>
                         @endforeach
                         @endisset

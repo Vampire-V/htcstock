@@ -160,7 +160,7 @@
                                     @method('DELETE')
                                 </form>
                             </td>
-                            <td class="text-center">{{$item->user->{'name_'.app()->getLocale()} }}</td>
+                            <td class="text-center">{{$item->user->name }}</td>
                             <td class="text-center">{{$item->levels}}</td>
                         </tr>
                         @endforeach

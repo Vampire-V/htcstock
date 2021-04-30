@@ -85,7 +85,7 @@
                         @foreach ($users as $key => $user)
                         <tr>
                             <th scope="row">{{$key+1}}</th>
-                            <td>{{$user->{'name_'.app()->getLocale()} }}</td>
+                            <td>{{$user->name }}</td>
                             <td>{{$user->department->name}}</td>
                             <td>{{$user->positions->name}}</td>
                             <td><a href="{{route('kpi.staff.edit',$user->id)}}"

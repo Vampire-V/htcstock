@@ -14,8 +14,8 @@ return [
     */
 
     'language' => 'Language',
-    'english' => 'English',
-    'thailand' => 'Thailand',
+    'en' => 'English',
+    'th' => 'Thailand',
     'logout' => 'Logout',
     'profile' => 'Profile',
 

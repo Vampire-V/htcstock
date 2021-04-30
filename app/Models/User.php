@@ -9,12 +9,14 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\App;
+use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
+use Astrotomic\Translatable\Translatable;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, TranslatableContract
 {
-    use Notifiable, HasPermissionsTrait, UserTrait;
+    use Notifiable, HasPermissionsTrait, UserTrait, Translatable;
 
+    public $translatedAttributes = ['name'];
     /**
      * The attributes that are mass assignable.
      *

@@ -36,7 +36,7 @@
                 <li class="app-sidebar__heading">Menu</li>
                 <li>
                     <a href="{{route('me.user.edit',Auth::user()->id)}}" class="{{Helper::isActive('me/user*')}}">
-                        <i class="metismenu-icon pe-7s-monitor"></i>
+                        <i class="metismenu-icon pe-7s-users"></i>
                         Profile
                     </a>
                 </li>

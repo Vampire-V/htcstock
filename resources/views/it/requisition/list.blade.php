@@ -104,7 +104,7 @@
                                 <th scope="row">{{$key+1}}</th>
                                 <td>{{$item->accessorie->access_name}}</td>
                                 <td>{{Helper::convertQty($item->qty)}}</td>
-                                <td>{{$item->user->{'name_'.app()->getLocale()} }}</td>
+                                <td>{{$item->user->name }}</td>
                                 <td>{{$item->created_at}}</td>
                                 <td><a href="{{route('it.equipment.requisition.edit',$item->id)}}"><button type="button"
                                             class="btn btn-primary btn-sm float-left">{{ __('itstock.requisition-accessorie.detail') }}</button></a></td>

@@ -215,7 +215,7 @@
                                 @foreach ($users as $key => $user)
                                 <tr>
                                     <th>{{$key+1}}</th>
-                                    <td class="truncate">{{ $user->name }}</td>
+                                    <td class="truncate">{{ $user->name }} : {{$user->id}}</td>
                                     @isset($user->total)
                                     @foreach ($user->total as $total)
                                     <td>

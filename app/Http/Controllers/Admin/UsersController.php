@@ -187,7 +187,7 @@ class UsersController extends Controller
             } else {
                 $request->session()->flash('error', 'ติดต่อ กับ ' . ENV('USERS_UPDATE') . "ไม่ได้");
             }
-
+            /** make update user : name en 
             $ids = [
                 1,
                 2,
@@ -1288,6 +1288,7 @@ class UsersController extends Controller
             foreach ($datas as $key => $value) {
                 $this->userService->update($value, $ids[$key]);
             }
+             */
         } catch (\Exception $e) {
             DB::rollBack();
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());

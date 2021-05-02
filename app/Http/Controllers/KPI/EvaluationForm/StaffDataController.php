@@ -4,9 +4,6 @@ namespace App\Http\Controllers\KPI\EvaluationForm;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ALL\UserResource;
-use App\Models\KPI\Evaluate;
-use App\Models\KPI\TargetPeriod;
-use App\Models\User;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\IT\Interfaces\PositionServiceInterface;
 use App\Services\IT\Interfaces\UserServiceInterface;
@@ -16,11 +13,7 @@ use Illuminate\Http\Request;
 
 class StaffDataController extends Controller
 {
-    protected $departmentService;
-    protected $positionService;
-    protected $userService;
-    protected $evaluateService;
-    protected $targetPeriodService;
+    protected $departmentService, $positionService, $userService, $evaluateService, $targetPeriodService;
     public function __construct(
         DepartmentServiceInterface $departmentServiceInterface,
         PositionServiceInterface $positionServiceInterface,
@@ -128,22 +121,4 @@ class StaffDataController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $staff
-     * @param  int  $period
-     * @return App\Http\Resources\ALL\UserResource
-     */
-    public function listOfTeamsOfEvaluate($staff, $period)
-    {
-        try {
-            $user = $this->userService->find($staff);
-            $team = $this->userService->listOfTeamsOfEvaluateReport($user->department_id, $period);
-
-            return new UserResource($team);
-        } catch (\Exception $e) {
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
-        }
-    }
 }

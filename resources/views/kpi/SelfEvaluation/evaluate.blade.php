@@ -35,7 +35,8 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}} </span></h5>
+                        <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}}
+                            </span></h5>
                     </div>
                 </div>
             </div>
@@ -45,8 +46,7 @@
                         <div class="col-md-3 mb-3">
                             <label for="staffName">Staff Name</label>
                             <input type="text" class="form-control form-control-sm" id="staffName"
-                                placeholder="Staff Name" value="{{$evaluate->user->name }}"
-                                readonly>
+                                placeholder="Staff Name" value="{{$evaluate->user->name }}" readonly>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
@@ -263,16 +263,15 @@
     }
 
     const submit = () => {
-        // window.scroll({top: 0, behavior: "smooth"})
         setVisible(true)
         putEvaluateSelf(evaluate.id,evaluateForm).then(res => {
-            if (res.status === 200) {
+            if (res.status === 201) {
                 status.textContent = res.data.data.status
-                toast(`Save evaluate-form.`,'success')
+                toast(res.data.message,res.data.status)
             }
         })
         .catch(error => {
-            toast(error.response.data.message,'error')
+            toast(error.response.data.message,error.response.data.status)
             console.log(error.response.data.message)
         })
         .finally( () => {
@@ -283,21 +282,20 @@
 
     const submitToManager = (e) => {
         evaluateForm.next = !evaluateForm.next
-        // window.scroll({top: 0, behavior: "smooth"})
         setVisible(true)
         // Save & send to manager 
         putEvaluateSelf(evaluate.id,evaluateForm).then(res => {
             let label_status = document.getElementsByClassName('card-header')[0].querySelector('span')
-            if (res.status === 200) {
+            if (res.status === 201) {
                 label_status.textContent = res.data.data.status
                 if (res.data.data.status === status.SUBMITTED) {
                     pageDisable()
                 }
-                toast(`Sent evaluate-form To Manager.`,'success')
+                toast(res.data.message,res.data.status)
             }
         })
         .catch(error => {
-            toast(error.response.data.message,'error')
+            toast(error.response.data.message,error.response.data.status)
             console.log(error.response.data.message)
         })
         .finally( () => {

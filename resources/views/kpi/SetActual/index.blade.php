@@ -210,14 +210,12 @@
                 setVisible(true)
                 putSetActual(detail,detail[0].rules.user_actual.id)
                 .then(res => {
-                    if (res.data.status) {
-                        toast(`Set Actual Success!`,'success')
-                    }else{
-                        toast(`Set Actual Fail!`,'error')
+                    if (res.status === 201) {
+                        toast(res.data.message,res.data.status)
                     }
                 })
                 .catch(error => {
-                    console.log(error);
+                    toast(error.response.data.message,error.response.data.status)
                 })
                 .finally(() => {
                     setVisible(false)

@@ -35,7 +35,8 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}">{{$evaluate->status}}</span></h5>
+                        <h5>status : <span
+                                class="{{Helper::kpiStatusBadge($evaluate->status)}}">{{$evaluate->status}}</span></h5>
                     </div>
                 </div>
             </div>
@@ -173,7 +174,8 @@
                             <th>{{$item->name}}</th>
                             <td>0.00%</td>
                             <td>0.00%</td>
-                            {{-- <td><input class="form-control form-control-sm" type="number" name="{{$item->name}}" step="0.01" min="0" onchange="changeAch(this)"></td> --}}
+                            {{-- <td><input class="form-control form-control-sm" type="number" name="{{$item->name}}"
+                            step="0.01" min="0" onchange="changeAch(this)"></td> --}}
                             <td>0.00%</td>
                         </tr>
                         @endforeach
@@ -199,8 +201,8 @@
     <div class="page-title-wrapper">
         <div class="page-title-heading"></div>
         <div class="page-title-actions">
-            <button class="mb-2 mr-2 btn btn-primary" onclick="approve(this)" >Approve</button>
-            <button class="mb-2 mr-2 btn btn-warning" onclick="reject(this)" >Reject</button>
+            <button class="mb-2 mr-2 btn btn-primary" onclick="approve(this)">Approve</button>
+            <button class="mb-2 mr-2 btn btn-warning" onclick="reject(this)">Reject</button>
         </div>
     </div>
 </div>
@@ -251,18 +253,19 @@
             putEvaluateReview(evaluate.id,evaluateForm)
             .then(res => {
                 let status = document.getElementsByClassName('card-header')[0].querySelector('span')
-                if (res.status === 200) {
+                if (res.status === 201) {
                     status.textContent = res.data.data.status
                     pageDisable()
-                    toast(`Evaluate-review Reject.`,'success')
-                    toastClear()
+                    toast(res.data.message,res.data.status)
                 }
             })
             .catch(error => {
-                toast(error.response.data.message,'error')
+                toast(error.response.data.message,error.response.data.status)
+            })
+            .finally(() => {
+                setVisible(false)
                 toastClear()
             })
-            .finally(() => setVisible(false))
         }
         
     }
@@ -272,17 +275,16 @@
         // Save & approved
         // /kpi/evaluation-review/update
         setVisible(true)
-        // window.scroll({top: 0, behavior: "smooth"})
         putEvaluateReview(evaluate.id,evaluateForm).then(res => {
             let status = document.getElementsByClassName('card-header')[0].querySelector('span')
-            if (res.status === 200) {
+            if (res.status === 201) {
                 status.textContent = res.data.data.status
                 pageDisable()
-                toast(`evaluate-review Approved.`,'success')
+                toast(res.data.message,res.data.status)
             }
         })
         .catch(error => {
-            toast(error.response.data.message,'error')
+            toast(error.response.data.message,error.response.data.status)
         })
         .finally( () => {
             evaluateForm.next = !evaluateForm.next

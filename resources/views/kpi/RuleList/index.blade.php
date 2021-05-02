@@ -67,8 +67,8 @@
                         </div>
                         <div class="col-md-3 col-xl-3">
                             <label for="ruleType">Rule Type :</label>
-                            <select id="validationRuleType" class="form-control-sm form-control"
-                                name="rule_type[]" multiple>
+                            <select id="validationRuleType" class="form-control-sm form-control" name="rule_type[]"
+                                multiple>
                                 @isset($rulesType)
                                 @foreach ($rulesType as $item)
                                 <option value="{{$item->id}}" @if ($selectedRuleType->contains($item->id))
@@ -215,22 +215,19 @@
             postRuleUpload({file:path})
             .then(res => {
                 if (res.status === 200) {
-                    if (res.data.errors.length > 0) {
-                        res.data.errors.forEach(element => {
+                    if (res.data.data.errors.length > 0) {
+                        res.data.data.errors.forEach(element => {
                             toast(`Row :${element.row} Col :${element.col} Message :${element.message}`,'error')
                         })
                     }
-                    if (res.data.status) {
-                        toast(`Import rule success!`,'success')
-                    }else{
-                        toast(`Import rule Fail!`,'error')
-                    }
+                    toast(res.data.message,res.data.status)
                 }
             })
             .catch(error => {
-                toast(error.response.data.message,'error')
+                toast(error.response.data.message,error.response.data.status)
             })
             .finally(() => {
+                document.getElementById('modal-import').getElementsByClassName("close")[0].click()
                 setVisible(false)
                 toastClear()
             })
@@ -250,12 +247,14 @@
         data.append('file', e.files[0])
         postUploadFile(data,config)
         .then(res => {
+            console.log(res);
             if (res.status === 200) {
-                document.getElementsByName('path_file')[0].value = res.data.folder
+                document.getElementsByName('path_file')[0].value = res.data.data
             }
         })
         .catch(error => {
-            toast(error.response.data.message,'error')
+            console.log(error.response);
+            toast(error.response.data.message,error.response.data.status)
             error.response.data.errors.file.forEach(element => {
                 toast(element,'error')
             })

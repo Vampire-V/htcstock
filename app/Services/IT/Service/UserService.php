@@ -98,15 +98,6 @@ class UserService extends BaseService implements UserServiceInterface
         }
     }
 
-    public function listOfTeamsOfEvaluateReport($department, $period): Collection
-    {
-        try {
-            return User::with(['evaluate' => fn ($query) => $query->where('period_id', $period)])->where('department_id', $department)->get();
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    }
-
     public function evaluationOfYearReport(string $year): Collection
     {
         try {
@@ -125,6 +116,15 @@ class UserService extends BaseService implements UserServiceInterface
             }
 
             return $data;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function getManager(User $user): User
+    {
+        try {
+            return User::where('username',$user->head_id)->first();
         } catch (\Throwable $th) {
             throw $th;
         }

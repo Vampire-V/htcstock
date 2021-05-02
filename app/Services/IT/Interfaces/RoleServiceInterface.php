@@ -17,4 +17,5 @@ interface RoleServiceInterface
 
     public function filter(Request $request);
     public function roleIn(...$slug): Collection;
+    public function query();
 }

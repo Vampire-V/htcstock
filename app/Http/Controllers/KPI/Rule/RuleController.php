@@ -111,9 +111,9 @@ class RuleController extends Controller
         try {
             $rule = $this->ruleService->find($id);
         } catch (\Exception $e) {
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(), 500);
         }
-        return new RuleResource($rule);
+        return $this->successResponse(new RuleResource($rule), "rule show ", 200);
     }
 
     /**
@@ -181,19 +181,24 @@ class RuleController extends Controller
         try {
             $rule = $this->ruleService->dropdown($group);
         } catch (\Exception $e) {
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(), 500);
         }
 
-        return RuleResource::collection($rule);
+        return $this->successResponse(RuleResource::collection($rule), "rule dropdown ", 200);
     }
 
     public function upload(Request $request)
     {
         $status = \false;
+        $message = "Import rule error!";
 
         $temporaryFile = TemporaryFile::where('folder', $request->file)->first();
         if (!$temporaryFile) {
             return \response()->json(["message" => "file not found!"], 422);
+        }
+        
+        if (!strpos(Storage::files('public/kpi/template')[0], $temporaryFile->filename)) {
+            return \response()->json(["message" => "It is not a template file."], 422);
         }
 
         $file = Storage::path('kpi/' . $temporaryFile->folder . '/' . $temporaryFile->filename);
@@ -252,19 +257,21 @@ class RuleController extends Controller
                 );
             }
         });
+        
         DB::beginTransaction();
         try {
             if ($this->rule_attrs) {
                 $status = $this->ruleService->insert($this->rule_attrs);
+                $message = $status ? "Import rule success!" : $message;
                 if ($temporaryFile->delete()) {
                     Storage::deleteDirectory('kpi/' . $temporaryFile->folder);
                 }
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return \response()->json(['errors' => $this->excel_errors, 'status' => $status]);
+        return $this->successResponse(['errors' => $this->excel_errors, 'status' => $status], $message, 200);
     }
 }

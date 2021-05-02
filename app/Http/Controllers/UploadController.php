@@ -28,13 +28,13 @@ class UploadController extends Controller
                 $fileModel->folder = $folder;
                 $fileModel->filename = $filename;
                 $fileModel->save();
-                DB::commit();
-                return \response()->json(['folder' => $folder]);
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            throw $e;
+            $this->errorResponse($e->getMessage(), 500);
         }
+        DB::commit();
+        return $this->successResponse($folder, "upload file", 200);
     }
 
     /**

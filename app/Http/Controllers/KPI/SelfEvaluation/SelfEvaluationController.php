@@ -79,12 +79,7 @@ class SelfEvaluationController extends Controller
      */
     public function show($id)
     {
-        try {
-            $evaluate = $this->evaluateService->find($id);
-        } catch (\Exception $e) {
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
-        }
-        return new EvaluateResource($evaluate);
+        //
     }
 
     /**
@@ -98,7 +93,6 @@ class SelfEvaluationController extends Controller
         try {
             $category = $this->categoryService->dropdown();
             $f_evaluate = $this->evaluateService->find($id);
-            // $f_evaluate->evaluateDetail->each(fn ($item) => $this->evaluateDetailService->formulaKeyTask($item));
             $evaluate  = new EvaluateResource($f_evaluate);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
@@ -115,6 +109,7 @@ class SelfEvaluationController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $message = KPIEnum::draft;
         DB::beginTransaction();
         try {
             $evaluate = $this->evaluateService->find($id);
@@ -126,9 +121,10 @@ class SelfEvaluationController extends Controller
             $evaluate->status = $request->next ? KPIEnum::submit : KPIEnum::draft;
             $evaluate->save();
             if ($request->next) {
+                $message = KPIEnum::submit;
                 # send mail to Manger
                 if ($evaluate->user->head_id) {
-                    $manager = $this->userService->all()->where('username',$evaluate->user->head_id)->firstOrFail();
+                    $manager = $this->userService->getManager($evaluate->user);
                     Mail::to($manager->email)->send(new EvaluationSelfMail($evaluate));
                 }else{
                     // $evaluate->user->head_id is null
@@ -136,10 +132,10 @@ class SelfEvaluationController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return new EvaluateResource($evaluate);
+        return $this->successResponse(new EvaluateResource($evaluate), "evaluate self status to : " . $message, 201);
     }
 
     /**

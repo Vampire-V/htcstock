@@ -26,18 +26,14 @@ class StoreUserPost extends FormRequest
     public function rules()
     {
         $rules = [
-            'th.name' => 'required|max:255',
+            'name:th' => 'required|max:255',
+            'name:en' => 'required|max:255',
             'email' => 'required|email:rfc,dns',
             'phone' => 'required',
             'division' => 'required',
             'department' => 'required',
             'position' => 'required'
         ];
-
-        foreach (\config('translatable.locales') as $locale) {
-            $rules[$locale . '.name'] = 'string';
-        }
-
         return $rules;
     }
 }

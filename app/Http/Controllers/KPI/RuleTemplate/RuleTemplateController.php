@@ -93,16 +93,14 @@ class RuleTemplateController extends Controller
                 return \back();
             }
 
-            $template = $this->templateService->find($template);
-
-            $ruleTemplates = $this->ruleTemplateService->byTemplate($template);
+            $template = $this->templateService->ruleTemplate($template);
             $request->session()->flash('success', ' has been create success');
         } catch (\Exception $e) {
             DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return RuleTemplateResource::collection($ruleTemplates);
+        return $this->successResponse(RuleTemplateResource::collection($template->ruleTemplate), "Created rule template", 200);
     }
 
     /**
@@ -159,14 +157,11 @@ class RuleTemplateController extends Controller
     public function bytemplate($template)
     {
         try {
-            $template = $this->templateService->find($template);
-            $ruleTemplates = $this->ruleTemplateService->byTemplate($template);
+            $template = $this->templateService->ruleTemplate($template);
         } catch (\Exception $e) {
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(), 500);
         }
-        return RuleTemplateResource::collection($ruleTemplates);
-
-        // return new JsonResponse($ruleTemplates);
+        return $this->successResponse(RuleTemplateResource::collection($template->ruleTemplate), "rule by template", 200);
     }
 
     public function switchrow(Request $request, $id)
@@ -184,14 +179,13 @@ class RuleTemplateController extends Controller
             $first->save();
             $second->save();
 
-            $template = $this->templateService->find($id);
-            $ruleTemplates = $this->ruleTemplateService->byTemplate($template);
+            $template = $this->templateService->ruleTemplate($id);
         } catch (\Exception $e) {
             DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return RuleTemplateResource::collection($ruleTemplates);
+        return $this->successResponse(RuleTemplateResource::collection($template->ruleTemplate), "Change number rule template", 200);
     }
 
     public function deleteRuleTemplate(Request $request, $id)
@@ -205,12 +199,12 @@ class RuleTemplateController extends Controller
                 $value->parent_rule_template_id = $key + 1;
                 $value->save();
             }
-            $ruleTemplates = $this->ruleTemplateService->byTemplate($template);
+            $template->fresh();
         } catch (\Exception $e) {
             DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return RuleTemplateResource::collection($ruleTemplates);
+        return $this->successResponse(RuleTemplateResource::collection($template->ruleTemplate), "Deleted rule template", 200);
     }
 }

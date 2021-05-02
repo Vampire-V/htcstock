@@ -96,7 +96,6 @@ class SetActualController extends Controller
     {
         $body = $request->all();
         $status_contain = collect([KPIEnum::draft, KPIEnum::ready]);
-        $status = \false;
         DB::beginTransaction();
         try {
             for ($i = 0; $i < count($body); $i++) {
@@ -106,15 +105,14 @@ class SetActualController extends Controller
                 if ($detail && $status_contain->contains($detail->evaluate->status)) {
                     $detail->actual = floatval($element['actual']);
                     $detail->save();
-                    $status = \true;
                 }
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return \response()->json(["status" => $status]);
+        return $this->successResponse(null,"Updated actual",201);
     }
 
     /**

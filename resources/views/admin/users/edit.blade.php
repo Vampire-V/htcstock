@@ -21,109 +21,130 @@
         </div>
     </div>
 </div>
+
 <div class="row">
-    <div class="col-lg-12">
-        <div class="main-card mb-12 card">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
             <div class="card-body">
                 <h5 class="card-title">{{ __('Form user') }}</h5>
-                <form action="{{route('admin.users.update',$user->id)}}" method="post">
+                <form class="" action="{{route('me.user.update',$user->id)}}" method="post">
                     @csrf
                     @method('PUT')
-                    <div class="form-group row">
-                        <label for="name" class="col-md-3 col-form-label text-md-right">{{ __('Name') }}</label>
-                        <div class="col-md-3">
-                            <input id="name" type="text"
-                                class="form-control-sm form-control @error('name') is-invalid @enderror" name="name"
-                                value="{{ $user->name }}" required autocomplete="name" readonly>
-                            @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="name" class="">{{ __('Name') }} (TH)</label>
+                                <input name="name:th" id="name_th" placeholder="Name placeholder" type="text"
+                                    class="form-control form-control-sm @error('name') is-invalid @enderror" readonly
+                                    value="{{ $user->translate('th')->name }}" required autocomplete="name" autofocus>
+                                @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="name" class="">{{ __('Name') }} (EN)</label>
+                                <input name="name:en" id="name_en" placeholder="Name placeholder" type="text"
+                                    class="form-control form-control-sm @error('name') is-invalid @enderror" readonly
+                                    value="{{ $user->translate('en')->name }}" required autocomplete="name" autofocus>
+                                @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="email"
-                            class="col-md-3 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="email" class="">{{ __('E-Mail Address') }}</label>
+                                <input name="email" id="email" placeholder="with a placeholder" type="email"
+                                    value="{{ $user->email }}" required autocomplete="email" readonly
+                                    class="form-control form-control-sm">
 
-                        <div class="col-md-3">
-                            <input id="email" type="email"
-                                class="form-control-sm form-control @error('email') is-invalid @enderror" name="email"
-                                value="{{ $user->email }}" autocomplete="email" readonly>
-
-                            @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
+                                @error('email')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="Phone" class="">{{ __('Phone') }}</label>
+                                <input name="phone" id="phone" placeholder="Phone placeholder" type="text"
+                                    class="form-control form-control-sm @error('phone') is-invalid @enderror"
+                                    value="{{ $user->phone }}" required autocomplete="phone" autofocus readonly>
+                                @error('phone')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="division"
-                            class="col-md-3 col-form-label text-md-right">{{ __('Division') }}</label>
 
-                        <div class="col-md-3">
-                            <input id="division" type="text"
-                                class="form-control-sm form-control @error('division') is-invalid @enderror"
-                                name="division" value="{{ $user->divisions->name }}" autocomplete="division"
-                                readonly>
-
-                            @error('division')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
+                    <div class="form-row">
+                        <div class="col-md-4">
+                            <div class="position-relative form-group">
+                                <label for="Division" class="">{{ __('Division') }}</label>
+                                <input name="division" id="division" placeholder="with a placeholder" type="division"
+                                    value="{{ $user->divisions->name }}" required autocomplete="division" readonly
+                                    class="form-control form-control-sm">
+                                @error('division')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="position-relative form-group">
+                                <label for="Department" class="">{{ __('Department') }}</label>
+                                <input name="department" id="department" placeholder="Department placeholder"
+                                    type="text"
+                                    class="form-control form-control-sm @error('department') is-invalid @enderror"
+                                    value="{{ $user->department->name }}" required autocomplete="department" readonly
+                                    autofocus>
+                                @error('department')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="position-relative form-group">
+                                <label for="Position" class="">{{ __('Position') }}</label>
+                                <input name="position" id="position" placeholder="with a placeholder" type="position"
+                                    value="{{ $user->positions->name }}" required autocomplete="position" readonly
+                                    class="form-control form-control-sm">
+                                @error('position')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="department"
-                            class="col-md-3 col-form-label text-md-right">{{ __('Department') }}</label>
-
-                        <div class="col-md-3">
-                            <input id="department" type="text"
-                                class="form-control-sm form-control @error('department') is-invalid @enderror"
-                                name="department" value="{{ $user->department->name }}" autocomplete="department"
-                                readonly>
-
-                            @error('department')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="position" class="col-md-3 col-form-label text-md-right">{{ __('Position') }}</label>
-
-                        <div class="col-md-3">
-                            <input id="position" type="text"
-                                class="form-control-sm form-control @error('position') is-invalid @enderror"
-                                name="position" value="{{ $user->positions->name }}" autocomplete="position" readonly>
-
-                            @error('position')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                    </div>
-            <a class="btn btn-warning mr-2" type="button" href="{{url()->previous()}}">Back</a>
-            {{-- <button type="submit" class="btn btn-primary">Update</button> --}}
-            </form>
-
+                    <a class="btn btn-warning mr-2" type="button" href="{{url()->previous()}}">Back</a>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-</div>
-<br>
+
 <div class="row">
     <div class="col-md-3">
         <div class="main-card mb-3 card">
             <div class="card-header">Role for users
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        {{-- <button class="active btn btn-focus">Last Week</button> --}}
                         <button class="btn btn-focus" data-toggle="modal" data-target=".bd-role-modal-lg">Add</button>
                     </div>
                 </div>
@@ -154,9 +175,6 @@
                 </table>
             </div>
             <div class="d-block text-center card-footer">
-                {{-- <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i
-                        class="pe-7s-trash btn-icon-wrapper"> </i></button>
-                <button class="btn-wide btn btn-success">Save</button> --}}
             </div>
         </div>
     </div>
@@ -165,7 +183,6 @@
             <div class="card-header">System for users
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        {{-- <button class="active btn btn-focus">Last Week</button> --}}
                         <button class="btn btn-focus" data-toggle="modal" data-target=".bd-system-modal-lg">Add</button>
                     </div>
                 </div>
@@ -197,9 +214,6 @@
                 </table>
             </div>
             <div class="d-block text-center card-footer">
-                {{-- <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i
-                        class="pe-7s-trash btn-icon-wrapper"> </i></button>
-                <button class="btn-wide btn btn-success">Save</button> --}}
             </div>
         </div>
     </div>

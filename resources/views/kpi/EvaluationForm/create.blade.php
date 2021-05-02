@@ -344,22 +344,19 @@
         if (evaluateForm.template && evaluateForm.mainRule) {
             setVisible(true)
             evaluateForm.next = true
-            // window.scroll({top: 0, behavior: "smooth"})
             postEvaluateForm(staff.id,period.id,evaluateForm).then(res => {
                 if (res.status === 201) {
-                    toast(`create evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`,'success')
-                    toastClear()
+                    toast(res.data.message,res.data.status)
                     setTimeout(function(){ 
                         window.location.replace(`${origin}${window.location.pathname.replace("create",res.data.data.id)}/edit`)
                     }, 3000)
                 }
             }).catch(error => {
-                toast(error.response.data.message,'error')
-                toastClear()
-                console.log(error.response.data)
+                toast(error.response.data.message,error.response.data.status)
             }).finally(() => {
                 setVisible(false)
                 evaluateForm.next = false
+                toastClear()
             })
         }
     }
@@ -368,21 +365,19 @@
         validityForm()
         if (evaluateForm.template && evaluateForm.mainRule) {
             setVisible(true)
-            // window.scroll({top: 0, behavior: "smooth"})
             postEvaluateForm(staff.id,period.id,evaluateForm).then( async res => {
+                console.log(res);
                 if (res.status === 201) {
-                    toast(`create evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`,'success')
-                    toastClear()
+                    toast(res.data.message,res.data.status)
                     setTimeout(function(){ 
                         window.location.replace(`${origin}${window.location.pathname.replace("create",res.data.data.id)}/edit`)
                     }, 3000)
                 }
             }).catch(error => {
-                console.log(error.response.data)
-                toast(error.response.data.message,'error')
-                toastClear()
+                toast(error.response.data.message,error.response.data.status)
             }).finally(() => {
                 setVisible(false)
+                toastClear()
             })
         }
     }
@@ -450,23 +445,26 @@
         // Fetch rule API and add to detail temp
         getRule(select.options[select.selectedIndex].value)
         .then(res => {
-            let row = evaluateForm.detail.find(obj => obj.rules.category_id === res.data.data.category_id)
-            let detail = new EvaluateDetail()
-            detail.rule_id = res.data.data.id
-            detail.rules = Object.create(res.data.data)
-            detail.target = row.target
-            detail.max = row.max
-            detail.weight = row.weight
-            detail.weight_category = row.weight_category
-            detail.base_line = row.base_line
-            evaluateForm.detail.push(detail)
-            e.offsetParent.querySelector('.close').click()
+            if (res.status === 200) {
+                let row = evaluateForm.detail.find(obj => obj.rules.category_id === res.data.data.category_id)
+                let detail = new EvaluateDetail()
+                detail.rule_id = res.data.data.id
+                detail.rules = Object.create(res.data.data)
+                detail.target = row.target
+                detail.max = row.max
+                detail.weight = row.weight
+                detail.weight_category = row.weight_category
+                detail.base_line = row.base_line
+                evaluateForm.detail.push(detail)
+                e.offsetParent.querySelector('.close').click()
+            }
         })
         .catch(error => {
-            console.log(error.response.data)
+            toast(error.response.data.message,error.response.data.status)
         })
         .finally(() => {
             displayDetail(evaluateForm)
+            toastClear()
         })
         
     }

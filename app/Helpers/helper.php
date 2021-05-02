@@ -60,7 +60,7 @@ class Helper
         return $step;
     }
 
-    public static function kpiStatusBadge(string $status): string
+    public static function kpiStatusBadge($status): string
     {
         switch ($status) {
             case KPIEnum::new:

@@ -108,12 +108,6 @@ const getEvaluateForm = (staff, period, evaluate) => axios({
     url: `/kpi/evaluation-form/staff/${staff}/edit/period/${period}/evaluate/${evaluate}`
 })
 
-const getListOfTeamsOfEvaluate = (staff, period) => axios({
-    method: 'GET',
-    responseType: 'json',
-    url: `/kpi/evaluation-form/staff/${staff}/period/${period}`
-})
-
 const putEvaluateSelf = (self_evaluation, form) => axios({
     method: 'PUT',
     responseType: 'json',

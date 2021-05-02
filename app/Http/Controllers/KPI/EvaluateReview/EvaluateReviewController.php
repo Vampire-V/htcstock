@@ -14,6 +14,7 @@ use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class EvaluateReviewController extends Controller
@@ -53,7 +54,8 @@ class EvaluateReviewController extends Controller
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
-        return \view('kpi.EvaluationReview.index',
+        return \view(
+            'kpi.EvaluationReview.index',
             \compact('start_year', 'user', 'status_list', 'period', 'evaluates', 'query', 'selectedStatus', 'selectedYear', 'selectedPeriod')
         );
     }
@@ -118,6 +120,7 @@ class EvaluateReviewController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $message = "";
         DB::beginTransaction();
         try {
             $evaluate = $this->evaluateService->find($id);
@@ -129,19 +132,24 @@ class EvaluateReviewController extends Controller
             $evaluate->status = $request->next ? KPIEnum::approved : KPIEnum::draft;
             $evaluate->comment = $request->comment;
             $evaluate->save();
+            Log::notice("User : " . \auth()->user()->id . " = Update evaluate review : id = " . $evaluate->id);
             if ($evaluate->status === KPIEnum::approved) {
+                $message = KPIEnum::approved;
                 # send mail to approved
             }
             if ($evaluate->status === KPIEnum::draft) {
+                $message = KPIEnum::draft;
                 # send mail to reject
                 Mail::to($evaluate->user->email)->send(new EvaluationReviewMail($evaluate));
+                Log::notice("User : " . \auth()->user()->id . " = Send mail evaluate review : id = " . $evaluate->id);
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return new EvaluateResource($evaluate);
+        return $this->successResponse(new EvaluateResource($evaluate), "evaluate review status to : " . $message, 201);
     }
 
     /**

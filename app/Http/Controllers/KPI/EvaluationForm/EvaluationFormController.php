@@ -24,16 +24,8 @@ use Illuminate\Support\Facades\Mail;
 
 class EvaluationFormController extends Controller
 {
-    protected $departmentService;
-    protected $positionService;
-    protected $userService;
-    protected $targetPeriodService;
-    protected $ruleTemplateService;
-    protected $templateService;
-    protected $categoryService;
-    protected $ruleService;
-    protected $evaluateService;
-    protected $evaluateDetailService;
+
+    protected $departmentService, $positionService, $userService, $targetPeriodService, $ruleTemplateService, $templateService, $categoryService, $ruleService, $evaluateService, $evaluateDetailService;
     public function __construct(
         DepartmentServiceInterface $departmentServiceInterface,
         PositionServiceInterface $positionServiceInterface,
@@ -82,7 +74,6 @@ class EvaluationFormController extends Controller
      */
     public function create($staff, $period)
     {
-        // \dd("Staff : " . $staff, "period form : " . $period);
         try {
             $user = $this->userService->find($staff);
             $period = $this->targetPeriodService->find($period);
@@ -128,32 +119,34 @@ class EvaluationFormController extends Controller
                         'total_weight_omg' => $request->total_weight_omg
                     ]
                 );
-
+                $detail = [];
                 foreach ($request->detail as $key => $value) {
-                    $evaluate_id = $evaluate->id;
                     $rule_id = $value['rule_id'];
                     $target = $value['target'];
                     $weight = $value['weight'];
                     $weight_category = $value['weight_category'];
                     $base_line = $value['base_line'];
                     $max_result = $value['max'];
-                    $attr = compact("evaluate_id", "rule_id", "target", "weight", "weight_category", "base_line", "max_result");
-                    $this->evaluateDetailService->create($attr);
+                    \array_push($detail, compact("rule_id", "target", "weight", "weight_category", "base_line", "max_result"));
                 }
+                if (count($detail) > 0) {
+                    $evaluate->evaluateDetail()->createMany($detail);
+                    Log::notice("User : " . \auth()->user()->id . " = Create evaluate form : id = " . $evaluate->id);
+                }
+
                 if ($request->next) {
                     # send mail to staff
                     Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
+                    Log::notice("User : " . \auth()->user()->id . " = Send evaluate mail : id = " . $evaluate->id);
                 }
-                Log::notice("User : " . \auth()->user()->id . " = Create evaluate form : id = " . $evaluate->id);
             }
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        
-        return new EvaluateResource($evaluate);
+        return $this->successResponse(new EvaluateResource($evaluate), 'Evaluate created : ' . $evaluate->targetperiod->name . $evaluate->targetperiod->year, 201);
     }
 
     /**
@@ -167,9 +160,9 @@ class EvaluationFormController extends Controller
         try {
             $evaluate = $this->evaluateService->find($evaluate);
         } catch (\Exception $e) {
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(), 500);
         }
-        return new EvaluateResource($evaluate);
+        return $this->successResponse(new EvaluateResource($evaluate),'Evaluate show',200);
     }
 
     /**
@@ -223,9 +216,9 @@ class EvaluationFormController extends Controller
                 $evaluate->save();
 
                 $evaluate->evaluateDetail()->delete();
+                $detail = [];
                 // Insert new Detail
                 foreach ($request->detail as $key => $value) {
-                    $evaluate_id = $evaluate->id;
                     $rule_id = $value['rule_id'];
                     $target = $value['target'];
                     $actual = 0;
@@ -233,23 +226,27 @@ class EvaluationFormController extends Controller
                     $weight_category = $value['weight_category'];
                     $base_line = $value['base_line'];
                     $max_result = $value['max'];
-                    
-                    $attr = compact("evaluate_id", "rule_id", "target", "actual", "weight", "weight_category", "base_line", "max_result");
-                    $evaluate->evaluateDetail()->create($attr);
+                    \array_push($detail, compact("rule_id", "target", "actual", "weight", "weight_category", "base_line", "max_result"));
+                }
+
+                if (count($detail) > 0) {
+                    $evaluate->evaluateDetail()->createMany($detail);
+                    Log::notice("User : " . \auth()->user()->id . " = Created evaluate form : id = " . $evaluate->id);
                 }
 
                 if ($request->next) {
                     # send mail to staff
                     Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
+                    Log::notice("User : " . \auth()->user()->id . " = Send mail evaluate form  : id = " . $evaluate->id);
                 }
             }
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return new EvaluateResource($evaluate);
+        return $this->successResponse(new EvaluateResource($evaluate), 'Evaluate update : ' . $evaluate->targetperiod->name . $evaluate->targetperiod->year, 201);
     }
 
     /**

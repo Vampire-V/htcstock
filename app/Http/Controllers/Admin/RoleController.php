@@ -100,10 +100,15 @@ class RoleController extends Controller
     public function edit($id)
     {
         try {
-            $role = $this->rolesService->find($id);
+            $role = $this->rolesService->query()->with('permissions')->find($id);
             $system = $this->systemService->systemIn([substr($role->slug, strpos($role->slug, '-') + 1)])->first();
-            $permissions = $this->permissionsService->systemIn([$system->id]);
-            return \view('admin.roles.edit')->with(['role' => $role, 'permissions' => $permissions]);
+            if ($system) {
+                $permissions = $this->permissionsService->systemIn([$system->id]);
+            }else{
+                $permissions = $this->permissionsService->dropdown();
+            }
+            
+            return \view('admin.roles.edit',\compact('role','permissions'));
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }

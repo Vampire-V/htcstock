@@ -58,4 +58,13 @@ class RoleService extends BaseService implements RoleServiceInterface
             throw $th;
         }
     }
+
+    public function query()
+    {
+        try {
+            return Role::query();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

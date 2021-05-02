@@ -51,7 +51,8 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <h5>Status <span class="{{Helper::kpiStatusBadge($evaluate->status)}}">{{$evaluate->status}}</span></h5>
+                        <h5>Status <span
+                                class="{{Helper::kpiStatusBadge($evaluate->status)}}">{{$evaluate->status}}</span></h5>
                     </div>
                 </div>
             </div>
@@ -323,12 +324,12 @@
             })
             .catch(error => {
                 toast(error.response.data.message,'error')
-                toastClear()
                 console.log(error.response.data)
             })
             .finally(() => {
                 pageEnable()
                 setVisible(false)
+                toastClear()
             })
         }
         else{
@@ -347,25 +348,23 @@
         if (evaluateForm.template && evaluateForm.mainRule) {
             setVisible(true)
             evaluateForm.next = true
-            // window.scroll({top: 0, behavior: "smooth"})
             putEvaluateForm(staff.id,period.id,evaluate.id,evaluateForm).then(res => {
-                if (res.status === 200) {
+                if (res.status === 201) {
                     document.getElementsByClassName('app-main__inner')[0].querySelector('.badge').textContent = res.data.data.status
                     if (res.data.data.status === status.READY || res.data.data.status === status.APPROVED) {
                         pageDisable()
                     }else{
                         pageEnable()
                     }
-                    toast(`update evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`,'success')
-                    toastClear()
+                    toast(res.data.message,res.data.status)
                 }
             }).catch(error => {
-                toast(error.response.data.message,'error')
-                toastClear()
+                toast(error.response.data.message,error.response.data.status)
                 console.log(error.response.data)
             }).finally(() => {
                 setVisible(false)
                 evaluateForm.next = false
+                toastClear()
             })
         }
     }
@@ -374,18 +373,16 @@
         validityForm()
         if (evaluateForm.template && evaluateForm.mainRule) {
             setVisible(true)
-            // window.scroll({top: 0, behavior: "smooth"})
             putEvaluateForm(staff.id,period.id,evaluate.id,evaluateForm).then( async res => {
                 if (res.status === 201) {
-                    toast(`update evaluate-form : ${res.data.data.period.name} - ${res.data.data.period.year}`,'success')
-                    toastClear()
+                    toast(res.data.message,res.data.status)
                 }
             }).catch(error => {
                 console.log(error.response.data)
-                toast(error.response.data.message,'error')
-                toastClear()
+                toast(error.response.data.message,error.response.data.status)
             }).finally(() => {
                 setVisible(false)
+                toastClear()
             })
         }
     }
@@ -444,7 +441,7 @@
         })
         .catch(error => {
             console.log(error.response.data);
-            toast(error.response.data.message,'error')
+            toast(error.response.data.message,error.response.data.status)
             toastClear() 
         })
         .finally()
@@ -455,24 +452,27 @@
         // Fetch rule API and add to detail temp
         getRule(select.options[select.selectedIndex].value)
         .then(res => {
-            let row = evaluateForm.detail.find(obj => obj.rules.category_id === res.data.data.category_id)
-            let detail = new EvaluateDetail()
-            detail.evaluate_id = row.evaluate_id
-            detail.rule_id = res.data.data.id
-            detail.rules = Object.create(res.data.data)
-            detail.target = row.target
-            detail.max = row.max
-            detail.weight = row.weight
-            detail.weight_category = row.weight_category
-            detail.base_line = row.base_line
-            evaluateForm.detail.push(detail)
+            if (res.status === 200) {
+                let row = evaluateForm.detail.find(obj => obj.rules.category_id === res.data.data.category_id)
+                let detail = new EvaluateDetail()
+                detail.evaluate_id = row.evaluate_id
+                detail.rule_id = res.data.data.id
+                detail.rules = Object.create(res.data.data)
+                detail.target = row.target
+                detail.max = row.max
+                detail.weight = row.weight
+                detail.weight_category = row.weight_category
+                detail.base_line = row.base_line
+                evaluateForm.detail.push(detail)
+            }
         })
         .catch(error => {
-            console.log(error.response.data)
+            toast(error.response.data.message,error.response.data.status)
         })
         .finally(() => {
             displayDetail(evaluateForm)
             e.offsetParent.querySelector('.close').click()
+            toastClear()
         })
         
         

@@ -7,7 +7,7 @@ Route::get('kpi/evaluation/{id}/verify', 'Auth\LoginController@authKpiEvaluation
 Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', 'HomeController@index')->name('dashboard');
 
-    Route::resource('self-evaluation', 'SelfEvaluation\SelfEvaluationController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
+    Route::resource('self-evaluation', 'SelfEvaluation\SelfEvaluationController', ['only' => ['index', 'create', 'edit', 'update', 'store', 'destroy']]);
 
     Route::resource('evaluation-review', 'EvaluateReview\EvaluateReviewController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
 
@@ -25,7 +25,6 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
 
     Route::group(['prefix' => 'evaluation-form'], function () {
         Route::resource('staff', 'EvaluationForm\StaffDataController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
-        Route::get('staff/{staff}/period/{period}', 'EvaluationForm\StaffDataController@listOfTeamsOfEvaluate')->name('staff.team');
         Route::group(['prefix' => 'staff/{staff}/edit'], function () {
             Route::resource('period/{period}/evaluate', 'EvaluationForm\EvaluationFormController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
         });

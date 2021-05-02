@@ -159,7 +159,7 @@
 {{-- Modal --}}
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">New Rule to : </h5>
@@ -284,7 +284,9 @@
     const setOptionModal = (group) => {
         let table = document.getElementById(`table-${group.name}`)
         rows = table.tBodies[0].rows
-        getRuleDropdown(group).then(result => {
+        getRuleDropdown(group)
+        .then(result => {
+            console.log(result);
             for (const row of rows) {
                 for (let i = 0; i < result.data.data.length; i++) {
                     const element = result.data.data[i]
@@ -301,7 +303,9 @@
                 option.value = element.id
                 document.getElementById('validationRuleName').appendChild(option)
             })
-        }).catch(error => console.log(error.response)).finally(() => {
+        })
+        .catch(error => console.log(error.response))
+        .finally(() => {
             // console.log(datas);
         })
     }
@@ -326,15 +330,22 @@
         if (form.checkValidity()) {
             let formData = new FormData(form)
             formData.append('template_id',template.id)
-            postRuleTemplate(template.id,formData).then(res => {
-                createRow(res.data.data)
-            }).catch(error => {
+            postRuleTemplate(template.id,formData)
+            .then(res => {
+                if (res.status === 200) {
+                    createRow(res.data.data)
+                }
+            })
+            .catch(error => {
+                console.log(error.response.data);
                 error.response.data.messages.forEach(value => {
                     toast(value,'error')
                 })
-                toastClear()
-            }).finally( () => {
+                
+            })
+            .finally( () => {
                 document.getElementById('exampleModal').getElementsByClassName("close")[0].click()
+                toastClear()
             })
         }
     }

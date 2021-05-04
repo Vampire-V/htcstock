@@ -164,7 +164,6 @@ class UsersController extends Controller
             if (!\is_null($response)) {
 
                 foreach ($response as $value) {
-
                     $user = User::where('username', $value['username'])->first();
 
                     if (\is_null($user)) {
@@ -178,9 +177,9 @@ class UsersController extends Controller
                     $user->translateOrNew('th')->name = $value['name'];
                     $user->name_th = $value['name'];
                     $user->email = $value['email'];
-                    $user->department_id = \is_null($department) ? null : $department->id;
-                    $user->divisions_id = \is_null($division) ? null : $division->id;
-                    $user->head_id = $value['leader'];
+                    $user->department_id = \is_null($user->department_id) ? $department->id : $user->department_id;
+                    $user->divisions_id = \is_null($user->divisions_id) ? $division->id : $user->divisions_id;
+                    $user->head_id = \is_null($user->head_id) ? $value['leader'] : $user->head_id;
                     $user->save();
                 }
                 $request->session()->flash('success', 'has been update user');

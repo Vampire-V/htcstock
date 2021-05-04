@@ -60,12 +60,10 @@ class TargetPeriodController extends Controller
         DB::beginTransaction();
 
         try {
-            \dd($request->name);
             $period = new TargetPeriod();
             $period->name = $request->name;
             $period->year = $request->year;
             $period->save();
-            // \dd($request->except(['_token']), $period);
         } catch (\Exception $e) {
             DB::rollBack();
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());

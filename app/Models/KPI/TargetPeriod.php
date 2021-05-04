@@ -37,7 +37,7 @@ class TargetPeriod extends Model
      */
     public function getNameAttribute($value)
     {
-        return date("F", mktime(0, 0, 0, $value, 1, 2021));
+        return date("F", mktime(0, 0, 0, $value, date('d'), date('Y')));
     }
 
     /**
@@ -48,6 +48,6 @@ class TargetPeriod extends Model
      */
     public function setNameAttribute($value)
     {
-        $this->attributes['name'] = date("m", mktime(0, 0, 0, $value, 1, 2021));
+        $this->attributes['name'] = date("m", mktime(0, 0, 0, $value, date('d'), date('Y')));
     }
 }

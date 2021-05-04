@@ -44,7 +44,8 @@ class AllEvaluationController extends Controller
         $selectedUser = \intval($request->user);
         $start_year = date('Y', strtotime('-10 years'));
         
-        $periods = $this->targetPeriodService->dropdown();
+        $months = $this->targetPeriodService->dropdown()->unique('name');
+        // $years = $months->unique('year');
         $departments = $this->departmentService->dropdown();
         $users = $this->userService->dropdown();
         $evaluates = $this->evaluateService->editEvaluateFilter($request);
@@ -54,7 +55,7 @@ class AllEvaluationController extends Controller
         $evaluateDetail = EvaluateDetailResource::collection($details);
 
         // \dd($selectedDept,$departments);
-        return \view('kpi.Eddy.index', \compact('start_year', 'selectedYear', 'departments', 'selectedDept', 'periods', 'selectedPeriod', 'users', 'selectedUser','evaluate','evaluateDetail'));
+        return \view('kpi.Eddy.index', \compact('start_year', 'selectedYear', 'departments', 'selectedDept', 'months', 'selectedPeriod', 'users', 'selectedUser','evaluate','evaluateDetail'));
     }
 
     /**

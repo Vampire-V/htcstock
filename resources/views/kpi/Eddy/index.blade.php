@@ -66,26 +66,20 @@
                                             @endforeach
                                             @endisset
                                         </select>
-                                        {{-- <div class="invalid-feedback">
-                                            Please provide a valid state.
-                                        </div> --}}
                                     </div>
                                     <div class="col-md-2 mb-2">
                                         <label for="Year">Target Period</label>
                                         <select name="period[]" id="period" class="form-control-sm form-control"
                                             multiple>
                                             {{-- <option value="">Choose...</option> --}}
-                                            @isset($periods)
-                                            @foreach ($periods as $item)
-                                            <option value="{{$item->id}}" @if ($selectedPeriod->contains($item->id))
+                                            @isset($months)
+                                            @foreach ($months as $month)
+                                            <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if ($selectedPeriod->contains(date('m', strtotime($month->name." 1 2021"))))
                                                 selected
-                                                @endif>{{$item->name}}</option>
+                                                @endif>{{$month->name}}</option>
                                             @endforeach
                                             @endisset
                                         </select>
-                                        {{-- <div class="invalid-feedback">
-                                            Please provide a valid state.
-                                        </div> --}}
                                     </div>
                                     <div class="col-md-2 mb-2">
                                         <label for="Year">Year</label>
@@ -98,9 +92,6 @@
                                             </option>
                                             @endforeach
                                         </select>
-                                        {{-- <div class="invalid-feedback">
-                                            Please provide a valid state.
-                                        </div> --}}
                                     </div>
                                     <div class="col-md-4 mb-4">
                                         <label for="Department">Department</label>
@@ -115,9 +106,6 @@
                                             @endforeach
                                             @endisset
                                         </select>
-                                        {{-- <div class="invalid-feedback">
-                                            Please provide a valid state.
-                                        </div> --}}
                                     </div>
                                     <div class="col-md-1 mb-1 text-center">
                                         <button class="btn btn-primary mt-4" type="submit">Search</button>
@@ -198,26 +186,20 @@
                                             @endforeach
                                             @endisset
                                         </select>
-                                        {{-- <div class="invalid-feedback">
-                                            Please provide a valid state.
-                                        </div> --}}
                                     </div>
                                     <div class="col-md-2 mb-2">
                                         <label for="Year">Target Period</label>
                                         <select name="period[]" id="period_ach" class="form-control-sm form-control"
                                             multiple>
                                             {{-- <option value="">Choose...</option> --}}
-                                            @isset($periods)
-                                            @foreach ($periods as $item)
-                                            <option value="{{$item->id}}" @if ($selectedPeriod->contains($item->id))
+                                            @isset($months)
+                                            @foreach ($months as $month)
+                                            <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if ($selectedPeriod->contains(date('m', strtotime($month->name." 1 2021"))))
                                                 selected
-                                                @endif>{{$item->name}}</option>
+                                                @endif>{{$month->name}}</option>
                                             @endforeach
                                             @endisset
                                         </select>
-                                        {{-- <div class="invalid-feedback">
-                                            Please provide a valid state.
-                                        </div> --}}
                                     </div>
                                     <div class="col-md-2 mb-2">
                                         <label for="Year">Year</label>
@@ -230,9 +212,6 @@
                                             </option>
                                             @endforeach
                                         </select>
-                                        {{-- <div class="invalid-feedback">
-                                            Please provide a valid state.
-                                        </div> --}}
                                     </div>
                                     <div class="col-md-4 mb-4">
                                         <label for="Department">Department</label>
@@ -247,9 +226,6 @@
                                             @endforeach
                                             @endisset
                                         </select>
-                                        {{-- <div class="invalid-feedback">
-                                            Please provide a valid state.
-                                        </div> --}}
                                     </div>
                                     <div class="col-md-1 mb-1 text-center">
                                         <button class="btn btn-primary mt-4" type="submit">Search</button>

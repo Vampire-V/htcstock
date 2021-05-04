@@ -37,11 +37,11 @@
                                 <label for="Year">Target Period</label>
                                 <select name="period" id="period" class="form-control-sm form-control">
                                     <option value="">Choose...</option>
-                                    @isset($periods)
-                                    @foreach ($periods as $item)
-                                    <option value="{{$item->name}}" @if ($selectedPeriod===$item->name)
+                                    @isset($months)
+                                    @foreach ($months as $month)
+                                    <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if ($selectedPeriod===date('m', strtotime($month->name." 1 2021")))
                                         selected
-                                        @endif>{{$item->name}}</option>
+                                        @endif>{{$month->name}}</option>
                                     @endforeach
                                     @endisset
                                 </select>

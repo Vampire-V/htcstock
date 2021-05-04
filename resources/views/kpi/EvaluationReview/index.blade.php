@@ -66,10 +66,10 @@
                         <div class="col-md-2 mb-3">
                             <label for="period">Period :</label>
                             <select name="period[]" id="validationPeriod" class="form-control-sm form-control" multiple>
-                                @isset($period)
-                                @foreach ($period as $item)
-                                <option value="{{$item->id}}" @if($selectedPeriod->contains($item->id))
-                                    selected @endif>{{$item->name}}</option>
+                                @isset($months)
+                                @foreach ($months as $month)
+                                <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if($selectedPeriod->contains($month->name))
+                                    selected @endif>{{$month->name}}</option>
                                 @endforeach
                                 @endisset
                             </select>
@@ -113,7 +113,8 @@
                             <td>{{$evaluate->user->positions->name}}</td>
                             <td>{{$evaluate->targetperiod->year}}</td>
                             <td>{{$evaluate->targetperiod->name}}</td>
-                            <td><span class="{{Helper::kpiStatusBadge($evaluate->status)}}">{{$evaluate->status}}</span></td>
+                            <td><span class="{{Helper::kpiStatusBadge($evaluate->status)}}">{{$evaluate->status}}</span>
+                            </td>
                             <td><a href="{{route('kpi.evaluation-review.edit',$evaluate->id)}}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Review
                                 </a></td>

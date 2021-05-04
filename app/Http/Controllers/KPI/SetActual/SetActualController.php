@@ -36,10 +36,11 @@ class SetActualController extends Controller
         $selectedPeriod = $request->period;
         $start_year = date('Y', strtotime('-10 years'));
 
-        $periods = $this->targetPeriodService->dropdown();
+        $months = $this->targetPeriodService->dropdown()->unique('name');
+        // $years = $months->unique('year');
         $departments = $this->departmentService->dropdown();
         $evaluateDetail = EvaluateDetailResource::collection($this->evaluateDetailService->setActualFilter($request));
-        return \view('kpi.SetActual.index', \compact('start_year', 'evaluateDetail', 'selectedYear', 'selectedDept', 'selectedPeriod', 'periods', 'departments'));
+        return \view('kpi.SetActual.index', \compact('start_year', 'evaluateDetail', 'selectedYear', 'selectedDept', 'selectedPeriod', 'months', 'departments'));
     }
 
     /**
@@ -112,7 +113,7 @@ class SetActualController extends Controller
             return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return $this->successResponse(null,"Updated actual",201);
+        return $this->successResponse(null, "Updated actual", 201);
     }
 
     /**

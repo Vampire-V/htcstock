@@ -27,11 +27,12 @@ class TargetPeriodController extends Controller
         $selectedYear = $request->year;
         try {
             $periods = $this->periodService->filterIndex($request);
-            $years = $this->periodService->dropdown()->unique('year');
+            $months = $this->periodService->dropdown()->unique('name');
+            $years = $months->unique('year');
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.SetPeriod.index', \compact('periods', 'selectedPeriod', 'selectedYear','years'));
+        return \view('kpi.SetPeriod.index', \compact('periods', 'selectedPeriod', 'selectedYear','years','months'));
     }
 
     /**

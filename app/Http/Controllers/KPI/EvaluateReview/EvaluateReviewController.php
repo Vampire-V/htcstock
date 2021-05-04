@@ -48,7 +48,8 @@ class EvaluateReviewController extends Controller
         $status_list = [KPIEnum::submit, KPIEnum::approved];
         try {
             $user = Auth::user();
-            $period = $this->targetPeriodService->dropdown();
+            $months = $this->targetPeriodService->dropdown()->unique('name');
+            $years = $months->unique('year');
             $evaluates = $this->evaluateService->reviewfilter($request);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
@@ -56,7 +57,7 @@ class EvaluateReviewController extends Controller
 
         return \view(
             'kpi.EvaluationReview.index',
-            \compact('start_year', 'user', 'status_list', 'period', 'evaluates', 'query', 'selectedStatus', 'selectedYear', 'selectedPeriod')
+            \compact('start_year', 'user', 'status_list', 'months', 'evaluates', 'query', 'selectedStatus', 'selectedYear', 'selectedPeriod')
         );
     }
 

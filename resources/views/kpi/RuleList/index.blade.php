@@ -208,6 +208,7 @@
                 }
             })
             .catch(error => {
+                console.log(error.response.data);
                 toast(error.response.data.message,error.response.data.status)
             })
             .finally(() => {
@@ -237,7 +238,7 @@
             }
         })
         .catch(error => {
-            console.log(error.response);
+            console.log(error.response.data);
             toast(error.response.data.message,error.response.data.status)
             error.response.data.errors.file.forEach(element => {
                 toast(element,'error')

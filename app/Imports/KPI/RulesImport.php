@@ -41,7 +41,7 @@ class RulesImport implements ToModel, WithStartRow, WithColumnLimit, WithBatchIn
 
     public function endColumn(): string
     {
-        return 'F';
+        return 'G';
     }
 
     public function batchSize(): int

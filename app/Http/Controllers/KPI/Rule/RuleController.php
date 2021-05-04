@@ -196,7 +196,7 @@ class RuleController extends Controller
         if (!$temporaryFile) {
             return \response()->json(["message" => "file not found!"], 422);
         }
-        
+
         if (!strpos(Storage::files('public/kpi/template')[0], $temporaryFile->filename)) {
             return \response()->json(["message" => "It is not a template file."], 422);
         }
@@ -206,11 +206,12 @@ class RuleController extends Controller
         $datas = $read_data[0]->filter(fn ($value) => $value[1] !== null);
         $category = $this->ruleCategoryService->dropdown();
         $rule_type = $this->ruleTypeService->dropdown();
+        $users = $this->userService->dropdown();
 
-        $datas->each(function ($value, $key) use ($category, $rule_type) {
-
+        $datas->each(function ($value, $key) use ($category, $rule_type, $users) {
             $c = $category->filter(fn ($obj) => $obj->name === $value[2]);
             $f = $rule_type->filter(fn ($obj) => $obj->name === $value[5]);
+            $u = $users->filter(fn ($obj) => $obj->username === strval($value[6]));
             $checkName = $this->ruleService->isName($value[1]);
 
             if ($checkName) {
@@ -241,8 +242,15 @@ class RuleController extends Controller
                 $error->message = 'ไม่มี';
                 array_push($this->excel_errors, $error);
             }
+            if ($u->count() < 1) {
+                $error = new stdClass;
+                $error->row = $key + 6;
+                $error->col = 'G';
+                $error->message = 'ไม่มี';
+                array_push($this->excel_errors, $error);
+            }
 
-            if ($c->count() > 0 && !is_null($value[4]) && $f->count() > 0 && !$checkName) {
+            if ($c->count() > 0 && !is_null($value[4]) && $f->count() > 0 && !$checkName && $u->count() > 0) {
                 \array_push(
                     $this->rule_attrs,
                     [
@@ -251,13 +259,14 @@ class RuleController extends Controller
                         'description' => $value[3],
                         'calculate_type' => $value[4],
                         'kpi_rule_types_id' => $f->first()->id,
+                        'user_actual' => $u->first()->id,
                         'created_at' => date("Y-m-d H:i:s"),
                         'updated_at' => date("Y-m-d H:i:s"),
                     ]
                 );
             }
         });
-        
+
         DB::beginTransaction();
         try {
             if ($this->rule_attrs) {

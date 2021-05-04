@@ -6,13 +6,14 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 interface TargetPeriodServiceInterface
 {
-    public function all(): Builder;
+    public function query(): Builder;
     public function create(array $attributes): Model;
     public function find($id): Model;
-
+    public function filterIndex(Request $request);
     public function update(array $attributes, int $id): bool;
     public function destroy($id);
     public function byYear(string $year);

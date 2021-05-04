@@ -16,18 +16,6 @@
             </div>
         </div>
         <div class="page-title-actions">
-            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
-                class="btn-shadow mr-3 btn btn-dark">
-                <i class="fa fa-star"></i>
-            </button> --}}
-            {{-- <div class="d-inline-block dropdown">
-                <a href="#" class="btn-shadow btn btn-info">
-                    <span class="btn-icon-wrapper pr-2 opacity-7">
-                        <i class="fa fa-business-time fa-w-20"></i>
-                    </span>
-                    Create
-                </a>
-            </div> --}}
         </div>
     </div>
 </div>
@@ -57,9 +45,6 @@
                                     @endforeach
                                     @endisset
                                 </select>
-                                {{-- <div class="invalid-feedback">
-                                    Please provide a valid state.
-                                </div> --}}
                             </div>
                             <div class="col-md-2 mb-2">
                                 <label for="Year">Year</label>
@@ -69,11 +54,8 @@
                                     </option>
                                     @endforeach
                                 </select>
-                                {{-- <div class="invalid-feedback">
-                                    Please provide a valid state.
-                                </div> --}}
                             </div>
-                            <div class="col-md-2 mb-2">
+                            <div class="col-md-3 mb-3">
                                 <label for="Department">Department</label>
                                 <select name="department" id="department" class="form-control-sm form-control">
                                     <option value="">Choose...</option>
@@ -85,9 +67,6 @@
                                     @endforeach
                                     @endisset
                                 </select>
-                                {{-- <div class="invalid-feedback">
-                                    Please provide a valid state.
-                                </div> --}}
                             </div>
                             <div class="col-md-1 mb-1 text-center">
                                 <button class="btn btn-primary mt-4" type="submit">Search</button>

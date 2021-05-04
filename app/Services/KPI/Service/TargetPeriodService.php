@@ -8,6 +8,7 @@ use App\Services\BaseService;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 
 class TargetPeriodService extends BaseService implements TargetPeriodServiceInterface
 {
@@ -21,7 +22,7 @@ class TargetPeriodService extends BaseService implements TargetPeriodServiceInte
         parent::__construct($model);
     }
 
-    public function all(): Builder
+    public function query(): Builder
     {
         try {
             return TargetPeriod::query();
@@ -85,6 +86,15 @@ class TargetPeriodService extends BaseService implements TargetPeriodServiceInte
                         ->where('status', KPIEnum::approved);
                 }
             ])->where('year', $year)->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function filterIndex(Request $request)
+    {
+        try {
+            return TargetPeriod::filter($request)->orderBy('year', 'desc')->orderBy('name', 'asc')->get();
         } catch (\Throwable $th) {
             throw $th;
         }

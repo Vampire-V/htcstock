@@ -19,7 +19,19 @@
                 element.cells[10].textContent = cal.toFixed(2) + '%'
             }
         }
-        OverlayScrollbars(document.getElementsByClassName('table-responsive'), { });
+        $("#period").select2({
+            placeholder: 'Select Period',
+            allowClear: true
+        });
+        $("#year").select2({
+            placeholder: 'Select Year',
+            allowClear: true
+        });
+        $("#department").select2({
+            placeholder: 'Select Department',
+            allowClear: true
+        });
+        OverlayScrollbars(document.getElementsByClassName('table-responsive'), {});
     })
 
     window.addEventListener('load', function () {

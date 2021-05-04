@@ -4,7 +4,6 @@ namespace App\Services\KPI\Service;
 
 use App\Enum\KPIEnum;
 use App\Models\KPI\Evaluate;
-use App\Models\User;
 use App\Services\BaseService;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use Illuminate\Database\Eloquent\Builder;

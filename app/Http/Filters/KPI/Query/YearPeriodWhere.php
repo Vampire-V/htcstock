@@ -2,10 +2,10 @@
 
 namespace App\Http\Filters\KPI\Query;
 
-class PeriodIn
+class YearPeriodWhere
 {
     public function filter($builder, $value)
     {
-        return $builder->whereIn('id', [...$value]);
+        return $builder->where('year', $value);
     }
 }

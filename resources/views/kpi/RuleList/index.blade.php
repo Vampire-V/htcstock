@@ -131,7 +131,7 @@
                         <tr>
                             <th scope="row">{{$key + 1}}</th>
                             <td>{{$item->name}}</td>
-                            <td>{{$item->category->name}}</td>
+                            <td class="truncate">{{$item->category->name}}</td>
                             <td>{{$item->calculate_type}}</td>
                             <td>{{$item->ruletype->name}}</td>
                             <td><a href="{{route('kpi.rule-list.edit',$item->id)}}"
@@ -140,22 +140,6 @@
                         </tr>
                         @endforeach
                         @endisset
-                        {{-- <tr>
-                            <th scope="row">1</th>
-                            <td>Seller Target</td>
-                            <td></td>
-                            <td><a href="{{route('kpi.rule-list.edit',1)}}"
-                        class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
-                        </a></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Quality Controll</td>
-                            <td></td>
-                            <td><a href="{{route('kpi.rule-list.edit',1)}}"
-                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
-                                </a></td>
-                        </tr> --}}
                     </tbody>
                 </table>
             </div>

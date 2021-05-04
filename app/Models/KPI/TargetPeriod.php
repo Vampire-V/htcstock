@@ -2,7 +2,9 @@
 
 namespace App\Models\KPI;
 
+use App\Http\Filters\KPI\PeriodFilter;
 use App\Relations\TargetPeriodTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class TargetPeriod extends Model
@@ -14,10 +16,38 @@ class TargetPeriod extends Model
      *
      * @var array
      */
-    // protected $fillable = [
-    //     'name',
-    //     'year'
-    // ];
+    protected $fillable = [
+        'name',
+        'year'
+    ];
 
     protected $guarded = [];
+
+    // service เรียกใช้ Filter
+    public function scopeFilter(Builder $builder, $request)
+    {
+        return (new PeriodFilter($request))->filter($builder);
+    }
+
+    /**
+     * Get the user's first name.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getNameAttribute($value)
+    {
+        return date("F", mktime(0, 0, 0, $value, date('d'), date('Y')));
+    }
+
+    /**
+     * Set the user's first name.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = date("m", mktime(0, 0, 0, $value,  date('d'), date('Y')));
+    }
 }

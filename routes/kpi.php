@@ -32,5 +32,7 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
 
     Route::resource('set-actual', 'SetActual\SetActualController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
     Route::resource('for-eddy', 'EddyMenu\AllEvaluationController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
-    Route::put('for-eddy/{id}/updateAch','EddyMenu\AllEvaluationController@updateAch');
+    Route::put('for-eddy/{id}/updateAch', 'EddyMenu\AllEvaluationController@updateAch');
+
+    Route::resource('set-period', 'SetPeriod\TargetPeriodController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
 });

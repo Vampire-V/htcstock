@@ -5,7 +5,7 @@ namespace App\Http\Filters\KPI;
 use App\Http\Filters\AbstractFilter;
 use App\Http\Filters\KPI\Query\DepartmentWhereHas;
 use App\Http\Filters\KPI\Query\PositionWhereHas;
-use App\Http\Filters\KPI\Query\PeriodIn;
+use App\Http\Filters\KPI\Query\EvaluationPeriodIn;
 use App\Http\Filters\KPI\Query\StatusEvaluateIn;
 use App\Http\Filters\KPI\Query\UserWhereIn;
 use App\Http\Filters\KPI\Query\YearPeriodWhereHas;
@@ -17,7 +17,7 @@ class EvaluationFilter extends AbstractFilter
         'department_id' => DepartmentWhereHas::class,
         'status' => StatusEvaluateIn::class,
         'year' => YearPeriodWhereHas::class,
-        'period' => PeriodIn::class,
+        'period' => EvaluationPeriodIn::class,
         'user' => UserWhereIn::class
     ];
 }

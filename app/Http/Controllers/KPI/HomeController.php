@@ -28,15 +28,16 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $ofSelf = $this->targetPeriodService->selfApprovedEvaluationOfyear(date('Y'));
-        $ofDept = $this->targetPeriodService->deptApprovedEvaluationOfyear(date('Y'));
-        $periods = $this->targetPeriodService->dropdown();
-        $users = $this->userService->evaluationOfYearReport(date('Y'));
-        $rules = $this->ruleService->rulesInEvaluationReport(\date('Y'));
+        $selectedYear = empty($request->year) ? date('Y') : $request->year;
+        $ofSelf = $this->targetPeriodService->selfApprovedEvaluationOfyear($selectedYear);
+        $ofDept = $this->targetPeriodService->deptApprovedEvaluationOfyear($selectedYear);
+        $periods = $this->targetPeriodService->query()->where('year',$selectedYear)->get();
+        $users = $this->userService->evaluationOfYearReport($selectedYear);
+        $rules = $this->ruleService->rulesInEvaluationReport($selectedYear);
 
-        return \view('kpi.home', \compact('ofSelf', 'ofDept', 'users','periods','rules'));
+        return \view('kpi.home', \compact('ofSelf', 'ofDept', 'users', 'periods', 'rules', 'selectedYear'));
     }
 
     /**

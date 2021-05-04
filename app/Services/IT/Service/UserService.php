@@ -101,21 +101,20 @@ class UserService extends BaseService implements UserServiceInterface
     public function evaluationOfYearReport(string $year): Collection
     {
         try {
-            $data = User::with(['evaluates.evaluateDetail'])->orderBy('department_id')->get();
-            // \dd($data->where('user_id',51));
-            $periods = $this->periodService->dropdown();
-            foreach ($data as $value) {
+            $users = User::with(['evaluates.evaluateDetail'])->orderBy('department_id')->get();
+            $periods = $this->periodService->query()->where('year',$year)->get();
+            foreach ($users as $user) {
                 $total = \collect();
                 foreach ($periods as $period) {
-                    $evaluates = $value->evaluates->whereIn('period_id', [$period->id]);
+                    $evaluates = $user->evaluates->whereIn('period_id', [$period->id]);
                     $total_target = $evaluates ? $evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target')) : 0.00;
                     $total_actual = $evaluates ? $evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual')) : 0.00;
                     $total->push((object)['target' => $total_target, 'actual' => $total_actual]);
                 }
-                $value->total = $total;
+                $user->total = $total;
             }
 
-            return $data;
+            return $users;
         } catch (\Throwable $th) {
             throw $th;
         }

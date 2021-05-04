@@ -71,12 +71,12 @@ class RuleService extends BaseService implements RuleServiceInterface
     public function rulesInEvaluationReport(string $year)
     {
         try {
-            $data = Rule::with('evaluatesDetail.evaluate')->get();
-            $periods = $this->periodService->dropdown();
-            foreach ($data as $key => $value) {
+            $rules = Rule::with('evaluatesDetail.evaluate')->get();
+            $periods = $this->periodService->query()->where('year',$year)->get();
+            foreach ($rules as $key => $rule) {
                 $total = \collect();
                 foreach ($periods as $period) {
-                    $data_for_sum = $value->evaluatesDetail->filter(function ($evaluate) use ($period) {
+                    $data_for_sum = $rule->evaluatesDetail->filter(function ($evaluate) use ($period) {
                         return $evaluate->evaluate->status === KPIEnum::approved && $period->id === $evaluate->evaluate->period_id;
                     });
                     $data_for_sum->sum('target');
@@ -85,9 +85,9 @@ class RuleService extends BaseService implements RuleServiceInterface
                     $total_actual = $data_for_sum->count() ? $data_for_sum->sum('actual') : 0.00;
                     $total->push((object)['target' => $total_target, 'actual' => $total_actual]);
                 }
-                $value->total = $total;
+                $rule->total = $total;
             }
-            return $data;
+            return $rules;
         } catch (\Throwable $th) {
             throw $th;
         }

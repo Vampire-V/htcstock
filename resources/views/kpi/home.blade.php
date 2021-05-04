@@ -22,6 +22,25 @@
                 </div>
             </div>
         </div>
+        <div class="page-title-actions">
+            <label for="ForYear" class="mr-sm-2">Year</label>
+            <div class="d-inline-block dropdown">
+                <form class="needs-validation" novalidate method="get" id="form-search">
+                    <select class="form-control form-control-sm" name="year" id="year" onchange="test()">
+                        @foreach (range(date('Y'),date('Y')+5) as $year)
+                        <option value="{{$year}}" @if (intVal($selectedYear)===$year) selected @endif>
+                            {{$year}}</option>
+                        @endforeach
+                    </select>
+                </form>
+                <script>
+                    function test() {
+                        console.log(document.forms);
+                        document.forms['form-search'].submit();
+                    }
+                </script>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row">

@@ -42,6 +42,7 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'head_id' => 'int'
     ];
 
     public function scopeFilter(Builder $builder, $request)

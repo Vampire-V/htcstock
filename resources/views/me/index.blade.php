@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="position-relative form-group">
                             <label for="email" class="">{{ __('E-Mail Address') }}</label>
                             <input name="email" id="email" placeholder="with a placeholder" type="email"
@@ -72,7 +72,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="position-relative form-group">
                             <label for="Phone" class="">{{ __('Phone') }}</label>
                             <input name="phone" id="phone" placeholder="Phone placeholder" type="text"
@@ -85,15 +85,32 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="position-relative form-group">
+                            <label for="Manager" class="">{{ __('Manager') }}</label>
+                            <select name="head_id" id="head_id" class="form-control form-control-sm">
+                                <option value="">Choose...</option>
+                                @isset($users)
+                                @foreach ($users as $item)
+                                <option value="{{$item->id}}" @if ($item->id === $user->head_id)
+                                    selected
+                                    @endif>{{$item->name}}</option>
+                                @endforeach
+                                @endisset
+                            </select>
+                            @error('head_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-row">
                     <div class="col-md-4">
                         <div class="position-relative form-group">
                             <label for="Division" class="">{{ __('Division') }}</label>
-                            {{-- <input name="division" id="division" placeholder="with a placeholder" type="division"
-                                    value="{{ $user->divisions->name }}" required autocomplete="division" readonly
-                            class="form-control form-control-sm"> --}}
                             <select name="division" id="division" class="form-control form-control-sm">
                                 <option value="">Choose...</option>
                                 @isset($divisions)
@@ -114,11 +131,6 @@
                     <div class="col-md-4">
                         <div class="position-relative form-group">
                             <label for="Department" class="">{{ __('Department') }}</label>
-                            {{-- <input name="department" id="department" placeholder="Department placeholder"
-                                    type="text"
-                                    class="form-control form-control-sm @error('department') is-invalid @enderror"
-                                    value="{{ $user->department->name }}" required autocomplete="department" readonly
-                            autofocus> --}}
                             <select name="department" id="department" class="form-control form-control-sm">
                                 <option value="">Choose...</option>
                                 @isset($departments)
@@ -139,9 +151,6 @@
                     <div class="col-md-4">
                         <div class="position-relative form-group">
                             <label for="Position" class="">{{ __('Position') }}</label>
-                            {{-- <input name="position" id="position" placeholder="with a placeholder" type="position"
-                                    value="{{ $user->positions->name }}" required autocomplete="position" readonly
-                            class="form-control form-control-sm"> --}}
                             <select name="position" id="position" class="form-control form-control-sm">
                                 <option value="">Choose...</option>
                                 @isset($positions)
@@ -165,5 +174,42 @@
         </div>
     </div>
 </div>
-</div>
+
 @stop
+
+@section('second-script')
+<script>
+    (function () {
+        'use strict';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Supporting Documents
+            $("#head_id").select2({
+                placeholder: 'Select Manager',
+                allowClear: true
+            });
+            $("#division").select2({
+                placeholder: 'Select Division',
+                allowClear: true
+            });
+            $("#department").select2({
+                placeholder: 'Select Department',
+                allowClear: true
+            });
+            $("#position").select2({
+                placeholder: 'Select Position',
+                allowClear: true
+            });
+        })
+
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            let forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            validationForm(forms)
+
+        }, false);
+
+    })();
+</script>
+@endsection

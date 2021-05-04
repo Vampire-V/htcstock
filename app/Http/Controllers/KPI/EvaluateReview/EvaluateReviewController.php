@@ -134,11 +134,12 @@ class EvaluateReviewController extends Controller
             $evaluate->comment = $request->comment;
             $evaluate->save();
             Log::notice("User : " . \auth()->user()->id . " = Update evaluate review : id = " . $evaluate->id);
-            if ($evaluate->status === KPIEnum::approved) {
+
+
+            if ($request->next) {
                 $message = KPIEnum::approved;
                 # send mail to approved
-            }
-            if ($evaluate->status === KPIEnum::draft) {
+            } else {
                 $message = KPIEnum::draft;
                 # send mail to reject
                 Mail::to($evaluate->user->email)->send(new EvaluationReviewMail($evaluate));

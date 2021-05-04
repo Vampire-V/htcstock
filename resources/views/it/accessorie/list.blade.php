@@ -90,42 +90,6 @@
     <div class="main-card mb-3 card">
         <div class="card-body">
             <h5 class="card-title">{{ __('itstock.manage-accessorie.equipment-list') }}</h5>
-            {{-- <div class="table-responsive">
-                <table class="mb-0 table table-hover">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>{{ __('itstock.manage-accessorie.name') }}</th>
-                            <th>{{ __('itstock.manage-accessorie.unit') }}</th>
-                            <th>#</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @isset($accessories)
-                        @foreach ($accessories as $key => $item)
-                        <tr>
-                            <th scope="row">{{$key+1}}</th>
-                            <td>{{$item->access_name}}</td>
-                            <td>{{$item->unit}}</td>
-                            <td><a href="{{route('it.equipment.management.edit',$item->access_id)}}"><button
-                                        type="button"
-                                        class="btn btn-primary btn-sm float-center mr-1">{{ __('itstock.manage-accessorie.detail') }}</button></a>
-
-                                <button type="button" class="btn btn-danger btn-sm float-center"
-                                    onclick="destroy({{$item->access_id}})">{{ __('itstock.manage-accessorie.delete') }}</button>
-                                <form id="destroy-form{{$item->access_id}}"
-                                    action="{{route('it.equipment.management.destroy',$item->access_id)}}" method="POST"
-                                    style="display: none;">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                        @endisset
-                    </tbody>
-                </table>
-            </div> --}}
             <div class="tab-content">
                 <div class="tab-pane tabs-animation fade show active" id="tab-content-1" role="tabpanel">
                     <div class="row">

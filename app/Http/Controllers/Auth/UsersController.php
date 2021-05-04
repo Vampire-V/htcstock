@@ -76,10 +76,11 @@ class UsersController extends Controller
             $divisions = $this->divisionsService->dropdown();
             $departments = $this->departmentsService->dropdown();
             $positions = $this->positionsService->dropdown();
+            $users = $this->userService->dropdown();
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('me.index', \compact('user', 'divisions', 'departments', 'positions'));
+        return \view('me.index', \compact('user', 'divisions', 'departments', 'positions', 'users'));
     }
 
     /**

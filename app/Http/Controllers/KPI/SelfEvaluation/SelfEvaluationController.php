@@ -118,15 +118,19 @@ class SelfEvaluationController extends Controller
                     ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])
                     ->update(['actual' => $value['actual']]);
             }
-            $evaluate->status = $request->next ? KPIEnum::submit : KPIEnum::draft;
-            $evaluate->save();
+            
             if ($request->next) {
-                $message = KPIEnum::submit;
                 # send mail to Manger
                 if ($evaluate->user->head_id) {
+                    $evaluate->status = KPIEnum::submit;
+                    $evaluate->save();
+                    $message = KPIEnum::submit;
                     $manager = $this->userService->getManager($evaluate->user);
                     Mail::to($manager->email)->send(new EvaluationSelfMail($evaluate));
                 }else{
+                    $evaluate->status = KPIEnum::draft;
+                    $evaluate->save();
+                    $message = KPIEnum::draft . " You don't have a manager!";
                     // $evaluate->user->head_id is null
                 }
             }

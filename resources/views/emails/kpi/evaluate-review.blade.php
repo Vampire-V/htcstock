@@ -1,7 +1,7 @@
 @component('mail::message')
 # KPI evaluate
 
-KPI evaluate review by {{$manager->email}}
+KPI evaluate review by {{auth()->user()->email}}
 
 @component('mail::button', ['url' => route('kpi.evaluation.verify',$evaluate->id)])
 Go to KPI Evaluate Review

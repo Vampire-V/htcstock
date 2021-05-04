@@ -38,7 +38,6 @@ class EvaluationReviewMail extends Mailable
      */
     public function build()
     {
-        $manager = User::where('username',$this->evaluate->user->head_id)->firstOrFail();
-        return $this->markdown('emails.kpi.evaluate-review')->with(['evaluate' => $this->evaluate,'manager' => $manager]);
+        return $this->markdown('emails.kpi.evaluate-review')->with(['evaluate' => $this->evaluate]);
     }
 }

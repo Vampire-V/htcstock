@@ -35,14 +35,14 @@
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Menu</li>
                 {{-- admin manager --}}
-                @can('admin-manager-kpi')
+                {{-- @can('admin-manager-kpi') --}}
                 <li>
                     <a href="{{route('kpi.dashboard')}}" class="{{Helper::isActive('kpi/dashboard*')}}">
                         <i class="metismenu-icon pe-7s-monitor"></i>
                         Dashboard
                     </a>
                 </li>
-                @endcan
+                {{-- @endcan --}}
                 {{-- end admin manager --}}
                 <li>
                     <a href="{{route('kpi.self-evaluation.index')}}"

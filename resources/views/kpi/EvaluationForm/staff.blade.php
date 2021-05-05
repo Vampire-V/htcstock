@@ -50,7 +50,7 @@
                             <select name="year" id="validationYear" class="form-control-sm form-control"
                                 onchange="this.form.submit()">
                                 @foreach (range(date('Y'), $start_year) as $year)
-                                <option value="{{$year}}" @if ($selectedYear===$year) selected @endif>{{$year}}</option>
+                                <option value="{{$year}}" @if (intval($selectedYear)===$year) selected @endif>{{$year}}</option>
                                 @endforeach
                             </select>
                         </div>

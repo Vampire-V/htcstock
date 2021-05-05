@@ -25,7 +25,7 @@
             <div class="page-title-icon">
                 <i class="pe-7s-monitor icon-gradient bg-mean-fruit"> </i>
             </div>
-            <div>Self Evaluate
+            <div>Evaluate Form
                 <div class="page-title-subheading">This is an example self evaluate created using
                     build-in elements and components.
                 </div>

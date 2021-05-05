@@ -36,7 +36,7 @@
                                 class="form-control form-control-sm @error('name') is-invalid @enderror"
                                 value="{{ $user->translate('th') ? $user->translate('th')->name : null }}" required
                                 autocomplete="name" autofocus>
-                                
+
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -96,7 +96,7 @@
                                 <option value="">Choose...</option>
                                 @isset($users)
                                 @foreach ($users as $item)
-                                <option value="{{$item->id}}" @if ($item->id === $user->head_id)
+                                <option value="{{$item->username}}" @if ($item->username === strval($user->head_id))
                                     selected
                                     @endif>{{$item->name}}</option>
                                 @endforeach

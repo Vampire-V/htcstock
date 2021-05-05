@@ -23,7 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
      * @var array
      */
     protected $fillable = [
-        'name_th', 'name_en', 'head_id', 'email', 'phone', 'username', 'password', 'department_id', 'incentive_type', 'locale', 'divisions_id', 'positions_id'
+        'name_th', 'name_en', 'head_id', 'email', 'phone', 'username', 'password', 'department_id', 'incentive_type', 'locale', 'divisions_id', 'positions_id', 'resigned'
     ];
 
     /**

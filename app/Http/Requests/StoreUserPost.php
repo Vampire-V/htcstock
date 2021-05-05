@@ -32,7 +32,8 @@ class StoreUserPost extends FormRequest
             'phone' => 'required',
             'division' => 'required',
             'department' => 'required',
-            'position' => 'required'
+            'position' => 'required',
+            'head_id' => 'required'
         ];
         return $rules;
     }

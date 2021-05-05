@@ -34,7 +34,9 @@
                             <label for="name" class="">{{ __('Name') }} (TH)</label>
                             <input name="name:th" id="name_th" placeholder="Name placeholder" type="text"
                                 class="form-control form-control-sm @error('name') is-invalid @enderror"
-                                value="{{ $user->translate('th')->name }}" required autocomplete="name" autofocus>
+                                value="{{ $user->translate('th') ? $user->translate('th')->name : null }}" required
+                                autocomplete="name" autofocus>
+                                
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -47,7 +49,9 @@
                             <label for="name" class="">{{ __('Name') }} (EN)</label>
                             <input name="name:en" id="name_en" placeholder="Name placeholder" type="text"
                                 class="form-control form-control-sm @error('name') is-invalid @enderror"
-                                value="{{ $user->translate('en')->name }}" required autocomplete="name" autofocus>
+                                value="{{ $user->translate('en') ? $user->translate('en')->name : null }}" required
+                                autocomplete="name" autofocus>
+
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

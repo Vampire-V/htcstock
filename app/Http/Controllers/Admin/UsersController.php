@@ -162,7 +162,7 @@ class UsersController extends Controller
 
             $response = Http::get(ENV('USERS_UPDATE'))->json();
             if (!\is_null($response)) {
-
+                $list_users = [];
                 foreach ($response as $value) {
                     $user = User::where('username', $value['username'])->first();
                     $department = Department::where('process_id', $value['department_id'])->first();
@@ -181,7 +181,9 @@ class UsersController extends Controller
                     $user->divisions_id = $user->divisions_id ?? $division ? $division->id : null;
                     $user->head_id = $user->head_id ?? $value['leader'];
                     $user->save();
+                    $list_users[] = $value['username'];
                 }
+                User::whereNotIn('username',[...$list_users])->update(['resigned' => 1]);
                 $request->session()->flash('success', 'has been update user');
             } else {
                 $request->session()->flash('error', 'ติดต่อ กับ ' . ENV('USERS_UPDATE') . "ไม่ได้");

@@ -174,7 +174,7 @@
                                 @foreach ($rules as $key => $item)
                                 <tr>
                                     <th scope="row">{{$key+1}}</th>
-                                    <td class="truncate">{{$item->name}}</td>
+                                    <td class="truncate" data-toggle="tooltip" title="{{$item->name}}">{{$item->name}}</td>
                                     @isset($item->total)
                                     @foreach ($item->total as $total)
                                     <td>{{$total->target}}</td>
@@ -234,7 +234,7 @@
                                 @foreach ($users as $key => $user)
                                 <tr>
                                     <th>{{$key+1}}</th>
-                                    <td class="truncate">{{ $user->name }} : {{$user->id}}</td>
+                                    <td class="truncate" data-toggle="tooltip" title="{{$user->name}}">{{ $user->name }}</td>
                                     @isset($user->total)
                                     @foreach ($user->total as $total)
                                     <td>

@@ -165,21 +165,21 @@ class UsersController extends Controller
 
                 foreach ($response as $value) {
                     $user = User::where('username', $value['username'])->first();
+                    $department = Department::where('process_id', $value['department_id'])->first();
+                    $division = Division::where('division_id', $value['division_id'])->first();
 
                     if (\is_null($user)) {
                         $user = new User;
                         $user->password = Hash::make(\substr($value['email'], 0, 1) . $value['username']);
                     }
-                    $department = Department::where('process_id', $value['department_id'])->first();
-                    $division = Division::where('division_id', $value['division_id'])->first();
-
+                    
                     $user->username = $value['username'];
                     $user->translateOrNew('th')->name = $value['name'];
                     $user->name_th = $value['name'];
                     $user->email = $value['email'];
-                    $user->department_id = \is_null($user->department_id) ? $department->id : $user->department_id;
-                    $user->divisions_id = \is_null($user->divisions_id) ? $division->id : $user->divisions_id;
-                    $user->head_id = \is_null($user->head_id) ? $value['leader'] : $user->head_id;
+                    $user->department_id = $user->department_id ?? $department ? $department->id : null;
+                    $user->divisions_id = $user->divisions_id ?? $division ? $division->id : null;
+                    $user->head_id = $user->head_id ?? $value['leader'];
                     $user->save();
                 }
                 $request->session()->flash('success', 'has been update user');

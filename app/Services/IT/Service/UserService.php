@@ -2,6 +2,7 @@
 
 namespace App\Services\IT\Service;
 
+use App\Enum\KPIEnum;
 use App\Services\BaseService;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Models\User;
@@ -106,7 +107,7 @@ class UserService extends BaseService implements UserServiceInterface
             foreach ($users as $user) {
                 $total = \collect();
                 foreach ($periods as $period) {
-                    $evaluates = $user->evaluates->whereIn('period_id', [$period->id]);
+                    $evaluates = $user->evaluates->whereIn('period_id', [$period->id])->where('status',KPIEnum::approved);
                     $total_target = $evaluates ? $evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target')) : 0.00;
                     $total_actual = $evaluates ? $evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual')) : 0.00;
                     $total->push((object)['target' => $total_target, 'actual' => $total_actual]);

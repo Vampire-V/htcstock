@@ -27,7 +27,7 @@
             <div class="d-inline-block dropdown">
                 <form class="needs-validation" novalidate method="get" id="form-search">
                     <select class="form-control form-control-sm" name="year" id="year" onchange="test()">
-                        @foreach (range(date('Y'),date('Y')+5) as $year)
+                        @foreach (range(date('Y')-5,date('Y')+5) as $year)
                         <option value="{{$year}}" @if (intVal($selectedYear)===$year) selected @endif>
                             {{$year}}</option>
                         @endforeach

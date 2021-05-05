@@ -144,7 +144,7 @@ class RuleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreRulePut $request, $id)
+    public function update(StoreRulePost $request, $id)
     {
         DB::beginTransaction();
         $fromValue = $request->except(['_token', '_method']);

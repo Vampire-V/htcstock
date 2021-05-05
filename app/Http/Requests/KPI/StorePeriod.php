@@ -23,9 +23,13 @@ class StorePeriod extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required|max:255',
+        $rule = [
+            'name' => 'required|unique:kpi_target_periods,name,year|max:255',
             'year' => 'required|regex:/(^\d{4}$)/'
         ];
+        if ($this->route('set_period')) {
+            $rule['name'] = 'required|max:255';
+        }
+        return $rule;
     }
 }

@@ -23,13 +23,16 @@ class StoreRulePost extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rule = [
             'category_id' => 'required',
             'name' => 'required|unique:kpi_rules|max:255',
-            // 'measurement' => 'required',
             'user_actual' => 'required',
             'calculate_type' => 'required',
             'kpi_rule_types_id' => 'required'
         ];
+        if ($this->route('rule_list')) {
+            $rule['name'] = 'required|max:255';
+        }
+        return $rule;
     }
 }

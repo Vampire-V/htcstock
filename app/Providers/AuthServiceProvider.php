@@ -37,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
         // ตอนเรียกใช้ controller Gate::denies('for-superadmin-admin')
         Gate::define('for-superadmin-admin', function ($user) {
             // $user->hasRole('admin','author') True
-            return $user->hasRole(UserEnum::SUPERADMIN,UserEnum::ADMIN);
+            return $user->hasRole(UserEnum::SUPERADMIN,UserEnum::ADMINIT);
         });
 
         Gate::define('for-superadmin', function ($user) {
@@ -54,7 +54,7 @@ class AuthServiceProvider extends ServiceProvider
         });
         
         Gate::define('admin-manager-kpi', function ($user) {
-            return $user->hasInRole(['admin-kpi','manager-kpi']);
+            return $user->hasInRole([UserEnum::ADMINKPI,UserEnum::MANAGERKPI]);
         });
         try {
             Role::get()->map(function ($role) {

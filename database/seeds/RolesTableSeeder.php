@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\UserEnum;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
 
@@ -15,31 +16,35 @@ class RoleTableSeeder extends Seeder
         $roles = [
             [
                 'name' => 'Super Admin',
-                'slug' => 'super-admin',
+                'slug' => UserEnum::SUPERADMIN,
             ],
             [
                 'name' => 'Admin IT Stock',
-                'slug' => 'admin-it',
+                'slug' => UserEnum::ADMINIT,
             ],
             [
                 'name' => 'User IT Stock',
-                'slug' => 'user-it',
+                'slug' => UserEnum::USERIT,
             ],
             [
                 'name' => 'Admin Legal',
-                'slug' => 'admin-legal',
+                'slug' => UserEnum::ADMINLEGAL,
             ],
             [
                 'name' => 'User Legal',
-                'slug' => 'user-legal',
+                'slug' => UserEnum::USERLEGAL,
             ],
             [
                 'name' => 'Admin KPI',
-                'slug' => 'admin-kpi',
+                'slug' => UserEnum::ADMINKPI,
             ],
             [
                 'name' => 'User KPI',
-                'slug' => 'user-kpi',
+                'slug' => UserEnum::USERKPI,
+            ],
+            [
+                'name' => 'Manager KPI',
+                'slug' => UserEnum::MANAGERKPI,
             ],
         ];
 

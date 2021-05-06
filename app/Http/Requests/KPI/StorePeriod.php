@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\KPI;
 
+use App\Enum\UserEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePeriod extends FormRequest
@@ -13,7 +14,7 @@ class StorePeriod extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->roles->search(fn ($obj) => $obj->slug === 'admin-kpi', $strict = true) !== \false;
+        return $this->user()->roles->search(fn ($obj) => $obj->slug === UserEnum::ADMINKPI, $strict = true) !== \false;
     }
 
     /**

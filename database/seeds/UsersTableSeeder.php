@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\UserEnum;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
@@ -17,9 +18,9 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $adminRole = Role::where('slug', 'super-admin')->first();
-        $authorRole = Role::where('slug', 'admin-it')->first();
-        $userRole = Role::where('slug', 'user-it')->first();
+        $adminRole = Role::where('slug', UserEnum::SUPERADMIN)->first();
+        $authorRole = Role::where('slug', UserEnum::ADMINIT)->first();
+        $userRole = Role::where('slug', UserEnum::USERIT)->first();
         // $response = Http::get(ENV('USERS_INFO'));
 
         $users = User::all();

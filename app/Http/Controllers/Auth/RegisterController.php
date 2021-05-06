@@ -72,7 +72,7 @@ class RegisterController extends Controller
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
         ]);
-        $user->roles()->attach(UserEnum::USER);
+        $user->roles()->attach(UserEnum::USERIT);
         return $user;
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\UserEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Division;
@@ -136,8 +137,8 @@ class UsersController extends Controller
         try {
             // denies คือ !=
             // allows คือ ==
-            // ตรวจสอบ Role Gate::denies('super-admin') จาก AuthServiceProvider ถ้าไม่ใช้ Admin 
-            if (Gate::denies('super-admin')) {
+            // ตรวจสอบ Role Gate::denies(UserEnum::SUPERADMIN) จาก AuthServiceProvider ถ้าไม่ใช้ Admin 
+            if (Gate::denies(UserEnum::SUPERADMIN)) {
                 return \redirect()->route('admin.users.index');
             }
             if ($this->userService->delete($id)) {
@@ -187,10 +188,10 @@ class UsersController extends Controller
                 User::whereNotIn('username', [...$list_users])->update(['resigned' => 1]); //update user ที่ออกไปแล้ว
                 $all_user = User::where('resigned', false)->get();
                 $systems = System::whereNotIn('slug', ['legal'])->get();
-                $roles = Role::whereNotIn('slug', ['super-admin', 'admin-it', 'admin-legal', 'user-legal', 'admin-kpi'])->get();
+                $roles = Role::whereNotIn('slug', [UserEnum::SUPERADMIN, UserEnum::ADMINIT, UserEnum::ADMINLEGAL, UserEnum::USERLEGAL, UserEnum::ADMINKPI])->get();
 
                 foreach ($all_user as $key => $staff) {
-                    // $staff->roles()->detach($roles->filter(fn($q) => $q->slug === 'manager-kpi')->first());
+                    // $staff->roles()->detach($roles->filter(fn($q) => $q->slug === UserEnum::MANAGERKPI)->first());
                     foreach ($systems as $key => $system) {
                         if (!$staff->systems->contains('slug', $system->slug)) {
                             $staff->systems()->attach($system);
@@ -199,10 +200,10 @@ class UsersController extends Controller
                     foreach ($roles as $key => $role) {
                         
                         if (!$staff->roles->contains('slug', $role->slug)) {
-                            if ($role->slug === 'manager-kpi' && $staff->username === strval($staff->head_id)) {
+                            if ($role->slug === UserEnum::MANAGERKPI && $staff->username === strval($staff->head_id)) {
                                 $staff->roles()->attach($role);
                             }
-                            if ($role->slug !== 'manager-kpi') {
+                            if ($role->slug !== UserEnum::MANAGERKPI) {
                                 $staff->roles()->attach($role);
                             }
                         }

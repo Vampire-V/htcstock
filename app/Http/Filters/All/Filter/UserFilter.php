@@ -12,10 +12,10 @@ use App\Http\Filters\All\Query\UserRoleIn;
 class UserFilter extends AbstractFilter
 {
     protected $filters = [
-        'position_id' => PositionIn::class,
-        'department_id' => DepartmentIn::class,
         'search' => NameUsernameEmailLike::class,
         'division' => DivisionIn::class,
+        'department' => DepartmentIn::class,
+        'position' => PositionIn::class,
         'user_role' => UserRoleIn::class
     ];
 }

@@ -13,18 +13,18 @@ class TargetPeriodSeeder extends Seeder
     public function run()
     {
         $month = [
-            ['name' => 'January', 'year' => date('Y')],
-            ['name' => 'February', 'year' => date('Y')],
-            ['name' => 'March', 'year' => date('Y')],
-            ['name' => 'April', 'year' => date('Y')],
-            ['name' => 'May', 'year' => date('Y')],
-            ['name' => 'June', 'year' => date('Y')],
-            ['name' => 'July', 'year' => date('Y')],
-            ['name' => 'August', 'year' => date('Y')],
-            ['name' => 'September', 'year' => date('Y')],
-            ['name' => 'October', 'year' => date('Y')],
-            ['name' => 'November', 'year' => date('Y')],
-            ['name' => 'December', 'year' => date('Y')],
+            ['name' => '01', 'year' => date('Y')],
+            ['name' => '02', 'year' => date('Y')],
+            ['name' => '03', 'year' => date('Y')],
+            ['name' => '04', 'year' => date('Y')],
+            ['name' => '05', 'year' => date('Y')],
+            ['name' => '06', 'year' => date('Y')],
+            ['name' => '07', 'year' => date('Y')],
+            ['name' => '08', 'year' => date('Y')],
+            ['name' => '09', 'year' => date('Y')],
+            ['name' => '10', 'year' => date('Y')],
+            ['name' => '11', 'year' => date('Y')],
+            ['name' => '12', 'year' => date('Y')],
         ];
         foreach ($month as $key => $value) {
             TargetPeriod::firstOrCreate($value);

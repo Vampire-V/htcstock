@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Enum\ContractEnum;
+use App\Enum\UserEnum;
 use App\Models\Legal\LegalContract;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -43,7 +44,7 @@ class LegalContractPolicy
      */
     public function create(User $user)
     {
-        return $user->can('user-legal');
+        return $user->can(UserEnum::USERLEGAL);
     }
 
     /**

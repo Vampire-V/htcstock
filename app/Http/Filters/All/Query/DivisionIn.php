@@ -5,6 +5,6 @@ class DivisionIn
 {
     public function filter($builder, $value)
     {
-        return $builder->whereIn('divisions_id',[...$value]);
+        return $builder->orWhereIn('divisions_id',[...$value]);
     }
 }

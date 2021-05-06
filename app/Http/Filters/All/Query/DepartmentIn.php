@@ -6,6 +6,6 @@ class DepartmentIn
 {
     public function filter($builder, $value)
     {
-        return $builder->whereIn('department_id',[...$value]);
+        return $builder->orWhereIn('department_id',[...$value]);
     }
 }

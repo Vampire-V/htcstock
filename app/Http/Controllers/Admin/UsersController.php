@@ -190,18 +190,20 @@ class UsersController extends Controller
                 $roles = Role::whereNotIn('slug', ['super-admin', 'admin-it', 'admin-legal', 'user-legal', 'admin-kpi'])->get();
 
                 foreach ($all_user as $key => $staff) {
+                    $staff->roles()->detach($roles->filter(fn($q) => $q->slug === 'manager-kpi')->first());
                     foreach ($systems as $key => $system) {
                         if (!$staff->systems->contains('slug', $system->slug)) {
                             $staff->systems()->attach($system);
                         }
                     }
                     foreach ($roles as $key => $role) {
+                        
                         if (!$staff->roles->contains('slug', $role->slug)) {
                             if ($role->slug === 'manager-kpi' && $staff->username === strval($staff->head_id)) {
-                                $staff->roles()->attach($role);
+                                // $staff->roles()->attach($role);
                             }
                             if ($role->slug !== 'manager-kpi') {
-                                $staff->roles()->attach($role);
+                                // $staff->roles()->attach($role);
                             }
                         }
                     }

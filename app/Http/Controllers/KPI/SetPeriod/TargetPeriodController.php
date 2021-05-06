@@ -8,6 +8,7 @@ use App\Models\KPI\TargetPeriod;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class TargetPeriodController extends Controller
 {
@@ -43,7 +44,8 @@ class TargetPeriodController extends Controller
     public function create()
     {
         try {
-            //code...
+            $response = $this->user()->cannot('create');
+            \dd($response);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }

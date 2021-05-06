@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Enum\UserEnum;
+use App\Models\KPI\TargetPeriod;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Legal\LegalContract;
 use App\Policies\LegalContractPolicy;
+use App\Policies\PeriodPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -19,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         LegalContract::class => LegalContractPolicy::class,
+        TargetPeriod::class => PeriodPolicy::class
     ];
 
     /**

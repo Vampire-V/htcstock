@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Division;
 use App\Models\Role;
+use App\Models\System;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\IT\Interfaces\RoleServiceInterface;
 use App\Services\IT\Interfaces\UserServiceInterface;
@@ -172,7 +173,7 @@ class UsersController extends Controller
                         $user = new User;
                         $user->password = Hash::make(\substr($value['email'], 0, 1) . $value['username']);
                     }
-                    
+
                     $user->username = $value['username'];
                     $user->translateOrNew('th')->name = $value['name'];
                     $user->name_th = $value['name'];
@@ -183,7 +184,28 @@ class UsersController extends Controller
                     $user->save();
                     $list_users[] = $value['username'];
                 }
-                User::whereNotIn('username',[...$list_users])->update(['resigned' => 1]);
+                User::whereNotIn('username', [...$list_users])->update(['resigned' => 1]); //update user ที่ออกไปแล้ว
+                $all_user = User::where('resigned', false)->get();
+                $systems = System::whereNotIn('slug', ['legal'])->get();
+                $roles = Role::whereNotIn('slug', ['super-admin', 'admin-it', 'admin-legal', 'user-legal', 'admin-kpi'])->get();
+
+                foreach ($all_user as $key => $staff) {
+                    foreach ($systems as $key => $system) {
+                        if (!$staff->systems->contains('slug', $system->slug)) {
+                            $staff->systems()->attach($system);
+                        }
+                    }
+                    foreach ($roles as $key => $role) {
+                        if (!$staff->roles->contains('slug', $role->slug)) {
+                            if ($role->slug === 'manager-kpi' && $staff->username === strval($staff->head_id)) {
+                                $staff->roles()->attach($role);
+                            }
+                            if ($role->slug !== 'manager-kpi') {
+                                $staff->roles()->attach($role);
+                            }
+                        }
+                    }
+                }
                 $request->session()->flash('success', 'has been update user');
             } else {
                 $request->session()->flash('error', 'ติดต่อ กับ ' . ENV('USERS_UPDATE') . "ไม่ได้");

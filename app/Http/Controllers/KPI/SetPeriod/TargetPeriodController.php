@@ -44,8 +44,8 @@ class TargetPeriodController extends Controller
     public function create()
     {
         try {
-            $response = $this->user()->cannot('create');
-            \dd($response);
+            // $response = $this->user()->cannot('create');
+            // \dd($response);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }

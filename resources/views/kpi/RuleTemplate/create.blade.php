@@ -101,13 +101,13 @@
                             <button class="mb-2 mr-2 btn btn-danger" onclick="deleterule(this)"
                                 data-group="{{$group->name}}" data-group-id="{{$group->id}}" disabled>Delete Selected
                                 Rule</button>
-                            <button class="mb-2 mr-2 btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                            <button class="mb-2 mr-2 btn btn-primary" data-toggle="modal" data-target="#modal-add-rule"
                                 data-group="{{$group}}" disabled>Add new rule</button>
                         </div>
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="mb-0 table table-sm" id="table-{{$group->name}}">
+                    <table class="mb-0 table table-sm {{$group->name}}" id="table-{{$group->name}}">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -157,7 +157,7 @@
 </div>
 
 {{-- Modal --}}
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="modal-add-rule" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
@@ -235,18 +235,33 @@
 @endsection
 
 @section('second-script')
-
-<script src="{{asset('assets\js\kpi\ruleTemplate\create.js')}}" defer></script>
 <script>
     var template = {!!json_encode($template)!!}
-    
-    $('#exampleModal').on('show.bs.modal', function (event) {
+    var rules = {!!json_encode($rules)!!}
+    var temp_rules = [];
+</script>
+<script src="{{asset('assets\js\kpi\ruleTemplate\create.js')}}" defer></script>
+<script>
+    $('#modal-add-rule').on('shown.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var group = button.data('group') // Extract info from data-* attributes
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
-        setOptionModal(group)
+        arr = rules.filter((value, index) => {
+            let rre = true
+            temp_rules.forEach(temp_rule => {
+                if (temp_rule.rules.id === value.id) {
+                    rre = !rre;
+                }
+            })
+            return rre
+        })
+        let rules_group = arr.filter(rule => rule.category_id === group.id)
+        rules_group.forEach((rule,key) => {
+            modal.find('.modal-body select[id="validationRuleName"]')[0][key] = new Option(rule.name, rule.id)
+        })
+        // setOptionModal(group)
         let weight = modal.find('.modal-body input[name ="weight"]')[0]
         let maxW = setMaxWeight(group)
         if (maxW <= 0) {
@@ -267,7 +282,7 @@
         
     })
 
-    $('#exampleModal').on('hide.bs.modal', function (event) {
+    $('#modal-add-rule').on('hide.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var group = button.data('group') // Extract info from data-* attributes
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
@@ -284,30 +299,31 @@
     const setOptionModal = (group) => {
         let table = document.getElementById(`table-${group.name}`)
         rows = table.tBodies[0].rows
-        getRuleDropdown(group)
-        .then(result => {
-            console.log(result);
-            for (const row of rows) {
-                for (let i = 0; i < result.data.data.length; i++) {
-                    const element = result.data.data[i]
-                    if (element.name === row.children[1].textContent) {
-                        result.data.data.splice(i,1)
-                        i--
+        console.log(this.rules,rows);
+        /*
+            getRuleDropdown(group)
+            .then(result => {
+                for (const row of rows) {
+                    for (let i = 0; i < result.data.data.length; i++) {
+                        const element = result.data.data[i]
+                        console.log(row.children[1].textContent);
+                        if (element.name === row.children[1].textContent) {
+                            result.data.data.splice(i,1)
+                            i--
+                        }
                     }
                 }
-            }
-            
-            result.data.data.forEach(element => {
-                let option = document.createElement("option")
-                option.text = element.name+" - "+element.calculate_type
-                option.value = element.id
-                document.getElementById('validationRuleName').appendChild(option)
+                
+                result.data.data.forEach(element => {
+                    let option = document.createElement("option")
+                    option.text = element.name+" - "+element.calculate_type
+                    option.value = element.id
+                    document.getElementById('validationRuleName').appendChild(option)
+                })
             })
-        })
-        .catch(error => console.log(error.response))
-        .finally(() => {
-            // console.log(datas);
-        })
+            .catch(error => console.log(error.response))
+            .finally(() => {})
+        **/
     }
 
     const changeWeight = (sel) => {
@@ -333,6 +349,7 @@
             postRuleTemplate(template.id,formData)
             .then(res => {
                 if (res.status === 200) {
+                    temp_rules = res.data.data
                     createRow(res.data.data)
                 }
             })
@@ -344,7 +361,7 @@
                 
             })
             .finally( () => {
-                document.getElementById('exampleModal').getElementsByClassName("close")[0].click()
+                document.getElementById('modal-add-rule').getElementsByClassName("close")[0].click()
                 toastClear()
             })
         }
@@ -385,7 +402,7 @@
                 newCellCheck.appendChild(div)
 
                 let newCellName = newRow.insertCell()
-                newCellName.textContent = element.rules.name +" - "+element.rules.calculate_type
+                newCellName.textContent = element.rules.name
 
                 let newCellMeasurement = newRow.insertCell()
                 newCellMeasurement.textContent = element.rules.measurement

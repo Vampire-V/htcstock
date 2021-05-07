@@ -59,6 +59,7 @@
                 </li>
                 {{-- admin --}}
                 @can('admin-kpi')
+                <li class="app-sidebar__heading">Menu For Operation</li>
                 <li>
                     <a href="{{route('kpi.set-period.index')}}" class="{{Helper::isActive('kpi/set-period*')}}">
                         <i class="metismenu-icon pe-7s-date"></i>
@@ -87,12 +88,15 @@
                 {{-- end admin --}}
                 {{-- admin manager --}}
                 @can('admin-manager-kpi')
+                <li class="app-sidebar__heading">Menu For Manager</li>
+                <li class="{{Helper::isActive('kpi/evaluation-review*')}}">
                 <li>
                     <a href="{{route('kpi.evaluation-review.index')}}"
                         class="{{Helper::isActive('kpi/evaluation-review*')}}">
                         <i class="metismenu-icon pe-7s-display2"></i>
                         Evaluation Review
                     </a>
+                </li>
                 </li>
                 @endcan
                 {{-- end admin manager --}}

@@ -64,7 +64,7 @@ class EvaluationFormController extends Controller
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.EvaluationForm.index', \compact('users', 'departments', 'positions', 'query'));
+        return \view('kpi.EvaluationForm.index', \compact('users', 'departments', 'positions', 'query','selectDepartment','selectPosition'));
     }
 
     /**

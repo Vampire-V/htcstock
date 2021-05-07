@@ -67,10 +67,12 @@ class RuleTemplateController extends Controller
         try {
             $category = $this->categoryService->all();
             $template = $this->templateService->find($template);
+            $rules = $this->ruleService->dropdown();
+            
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.RuleTemplate.create', \compact('category', 'template'));
+        return \view('kpi.RuleTemplate.create', \compact('category', 'template','rules'));
     }
 
     /**

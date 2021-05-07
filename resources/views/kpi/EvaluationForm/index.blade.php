@@ -32,7 +32,7 @@
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
                             <label for="department">Department :</label>
-                            <select class="form-control form-control-sm" id="department" name="department_id[]"
+                            <select class="form-control form-control-sm" id="department" name="department[]"
                                 multiple>
                                 @isset($departments)
                                 @foreach ($departments as $dept)
@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="position">Position :</label>
-                            <select class="form-control-sm form-control" id="position" name="position_id[]" multiple>
+                            <select class="form-control-sm form-control" id="position" name="position[]" multiple>
                                 @isset($positions)
                                 @foreach ($positions as $position)
                                 <option value="{{$position->id}}" @if ($selectPosition->contains($position->id))

@@ -5,11 +5,12 @@
         // Supporting Documents
 
         $("#validationRuleName").select2({
-            dropdownParent: $('#exampleModal'),
+            dropdownParent: $('#modal-add-rule'),
             placeholder: 'Select Rules',
             allowClear: true
         });
         getRuleTemplate(template.id).then(res => {
+            temp_rules = res.data.data
             createRow(res.data.data)
         })
     })

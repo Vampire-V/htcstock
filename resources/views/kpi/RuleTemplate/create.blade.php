@@ -184,7 +184,7 @@
                         <div class="col-md-6">
                             <div class="position-relative form-group"><label for="base-line" class="">Base line
                                     : %</label><input name="base_line" id="validationBaseLine" placeholder="BaseLine"
-                                    type="number" min="0" step="0.1" class="form-control form-control-sm" required>
+                                    type="number" min="0" step="0.01" class="form-control form-control-sm" required>
                             </div>
                         </div>
                     </div>
@@ -194,14 +194,14 @@
                             <div class="position-relative form-group"><label for="max-result" class="">Max
                                     : %</label>
                                 <input name="max_result" id="validationMax" placeholder="Max result" type="number"
-                                    min="0" step="0.1" class="form-control form-control-sm" required>
+                                    min="0" step="0.01" class="form-control form-control-sm" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="position-relative form-group"><label for="target-config" class="">Target
                                     config
                                     :</label><input name="target_config" id="validationTargetConfig"
-                                    placeholder="Target config" type="number" min="0" step="0.1"
+                                    placeholder="Target config" type="number" min="0" step="0.01"
                                     class="form-control form-control-sm" required></div>
                         </div>
                     </div>
@@ -211,7 +211,7 @@
                             <div class="position-relative form-group"><label for="weight" class="">Weight limit
                                     100%:</label>
                                 <input name="weight" id="validationWeight" placeholder="Weight" type="number" min="0"
-                                    step="0.1" max="100" class="form-control form-control-sm" required>
+                                    step="0.01" max="100" class="form-control form-control-sm" required>
                             </div>
                         </div>
 
@@ -219,7 +219,7 @@
                             <div class="position-relative form-group"><label for="weight-category" class="">Weight
                                     category
                                     : %</label><input name="weight_category" id="validationWeightCategory"
-                                    placeholder="Weight category" type="number" min="0" step="0.1"
+                                    placeholder="Weight category" type="number" min="0" step="0.01"
                                     class="form-control form-control-sm" readonly></div>
                         </div>
                     </div>

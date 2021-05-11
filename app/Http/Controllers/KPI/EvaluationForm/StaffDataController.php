@@ -5,6 +5,7 @@ namespace App\Http\Controllers\KPI\EvaluationForm;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ALL\UserResource;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
+use App\Services\IT\Interfaces\DivisionServiceInterface;
 use App\Services\IT\Interfaces\PositionServiceInterface;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
@@ -13,19 +14,21 @@ use Illuminate\Http\Request;
 
 class StaffDataController extends Controller
 {
-    protected $departmentService, $positionService, $userService, $evaluateService, $targetPeriodService;
+    protected $departmentService, $positionService, $userService, $evaluateService, $targetPeriodService, $divisionService;
     public function __construct(
         DepartmentServiceInterface $departmentServiceInterface,
         PositionServiceInterface $positionServiceInterface,
         UserServiceInterface $userServiceInterface,
         EvaluateServiceInterface $evaluateServiceInterface,
-        TargetPeriodServiceInterface $targetPeriodServiceInterface
+        TargetPeriodServiceInterface $targetPeriodServiceInterface,
+        DivisionServiceInterface $divisionServiceInterface
     ) {
         $this->departmentService = $departmentServiceInterface;
         $this->positionService = $positionServiceInterface;
         $this->userService = $userServiceInterface;
         $this->evaluateService = $evaluateServiceInterface;
         $this->targetPeriodService = $targetPeriodServiceInterface;
+        $this->divisionService = $divisionServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -37,14 +40,16 @@ class StaffDataController extends Controller
         $query = $request->all();
         $selectDepartment = \collect($request->department);
         $selectPosition = \collect($request->position);
+        $selectDivision = \collect($request->division);
         try {
             $users = $this->userService->filter($request);
+            $divisions = $this->divisionService->dropdown();
             $departments = $this->departmentService->dropdown();
             $positions = $this->positionService->dropdown();
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.EvaluationForm.index', \compact('users', 'departments', 'positions', 'query', 'selectDepartment', 'selectPosition'));
+        return \view('kpi.EvaluationForm.index', \compact('users', 'divisions', 'departments', 'positions', 'query', 'selectDivision', 'selectDepartment', 'selectPosition'));
     }
 
     /**
@@ -120,5 +125,4 @@ class StaffDataController extends Controller
     {
         //
     }
-
 }

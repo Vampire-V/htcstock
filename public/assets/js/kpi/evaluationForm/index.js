@@ -3,6 +3,11 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         // Supporting Documents
+        
+        $("#division").select2({
+            placeholder: 'Select Division',
+            allowClear: true
+        })
         $("#department").select2({
             placeholder: 'Select Department',
             allowClear: true
@@ -12,7 +17,7 @@
             allowClear: true
         })
         $("#validationYear").select2({
-            placeholder: 'Select Position',
+            placeholder: 'Select Year',
             allowClear: true
         })
         

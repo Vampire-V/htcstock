@@ -31,6 +31,19 @@
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
+                            <label for="division">Division :</label>
+                            <select class="form-control form-control-sm" id="division" name="division[]"
+                                multiple>
+                                @isset($divisions)
+                                @foreach ($divisions as $division)
+                                <option value="{{$division->id}}" @if ($selectDivision->contains($division->id))
+                                    selected
+                                    @endif>{{$division->name}}</option>
+                                @endforeach
+                                @endisset
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
                             <label for="department">Department :</label>
                             <select class="form-control form-control-sm" id="department" name="department[]"
                                 multiple>
@@ -75,6 +88,7 @@
                         <tr>
                             <th>#</th>
                             <th>Staff Name</th>
+                            <th>Division</th>
                             <th>Department</th>
                             <th>Position</th>
                             <th>#</th>
@@ -86,6 +100,7 @@
                         <tr>
                             <th scope="row">{{$key+1}}</th>
                             <td>{{$user->name }}</td>
+                            <td>{{$user->divisions->name}}</td>
                             <td>{{$user->department->name}}</td>
                             <td>{{$user->positions->name}}</td>
                             <td><a href="{{route('kpi.staff.edit',$user->id)}}"

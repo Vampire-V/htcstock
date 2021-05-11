@@ -445,15 +445,24 @@ var findAchValue = (obj) => {
 }
 
 var findCalValue = (obj, ach) => {
-    
     if (ach < obj.base_line) {
         cal = 0.00
     }else{
-        if (ach >= obj.max_result) {
-            cal = parseFloat(obj.max_result) * parseFloat(obj.weight) / 100
-        }else{
-            cal = ach * parseFloat(obj.weight) / 100
+        if ('max_result' in obj) {
+            if (ach >= obj.max_result) {
+                cal = parseFloat(obj.max_result) * parseFloat(obj.weight) / 100
+            }else{
+                cal = ach * parseFloat(obj.weight) / 100
+            } 
         }
+        if ('max' in obj) {
+            if (ach >= obj.max) {
+                cal = parseFloat(obj.max) * parseFloat(obj.weight) / 100
+            }else{
+                cal = ach * parseFloat(obj.weight) / 100
+            }
+        }
+        
     }
 
     return cal

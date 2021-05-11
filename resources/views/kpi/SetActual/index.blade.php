@@ -116,7 +116,10 @@
                                 <td>{{number_format($item->weight,2)}}%</td>
                                 <td>{{number_format($item->target,2)}}</td>
                                 <td><input type="number" name="actual" id="{{$item->id}}" value="{{$item->actual}}"
-                                        min="0" step="0.01" class="form-control form-control-sm"
+                                        @if ($item->rule->calculate_type !== "Negative")
+                                        min="0"
+                                        @endif  
+                                        step="0.01" class="form-control form-control-sm"
                                         onchange="changeActual(this)" />
                                 </td>
                                 <td></td>

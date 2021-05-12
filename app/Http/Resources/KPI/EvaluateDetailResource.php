@@ -17,6 +17,7 @@ class EvaluateDetailResource extends JsonResource
         return [
             'id' => $this->id,
             'evaluate_id' => $this->evaluate_id,
+            'evaluate' => $this->evaluate,
             'rule_id' => $this->rule_id,
             'target' => $this->target,
             'actual' => number_format($this->actual,2),

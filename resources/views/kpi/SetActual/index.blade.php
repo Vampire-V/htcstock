@@ -183,9 +183,13 @@
                     e.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle = changeTooltipCal(e.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle, element)
                 }
                 if (e.parentNode.parentNode.cells[3].textContent === element.rules.name) {
+                    element.actual = parseFloat(e.value).toFixed(2)
+                    let ach = findAchValue(element)
+                    let cal = findCalValue(element,ach)
+                    element.ach = ach
+                    element.cal = cal
                     let input = document.getElementById(element.id)
                     input.value = parseFloat(e.value).toFixed(2)
-                    element.actual = parseFloat(e.value).toFixed(2)
                     input.parentNode.nextElementSibling.textContent =  ach.toFixed(2) + '%'
                     input.parentNode.nextElementSibling.nextElementSibling.textContent = cal.toFixed(2) + '%'
                     input.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle = changeTooltipCal(input.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle, element)

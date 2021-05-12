@@ -179,9 +179,13 @@ class UsersController extends Controller
                     $user->translateOrNew('th')->name = $value['name'];
                     $user->name_th = $value['name'];
                     $user->email = $value['email'];
-                    $user->department_id = $user->department_id ?? $department ? $department->id : null;
-                    $user->divisions_id = $user->divisions_id ?? $division ? $division->id : null;
-                    $user->head_id = $user->head_id ?? $value['leader'];
+                    if (!$user->department_id) {
+                        $user->department_id = $department ? $department->id : null;
+                    }
+                    if (!$user->divisions_id) {
+                        $user->divisions_id = $division ? $division->id : null;
+                    }
+                    $user->head_id = $user->head_id ? $user->head_id : $value['leader'];
                     $user->save();
                     $list_users[] = $value['username'];
                 }
@@ -1316,8 +1320,10 @@ class UsersController extends Controller
             }
              */
         } catch (\Exception $e) {
+            dd($user->department_id,$department);
+            throw $e;
             DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            // return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return back();

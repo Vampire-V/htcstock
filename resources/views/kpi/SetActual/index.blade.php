@@ -182,6 +182,14 @@
                     e.parentNode.nextElementSibling.nextElementSibling.textContent = cal.toFixed(2) + '%'
                     e.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle = changeTooltipCal(e.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle, element)
                 }
+                if (e.parentNode.parentNode.cells[3].textContent === element.rules.name) {
+                    let input = document.getElementById(element.id)
+                    input.value = parseFloat(e.value).toFixed(2)
+                    element.actual = parseFloat(e.value).toFixed(2)
+                    input.parentNode.nextElementSibling.textContent =  ach.toFixed(2) + '%'
+                    input.parentNode.nextElementSibling.nextElementSibling.textContent = cal.toFixed(2) + '%'
+                    input.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle = changeTooltipCal(input.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle, element)
+                }
             }
         }
     }

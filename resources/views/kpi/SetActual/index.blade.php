@@ -168,6 +168,7 @@
 <script src="{{asset('assets\js\kpi\setActual\index.js')}}" defer></script>
 <script>
     var changeActual = (e) => {
+        console.log(e.parentNode.nextElementSibling);
         let button = document.getElementById('table-set-actual').querySelector('button')
         if (Array.isArray(e.value.match(/\w+/))) {
             for (let index = 0; index < detail.length; index++) {

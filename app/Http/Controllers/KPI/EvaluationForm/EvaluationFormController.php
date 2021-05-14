@@ -64,7 +64,7 @@ class EvaluationFormController extends Controller
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.EvaluationForm.index', \compact('users', 'departments', 'positions', 'query','selectDepartment','selectPosition'));
+        return \view('kpi.EvaluationForm.index', \compact('users', 'departments', 'positions', 'query', 'selectDepartment', 'selectPosition'));
     }
 
     /**
@@ -107,7 +107,6 @@ class EvaluationFormController extends Controller
                         'head_id' => $staff,
                         'status' => $request->next ? KPIEnum::ready : KPIEnum::new,
                         'template_id' => $request->template,
-                        'main_rule_id' => $request->mainRule,
                         'main_rule_condition_1_min' => $request->minone,
                         'main_rule_condition_1_max' => $request->maxone,
                         'main_rule_condition_2_min' => $request->mintwo,
@@ -162,7 +161,7 @@ class EvaluationFormController extends Controller
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
-        return $this->successResponse(new EvaluateResource($evaluate),'Evaluate show',200);
+        return $this->successResponse(new EvaluateResource($evaluate), 'Evaluate show', 200);
     }
 
     /**
@@ -202,7 +201,6 @@ class EvaluationFormController extends Controller
             if ($evaluate) {
                 // Update Header
                 $evaluate->template_id = $request->template;
-                $evaluate->main_rule_id = $request->mainRule;
                 $evaluate->status = $request->next ? KPIEnum::ready : KPIEnum::new;
                 $evaluate->main_rule_condition_1_min = $request->minone;
                 $evaluate->main_rule_condition_1_max = $request->maxone;

@@ -17,7 +17,6 @@ $factory->define(Evaluate::class, function (Faker $faker) use ($users, $periods,
     //     'head_id : ' . $faker->randomElement($users) . ' ' .
     //     'status : ' . $faker->randomElements(['a','b','c','d']) . ' ' .
     //     'rule_template_id : ' . $faker->randomElement($ruleTemplate) . ' ' .
-    //     'main_rule_id : ' . $faker->randomNumber(1) . ' ' .
     //     'main_rule_condition_1_min : ' . $faker->randomNumber(2) . ' ' .
     //     'main_rule_condition_1_max : ' . $faker->randomNumber(2) . ' ' .
     //     'main_rule_condition_2_min : ' . $faker->randomNumber(2) . ' ' .
@@ -33,7 +32,6 @@ $factory->define(Evaluate::class, function (Faker $faker) use ($users, $periods,
         'head_id' => $faker->randomElement($users),
         'status' => 'New',
         'rule_template_id' => $faker->randomElement($ruleTemplate),
-        'main_rule_id' => $faker->randomNumber(1),
         'main_rule_condition_1_min' => $faker->randomNumber(2),
         'main_rule_condition_1_max' => $faker->randomNumber(2),
         'main_rule_condition_2_min' => $faker->randomNumber(2),

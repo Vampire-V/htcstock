@@ -30,7 +30,7 @@
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label for="division">Division :</label>
                             <select class="form-control form-control-sm" id="division" name="division[]"
                                 multiple>
@@ -43,7 +43,7 @@
                                 @endisset
                             </select>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label for="department">Department :</label>
                             <select class="form-control form-control-sm" id="department" name="department[]"
                                 multiple>
@@ -56,7 +56,7 @@
                                 @endisset
                             </select>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label for="position">Position :</label>
                             <select class="form-control-sm form-control" id="position" name="position[]" multiple>
                                 @isset($positions)
@@ -68,7 +68,7 @@
                                 @endisset
                             </select>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <button class="mb-2 mr-2 btn btn-primary mt-4">Search</button>
                         </div>
                     </div>

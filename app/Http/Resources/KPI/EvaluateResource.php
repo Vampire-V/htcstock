@@ -21,7 +21,6 @@ class EvaluateResource extends JsonResource
             'head_id' => $this->head_id,
             'status' => $this->status,
             'template_id' => $this->template_id,
-            'main_rule_id' => $this->main_rule_id,
             'main_rule_condition_1_min' => $this->main_rule_condition_1_min,
             'main_rule_condition_1_max' => $this->main_rule_condition_1_max,
             'main_rule_condition_2_min' => $this->main_rule_condition_2_min,

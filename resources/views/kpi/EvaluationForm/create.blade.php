@@ -182,67 +182,6 @@
 </div>
 @endisset
 
-{{-- Main Rule Config --}}
-<div class="col-lg-12">
-    <div class="main-card mb-3 card">
-        <div class="card-body">
-            <h5 class="card-title">Main Rule Config</h5>
-            <div class="position-relative form-group">
-                <form class="needs-validation " novalidate>
-                    <div class="form-row">
-                        <div class="col-md-4 mb-3">
-                            <label for="mainRule">Main Rule :</label>
-                            <select id="mainRule" class="form-control-sm form-control" name="rule_id" required
-                                onchange="changeMainRule(this)">
-
-                            </select>
-                            <div class="invalid-feedback">
-                                Please provide a valid Main Rule.
-                            </div>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="table-responsive">
-                <table class="mb-0 table table-sm">
-                    <thead>
-                        <tr>
-                            <th>Range Name</th>
-                            <th>Minimum</th>
-                            <th>Maximum</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Condition Range 1</th>
-                            <td><input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="1"
-                                    id="minone" name="minone" value="0" onchange="changeValueMainRule(this)"></td>
-                            <td><input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="1"
-                                    id="maxone" name="maxone" value="0" onchange="changeValueMainRule(this)"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Condition Range 2</th>
-                            <td><input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="1"
-                                    id="mintwo" name="mintwo" value="0" onchange="changeValueMainRule(this)"></td>
-                            <td><input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="1"
-                                    id="maxtwo" name="maxtwo" value="0" onchange="changeValueMainRule(this)"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Condition Range 3</th>
-                            <td><input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="1"
-                                    id="mintree" name="mintree" value="0" onchange="changeValueMainRule(this)"></td>
-                            <td><input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="1"
-                                    id="maxtree" name="maxtree" value="0" onchange="changeValueMainRule(this)"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
 {{-- Button --}}
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -310,7 +249,7 @@
     const changeTemplate = (e) => {
         evaluateForm.template = e.selectedIndex > 0 ? parseInt(e.options[e.selectedIndex].value) : null
         if (evaluateForm.template) {
-            setVisible(true);
+            setVisible(true)
             getRuleTemplate(evaluateForm.template)
             .then( res => {
                 if (res.status === 200) {
@@ -325,8 +264,7 @@
             })
             .finally(() => {
                 pageEnable()
-                setVisible(false);
-                console.log(evaluateForm)
+                setVisible(false)
             })
         }
         else{
@@ -335,13 +273,9 @@
         }
     }
 
-    const changeMainRule = (e) => {
-        evaluateForm.mainRule = e.selectedIndex > 0 ? parseInt(e.options[e.selectedIndex].value) : null
-    }
-
     const submitToUser = () => {
         validityForm()
-        if (evaluateForm.template && evaluateForm.mainRule) {
+        if (evaluateForm.template) {
             setVisible(true)
             evaluateForm.next = true
             postEvaluateForm(staff.id,period.id,evaluateForm).then(res => {
@@ -363,7 +297,7 @@
 
     const submit = () => {
         validityForm()
-        if (evaluateForm.template && evaluateForm.mainRule) {
+        if (evaluateForm.template) {
             setVisible(true)
             postEvaluateForm(staff.id,period.id,evaluateForm).then( async res => {
                 console.log(res);

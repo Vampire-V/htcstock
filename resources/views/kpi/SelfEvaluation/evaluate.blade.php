@@ -135,28 +135,6 @@
     <div class="main-card mb-3 card">
         <div class="card-body">
             <h5 class="card-title">Calculation Summary</h5>
-            <div class="position-relative form-group">
-                <form class="needs-validation" novalidate>
-                    <div class="form-row">
-                        <div class="col-md-4 mb-3">
-                            <label for="mainRule">Main Rule :</label>
-                            <input type="text" class="form-control form-control-sm" id="mainRule"
-                                placeholder="Main Rule" value="" readonly>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="Cal">%Cal :</label>
-                            <input type="text" class="form-control form-control-sm" id="Cal" placeholder="%Cal" value=""
-                                readonly>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
             <div class="table-responsive">
                 <table class="mb-0 table table-sm" id="table-calculation">
                     <thead>
@@ -192,42 +170,7 @@
         </div>
     </div>
 </div>
-{{-- Main Rule Conditions --}}
-{{-- <div class="col-lg-12">
-    <div class="main-card mb-3 card">
-        <div class="card-body">
-            <h5 class="card-title">Main Rule Conditions</h5>
-            <div class="table-responsive">
-                <table class="mb-0 table table-sm">
-                    <thead>
-                        <tr>
-                            <th>Range Name</th>
-                            <th>Minimum</th>
-                            <th>Maximum</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Condition Range 1</th>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Condition Range 2</th>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Condition Range 3</th>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div> --}}
+
 {{-- Button --}}
 <div class="app-page-title">
     <div class="page-title-wrapper">

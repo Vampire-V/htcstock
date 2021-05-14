@@ -7,10 +7,6 @@
             placeholder: 'Select Template...',
             allowClear: true
         });
-        $("#mainRule").select2({
-            placeholder: 'Select Main Rule...',
-            allowClear: true
-        });
 
         $("#rule-name").select2({
             placeholder: 'Select RuleTemplate',

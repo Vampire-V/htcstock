@@ -15,7 +15,6 @@ var calculate = {
 
 class EvaluateForm {
     constructor(template = null,
-        mainRule = null,
         minone = 0,
         maxone = 0,
         mintwo = 0,
@@ -33,7 +32,6 @@ class EvaluateForm {
         remove = [],
         next = false, ) {
         this.template = template
-        this.mainRule = mainRule
         this.minone = minone
         this.maxone = maxone
         this.mintwo = mintwo
@@ -83,7 +81,6 @@ class EvaluateDetail {
 var setEvaluate = (datas) => {
     var evaluateForm = new EvaluateForm()
     evaluateForm.template = datas.template_id
-    evaluateForm.mainRule = datas.main_rule_id
     evaluateForm.minone = datas.main_rule_condition_1_min
     evaluateForm.maxone = datas.main_rule_condition_1_max
     evaluateForm.mintwo = datas.main_rule_condition_2_min
@@ -188,12 +185,8 @@ var displayDetail = (evaluateForm) => {
 
             if (table.id === "table-calculation") {
                 let body_cal = table.tBodies[0].rows
-                let main_rule = evaluateForm.detail.find(value => value.rule_id === evaluateForm.mainRule)
                 let sum_total = 0.00
-                // table.offsetParent.firstElementChild.querySelector('#mainRule')
-                document.getElementById('mainRule').value = main_rule.rules.name
                 // table.offsetParent.firstElementChild.querySelector('#Cal')
-                document.getElementById('Cal').value = parseFloat(main_rule.cal).toFixed(2) + '%'
                 for (let index = 0; index < body_cal.length; index++) {
                     const row = body_cal[index]
                     row.cells[1].textContent = weightForSum[index].toFixed(2) + '%'
@@ -271,23 +264,6 @@ var displayDetail = (evaluateForm) => {
                     removeAllChildNodes(table.tBodies[0])
                     table.offsetParent.querySelector('.card-title').textContent = table.id.substring(6)
                 }
-            } else {
-                let select = document.getElementById('mainRule')
-                // table.offsetParent.querySelector('#mainRule') 
-                if (select) {
-                    removeAllChildNodes(select)
-                    if (evaluateForm.detail.length > 0) {
-                        select.add(new Option('', '', false, false))
-                        for (let k = 0; k < evaluateForm.detail.length; k++) {
-                            const element = evaluateForm.detail[k];
-                            if (evaluateForm.mainRule === element.rule_id) {
-                                select.add(new Option(element.rules.name, element.rule_id, false, true))
-                            } else {
-                                select.add(new Option(element.rules.name, element.rule_id, false, false))
-                            }
-                        }
-                    }
-                }
             }
         }
 
@@ -350,7 +326,6 @@ const validityForm = () => {
 // kpi Evaluate-Form Update
 var setEvaluateForm = (evaluate) => {
     evaluateForm.template = evaluate.template_id
-    evaluateForm.mainRule = evaluate.main_rule_id
     evaluateForm.minone = evaluate.main_rule_condition_1_min
     evaluateForm.maxone = evaluate.main_rule_condition_1_max
     evaluateForm.mintwo = evaluate.main_rule_condition_2_min
@@ -399,9 +374,6 @@ var formulaRuleDetail = (e, key) => {
         foot.lastElementChild.cells[foot.lastElementChild.childElementCount - 2].textContent = parseFloat(sumAch).toFixed(2) + '%'
 
         // Calculation Summary
-        if (evaluateForm.mainRule === evaluateForm.detail[key].rule_id) {
-            document.getElementById('Cal').value = parseFloat(evaluateForm.detail[key].cal).toFixed(2) + '%'
-        }
         let table = document.getElementById('table-calculation')
         let body = table.tBodies[0].rows
         let total_summary = 0.00

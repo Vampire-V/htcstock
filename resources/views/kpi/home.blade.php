@@ -26,7 +26,7 @@
             <label for="ForYear" class="mr-sm-2">Year</label>
             <div class="d-inline-block dropdown">
                 <form class="needs-validation" novalidate method="get" id="form-search">
-                    <select class="form-control form-control-sm" name="year" id="year" onchange="test()">
+                    <select class="form-control form-control-sm" name="year" id="year" onchange="search()">
                         @foreach (range(date('Y')-5,date('Y')+5) as $year)
                         <option value="{{$year}}" @if (intVal($selectedYear)===$year) selected @endif>
                             {{$year}}</option>
@@ -34,8 +34,7 @@
                     </select>
                 </form>
                 <script>
-                    function test() {
-                        console.log(document.forms);
+                    function search() {
                         document.forms['form-search'].submit();
                     }
                 </script>
@@ -213,16 +212,17 @@
                             <thead>
                                 <tr>
                                     <th rowspan="2" style="vertical-align : middle;">#</th>
-                                    <th rowspan="2" style="vertical-align : middle;">full name</th>
+                                    <th rowspan="2" style="vertical-align : middle;">Department</th>
+                                    <th rowspan="2" style="vertical-align : middle;">Full Name</th>
                                     @isset($periods)
-                                    @foreach ($periods as $item)
-                                    <th colspan="2">{{$item->name}}</th>
+                                    @foreach ($periods as $period)
+                                    <th colspan="2">{{$period->name}}</th>
                                     @endforeach
                                     @endisset
                                 </tr>
                                 <tr>
                                     @isset($periods)
-                                    @foreach ($periods as $item)
+                                    @foreach ($periods as $period)
                                     <th>target</th>
                                     <th>actual</th>
                                     @endforeach
@@ -234,6 +234,7 @@
                                 @foreach ($users as $key => $user)
                                 <tr>
                                     <th>{{$key+1}}</th>
+                                    <td class="truncate" data-toggle="tooltip" title="{{$user->department->name}}">{{$user->department->name}}</td>
                                     <td class="truncate" data-toggle="tooltip" title="{{$user->name}}">{{ $user->name }}</td>
                                     @isset($user->total)
                                     @foreach ($user->total as $total)

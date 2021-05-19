@@ -78,7 +78,7 @@ class EvaluationFormController extends Controller
             $user = $this->userService->find($staff);
             $period = $this->targetPeriodService->find($period);
             $category = $this->categoryService->all();
-            $templates = $this->templateService->dropdown();
+            $templates = $this->templateService->forCreated(\auth()->id());
             $rules = $this->ruleService->dropdown($category->first(function ($value, $key) {
                 return $value->name === "key-task";
             })->id);

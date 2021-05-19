@@ -23,9 +23,14 @@ class StoreTemplatePost extends FormRequest
      */
     public function rules()
     {
-        return [
+        $template = [
             'name' => 'required|unique:kpi_templates|max:255',
             'department_id' => 'required'
         ];
+        if (strpos($this->path(),"dynamic")) {
+            \array_splice($template, 1, 1);
+        }
+        
+        return $template;
     }
 }

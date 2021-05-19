@@ -7,21 +7,27 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\KPI\EvaluateDetailResource;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
+use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
+use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SetActualController extends Controller
 {
-    protected $evaluateDetailService, $departmentService, $targetPeriodService;
+    protected $evaluateDetailService, $departmentService, $targetPeriodService, $categoryService, $ruleService;
     public function __construct(
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
         DepartmentServiceInterface $departmentServiceInterface,
-        TargetPeriodServiceInterface $targetPeriodServiceInterface
+        TargetPeriodServiceInterface $targetPeriodServiceInterface,
+        RuleCategoryServiceInterface $ruleCategoryServiceInterface,
+        RuleServiceInterface $ruleServiceInterface
     ) {
         $this->evaluateDetailService = $evaluateDetailServiceInterface;
         $this->departmentService = $departmentServiceInterface;
         $this->targetPeriodService = $targetPeriodServiceInterface;
+        $this->categoryService = $ruleCategoryServiceInterface;
+        $this->ruleService = $ruleServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -34,13 +40,29 @@ class SetActualController extends Controller
         $selectedYear = empty($request->year) ? date('Y') : $request->year;
         $selectedDept = $request->department;
         $selectedPeriod = $request->period;
+        $selectedCategory = $request->category;
+        $selectedRule = $request->rule;
         $start_year = date('Y', strtotime('-10 years'));
 
         $months = $this->targetPeriodService->dropdown()->unique('name');
         // $years = $months->unique('year');
         $departments = $this->departmentService->dropdown();
+        $categorys = $this->categoryService->dropdown();
+        $rules = $this->ruleService->dropdown();
         $evaluateDetail = EvaluateDetailResource::collection($this->evaluateDetailService->setActualFilter($request));
-        return \view('kpi.SetActual.index', \compact('start_year', 'evaluateDetail', 'selectedYear', 'selectedDept', 'selectedPeriod', 'months', 'departments'));
+        return \view('kpi.SetActual.index', \compact(
+            'start_year',
+            'evaluateDetail',
+            'selectedYear',
+            'selectedDept',
+            'selectedPeriod',
+            'months',
+            'departments',
+            'categorys',
+            'selectedCategory',
+            'rules',
+            'selectedRule'
+        ));
     }
 
     /**

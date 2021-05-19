@@ -4,6 +4,8 @@ namespace App\Http\Controllers\KPI\Template;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\KPI\StoreTemplatePost;
+use App\Http\Resources\KPI\TemplateResource;
+use App\Models\KPI\Template;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
@@ -128,5 +130,31 @@ class TemplateController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_dynamic(StoreTemplatePost $request)
+    {
+        DB::beginTransaction();
+        $fromValue = $request->except(['_token']);
+        try {
+            $template = new Template();
+            $template->name = $request->name;
+            $template->department_id = \auth()->user()->department->id;
+            $template->weight_kpi = 70;
+            $template->weight_key_task = 30;
+            $template->weight_omg = 0;
+            $template->save();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+        DB::commit();
+        return $this->successResponse(new TemplateResource($template), "Created template", 200);
     }
 }

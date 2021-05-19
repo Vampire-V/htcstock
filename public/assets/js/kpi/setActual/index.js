@@ -19,6 +19,15 @@
                 element.cells[10].textContent = cal.toFixed(2) + '%'
             }
         }
+        
+        $("#category").select2({
+            placeholder: 'Select Category',
+            allowClear: true
+        });
+        $("#rule").select2({
+            placeholder: 'Select Rule',
+            allowClear: true
+        });
         $("#period").select2({
             placeholder: 'Select Period',
             allowClear: true

@@ -8,6 +8,7 @@ use App\Services\KPI\Interfaces\TemplateServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TemplateService extends BaseService implements TemplateServiceInterface
 {
@@ -53,6 +54,15 @@ class TemplateService extends BaseService implements TemplateServiceInterface
     {
         try {
             return Template::with('ruleTemplate')->find($template_id);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function forCreated(int $id)
+    {
+        try {
+            return Template::where('user_created', $id)->get();
         } catch (\Throwable $th) {
             throw $th;
         }

@@ -86,12 +86,31 @@
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
         <div class="card-body">
-            <h5 class="card-title">Self Evaluate List</h5>
+            <div class="card-header">
+                <h5 class="card-title">Self Evaluate List</h5>
+                <div class="btn-actions-pane">
+                    <div role="group" class="btn-group-sm btn-group">
+                    </div>
+                </div>
+                <div class="btn-actions-pane-right">
+                    <div role="group" class="btn-group-sm btn-group">
+                        @if (Auth::user()->hasRole('super-admin'))
+                        <a href="{{route('kpi.evaluate.create_new')}}" class="btn-shadow btn btn-info mb-2 mr-2">
+                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="pe-7s-plus"></i>
+                            </span>
+                            Create
+                        </a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
             <div class="table-responsive">
                 <table class="mb-0 table table-sm">
                     <thead>
                         <tr>
-                            <th >#</th>
+                            <th>#</th>
                             <th>Period</th>
                             <th style="width: 10px;">Year</th>
                             <th>Status</th>

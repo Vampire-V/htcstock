@@ -34,6 +34,32 @@
                     <form class="needs-validation" novalidate>
                         <div class="form-row">
                             <div class="col-md-2 mb-2">
+                                <label for="Category">Category</label>
+                                <select name="category" id="category" class="form-control-sm form-control">
+                                    <option value="">Choose...</option>
+                                    @isset($categorys)
+                                    @foreach ($categorys as $category)
+                                    <option value="{{$category->id}}" @if (intval($selectedCategory) === $category->id)
+                                        selected
+                                        @endif>{{$category->name}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <label for="RuleName">Rule Name</label>
+                                <select name="rule" id="rule" class="form-control-sm form-control">
+                                    <option value="">Choose...</option>
+                                    @isset($rules)
+                                    @foreach ($rules as $rule)
+                                    <option value="{{$rule->id}}" @if (intval($selectedRule) === $rule->id)
+                                        selected
+                                        @endif>{{$rule->name}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-2">
                                 <label for="Year">Target Period</label>
                                 <select name="period" id="period" class="form-control-sm form-control">
                                     <option value="">Choose...</option>
@@ -89,7 +115,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Evaluation form</th>
+                                <th>Category</th>
                                 <th>Target Period</th>
                                 <th>Rule Name</th>
                                 <th>Base Line</th>
@@ -106,11 +132,9 @@
                             @foreach ($evaluateDetail as $key => $item)
                             <tr>
                                 <th scope="row">{{$key+1}}</th>
-                                <td>{{$item->evaluate->user->name }} : <span
-                                        class="{{Helper::kpiStatusBadge($item->evaluate->status)}}">{{$item->evaluate->status}}</span>
-                                </td>
+                                <td>{{$item->rule->category->name }}</td>
                                 <td>{{$item->evaluate->targetperiod->name}} {{$item->evaluate->targetperiod->year}}</td>
-                                <td class="truncate">{{$item->rule->name}}</td>
+                                <td class="truncate" data-toggle="tooltip" title="" data-placement="top" data-original-title="{{$item->rule->name}}">{{$item->rule->name}}</td>
                                 <td>{{number_format($item->base_line,2)}}</td>
                                 <td>{{number_format($item->max_result,2)}}</td>
                                 <td>{{number_format($item->weight,2)}}%</td>

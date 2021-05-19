@@ -128,21 +128,21 @@ const putEvaluateReview = (review_evaluation, form) => axios({
     data: form
 })
 
-const putSetActual = (form,id) => axios({
+const putSetActual = (form, id) => axios({
     method: 'PUT',
     responseType: 'json',
     url: `/kpi/set-actual/${id}`,
     data: form
 })
 
-const putSetActualForEddy = (form,id) => axios({
+const putSetActualForEddy = (form, id) => axios({
     method: 'PUT',
     responseType: 'json',
     url: `/kpi/for-eddy/${id}`,
     data: form
 })
 
-const putSetAchForEddy = (form,id) => axios({
+const putSetAchForEddy = (form, id) => axios({
     method: 'PUT',
     responseType: 'json',
     url: `/kpi/for-eddy/${id}/updateAch`,
@@ -153,6 +153,20 @@ const postRuleUpload = (form) => axios({
     method: 'POST',
     responseType: 'json',
     url: `/kpi/rule-list/upload`,
+    data: form
+})
+
+const postTemplate = (from) => axios({
+    method: 'POST',
+    responseType: 'json',
+    url: `/kpi/template/dynamic`,
+    data: from
+})
+
+const postEvaluateSelf = (staff, period, form) => axios({
+    method: 'POST',
+    responseType: 'json',
+    url: `/kpi/self-evaluation/evaluate`,
     data: form
 })
 

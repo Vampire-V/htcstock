@@ -22,6 +22,15 @@ class Template extends Model
         'department_id'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($query) {
+            $query->user_created = auth()->id();
+        });
+    }
+
     // service เรียกใช้ Filter
     public function scopeFilter(Builder $builder, $request)
     {

@@ -102,7 +102,7 @@ class UserService extends BaseService implements UserServiceInterface
     public function evaluationOfYearReport(string $year): Collection
     {
         try {
-            $users = User::with(['evaluates.evaluateDetail'])->whereNotIn('resigned',[1])->orderBy('department_id','desc')->get();
+            $users = User::with(['evaluates.evaluateDetail.rule.category'])->whereNotIn('resigned',[1])->orderBy('department_id','desc')->get();
             $periods = $this->periodService->query()->where('year',$year)->get();
             foreach ($users as $user) {
                 $total = \collect();

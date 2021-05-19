@@ -55,7 +55,7 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
     public function setActualFilter(Request $request)
     {
         try {
-            return EvaluateDetail::with(['evaluate.user', 'evaluate.targetperiod', 'rule'])
+            return EvaluateDetail::with(['evaluate.user', 'evaluate.targetperiod', 'rule.category'])
                 ->whereHas('rule', fn ($query) => $query->where('user_actual', \auth()->id()))
                 ->whereHas('evaluate', fn ($query) => $query->whereNotIn('status', [KPIEnum::approved, KPIEnum::new, KPIEnum::submit]))
                 ->setActualFilter($request)

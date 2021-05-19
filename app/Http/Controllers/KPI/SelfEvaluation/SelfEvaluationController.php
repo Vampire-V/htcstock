@@ -6,30 +6,42 @@ use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\KPI\EvaluateResource;
 use App\Mail\KPI\EvaluationSelfMail;
+use App\Models\KPI\Evaluate;
 use App\Models\KPI\EvaluateDetail;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
+use App\Services\KPI\Interfaces\RuleServiceInterface;
+use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
+use App\Services\KPI\Interfaces\TemplateServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SelfEvaluationController extends Controller
 {
-    protected $evaluateService, $evaluateDetailService, $userService, $categoryService;
+    protected $evaluateService, $evaluateDetailService, $userService, 
+    $categoryService, $templateService, $ruleService, $periodService;
     public function __construct(
         EvaluateServiceInterface $evaluateServiceInterface,
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
         UserServiceInterface $userServiceInterface,
-        RuleCategoryServiceInterface $ruleCategoryServiceInterface
+        RuleCategoryServiceInterface $ruleCategoryServiceInterface,
+        TemplateServiceInterface $templateServiceInterface,
+        RuleServiceInterface $ruleServiceInterface,
+        TargetPeriodServiceInterface $targetPeriodServiceInterface
 
     ) {
         $this->evaluateService = $evaluateServiceInterface;
         $this->evaluateDetailService = $evaluateDetailServiceInterface;
         $this->userService = $userServiceInterface;
         $this->categoryService = $ruleCategoryServiceInterface;
+        $this->templateService = $templateServiceInterface;
+        $this->ruleService = $ruleServiceInterface;
+        $this->periodService = $targetPeriodServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -118,7 +130,7 @@ class SelfEvaluationController extends Controller
                     ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])
                     ->update(['actual' => $value['actual']]);
             }
-            
+
             if ($request->next) {
                 # send mail to Manger
                 if ($evaluate->user->head_id) {
@@ -127,7 +139,7 @@ class SelfEvaluationController extends Controller
                     $message = KPIEnum::submit;
                     $manager = $this->userService->getManager($evaluate->user);
                     Mail::to($manager->email)->send(new EvaluationSelfMail($evaluate));
-                }else{
+                } else {
                     $evaluate->status = KPIEnum::draft;
                     $evaluate->save();
                     $message = KPIEnum::draft . " You don't have a manager!";
@@ -151,5 +163,47 @@ class SelfEvaluationController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create_new()
+    {
+        try {
+            // $user = $this->userService->find($staff);
+            // $period = $this->targetPeriodService->find($period);
+            $months = $this->periodService->dropdown()->unique('name');
+            $years = $months->unique('year');
+            $category = $this->categoryService->dropdown();
+            $templates = $this->templateService->forCreated(\auth()->id());
+            $rules = $this->ruleService->dropdown($category->first(function ($value, $key) {
+                return $value->name === "key-task";
+            })->id);
+            // exit;
+        } catch (\Exception $e) {
+            throw $e;
+            // return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
+        return \view('kpi.SelfEvaluation.create', \compact('templates', 'category', 'rules', 'months', 'years'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_new(Request $request)
+    {
+        try {
+            $evaluate = new Evaluate();
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+        return $this->successResponse(new EvaluateResource($evaluate), "Created evaluate", 200);
     }
 }

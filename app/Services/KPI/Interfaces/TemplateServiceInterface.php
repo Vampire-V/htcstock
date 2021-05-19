@@ -19,4 +19,5 @@ interface TemplateServiceInterface
     public function dropdown(): Collection;
     public function filter(Request $request);
     public function ruleTemplate($template_id);
+    public function forCreated(int $id);
 }

@@ -8,6 +8,7 @@ use App\Models\IT\Transactions;
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\Rule;
 use App\Models\KPI\TargetPeriod;
+use App\Models\KPI\Template;
 use App\Models\Legal\LegalApproval;
 use App\Models\Legal\LegalApprovalDetail;
 use App\Models\Legal\LegalContract;
@@ -95,5 +96,10 @@ trait UserTrait
     public function rule()
     {
         return $this->hasOne(Rule::class)->withDefault();
+    }
+
+    public function template()
+    {
+        return $this->hasOne(Template::class)->withDefault();
     }
 }

@@ -22,6 +22,12 @@ class Template extends Model
         'department_id'
     ];
 
+    protected $casts = [
+        'weight_kpi' => 'float',
+        'weight_key_task' => 'float',
+        'weight_omg' => 'float',
+    ];
+
     protected static function boot()
     {
         parent::boot();

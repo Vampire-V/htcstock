@@ -123,7 +123,6 @@ var displayDetail = (evaluateForm) => {
     let tables = document.getElementsByClassName('app-main__inner')[0].querySelectorAll('table')
     let weightForSum = []
     let achForSum = []
-    // console.log(evaluateForm);
     for (let i = 0; i < tables.length; i++) {
         const table = tables[i]
         let data_category = evaluateForm.detail.filter(value => value.rules.categorys.name === table.id.substring(6))
@@ -131,7 +130,7 @@ var displayDetail = (evaluateForm) => {
         let sum_ach = 0.00
         let sum_cal = 0.00
         if (window.location.pathname.search("self-evaluation") > 0 || window.location.pathname.search("evaluation-review") > 0) {
-            if (table.id !== "table-calculation") {
+            if (table.id === "table-kpi" || table.id === "table-key-task" || table.id === "table-omg") {
                 removeAllChildNodes(table.tBodies[0])
                 for (let index = 0; index < data_category.length; index++) {
                     const element = data_category[index]
@@ -186,7 +185,6 @@ var displayDetail = (evaluateForm) => {
             if (table.id === "table-calculation") {
                 let body_cal = table.tBodies[0].rows
                 let sum_total = 0.00
-                // table.offsetParent.firstElementChild.querySelector('#Cal')
                 for (let index = 0; index < body_cal.length; index++) {
                     const row = body_cal[index]
                     row.cells[1].textContent = weightForSum[index].toFixed(2) + '%'
@@ -398,6 +396,7 @@ var formulaRuleDetail = (e, key) => {
 }
 
 var findAchValue = (obj) => {
+    // console.log(obj.actual , obj.target);
     if (typeof obj === `object`) {
         if (obj.rules.calculate_type === calculate.POSITIVE) {
             ach = parseFloat((obj.actual / obj.target) * 100)
@@ -412,8 +411,7 @@ var findAchValue = (obj) => {
     if (typeof obj === `number`) {
         ach = obj
     }
-
-    return ach
+    return  isNaN(ach) || (ach === Infinity) ? 0.00 : ach
 }
 
 var findCalValue = (obj, ach) => {
@@ -436,8 +434,7 @@ var findCalValue = (obj, ach) => {
         }
         
     }
-
-    return cal
+    return isNaN(cal) || (cal === Infinity) ? 0.00 : cal
 }
 
 /**

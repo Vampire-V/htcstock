@@ -70,6 +70,14 @@
                                 Please provide a valid city.
                             </div>
                         </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="Template">Template</label>
+                            <input type="text" class="form-control form-control-sm" id="Template" placeholder="Template"
+                                value="{{$evaluate->template->name}}" disabled>
+                            <div class="invalid-feedback">
+                                Please provide a valid city.
+                            </div>
+                        </div>
                     </div>
                     <div class="form-row">
 

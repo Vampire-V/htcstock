@@ -134,28 +134,6 @@
     <div class="main-card mb-3 card">
         <div class="card-body">
             <h5 class="card-title">Calculation Summary</h5>
-            <div class="position-relative form-group">
-                <form class="needs-validation" novalidate>
-                    <div class="form-row">
-                        <div class="col-md-4 mb-3">
-                            <label for="mainRule">Main Rule :</label>
-                            <input type="text" class="form-control form-control-sm" id="mainRule"
-                                placeholder="Main Rule" value="" readonly>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="Cal">%Cal :</label>
-                            <input type="text" class="form-control form-control-sm" id="Cal" placeholder="%Cal" value=""
-                                readonly>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
             <div class="table-responsive">
                 <table class="mb-0 table table-sm" id="table-calculation">
                     <thead>

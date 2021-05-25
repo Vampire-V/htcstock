@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="page-title-actions">
-            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
+            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom" onclick="show_summary()"
                 class="btn-shadow mr-3 btn btn-dark">
                 <i class="fa fa-star"></i>
             </button>
@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="position-relative form-group">
-                <form class="needs-validation" novalidate>
+                <form class="needs-validation" id="create-evaluate" novalidate>
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="staffName">Staff Name</label>
@@ -111,7 +111,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="Year">Period Name</label>
-                            <select name="period" id="period" class="form-control-sm form-control">
+                            <select name="period" id="period" class="form-control-sm form-control" required>
                                 <option value="">Choose...</option>
                                 @isset($months)
                                 @foreach ($months as $month)
@@ -120,10 +120,16 @@
                                 @endforeach
                                 @endisset
                             </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid Period.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
                         </div>
-                        <div class="col-md-3 mb-2">
+                        <div class="col-md-4 mb-3">
                             <label for="Year">Year</label>
-                            <select name="year" id="year" class="form-control-sm form-control">
+                            <select name="year" id="year" class="form-control-sm form-control" required>
                                 <option value=""></option>
                                 @isset($years)
                                 @foreach ($years as $year)
@@ -132,6 +138,12 @@
                                 @endforeach
                                 @endisset
                             </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid Year.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -139,9 +151,10 @@
         </div>
     </div>
 </div>
+
 <div class="collapse" id="collapseExample123">
     @isset($category)
-    <div id="all-table">
+    <div id="group-table">
         @foreach ($category as $group)
         <div class="col-lg-12">
             <div class="main-card mb-3 card">
@@ -151,17 +164,21 @@
                         <div class="btn-actions-pane">
                             <div role="group" class="btn-group-sm btn-group">
                                 <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
-                                    id="weight-{{$group->name}}" name="weight_{{$group->name}}">
+                                    id="weight-{{$group->name}}" name="weight_{{str_replace("-","_",$group->name)}}"
+                                    readonly> %
                             </div>
                         </div>
                         <div class="btn-actions-pane-right">
                             <div role="group" class="btn-group-sm btn-group">
                                 <button class="mb-2 mr-2 btn btn-danger" id="rule-remove-modal"
-                                    onclick="deleteRuleTemp(this)">Delete Selected
+                                    onclick="removeInSelected(this)">Delete Selected
                                     Rule</button>
+                                {{-- @if ($group->name === "kpi") --}}
                                 <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
                                     data-target="#rule-modal" id="rule-add-modal">Add
                                     New Rule</button>
+                                {{-- @endif --}}
+
                             </div>
                         </div>
                     </div>
@@ -211,19 +228,56 @@
     @endisset
 </div>
 
-
+{{-- Calculation Summary --}}
+<div class="col-lg-12">
+    <div class="main-card mb-3 card">
+        <div class="card-body">
+            <h5 class="card-title">Calculation Summary</h5>
+            <div class="table-responsive">
+                <table class="mb-0 table table-sm" id="table-calculation">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Weight</th>
+                            <th>%Cal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @isset($category)
+                        @foreach ($category as $item)
+                        <tr>
+                            <th>{{$item->name}}</th>
+                            <td>0.00%</td>
+                            <td>0.00%</td>
+                        </tr>
+                        @endforeach
+                        @endisset
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th scope="row">Total</th>
+                            <td>0.00%</td>
+                            <td>0.00%</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {{-- Button --}}
 <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
         </div>
         <div class="page-title-actions">
-            <button class="mb-2 mr-2 btn btn-primary" id="submit" onclick="submit()" disabled>Save</button>
-            {{-- <button class="mb-2 mr-2 btn btn-success" id="submit-to-user" onclick="submitToUser()" disabled>Submit to staff</button> --}}
-            {{-- <button class="mb-2 mr-2 btn btn-danger">Delete</button> --}}
+            <button class="mb-2 mr-2 btn btn-primary" id="submit" onclick="submit()">Save</button>
+            <button class="mb-2 mr-2 btn btn-success" id="submit-to-user" onclick="submitToManager()">Save & Send to
+                manager</button>
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('modal')
@@ -233,7 +287,7 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="rule-modal-label">Add Rule</h5>
+                <h5 class="modal-title" id="rule-modal-label">New Rule</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -243,18 +297,17 @@
                     <input type="hidden" name="parent_rule_template_id" value="">
                     <div class="form-row">
                         <div class="col-md-12">
-                            <div class="position-relative form-group"><label for="rule-name" class="">Rule Name
+                            <div class="position-relative form-group"><label for="rule_name" class="">Rule Name
                                     :</label>
-                                <select id="rule-name" class="form-control form-control-sm" name="rule_id_add">
-                                </select>
-                            </div>
+                                <select id="rule_name" class="form-control form-control-sm" name="rule_name">
+                                </select></div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="addKeyTask(this)">Add</button>
+                <button type="button" class="btn btn-primary" onclick="addRule(this)">Add</button>
             </div>
         </div>
     </div>
@@ -271,6 +324,8 @@
 <script defer>
     // variable
 </script>
-<script src="{{asset('assets\js\kpi\evaluationSelf\create.js')}}" defer>  // new form object evaluateForm </script>
+<script src="{{asset('assets\js\kpi\evaluationSelf\create.js')}}" defer>
+    // new form object evaluateForm 
+</script>
 
 @endsection

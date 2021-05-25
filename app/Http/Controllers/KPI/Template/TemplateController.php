@@ -95,7 +95,14 @@ class TemplateController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $template = $this->templateService->find($id);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+        DB::commit();
+        return $this->successResponse(new TemplateResource($template), "find template", 200);
     }
 
     /**
@@ -141,7 +148,6 @@ class TemplateController extends Controller
     public function store_dynamic(StoreTemplatePost $request)
     {
         DB::beginTransaction();
-        $fromValue = $request->except(['_token']);
         try {
             $template = new Template();
             $template->name = $request->name;

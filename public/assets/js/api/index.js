@@ -10,6 +10,17 @@ function json(response) {
     return response.json()
 }
 
+const validationFormApi = (forms) => {
+    let result = true
+    Array.prototype.filter.call(forms, function (form) {
+        if (form.checkValidity() === false) {
+            result = false
+        }
+        form.offsetParent.classList.add('was-validated')
+    })
+    return result
+}
+
 
 const getAccessoriesId = id => fetch("/api/accessorie/" + id + "/checkstock").then(status).then(json)
 // const getAccessoriesAvailable = () => fetch("/accessorie/available").then(status).then(json)
@@ -163,11 +174,21 @@ const postTemplate = (from) => axios({
     data: from
 })
 
-const postEvaluateSelf = (staff, period, form) => axios({
+const postEvaluateSelf = (period, year, form) => axios({
     method: 'POST',
     responseType: 'json',
     url: `/kpi/self-evaluation/evaluate`,
-    data: form
+    data: {
+        'period': period,
+        'year': year,
+        'form': form
+    }
+})
+
+const getTemplate = (id) => axios({
+    method: 'GET',
+    responseType: 'json',
+    url: `/kpi/template/${id}`
 })
 
 const postUploadFile = (form, config) => axios.post('/upload', form, config)

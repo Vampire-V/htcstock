@@ -12,9 +12,9 @@
 
     <!-- Scripts -->
     {{-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" defer></script> --}}
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    {{-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"
-        defer></script>
+        defer></script> --}}
 
     <script src="https://unpkg.com/axios/dist/axios.min.js" defer></script>
     <script src="{{ asset('assets/js/template/app.js') }}" defer></script>
@@ -54,6 +54,7 @@
             <div id="loading"></div>
         </div>
     </div>
+    @yield('modal')
     <!-- JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
@@ -74,4 +75,3 @@
 
 </html>
 
-@yield('modal')

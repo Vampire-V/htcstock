@@ -7,12 +7,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\KPI\EvaluateResource;
 use App\Mail\KPI\EvaluationSelfMail;
 use App\Models\KPI\Evaluate;
-use App\Models\KPI\EvaluateDetail;
+use App\Models\KPI\RuleTemplate;
+use App\Models\User;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
+use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
 use Illuminate\Http\Request;
@@ -23,8 +25,9 @@ use Illuminate\Support\Facades\Mail;
 
 class SelfEvaluationController extends Controller
 {
-    protected $evaluateService, $evaluateDetailService, $userService, 
-    $categoryService, $templateService, $ruleService, $periodService;
+    protected $evaluateService, $evaluateDetailService, $userService,
+        $categoryService, $templateService, $ruleService, $periodService,
+        $ruleTemplateService;
     public function __construct(
         EvaluateServiceInterface $evaluateServiceInterface,
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
@@ -32,7 +35,8 @@ class SelfEvaluationController extends Controller
         RuleCategoryServiceInterface $ruleCategoryServiceInterface,
         TemplateServiceInterface $templateServiceInterface,
         RuleServiceInterface $ruleServiceInterface,
-        TargetPeriodServiceInterface $targetPeriodServiceInterface
+        TargetPeriodServiceInterface $targetPeriodServiceInterface,
+        RuleTemplateServiceInterface $ruleTemplateServiceInterface
 
     ) {
         $this->evaluateService = $evaluateServiceInterface;
@@ -42,6 +46,7 @@ class SelfEvaluationController extends Controller
         $this->templateService = $templateServiceInterface;
         $this->ruleService = $ruleServiceInterface;
         $this->periodService = $targetPeriodServiceInterface;
+        $this->ruleTemplateService = $ruleTemplateServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -180,13 +185,9 @@ class SelfEvaluationController extends Controller
             $years = $months->unique('year');
             $category = $this->categoryService->dropdown();
             $templates = $this->templateService->forCreated(\auth()->id());
-            $rules = $this->ruleService->dropdown($category->first(function ($value, $key) {
-                return $value->name === "key-task";
-            })->id);
-            // exit;
+            $rules = $this->ruleService->dropdown($category->first(fn ($value, $key) => $value->name === "key-task")->id);
         } catch (\Exception $e) {
-            throw $e;
-            // return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.SelfEvaluation.create', \compact('templates', 'category', 'rules', 'months', 'years'));
     }
@@ -199,11 +200,80 @@ class SelfEvaluationController extends Controller
      */
     public function store_new(Request $request)
     {
+        DB::beginTransaction();
         try {
+            $form = \json_decode(json_encode($request->form));
+            $period = $this->periodService->query()->where('name', $request->period)->where('year', $request->year)->first();
+
+            RuleTemplate::with('rule')->where('template_id', $form->template)->delete();
+            
+            RuleTemplate::insert($this->new_rule_template($form));
+            $status = $form->next ? KPIEnum::submit : KPIEnum::ready;
+            $manager = User::where('username', \auth()->user()->head_id)->first();
+
             $evaluate = new Evaluate();
+            $evaluate->user_id = \auth()->id();
+            $evaluate->period_id = $period->id;
+            $evaluate->head_id = $manager->id ?? null;
+            $evaluate->status = $status;
+            $evaluate->template_id = $form->template;
+            $evaluate->total_weight_kpi = $form->total_weight_kpi;
+            $evaluate->total_weight_key_task = $form->total_weight_key_task;
+            $evaluate->total_weight_omg = $form->total_weight_omg;
+            $evaluate->save();
+            $evaluate->evaluateDetail()->createMany($this->new_evaluate_detail($form));
+            $evaluate->save();
         } catch (\Exception $e) {
+            DB::rollBack();
             return $this->errorResponse($e->getMessage(), 500);
         }
+        DB::commit();
         return $this->successResponse(new EvaluateResource($evaluate), "Created evaluate", 200);
+    }
+
+    private function new_rule_template($value)
+    {
+        $result = [];
+        try {
+            for ($i = 0; $i < count($value->detail); $i++) {
+                $element = $value->detail[$i];
+                $template_id = $value->template;
+                $rule_id = $element->rule_id;
+                $weight = $element->weight;
+                $weight_category = $element->weight_category;
+                // $parent_rule_template_id = $element->weight;
+                $target_config = $element->target;
+                $base_line = $element->base_line;
+                $max_result = $element->max;
+                $created_at = \now();
+                $updated_at = \now();
+                $result[] = \compact('template_id', 'rule_id', 'weight', 'weight_category', 'target_config', 'base_line', 'max_result', 'created_at', 'updated_at');
+            }
+            return $result;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    private function new_evaluate_detail($value)
+    {
+        $result = [];
+        try {
+            for ($i = 0; $i < count($value->detail); $i++) {
+                $element = $value->detail[$i];
+
+                $rule_id = $element->rule_id;
+                $target = $element->target;
+                $actual = $element->actual;
+                $weight = $element->weight;
+                $weight_category = $element->weight_category;
+                $base_line = $element->base_line;
+                $max_result = $element->max;
+                $result[] = \compact('rule_id', 'target', 'actual', 'weight', 'weight_category', 'base_line', 'max_result');
+            }
+            return $result;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

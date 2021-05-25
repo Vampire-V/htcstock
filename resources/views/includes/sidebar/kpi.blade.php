@@ -72,7 +72,7 @@
                         Rule List
                     </a>
                 </li>
-                <li>
+                {{-- <li>
                     <a href="{{route('kpi.template.index')}}" class="{{Helper::isActive('kpi/template*')}}">
                         <i class="metismenu-icon pe-7s-box1"></i>
                         Rule Template
@@ -83,7 +83,7 @@
                         <i class="metismenu-icon pe-7s-folder"></i>
                         Evaluation Form
                     </a>
-                </li>
+                </li> --}}
                 @endcan
                 {{-- end admin --}}
                 {{-- admin manager --}}

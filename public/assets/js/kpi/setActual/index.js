@@ -18,6 +18,7 @@
                 element.cells[9].textContent = ach.toFixed(2) + '%'
                 element.cells[10].textContent = cal.toFixed(2) + '%'
             }
+            $('[data-toggle="tooltip"]').tooltip()
         }
         
         $("#category").select2({

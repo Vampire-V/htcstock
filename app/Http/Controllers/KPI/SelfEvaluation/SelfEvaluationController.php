@@ -133,7 +133,16 @@ class SelfEvaluationController extends Controller
             foreach ($request->detail as $value) {
                 $evaluate->evaluateDetail()
                     ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])
-                    ->update(['actual' => $value['actual']]);
+                    ->update(
+                        [
+                            'target' => $value['target'],
+                            'actual' => $value['actual'],
+                            'weight' => $value['weight'],
+                            'weight_category' => $value['weight_category'],
+                            'base_line' => $value['base_line'],
+                            'max_result' => $value['max']
+                        ]
+                    );
             }
 
             if ($request->next) {
@@ -206,7 +215,7 @@ class SelfEvaluationController extends Controller
             $period = $this->periodService->query()->where('name', $request->period)->where('year', $request->year)->first();
 
             RuleTemplate::with('rule')->where('template_id', $form->template)->delete();
-            
+
             RuleTemplate::insert($this->new_rule_template($form));
             $status = $form->next ? KPIEnum::submit : KPIEnum::ready;
             $manager = User::where('username', \auth()->user()->head_id)->first();
@@ -223,12 +232,28 @@ class SelfEvaluationController extends Controller
             $evaluate->save();
             $evaluate->evaluateDetail()->createMany($this->new_evaluate_detail($form));
             $evaluate->save();
+
+            if ($form->next) {
+                # send mail to Manger
+                if ($evaluate->user->head_id) {
+                    $evaluate->status = KPIEnum::submit;
+                    $evaluate->save();
+                    $message = KPIEnum::submit;
+                    $manager = $this->userService->getManager($evaluate->user);
+                    Mail::to($manager->email)->send(new EvaluationSelfMail($evaluate));
+                } else {
+                    $evaluate->status = KPIEnum::draft;
+                    $evaluate->save();
+                    $message = KPIEnum::draft . " You don't have a manager!";
+                    // $evaluate->user->head_id is null
+                }
+            }
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return $this->successResponse(new EvaluateResource($evaluate), "Created evaluate", 200);
+        return $this->successResponse(new EvaluateResource($evaluate), "Created evaluate status: " . $message, 200);
     }
 
     private function new_rule_template($value)

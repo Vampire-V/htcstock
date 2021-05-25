@@ -20,7 +20,7 @@ class EvaluateDetailResource extends JsonResource
             'evaluate' => $this->evaluate,
             'rule_id' => $this->rule_id,
             'target' => $this->target,
-            'actual' => number_format($this->actual,2),
+            'actual' => $this->actual,
             'weight' => $this->weight,
             'weight_category' => $this->weight_category,
             'base_line' => $this->base_line,

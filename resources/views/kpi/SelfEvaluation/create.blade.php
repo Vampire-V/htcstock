@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="page-title-actions">
-            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom" onclick="show_summary()"
+            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
                 class="btn-shadow mr-3 btn btn-dark">
                 <i class="fa fa-star"></i>
             </button>

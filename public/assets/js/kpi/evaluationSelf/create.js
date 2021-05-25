@@ -208,10 +208,6 @@ var render_html = () => {
     summary_table.tFoot.rows[0].cells[1].textContent = `${sum_weight.toFixed(2)} %`
 }
 
-var show_summary = () => {
-    console.log(summary)
-}
-
 var getDataByTemplate = (template_id) => {
     setVisible(true)
     getRuleTemplate(template_id)
@@ -229,25 +225,6 @@ var getDataByTemplate = (template_id) => {
             setVisible(false)
             toastClear()
             render_html()
-        })
-}
-
-// dropdown
-const setDropdowToModal = (group, modal) => {
-    let select = modal.find('.modal-body #rule_name')[0]
-    getRuleDropdown(group)
-        .then(res => {
-            if (res.status === 200) {
-                rule = res.data.data.filter(item => !evaluateForm.detail.map(r => r.rule_id).includes(item.id))
-                for (let index = 0; index < rule.length; index++) {
-                    const element = rule[index]
-                    select.add(new Option(element.name, element.id, false, false))
-                }
-            }
-        })
-        .catch(error => {
-            toast(error.response.data.message, error.response.data.status)
-            console.log(error.response.data)
         })
 }
 
@@ -283,20 +260,22 @@ const submitToManager = () => {
     if (validation) {
         setVisible(true)
         evaluateForm.next = true
-        postEvaluateForm(staff.id, period.id, evaluateForm).then(res => {
-            if (res.status === 201) {
-                toast(res.data.message, res.data.status)
-                setTimeout(function () {
-                    window.location.replace(`${origin}${window.location.pathname.replace("create",res.data.data.id)}/edit`)
-                }, 3000)
-            }
-        }).catch(error => {
-            toast(error.response.data.message, error.response.data.status)
-        }).finally(() => {
-            setVisible(false)
-            evaluateForm.next = false
-            toastClear()
-        })
+        postEvaluateSelf($("#period").val(), $("#year").val(), evaluateForm)
+            .then(async res => {
+                console.log(res)
+                if (res.status === 200) {
+                    toast(res.data.message, res.data.status)
+                    setTimeout(function () {
+                        window.location.replace(`${origin}${window.location.pathname.replace("evaluate",res.data.data.id)}/edit`)
+                    }, 3000)
+                }
+            }).catch(error => {
+                toast(error.response.data.message, error.response.data.status)
+            }).finally(() => {
+                setVisible(false)
+                evaluateForm.next = false
+                toastClear()
+            })
     }
 }
 
@@ -378,12 +357,6 @@ const changeValue = (e) => {
     })
 }
 
-const sumary_table = () => {
-
-    // table.tfoot.rows[0].cells[2].textContent = `${total.toFixed(2)} %`
-}
-
-
 // modal method
 
 $('#rule-modal').on('show.bs.modal', function (event) {
@@ -407,6 +380,25 @@ $('#rule-modal').on('hide.bs.modal', function (event) {
     removeAllChildNodes(modal.find('.modal-body #rule_name')[0])
     rule = []
 })
+
+// dropdown
+const setDropdowToModal = (group, modal) => {
+    let select = modal.find('.modal-body #rule_name')[0]
+    getRuleDropdown(group)
+        .then(res => {
+            if (res.status === 200) {
+                rule = res.data.data.filter(item => !evaluateForm.detail.map(r => r.rule_id).includes(item.id))
+                for (let index = 0; index < rule.length; index++) {
+                    const element = rule[index]
+                    select.add(new Option(element.name, element.id, false, false))
+                }
+            }
+        })
+        .catch(error => {
+            toast(error.response.data.message, error.response.data.status)
+            console.log(error.response.data)
+        })
+}
 
 const addRule = (e) => {
     let rule_name = document.getElementById('rule_name')

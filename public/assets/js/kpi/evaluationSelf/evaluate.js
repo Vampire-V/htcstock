@@ -98,8 +98,9 @@ var render_html = () => {
 
                 let cellActual = newRow.insertCell()
                 // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
-                // let readonly = auth === element.rules.user_actual.id || window.location.pathname.includes("evaluation-review") ? false : true
-                cellActual.appendChild(newInput('number', className, 'actual', element.actual, '', `changeValue(this)`))
+                let readonly = auth.id === element.rules.user_actual.id || auth.roles.find(item => item.slug === `admin-kpi`) ? false : true
+                console.log(readonly);
+                cellActual.appendChild(newInput('number', className, 'actual', element.actual, '', `changeValue(this)`,readonly))
 
                 let cellAch = newRow.insertCell()
                 element.ach = findAchValue(element)

@@ -10,6 +10,7 @@ use App\Http\Resources\KPI\RuleResource;
 use App\Imports\KPI\RulesImport;
 use App\Models\TemporaryFile;
 use App\Services\IT\Interfaces\UserServiceInterface;
+use App\Services\IT\Service\DepartmentService;
 use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\RuleTypeServiceInterface;
@@ -25,19 +26,21 @@ class RuleController extends Controller
 {
 
     protected $ruleCategoryService, $targetUnitService, $ruleService, $ruleTypeService, $userService,
-        $excel_errors = [], $rule_attrs = [];
+        $departmentService, $excel_errors = [], $rule_attrs = [];
     public function __construct(
         RuleCategoryServiceInterface $ruleCategoryServiceInterface,
         TargetUnitServiceInterface $targetUnitServiceInterface,
         RuleServiceInterface $ruleServiceInterface,
         RuleTypeServiceInterface $ruleTypeServiceInterface,
-        UserServiceInterface $userServiceInterface
+        UserServiceInterface $userServiceInterface,
+        DepartmentService $departmentServiceInterface
     ) {
         $this->ruleCategoryService = $ruleCategoryServiceInterface;
         $this->targetUnitService = $targetUnitServiceInterface;
         $this->ruleService = $ruleServiceInterface;
         $this->ruleTypeService = $ruleTypeServiceInterface;
         $this->userService = $userServiceInterface;
+        $this->departmentService = $departmentServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -73,7 +76,8 @@ class RuleController extends Controller
         $rulesType = $this->ruleTypeService->dropdown();
         $users = $this->userService->dropdown();
         $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
-        return \view('kpi.RuleList.create', \compact('category', 'unit', 'calcuTypes', 'rulesType', 'users'));
+        $departments = $this->departmentService->dropdown();
+        return \view('kpi.RuleList.create', \compact('category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments'));
     }
 
     /**
@@ -87,7 +91,8 @@ class RuleController extends Controller
         DB::beginTransaction();
         $fromValue = $request->except(['_token']);
         try {
-            if (!$this->ruleService->create($fromValue)) {
+            $rule = $this->ruleService->create($fromValue);
+            if (!$rule) {
                 $request->session()->flash('error', ' has been create fail');
                 return \back();
             }
@@ -97,7 +102,7 @@ class RuleController extends Controller
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
-        return \back();
+        return \redirect()->route('kpi.rule-list.edit',$rule->id);
     }
 
     /**
@@ -131,10 +136,11 @@ class RuleController extends Controller
             $unit = $this->targetUnitService->dropdown();
             $rulesType = $this->ruleTypeService->dropdown();
             $users = $this->userService->dropdown();
+            $departments = $this->departmentService->dropdown();
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.RuleList.edit', \compact('rule', 'category', 'unit', 'calcuTypes', 'rulesType', 'users'));
+        return \view('kpi.RuleList.edit', \compact('rule', 'category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments'));
     }
 
     /**

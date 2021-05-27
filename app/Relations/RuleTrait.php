@@ -52,4 +52,9 @@ trait RuleTrait
     {
         return $this->belongsTo(KpiRuleType::class, 'kpi_rule_types_id')->withDefault();
     }
+
+    public function department()
+    {
+        return $this->belongsTo(KpiRuleType::class, 'department_id')->withDefault();
+    }
 }

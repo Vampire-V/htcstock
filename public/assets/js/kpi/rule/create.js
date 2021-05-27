@@ -19,6 +19,11 @@
             placeholder: 'Select agreements',
             allowClear: true
         });
+        $("#validationDataSources").select2({
+            placeholder: 'Select DataSources',
+            allowClear: true
+        });
+        
     })
 
     window.addEventListener('load', function () {

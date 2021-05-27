@@ -37,7 +37,12 @@
                     @csrf
                     @method('PUT')
                     <div class="form-row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-4">
+                            <label for="ruleName">Rule Name :</label>
+                            <input type="text" class="form-control form-control-sm" id="ruleName"
+                                placeholder="Rule Name" value="{{$rule->name}}" name="name" required>
+                        </div>
+                        <div class="col-md-4">
                             <label for="ruleCategory">Rule Category :</label>
                             <select id="validationRuleCategory" class="form-control-sm form-control" name="category_id"
                                 required>
@@ -58,19 +63,7 @@
                                 Looks good!
                             </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="ruleName">Rule Name :</label>
-                            <input type="text" class="form-control form-control-sm" id="ruleName"
-                                placeholder="Rule Name" value="{{$rule->name}}" name="name" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="description">Description :</label>
-                            <input type="text" class="form-control form-control-sm" id="description"
-                                placeholder="Description" value="{{$rule->description}}" name="description">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-4">
                             <label for="mesurement">Rule Type :</label>
                             <select id="validationRuleType" class="form-control-sm form-control"
                                 name="kpi_rule_types_id" required>
@@ -90,7 +83,9 @@
                                 Looks good!
                             </div>
                         </div>
-                        <div class="col-md-4 mb-3">
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4">
                             <label for="targetUnit">User actual :</label>
                             <select id="validationUserActual" class="form-control-sm form-control" name="user_actual"
                                 required>
@@ -110,7 +105,7 @@
                                 Looks good!
                             </div>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-4">
                             <div class="position-relative form-group"><label for="Calculate-type" class="">Calculate
                                     Type
                                     :</label>
@@ -119,7 +114,7 @@
                                     <option value="">Choose...</option>
                                     @isset($calcuTypes)
                                     @foreach ($calcuTypes as $item)
-                                    <option value="{{$item}}" @if ($item === $rule->calculate_type)
+                                    <option value="{{$item}}" @if ($item===$rule->calculate_type)
                                         selected
                                         @endif>
                                         {{$item}}</option>
@@ -134,10 +129,57 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="position-relative form-group"><label for="DataSources" class="">DataSources
+                                    :</label>
+                                <select id="validationDataSources" class="form-control form-control-sm"
+                                    name="department_id" required>
+                                    <option value="">Choose...</option>
+                                    @isset($departments)
+                                    @foreach ($departments as $department)
+                                    <option value="{{$department->id}}" @if ($department->id===$rule->department_id)
+                                        selected
+                                        @endif>
+                                        {{$department->name}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Data Sources
+                                </div>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-md-4 mb-3">
-                            <button class="mb-2 mr-2 btn btn-success">Save</button>
+                        <div class="col-md-4">
+                            <label for="BaseLine">Base Line :</label>
+                            <input type="number" class="form-control form-control-sm" id="base_line"
+                                value="{{$rule->base_line}}" name="base_line" min="0.00" step="0.01" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="Max">Max :</label>
+                            <input type="number" class="form-control form-control-sm" id="max"
+                                value="{{$rule->max}}" name="max" min="0.00" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <label for="description">Detinition :</label>
+                            <textarea class="form-control form-control-sm" id="description" name="description"
+                                rows="3">{{$rule->description}}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="CalculationMachianism">Calculation Machianism :</label>
+                            <textarea class="form-control form-control-sm" id="CalculationMachianism"
+                                name="desc_m" rows="3">{{$rule->desc_m}}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3 mt-2">
+                            <button class="mb-2 mr-2 mt-2 btn btn-success">Save</button>
                         </div>
                     </div>
                 </form>

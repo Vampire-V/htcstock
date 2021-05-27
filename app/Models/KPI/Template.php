@@ -3,7 +3,6 @@
 namespace App\Models\KPI;
 
 use App\Http\Filters\KPI\TemplateFilter;
-use App\Models\Department;
 use App\Relations\TemplateTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +18,11 @@ class Template extends Model
      */
     protected $fillable = [
         'name',
-        'department_id'
+        'department_id',
+        'user_created',
+        'weight_kpi',
+        'weight_key_task',
+        'weight_omg'
     ];
 
     protected $casts = [
@@ -34,6 +37,9 @@ class Template extends Model
 
         static::creating(function ($query) {
             $query->user_created = auth()->id();
+            $query->weight_kpi = 70;
+            $query->weight_key_task = 30;
+            $query->weight_omg = 0;
         });
     }
 

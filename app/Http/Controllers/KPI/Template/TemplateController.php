@@ -152,9 +152,6 @@ class TemplateController extends Controller
             $template = new Template();
             $template->name = $request->name;
             $template->department_id = \auth()->user()->department->id;
-            $template->weight_kpi = 70;
-            $template->weight_key_task = 30;
-            $template->weight_omg = 0;
             $template->save();
         } catch (\Exception $e) {
             DB::rollBack();

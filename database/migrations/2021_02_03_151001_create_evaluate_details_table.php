@@ -17,12 +17,12 @@ class CreateEvaluateDetailsTable extends Migration
             $table->id();
             $table->foreignId('evaluate_id')->nullable()->constrained('kpi_evaluates')->comment('Id ของ evaluates');
             $table->unsignedInteger('rule_id')->nullable()->comment('Id ของ rule ได้มาจาก template');
-            $table->decimal('target', 13, 2)->nullable()->comment('ค่า target');
-            $table->decimal('actual', 13, 2)->nullable()->comment('ค่า actual');
-            $table->decimal('weight', 5, 2)->nullable()->comment('ค่าถ่วงน้ำหนัก');
-            $table->decimal('weight_category', 5, 2)->nullable()->comment('ค่าถ่วงน้ำหนักของ Category');
-            $table->decimal('base_line', 13, 2)->nullable()->comment('ค่า Base Line');
-            $table->decimal('max_result', 13, 2)->nullable()->comment('ผลลัพธ์สูงสุด');
+            $table->decimal('target', 13, 2)->default(0)->comment('ค่า target');
+            $table->decimal('actual', 13, 2)->default(0)->comment('ค่า actual');
+            $table->decimal('weight', 5, 2)->default(0)->comment('ค่าถ่วงน้ำหนัก');
+            $table->decimal('weight_category', 5, 2)->default(0)->comment('ค่าถ่วงน้ำหนักของ Category');
+            $table->decimal('base_line', 13, 2)->default(0)->comment('ค่า Base Line');
+            $table->decimal('max_result', 13, 2)->default(0)->comment('ผลลัพธ์สูงสุด');
             $table->timestamps();
         });
     }

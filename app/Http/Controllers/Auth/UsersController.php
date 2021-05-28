@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserPost;
+use App\Models\User;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\IT\Interfaces\DivisionServiceInterface;
 use App\Services\IT\Interfaces\PositionServiceInterface;
@@ -94,13 +95,19 @@ class UsersController extends Controller
     {
         DB::beginTransaction();
         try {
-            if ($this->userService->update($request->except(['_token', '_method']), $id)) {
-                $request->session()->flash('success', $request->name . ' user has been update');
-            } else {
-                $request->session()->flash('error', 'error flash message!');
-            }
+            $profile = User::find($id);
+            $profile->translateOrNew('th')->name = $request['name:th'];
+            $profile->translateOrNew('en')->name = $request['name:en'];
+            $profile->phone = $request->phone;
+            $profile->head_id = $request->head_id;
+            $profile->divisions_id = $request->division;
+            $profile->department_id = $request->department;
+            $profile->positions_id = $request->position;
+            $profile->save();
+            $request->session()->flash('success', $request['name:th'] .' ('.$request['name:en'].') user has been update');
         } catch (\Exception $e) {
             DB::rollBack();
+            $request->session()->flash('error', 'error flash message!');
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();

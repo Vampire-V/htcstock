@@ -28,12 +28,12 @@ class StoreUserPost extends FormRequest
         $rules = [
             'name:th' => 'required|max:255',
             'name:en' => 'required|max:255',
-            'email' => 'required|email:rfc,dns',
-            // 'phone' => 'required',
+            // 'email' => 'required|email:rfc,dns',
+            'phone' => 'required',
             'division' => 'required',
             'department' => 'required',
-            // 'position' => 'required',
-            // 'head_id' => 'required'
+            'position' => 'required',
+            'head_id' => 'required'
         ];
         return $rules;
     }

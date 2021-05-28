@@ -38,9 +38,9 @@ class StaffDataController extends Controller
     public function index(Request $request)
     {
         $query = $request->all();
-        $selectDepartment = \collect($request->department);
-        $selectPosition = \collect($request->position);
-        $selectDivision = \collect($request->division);
+        $selectDepartment = \collect($request->department ?? \auth()->user()->department_id);
+        $selectPosition = \collect($request->position ?? \auth()->user()->positions_id);
+        $selectDivision = \collect($request->division ?? \auth()->user()->divisions_id);
         try {
             $users = $this->userService->filter($request);
             $divisions = $this->divisionService->dropdown();

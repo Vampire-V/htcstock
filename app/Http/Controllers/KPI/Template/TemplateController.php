@@ -38,7 +38,7 @@ class TemplateController extends Controller
         $selectDepartment = \collect($request->department_id);
         try {
             $departments = $this->departmentService->dropdown();
-            $dropdowntem = $this->templateService->dropdown();
+            $dropdowntem = $this->templateService->all()->where('user_created',auth()->id())->get();
             $templates = $this->templateService->filter($request);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());

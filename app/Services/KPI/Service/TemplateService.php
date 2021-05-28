@@ -43,7 +43,7 @@ class TemplateService extends BaseService implements TemplateServiceInterface
     public function filter(Request $request)
     {
         try {
-            return Template::with(['department'])->filter($request)->orderBy('created_at', 'desc')
+            return Template::with(['department'])->filter($request)->where('user_created', \auth()->id())->orderBy('created_at', 'desc')
                 ->get();
         } catch (\Throwable $th) {
             throw $th;

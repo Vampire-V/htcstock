@@ -83,24 +83,23 @@ var render_html = () => {
                     "data-placement": "top"
                 })
                 cellDesc.classList.add('truncate')
-
-                let cellBaseLine = newRow.insertCell()
-                cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line, '', `changeValue(this)`))
-
-                let cellMax = newRow.insertCell()
-                cellMax.appendChild(newInput('number', className, 'max', element.max, '', `changeValue(this)`))
-
-                let cellWeight = newRow.insertCell()
-                cellWeight.appendChild(newInput('number', className, 'weight', element.weight, '', `changeValue(this)`))
-
-                let cellTarget = newRow.insertCell()
-                cellTarget.appendChild(newInput('number', className, 'target', element.target, '', `changeValue(this)`))
-
-                let cellActual = newRow.insertCell()
                 // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
                 let readonly = auth.id === element.rules.user_actual.id || auth.roles.find(item => item.slug === `admin-kpi`) ? false : true
                 console.log(readonly);
-                cellActual.appendChild(newInput('number', className, 'actual', element.actual, '', `changeValue(this)`,readonly))
+                let cellBaseLine = newRow.insertCell()
+                cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line, '', `changeValue(this)`,readonly))
+
+                let cellMax = newRow.insertCell()
+                cellMax.appendChild(newInput('number', className, 'max', element.max, '', `changeValue(this)`,readonly))
+
+                let cellWeight = newRow.insertCell()
+                cellWeight.appendChild(newInput('number', className, 'weight', element.weight, '', `changeValue(this)`,readonly))
+
+                let cellTarget = newRow.insertCell()
+                cellTarget.appendChild(newInput('number', className, 'target', element.target, '', `changeValue(this)`,readonly))
+
+                let cellActual = newRow.insertCell()
+                cellActual.appendChild(newInput('number', className, 'actual', element.actual, '', `changeValue(this)`, readonly))
 
                 let cellAch = newRow.insertCell()
                 element.ach = findAchValue(element)
@@ -229,45 +228,45 @@ const changeValue = (e) => {
 
 const submit = () => {
     setVisible(true)
-    putEvaluateSelf(evaluate.id,evaluateForm).then(res => {
-        if (res.status === 201) {
-            status.textContent = res.data.data.status
-            toast(res.data.message,res.data.status)
-        }
-    })
-    .catch(error => {
-        toast(error.response.data.message,error.response.data.status)
-        console.log(error.response.data.message)
-    })
-    .finally( () => {
-        setVisible(false)
-        toastClear()
-    })
+    putEvaluateSelf(evaluate.id, evaluateForm).then(res => {
+            if (res.status === 201) {
+                status.textContent = res.data.data.status
+                toast(res.data.message, res.data.status)
+            }
+        })
+        .catch(error => {
+            toast(error.response.data.message, error.response.data.status)
+            console.log(error.response.data.message)
+        })
+        .finally(() => {
+            setVisible(false)
+            toastClear()
+        })
 }
 
 const submitToManager = () => {
     evaluateForm.next = !evaluateForm.next
     setVisible(true)
     // Save & send to manager 
-    putEvaluateSelf(evaluate.id,evaluateForm).then(res => {
-        let label_status = document.getElementsByClassName('card-header')[0].querySelector('span')
-        if (res.status === 201) {
-            label_status.textContent = res.data.data.status
-            if (res.data.data.status === status.SUBMITTED) {
-                pageDisable()
+    putEvaluateSelf(evaluate.id, evaluateForm).then(res => {
+            let label_status = document.getElementsByClassName('card-header')[0].querySelector('span')
+            if (res.status === 201) {
+                label_status.textContent = res.data.data.status
+                if (res.data.data.status === status.SUBMITTED) {
+                    pageDisable()
+                }
+                toast(res.data.message, res.data.status)
             }
-            toast(res.data.message,res.data.status)
-        }
-    })
-    .catch(error => {
-        toast(error.response.data.message,error.response.data.status)
-        console.log(error.response.data.message)
-    })
-    .finally( () => {
-        evaluateForm.next = !evaluateForm.next
-        setVisible(false)
-        toastClear()
-    })
+        })
+        .catch(error => {
+            toast(error.response.data.message, error.response.data.status)
+            console.log(error.response.data.message)
+        })
+        .finally(() => {
+            evaluateForm.next = !evaluateForm.next
+            setVisible(false)
+            toastClear()
+        })
 }
 
 // modal method

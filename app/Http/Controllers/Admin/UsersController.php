@@ -6,6 +6,7 @@ use App\Enum\UserEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Division;
+use App\Models\GroupDivision;
 use App\Models\Role;
 use App\Models\System;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
@@ -180,10 +181,34 @@ class UsersController extends Controller
                     $user->name_th = $value['name'];
                     $user->email = $value['email'];
                     if (!$user->department_id) {
-                        $user->department_id = $department ? $department->id : null;
+                        if (\is_null($department)) {
+                            $dept = new Department();
+                            $dept->name = $value['department'];
+                            $dept->process_id = $value['department_id'];
+                            $dept->save();
+                            $user->department_id = $dept->id;
+                        } else {
+                            $user->department_id = $department->id;
+                        }
                     }
                     if (!$user->divisions_id) {
-                        $user->divisions_id = $division ? $division->id : null;
+                        if (\is_null($division)) {
+                            $div = new Division();
+                            $div->name = $value['division'];
+                            $div->division_id = $value['division_id'];
+                            $group = GroupDivision::where('GDivisionID', $value['division_group_id'])->first();
+                            if (\is_null($group)) {
+                                $group = new GroupDivision();
+                                $group->GDivisionDesc = $value['division_group'];
+                                $group->GDivisionID = $value['division_group_id'];
+                                $group->save();
+                            }
+                            $div->group_division_id = $group->GDivisionID;
+                            $div->save();
+                            $user->divisions_id = $div->id;
+                        } else {
+                            $user->divisions_id = $division->id;
+                        }
                     }
                     $user->head_id = $user->head_id ? $user->head_id : $value['leader'];
                     $user->save();
@@ -202,7 +227,7 @@ class UsersController extends Controller
                         }
                     }
                     foreach ($roles as $key => $role) {
-                        
+
                         if (!$staff->roles->contains('slug', $role->slug)) {
                             if ($role->slug === UserEnum::MANAGERKPI && $staff->username === strval($staff->head_id)) {
                                 $staff->roles()->attach($role);
@@ -1320,7 +1345,7 @@ class UsersController extends Controller
             }
              */
         } catch (\Exception $e) {
-            dd($user->department_id,$department);
+            dd($user->department_id, $department);
             throw $e;
             DB::rollBack();
             // return \redirect()->back()->with('error', "Error : " . $e->getMessage());

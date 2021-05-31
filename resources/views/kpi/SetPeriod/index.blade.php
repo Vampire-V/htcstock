@@ -37,14 +37,14 @@
                                 <label for="Year">Period Name</label>
                                 <select name="period[]" id="period" class="form-control-sm form-control" multiple>
                                     <option value="">Choose...</option>
-                                    @isset($months)
-                                    @foreach ($months as $month)
-                                    <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if ($selectedPeriod->contains(date('m', strtotime($month->name." 1 2021"))))
+                                    @foreach (range(1,12) as $month)
+                                    <option value="{{date('m', mktime(0, 0, 0, $month, 1))}}" 
+                                    @if ($selectedPeriod->
+                                        contains(date('m', mktime(0, 0, 0, $month, 1))))
                                         selected
-                                        @endif>{{$month->name}}
-                                    </option>
+                                        @endif>
+                                        {{date('F', mktime(0, 0, 0, $month, 1))}} </option>
                                     @endforeach
-                                    @endisset
                                 </select>
                             </div>
                             <div class="col-md-2 mb-2">
@@ -53,7 +53,8 @@
                                     <option value=""></option>
                                     @isset($years)
                                     @foreach ($years as $year)
-                                    <option value="{{$year->year}}" @if ($selectedYear===$year->year) selected @endif>{{$year->year}}
+                                    <option value="{{$year->year}}" @if ($selectedYear===$year->year) selected
+                                        @endif>{{$year->year}}
                                     </option>
                                     @endforeach
                                     @endisset

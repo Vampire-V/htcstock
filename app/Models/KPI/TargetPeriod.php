@@ -48,8 +48,9 @@ class TargetPeriod extends Model
      * @param  string  $value
      * @return void
      */
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = date("m", mktime(0, 0, 0, $value, date('d'), date('Y')));
-    }
+    // public function setNameAttribute($value)
+    // {
+    //     $dateObj = DateTime::createFromFormat('!m', \intval($value));
+    //     $this->attributes['name'] = date("m", mktime(0, 0, 0, $value, date('d'), date('Y')));
+    // }
 }

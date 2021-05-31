@@ -4,6 +4,7 @@ namespace App\Http\Requests\KPI;
 
 use App\Enum\UserEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePeriod extends FormRequest
 {
@@ -25,12 +26,9 @@ class StorePeriod extends FormRequest
     public function rules()
     {
         $rule = [
-            'name' => 'required|unique:kpi_target_periods,name,year|max:255',
+            'name' => ['required', Rule::unique('kpi_target_periods')->where(fn ($query) => $query->where('name', $this->input('name'))->where('year', $this->input('year'))), 'max:255'],
             'year' => 'required|regex:/(^\d{4}$)/'
         ];
-        if ($this->route('set_period')) {
-            $rule['name'] = 'required|max:255';
-        }
         return $rule;
     }
 }

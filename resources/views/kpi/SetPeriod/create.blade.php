@@ -36,8 +36,8 @@
                             <label for="ForName">Name</label>
                             <select class="form-control" name="name" id="name" required>
                                 @foreach (range(1,12) as $month)
-                                <option value="{{date("m",mktime(0,0,0,$month,date('d'),date('Y'))) }}">
-                                    {{date("F",mktime(0,0,0,$month,date('d'),date('Y')))}}</option>
+                                <option value="{{date('m', mktime(0, 0, 0, $month, 1))}}">
+                                    {{date('F', mktime(0, 0, 0, $month, 1))}} </option>
                                 @endforeach
                             </select>
                             <div class="valid-feedback">

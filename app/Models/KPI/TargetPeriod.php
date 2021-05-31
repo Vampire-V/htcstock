@@ -4,6 +4,7 @@ namespace App\Models\KPI;
 
 use App\Http\Filters\KPI\PeriodFilter;
 use App\Relations\TargetPeriodTrait;
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,7 +38,8 @@ class TargetPeriod extends Model
      */
     public function getNameAttribute($value)
     {
-        return date("F", mktime(0, 0, 0, $value, date('d'), date('Y')));
+        $dateObj = DateTime::createFromFormat('!m', \intval($value));
+        return $dateObj->format('F');
     }
 
     /**

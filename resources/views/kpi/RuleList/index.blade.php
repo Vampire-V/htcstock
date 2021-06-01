@@ -146,7 +146,8 @@
         </div>
     </div>
 </div>
-
+@endsection
+@section('modal')
 {{-- Modal --}}
 <div class="modal fade" id="modal-import" tabindex="-1" role="dialog" aria-labelledby="modal-import-label"
     aria-hidden="true">

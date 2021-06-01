@@ -102,7 +102,7 @@ class RuleController extends Controller
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
-        return \redirect()->route('kpi.rule-list.edit',$rule->id);
+        return \redirect()->route('kpi.rule-list.edit', $rule->id);
     }
 
     /**
@@ -206,75 +206,114 @@ class RuleController extends Controller
         if (!strpos(Storage::files('public/kpi/template')[0], $temporaryFile->filename)) {
             return \response()->json(["message" => "It is not a template file."], 422);
         }
-
-        $file = Storage::path('kpi/' . $temporaryFile->folder . '/' . $temporaryFile->filename);
-        $read_data = Excel::toCollection(new RulesImport(), $file, null, \Maatwebsite\Excel\Excel::XLSX);
-        $datas = $read_data[0]->filter(fn ($value) => $value[1] !== null);
-        $category = $this->ruleCategoryService->dropdown();
-        $rule_type = $this->ruleTypeService->dropdown();
-        $users = $this->userService->dropdown();
-
-        $datas->each(function ($value, $key) use ($category, $rule_type, $users) {
-            $c = $category->filter(fn ($obj) => $obj->name === $value[2]);
-            $f = $rule_type->filter(fn ($obj) => $obj->name === $value[5]);
-            $u = $users->filter(fn ($obj) => $obj->username === strval($value[6]));
-            $checkName = $this->ruleService->isName($value[1]);
-
-            if ($checkName) {
-                $error = new stdClass;
-                $error->row = $key + 6;
-                $error->col = 'B';
-                $error->message = 'มีอยู่แล้ว';
-                array_push($this->excel_errors, $error);
-            }
-            if ($c->count() < 1) {
-                $error = new stdClass;
-                $error->row = $key + 6;
-                $error->col = 'C';
-                $error->message = 'ไม่มี';
-                array_push($this->excel_errors, $error);
-            }
-            if (is_null($value[4])) {
-                $error = new stdClass;
-                $error->row = $key + 6;
-                $error->col = 'E';
-                $error->message = 'ไม่มี';
-                array_push($this->excel_errors, $error);
-            }
-            if ($f->count() < 1) {
-                $error = new stdClass;
-                $error->row = $key + 6;
-                $error->col = 'F';
-                $error->message = 'ไม่มี';
-                array_push($this->excel_errors, $error);
-            }
-            if ($u->count() < 1) {
-                $error = new stdClass;
-                $error->row = $key + 6;
-                $error->col = 'G';
-                $error->message = 'ไม่มี';
-                array_push($this->excel_errors, $error);
-            }
-
-            if ($c->count() > 0 && !is_null($value[4]) && $f->count() > 0 && !$checkName && $u->count() > 0) {
-                \array_push(
-                    $this->rule_attrs,
-                    [
-                        'name' => $value[1],
-                        'category_id' => $c->first()->id,
-                        'description' => $value[3],
-                        'calculate_type' => $value[4],
-                        'kpi_rule_types_id' => $f->first()->id,
-                        'user_actual' => $u->first()->id,
-                        'created_at' => date("Y-m-d H:i:s"),
-                        'updated_at' => date("Y-m-d H:i:s"),
-                    ]
-                );
-            }
-        });
-
         DB::beginTransaction();
         try {
+            $file = Storage::path('kpi/' . $temporaryFile->folder . '/' . $temporaryFile->filename);
+            $read_data = Excel::toCollection(new RulesImport(), $file, null, \Maatwebsite\Excel\Excel::XLSX);
+            $datas = $read_data[0]->filter(fn ($value) => $value[1] !== null);
+            $category = $this->ruleCategoryService->dropdown();
+            $rule_type = $this->ruleTypeService->dropdown();
+            $users = $this->userService->dropdown();
+            $departments = $this->departmentService->dropdown();
+
+            $datas->each(function ($value, $key) use ($category, $rule_type, $users, $departments) {
+                $row = $key + 6;
+                $rule_name = $value[1];
+                $group_name = $value[2];
+                $detinition = $value[3];
+                $calculation_machianism = $value[4];
+                $calcu_name = $value[5];
+                $rule_type_name = $value[6];
+                $username = $value[7];
+                $dept_name = $value[8];
+                $base_line = $value[9];
+                $max = $value[10];
+
+                $group = $category->filter(fn ($obj) => $obj->name === $group_name);
+                $type = $rule_type->filter(fn ($obj) => $obj->name === $rule_type_name);
+                $user = $users->filter(fn ($obj) => $obj->username === strval($username));
+                $department = $departments->filter(fn ($obj) => $obj->name === strval($dept_name));
+                $checkName = $this->ruleService->isName($rule_name);
+                
+                if ($checkName) {
+                    $error = new stdClass;
+                    $error->row = $row;
+                    $error->col = 'B';
+                    $error->message = 'มีอยู่แล้ว';
+                    array_push($this->excel_errors, $error);
+                }
+                if ($group->count() < 1) {
+                    $error = new stdClass;
+                    $error->row = $row;
+                    $error->col = 'C';
+                    $error->message = 'ไม่มี';
+                    array_push($this->excel_errors, $error);
+                }
+                if (is_null($calcu_name)) {
+                    $error = new stdClass;
+                    $error->row = $row;
+                    $error->col = 'F';
+                    $error->message = 'ไม่มี';
+                    array_push($this->excel_errors, $error);
+                }
+                if ($type->count() < 1) {
+                    $error = new stdClass;
+                    $error->row = $row;
+                    $error->col = 'G';
+                    $error->message = 'ไม่มี';
+                    array_push($this->excel_errors, $error);
+                }
+                if ($user->count() < 1) {
+                    $error = new stdClass;
+                    $error->row = $row;
+                    $error->col = 'H';
+                    $error->message = 'ไม่มี';
+                    array_push($this->excel_errors, $error);
+                }
+                if ($department->count() < 1) {
+                    $error = new stdClass;
+                    $error->row = $row;
+                    $error->col = 'I';
+                    $error->message = 'ไม่มี';
+                    array_push($this->excel_errors, $error);
+                }
+                if (is_null($base_line)) {
+                    $error = new stdClass;
+                    $error->row = $row;
+                    $error->col = 'J';
+                    $error->message = 'ไม่มี';
+                    array_push($this->excel_errors, $error);
+                }
+                if (is_null($max)) {
+                    $error = new stdClass;
+                    $error->row = $row;
+                    $error->col = 'K';
+                    $error->message = 'ไม่มี';
+                    array_push($this->excel_errors, $error);
+                }
+ 
+                if ($group->count() > 0 && !is_null($calcu_name) && $type->count() > 0 && !$checkName && $user->count() > 0 && $department->count() > 0 && !is_null($base_line) && !is_null($max)) {
+                    \array_push(
+                        $this->rule_attrs,
+                        [
+                            'name' => $rule_name,
+                            'category_id' => $group->first()->id,
+                            'description' => $detinition,
+                            'desc_m' => $calculation_machianism,
+                            'calculate_type' => $calcu_name,
+                            'kpi_rule_types_id' => $type->first()->id,
+                            'user_actual' => $user->first()->id,
+                            'department_id' => $department->first()->id,
+                            'base_line' => $base_line,
+                            'max' => $max,
+                            'created_at' => date("Y-m-d H:i:s"),
+                            'updated_at' => date("Y-m-d H:i:s"),
+                        ]
+                    );
+                }
+
+            });
+
             if ($this->rule_attrs) {
                 $status = $this->ruleService->insert($this->rule_attrs);
                 $message = $status ? "Import rule success!" : $message;

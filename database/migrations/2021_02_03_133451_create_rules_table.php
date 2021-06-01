@@ -18,8 +18,8 @@ class CreateRulesTable extends Migration
             $table->id()->comment('id rule');
             $table->string('name', 255)->comment('ชื่อ Rule');
             $table->foreignId('category_id')->nullable()->constrained('kpi_rule_categories')->comment('Code ของ rule_categories');
-            $table->string('description', 255)->nullable()->comment('คำอธิบาย');
-            $table->string('measurement', 255)->nullable()->comment('การวัดผล <= หรือ >=');
+            $table->longText('description')->nullable()->comment('คำอธิบาย');
+            $table->longText('measurement')->nullable()->comment('การวัดผล <= หรือ >=');
             $table->foreignId('target_unit_id')->nullable()->constrained('kpi_target_units')->comment('Code ของ target_units');
             $table->enum('calculate_type', [
                 KPIEnum::positive,

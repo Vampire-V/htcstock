@@ -16,7 +16,7 @@ class AddFieldV2ToKpiRules extends Migration
         Schema::table('kpi_rules', function (Blueprint $table) {
             $table->decimal('base_line', 13, 2)->default(0)->comment('ค่า Base Line');
             $table->decimal('max', 13, 2)->default(0)->comment('ค่า Max');
-            $table->text('desc_m')->nullable()->comment('calculation machanism');
+            $table->text('desc_m')->nullable()->comment('calculation machanism อธิบาย ที่มาของ actual');
             $table->foreignId('department_id')->nullable()->constrained('departments')->comment('Data Sources');
         });
     }

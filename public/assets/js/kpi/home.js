@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     //The first argument are the elements to which the plugin shall be initialized
     //The second argument has to be at least a empty object or a object with your desired options
+    window.localStorage.setItem('tab-dashboard', `tab-c-1`)
     OverlayScrollbars(document.getElementsByClassName('table-responsive'), {
         className: "os-theme-dark",
         resize: "both",
@@ -48,6 +49,34 @@ document.addEventListener("DOMContentLoaded", function () {
             onUpdated: null
         }
     });
+
+    let active_tab = localStorage.getItem('tab-dashboard')
+    if (active_tab) {
+        let content_id = null
+        let ele_active = document.getElementById(active_tab)
+        let scope = ele_active.parentNode.parentNode.parentNode
+        for (let index = 0; index < scope.firstElementChild.children.length; index++) {
+            const element = scope.firstElementChild.children[index];
+            if (element.firstElementChild.id === active_tab) {
+                element.firstElementChild.classList.add('active')
+                content_id = element.firstElementChild.href.substring(element.firstElementChild.href.search("#") + 1, element.firstElementChild.href.length)
+            } else {
+                element.firstElementChild.classList.remove('active')
+            }
+        }
+
+        if (content_id) {
+            let contents = document.getElementById(content_id).parentElement
+            for (let index = 0; index < contents.children.length; index++) {
+                const element = contents.children[index];
+                if (content_id === element.id) {
+                    element.classList.add('active')
+                } else {
+                    element.classList.remove('active')
+                }
+            }
+        }
+    }
 });
 
 var search_table = (e) => {
@@ -63,12 +92,14 @@ var search_table = (e) => {
         if (td) {
             txtValue = td.textContent || td.innerText;
             if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                console.log('if', tr[i]);
                 tr[i].style.display = "";
             } else {
                 tr[i].style.display = "none";
-                console.log('else', tr[i]);
             }
         }
     }
+}
+
+var search = () => {
+    document.forms['form-search'].submit();
 }

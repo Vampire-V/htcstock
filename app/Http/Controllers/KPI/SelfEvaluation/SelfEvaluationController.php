@@ -233,9 +233,9 @@ class SelfEvaluationController extends Controller
             $evaluate->evaluateDetail()->createMany($this->new_evaluate_detail($form));
             $evaluate->save();
 
-            if ($form->next) {
+            // if ($form->next) {
                 # send mail to Manger
-                if ($evaluate->user->head_id) {
+                if ($evaluate->user->head_id && $form->next) {
                     $evaluate->status = KPIEnum::submit;
                     $evaluate->save();
                     $message = KPIEnum::submit;
@@ -247,7 +247,7 @@ class SelfEvaluationController extends Controller
                     $message = KPIEnum::draft . " You don't have a manager!";
                     // $evaluate->user->head_id is null
                 }
-            }
+            // }
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), 500);

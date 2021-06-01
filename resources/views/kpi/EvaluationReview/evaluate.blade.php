@@ -23,6 +23,8 @@
         </div>
     </div>
 </div>
+
+
 {{-- Display user detail --}}
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
@@ -35,8 +37,8 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <h5>status : <span
-                                class="{{Helper::kpiStatusBadge($evaluate->status)}}">{{$evaluate->status}}</span></h5>
+                        <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}}
+                            </span></h5>
                     </div>
                 </div>
             </div>
@@ -70,6 +72,14 @@
                                 Please provide a valid city.
                             </div>
                         </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="Template">Template</label>
+                            <input type="text" class="form-control form-control-sm" id="Template" placeholder="Template"
+                                value="{{$evaluate->template->name}}" disabled>
+                            <div class="invalid-feedback">
+                                Please provide a valid city.
+                            </div>
+                        </div>
                     </div>
                     <div class="form-row">
 
@@ -81,52 +91,77 @@
 </div>
 
 @isset($category)
-@foreach ($category as $group)
-<div class="col-lg-12">
-    <div class="main-card mb-3 card">
-        <div class="card-body">
-            <h5 class="card-title">{{$group->name}}</h5>
-            <div class="table-responsive">
-                <table class="mb-0 table table-sm" id="table-{{$group->name}}">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Rule Name</th>
-                            <th>Base Line</th>
-                            <th>Max</th>
-                            <th>Weight</th>
-                            <th>Target</th>
-                            <th style="width: 10%;">Actual</th>
-                            <th>%Ach</th>
-                            <th>%Cal</th>
-                            {{-- <th>Result</th> --}}
-                        </tr>
-                    </thead>
-                    <tbody>
+<div id="group-table">
+    @foreach ($category as $group)
+    <div class="col-lg-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <div class="card-header">
+                    <label for="department" class="mb-2 mr-2">{{$group->name}} (Weight) :</label>
+                    <div class="btn-actions-pane">
+                        <div role="group" class="btn-group-sm btn-group">
+                            <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
+                                id="weight-{{$group->name}}" name="weight_{{str_replace("-","_",$group->name)}}"
+                                readonly> %
+                        </div>
+                    </div>
+                    <div class="btn-actions-pane-right">
+                        {{-- @if (Auth::user()->hasRole('super-admin'))
+                        <div role="group" class="btn-group-sm btn-group">
+                            <button class="mb-2 mr-2 btn btn-danger" id="rule-remove-modal"
+                                onclick="removeInSelected(this)">Delete Selected
+                                Rule</button>
+                            <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
+                                data-target="#rule-modal" id="rule-add-modal">Add
+                                New Rule</button>
+                        </div>
+                        @endif --}}
+                    </div>
+                </div>
 
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th scope="row"></th>
-                            <td></td>
-                            <td></td>
-                            <td>Total :</td>
-                            <td>%</td>
-                            <td></td>
-                            <td></td>
-                            <td>%</td>
-                            <td>%</td>
-                        </tr>
-                    </tfoot>
-                </table>
+                <div class="table-responsive">
+                    <table class="mb-0 table table-sm" id="table-{{$group->name}}">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Rule Name</th>
+                                <th>Description</th>
+                                <th>Base Line</th>
+                                <th>Max</th>
+                                <th>Weight %</th>
+                                <th>Target</th>
+                                <th>Actual</th>
+                                <th>%Ach</th>
+                                <th>%Cal</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th scope="row" rowspan="4"></th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="text-align: right;">Total Weight :</td>
+                                <td>0</td>
+                                <td rowspan="5"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+    @endforeach
 </div>
-@endforeach
 @endisset
-
-
 
 
 {{-- Calculation Summary --}}
@@ -140,9 +175,7 @@
                         <tr>
                             <th>#</th>
                             <th>Weight</th>
-                            <th>%Ach</th>
-                            {{-- <th style="width: 10%;">Set Ach%</th> --}}
-                            <th>Total</th>
+                            <th>%Cal</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -152,20 +185,15 @@
                             <th>{{$item->name}}</th>
                             <td>0.00%</td>
                             <td>0.00%</td>
-                            {{-- <td><input class="form-control form-control-sm" type="number" name="{{$item->name}}"
-                            step="0.01" min="0" onchange="changeAch(this)"></td> --}}
-                            <td>0.00%</td>
                         </tr>
                         @endforeach
                         @endisset
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th scope="row"></th>
-                            <td></td>
-                            <td></td>
-                            {{-- <td></td> --}}
-                            <td></td>
+                            <th scope="row">Total</th>
+                            <td>0.00%</td>
+                            <td>0.00%</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -192,83 +220,8 @@
 <script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script defer>
     // variable
-    const auth = {!!json_encode(Auth::id())!!}
+    const auth = {!!json_encode(Auth::user())!!}
     const evaluate = {!!json_encode($evaluate)!!}
 </script>
 <script src="{{asset('assets\js\kpi\evaluationReview\evaluate.js')}}" defer></script>
-<script>
-    const changeActualValue = (e) => {
-        evaluateForm.detail.forEach((element,index) => {
-            if (e.offsetParent.parentNode.cells[1].textContent === element.rules.name) {
-                formulaRuleDetail(e,index)
-            }
-        });
-    }
-
-    const changeAch = (e) => {
-        for (const [key, value] of Object.entries(evaluateForm)) {
-            if (e.name.substr(0,3) === key.substr(4,3)) {
-                evaluateForm,evaluateForm[key] = parseFloat(e.value)
-            }
-        }
-    }
-
-    const reject = async (e) => {
-        // Save & reject
-        // /kpi/evaluation-review/update
-        const { value: text } = await Swal.fire({
-            input: 'textarea',
-            inputLabel: `Why evaluate reject!`,
-            inputPlaceholder: 'Type your message here...',
-            inputAttributes: {
-                'aria-label': 'Type your message here'
-            },
-            showCancelButton: true
-        })
-        if (text) {
-            evaluateForm.comment = text
-            setVisible(true)
-            putEvaluateReview(evaluate.id,evaluateForm)
-            .then(res => {
-                let status = document.getElementsByClassName('card-header')[0].querySelector('span')
-                if (res.status === 201) {
-                    status.textContent = res.data.data.status
-                    pageDisable()
-                    toast(res.data.message,res.data.status)
-                }
-            })
-            .catch(error => {
-                toast(error.response.data.message,error.response.data.status)
-            })
-            .finally(() => {
-                setVisible(false)
-                toastClear()
-            })
-        }
-        
-    }
-
-    const approve = (e) => {
-        evaluateForm.next = !evaluateForm.next
-        // Save & approved
-        // /kpi/evaluation-review/update
-        setVisible(true)
-        putEvaluateReview(evaluate.id,evaluateForm).then(res => {
-            let status = document.getElementsByClassName('card-header')[0].querySelector('span')
-            if (res.status === 201) {
-                status.textContent = res.data.data.status
-                pageDisable()
-                toast(res.data.message,res.data.status)
-            }
-        })
-        .catch(error => {
-            toast(error.response.data.message,error.response.data.status)
-        })
-        .finally( () => {
-            evaluateForm.next = !evaluateForm.next
-            setVisible(false)
-            toastClear()
-        })
-    }
-</script>
 @endsection

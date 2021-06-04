@@ -90,28 +90,33 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive" style="height: 110px;">
-                                @isset($ofSelf)
+                                {{-- @isset($ofSelf) --}}
                                 <table class="mb-0 table table-sm" id="table-set-actual">
                                     <thead>
                                         <tr>
-                                            <th >Name</th>
-                                            <th >Position</th>
-                                            <th >Kpi</th>
-                                            <th >Key-task</th>
-                                            <th >Omg</th>
-                                            <th >Score</th>
-                                            <th >Rang</th>
+                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Name</th>
+                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Position</th>
+                                            <th>Kpi</th>
+                                            <th>Key-task</th>
+                                            <th>Omg</th>
+                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Score</th>
+                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Rang</th>
+                                        </tr>
+                                        <tr>
+                                            <th>70</th>
+                                            <th>30</th>
+                                            <th>0</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        {{-- <tr>
                                             <td></td>
-                                        </tr>
+                                        </tr> --}}
                                     </tbody>
                                     <tfoot>
                                     </tfoot>
                                 </table>
-                                @endisset
+                                {{-- @endisset --}}
                             </div>
                         </div>
                     </div>

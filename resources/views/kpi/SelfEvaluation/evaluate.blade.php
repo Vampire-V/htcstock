@@ -124,10 +124,11 @@
                                 <th>#</th>
                                 <th>Rule Name</th>
                                 <th>Description</th>
-                                <th>Base Line</th>
-                                <th>Max</th>
+                                <th>Base Line %</th>
+                                <th>Max %</th>
                                 <th>Weight %</th>
-                                <th>Target</th>
+                                <th>Amount</th>
+                                <th>Target %</th>
                                 <th>Actual</th>
                                 <th>%Ach</th>
                                 <th>%Cal</th>
@@ -143,7 +144,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td style="text-align: right;">Total Weight :</td>
+                                <td style="text-align: right;">Total Weight</td>
                                 <td>0</td>
                                 <td rowspan="5"></td>
                                 <td></td>

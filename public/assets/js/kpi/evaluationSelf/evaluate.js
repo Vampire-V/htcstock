@@ -85,18 +85,21 @@ var render_html = () => {
                 cellDesc.classList.add('truncate')
                 // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
                 let readonly = auth.id === element.rules.user_actual.id || auth.roles.find(item => item.slug === `admin-kpi`) ? false : true
-                console.log(readonly);
+                // console.log(readonly);
                 let cellBaseLine = newRow.insertCell()
-                cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line, '', `changeValue(this)`,readonly))
+                cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line, '', `changeValue(this)`, readonly))
 
                 let cellMax = newRow.insertCell()
-                cellMax.appendChild(newInput('number', className, 'max', element.max, '', `changeValue(this)`,readonly))
+                cellMax.appendChild(newInput('number', className, 'max', element.max, '', `changeValue(this)`, readonly))
 
                 let cellWeight = newRow.insertCell()
-                cellWeight.appendChild(newInput('number', className, 'weight', element.weight, '', `changeValue(this)`,readonly))
+                cellWeight.appendChild(newInput('number', className, 'weight', element.weight, '', `changeValue(this)`, readonly))
+
+                let cellAmount = newRow.insertCell()
+                cellAmount.appendChild(newInput('number', className, 'amount', element.amount, '', 'changeValue(this)', readonly))
 
                 let cellTarget = newRow.insertCell()
-                cellTarget.appendChild(newInput('number', className, 'target', element.target, '', `changeValue(this)`,readonly))
+                cellTarget.appendChild(newInput('number', className, 'target', element.target, '', `changeValue(this)`, readonly))
 
                 let cellActual = newRow.insertCell()
                 cellActual.appendChild(newInput('number', className, 'actual', element.actual, '', `changeValue(this)`, readonly))
@@ -145,15 +148,13 @@ var render_html = () => {
         let sum_ach = temp_rules.reduce((total, cur) => total += cur.ach, 0.00)
         let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00)
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
-        table.tFoot.lastElementChild.cells[8].textContent = `${sum_ach.toFixed(2)}%`
-        table.tFoot.lastElementChild.cells[9].textContent = `${sum_cal.toFixed(2)}%`
+        table.tFoot.lastElementChild.cells[9].textContent = `${sum_ach.toFixed(2)}%`
+        table.tFoot.lastElementChild.cells[10].textContent = `${sum_cal.toFixed(2)}%`
         summary.push({
             'weight': parseFloat(head_weight.value),
             'cal': parseFloat(sum_cal),
             'category': table.id.substring(6)
         })
-
-        $('[data-toggle="tooltip"]').tooltip()
     }
 
     let summary_table = document.getElementById('table-calculation')
@@ -165,9 +166,15 @@ var render_html = () => {
         total += (summary[index].cal * summary[index].weight) / 100
         row.cells[1].textContent = `${summary[index].weight.toFixed(2)} %`
         row.cells[2].textContent = `${((summary[index].cal * summary[index].weight) / 100).toFixed(2)} %`
+        setAttributes(row.cells[2], {
+            "data-toggle": "tooltip",
+            "title": `(${summary[index].cal.toFixed(2)} * ${summary[index].weight.toFixed(2)}) / 100`,
+            "data-placement": "top"
+        })
     }
     summary_table.tFoot.rows[0].cells[2].textContent = `${total.toFixed(2)} %`
     summary_table.tFoot.rows[0].cells[1].textContent = `${sum_weight.toFixed(2)} %`
+    $('[data-toggle="tooltip"]').tooltip()
 }
 
 const changeValue = (e) => {
@@ -203,9 +210,11 @@ const changeValue = (e) => {
                     .filter(item => item.rules.categorys.name === rule.rules.categorys.name)
                     .reduce((total, currentValue) => total + currentValue.ach, 0)
 
-                foot.lastElementChild.cells[foot.lastElementChild.childElementCount - 2].textContent = parseFloat(sumCal).toFixed(2) + '%'
-                foot.lastElementChild.cells[foot.lastElementChild.childElementCount - 3].textContent = parseFloat(sumAch).toFixed(2) + '%'
+                foot.lastElementChild.cells[foot.lastElementChild.childElementCount - 2].textContent = parseFloat(sumAch).toFixed(2) + '%'
+                foot.lastElementChild.cells[foot.lastElementChild.childElementCount - 1].textContent = parseFloat(sumCal).toFixed(2) + '%'
                 summary[sumary_index].cal = parseFloat(sumCal)
+                
+                
                 /**  table-calculation */
                 let table = document.getElementById('table-calculation')
                 let total = 0.00
@@ -217,10 +226,11 @@ const changeValue = (e) => {
                     let calculator = (summary[index].weight * summary[index].cal) / 100
                     element.cells[2].textContent = `${parseFloat(calculator).toFixed(2)} %`
                     total += parseFloat(calculator)
+                    element.cells[2].dataset.originalTitle = `(${summary[index].cal.toFixed(2)} * ${summary[index].weight.toFixed(2)}) / 100`
                 }
-                table.tFoot.rows[0].cells[2].textContent = `${total.toFixed(2)} %`
                 table.tFoot.rows[0].cells[1].textContent = `${sum_weight.toFixed(2)} %`
-
+                table.tFoot.rows[0].cells[2].textContent = `${total.toFixed(2)} %`
+                
             }
         }
     })

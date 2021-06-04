@@ -25,6 +25,7 @@ class EvaluateDetailResource extends JsonResource
             'weight_category' => $this->weight_category,
             'base_line' => $this->base_line,
             'max_result' => $this->max_result,
+            'amount' => $this->amount,
 
             'created_at' => (string) $this->created_at,
             'updated_at' => (string) $this->updated_at,

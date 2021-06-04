@@ -142,8 +142,6 @@ var render_html = () => {
             'cal': parseFloat(sum_cal),
             'category': table.id.substring(6)
         })
-
-        $('[data-toggle="tooltip"]').tooltip()
     }
 
     let summary_table = document.getElementById('table-calculation')
@@ -155,9 +153,15 @@ var render_html = () => {
         total += (summary[index].cal * summary[index].weight) / 100
         row.cells[1].textContent = `${summary[index].weight.toFixed(2)} %`
         row.cells[2].textContent = `${((summary[index].cal * summary[index].weight) / 100).toFixed(2)} %`
+        setAttributes(row.cells[2], {
+            "data-toggle": "tooltip",
+            "title": `(${summary[index].cal.toFixed(2)} * ${summary[index].weight.toFixed(2)}) / 100`,
+            "data-placement": "top"
+        })
     }
     summary_table.tFoot.rows[0].cells[2].textContent = `${total.toFixed(2)} %`
     summary_table.tFoot.rows[0].cells[1].textContent = `${sum_weight.toFixed(2)} %`
+    $('[data-toggle="tooltip"]').tooltip()
 }
 
 const changeValue = (e) => {
@@ -216,53 +220,12 @@ const changeValue = (e) => {
     })
 }
 
-const submit = () => {
-    setVisible(true)
-    putEvaluateSelf(evaluate.id, evaluateForm).then(res => {
-            if (res.status === 201) {
-                status.textContent = res.data.data.status
-                toast(res.data.message, res.data.status)
-            }
-        })
-        .catch(error => {
-            toast(error.response.data.message, error.response.data.status)
-            console.log(error.response.data.message)
-        })
-        .finally(() => {
-            setVisible(false)
-            toastClear()
-        })
-}
-
-const submitToManager = () => {
-    evaluateForm.next = !evaluateForm.next
-    setVisible(true)
-    // Save & send to manager 
-    putEvaluateSelf(evaluate.id, evaluateForm).then(res => {
-            let label_status = document.getElementsByClassName('card-header')[0].querySelector('span')
-            if (res.status === 201) {
-                label_status.textContent = res.data.data.status
-                if (res.data.data.status === status.SUBMITTED) {
-                    pageDisable()
-                }
-                toast(res.data.message, res.data.status)
-            }
-        })
-        .catch(error => {
-            toast(error.response.data.message, error.response.data.status)
-            console.log(error.response.data.message)
-        })
-        .finally(() => {
-            evaluateForm.next = !evaluateForm.next
-            setVisible(false)
-            toastClear()
-        })
-}
-
 const reject = async (e) => {
     // Save & reject
     // /kpi/evaluation-review/update
-    const { value: text } = await Swal.fire({
+    const {
+        value: text
+    } = await Swal.fire({
         input: 'textarea',
         inputLabel: `Why evaluate reject!`,
         inputPlaceholder: 'Type your message here...',
@@ -274,24 +237,24 @@ const reject = async (e) => {
     if (text) {
         evaluateForm.comment = text
         setVisible(true)
-        putEvaluateReview(evaluate.id,evaluateForm)
-        .then(res => {
-            let status = document.getElementsByClassName('card-header')[0].querySelector('span')
-            if (res.status === 201) {
-                status.textContent = res.data.data.status
-                pageDisable()
-                toast(res.data.message,res.data.status)
-            }
-        })
-        .catch(error => {
-            toast(error.response.data.message,error.response.data.status)
-        })
-        .finally(() => {
-            setVisible(false)
-            toastClear()
-        })
+        putEvaluateReview(evaluate.id, evaluateForm)
+            .then(res => {
+                let status = document.getElementsByClassName('card-header')[0].querySelector('span')
+                if (res.status === 201) {
+                    status.textContent = res.data.data.status
+                    pageDisable()
+                    toast(res.data.message, res.data.status)
+                }
+            })
+            .catch(error => {
+                toast(error.response.data.message, error.response.data.status)
+            })
+            .finally(() => {
+                setVisible(false)
+                toastClear()
+            })
     }
-    
+
 }
 
 const approve = (e) => {
@@ -299,20 +262,20 @@ const approve = (e) => {
     // Save & approved
     // /kpi/evaluation-review/update
     setVisible(true)
-    putEvaluateReview(evaluate.id,evaluateForm).then(res => {
-        let status = document.getElementsByClassName('card-header')[0].querySelector('span')
-        if (res.status === 201) {
-            status.textContent = res.data.data.status
-            pageDisable()
-            toast(res.data.message,res.data.status)
-        }
-    })
-    .catch(error => {
-        toast(error.response.data.message,error.response.data.status)
-    })
-    .finally( () => {
-        evaluateForm.next = !evaluateForm.next
-        setVisible(false)
-        toastClear()
-    })
+    putEvaluateReview(evaluate.id, evaluateForm).then(res => {
+            let status = document.getElementsByClassName('card-header')[0].querySelector('span')
+            if (res.status === 201) {
+                status.textContent = res.data.data.status
+                pageDisable()
+                toast(res.data.message, res.data.status)
+            }
+        })
+        .catch(error => {
+            toast(error.response.data.message, error.response.data.status)
+        })
+        .finally(() => {
+            evaluateForm.next = !evaluateForm.next
+            setVisible(false)
+            toastClear()
+        })
 }

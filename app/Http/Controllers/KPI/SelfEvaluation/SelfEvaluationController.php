@@ -140,7 +140,8 @@ class SelfEvaluationController extends Controller
                             'weight' => $value['weight'],
                             'weight_category' => $value['weight_category'],
                             'base_line' => $value['base_line'],
-                            'max_result' => $value['max']
+                            'max_result' => $value['max'],
+                            'amount' => $value['amount']
                         ]
                     );
             }
@@ -234,19 +235,19 @@ class SelfEvaluationController extends Controller
             $evaluate->save();
 
             // if ($form->next) {
-                # send mail to Manger
-                if ($evaluate->user->head_id && $form->next) {
-                    $evaluate->status = KPIEnum::submit;
-                    $evaluate->save();
-                    $message = KPIEnum::submit;
-                    $manager = $this->userService->getManager($evaluate->user);
-                    Mail::to($manager->email)->send(new EvaluationSelfMail($evaluate));
-                } else {
-                    $evaluate->status = KPIEnum::draft;
-                    $evaluate->save();
-                    $message = KPIEnum::draft . " You don't have a manager!";
-                    // $evaluate->user->head_id is null
-                }
+            # send mail to Manger
+            if ($evaluate->user->head_id && $form->next) {
+                $evaluate->status = KPIEnum::submit;
+                $evaluate->save();
+                $message = KPIEnum::submit;
+                $manager = $this->userService->getManager($evaluate->user);
+                Mail::to($manager->email)->send(new EvaluationSelfMail($evaluate));
+            } else {
+                $evaluate->status = KPIEnum::draft;
+                $evaluate->save();
+                $message = KPIEnum::draft . " You don't have a manager!";
+                // $evaluate->user->head_id is null
+            }
             // }
         } catch (\Exception $e) {
             DB::rollBack();
@@ -294,7 +295,8 @@ class SelfEvaluationController extends Controller
                 $weight_category = $element->weight_category;
                 $base_line = $element->base_line;
                 $max_result = $element->max;
-                $result[] = \compact('rule_id', 'target', 'actual', 'weight', 'weight_category', 'base_line', 'max_result');
+                $amount =  $element->amount;
+                $result[] = \compact('rule_id', 'target', 'actual', 'weight', 'weight_category', 'base_line', 'max_result', 'amount');
             }
             return $result;
         } catch (\Throwable $th) {

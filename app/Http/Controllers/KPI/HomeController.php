@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\KPI;
 
 use App\Enum\KPIEnum;
+use App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait;
 use App\Http\Controllers\Controller;
+use App\Models\KPI\Evaluate;
 use App\Models\KPI\TargetPeriod;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    use CalculatorEvaluateTrait;
     protected $targetPeriodService, $userService, $ruleService;
     public function __construct(
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
@@ -31,6 +34,16 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $selectedYear = empty($request->year) ? date('Y') : $request->year;
+        $evaluations =  Evaluate::with('user','evaluateDetail.rule','targetperiod')->where('status',KPIEnum::approved)->get();
+        $this->calculation_summary($evaluations);
+        // $evaluations->each(function ($model) {
+        //     $model->evaluateDetail->reduce(function ($carry, $item) {
+        //         \dump($item->cal);
+        //         return $carry + $item->cal;
+        //     }, 0.00);
+        // });
+        // dd($value->total_kpi_cal);
+        // exit;
         $ofSelf = $this->targetPeriodService->selfApprovedEvaluationOfyear($selectedYear);
         $ofDept = $this->targetPeriodService->deptApprovedEvaluationOfyear($selectedYear);
         $periods = $this->targetPeriodService->query()->where('year',$selectedYear)->get();

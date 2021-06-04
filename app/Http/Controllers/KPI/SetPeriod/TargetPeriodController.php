@@ -29,7 +29,7 @@ class TargetPeriodController extends Controller
         try {
             $periods = $this->periodService->filterIndex($request);
             $months = $this->periodService->dropdown()->unique('name');
-            $years = $months->unique('year');
+            $years = $this->periodService->dropdown()->unique('year');
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }

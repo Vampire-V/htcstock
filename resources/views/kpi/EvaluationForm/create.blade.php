@@ -150,10 +150,11 @@
                                 <th>#</th>
                                 <th>Rule Name</th>
                                 <th>Description</th>
-                                <th>Base Line</th>
-                                <th>Max</th>
+                                <th>Base Line %</th>
+                                <th>Max %</th>
                                 <th>Weight %</th>
-                                <th>Target</th>
+                                <th>Amount</th>
+                                <th>Target %</th>
                                 @if ($group->name === 'key-task')
                                 <th>#</th>
                                 @endif
@@ -170,6 +171,7 @@
                                 <td></td>
                                 <td style="text-align: right;">Total Weight :</td>
                                 <td>0</td>
+                                <td></td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -248,7 +250,4 @@
     // new form object evaluateForm
 </script>
 
-<script>
-
-</script>
 @endsection

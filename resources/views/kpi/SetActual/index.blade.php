@@ -19,8 +19,10 @@
         </div>
     </div>
 </div>
+
+<h1>ยังไม่เปิดให้ใช้งาน.....</h1>
 {{-- end title  --}}
-<div class="row">
+{{-- <div class="row">
     <div class="col-md-12 col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-header-tab card-header-tab-animation card-header">
@@ -156,7 +158,7 @@
                             <tr>
                                 <td colspan="8"></td>
                                 <td><button class="mb-2 mr-2 btn btn-success btn-sm"
-                                        onclick="submit(this)">Submit</button>
+                                        onclick="submit(this)">Save</button>
                                 </td>
                                 <td colspan="2"></td>
                             </tr>
@@ -166,7 +168,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 
 {{-- Button --}}
@@ -190,74 +192,4 @@
     var all_data = [];
 </script>
 <script src="{{asset('assets\js\kpi\setActual\index.js')}}" defer></script>
-<script>
-    var changeActual = (e) => {
-        console.log(e.parentNode.nextElementSibling);
-        let button = document.getElementById('table-set-actual').querySelector('button')
-        if (Array.isArray(e.value.match(/\w+/))) {
-            for (let index = 0; index < detail.length; index++) {
-                const element = detail[index];
-                if (element.id === parseInt(e.id)) {
-                    element.actual = parseFloat(e.value).toFixed(2)
-                    let ach = findAchValue(element)
-                    let cal = findCalValue(element,ach)
-                    element.ach = ach
-                    element.cal = cal
-                    e.parentNode.nextElementSibling.textContent =  ach.toFixed(2) + '%'
-                    e.parentNode.nextElementSibling.nextElementSibling.textContent = cal.toFixed(2) + '%'
-                    e.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle = changeTooltipCal(e.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle, element)
-                }
-                if (e.parentNode.parentNode.cells[3].textContent === element.rules.name) {
-                    element.actual = parseFloat(e.value).toFixed(2)
-                    let ach = findAchValue(element)
-                    let cal = findCalValue(element,ach)
-                    element.ach = ach
-                    element.cal = cal
-                    let input = document.getElementById(element.id)
-                    input.value = parseFloat(e.value).toFixed(2)
-                    input.parentNode.nextElementSibling.textContent =  ach.toFixed(2) + '%'
-                    input.parentNode.nextElementSibling.nextElementSibling.textContent = cal.toFixed(2) + '%'
-                    input.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle = changeTooltipCal(input.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle, element)
-                }
-            }
-        }
-    }
-
-    var submit = async (e) => {
-        if (detail.length > 0) {
-            if (validationActual()) {
-                setVisible(true)
-                putSetActual(detail,detail[0].rules.user_actual.id)
-                .then(res => {
-                    if (res.status === 201) {
-                        toast(res.data.message,res.data.status)
-                    }
-                })
-                .catch(error => {
-                    toast(error.response.data.message,error.response.data.status)
-                })
-                .finally(() => {
-                    setVisible(false)
-                    toastClear()
-                })
-            }else{
-                toast(`Can’t contain letters`,'error')
-                toastClear()
-            }
-        }
-    }
-
-    var validationActual = () => {
-        let tBody = document.getElementById('table-set-actual').tBodies[0]
-        for (let index = 0; index < tBody.rows.length; index++) {
-            const element = tBody.rows[index];
-            if (!Array.isArray(element.cells[8].firstChild.value.match(/\w+/))) {
-                element.cells[8].firstChild.focus()
-                console.log(element.cells[8].firstChild);
-                return false
-            }
-        }
-        return true
-    }
-</script>
 @endsection

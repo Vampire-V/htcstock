@@ -62,7 +62,8 @@ class EvaluateDetail {
         weight_category = 0.00,
         base_line = 0.00,
         ach = 0.00,
-        cal = 0.00) {
+        cal = 0.00,
+        amount = 0.00) {
         this.evaluate_id = evaluate_id
         this.rule_id = rule_id
         this.rules = rules
@@ -74,6 +75,7 @@ class EvaluateDetail {
         this.base_line = base_line
         this.ach = ach
         this.cal = cal
+        this.amount = amount
     }
 }
 // KPI
@@ -113,6 +115,7 @@ var setDetail = (rule_temp) => {
         detail.weight = element.weight
         detail.weight_category = element.weight_category
         detail.base_line = element.base_line
+        detail.amount = element.amount
         evaluateForm.detail.push(detail)
     })
     return evaluateForm
@@ -266,7 +269,6 @@ var displayDetail = (evaluateForm) => {
         }
 
     }
-
 }
 
 var sumTotalCalculationSummary = (table) => {
@@ -396,7 +398,6 @@ var formulaRuleDetail = (e, key) => {
 }
 
 var findAchValue = (obj) => {
-    // console.log(obj.actual , obj.target);
     if (typeof obj === `object`) {
         if (obj.rules.calculate_type === calculate.POSITIVE) {
             ach = parseFloat((obj.actual / obj.target) * 100)

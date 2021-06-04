@@ -99,7 +99,7 @@ class RuleTemplateController extends Controller
             $request->session()->flash('success', ' has been create success');
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), $e->getCode());
         }
         DB::commit();
         return $this->successResponse(RuleTemplateResource::collection($template->ruleTemplate), "Created rule template", 200);

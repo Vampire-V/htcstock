@@ -12,17 +12,27 @@ class TargetPeriod extends Model
 {
     use TargetPeriodTrait;
     protected $table = 'kpi_target_periods';
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-        'year'
+
+    protected $casts = [
+        'quarter' => 'int'
     ];
 
     protected $guarded = [];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $month = new DateTime(date('Y') . '-' . $model->name . '-' . date('d'));
+            $model->quarter = ceil($month->format('m') / 3);
+        });
+
+        static::updating(function ($model) {
+            $month = new DateTime(date('Y') . '-' . $model->name . '-' . date('d'));
+            $model->quarter = ceil($month->format('m') / 3);
+        });
+    }
 
     // service เรียกใช้ Filter
     public function scopeFilter(Builder $builder, $request)

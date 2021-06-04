@@ -20,12 +20,25 @@
         // let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         // validationForm(forms)
-        console.log('tao...');
     }, false);
 
 })();
 var evaluateForm = new EvaluateForm()
 
+const changeValue = (e) => {
+    
+    let object = evaluateForm.detail.find(obj => obj.rules.name === e.offsetParent.parentNode.cells[1].textContent)
+    for (const key in object) {
+        object[key] = key === e.name ? parseFloat(e.value) : object[key]
+    }
+    let table = e.offsetParent.offsetParent
+    let sum = evaluateForm.detail.reduce((total, cur) => cur.rules.category_id === object.rules.category_id ? total += cur.weight : total, 0.00)
+    e.offsetParent.parentNode.parentNode.parentNode.tFoot.lastElementChild.cells[5].textContent = `${sum.toFixed(2)}%`
+
+    evaluateForm.total_weight_kpi = table.id.substring(6) === 'kpi' ? sum : evaluateForm.total_weight_kpi
+    evaluateForm.total_weight_key_task = table.id.substring(6) === 'key-task' ? sum : evaluateForm.total_weight_key_task
+    evaluateForm.total_weight_omg = table.id.substring(6) === 'omg' ? sum : evaluateForm.total_weight_omg
+}
 
 // dropdown
 const changeTemplate = (e) => {
@@ -35,8 +48,22 @@ const changeTemplate = (e) => {
         getRuleTemplate(evaluateForm.template)
             .then(res => {
                 if (res.status === 200) {
-                    let rule_temp = res.data.data
-                    displayDetail(setDetail(rule_temp))
+                    evaluateForm.detail = evaluateForm.detail.length > 0 ? [] : evaluateForm.detail
+                    res.data.data.forEach(element => {
+                        let detail = new EvaluateDetail()
+                        detail.evaluate_id = typeof element.evaluate_id === 'undefined' ? null : element.evaluate_id
+                        detail.rule_id = element.rule_id
+                        detail.rules = Object.create(element.rules)
+                        detail.target = typeof element.target === 'undefined' ? element.target_config : element.target
+                        detail.actual = typeof element.actual === 'undefined' ? 0.00 : element.actual
+                        detail.max = element.max_result
+                        detail.weight = element.weight
+                        detail.weight_category = element.weight_category
+                        detail.base_line = element.base_line
+                        detail.amount = element.amount
+                        evaluateForm.detail.push(detail)
+                    })
+                    display_template()
                 }
             })
             .catch(error => {
@@ -49,7 +76,7 @@ const changeTemplate = (e) => {
                 setVisible(false)
             })
     } else {
-        displayDetail([])
+        display_template()
         pageDisable(`button,input`)
     }
 }
@@ -110,7 +137,7 @@ const deleteRuleTemp = (e) => {
     }
     // remove detail temp
     evaluateForm.detail = evaluateForm.detail.filter((value, index) => removeDetailIndex.indexOf(index) == -1)
-    displayDetail(evaluateForm)
+    display_template()
 }
 
 // modal method
@@ -135,14 +162,12 @@ $('#rule-modal').on('hide.bs.modal', function (event) {
 })
 
 const dropdownRule = (category, modal) => {
-    console.log(category, modal);
     let select = modal.find('.modal-body #rule-name')[0]
     let rule_keytask = evaluateForm.detail.filter(value => value.rules.category_id === category.id)
     getRuleDropdown(category)
         .then(res => {
             if (res.status === 200) {
                 let rules = res.data.data.filter(obj => rule_keytask.some(r => r.rule_id === obj.id) ? null : obj)
-                select.add(new Option('', '', false, false))
                 for (let index = 0; index < rules.length; index++) {
                     const element = rules[index];
                     select.add(new Option(element.name, element.id, false, false))
@@ -172,6 +197,7 @@ const addKeyTask = (e) => {
                 detail.weight = row.weight
                 detail.weight_category = row.weight_category
                 detail.base_line = row.base_line
+                detail.amount = row.amount
                 evaluateForm.detail.push(detail)
                 e.offsetParent.querySelector('.close').click()
             }
@@ -180,8 +206,88 @@ const addKeyTask = (e) => {
             toast(error.response.data.message, error.response.data.status)
         })
         .finally(() => {
-            displayDetail(evaluateForm)
+            display_template()
             toastClear()
         })
+}
 
+const display_template = () => {
+    let tables = document.getElementById('all-table').querySelectorAll('table')
+    for (let i = 0; i < tables.length; i++) {
+        const table = tables[i]
+        let data_category = evaluateForm.detail.filter(value => value.rules.categorys.name === table.id.substring(6))
+        if (data_category.length > 0) {
+            removeAllChildNodes(table.tBodies[0])
+            for (let index = 0; index < data_category.length; index++) {
+                const element = data_category[index]
+                let newRow = table.tBodies[0].insertRow()
+
+                let cellIndex = newRow.insertCell()
+                cellIndex.textContent = index + 1
+
+                let cellName = newRow.insertCell()
+                cellName.textContent = element.rules.name
+                cellName.classList.add('truncate')
+                setAttributes(cellName, {
+                    "data-toggle": "tooltip",
+                    "title": `${element.rules.name}`,
+                    "data-placement": "top"
+                })
+
+                let cellDesc = newRow.insertCell()
+                cellDesc.textContent = element.rules.description
+                cellDesc.classList.add('truncate')
+                setAttributes(cellDesc, {
+                    "data-toggle": "tooltip",
+                    "title": `${element.rules.description}`,
+                    "data-placement": "top"
+                })
+
+
+                let cellBase_line = newRow.insertCell()
+                cellBase_line.appendChild(newInput('number', className, 'base_line', element.base_line, '', `changeValue(this)`))
+
+                let cellMax = newRow.insertCell()
+                cellMax.appendChild(newInput('number', className, 'max', element.max, '', `changeValue(this)`))
+
+                let cellWeight = newRow.insertCell()
+                cellWeight.appendChild(newInput('number', className, 'weight', element.weight, '', `changeValue(this)`))
+
+                let cellAmount = newRow.insertCell()
+                cellAmount.appendChild(newInput('number', className, 'amount', element.amount, '', `changeValue(this)`))
+
+                let cellTarget = newRow.insertCell()
+                cellTarget.appendChild(newInput('number', className, 'target', element.target, '', `changeValue(this)`))
+
+                if (table.id.substring(6) === `key-task`) {
+                    let cellDelete = newRow.insertCell()
+                    let div = document.createElement('div')
+                    div.className = 'custom-checkbox custom-control'
+
+                    let checkbox = newInput('checkbox', 'custom-control-input', `check${element.rule_id}`, '', element.rule_id)
+
+                    let label = document.createElement('label')
+                    label.classList.add('custom-control-label')
+                    label.htmlFor = element.rule_id
+                    div.appendChild(checkbox)
+                    div.appendChild(label)
+                    cellDelete.appendChild(div)
+                }
+            }
+            let sum_weight = data_category.reduce((total, cur) => total += cur.weight, 0.00)
+            evaluateForm.total_weight_kpi = table.id.substring(6) === 'kpi' ? sum_weight : evaluateForm.total_weight_kpi
+            evaluateForm.total_weight_key_task = table.id.substring(6) === 'key-task' ? sum_weight : evaluateForm.total_weight_key_task
+            evaluateForm.total_weight_omg = table.id.substring(6) === 'omg' ? sum_weight : evaluateForm.total_weight_omg
+            table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
+            table.offsetParent.querySelector('.card-title').textContent = `${data_category[0].rules.categorys.name} : ${data_category[0].weight_category}%`
+        } else {
+            evaluateForm.total_weight_kpi = table.id.substring(6) === 'kpi' ? 0.00 : evaluateForm.total_weight_kpi
+            evaluateForm.total_weight_key_task = table.id.substring(6) === 'key-task' ? 0.00 : evaluateForm.total_weight_key_task
+            evaluateForm.total_weight_omg = table.id.substring(6) === 'omg' ? 0.00 : evaluateForm.total_weight_omg
+            table.tFoot.lastElementChild.cells[5].textContent = `0.00%`
+            removeAllChildNodes(table.tBodies[0])
+            table.offsetParent.querySelector('.card-title').textContent = table.id.substring(6)
+        }
+    }
+    $('[data-toggle="tooltip"]').tooltip()
 }

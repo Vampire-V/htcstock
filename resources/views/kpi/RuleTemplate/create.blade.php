@@ -189,16 +189,22 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="position-relative form-group"><label for="max-result" class="">Max
                                     : %</label>
                                 <input name="max_result" id="validationMax" placeholder="Max result" type="number"
                                     min="0" step="0.01" class="form-control form-control-sm" required>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="position-relative form-group"><label for="target-config" class="">Amount
+                                    :</label><input name="amount" id="validationTargetConfig"
+                                    placeholder="Amount" type="number" min="0" step="0.1"
+                                    class="form-control form-control-sm" required></div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="position-relative form-group"><label for="target-config" class="">Target
-                                    config
+                                    %
                                     :</label><input name="target_config" id="validationTargetConfig"
                                     placeholder="Target config" type="number" min="0" step="0.01"
                                     class="form-control form-control-sm" required></div>

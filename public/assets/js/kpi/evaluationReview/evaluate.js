@@ -85,6 +85,9 @@ var render_html = () => {
                 let cellWeight = newRow.insertCell()
                 cellWeight.appendChild(newInput('number', className, 'weight', element.weight, '', `changeValue(this)`, readonly))
 
+                let cellAmount = newRow.insertCell()
+                cellAmount.appendChild(newInput('number', className, 'amount', element.amount, '', `changeValue(this)`, readonly))
+
                 let cellTarget = newRow.insertCell()
                 cellTarget.appendChild(newInput('number', className, 'target', element.target, '', `changeValue(this)`, readonly))
 
@@ -96,7 +99,6 @@ var render_html = () => {
                 cellAch.style = 'cursor: default;'
                 setTooltipAch(cellAch, element)
                 cellAch.textContent = element.ach.toFixed(2) + '%'
-
 
                 let cellCal = newRow.insertCell()
                 element.cal = findCalValue(element, element.ach)
@@ -135,8 +137,8 @@ var render_html = () => {
         let sum_ach = temp_rules.reduce((total, cur) => total += cur.ach, 0.00)
         let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00)
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
-        table.tFoot.lastElementChild.cells[8].textContent = `${sum_ach.toFixed(2)}%`
-        table.tFoot.lastElementChild.cells[9].textContent = `${sum_cal.toFixed(2)}%`
+        table.tFoot.lastElementChild.cells[9].textContent = `${sum_ach.toFixed(2)}%`
+        table.tFoot.lastElementChild.cells[10].textContent = `${sum_cal.toFixed(2)}%`
         summary.push({
             'weight': parseFloat(head_weight.value),
             'cal': parseFloat(sum_cal),
@@ -200,6 +202,7 @@ const changeValue = (e) => {
                 foot.lastElementChild.cells[foot.lastElementChild.childElementCount - 2].textContent = parseFloat(sumCal).toFixed(2) + '%'
                 foot.lastElementChild.cells[foot.lastElementChild.childElementCount - 3].textContent = parseFloat(sumAch).toFixed(2) + '%'
                 summary[sumary_index].cal = parseFloat(sumCal)
+
                 /**  table-calculation */
                 let table = document.getElementById('table-calculation')
                 let total = 0.00
@@ -211,10 +214,10 @@ const changeValue = (e) => {
                     let calculator = (summary[index].weight * summary[index].cal) / 100
                     element.cells[2].textContent = `${parseFloat(calculator).toFixed(2)} %`
                     total += parseFloat(calculator)
+                    element.cells[2].dataset.originalTitle = `(${summary[index].cal.toFixed(2)} * ${summary[index].weight.toFixed(2)}) / 100`
                 }
                 table.tFoot.rows[0].cells[2].textContent = `${total.toFixed(2)} %`
                 table.tFoot.rows[0].cells[1].textContent = `${sum_weight.toFixed(2)} %`
-
             }
         }
     })
@@ -254,7 +257,6 @@ const reject = async (e) => {
                 toastClear()
             })
     }
-
 }
 
 const approve = (e) => {

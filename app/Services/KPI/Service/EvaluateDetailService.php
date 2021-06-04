@@ -3,6 +3,7 @@
 namespace App\Services\KPI\Service;
 
 use App\Enum\KPIEnum;
+use App\Enum\UserEnum;
 use App\Models\KPI\EvaluateDetail;
 use App\Services\BaseService;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
@@ -55,14 +56,25 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
     public function setActualFilter(Request $request)
     {
         try {
-            return EvaluateDetail::with(['evaluate.user', 'evaluate.targetperiod', 'rule.category'])
-                ->whereHas('rule', fn ($query) => $query->where('user_actual', \auth()->id()))
-                ->whereHas('evaluate', fn ($query) => $query->whereNotIn('status', [KPIEnum::approved, KPIEnum::new, KPIEnum::submit]))
-                ->setActualFilter($request)
-                ->get();
+            if (\auth()->user()->roles->search(fn ($obj) => $obj->slug === UserEnum::ADMINKPI, true)) {
+                $result = EvaluateDetail::with(['evaluate.user', 'evaluate.targetperiod', 'rule.category'])
+                    // ->whereHas('rule', fn ($query) => $query->where('user_actual', \auth()->id()))
+                    ->whereHas('evaluate', fn ($query) => $query->whereNotIn('status', [KPIEnum::approved, KPIEnum::new, KPIEnum::submit]))
+                    ->whereHas('evaluate.user', fn ($query) => $query->where('divisions_id', \auth()->user()->divisions_id))
+                    ->setActualFilter($request)
+                    ->get();
+            } else {
+                $result = EvaluateDetail::with(['evaluate.user', 'evaluate.targetperiod', 'rule.category'])
+                    ->whereHas('rule', fn ($query) => $query->where('user_actual', \auth()->id()))
+                    ->whereHas('evaluate', fn ($query) => $query->whereNotIn('status', [KPIEnum::approved, KPIEnum::new, KPIEnum::submit]))
+                    // ->whereHas('evaluate.user', fn ($query) => $query->where('divisions_id', \auth()->user()->divisions_id))
+                    ->setActualFilter($request)
+                    ->get();
+            }
         } catch (\Throwable $th) {
             throw $th;
         }
+        return $result;
     }
 
     // public function formulaKeyTask(EvaluateDetail $object): EvaluateDetail

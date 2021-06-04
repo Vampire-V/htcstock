@@ -7,16 +7,22 @@
         if (detail.length > 0) {
             let tBody = document.getElementById('table-set-actual').tBodies[0]
             for (let index = 0; index < tBody.rows.length; index++) {
-                const element = tBody.rows[index];
-                let obj = detail.find(value => value.id === parseInt(element.cells[8].firstChild.id))
+                const element = tBody.rows[index]
+                let actual = element.cells[9]
+                let Ach = element.cells[10]
+                let Cal = element.cells[11]
+                let obj = detail.find(value => value.id === parseInt(actual.firstChild.id))
+                if (obj.rules.calculate_type !== calculate.NEGATIVE) {
+                    actual.setAttribute("min", 0.00);
+                }
                 let ach = findAchValue(obj)
                 let cal = findCalValue(obj, ach)
                 obj.ach = ach
                 obj.cal = cal
-                setTooltipAch(element.cells[9], obj)
-                setTooltipCal(element.cells[10], obj)
-                element.cells[9].textContent = ach.toFixed(2) + '%'
-                element.cells[10].textContent = cal.toFixed(2) + '%'
+                setTooltipAch(Ach, obj)
+                setTooltipCal(Cal, obj)
+                Ach.textContent = ach.toFixed(2) + '%'
+                Cal.textContent = cal.toFixed(2) + '%'
             }
             $('[data-toggle="tooltip"]').tooltip()
         }
@@ -56,33 +62,66 @@
 
 
 var changeActual = (e) => {
-    let button = document.getElementById('table-set-actual').querySelector('button')
-    if (Array.isArray(e.value.match(/\w+/))) {
+    let row = e.parentNode.parentNode
+    if (Array.isArray(e.value.match(/^(\d+\.?\d*|\.\d+)$/))) {
         for (let index = 0; index < detail.length; index++) {
-            const element = detail[index];
+            const element = detail[index]
             if (element.id === parseInt(e.id)) {
                 element.actual = parseFloat(e.value).toFixed(2)
                 let ach = findAchValue(element)
                 let cal = findCalValue(element, ach)
                 element.ach = ach
                 element.cal = cal
-                e.parentNode.nextElementSibling.textContent = ach.toFixed(2) + '%'
-                e.parentNode.nextElementSibling.nextElementSibling.textContent = cal.toFixed(2) + '%'
-                e.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle = changeTooltipCal(e.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle, element)
+                row.cells[10].textContent = ach.toFixed(2) + '%'
+                row.cells[11].textContent = cal.toFixed(2) + '%'
+                row.cells[11].dataset.originalTitle = changeTooltipCal(row.cells[11].dataset.originalTitle, element)
             }
 
-            if (e.parentNode.parentNode.cells[3].textContent === element.rules.name && e.parentNode.parentNode.cells[2].textContent === `${element.evaluate.targetperiod.name} ${element.evaluate.targetperiod.year}`) {
+            if (row.cells[3].textContent === element.rules.name && row.cells[2].textContent === `${element.evaluate.targetperiod.name} ${element.evaluate.targetperiod.year}`) {
                 element.actual = parseFloat(e.value).toFixed(2)
                 let ach = findAchValue(element)
                 let cal = findCalValue(element, ach)
                 element.ach = ach
                 element.cal = cal
                 let input = document.getElementById(element.id)
-                // console.log(input,e);
+                let duplicate_row = input.parentNode.parentNode
                 input.value = parseFloat(e.value).toFixed(2)
-                input.parentNode.nextElementSibling.textContent = ach.toFixed(2) + '%'
-                input.parentNode.nextElementSibling.nextElementSibling.textContent = cal.toFixed(2) + '%'
-                input.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle = changeTooltipCal(input.parentNode.nextElementSibling.nextElementSibling.dataset.originalTitle, element)
+                duplicate_row.cells[10].textContent = ach.toFixed(2) + '%'
+                duplicate_row.cells[11].textContent = cal.toFixed(2) + '%'
+                duplicate_row.cells[11].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[11].dataset.originalTitle, element)
+            }
+        }
+    }
+}
+
+var changeTarget = (e) => {
+    let row = e.parentNode.parentNode
+    if (Array.isArray(e.value.match(/^(\d+\.?\d*|\.\d+)$/))) {
+        for (let index = 0; index < detail.length; index++) {
+            const element = detail[index]
+            let id = parseInt(e.id.substr(e.id.search("_") + 1,e.id.length))
+            if (element.id === id) {
+                element.target = parseFloat(e.value).toFixed(2)
+                let ach = findAchValue(element)
+                let cal = findCalValue(element, ach)
+                element.ach = ach
+                element.cal = cal
+                row.cells[10].textContent = ach.toFixed(2) + '%'
+                row.cells[11].textContent = cal.toFixed(2) + '%'
+                row.cells[11].dataset.originalTitle = changeTooltipCal(row.cells[11].dataset.originalTitle, element)
+            }
+            if (row.cells[3].textContent === element.rules.name && row.cells[2].textContent === `${element.evaluate.targetperiod.name} ${element.evaluate.targetperiod.year}`) {
+                element.target = parseFloat(e.value).toFixed(2)
+                let ach = findAchValue(element)
+                let cal = findCalValue(element, ach)
+                element.ach = ach
+                element.cal = cal
+                let input = document.getElementById(`target_${element.id}`)
+                let duplicate_row = input.parentNode.parentNode
+                input.value = parseFloat(e.value).toFixed(2)
+                duplicate_row.cells[10].textContent = ach.toFixed(2) + '%'
+                duplicate_row.cells[11].textContent = cal.toFixed(2) + '%'
+                duplicate_row.cells[11].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[11].dataset.originalTitle, element)
             }
         }
     }
@@ -116,9 +155,12 @@ var validationActual = () => {
     let tBody = document.getElementById('table-set-actual').tBodies[0]
     for (let index = 0; index < tBody.rows.length; index++) {
         const element = tBody.rows[index];
-        if (!Array.isArray(element.cells[8].firstChild.value.match(/\w+/))) {
+        if (!Array.isArray(element.cells[9].firstChild.value.match(/^(\d+\.?\d*|\.\d+)$/))) {
+            element.cells[9].firstChild.focus()
+            return false
+        }
+        if (!Array.isArray(element.cells[8].firstChild.value.match(/^(\d+\.?\d*|\.\d+)$/))) {
             element.cells[8].firstChild.focus()
-            console.log(element.cells[8].firstChild);
             return false
         }
     }

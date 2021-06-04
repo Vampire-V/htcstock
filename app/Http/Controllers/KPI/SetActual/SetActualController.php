@@ -49,7 +49,8 @@ class SetActualController extends Controller
         $departments = $this->departmentService->dropdown();
         $categorys = $this->categoryService->dropdown();
         $rules = $this->ruleService->dropdown();
-        $evaluateDetail = EvaluateDetailResource::collection($this->evaluateDetailService->setActualFilter($request));
+        $result = $this->evaluateDetailService->setActualFilter($request);
+        $evaluateDetail = EvaluateDetailResource::collection($result);
         return \view('kpi.SetActual.index', \compact(
             'start_year',
             'evaluateDetail',
@@ -127,6 +128,7 @@ class SetActualController extends Controller
 
                 if ($detail && $status_contain->contains($detail->evaluate->status)) {
                     $detail->actual = floatval($element['actual']);
+                    $detail->target = floatval($element['target']);
                     $detail->save();
                 }
             }

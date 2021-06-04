@@ -20,9 +20,9 @@
     </div>
 </div>
 
-<h1>ยังไม่เปิดให้ใช้งาน.....</h1>
+{{-- <h1>ยังไม่เปิดให้ใช้งาน.....</h1> --}}
 {{-- end title  --}}
-{{-- <div class="row">
+<div class="row">
     <div class="col-md-12 col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-header-tab card-header-tab-animation card-header">
@@ -41,7 +41,7 @@
                                     <option value="">Choose...</option>
                                     @isset($categorys)
                                     @foreach ($categorys as $category)
-                                    <option value="{{$category->id}}" @if (intval($selectedCategory) === $category->id)
+                                    <option value="{{$category->id}}" @if (intval($selectedCategory)===$category->id)
                                         selected
                                         @endif>{{$category->name}}</option>
                                     @endforeach
@@ -54,7 +54,7 @@
                                     <option value="">Choose...</option>
                                     @isset($rules)
                                     @foreach ($rules as $rule)
-                                    <option value="{{$rule->id}}" @if (intval($selectedRule) === $rule->id)
+                                    <option value="{{$rule->id}}" @if (intval($selectedRule)===$rule->id)
                                         selected
                                         @endif>{{$rule->name}}</option>
                                     @endforeach
@@ -67,7 +67,8 @@
                                     <option value="">Choose...</option>
                                     @isset($months)
                                     @foreach ($months as $month)
-                                    <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if ($selectedPeriod===date('m', strtotime($month->name." 1 2021")))
+                                    <option value="{{date('m', strtotime($month->name." 1 2021"))}}"
+                                        @if($selectedPeriod===date('m', strtotime($month->name." 1 2021")))
                                         selected
                                         @endif>{{$month->name}}</option>
                                     @endforeach
@@ -120,13 +121,14 @@
                                 <th>Category</th>
                                 <th>Target Period</th>
                                 <th>Rule Name</th>
-                                <th>Base Line</th>
-                                <th>Max</th>
-                                <th>Weight</th>
-                                <th>Target</th>
+                                <th>Base Line%</th>
+                                <th>Max%</th>
+                                <th>Weight%</th>
+                                <th>Amount</th>
+                                <th style="width: 10%;">Target%</th>
                                 <th style="width: 10%;">Actual</th>
-                                <th>%Ach</th>
-                                <th>%Cal</th>
+                                <th>Ach%</th>
+                                <th>Cal%</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -136,15 +138,17 @@
                                 <th scope="row">{{$key+1}}</th>
                                 <td>{{$item->rule->category->name }}</td>
                                 <td>{{$item->evaluate->targetperiod->name}} {{$item->evaluate->targetperiod->year}}</td>
-                                <td class="truncate" data-toggle="tooltip" title="" data-placement="top" data-original-title="{{$item->rule->name}}">{{$item->rule->name}}</td>
+                                <td class="truncate" data-toggle="tooltip" title="" data-placement="top"
+                                    data-original-title="{{$item->rule->name}}">{{$item->rule->name}}</td>
                                 <td>{{number_format($item->base_line,2)}}</td>
                                 <td>{{number_format($item->max_result,2)}}</td>
-                                <td>{{number_format($item->weight,2)}}%</td>
-                                <td>{{number_format($item->target,2)}}</td>
+                                <td>{{number_format($item->weight,2)}}</td>
+                                <td>{{number_format($item->amount,2)}}</td>
+                                <td><input type="number" name="target" id="target_{{$item->id}}" value="{{$item->target}}"
+                                        step="0.01" class="form-control form-control-sm"
+                                        onchange="changeTarget(this)" />
+                                </td>
                                 <td><input type="number" name="actual" id="{{$item->id}}" value="{{$item->actual}}"
-                                        @if ($item->rule->calculate_type !== "Negative")
-                                        min="0"
-                                        @endif  
                                         step="0.01" class="form-control form-control-sm"
                                         onchange="changeActual(this)" />
                                 </td>
@@ -156,7 +160,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="8"></td>
+                                <td colspan="9"></td>
                                 <td><button class="mb-2 mr-2 btn btn-success btn-sm"
                                         onclick="submit(this)">Save</button>
                                 </td>
@@ -168,7 +172,7 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 
 
 {{-- Button --}}

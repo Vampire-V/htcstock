@@ -17,6 +17,7 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
 
     Route::resource('template', 'Template\TemplateController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
     Route::post('template/dynamic', 'Template\TemplateController@store_dynamic');
+    Route::put('template/{id}/dynamic', 'Template\TemplateController@update_dynamic');
     Route::group(['prefix' => 'template/{template}/edit'], function () {
         Route::resource('rule-template', 'RuleTemplate\RuleTemplateController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store']]);
         Route::get('ruletemplate/bytemplate', 'RuleTemplate\RuleTemplateController@bytemplate')->name('rule-template.list');

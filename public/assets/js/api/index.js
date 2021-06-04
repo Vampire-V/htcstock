@@ -174,6 +174,13 @@ const postTemplate = (from) => axios({
     data: from
 })
 
+const putTemplate = (from,id) => axios({
+    method: 'PUT',
+    responseType: 'json',
+    url: `/kpi/template/${id}/dynamic`,
+    data: from
+})
+
 const postEvaluateSelf = (period, year, form) => axios({
     method: 'POST',
     responseType: 'json',

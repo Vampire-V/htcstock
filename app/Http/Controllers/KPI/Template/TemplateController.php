@@ -38,7 +38,7 @@ class TemplateController extends Controller
         $selectDepartment = \collect($request->department_id);
         try {
             $departments = $this->departmentService->dropdown();
-            $dropdowntem = $this->templateService->all()->where('user_created',auth()->id())->get();
+            $dropdowntem = $this->templateService->all()->where('user_created', auth()->id())->get();
             $templates = $this->templateService->filter($request);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
@@ -139,7 +139,7 @@ class TemplateController extends Controller
         //
     }
 
-        /**
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -159,5 +159,28 @@ class TemplateController extends Controller
         }
         DB::commit();
         return $this->successResponse(new TemplateResource($template), "Created template", 200);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update_dynamic(Request $request,$id)
+    {
+        DB::beginTransaction();
+        try {
+            $template = Template::find($id);
+            $template->weight_kpi = $request->kpi ?? 0.00;
+            $template->weight_key_task = $request->key_task ?? 0.00;
+            $template->weight_omg = $request->omg ?? 0.00;
+            $template->save();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
+        DB::commit();
+        return $this->successResponse(new TemplateResource($template), "Update weight success!", 200);
     }
 }

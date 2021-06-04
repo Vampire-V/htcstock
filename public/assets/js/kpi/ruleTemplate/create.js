@@ -37,7 +37,7 @@
         let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         validationForm(forms)
-        // console.log('load...');
+        console.log('load...');
     }, false);
 })();
 
@@ -120,6 +120,35 @@ const turnOnAddRule = (weight, btn) => {
 const changeWeight = (sel) => {
     let btn_header = sel.offsetParent.parentElement.parentElement.lastElementChild.firstElementChild.children;
     turnOnAddRule(sel.valueAsNumber, btn_header[1])
+    let form = {
+        kpi: template.weight_kpi,
+        key_task: template.weight_key_task,
+        omg: template.weight_omg
+    }
+    switch (sel.id) {
+        case 'weight-kpi':
+            form.kpi = parseFloat(sel.value)
+            break;
+        case 'weight-key-task':
+            form.key_task = parseFloat(sel.value)
+            break;
+        case 'weight-omg':
+            form.omg = parseFloat(sel.value)
+            break;
+        default:
+            break;
+    }
+    putTemplate(form, template.id)
+        .then(res => {
+            toast(res.data.message, res.data.status)
+        })
+        .catch(error => {
+            console.log(error.response.data)
+            toast(error.response.data, res.data.status)
+        })
+        .finally(() => {
+            toastClear()
+        })
 }
 
 

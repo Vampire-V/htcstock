@@ -74,7 +74,7 @@ var changeActual = (e) => {
                 element.actual_pc = actual_pc
                 element.ach = ach
                 element.cal = cal
-                row.cells[8].textContent = actual_pc.toFixed(2) + '%'
+                row.cells[10].textContent = actual_pc.toFixed(2) + '%'
                 row.cells[11].textContent = ach.toFixed(2) + '%'
                 row.cells[12].textContent = cal.toFixed(2) + '%'
                 row.cells[12].dataset.originalTitle = changeTooltipCal(row.cells[11].dataset.originalTitle, element)
@@ -91,7 +91,7 @@ var changeActual = (e) => {
                 let input = document.getElementById(element.id)
                 let duplicate_row = input.parentNode.parentNode
                 input.value = parseFloat(e.value).toFixed(2)
-                duplicate_row.cells[8].textContent = actual_pc.toFixed(2) + '%'
+                duplicate_row.cells[10].textContent = actual_pc.toFixed(2) + '%'
                 duplicate_row.cells[11].textContent = ach.toFixed(2) + '%'
                 duplicate_row.cells[12].textContent = cal.toFixed(2) + '%'
                 duplicate_row.cells[12].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[11].dataset.originalTitle, element)
@@ -114,7 +114,7 @@ var changeTarget = (e) => {
                 element.target_pc = target_pc
                 element.ach = ach
                 element.cal = cal
-                row.cells[10].textContent = target_pc.toFixed(2) + '%'
+                row.cells[8].textContent = target_pc.toFixed(2) + '%'
                 row.cells[11].textContent = ach.toFixed(2) + '%'
                 row.cells[12].textContent = cal.toFixed(2) + '%'
                 row.cells[12].dataset.originalTitle = changeTooltipCal(row.cells[11].dataset.originalTitle, element)
@@ -130,7 +130,7 @@ var changeTarget = (e) => {
                 let input = document.getElementById(`target_${element.id}`)
                 let duplicate_row = input.parentNode.parentNode
                 input.value = parseFloat(e.value).toFixed(2)
-                duplicate_row.cells[10].textContent = target_pc.toFixed(2) + '%'
+                duplicate_row.cells[8].textContent = target_pc.toFixed(2) + '%'
                 duplicate_row.cells[11].textContent = ach.toFixed(2) + '%'
                 duplicate_row.cells[12].textContent = cal.toFixed(2) + '%'
                 duplicate_row.cells[12].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[11].dataset.originalTitle, element)

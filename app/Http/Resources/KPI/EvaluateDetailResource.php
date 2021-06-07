@@ -25,11 +25,14 @@ class EvaluateDetailResource extends JsonResource
             'weight_category' => $this->weight_category,
             'base_line' => $this->base_line,
             'max_result' => $this->max_result,
-            'amount' => $this->amount,
 
             'created_at' => (string) $this->created_at,
             'updated_at' => (string) $this->updated_at,
-            'rules' => new RuleResource($this->rule)
+            'rules' => new RuleResource($this->rule),
+            'ach' => $this->ach ?? 0.00,
+            'cal' => $this->cal ?? 0.00,
+            'target_pc' => $this->target_pc ?? 0.00,
+            'actual_pc' => $this->actual_pc ?? 0.00
         ];
     }
 }

@@ -150,10 +150,10 @@
                                 <th>#</th>
                                 <th>Rule Name</th>
                                 <th>Description</th>
-                                <th>Base Line %</th>
-                                <th>Max %</th>
-                                <th>Weight %</th>
-                                <th>Amount</th>
+                                <th style="width: 10%;">Base Line %</th>
+                                <th style="width: 10%;">Max %</th>
+                                <th style="width: 10%;">Weight %</th>
+                                <th style="width: 15%;">Target Amount</th>
                                 <th>Target %</th>
                                 @if ($group->name === 'key-task')
                                 <th>#</th>

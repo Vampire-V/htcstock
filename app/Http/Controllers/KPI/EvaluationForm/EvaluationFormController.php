@@ -126,8 +126,7 @@ class EvaluationFormController extends Controller
                     $weight_category = $value['weight_category'];
                     $base_line = $value['base_line'];
                     $max_result = $value['max'];
-                    $amount = $value['amount'];
-                    \array_push($detail, compact("rule_id", "target", "weight", "weight_category", "base_line", "max_result", "amount"));
+                    \array_push($detail, compact("rule_id", "target", "weight", "weight_category", "base_line", "max_result"));
                 }
                 if (count($detail) > 0) {
                     $evaluate->evaluateDetail()->createMany($detail);
@@ -225,8 +224,7 @@ class EvaluationFormController extends Controller
                     $weight_category = $value['weight_category'];
                     $base_line = $value['base_line'];
                     $max_result = $value['max'];
-                    $amount = $value['amount'];
-                    \array_push($detail, compact("rule_id", "target", "actual", "weight", "weight_category", "base_line", "max_result", "amount"));
+                    \array_push($detail, compact("rule_id", "target", "actual", "weight", "weight_category", "base_line", "max_result"));
                 }
 
                 if (count($detail) > 0) {

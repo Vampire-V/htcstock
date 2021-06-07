@@ -2,6 +2,13 @@
 @section('sidebar')
 @include('includes.sidebar.kpi')
 @stop
+@section('style')
+<style>
+    label {
+        font-weight: bold;
+    }
+</style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -157,12 +164,36 @@
                         <div class="col-md-4">
                             <label for="BaseLine">Base Line :</label>
                             <input type="number" class="form-control form-control-sm" id="base_line"
-                                value="{{$rule->base_line}}" name="base_line" min="0.00" step="0.01" required>
+                                value="{{number_format($rule->base_line,2)}}" name="base_line" min="0.00" step="0.01"
+                                required>
                         </div>
                         <div class="col-md-4">
                             <label for="Max">Max :</label>
                             <input type="number" class="form-control form-control-sm" id="max"
-                                value="{{$rule->max}}" name="max" min="0.00" step="0.01" required>
+                                value="{{number_format($rule->max,2)}}" name="max" min="0.00" step="0.01" required>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="position-relative form-group"><label for="Rule" class="">Rule KPI
+                                    :</label>
+                                <select id="validationRelationRule" class="form-control form-control-sm"
+                                    name="parent">
+                                    <option value="">Choose...</option>
+                                    @isset($rules)
+                                    @foreach ($rules as $item)
+                                    <option value="{{$item->id}}" @if ($rule->parent_to->id === $item->id)
+                                        selected
+                                        @endif>
+                                        {{$item->name}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Rule
+                                </div>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -173,8 +204,8 @@
                         </div>
                         <div class="col-md-6">
                             <label for="CalculationMachianism">Calculation Machianism :</label>
-                            <textarea class="form-control form-control-sm" id="CalculationMachianism"
-                                name="desc_m" rows="3">{{$rule->desc_m}}</textarea>
+                            <textarea class="form-control form-control-sm" id="CalculationMachianism" name="desc_m"
+                                rows="3">{{$rule->desc_m}}</textarea>
                         </div>
                     </div>
                     <div class="form-row">

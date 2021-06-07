@@ -17,8 +17,7 @@ class EvaluateDetail extends Model
         'target' => 'float',
         'base_line' => 'float',
         'max_result' => 'float',
-        'actual' => 'float',
-        'amount' => 'float'
+        'actual' => 'float'
     ];
     /**
      * The attributes that are mass assignable.

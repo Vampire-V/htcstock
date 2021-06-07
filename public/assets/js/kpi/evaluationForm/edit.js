@@ -21,7 +21,6 @@
         // let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         // validationForm(forms)
-        console.log('tao... edit');
         getEvaluateForm(staff.id, period.id, evaluate.id)
             .then(async res => {
                 if (res.status === 200) {
@@ -48,7 +47,7 @@ var evaluateForm = new EvaluateForm()
 
 // dropdown
 const changeValue = (e) => {
-    
+
     let object = evaluateForm.detail.find(obj => obj.rules.name === e.offsetParent.parentNode.cells[1].textContent)
     for (const key in object) {
         object[key] = key === e.name ? parseFloat(e.value) : object[key]
@@ -82,7 +81,6 @@ const changeTemplate = (e) => {
                         detail.weight = element.weight
                         detail.weight_category = element.weight_category
                         detail.base_line = element.base_line
-                        detail.amount = element.amount
                         evaluateForm.detail.push(detail)
                     })
                     display_template()
@@ -102,53 +100,6 @@ const changeTemplate = (e) => {
         pageDisable(`button,input`)
     }
 }
-
-
-// const submitToUser = () => {
-
-//     validityForm()
-//     if (evaluateForm.template) {
-//         setVisible(true)
-//         evaluateForm.next = true
-//         putEvaluateForm(staff.id, period.id, evaluate.id, evaluateForm).then(res => {
-//             if (res.status === 201) {
-//                 document.getElementsByClassName('app-main__inner')[0].querySelector('.badge').textContent = res.data.data.status
-//                 if (res.data.data.status === status.READY || res.data.data.status === status.APPROVED) {
-//                     pageDisable()
-//                 } else {
-//                     pageEnable()
-//                 }
-//                 toast(res.data.message, res.data.status)
-//             }
-//         }).catch(error => {
-//             toast(error.response.data.message, error.response.data.status)
-//             console.log(error.response.data)
-//         }).finally(() => {
-//             setVisible(false)
-//             evaluateForm.next = false
-//             toastClear()
-//         })
-//     }
-// }
-
-// const submit = () => {
-//     validityForm()
-//     if (evaluateForm.template) {
-//         setVisible(true)
-//         putEvaluateForm(staff.id, period.id, evaluate.id, evaluateForm).then(async res => {
-//             if (res.status === 201) {
-//                 toast(res.data.message, res.data.status)
-//             }
-//         }).catch(error => {
-//             console.log(error.response.data)
-//             toast(error.response.data.message, error.response.data.status)
-//         }).finally(() => {
-//             setVisible(false)
-//             toastClear()
-//         })
-//     }
-// }
-
 
 const submitToUser = () => {
     validityForm()
@@ -267,7 +218,6 @@ const addKeyTask = (e) => {
                 detail.weight = row.weight
                 detail.weight_category = row.weight_category
                 detail.base_line = row.base_line
-                detail.amount = row.amount
                 evaluateForm.detail.push(detail)
                 e.offsetParent.querySelector('.close').click()
             }
@@ -315,19 +265,19 @@ const display_template = () => {
 
 
                 let cellBase_line = newRow.insertCell()
-                cellBase_line.appendChild(newInput('number', className, 'base_line', element.base_line, '', `changeValue(this)`))
+                cellBase_line.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`))
 
                 let cellMax = newRow.insertCell()
-                cellMax.appendChild(newInput('number', className, 'max', element.max, '', `changeValue(this)`))
+                cellMax.appendChild(newInput('number', className, 'max', element.max.toFixed(2), '', `changeValue(this)`))
 
                 let cellWeight = newRow.insertCell()
-                cellWeight.appendChild(newInput('number', className, 'weight', element.weight, '', `changeValue(this)`))
-
-                let cellAmount = newRow.insertCell()
-                cellAmount.appendChild(newInput('number', className, 'amount', element.amount, '', `changeValue(this)`))
+                cellWeight.appendChild(newInput('number', className, 'weight', element.weight.toFixed(2), '', `changeValue(this)`))
 
                 let cellTarget = newRow.insertCell()
-                cellTarget.appendChild(newInput('number', className, 'target', element.target, '', `changeValue(this)`))
+                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`))
+
+                let cellTargetPC = newRow.insertCell()
+                cellTargetPC.textContent = findTargetPercent(element, data_category).toFixed(2)
 
                 if (table.id.substring(6) === `key-task`) {
                     let cellDelete = newRow.insertCell()

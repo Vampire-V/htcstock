@@ -129,11 +129,12 @@
                                 <th>Base Line %</th>
                                 <th>Max %</th>
                                 <th>Weight %</th>
-                                <th>Amount</th>
+                                <th>Target Amount</th>
                                 <th>Target %</th>
-                                <th>Actual</th>
-                                <th>Ach %</th>
-                                <th>Cal %</th>
+                                <th>Actual Amount</th>
+                                <th>Actual %</th>
+                                <th>%Ach</th>
+                                <th>%Cal</th>
                                 <th>#</th>
                             </tr>
                         </thead>
@@ -142,14 +143,15 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th scope="row" rowspan="4"></th>
+                                <th scope="row"></th>
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td style="text-align: right;">Total Weight</td>
-                                <td>0</td>
+                                <td style="text-align: right;">Weight</td>
+                                <td>0.00</td>
                                 <td></td>
-                                <td rowspan="5"></td>
+                                <td></td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

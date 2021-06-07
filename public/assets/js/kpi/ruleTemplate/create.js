@@ -37,25 +37,21 @@
         let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         validationForm(forms)
-        console.log('load...');
     }, false);
 })();
 
 
-function formSubmit() {
-    document.getElementById('form-template').submit()
-}
-
 const createRow = async (data) => {
     let tables = document.getElementById("all-table").querySelectorAll('table')
     await tables.forEach(intable => {
-        intable.getElementsByTagName('tbody')[0].innerHTML = ''
-        intable.getElementsByTagName('tfoot')[0].lastElementChild.cells[6].textContent = 0
+        // intable.getElementsByTagName('tbody')[0].innerHTML = ''
+        removeAllChildNodes(intable.getElementsByTagName('tbody')[0])
+        intable.getElementsByTagName('tfoot')[0].lastElementChild.cells[4].textContent = 0
     });
     await tables.forEach(intable => {
         let newArray = data.filter(value => value.rules.categorys.name === intable.id.substring(6))
-        let sumWeight = newArray.reduce((accumulator, currentValue) => accumulator + currentValue.weight, 0)
-        newArray.forEach((element, key, array) => {
+        let sumWeight = newArray.reduce((accumulator, currentValue) => accumulator + currentValue.weight, 0.00)
+        newArray.sort((a, b) => a.parent_rule_template_id - b.parent_rule_template_id).forEach((element, key, array) => {
             let table = document.getElementById(intable.id)
             let body = table.getElementsByTagName('tbody')[0]
             let newRow = body.insertRow()
@@ -83,23 +79,23 @@ const createRow = async (data) => {
             let newCellName = newRow.insertCell()
             newCellName.textContent = element.rules.name
 
-            let newCellMeasurement = newRow.insertCell()
-            newCellMeasurement.textContent = element.rules.measurement
-
             let newCellBaseLine = newRow.insertCell()
             newCellBaseLine.textContent = element.base_line.toFixed(2)
 
             let newCellMax = newRow.insertCell()
             newCellMax.textContent = element.max_result.toFixed(2)
 
-            let newCellTarget = newRow.insertCell()
-            newCellTarget.textContent = element.target_config.toFixed(2)
-
             let newCellWeight = newRow.insertCell()
             newCellWeight.textContent = element.weight.toFixed(2)
 
-            let newCellParentRule = newRow.insertCell()
-            newCellParentRule.appendChild(makeOption(element, key, array))
+            let newCellTargetA = newRow.insertCell()
+            newCellTargetA.textContent = element.target_config.toFixed(2)
+
+            let newCellTarget = newRow.insertCell()
+            newCellTarget.textContent = findTargetPercent(element, newArray).toFixed(2)
+
+            let newCellSortRule = newRow.insertCell()
+            newCellSortRule.appendChild(makeOption(element, key, array))
 
             if (key === array.length - 1) {
                 let footter = table.getElementsByTagName('tfoot')[0]
@@ -107,8 +103,7 @@ const createRow = async (data) => {
                 let btn_header = config_weight.offsetParent.parentElement.parentElement.lastElementChild.firstElementChild.children
 
                 turnOnAddRule(config_weight.value, btn_header[1])
-                footter.children[0].children[newCellWeight.cellIndex].textContent = sumWeight.toFixed(2) + '%'
-                // config_weight.value = element.weight_category.toFixed(2)
+                footter.rows[0].cells[4].textContent = sumWeight.toFixed(2) + '%'
             }
         })
     })
@@ -160,40 +155,58 @@ $('#modal-add-rule').on('shown.bs.modal', function (event) {
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
     var modal = $(this)
-    arr = rules.filter((value, index) => {
-        let rre = true
-        temp_rules.forEach(temp_rule => {
-            if (temp_rule.rules.id === value.id) {
-                rre = !rre;
+    let arr = []
+    getRuleDropdown(group)
+        .then(response => {
+            if (response.status === 200) {
+                arr = response.data.data.filter((value, index) => {
+                    let rre = true
+                    temp_rules.forEach(temp_rule => {
+                        if (temp_rule.rules.id === value.id) {
+                            rre = !rre;
+                        }
+                    })
+                    return rre
+                })
             }
+
         })
-        return rre
-    })
-    let rules_group = arr.filter(rule => rule.category_id === group.id)
-    let select_rule = modal.find('.modal-body select[id="validationRuleName"]')[0]
-    rules_group.forEach((rule, key) => {
-        select_rule[key] = new Option(rule.name, rule.id)
-    })
-    modal.find('.modal-body input[name ="base_line"]').val(rules_group.find(item => item.id == select_rule.selectedOptions[select_rule.selectedIndex].value).base_line)
-    modal.find('.modal-body input[name ="max_result"]').val(rules_group.find(item => item.id == select_rule.selectedOptions[select_rule.selectedIndex].value).max)
-    let weight = modal.find('.modal-body input[name ="weight"]')[0]
-    let maxW = setMaxWeight(group)
-    if (maxW <= 0) {
-        weight.disabled = true
-        weight.previousElementSibling.textContent = `Weight limit ${maxW}%`
-        modal.find('.modal-footer')[0].lastElementChild.disabled = true
-        weight.max = maxW
-    } else {
-        weight.disabled = false
-        weight.previousElementSibling.textContent = `Weight limit ${maxW}%`
-        modal.find('.modal-footer')[0].lastElementChild.disabled = false
-        weight.max = maxW
-    }
+        .catch(error => {
+            console.log(error.response.data)
+        })
+        .finally(() => {
+            let rules_group = arr.filter(rule => rule.category_id === group.id)
+            let select_rule = modal.find('.modal-body select[id="validationRuleName"]')[0]
+            rules_group.forEach((rule, key) => {
+                select_rule[key] = new Option(rule.name, rule.id)
+            })
+            
+            let selected = select_rule.selectedOptions[select_rule.selectedIndex].value
+            let base_line = rules_group.find(item => item.id === parseInt(selected)).base_line
+            let max = rules_group.find(item => item.id === parseInt(selected)).max
+            // console.log(max);
+            modal.find('.modal-body input[name ="base_line"]').val(parseFloat(base_line).toFixed(2))
+            modal.find('.modal-body input[name ="max_result"]').val(parseFloat(max).toFixed(2))
+            let weight = modal.find('.modal-body input[name ="weight"]')[0]
+            let maxW = setMaxWeight(group)
+            if (maxW <= 0) {
+                weight.disabled = true
+                weight.previousElementSibling.textContent = `Weight rule limit ${maxW}%`
+                modal.find('.modal-footer')[0].lastElementChild.disabled = true
+                weight.max = parseFloat(maxW).toFixed(2)
+                weight.value = parseFloat(maxW).toFixed(2)
+            } else {
+                weight.disabled = false
+                weight.previousElementSibling.textContent = `Weight rule limit ${maxW}%`
+                modal.find('.modal-footer')[0].lastElementChild.disabled = false
+                weight.max = parseFloat(maxW).toFixed(2)
+                weight.value = parseFloat(maxW).toFixed(2)
+            }
 
-    let row = document.getElementById(`table-${group.name}`).getElementsByTagName('tbody')[0].lastElementChild
-    modal.find('.modal-body input[name ="parent_rule_template_id"]').val(getLastRowNum(row))
-    modal.find('.modal-body input[name ="weight_category"]').val(document.getElementById(`weight-${group.name}`).value)
-
+            let row = document.getElementById(`table-${group.name}`).getElementsByTagName('tbody')[0].lastElementChild
+            modal.find('.modal-body input[name ="parent_rule_template_id"]').val(getLastRowNum(row))
+            modal.find('.modal-body input[name ="weight_category"]').val(document.getElementById(`weight-${group.name}`).value)
+        })
 })
 
 $('#modal-add-rule').on('hide.bs.modal', function (event) {
@@ -211,27 +224,27 @@ $('#modal-add-rule').on('hide.bs.modal', function (event) {
 })
 
 const changerule = (e) => {
-    document.getElementsByName('base_line')[0].value = rules.find(item => item.id === parseInt(e.value)).base_line
-    document.getElementsByName('max_result')[0].value = rules.find(item => item.id === parseInt(e.value)).max
+    let base = rules.find(item => item.id === parseInt(e.value)).base_line
+    let max = rules.find(item => item.id === parseInt(e.value)).max
+    document.getElementsByName('base_line')[0].value = parseFloat(base).toFixed(2)
+    document.getElementsByName('max_result')[0].value = parseFloat(max).toFixed(2)
 }
 
-const getLastRowNum = (row) => {
-    console.log(row);
-    return row ? row.rowIndex + 1 : 1
-}
+const getLastRowNum = (row) => row ? row.rowIndex + 1 : 1
 
 const setMaxWeight = (group) => {
     let table = document.getElementById(`table-${group.name}`)
     rows = table.tBodies[0].rows
     let acc = 0
     for (const iterator of rows) {
-        acc += parseInt(iterator.cells[6].textContent)
+        acc += parseInt(iterator.cells[4].textContent)
     }
     return 100 - acc
 }
 
 const subMitForm = () => {
     let form = document.getElementById('form-ruletemplate')
+    validationForm(form)
     if (form.checkValidity()) {
         let formData = new FormData(form)
         formData.append('template_id', template.id)
@@ -259,6 +272,7 @@ const makeOption = (obj, key, array) => {
     let select = document.createElement('select')
     select.id = `id-${obj.id}`
     select.name = `id-${obj.id}`
+    select.style = `text-align: center;`
     select.className = `form-control form-control-sm`
     array.forEach(element => {
         let option = document.createElement('option')
@@ -319,5 +333,7 @@ const deleterule = e => {
     deleteRuleTemplate(template.id, form)
         .then(res => {
             createRow(res.data.data)
-        }).catch(error => console.log(error.response.data)).finally()
+        })
+        .catch(error => console.log(error.response.data))
+        .finally()
 }

@@ -124,9 +124,10 @@
                                 <th>Base Line%</th>
                                 <th>Max%</th>
                                 <th>Weight%</th>
-                                <th>Amount</th>
-                                <th style="width: 10%;">Target%</th>
-                                <th style="width: 10%;">Actual</th>
+                                <th style="width: 12%;">Target Amount</th>
+                                <th>target %</th>
+                                <th style="width: 12%;">Actual Amount</th>
+                                <th>actual %</th>
                                 <th>Ach%</th>
                                 <th>Cal%</th>
                             </tr>
@@ -140,20 +141,21 @@
                                 <td>{{$item->evaluate->targetperiod->name}} {{$item->evaluate->targetperiod->year}}</td>
                                 <td class="truncate" data-toggle="tooltip" title="" data-placement="top"
                                     data-original-title="{{$item->rule->name}}">{{$item->rule->name}}</td>
-                                <td>{{number_format($item->base_line,2)}}</td>
-                                <td>{{number_format($item->max_result,2)}}</td>
-                                <td>{{number_format($item->weight,2)}}</td>
-                                <td>{{number_format($item->amount,2)}}</td>
-                                <td><input type="number" name="target" id="target_{{$item->id}}" value="{{$item->target}}"
-                                        step="0.01" class="form-control form-control-sm"
+                                <td>{{number_format(floatval($item->base_line), 2, '.', '')}}%</td>
+                                <td>{{number_format(floatval($item->max_result), 2, '.', '')}}%</td>
+                                <td>{{number_format(floatval($item->weight), 2, '.', '')}}%</td>
+                                <td><input type="number" name="target" id="target_{{$item->id}}"
+                                        value="{{number_format(floatval($item->target), 2, '.', '')}}" step="0.01" class="form-control form-control-sm"
                                         onchange="changeTarget(this)" />
                                 </td>
-                                <td><input type="number" name="actual" id="{{$item->id}}" value="{{$item->actual}}"
+                                <td>{{number_format(floatval($item->target_pc), 2, '.', '')}}%</td>
+                                <td><input type="number" name="actual" id="{{$item->id}}" value="{{number_format(floatval($item->actual), 2, '.', '')}}"
                                         step="0.01" class="form-control form-control-sm"
                                         onchange="changeActual(this)" />
                                 </td>
-                                <td></td>
-                                <td></td>
+                                <td>{{number_format(floatval($item->actual_pc), 2, '.', '')}}%</td>
+                                <td>{{number_format(floatval($item->ach), 2, '.', '')}}%</td>
+                                <td>{{number_format(floatval($item->cal), 2, '.', '')}}%</td>
                             </tr>
                             @endforeach
                             @endisset
@@ -164,7 +166,7 @@
                                 <td><button class="mb-2 mr-2 btn btn-success btn-sm"
                                         onclick="submit(this)">Save</button>
                                 </td>
-                                <td colspan="2"></td>
+                                <td colspan="3"></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -173,18 +175,6 @@
         </div>
     </div>
 </div>
-
-
-{{-- Button --}}
-{{-- <div class="app-page-title">
-    <div class="page-title-wrapper">
-        <div class="page-title-heading">
-        </div>
-        <div class="page-title-actions">
-            <button class="mb-2 mr-2 btn btn-success">Save</button>
-        </div>
-    </div>
-</div> --}}
 @endsection
 
 @section('second-script')

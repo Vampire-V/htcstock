@@ -30,6 +30,9 @@ const changeValue = (e) => {
     let object = evaluateForm.detail.find(obj => obj.rules.name === e.offsetParent.parentNode.cells[1].textContent)
     for (const key in object) {
         object[key] = key === e.name ? parseFloat(e.value) : object[key]
+        if (object.rules.parent) {
+            console.log(object.rules.parent);
+        }
     }
     let table = e.offsetParent.offsetParent
     let sum = evaluateForm.detail.reduce((total, cur) => cur.rules.category_id === object.rules.category_id ? total += cur.weight : total, 0.00)
@@ -55,15 +58,15 @@ const changeTemplate = (e) => {
                         detail.rule_id = element.rule_id
                         detail.rules = Object.create(element.rules)
                         detail.target = typeof element.target === 'undefined' ? element.target_config : element.target
+                        detail.target_pc = findTargetPercent(element,res.data.data).toFixed(2)
                         detail.actual = typeof element.actual === 'undefined' ? 0.00 : element.actual
                         detail.max = element.max_result
                         detail.weight = element.weight
                         detail.weight_category = element.weight_category
                         detail.base_line = element.base_line
-                        detail.amount = element.amount
                         evaluateForm.detail.push(detail)
+                        // console.log(detail.target_pc);
                     })
-                    display_template()
                 }
             })
             .catch(error => {
@@ -73,6 +76,7 @@ const changeTemplate = (e) => {
             })
             .finally(() => {
                 pageEnable()
+                display_template()
                 setVisible(false)
             })
     } else {
@@ -197,7 +201,6 @@ const addKeyTask = (e) => {
                 detail.weight = row.weight
                 detail.weight_category = row.weight_category
                 detail.base_line = row.base_line
-                detail.amount = row.amount
                 evaluateForm.detail.push(detail)
                 e.offsetParent.querySelector('.close').click()
             }
@@ -245,19 +248,20 @@ const display_template = () => {
 
 
                 let cellBase_line = newRow.insertCell()
-                cellBase_line.appendChild(newInput('number', className, 'base_line', element.base_line, '', `changeValue(this)`))
+                cellBase_line.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`))
 
                 let cellMax = newRow.insertCell()
-                cellMax.appendChild(newInput('number', className, 'max', element.max, '', `changeValue(this)`))
+                cellMax.appendChild(newInput('number', className, 'max', element.max.toFixed(2), '', `changeValue(this)`))
 
                 let cellWeight = newRow.insertCell()
-                cellWeight.appendChild(newInput('number', className, 'weight', element.weight, '', `changeValue(this)`))
-
-                let cellAmount = newRow.insertCell()
-                cellAmount.appendChild(newInput('number', className, 'amount', element.amount, '', `changeValue(this)`))
+                cellWeight.appendChild(newInput('number', className, 'weight', element.weight.toFixed(2), '', `changeValue(this)`))
 
                 let cellTarget = newRow.insertCell()
-                cellTarget.appendChild(newInput('number', className, 'target', element.target, '', `changeValue(this)`))
+                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`))
+
+                let cellTargetPC = newRow.insertCell()
+                // console.log(element);
+                cellTargetPC.textContent = element.target_pc
 
                 if (table.id.substring(6) === `key-task`) {
                     let cellDelete = newRow.insertCell()

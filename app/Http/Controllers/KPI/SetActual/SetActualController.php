@@ -4,6 +4,7 @@ namespace App\Http\Controllers\KPI\SetActual;
 
 use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait;
 use App\Http\Resources\KPI\EvaluateDetailResource;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 class SetActualController extends Controller
 {
+    use CalculatorEvaluateTrait;
     protected $evaluateDetailService, $departmentService, $targetPeriodService, $categoryService, $ruleService;
     public function __construct(
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
@@ -50,6 +52,7 @@ class SetActualController extends Controller
         $categorys = $this->categoryService->dropdown();
         $rules = $this->ruleService->dropdown();
         $result = $this->evaluateDetailService->setActualFilter($request);
+        $this->calculation_detail($result);
         $evaluateDetail = EvaluateDetailResource::collection($result);
         return \view('kpi.SetActual.index', \compact(
             'start_year',

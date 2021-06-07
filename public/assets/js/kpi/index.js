@@ -56,26 +56,28 @@ class EvaluateDetail {
         rule_id = null,
         rules = Object.create(null),
         target = 0.00,
+        target_pc = 0.00,
         actual = 0.00,
+        actual_pc = 0.00,
         max = 0.00,
         weight = 0.00,
         weight_category = 0.00,
         base_line = 0.00,
         ach = 0.00,
-        cal = 0.00,
-        amount = 0.00) {
+        cal = 0.00) {
         this.evaluate_id = evaluate_id
         this.rule_id = rule_id
         this.rules = rules
         this.target = target
+        this.target_pc = target_pc
         this.actual = actual
+        this.actual_pc = actual_pc
         this.max = max
         this.weight = weight
         this.weight_category = weight_category
         this.base_line = base_line
         this.ach = ach
         this.cal = cal
-        this.amount = amount
     }
 }
 // KPI
@@ -115,7 +117,6 @@ var setDetail = (rule_temp) => {
         detail.weight = element.weight
         detail.weight_category = element.weight_category
         detail.base_line = element.base_line
-        detail.amount = element.amount
         evaluateForm.detail.push(detail)
     })
     return evaluateForm
@@ -399,41 +400,54 @@ var formulaRuleDetail = (e, key) => {
 
 var findAchValue = (obj) => {
     if (typeof obj === `object`) {
-        if (obj.rules.calculate_type === calculate.POSITIVE) {
-            ach = parseFloat((obj.actual / obj.target) * 100)
-        }
-        if (obj.rules.calculate_type === calculate.NEGATIVE) {
-            ach = parseFloat((2 - (obj.actual / obj.target)) * 100)
-        }
-        if (obj.rules.calculate_type === calculate.ZERO) {
-            ach = obj.actual <= obj.target ? 100.00 : 0.00
+        if (obj.target_pc === 100) {
+            if (obj.rules.calculate_type === calculate.POSITIVE) {
+                ach = parseFloat((obj.actual / obj.target) * 100)
+            }
+            if (obj.rules.calculate_type === calculate.NEGATIVE) {
+                ach = parseFloat((2 - (obj.actual / obj.target)) * 100)
+            }
+            if (obj.rules.calculate_type === calculate.ZERO) {
+                ach = obj.actual <= obj.target ? 100.00 : 0.00
+            }
+        } else {
+            if (obj.rules.calculate_type === calculate.POSITIVE) {
+                ach = parseFloat((obj.actual_pc / obj.target_pc) * 100)
+            }
+            if (obj.rules.calculate_type === calculate.NEGATIVE) {
+                ach = parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100)
+            }
+            if (obj.rules.calculate_type === calculate.ZERO) {
+                ach = obj.actual_pc <= obj.target_pc ? 100.00 : 0.00
+            }
         }
     }
     if (typeof obj === `number`) {
         ach = obj
     }
-    return  isNaN(ach) || (ach === Infinity) ? 0.00 : ach
+    return isNaN(ach) || (ach === Infinity) ? 0.00 : ach
 }
 
 var findCalValue = (obj, ach) => {
+    // console.log(obj,ach);
     if (ach < obj.base_line) {
         cal = 0.00
-    }else{
+    } else {
         if ('max_result' in obj) {
             if (ach >= obj.max_result) {
                 cal = parseFloat(obj.max_result) * parseFloat(obj.weight) / 100
-            }else{
+            } else {
                 cal = ach * parseFloat(obj.weight) / 100
-            } 
+            }
         }
         if ('max' in obj) {
             if (ach >= obj.max) {
                 cal = parseFloat(obj.max) * parseFloat(obj.weight) / 100
-            }else{
+            } else {
                 cal = ach * parseFloat(obj.weight) / 100
             }
         }
-        
+
     }
     return isNaN(cal) || (cal === Infinity) ? 0.00 : cal
 }
@@ -445,23 +459,32 @@ var findCalValue = (obj, ach) => {
  */
 var setTooltipAch = (e, data) => {
     if (data.rules.calculate_type === calculate.POSITIVE) {
-        setAttributes(e, {
-            "data-toggle": "tooltip",
-            "title": "rules calculate type = Positive : (actual / target) * 100",
-            "data-placement": "top"
-        })
+        if (data.target_pc === 100) {
+            setAttributes(e, {
+                "data-toggle": "tooltip",
+                "title": "Positive : (actual amount / target amount) * 100",
+                "data-placement": "top"
+            })
+        }else{
+            setAttributes(e, {
+                "data-toggle": "tooltip",
+                "title": "Positive : (Actual % / Target %) * 100",
+                "data-placement": "top"
+            })
+        }
+        
     }
     if (data.rules.calculate_type === calculate.NEGATIVE) {
         setAttributes(e, {
             "data-toggle": "tooltip",
-            "title": "rules calculate type = Negative : (2 - (actual / target)) * 100",
+            "title": "Negative : (2 - (actual amount / target amount)) * 100",
             "data-placement": "top"
         })
     }
     if (data.rules.calculate_type === calculate.ZERO) {
         setAttributes(e, {
             "data-toggle": "tooltip",
-            "title": "rules calculate type = Zero Oriented KP : actual <= target ? 100.00 : 0.00",
+            "title": "Zero Oriented KP : actual amount <= target amount? 100.00 : 0.00",
             "data-placement": "top"
         })
     }
@@ -479,7 +502,7 @@ var setTooltipCal = (e, data) => {
             "title": "Ach% < Base Line : Cal = 0.00",
             "data-placement": "top"
         })
-    }else{
+    } else {
         if (data.ach >= data.max_result) {
             // cal = parseFloat(obj.max_result) * parseFloat(obj.weight) / 100
             setAttributes(e, {
@@ -487,7 +510,7 @@ var setTooltipCal = (e, data) => {
                 "title": "Ach% >= Max  = (Max * Weight) / 100",
                 "data-placement": "top"
             })
-        }else{
+        } else {
             // cal = ach * parseFloat(obj.weight) / 100
             setAttributes(e, {
                 "data-toggle": "tooltip",
@@ -537,4 +560,43 @@ var changeTooltipCal = (befor, data) => {
         newTitle = "Ach% = Base Line : (Ach% * Weight) / 100"
     }
     return newTitle
+}
+
+/**
+ * @params {element} EvaluateDetail
+ * @params {array} EvaluateDetail list
+ * @return percent (element.target / parent.target) * 100
+ */
+var findTargetPercent = (element, array) => {
+    element.target_pc = 100.00
+    if (element.rules.parent) {
+        let parent = array.find(item => item.rule_id === element.rules.parent)
+        let config = element.target_config ?? element.target
+        let parent_config = parent.target_config ?? parent.target
+
+        if (config === 0 || parent_config === 0) {
+            element.target_pc = 0.00
+        } else {
+            element.target_pc = (config / parent_config) * 100
+        }
+    }
+    return element.target_pc
+}
+
+/**
+ * @params {element} EvaluateDetail
+ * @params {array} EvaluateDetail list
+ * @return percent (element.target / parent.target) * 100
+ */
+var findActualPercent = (element, array) => {
+    element.actual_pc = 100.00
+    if (element.rules.parent) {
+        let parent = array.find(item => item.rule_id === element.rules.parent)
+        if (element.actual === 0 || parent.actual === 0) {
+            element.actual_pc = 0.00
+        } else {
+            element.actual_pc = (element.actual / parent.actual) * 100
+        }
+    }
+    return element.actual_pc
 }

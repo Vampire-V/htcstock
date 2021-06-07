@@ -17,6 +17,10 @@
     .select2-containe {
         display: inherit !important;
     }
+    label span { color: red; }
+    label {
+        font-weight: bold;
+    }
 </style>
 @endsection
 @section('content')
@@ -112,12 +116,12 @@
                             <tr>
                                 <th>#</th>
                                 <th>Rule Name</th>
-                                <th>Measurement</th>
-                                <th>Base line</th>
-                                <th>Max</th>
-                                <th>Target config</th>
+                                <th>Base line %</th>
+                                <th>Max %</th>
                                 <th>Weight %</th>
-                                <th>Numbers</th>
+                                <th>Target Amount</th>
+                                <th>Target %</th>
+                                <th>Sort</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -127,9 +131,9 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td>Total Weight</td>
                                 <td></td>
                                 <td></td>
-                                <td>Total Weight :</td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -187,39 +191,29 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="position-relative form-group"><label for="max-result" class="">Max
                                     : %</label>
                                 <input name="max_result" id="validationMax" placeholder="Max result" type="number"
                                     min="0" step="0.01" class="form-control form-control-sm" required>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="position-relative form-group"><label for="target-config" class="">Amount
-                                    :</label><input name="amount" id="validationTargetConfig"
-                                    placeholder="Amount" type="number" min="0" step="0.1"
-                                    class="form-control form-control-sm" required></div>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="position-relative form-group"><label for="target-config" class="">Target
-                                    %
-                                    :</label><input name="target_config" id="validationTargetConfig"
+                                    : <span>( ใส่จำนวน )</span></label><input name="target_config" id="validationTargetConfig"
                                     placeholder="Target config" type="number" min="0" step="0.01"
                                     class="form-control form-control-sm" required></div>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="col-md-6">
-                            <div class="position-relative form-group"><label for="weight" class="">Weight limit
+                            <div class="position-relative form-group"><label for="weight" class="">Weight rule limit
                                     100%:</label>
                                 <input name="weight" id="validationWeight" placeholder="Weight" type="number" min="0"
                                     step="0.01" max="100" class="form-control form-control-sm" required>
                             </div>
                         </div>
-
                         <div class="col-md-6">
                             <div class="position-relative form-group"><label for="weight-category" class="">Weight
                                     category
@@ -239,6 +233,7 @@
 </div>
 @endsection
 @section('second-script')
+<script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script>
     var template = {!!json_encode($template)!!}
     var rules = {!!json_encode($rules)!!}

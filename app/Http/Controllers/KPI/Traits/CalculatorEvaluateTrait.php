@@ -12,12 +12,18 @@ trait CalculatorEvaluateTrait
     protected function calculation_summary(Collection $evaluations)
     {
         foreach ($evaluations as $key => $value) {
-            if ($value->evaluateDetail) {
-                foreach ($value->evaluateDetail as $key => $item) {
-                    // \dump($item->rule->name);
-                    $this->findAch($item);
-                    $this->findCal($item, $item->ach);
-                }
+            $this->calculation_detail($value->evaluateDetail);
+        }
+    }
+
+    protected function calculation_detail(Collection $evaluate_detail)
+    {
+        if ($evaluate_detail) {
+            foreach ($evaluate_detail as $key => $item) {
+                $this->findTargetPC($item,$evaluate_detail);
+                $this->findActualPC($item,$evaluate_detail);
+                $this->findAch($item);
+                $this->findCal($item, $item->ach);
             }
         }
     }
@@ -40,11 +46,43 @@ trait CalculatorEvaluateTrait
         if ($ach < $item->base_line) {
             $item->cal = 0.00;
         } else {
-            if ($ach >= $item->max) {
-                $item->cal = ($item->max * $item->weight) / 100.00;
+            $max = $item->max ?? $item->max_result;
+            if ($ach >= $max) {
+                $item->cal = ($max * $item->weight) / 100.00;
             } else {
                 $item->cal = ($ach * $item->weight) / 100.00;
             }
         }
+    }
+
+    private function findTargetPC(EvaluateDetail $object, Collection $collection)
+    {
+        $object->target_pc = 100.00;
+        if ($object->rule->parent) {
+            $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
+            $parent = $collection[$index];
+            $target = $object->target_config ?? $object->target;
+            $parent_target = $parent->target_config ?? $parent->target;
+
+            if ($target === 0.00 || $parent_target === 0.00) {
+                $object->target_pc = 0.00;
+            } else {
+                $object->target_pc = ($target / $parent_target) * 100;
+            }
+        };
+    }
+
+    private function findActualPC(EvaluateDetail $object, Collection $collection)
+    {
+        $object->actual_pc = 100.00;
+        if ($object->rule->parent) {
+            $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
+            $parent = $collection[$index];
+            if ($object->actual === 0.00 || $parent->actual === 0.00) {
+                $object->actual_pc = 0.00;
+            } else {
+                $object->actual_pc = ($object->actual / $parent->actual) * 100;
+            }
+        };
     }
 }

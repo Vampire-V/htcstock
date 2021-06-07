@@ -140,8 +140,7 @@ class SelfEvaluationController extends Controller
                             'weight' => $value['weight'],
                             'weight_category' => $value['weight_category'],
                             'base_line' => $value['base_line'],
-                            'max_result' => $value['max'],
-                            'amount' => $value['amount']
+                            'max_result' => $value['max']
                         ]
                     );
             }
@@ -295,8 +294,7 @@ class SelfEvaluationController extends Controller
                 $weight_category = $element->weight_category;
                 $base_line = $element->base_line;
                 $max_result = $element->max;
-                $amount =  $element->amount;
-                $result[] = \compact('rule_id', 'target', 'actual', 'weight', 'weight_category', 'base_line', 'max_result', 'amount');
+                $result[] = \compact('rule_id', 'target', 'actual', 'weight', 'weight_category', 'base_line', 'max_result');
             }
             return $result;
         } catch (\Throwable $th) {

@@ -23,6 +23,10 @@
             placeholder: 'Select DataSources',
             allowClear: true
         });
+        $("#validationRelationRule").select2({
+            placeholder: 'Select Rule',
+            allowClear: true
+        });
         
     })
 

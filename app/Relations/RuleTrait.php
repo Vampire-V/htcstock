@@ -5,6 +5,7 @@ namespace App\Relations;
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\EvaluateDetail;
 use App\Models\KPI\KpiRuleType;
+use App\Models\KPI\Rule;
 use App\Models\KPI\RuleCategory;
 use App\Models\KPI\RuleTemplate;
 use App\Models\KPI\TargetUnit;
@@ -56,5 +57,10 @@ trait RuleTrait
     public function department()
     {
         return $this->belongsTo(KpiRuleType::class, 'department_id')->withDefault();
+    }
+
+    public function parent_to()
+    {
+        return $this->belongsTo(Rule::class, 'parent')->withDefault();
     }
 }

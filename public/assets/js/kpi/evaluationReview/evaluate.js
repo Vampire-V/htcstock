@@ -77,22 +77,26 @@ var render_html = () => {
                 // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
                 let readonly = true
                 let cellBaseLine = newRow.insertCell()
-                cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line, '', `changeValue(this)`, readonly))
+                cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`, readonly))
 
                 let cellMax = newRow.insertCell()
-                cellMax.appendChild(newInput('number', className, 'max', element.max, '', `changeValue(this)`, readonly))
+                cellMax.appendChild(newInput('number', className, 'max', element.max.toFixed(2), '', `changeValue(this)`, readonly))
 
                 let cellWeight = newRow.insertCell()
-                cellWeight.appendChild(newInput('number', className, 'weight', element.weight, '', `changeValue(this)`, readonly))
-
-                let cellAmount = newRow.insertCell()
-                cellAmount.appendChild(newInput('number', className, 'amount', element.amount, '', `changeValue(this)`, readonly))
+                cellWeight.appendChild(newInput('number', className, 'weight', element.weight.toFixed(2), '', `changeValue(this)`, readonly))
 
                 let cellTarget = newRow.insertCell()
-                cellTarget.appendChild(newInput('number', className, 'target', element.target, '', `changeValue(this)`, readonly))
+                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`, readonly))
+
+                let cellTargetPC = newRow.insertCell()
+                cellTargetPC.textContent = findTargetPercent(element,temp_rules).toFixed(2) + '%'
+
 
                 let cellActual = newRow.insertCell()
-                cellActual.appendChild(newInput('number', className, 'actual', element.actual, '', `changeValue(this)`, false))
+                cellActual.appendChild(newInput('number', className, 'actual', element.actual.toFixed(2), '', `changeValue(this)`, false))
+
+                let cellActualPC = newRow.insertCell()
+                cellActualPC.textContent = findActualPercent(element,temp_rules).toFixed(2) + '%'
 
                 let cellAch = newRow.insertCell()
                 element.ach = findAchValue(element)
@@ -137,8 +141,8 @@ var render_html = () => {
         let sum_ach = temp_rules.reduce((total, cur) => total += cur.ach, 0.00)
         let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00)
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
-        table.tFoot.lastElementChild.cells[9].textContent = `${sum_ach.toFixed(2)}%`
-        table.tFoot.lastElementChild.cells[10].textContent = `${sum_cal.toFixed(2)}%`
+        table.tFoot.lastElementChild.cells[10].textContent = `${sum_ach.toFixed(2)}%`
+        table.tFoot.lastElementChild.cells[11].textContent = `${sum_cal.toFixed(2)}%`
         summary.push({
             'weight': parseFloat(head_weight.value),
             'cal': parseFloat(sum_cal),

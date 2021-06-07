@@ -9,20 +9,20 @@
             for (let index = 0; index < tBody.rows.length; index++) {
                 const element = tBody.rows[index]
                 let actual = element.cells[9]
-                let Ach = element.cells[10]
-                let Cal = element.cells[11]
+                // let Ach = element.cells[11]
+                // let Cal = element.cells[12]
                 let obj = detail.find(value => value.id === parseInt(actual.firstChild.id))
                 if (obj.rules.calculate_type !== calculate.NEGATIVE) {
                     actual.setAttribute("min", 0.00);
                 }
-                let ach = findAchValue(obj)
-                let cal = findCalValue(obj, ach)
-                obj.ach = ach
-                obj.cal = cal
-                setTooltipAch(Ach, obj)
-                setTooltipCal(Cal, obj)
-                Ach.textContent = ach.toFixed(2) + '%'
-                Cal.textContent = cal.toFixed(2) + '%'
+                // let ach = findAchValue(obj)
+                // let cal = findCalValue(obj, ach)
+                // obj.ach = ach
+                // obj.cal = cal
+                // setTooltipAch(Ach, obj)
+                // setTooltipCal(Cal, obj)
+                // Ach.textContent = ach.toFixed(2) + '%'
+                // Cal.textContent = cal.toFixed(2) + '%'
             }
             $('[data-toggle="tooltip"]').tooltip()
         }
@@ -68,27 +68,33 @@ var changeActual = (e) => {
             const element = detail[index]
             if (element.id === parseInt(e.id)) {
                 element.actual = parseFloat(e.value).toFixed(2)
+                let actual_pc = findActualPercent(element,detail)
                 let ach = findAchValue(element)
                 let cal = findCalValue(element, ach)
+                element.actual_pc = actual_pc
                 element.ach = ach
                 element.cal = cal
-                row.cells[10].textContent = ach.toFixed(2) + '%'
-                row.cells[11].textContent = cal.toFixed(2) + '%'
-                row.cells[11].dataset.originalTitle = changeTooltipCal(row.cells[11].dataset.originalTitle, element)
+                row.cells[8].textContent = actual_pc.toFixed(2) + '%'
+                row.cells[11].textContent = ach.toFixed(2) + '%'
+                row.cells[12].textContent = cal.toFixed(2) + '%'
+                row.cells[12].dataset.originalTitle = changeTooltipCal(row.cells[11].dataset.originalTitle, element)
             }
 
             if (row.cells[3].textContent === element.rules.name && row.cells[2].textContent === `${element.evaluate.targetperiod.name} ${element.evaluate.targetperiod.year}`) {
                 element.actual = parseFloat(e.value).toFixed(2)
+                let actual_pc = findActualPercent(element,detail)
                 let ach = findAchValue(element)
                 let cal = findCalValue(element, ach)
+                element.actual_pc = actual_pc
                 element.ach = ach
                 element.cal = cal
                 let input = document.getElementById(element.id)
                 let duplicate_row = input.parentNode.parentNode
                 input.value = parseFloat(e.value).toFixed(2)
-                duplicate_row.cells[10].textContent = ach.toFixed(2) + '%'
-                duplicate_row.cells[11].textContent = cal.toFixed(2) + '%'
-                duplicate_row.cells[11].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[11].dataset.originalTitle, element)
+                duplicate_row.cells[8].textContent = actual_pc.toFixed(2) + '%'
+                duplicate_row.cells[11].textContent = ach.toFixed(2) + '%'
+                duplicate_row.cells[12].textContent = cal.toFixed(2) + '%'
+                duplicate_row.cells[12].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[11].dataset.originalTitle, element)
             }
         }
     }
@@ -102,26 +108,32 @@ var changeTarget = (e) => {
             let id = parseInt(e.id.substr(e.id.search("_") + 1,e.id.length))
             if (element.id === id) {
                 element.target = parseFloat(e.value).toFixed(2)
+                let target_pc = findTargetPercent(element,detail)
                 let ach = findAchValue(element)
                 let cal = findCalValue(element, ach)
+                element.target_pc = target_pc
                 element.ach = ach
                 element.cal = cal
-                row.cells[10].textContent = ach.toFixed(2) + '%'
-                row.cells[11].textContent = cal.toFixed(2) + '%'
-                row.cells[11].dataset.originalTitle = changeTooltipCal(row.cells[11].dataset.originalTitle, element)
+                row.cells[10].textContent = target_pc.toFixed(2) + '%'
+                row.cells[11].textContent = ach.toFixed(2) + '%'
+                row.cells[12].textContent = cal.toFixed(2) + '%'
+                row.cells[12].dataset.originalTitle = changeTooltipCal(row.cells[11].dataset.originalTitle, element)
             }
             if (row.cells[3].textContent === element.rules.name && row.cells[2].textContent === `${element.evaluate.targetperiod.name} ${element.evaluate.targetperiod.year}`) {
                 element.target = parseFloat(e.value).toFixed(2)
+                let target_pc = findTargetPercent(element,detail)
                 let ach = findAchValue(element)
                 let cal = findCalValue(element, ach)
+                element.target_pc = target_pc
                 element.ach = ach
                 element.cal = cal
                 let input = document.getElementById(`target_${element.id}`)
                 let duplicate_row = input.parentNode.parentNode
                 input.value = parseFloat(e.value).toFixed(2)
-                duplicate_row.cells[10].textContent = ach.toFixed(2) + '%'
-                duplicate_row.cells[11].textContent = cal.toFixed(2) + '%'
-                duplicate_row.cells[11].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[11].dataset.originalTitle, element)
+                duplicate_row.cells[10].textContent = target_pc.toFixed(2) + '%'
+                duplicate_row.cells[11].textContent = ach.toFixed(2) + '%'
+                duplicate_row.cells[12].textContent = cal.toFixed(2) + '%'
+                duplicate_row.cells[12].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[11].dataset.originalTitle, element)
             }
         }
     }
@@ -159,8 +171,8 @@ var validationActual = () => {
             element.cells[9].firstChild.focus()
             return false
         }
-        if (!Array.isArray(element.cells[8].firstChild.value.match(/^(\d+\.?\d*|\.\d+)$/))) {
-            element.cells[8].firstChild.focus()
+        if (!Array.isArray(element.cells[7].firstChild.value.match(/^(\d+\.?\d*|\.\d+)$/))) {
+            element.cells[7].firstChild.focus()
             return false
         }
     }

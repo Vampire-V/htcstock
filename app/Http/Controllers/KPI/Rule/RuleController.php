@@ -8,6 +8,7 @@ use App\Http\Requests\KPI\StoreRulePost;
 use App\Http\Requests\KPI\StoreRulePut;
 use App\Http\Resources\KPI\RuleResource;
 use App\Imports\KPI\RulesImport;
+use App\Models\KPI\Rule;
 use App\Models\TemporaryFile;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\IT\Service\DepartmentService;
@@ -77,7 +78,8 @@ class RuleController extends Controller
         $users = $this->userService->dropdown();
         $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
         $departments = $this->departmentService->dropdown();
-        return \view('kpi.RuleList.create', \compact('category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments'));
+        $rules = $this->ruleService->dropdown($category->firstWhere('name','kpi')->id);
+        return \view('kpi.RuleList.create', \compact('category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments', 'rules'));
     }
 
     /**
@@ -131,16 +133,18 @@ class RuleController extends Controller
     {
         $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
         try {
-            $rule = $this->ruleService->find($id);
+            $rule = Rule::with('parent_to')->where('id',$id)->first();
+            // dd($rule);
             $category = $this->ruleCategoryService->dropdown();
             $unit = $this->targetUnitService->dropdown();
             $rulesType = $this->ruleTypeService->dropdown();
             $users = $this->userService->dropdown();
             $departments = $this->departmentService->dropdown();
+            $rules = $this->ruleService->dropdown($category->firstWhere('name','kpi')->id);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.RuleList.edit', \compact('rule', 'category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments'));
+        return \view('kpi.RuleList.edit', \compact('rule', 'rules', 'category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments'));
     }
 
     /**

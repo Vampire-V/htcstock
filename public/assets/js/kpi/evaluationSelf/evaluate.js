@@ -87,22 +87,25 @@ var render_html = () => {
                 let readonly = auth.id === element.rules.user_actual.id || auth.roles.find(item => item.slug === `admin-kpi`) ? false : true
                 // console.log(readonly);
                 let cellBaseLine = newRow.insertCell()
-                cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line, '', `changeValue(this)`, readonly))
+                cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`, readonly))
 
                 let cellMax = newRow.insertCell()
-                cellMax.appendChild(newInput('number', className, 'max', element.max, '', `changeValue(this)`, readonly))
+                cellMax.appendChild(newInput('number', className, 'max', element.max.toFixed(2), '', `changeValue(this)`, readonly))
 
                 let cellWeight = newRow.insertCell()
-                cellWeight.appendChild(newInput('number', className, 'weight', element.weight, '', `changeValue(this)`, readonly))
-
-                let cellAmount = newRow.insertCell()
-                cellAmount.appendChild(newInput('number', className, 'amount', element.amount, '', 'changeValue(this)', readonly))
+                cellWeight.appendChild(newInput('number', className, 'weight', element.weight.toFixed(2), '', `changeValue(this)`, readonly))
 
                 let cellTarget = newRow.insertCell()
-                cellTarget.appendChild(newInput('number', className, 'target', element.target, '', `changeValue(this)`, readonly))
+                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`, readonly))
+
+                let cellTargetPC = newRow.insertCell()
+                cellTargetPC.textContent = findTargetPercent(element,temp_rules).toFixed(2) + `%`
 
                 let cellActual = newRow.insertCell()
-                cellActual.appendChild(newInput('number', className, 'actual', element.actual, '', `changeValue(this)`, readonly))
+                cellActual.appendChild(newInput('number', className, 'actual', element.actual.toFixed(2), '', `changeValue(this)`, readonly))
+
+                let cellActualPC = newRow.insertCell()
+                cellActualPC.textContent = findActualPercent(element,temp_rules).toFixed(2) + `%`
 
                 let cellAch = newRow.insertCell()
                 element.ach = findAchValue(element)
@@ -142,14 +145,14 @@ var render_html = () => {
 
         head_weight = table.offsetParent.firstElementChild.querySelector('input')
         if (head_weight && head_weight.name in template) {
-            head_weight.value = template[head_weight.name]
+            head_weight.value = template[head_weight.name].toFixed(2)
         }
         let sum_weight = temp_rules.reduce((total, cur) => total += cur.weight, 0.00)
         let sum_ach = temp_rules.reduce((total, cur) => total += cur.ach, 0.00)
         let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00)
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
-        table.tFoot.lastElementChild.cells[9].textContent = `${sum_ach.toFixed(2)}%`
-        table.tFoot.lastElementChild.cells[10].textContent = `${sum_cal.toFixed(2)}%`
+        // table.tFoot.lastElementChild.cells[10].textContent = `${sum_ach.toFixed(2)}%`
+        table.tFoot.lastElementChild.cells[11].textContent = `${sum_cal.toFixed(2)}%`
         summary.push({
             'weight': parseFloat(head_weight.value),
             'cal': parseFloat(sum_cal),
@@ -190,15 +193,21 @@ const changeValue = (e) => {
                 sumary_index = summary.findIndex(item => item.category === rule.rules.categorys.name)
 
             if (rule.rules.calculate_type !== null) {
+                // หา target %
+                let targetPC = findTargetPercent(rule,evaluateForm.detail)
+                tr.cells[7].firstChild.textContent = targetPC.toFixed(2) + '%'
+                // หา actual %
+                let actualPC = findActualPercent(rule,evaluateForm.detail)
+                tr.cells[9].firstChild.textContent = actualPC.toFixed(2) + '%'
                 // หา %Ach
                 let ach = findAchValue(rule)
-                tr.cells[column + 1].firstChild.textContent = ach.toFixed(2) + '%'
+                tr.cells[10].firstChild.textContent = ach.toFixed(2) + '%'
                 rule.ach = ach
 
                 // หา %Cal
                 let cal = findCalValue(rule, ach)
-                tr.cells[column + 2].firstChild.textContent = cal.toFixed(2) + '%'
-                tr.cells[column + 2].dataset.originalTitle = changeTooltipCal(tr.cells[column + 2].dataset.originalTitle, rule)
+                tr.cells[11].firstChild.textContent = cal.toFixed(2) + '%'
+                tr.cells[11].dataset.originalTitle = changeTooltipCal(tr.cells[column + 2].dataset.originalTitle, rule)
                 rule.cal = cal
 
                 // total %Ach & %Cal
@@ -210,8 +219,8 @@ const changeValue = (e) => {
                     .filter(item => item.rules.categorys.name === rule.rules.categorys.name)
                     .reduce((total, currentValue) => total + currentValue.ach, 0)
 
-                foot.lastElementChild.cells[foot.lastElementChild.childElementCount - 2].textContent = parseFloat(sumAch).toFixed(2) + '%'
-                foot.lastElementChild.cells[foot.lastElementChild.childElementCount - 1].textContent = parseFloat(sumCal).toFixed(2) + '%'
+                // foot.lastElementChild.cells[10].textContent = parseFloat(sumAch).toFixed(2) + '%'
+                foot.lastElementChild.cells[11].textContent = parseFloat(sumCal).toFixed(2) + '%'
                 summary[sumary_index].cal = parseFloat(sumCal)
                 
                 

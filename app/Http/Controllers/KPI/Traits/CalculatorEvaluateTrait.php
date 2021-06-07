@@ -30,15 +30,28 @@ trait CalculatorEvaluateTrait
 
     private function findAch(EvaluateDetail $item)
     {
-        if ($item->rule->calculate_type === KPIEnum::positive) {
-            $item->ach = ($item->actual / $item->target) * 100.00;
+        if ($item->target_pc === 100.00) {
+            if ($item->rule->calculate_type === KPIEnum::positive) {
+                $item->ach = ($item->actual / $item->target) * 100.00;
+            }
+            if ($item->rule->calculate_type === KPIEnum::negative) {
+                $item->ach = (2 - ($item->actual / $item->target)) * 100.00;
+            }
+            if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
+                $item->ach = $item->actual <= $item->target ? 100.00 : 0.00;
+            }
+        }else{
+            if ($item->rule->calculate_type === KPIEnum::positive) {
+                $item->ach = ($item->actual_pc / $item->target_pc) * 100.00;
+            }
+            if ($item->rule->calculate_type === KPIEnum::negative) {
+                $item->ach = (2 - ($item->actual_pc / $item->target_pc)) * 100.00;
+            }
+            if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
+                $item->ach = $item->actual_pc <= $item->target_pc ? 100.00 : 0.00;
+            }
         }
-        if ($item->rule->calculate_type === KPIEnum::negative) {
-            $item->ach = (2 - ($item->actual / $item->target)) * 100.00;
-        }
-        if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
-            $item->ach = $item->actual <= $item->target ? 100.00 : 0.00;
-        }
+        
     }
 
     private function findCal(EvaluateDetail $item, $ach)

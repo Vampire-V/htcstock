@@ -400,12 +400,12 @@ var formulaRuleDetail = (e, key) => {
 
 var findAchValue = (obj) => {
     if (typeof obj === `object`) {
-        if (obj.target_pc === 100) {
+        if (!obj.rules.parent) {
             if (obj.rules.calculate_type === calculate.POSITIVE) {
-                ach = parseFloat((obj.actual / obj.target) * 100)
+                ach = parseFloat((obj.actual / obj.target) * 100.00)
             }
             if (obj.rules.calculate_type === calculate.NEGATIVE) {
-                ach = parseFloat((2 - (obj.actual / obj.target)) * 100)
+                ach = parseFloat((2 - (obj.actual / obj.target)) * 100.00)
             }
             if (obj.rules.calculate_type === calculate.ZERO) {
                 ach = obj.actual <= obj.target ? 100.00 : 0.00

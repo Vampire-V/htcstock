@@ -30,7 +30,7 @@ trait CalculatorEvaluateTrait
 
     private function findAch(EvaluateDetail $item)
     {
-        if ($item->target_pc === 100.00) {
+        if (!$item->rule->parent) {
             if ($item->rule->calculate_type === KPIEnum::positive) {
                 if ($item->actual <= 0) {
                     $item->ach = 0;

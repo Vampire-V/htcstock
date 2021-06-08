@@ -8,7 +8,7 @@
             let tBody = document.getElementById('table-set-actual').tBodies[0]
             for (let index = 0; index < tBody.rows.length; index++) {
                 const element = tBody.rows[index]
-                let actual = element.cells[9]
+                let actual = element.cells[10]
                 // let Ach = element.cells[11]
                 // let Cal = element.cells[12]
                 let obj = detail.find(value => value.id === parseInt(actual.firstChild.id))
@@ -74,13 +74,13 @@ var changeActual = (e) => {
                 element.actual_pc = actual_pc
                 element.ach = ach
                 element.cal = cal
-                row.cells[10].textContent = actual_pc.toFixed(2) + '%'
-                row.cells[11].textContent = ach.toFixed(2) + '%'
-                row.cells[12].textContent = cal.toFixed(2) + '%'
-                row.cells[12].dataset.originalTitle = changeTooltipCal(row.cells[11].dataset.originalTitle, element)
+                row.cells[11].textContent = actual_pc.toFixed(2) + '%'
+                row.cells[12].textContent = ach.toFixed(2) + '%'
+                row.cells[13].textContent = cal.toFixed(2) + '%'
+                row.cells[13].dataset.originalTitle = changeTooltipCal(row.cells[12].dataset.originalTitle, element)
             }
 
-            if (row.cells[3].textContent === element.rules.name && row.cells[2].textContent === `${element.evaluate.targetperiod.name} ${element.evaluate.targetperiod.year}`) {
+            if (row.cells[4].textContent === element.rules.name && row.cells[3].textContent === `${element.evaluate.targetperiod.name} ${element.evaluate.targetperiod.year}`) {
                 element.actual = parseFloat(e.value).toFixed(2)
                 let actual_pc = findActualPercent(element,detail)
                 let ach = findAchValue(element)
@@ -91,10 +91,10 @@ var changeActual = (e) => {
                 let input = document.getElementById(element.id)
                 let duplicate_row = input.parentNode.parentNode
                 input.value = parseFloat(e.value).toFixed(2)
-                duplicate_row.cells[10].textContent = actual_pc.toFixed(2) + '%'
-                duplicate_row.cells[11].textContent = ach.toFixed(2) + '%'
-                duplicate_row.cells[12].textContent = cal.toFixed(2) + '%'
-                duplicate_row.cells[12].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[11].dataset.originalTitle, element)
+                duplicate_row.cells[11].textContent = actual_pc.toFixed(2) + '%'
+                duplicate_row.cells[12].textContent = ach.toFixed(2) + '%'
+                duplicate_row.cells[13].textContent = cal.toFixed(2) + '%'
+                duplicate_row.cells[13].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[12].dataset.originalTitle, element)
             }
         }
     }
@@ -114,12 +114,12 @@ var changeTarget = (e) => {
                 element.target_pc = target_pc
                 element.ach = ach
                 element.cal = cal
-                row.cells[8].textContent = target_pc.toFixed(2) + '%'
-                row.cells[11].textContent = ach.toFixed(2) + '%'
-                row.cells[12].textContent = cal.toFixed(2) + '%'
-                row.cells[12].dataset.originalTitle = changeTooltipCal(row.cells[11].dataset.originalTitle, element)
+                row.cells[9].textContent = target_pc.toFixed(2) + '%'
+                row.cells[12].textContent = ach.toFixed(2) + '%'
+                row.cells[13].textContent = cal.toFixed(2) + '%'
+                row.cells[13].dataset.originalTitle = changeTooltipCal(row.cells[12].dataset.originalTitle, element)
             }
-            if (row.cells[3].textContent === element.rules.name && row.cells[2].textContent === `${element.evaluate.targetperiod.name} ${element.evaluate.targetperiod.year}`) {
+            if (row.cells[4].textContent === element.rules.name && row.cells[3].textContent === `${element.evaluate.targetperiod.name} ${element.evaluate.targetperiod.year}`) {
                 element.target = parseFloat(e.value).toFixed(2)
                 let target_pc = findTargetPercent(element,detail)
                 let ach = findAchValue(element)
@@ -130,10 +130,10 @@ var changeTarget = (e) => {
                 let input = document.getElementById(`target_${element.id}`)
                 let duplicate_row = input.parentNode.parentNode
                 input.value = parseFloat(e.value).toFixed(2)
-                duplicate_row.cells[8].textContent = target_pc.toFixed(2) + '%'
-                duplicate_row.cells[11].textContent = ach.toFixed(2) + '%'
-                duplicate_row.cells[12].textContent = cal.toFixed(2) + '%'
-                duplicate_row.cells[12].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[11].dataset.originalTitle, element)
+                duplicate_row.cells[9].textContent = target_pc.toFixed(2) + '%'
+                duplicate_row.cells[12].textContent = ach.toFixed(2) + '%'
+                duplicate_row.cells[13].textContent = cal.toFixed(2) + '%'
+                duplicate_row.cells[13].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[12].dataset.originalTitle, element)
             }
         }
     }
@@ -167,12 +167,12 @@ var validationActual = () => {
     let tBody = document.getElementById('table-set-actual').tBodies[0]
     for (let index = 0; index < tBody.rows.length; index++) {
         const element = tBody.rows[index];
-        if (!Array.isArray(element.cells[9].firstChild.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
-            element.cells[9].firstChild.focus()
+        if (!Array.isArray(element.cells[10].firstChild.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
+            element.cells[10].firstChild.focus()
             return false
         }
-        if (!Array.isArray(element.cells[7].firstChild.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
-            element.cells[7].firstChild.focus()
+        if (!Array.isArray(element.cells[8].firstChild.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
+            element.cells[8].firstChild.focus()
             return false
         }
     }

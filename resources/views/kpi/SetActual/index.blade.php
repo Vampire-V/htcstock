@@ -119,6 +119,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Category</th>
+                                <th>Name</th>
                                 <th>Target Period</th>
                                 <th>Rule Name</th>
                                 <th>Base Line%</th>
@@ -138,6 +139,7 @@
                             <tr>
                                 <th scope="row">{{$key+1}}</th>
                                 <td>{{$item->rule->category->name }}</td>
+                                <td>{{$item->evaluate->user->name }}</td>
                                 <td>{{$item->evaluate->targetperiod->name}} {{$item->evaluate->targetperiod->year}}</td>
                                 <td class="truncate" data-toggle="tooltip" title="" data-placement="top"
                                     data-original-title="{{$item->rule->name}}">{{$item->rule->name}}</td>
@@ -162,7 +164,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="9"></td>
+                                <td colspan="10"></td>
                                 <td><button class="mb-2 mr-2 btn btn-success btn-sm"
                                         onclick="submit(this)">Save</button>
                                 </td>

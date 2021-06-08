@@ -63,7 +63,7 @@
 
 var changeActual = (e) => {
     let row = e.parentNode.parentNode
-    if (Array.isArray(e.value.match(/^(\d+\.?\d*|\.\d+)$/))) {
+    if (Array.isArray(e.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
         for (let index = 0; index < detail.length; index++) {
             const element = detail[index]
             if (element.id === parseInt(e.id)) {
@@ -102,7 +102,7 @@ var changeActual = (e) => {
 
 var changeTarget = (e) => {
     let row = e.parentNode.parentNode
-    if (Array.isArray(e.value.match(/^(\d+\.?\d*|\.\d+)$/))) {
+    if (Array.isArray(e.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
         for (let index = 0; index < detail.length; index++) {
             const element = detail[index]
             let id = parseInt(e.id.substr(e.id.search("_") + 1,e.id.length))
@@ -167,11 +167,11 @@ var validationActual = () => {
     let tBody = document.getElementById('table-set-actual').tBodies[0]
     for (let index = 0; index < tBody.rows.length; index++) {
         const element = tBody.rows[index];
-        if (!Array.isArray(element.cells[9].firstChild.value.match(/^(\d+\.?\d*|\.\d+)$/))) {
+        if (!Array.isArray(element.cells[9].firstChild.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
             element.cells[9].firstChild.focus()
             return false
         }
-        if (!Array.isArray(element.cells[7].firstChild.value.match(/^(\d+\.?\d*|\.\d+)$/))) {
+        if (!Array.isArray(element.cells[7].firstChild.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
             element.cells[7].firstChild.focus()
             return false
         }

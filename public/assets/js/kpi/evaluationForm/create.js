@@ -29,7 +29,7 @@ const changeValue = (e) => {
     
     let object = evaluateForm.detail.find(obj => obj.rules.name === e.offsetParent.parentNode.cells[1].textContent)
     for (const key in object) {
-        object[key] = key === e.name ? parseFloat(e.value) : object[key]
+        object[key] = key === e.name ? parseFloat(e.value.trim()) : object[key]
         if (object.rules.parent) {
             console.log(object.rules.parent);
         }

@@ -38,14 +38,11 @@ trait CalculatorEvaluateTrait
                 if ($ac <= 0) {
                     $item->ach = 0.00;
                 } else {
-                    $item->ach = $this->isZero($ac, $tar) ? 0 : ($ac / $tar) * 100.00;
+                    $item->ach = $this->isZero($ac, $tar) ? 0.00 : ($ac / $tar) * 100.00;
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                if ($item->id === 240) {
-                    // dd($ac % $tar);
-                }
-                $item->ach = (2 - $this->isZero($ac, $tar) ? 0 : ($ac / $tar)) * 100.00;
+                $item->ach = (2 - $this->isZero($ac, $tar) ? 1 : ($ac / $tar)) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $item->ach = $ac <= $tar ? 100.00 : 0.00;
@@ -61,7 +58,7 @@ trait CalculatorEvaluateTrait
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                $item->ach = (2 - $this->isZero($ac, $tar) ? 0 : ($ac / $tar)) * 100.00;
+                $item->ach = (2 - $this->isZero($ac, $tar) ? 1 : ($ac / $tar)) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $item->ach = $ac <= $tar ? 100.00 : 0.00;

@@ -32,36 +32,28 @@ trait CalculatorEvaluateTrait
     {
         if (!$item->rule->parent) {
             if ($item->rule->calculate_type === KPIEnum::positive) {
-                if ($item->actual <= 0) {
-                    $item->ach = 0;
+                if ($item->actual <= 0.00) {
+                    $item->ach = 0.00;
                 } else {
                     $item->ach = ($item->actual / $item->target) * 100.00;
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                if ($item->actual <= 0) {
-                    $item->ach = 0;
-                } else {
-                    $item->ach = (2 - ($item->actual / $item->target)) * 100.00;
-                }
+                $item->ach = (2 - ($item->actual / $item->target)) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $item->ach = $item->actual <= $item->target ? 100.00 : 0.00;
             }
         } else {
             if ($item->rule->calculate_type === KPIEnum::positive) {
-                if ($item->actual_pc <= 0) {
-                    $item->ach = 0;
+                if ($item->actual_pc <= 0.00) {
+                    $item->ach = 0.00;
                 } else {
                     $item->ach = ($item->actual_pc / $item->target_pc) * 100.00;
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                if ($item->actual_pc <= 0) {
-                    $item->ach = 0;
-                } else {
-                    $item->ach = (2 - ($item->actual_pc / $item->target_pc)) * 100.00;
-                }
+                $item->ach = (2 - ($item->actual_pc / $item->target_pc)) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $item->ach = $item->actual_pc <= $item->target_pc ? 100.00 : 0.00;

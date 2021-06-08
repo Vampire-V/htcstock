@@ -465,14 +465,14 @@ var setTooltipAch = (e, data) => {
                 "title": "Positive : (actual amount / target amount) * 100",
                 "data-placement": "top"
             })
-        }else{
+        } else {
             setAttributes(e, {
                 "data-toggle": "tooltip",
                 "title": "Positive : (Actual % / Target %) * 100",
                 "data-placement": "top"
             })
         }
-        
+
     }
     if (data.rules.calculate_type === calculate.NEGATIVE) {
         setAttributes(e, {
@@ -571,12 +571,11 @@ var findTargetPercent = (element, array) => {
     element.target_pc = 100.00
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
-        let config = element.target_config ?? element.target
-        let parent_config = parent.target_config ?? parent.target
-
-        if (config === 0 || parent_config === 0) {
+        if (!parent || config === 0 || parent_config === 0) {
             element.target_pc = 0.00
         } else {
+            let config = element.target_config ?? element.target
+            let parent_config = parent.target_config ?? parent.target
             element.target_pc = (config / parent_config) * 100
         }
     }

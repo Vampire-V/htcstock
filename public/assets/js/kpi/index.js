@@ -592,7 +592,7 @@ var findActualPercent = (element, array) => {
     element.actual_pc = 100.00
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
-        if (element.actual === 0 || parent.actual === 0) {
+        if (!parent || element.actual === 0 || parent.actual === 0) {
             element.actual_pc = 0.00
         } else {
             element.actual_pc = (element.actual / parent.actual) * 100

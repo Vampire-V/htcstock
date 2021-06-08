@@ -571,13 +571,18 @@ var findTargetPercent = (element, array) => {
     element.target_pc = 100.00
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
-        if (!parent || config === 0 || parent_config === 0) {
+        let config = element.target_config ?? element.target
+        let parent_config = parent.target_config ?? parent.target
+        if (!parent) {
             element.target_pc = 0.00
         } else {
-            let config = element.target_config ?? element.target
-            let parent_config = parent.target_config ?? parent.target
-            element.target_pc = (config / parent_config) * 100
+            if (config === 0 || parent_config === 0) {
+                element.target_pc = 0.00
+            } else {
+                element.target_pc = (config / parent_config) * 100
+            }
         }
+
     }
     return element.target_pc
 }

@@ -32,38 +32,39 @@ trait CalculatorEvaluateTrait
     {
 
         if (!$item->rule->parent) {
+            $ac = \round($item->actual, 2);
+            $tar = \round($item->target, 2);
             if ($item->rule->calculate_type === KPIEnum::positive) {
-                if ($item->actual <= 0) {
+                if ($ac <= 0) {
                     $item->ach = 0.00;
                 } else {
-                    $item->ach = ($item->actual / $item->target) * 100.00;
+                    $item->ach = $this->isZero($ac, $tar) ? 0 : ($ac / $tar) * 100.00;
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                $ac = \round($item->actual, 2);
-                $tar = \round($item->target, 2);
-                $item->ach = (2 - ($ac / $tar)) * 100.00;
+                if ($item->id === 240) {
+                    // dd($ac % $tar);
+                }
+                $item->ach = (2 - $this->isZero($ac, $tar) ? 0 : ($ac / $tar)) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
-                $item->ach = $item->actual <= $item->target ? 100.00 : 0.00;
+                $item->ach = $ac <= $tar ? 100.00 : 0.00;
             }
         } else {
+            $ac = \round($item->actual_pc, 2);
+            $tar = \round($item->target_pc, 2);
             if ($item->rule->calculate_type === KPIEnum::positive) {
-                if ($item->actual_pc <= 0.00) {
+                if ($ac <= 0.00) {
                     $item->ach = 0.00;
                 } else {
-                    $ac = \round($item->actual_pc, 2);
-                    $tar = \round($item->target_pc, 2);
-                    $item->ach = ($ac / $tar) * 100.00;
+                    $item->ach = $this->isZero($ac, $tar) ? 0 : ($ac / $tar) * 100.00;
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                $ac = \round($item->actual_pc, 2);
-                $tar = \round($item->target_pc, 2);
-                $item->ach = (2 - ($ac / $tar)) * 100.00;
+                $item->ach = (2 - $this->isZero($ac, $tar) ? 0 : ($ac / $tar)) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
-                $item->ach = $item->actual_pc <= $item->target_pc ? 100.00 : 0.00;
+                $item->ach = $ac <= $tar ? 100.00 : 0.00;
             }
         }
     }
@@ -91,11 +92,7 @@ trait CalculatorEvaluateTrait
             $target = $object->target_config ?? $object->target;
             $parent_target = $parent->target_config ?? $parent->target;
 
-            if ($target === 0.00 || $parent_target === 0.00) {
-                $object->target_pc = 0.00;
-            } else {
-                $object->target_pc = ($target / $parent_target) * 100;
-            }
+            $object->target_pc =  $this->isZero($target, $parent_target) ? 0.00 : ($target / $parent_target) * 100;
         };
     }
 
@@ -105,11 +102,15 @@ trait CalculatorEvaluateTrait
         if ($object->rule->parent) {
             $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
             $parent = $collection[$index];
-            if ($object->actual === 0.00 || $parent->actual === 0.00) {
-                $object->actual_pc = 0.00;
-            } else {
-                $object->actual_pc = ($object->actual / $parent->actual) * 100;
-            }
+            $object->actual_pc =  $this->isZero($object->actual, $parent->actual) ? 0.00 : ($object->actual / $parent->actual) * 100;
         };
+    }
+
+    private function isZero($actual = 0, $target = 0)
+    {
+        if ($actual === 0 && $target === 0) {
+            return \true;
+        }
+        return \false;
     }
 }

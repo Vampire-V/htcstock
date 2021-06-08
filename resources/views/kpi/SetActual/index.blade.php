@@ -35,7 +35,33 @@
                 <div class="position-relative form-group">
                     <form class="needs-validation" novalidate>
                         <div class="form-row">
-                            <div class="col-md-2 mb-2">
+                            <div class="col-md-3 mb-3">
+                                <label for="User">User</label>
+                                <select name="user" id="user" class="form-control-sm form-control">
+                                    <option value="">Choose...</option>
+                                    @isset($users)
+                                    @foreach ($users as $user)
+                                    <option value="{{$user->id}}" @if (intval($selectedUser)===$user->id)
+                                        selected
+                                        @endif>{{$user->name}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="Department">Department</label>
+                                <select name="department" id="department" class="form-control-sm form-control">
+                                    <option value="">Choose...</option>
+                                    @isset($departments)
+                                    @foreach ($departments as $item)
+                                    <option value="{{$item->id}}" @if ($selectedDept==$item->id)
+                                        selected
+                                        @endif>{{$item->name}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
                                 <label for="Category">Category</label>
                                 <select name="category" id="category" class="form-control-sm form-control">
                                     <option value="">Choose...</option>
@@ -48,7 +74,10 @@
                                     @endisset
                                 </select>
                             </div>
-                            <div class="col-md-2 mb-2">
+                        </div>
+                        <div class="form-row">
+                            
+                            <div class="col-md-3 mb-3">
                                 <label for="RuleName">Rule Name</label>
                                 <select name="rule" id="rule" class="form-control-sm form-control">
                                     <option value="">Choose...</option>
@@ -84,20 +113,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="Department">Department</label>
-                                <select name="department" id="department" class="form-control-sm form-control">
-                                    <option value="">Choose...</option>
-                                    @isset($departments)
-                                    @foreach ($departments as $item)
-                                    <option value="{{$item->id}}" @if ($selectedDept==$item->id)
-                                        selected
-                                        @endif>{{$item->name}}</option>
-                                    @endforeach
-                                    @endisset
-                                </select>
-                            </div>
-                            <div class="col-md-1 mb-1 text-center">
+                            <div class="col-md-2 mb-2 text-center">
                                 <button class="btn btn-primary mt-4" type="submit">Search</button>
                             </div>
                         </div>

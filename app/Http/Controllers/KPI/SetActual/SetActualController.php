@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait;
 use App\Http\Resources\KPI\EvaluateDetailResource;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
+use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
@@ -17,19 +18,22 @@ use Illuminate\Support\Facades\DB;
 class SetActualController extends Controller
 {
     use CalculatorEvaluateTrait;
-    protected $evaluateDetailService, $departmentService, $targetPeriodService, $categoryService, $ruleService;
+    protected $evaluateDetailService, $departmentService, $targetPeriodService, 
+    $categoryService, $ruleService, $userService;
     public function __construct(
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
         DepartmentServiceInterface $departmentServiceInterface,
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
         RuleCategoryServiceInterface $ruleCategoryServiceInterface,
-        RuleServiceInterface $ruleServiceInterface
+        RuleServiceInterface $ruleServiceInterface,
+        UserServiceInterface $userServiceInterface
     ) {
         $this->evaluateDetailService = $evaluateDetailServiceInterface;
         $this->departmentService = $departmentServiceInterface;
         $this->targetPeriodService = $targetPeriodServiceInterface;
         $this->categoryService = $ruleCategoryServiceInterface;
         $this->ruleService = $ruleServiceInterface;
+        $this->userService = $userServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -44,10 +48,11 @@ class SetActualController extends Controller
         $selectedPeriod = $request->period;
         $selectedCategory = $request->category;
         $selectedRule = $request->rule;
+        $selectedUser = $request->user;
         $start_year = date('Y', strtotime('-10 years'));
 
         $months = $this->targetPeriodService->dropdown()->unique('name');
-        // $years = $months->unique('year');
+        $users = $this->userService->dropdown();
         $departments = $this->departmentService->dropdown();
         $categorys = $this->categoryService->dropdown();
         $rules = $this->ruleService->dropdown();
@@ -65,7 +70,9 @@ class SetActualController extends Controller
             'categorys',
             'selectedCategory',
             'rules',
-            'selectedRule'
+            'selectedRule',
+            'selectedUser',
+            'users'
         ));
     }
 

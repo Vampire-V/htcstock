@@ -30,7 +30,7 @@ trait CalculatorEvaluateTrait
 
     private function findAch(EvaluateDetail $item)
     {
-        
+
         if (!$item->rule->parent) {
             if ($item->rule->calculate_type === KPIEnum::positive) {
                 if ($item->actual <= 0) {
@@ -40,35 +40,27 @@ trait CalculatorEvaluateTrait
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                if ($item->actual <= 0.00) {
-                    $item->ach = 0.00;
-                } else {
-                    $item->ach = (2 - ($item->actual / $item->target)) * 100.00;
-                }
+                $ac = \round($item->actual, 2);
+                $tar = \round($item->target, 2);
+                $item->ach = (2 - ($ac / $tar)) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $item->ach = $item->actual <= $item->target ? 100.00 : 0.00;
             }
         } else {
-            // if ($item->rule->id === 56) {
-            //     $ac = \round($item->actual_pc,2);
-            //     $tar = \round($item->target_pc,2);
-            //     \dump($item->rule->name,$ac,$tar);
-            //     dd(($ac / $tar));
-            // }
             if ($item->rule->calculate_type === KPIEnum::positive) {
                 if ($item->actual_pc <= 0.00) {
                     $item->ach = 0.00;
                 } else {
-                    $item->ach = ($item->actual_pc / $item->target_pc) * 100.00;
+                    $ac = \round($item->actual_pc, 2);
+                    $tar = \round($item->target_pc, 2);
+                    $item->ach = ($ac / $tar) * 100.00;
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                if ($item->actual_pc <= 0.00) {
-                    $item->ach = 0.00;
-                } else {
-                    $item->ach = (2 - ($item->actual_pc / $item->target_pc)) * 100.00;
-                }
+                $ac = \round($item->actual_pc, 2);
+                $tar = \round($item->target_pc, 2);
+                $item->ach = (2 - ($ac / $tar)) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $item->ach = $item->actual_pc <= $item->target_pc ? 100.00 : 0.00;

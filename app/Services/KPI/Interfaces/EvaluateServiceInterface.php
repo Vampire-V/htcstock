@@ -23,4 +23,5 @@ interface EvaluateServiceInterface
     public function reviewfilter(Request $request);
     public function selfFilter(Request $request);
     public function editEvaluateFilter(Request $request): Collection;
+    public function scoreFilter(Request $request): Collection;
 }

@@ -58,13 +58,13 @@
                         <ul class="nav list-inline ml-auto">
                             <li class="nav-item">
                                 <form class="needs-validation" novalidate method="get" id="form-search">
-                                    <select class="form-control form-control-sm" name="year" id="year"
+                                    {{-- <select class="form-control form-control-sm" name="year" id="year"
                                         onchange="search()">
                                         @foreach (range(date('Y')-5,date('Y')+5) as $year)
                                         <option value="{{$year}}" @if (intVal($selectedYear)===$year) selected @endif>
                                             {{$year}}</option>
                                         @endforeach
-                                    </select>
+                                    </select> --}}
                                 </form>
                             </li>
                         </ul>
@@ -89,8 +89,36 @@
                     </div>
                     <div class="card-body">
                         <div class="tab-content">
-                            <div class="table-responsive" style="height: 110px;">
-                                <table class="mb-0 table table-sm" id="table-set-actual">
+                            <div class="position-relative form-group">
+                                <form class="needs-validation" novalidate>
+                                    <div class="form-row">
+                                        <div class="col-md-2 mb-2">
+                                            <label for="Quarter">Quarter</label>
+                                            <select name="quarter" id="quarter" class="form-control-sm form-control">
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            <label for="Period">Month</label>
+                                            <select name="period" id="period" class="form-control-sm form-control">
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            <label for="Year">Year</label>
+                                            <select name="year" id="year" class="form-control-sm form-control">
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            {{-- <label for="Category">Category</label>
+                                            <select name="category" id="category" class="form-control-sm form-control">
+                                                <option value="">Choose...</option>
+                                            </select> --}}
+                                            <button type="button" class="btn btn-sm btn-success" onclick="search_score()">click</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="mb-0 table table-sm" id="table-report-score">
                                     <thead>
                                         <tr>
                                             <th rowspan="2" style="vertical-align : middle;text-align:center;">Name</th>
@@ -138,7 +166,7 @@
                         <div class="tab-content">
                             <div class="table-responsive" style="height: 110px;">
                                 @isset($ofSelf)
-                                <table class="mb-0 table table-sm" id="table-set-actual">
+                                {{-- <table class="mb-0 table table-sm" id="table-self-evaluation">
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
@@ -149,7 +177,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <th scope="row">Traget</th>
+                                            <th scope="row">Target</th>
                                             @foreach ($ofSelf as $item)
                                             <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}
                                             </td>
@@ -165,7 +193,7 @@
                                     </tbody>
                                     <tfoot>
                                     </tfoot>
-                                </table>
+                                </table> --}}
                                 @endisset
                             </div>
                         </div>
@@ -184,7 +212,7 @@
                         <div class="tab-content">
                             <div class="table-responsive" style="height: 110px;">
                                 @isset($ofDept)
-                                <table class="mb-0 table table-sm" id="table-set-actual">
+                                {{-- <table class="mb-0 table table-sm" id="table-dept-evaluation">
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
@@ -195,7 +223,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <th scope="row">Traget</th>
+                                            <th scope="row">Target</th>
                                             @foreach ($ofDept as $item)
                                             <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}
                                             </td>
@@ -211,7 +239,7 @@
                                     </tbody>
                                     <tfoot>
                                     </tfoot>
-                                </table>
+                                </table> --}}
                                 @endisset
                             </div>
                         </div>
@@ -234,7 +262,7 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive" style="height:300px">
-                                <table class="table table-sm table-bordered">
+                                {{-- <table class="table table-sm table-bordered">
                                     <thead>
                                         <tr>
                                             <th rowspan="2" style="vertical-align : middle;">#</th>
@@ -273,7 +301,7 @@
                                     </tbody>
                                     <tfoot>
                                     </tfoot>
-                                </table>
+                                </table> --}}
                             </div>
                         </div>
                     </div>
@@ -295,7 +323,7 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive" style="height: 300px;">
-                                <table class="table table-sm table-bordered">
+                                {{-- <table class="table table-sm table-bordered">
                                     <thead>
                                         <tr>
                                             <th rowspan="2" style="vertical-align : middle;">#</th>
@@ -341,7 +369,7 @@
                                     </tbody>
                                     <tfoot>
                                     </tfoot>
-                                </table>
+                                </table> --}}
                             </div>
                         </div>
                     </div>

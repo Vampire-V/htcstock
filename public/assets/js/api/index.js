@@ -198,10 +198,6 @@ const getTemplate = (id) => axios({
     url: `/kpi/template/${id}`
 })
 
-const getOperationReportScore = () => axios({
-    method: 'GET',
-    responseType: 'json',
-    url: '/kpi/operation/reportscore'
-})
+const getOperationReportScore = (params) => axios.get('/kpi/operation/reportscore', params)
 
 const postUploadFile = (form, config) => axios.post('/upload', form, config)

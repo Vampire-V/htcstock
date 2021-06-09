@@ -219,14 +219,14 @@ class UsersController extends Controller
                 $systems = System::whereNotIn('slug', ['legal'])->get();
                 $roles = Role::whereNotIn('slug', [UserEnum::SUPERADMIN, UserEnum::ADMINIT, UserEnum::ADMINLEGAL, UserEnum::USERLEGAL, UserEnum::ADMINKPI])->get();
 
-                foreach ($all_user as $key => $staff) {
+                foreach ($all_user as $staff) {
                     // $staff->roles()->detach($roles->filter(fn($q) => $q->slug === UserEnum::MANAGERKPI)->first());
-                    foreach ($systems as $key => $system) {
+                    foreach ($systems as $system) {
                         if (!$staff->systems->contains('slug', $system->slug)) {
                             $staff->systems()->attach($system);
                         }
                     }
-                    foreach ($roles as $key => $role) {
+                    foreach ($roles as $role) {
 
                         if (!$staff->roles->contains('slug', $role->slug)) {
                             if ($role->slug === UserEnum::MANAGERKPI && $staff->username === strval($staff->head_id)) {
@@ -1345,10 +1345,10 @@ class UsersController extends Controller
             }
              */
         } catch (\Exception $e) {
-            dd($user->department_id, $department);
-            throw $e;
+            // dd($user->department_id, $department);
+            // throw $e;
             DB::rollBack();
-            // return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
         return back();

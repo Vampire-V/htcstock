@@ -114,4 +114,17 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
             throw $th;
         }
     }
+
+    public function scoreFilter(Request $request) : Collection
+    {
+        try {
+            return Evaluate::with('user.positions', 'evaluateDetail.rule.category', 'targetperiod')
+                ->whereIn('status', [KPIEnum::ready])
+                // ->whereIn('period_id', [5])
+                ->filter($request)
+                ->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

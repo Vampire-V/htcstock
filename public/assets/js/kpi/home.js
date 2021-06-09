@@ -108,17 +108,30 @@ var tabActive = (e) => {
     window.localStorage.setItem('tab-dashboard', e.id)
     let active_tab = localStorage.getItem('tab-dashboard')
     if (active_tab === `tab-c-0`) {
-        let score = []
-        getOperationReportScore()
-            .then(res => {
-                console.log('fetch data...');
+        make_month()
+        search_score()
+    }
+}
+var search_score = () => {
+    let score = []
+    let config = {
+        params: {
+            month: [$("#period").val()],
+            year: [$("#year").val()]
+        },
+    }
+    let table = document.getElementById('table-report-score')
+    table.previousElementSibling.classList.add('reload')
+    getOperationReportScore(config)
+        .then(res => {
+            console.log(res.data.data)
+            if (res.status === 200) {
                 for (let index = 0; index < res.data.data.length; index++) {
                     const evaluate = res.data.data[index];
                     const detail = evaluate.evaluate_detail;
                     let kpi = detail.filter(item => item.rule.category.id === 1)
                     let key_task = detail.filter(item => item.rule.category.id === 2)
                     let omg = detail.filter(item => item.rule.category.id === 3)
-                    console.log(evaluate.user_id, kpi);
 
                     score.push({
                         user: evaluate.user,
@@ -127,13 +140,96 @@ var tabActive = (e) => {
                         omg: omg.reduce((a, c) => a + c.cal, 0)
                     })
                 }
-            })
-            .catch(error => {
-                console.log(error);
-            })
-            .finally(() => {
-                console.log(score.filter(item => item.user.id === 38));
-            })
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            console.log(error.response.data);
+        })
+        .finally(() => {
+            setTimeout(render_score(score), 50000)
+        })
+}
+var render_score = (score) => {
+    let table = document.getElementById('table-report-score')
+    let body = table.tBodies[0]
+    if (body.rows.length > 0) {
+        removeAllChildNodes(body)
     }
+    if (score.length > 0) {
+        for (let index = 0; index < score.length; index++) {
+            const element = score[index]
+            let newRow = body.insertRow()
+            let name = newRow.insertCell()
+            name.textContent = element.user.translations[0].name
+
+            let position = newRow.insertCell()
+            position.textContent = element.user.positions.name
+
+            let kpi = newRow.insertCell()
+            kpi.textContent = element.kpi.toFixed(2)
+
+            let task = newRow.insertCell()
+            task.textContent = element.key_task.toFixed(2)
+
+            let omg = newRow.insertCell()
+            omg.textContent = element.omg.toFixed(2)
+
+            let cscore = newRow.insertCell()
+            cscore.textContent = element.omg.toFixed(2)
+
+            let rank = newRow.insertCell()
+            rank.textContent = index + 1
+
+            let rate = newRow.insertCell()
+            rate.textContent = 'test'
+        }
+    } else {
+        let newRow = body.insertRow()
+        let cell = newRow.insertCell()
+        cell.setAttribute("colspan", 8)
+        cell.textContent = 'No information...'
+    }
+    table.previousElementSibling.classList.remove('reload')
+}
+
+const make_month = () => {
+    let selectMonth = document.getElementById('period'),
+        selectYearh = document.getElementById('year'),
+        selectQuarter = document.getElementById('quarter'),
+        max = 5,
+        date = new Date(),
+        year = new Date().getFullYear()
+    do {
+        let text_year = year--
+        max--
+        selectYearh.add(new Option(text_year, text_year), null);
+    } while (max > 0);
+
+    for (m = 1; m <= 12; m++) {
+        let monthName = new Date(date.getFullYear(), m - 1).toLocaleString('en-US', {
+            month: 'long'
+        })
+        let selected = date.getMonth() === (m - 1)
+        let value = m < 10 ? `0${m}` : m
+        selectMonth.add(new Option(monthName, value, false, selected))
+    }
+    selectQuarter.add(new Option('', ''))
+    for (let q = 1; q <= 4; q++) {
+        selectQuarter.add(new Option(`Quarter ${q}`, q, true, false))
+    }
+    selectQuarter.disabled = true
+    $("#quarter").select2({
+        placeholder: 'Select Quarter',
+        allowClear: true
+    })
+    $("#period").select2({
+        placeholder: 'Select Month',
+        allowClear: true
+    })
+    $("#year").select2({
+        placeholder: 'Select Year',
+        allowClear: true
+    })
 
 }

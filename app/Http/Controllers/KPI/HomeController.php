@@ -9,23 +9,27 @@ use App\Models\KPI\Evaluate;
 use App\Models\KPI\TargetPeriod;
 use App\Models\User;
 use App\Services\IT\Interfaces\UserServiceInterface;
+use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
     use CalculatorEvaluateTrait;
-    protected $targetPeriodService, $userService, $ruleService;
+    protected $targetPeriodService, $userService, $ruleService, $evaluateService;
     public function __construct(
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
         UserServiceInterface $userServiceInterface,
-        RuleServiceInterface $ruleServiceInterface
+        RuleServiceInterface $ruleServiceInterface,
+        EvaluateServiceInterface $evaluateServiceInterface
     ) {
         $this->targetPeriodService = $targetPeriodServiceInterface;
         $this->userService = $userServiceInterface;
         $this->ruleService = $ruleServiceInterface;
+        $this->evaluateService = $evaluateServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -115,14 +119,10 @@ class HomeController extends Controller
     public function reportscore(Request $request)
     {
         try {
-            $evaluations = Evaluate::with('user', 'evaluateDetail.rule.category', 'targetperiod')
-            ->whereIn('status', [KPIEnum::ready])
-            ->whereIn('period_id',[5])->get();
-            
+            $evaluations = $this->evaluateService->scoreFilter($request);
             $this->calculation_summary($evaluations);
-            
         } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), $e->getCode());
         }
         return $this->successResponse($evaluations,200);
     }

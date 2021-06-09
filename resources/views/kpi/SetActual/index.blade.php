@@ -76,7 +76,6 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            
                             <div class="col-md-3 mb-3">
                                 <label for="RuleName">Rule Name</label>
                                 <select name="rule" id="rule" class="form-control-sm form-control">

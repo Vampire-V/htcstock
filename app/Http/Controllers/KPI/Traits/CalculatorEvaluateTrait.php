@@ -47,7 +47,7 @@ trait CalculatorEvaluateTrait
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                $item->ach = (2 - $this->isZero($ac, $tar) ? 1 : ($ac / $tar)) * 100.00;
+                $item->ach = (2 - $this->isZero($ac, $tar) ? 2 : ($ac / $tar)) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $item->ach = $ac <= $tar ? 100.00 : 0.00;
@@ -63,7 +63,7 @@ trait CalculatorEvaluateTrait
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                $item->ach = (2 - $this->isZero($ac, $tar) ? 1 : ($ac / $tar)) * 100.00;
+                $item->ach = (2 - $this->isZero($ac, $tar) ? 2 : ($ac / $tar)) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $item->ach = $ac <= $tar ? 100.00 : 0.00;
@@ -104,7 +104,7 @@ trait CalculatorEvaluateTrait
         if ($object->rule->parent) {
             $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
             $parent = $collection[$index];
-            $object->actual_pc =  $this->isZero($object->actual , $parent->actual) ? 0.00 : ($object->actual / $parent->actual) * 100;
+            $object->actual_pc = ($object->actual / $this->isDivi($parent->actual)) * 100;
             // $object->actual_pc =  ($object->actual / $parent->actual) * 100;
         };
     }
@@ -115,5 +115,9 @@ trait CalculatorEvaluateTrait
             return \true;
         }
         return \false;
+    }
+
+    private function isDivi($ff = 0.00) {
+        return $ff === 0.00 ? 1 : $ff;
     }
 }

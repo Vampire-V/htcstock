@@ -11,7 +11,7 @@ trait CalculatorEvaluateTrait
 
     protected function calculation_summary(Collection $evaluations)
     {
-        foreach ($evaluations as $key => $value) {
+        foreach ($evaluations as $value) {
             $this->calculation_detail($value->evaluateDetail);
         }
     }
@@ -19,16 +19,11 @@ trait CalculatorEvaluateTrait
     protected function calculation_detail(Collection $evaluate_detail)
     {
         if ($evaluate_detail) {
-            foreach ($evaluate_detail as $key => $item) {
-                try {
-                    $this->findTargetPC($item, $evaluate_detail);
-                    $this->findActualPC($item, $evaluate_detail);
-                    $this->findAch($item);
-                    $this->findCal($item, $item->ach);
-                } catch (\Throwable $th) {
-                    
-                    throw $th;
-                }
+            foreach ($evaluate_detail as $item) {
+                $this->findTargetPC($item, $evaluate_detail);
+                $this->findActualPC($item, $evaluate_detail);
+                $this->findAch($item);
+                $this->findCal($item, $item->ach);
             }
         }
     }
@@ -37,33 +32,33 @@ trait CalculatorEvaluateTrait
     {
 
         if (!$item->rule->parent) {
-            $ac = \round($item->actual, 2);
-            $tar = \round($item->target, 2);
+            $ac = $item->actual;
+            $tar = $item->target;
             if ($item->rule->calculate_type === KPIEnum::positive) {
                 if ($ac <= 0) {
                     $item->ach = 0.00;
                 } else {
-                    $item->ach = $this->isZero($ac, $tar) ? 0.00 : ($ac / $tar) * 100.00;
+                    $item->ach = ($ac / $tar) * 100.00;
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                $item->ach = (2 - $this->isZero($ac, $tar) ? 2 : ($ac / $tar)) * 100.00;
+                $item->ach = (2 - ($ac / $tar)) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $item->ach = $ac <= $tar ? 100.00 : 0.00;
             }
         } else {
-            $ac = \round($item->actual_pc, 2);
-            $tar = \round($item->target_pc, 2);
+            $ac = $item->actual_pc;
+            $tar = $item->target_pc;
             if ($item->rule->calculate_type === KPIEnum::positive) {
                 if ($ac <= 0.00) {
                     $item->ach = 0.00;
                 } else {
-                    $item->ach = $this->isZero($ac, $tar) ? 0 : ($ac / $tar) * 100.00;
+                    $item->ach = ($ac / $tar) * 100.00;
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                $item->ach = (2 - $this->isZero($ac, $tar) ? 2 : ($ac / $tar)) * 100.00;
+                $item->ach = (2 - ($ac / $tar)) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $item->ach = $ac <= $tar ? 100.00 : 0.00;
@@ -94,7 +89,7 @@ trait CalculatorEvaluateTrait
             $target = $object->target_config ?? $object->target;
             $parent_target = $parent->target_config ?? $parent->target;
 
-            $object->target_pc =  $this->isZero($target, $parent_target) ? 0.00 : ($target / $parent_target) * 100;
+            $object->target_pc =  ($target / $parent_target) * 100;
         };
     }
 
@@ -104,7 +99,7 @@ trait CalculatorEvaluateTrait
         if ($object->rule->parent) {
             $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
             $parent = $collection[$index];
-            $object->actual_pc = ($object->actual / $this->isDivi($parent->actual)) * 100;
+            $object->actual_pc = ($object->actual / $this->isZeroNew($parent->actual)) * 100;
             // $object->actual_pc =  ($object->actual / $parent->actual) * 100;
         };
     }
@@ -117,7 +112,8 @@ trait CalculatorEvaluateTrait
         return \false;
     }
 
-    private function isDivi($ff = 0.00) {
+    private function isZeroNew($ff = 0.00)
+    {
         return $ff === 0.00 ? 1 : $ff;
     }
 }

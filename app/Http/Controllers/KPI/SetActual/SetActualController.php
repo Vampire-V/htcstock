@@ -56,7 +56,9 @@ class SetActualController extends Controller
         $departments = $this->departmentService->dropdown();
         $categorys = $this->categoryService->dropdown();
         $rules = $this->ruleService->dropdown();
+        // DB::enableQueryLog();
         $result = $this->evaluateDetailService->setActualFilter($request);
+        // dd(DB::getQueryLog());
         $this->calculation_detail($result);
         $evaluateDetail = EvaluateDetailResource::collection($result);
         return \view('kpi.SetActual.index', \compact(

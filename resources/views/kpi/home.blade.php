@@ -90,7 +90,6 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive" style="height: 110px;">
-                                {{-- @isset($ofSelf) --}}
                                 <table class="mb-0 table table-sm" id="table-set-actual">
                                     <thead>
                                         <tr>
@@ -100,7 +99,8 @@
                                             <th>Key-task</th>
                                             <th>Omg</th>
                                             <th rowspan="2" style="vertical-align : middle;text-align:center;">Score</th>
-                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Rang</th>
+                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Rank</th>
+                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Rate</th>
                                         </tr>
                                         <tr>
                                             <th>70</th>
@@ -109,14 +109,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- <tr>
-                                            <td></td>
-                                        </tr> --}}
+                                        <div id="reload" class="reload"></div>
                                     </tbody>
                                     <tfoot>
                                     </tfoot>
                                 </table>
-                                {{-- @endisset --}}
                             </div>
                         </div>
                     </div>
@@ -124,6 +121,8 @@
             </div>
         </div>
     </div>
+
+
     <div class="tab-pane " id="tab-all" role="tabpanel">
         {{--  --}}
         <div class="row">
@@ -362,11 +361,5 @@
     // variable
 </script>
 <script src="{{asset('assets\js\kpi\home.js')}}" defer></script>
-<script>
-    var tabActive = (e) => {
-        // console.log(e);
-        window.localStorage.setItem('tab-dashboard',e.id)
-        // console.log(localStorage.getItem('tab-active'));
-    }
-</script>
+
 @endsection

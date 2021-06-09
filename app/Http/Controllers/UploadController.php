@@ -31,7 +31,7 @@ class UploadController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), $e->getCode());
         }
         DB::commit();
         return $this->successResponse($folder, "upload file", 200);

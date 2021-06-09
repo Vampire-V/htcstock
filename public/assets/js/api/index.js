@@ -174,7 +174,7 @@ const postTemplate = (from) => axios({
     data: from
 })
 
-const putTemplate = (from,id) => axios({
+const putTemplate = (from, id) => axios({
     method: 'PUT',
     responseType: 'json',
     url: `/kpi/template/${id}/dynamic`,
@@ -196,6 +196,12 @@ const getTemplate = (id) => axios({
     method: 'GET',
     responseType: 'json',
     url: `/kpi/template/${id}`
+})
+
+const getOperationReportScore = () => axios({
+    method: 'GET',
+    responseType: 'json',
+    url: '/kpi/operation/reportscore'
 })
 
 const postUploadFile = (form, config) => axios.post('/upload', form, config)

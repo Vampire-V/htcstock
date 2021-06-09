@@ -103,3 +103,37 @@ var search_table = (e) => {
 var search = () => {
     document.forms['form-search'].submit();
 }
+
+var tabActive = (e) => {
+    window.localStorage.setItem('tab-dashboard', e.id)
+    let active_tab = localStorage.getItem('tab-dashboard')
+    if (active_tab === `tab-c-0`) {
+        let score = []
+        getOperationReportScore()
+            .then(res => {
+                console.log('fetch data...');
+                for (let index = 0; index < res.data.data.length; index++) {
+                    const evaluate = res.data.data[index];
+                    const detail = evaluate.evaluate_detail;
+                    let kpi = detail.filter(item => item.rule.category.id === 1)
+                    let key_task = detail.filter(item => item.rule.category.id === 2)
+                    let omg = detail.filter(item => item.rule.category.id === 3)
+                    console.log(evaluate.user_id, kpi);
+
+                    score.push({
+                        user: evaluate.user,
+                        kpi: kpi.reduce((a, c) => a + c.cal, 0),
+                        key_task: key_task.reduce((a, c) => a + c.cal, 0),
+                        omg: omg.reduce((a, c) => a + c.cal, 0)
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            .finally(() => {
+                console.log(score.filter(item => item.user.id === 38));
+            })
+    }
+
+}

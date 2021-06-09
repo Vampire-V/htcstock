@@ -568,16 +568,16 @@ var changeTooltipCal = (befor, data) => {
  * @return percent (element.target / parent.target) * 100
  */
 var findTargetPercent = (element, array) => {
-    element.target_pc = 100.00
+    // element.target_pc = 100.00
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
         let config = element.target_config ?? element.target
         let parent_config = parent.target_config ?? parent.target
         if (!parent) {
-            element.target_pc = 0.00
+            // element.target_pc = 0.00
         } else {
             if (config === 0 || parent_config === 0) {
-                element.target_pc = 0.00
+                // element.target_pc = 0.00
             } else {
                 element.target_pc = (config / parent_config) * 100
             }
@@ -593,14 +593,11 @@ var findTargetPercent = (element, array) => {
  * @return percent (element.target / parent.target) * 100
  */
 var findActualPercent = (element, array) => {
+
     element.actual_pc = 100.00
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
-        if (!parent || element.actual === 0 || parent.actual === 0) {
-            element.actual_pc = 0.00
-        } else {
-            element.actual_pc = (element.actual / parent.actual) * 100
-        }
+        element.actual_pc = (element.actual / parent.actual) * 100
     }
     return element.actual_pc
 }

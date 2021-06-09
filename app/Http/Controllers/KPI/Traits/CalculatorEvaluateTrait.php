@@ -20,10 +20,15 @@ trait CalculatorEvaluateTrait
     {
         if ($evaluate_detail) {
             foreach ($evaluate_detail as $key => $item) {
-                $this->findTargetPC($item, $evaluate_detail);
-                $this->findActualPC($item, $evaluate_detail);
-                $this->findAch($item);
-                $this->findCal($item, $item->ach);
+                try {
+                    $this->findTargetPC($item, $evaluate_detail);
+                    $this->findActualPC($item, $evaluate_detail);
+                    $this->findAch($item);
+                    $this->findCal($item, $item->ach);
+                } catch (\Throwable $th) {
+                    
+                    throw $th;
+                }
             }
         }
     }
@@ -99,13 +104,14 @@ trait CalculatorEvaluateTrait
         if ($object->rule->parent) {
             $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
             $parent = $collection[$index];
-            $object->actual_pc =  $this->isZero($object->actual, $parent->actual) ? 0.00 : ($object->actual / $parent->actual) * 100;
+            $object->actual_pc =  $this->isZero($object->actual , $parent->actual) ? 0.00 : ($object->actual / $parent->actual) * 100;
+            // $object->actual_pc =  ($object->actual / $parent->actual) * 100;
         };
     }
 
-    private function isZero($actual = 0, $target = 0)
+    private function isZero($actual = 0.00, $target = 0.00)
     {
-        if ($actual === 0 && $target === 0) {
+        if ($actual === 0.00 && $target === 0.00) {
             return \true;
         }
         return \false;

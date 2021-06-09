@@ -7,6 +7,7 @@ use App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait;
 use App\Http\Controllers\Controller;
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\TargetPeriod;
+use App\Models\User;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
@@ -34,19 +35,11 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $selectedYear = empty($request->year) ? date('Y') : $request->year;
-        $evaluations =  Evaluate::with('user','evaluateDetail.rule','targetperiod')->where('status',KPIEnum::approved)->get();
+        $evaluations =  Evaluate::with('user', 'evaluateDetail.rule', 'targetperiod')->where('status', KPIEnum::approved)->get();
         $this->calculation_summary($evaluations);
-        // $evaluations->each(function ($model) {
-        //     $model->evaluateDetail->reduce(function ($carry, $item) {
-        //         \dump($item->cal);
-        //         return $carry + $item->cal;
-        //     }, 0.00);
-        // });
-        // dd($value->total_kpi_cal);
-        // exit;
         $ofSelf = $this->targetPeriodService->selfApprovedEvaluationOfyear($selectedYear);
         $ofDept = $this->targetPeriodService->deptApprovedEvaluationOfyear($selectedYear);
-        $periods = $this->targetPeriodService->query()->where('year',$selectedYear)->get();
+        $periods = $this->targetPeriodService->query()->where('year', $selectedYear)->get();
         $users = $this->userService->evaluationOfYearReport($selectedYear);
         $rules = $this->ruleService->rulesInEvaluationReport($selectedYear);
 
@@ -117,5 +110,20 @@ class HomeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function reportscore(Request $request)
+    {
+        try {
+            $evaluations = Evaluate::with('user', 'evaluateDetail.rule.category', 'targetperiod')
+            ->whereIn('status', [KPIEnum::ready])
+            ->whereIn('period_id',[5])->get();
+            
+            $this->calculation_summary($evaluations);
+            
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+        return $this->successResponse($evaluations,200);
     }
 }

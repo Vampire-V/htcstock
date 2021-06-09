@@ -9,24 +9,28 @@
             for (let index = 0; index < tBody.rows.length; index++) {
                 const element = tBody.rows[index]
                 let actual = element.cells[10]
-                // let Ach = element.cells[11]
-                // let Cal = element.cells[12]
+                let Ach = element.cells[12]
+                let Cal = element.cells[13]
                 let obj = detail.find(value => value.id === parseInt(actual.firstChild.id))
-                if (obj.rules.calculate_type !== calculate.NEGATIVE) {
+                if (obj.rules.calculate_type !== calculate.NEGATIVE && obj.rules.calculate_type !== calculate.ZERO) {
                     actual.setAttribute("min", 0.00);
                 }
                 // let ach = findAchValue(obj)
                 // let cal = findCalValue(obj, ach)
                 // obj.ach = ach
                 // obj.cal = cal
-                // setTooltipAch(Ach, obj)
-                // setTooltipCal(Cal, obj)
+                setTooltipAch(Ach, obj)
+                setTooltipCal(Cal, obj)
                 // Ach.textContent = ach.toFixed(2) + '%'
                 // Cal.textContent = cal.toFixed(2) + '%'
             }
             $('[data-toggle="tooltip"]').tooltip()
         }
 
+        $("#user").select2({
+            placeholder: 'Select User',
+            allowClear: true
+        });
         $("#category").select2({
             placeholder: 'Select Category',
             allowClear: true
@@ -47,7 +51,53 @@
             placeholder: 'Select Department',
             allowClear: true
         });
-        OverlayScrollbars(document.getElementsByClassName('table-responsive'), {});
+        OverlayScrollbars(document.getElementsByClassName('table-responsive'), {
+            className: "os-theme-dark",
+            resize: "both",
+            sizeAutoCapable: true,
+            clipAlways: true,
+            normalizeRTL: true,
+            paddingAbsolute: false,
+            autoUpdate: null,
+            autoUpdateInterval: 33,
+            updateOnLoad: ["img"],
+            nativeScrollbarsOverlaid: {
+                showNativeScrollbars: false,
+                initialize: true
+            },
+            overflowBehavior: {
+                x: "scroll",
+                y: "scroll"
+            },
+            scrollbars: {
+                visibility: "auto",
+                autoHide: "never",
+                autoHideDelay: 800,
+                dragScrolling: true,
+                clickScrolling: false,
+                touchSupport: true,
+                snapHandle: false
+            },
+            textarea: {
+                dynWidth: false,
+                dynHeight: false,
+                inheritedAttrs: ["style", "class"]
+            },
+            callbacks: {
+                onInitialized: null,
+                onInitializationWithdrawn: null,
+                onDestroyed: null,
+                onScrollStart: null,
+                onScroll: null,
+                onScrollStop: null,
+                onOverflowChanged: null,
+                onOverflowAmountChanged: null,
+                onDirectionChanged: null,
+                onContentSizeChanged: null,
+                onHostSizeChanged: null,
+                onUpdated: null
+            }
+        });
     })
 
     window.addEventListener('load', function () {
@@ -66,6 +116,7 @@ var changeActual = (e) => {
     if (Array.isArray(e.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
         for (let index = 0; index < detail.length; index++) {
             const element = detail[index]
+            
             if (element.id === parseInt(e.id)) {
                 element.actual = parseFloat(e.value).toFixed(2)
                 let actual_pc = findActualPercent(element,detail)

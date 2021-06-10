@@ -119,9 +119,9 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     {
         try {
             return Evaluate::with('user.positions', 'evaluateDetail.rule.category', 'targetperiod')
-                ->whereIn('status', [KPIEnum::ready])
-                // ->whereIn('period_id', [5])
+                ->whereIn('status', [KPIEnum::approved])
                 ->filter($request)
+                ->orderBy('user_id')
                 ->get();
         } catch (\Throwable $th) {
             throw $th;

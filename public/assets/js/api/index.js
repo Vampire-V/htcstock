@@ -200,4 +200,6 @@ const getTemplate = (id) => axios({
 
 const getOperationReportScore = (params) => axios.get('/kpi/operation/reportscore', params)
 
+const getWeigthConfig = (params) => axios.get('/kpi/weigth/config', params)
+
 const postUploadFile = (form, config) => axios.post('/upload', form, config)

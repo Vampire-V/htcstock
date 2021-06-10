@@ -124,6 +124,20 @@ class HomeController extends Controller
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), $e->getCode());
         }
-        return $this->successResponse($evaluations,200);
+        return $this->successResponse($evaluations, 200);
+    }
+
+    public function weigthconfig(Request $request)
+    {
+        try {
+            if ($request->is_quarter === "true") {
+                $config = config('kpi.weight')['quarter'];
+            } else {
+                $config = config('kpi.weight')['month'];
+            }
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
+        return $this->successResponse($config, 'Get weigth config', 200);
     }
 }

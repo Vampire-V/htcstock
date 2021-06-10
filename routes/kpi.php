@@ -37,8 +37,8 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::put('for-eddy/{id}/updateAch', 'EddyMenu\AllEvaluationController@updateAch');
 
     Route::resource('set-period', 'SetPeriod\TargetPeriodController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
-
     Route::get('operation/reportscore','HomeController@reportscore');
+    Route::get('weigth/config','HomeController@weigthconfig');
 
     // new 
     Route::get('self-evaluation/evaluate', 'SelfEvaluation\SelfEvaluationController@create_new')->name('evaluate.create_new');

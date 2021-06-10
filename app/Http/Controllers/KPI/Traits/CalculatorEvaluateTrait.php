@@ -30,7 +30,6 @@ trait CalculatorEvaluateTrait
 
     private function findAch(EvaluateDetail $item)
     {
-
         if (!$item->rule->parent) {
             $ac = $item->actual;
             $tar = $item->target;
@@ -42,7 +41,7 @@ trait CalculatorEvaluateTrait
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                $item->ach = (2 - ($ac / $tar)) * 100.00;
+                $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $item->ach = $ac <= $tar ? 100.00 : 0.00;
@@ -58,7 +57,7 @@ trait CalculatorEvaluateTrait
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                $item->ach = (2 - ($ac / $tar)) * 100.00;
+                $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $item->ach = $ac <= $tar ? 100.00 : 0.00;
@@ -89,7 +88,7 @@ trait CalculatorEvaluateTrait
             $target = $object->target_config ?? $object->target;
             $parent_target = $parent->target_config ?? $parent->target;
 
-            $object->target_pc =  ($target / $parent_target) * 100;
+            $object->target_pc =  ($target / $this->isZeroNew($parent_target)) * 100;
         };
     }
 

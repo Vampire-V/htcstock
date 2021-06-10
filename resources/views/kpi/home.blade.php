@@ -7,6 +7,9 @@
     /* .fiexd-layout {
         flex: 0 0 50% !important;
     } */
+    label {
+        font-weight: bold;
+    }
 </style>
 @endsection
 @section('content')
@@ -62,8 +65,8 @@
                                         onchange="search()">
                                         @foreach (range(date('Y')-5,date('Y')+5) as $year)
                                         <option value="{{$year}}" @if (intVal($selectedYear)===$year) selected @endif>
-                                            {{$year}}</option>
-                                        @endforeach
+                                    {{$year}}</option>
+                                    @endforeach
                                     </select> --}}
                                 </form>
                             </li>
@@ -92,27 +95,27 @@
                             <div class="position-relative form-group">
                                 <form class="needs-validation" novalidate>
                                     <div class="form-row">
-                                        <div class="col-md-2 mb-2">
-                                            <label for="Quarter">Quarter</label>
-                                            <select name="quarter" id="quarter" class="form-control-sm form-control">
-                                            </select>
+                                        <div class="col-md-3 mb-3">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                                                <label class="custom-control-label" for="customSwitch1">Month or
+                                                    Quarter</label>
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 mb-2">
-                                            <label for="Period">Month</label>
-                                            <select name="period" id="period" class="form-control-sm form-control">
+                                        <div class="col-md-3 mb-3">
+                                            <label for="label-custom-switch"></label>
+                                            <select name="period" id="period" class="form-control-sm form-control"
+                                                onchange="search_score()">
                                             </select>
-                                        </div>
-                                        <div class="col-md-2 mb-2">
-                                            <label for="Year">Year</label>
-                                            <select name="year" id="year" class="form-control-sm form-control">
+                                            <select name="quarter" id="quarter" class="form-control-sm form-control"
+                                                onchange="search_score()">
                                             </select>
                                         </div>
                                         <div class="col-md-3 mb-3">
-                                            {{-- <label for="Category">Category</label>
-                                            <select name="category" id="category" class="form-control-sm form-control">
-                                                <option value="">Choose...</option>
-                                            </select> --}}
-                                            <button type="button" class="btn btn-sm btn-success" onclick="search_score()">click</button>
+                                            <label for="Year">Year</label>
+                                            <select name="year" id="year" class="form-control-sm form-control"
+                                                onchange="search_score()">
+                                            </select>
                                         </div>
                                     </div>
                                 </form>
@@ -122,11 +125,13 @@
                                     <thead>
                                         <tr>
                                             <th rowspan="2" style="vertical-align : middle;text-align:center;">Name</th>
-                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Position</th>
+                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Position
+                                            </th>
                                             <th>Kpi</th>
                                             <th>Key-task</th>
                                             <th>Omg</th>
-                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Score</th>
+                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Score
+                                            </th>
                                             <th rowspan="2" style="vertical-align : middle;text-align:center;">Rank</th>
                                             <th rowspan="2" style="vertical-align : middle;text-align:center;">Rate</th>
                                         </tr>
@@ -172,27 +177,27 @@
                                             <th scope="col">#</th>
                                             @foreach ($ofSelf as $item)
                                             <th scope="col">{{$item->name}}</th>
-                                            @endforeach
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">Target</th>
-                                            @foreach ($ofSelf as $item)
-                                            <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}
-                                            </td>
-                                            @endforeach
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Actual</th>
-                                            @foreach ($ofSelf as $item)
-                                            <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}
-                                            </td>
-                                            @endforeach
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                    </tfoot>
+                                @endforeach
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Target</th>
+                                        @foreach ($ofSelf as $item)
+                                        <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}
+                                        </td>
+                                        @endforeach
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Actual</th>
+                                        @foreach ($ofSelf as $item)
+                                        <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}
+                                        </td>
+                                        @endforeach
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
                                 </table> --}}
                                 @endisset
                             </div>
@@ -218,27 +223,27 @@
                                             <th scope="col">#</th>
                                             @foreach ($ofDept as $item)
                                             <th scope="col">{{$item->name}}</th>
-                                            @endforeach
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">Target</th>
-                                            @foreach ($ofDept as $item)
-                                            <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}
-                                            </td>
-                                            @endforeach
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Actual</th>
-                                            @foreach ($ofDept as $item)
-                                            <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}
-                                            </td>
-                                            @endforeach
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                    </tfoot>
+                                @endforeach
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Target</th>
+                                        @foreach ($ofDept as $item)
+                                        <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}
+                                        </td>
+                                        @endforeach
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Actual</th>
+                                        @foreach ($ofDept as $item)
+                                        <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}
+                                        </td>
+                                        @endforeach
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
                                 </table> --}}
                                 @endisset
                             </div>
@@ -270,37 +275,37 @@
                                             @isset($periods)
                                             @foreach ($periods as $item)
                                             <th colspan="2">{{$item->name}}</th>
-                                            @endforeach
-                                            @endisset
-                                        </tr>
-                                        <tr>
-                                            @isset($periods)
-                                            @foreach ($periods as $item)
-                                            <th>target</th>
-                                            <th>actual</th>
-                                            @endforeach
-                                            @endisset
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @isset($rules)
-                                        @foreach ($rules as $key => $item)
-                                        <tr>
-                                            <th scope="row">{{$key+1}}</th>
-                                            <td class="truncate" data-toggle="tooltip" title="{{$item->name}}">
-                                                {{$item->name}}</td>
-                                            @isset($item->total)
-                                            @foreach ($item->total as $total)
-                                            <td>{{$total->target}}</td>
-                                            <td>{{$total->actual}}</td>
-                                            @endforeach
-                                            @endisset
-                                        </tr>
+                                @endforeach
+                                @endisset
+                                </tr>
+                                <tr>
+                                    @isset($periods)
+                                    @foreach ($periods as $item)
+                                    <th>target</th>
+                                    <th>actual</th>
+                                    @endforeach
+                                    @endisset
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @isset($rules)
+                                    @foreach ($rules as $key => $item)
+                                    <tr>
+                                        <th scope="row">{{$key+1}}</th>
+                                        <td class="truncate" data-toggle="tooltip" title="{{$item->name}}">
+                                            {{$item->name}}</td>
+                                        @isset($item->total)
+                                        @foreach ($item->total as $total)
+                                        <td>{{$total->target}}</td>
+                                        <td>{{$total->actual}}</td>
                                         @endforeach
                                         @endisset
-                                    </tbody>
-                                    <tfoot>
-                                    </tfoot>
+                                    </tr>
+                                    @endforeach
+                                    @endisset
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
                                 </table> --}}
                             </div>
                         </div>
@@ -332,43 +337,43 @@
                                             @isset($periods)
                                             @foreach ($periods as $period)
                                             <th colspan="2">{{$period->name}}</th>
-                                            @endforeach
-                                            @endisset
-                                        </tr>
-                                        <tr>
-                                            @isset($periods)
-                                            @foreach ($periods as $period)
-                                            <th>target</th>
-                                            <th>actual</th>
-                                            @endforeach
-                                            @endisset
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @isset($users)
-                                        @foreach ($users as $key => $user)
-                                        <tr>
-                                            <th>{{$key+1}}</th>
-                                            <td class="truncate" data-toggle="tooltip"
-                                                title="{{$user->department->name}}">{{$user->department->name}}</td>
-                                            <td class="truncate" data-toggle="tooltip" title="{{$user->name}}">
-                                                {{ $user->name }}</td>
-                                            @isset($user->total)
-                                            @foreach ($user->total as $total)
-                                            <td>
-                                                {{$total->target}}
-                                            </td>
-                                            <td>
-                                                {{$total->actual}}
-                                            </td>
-                                            @endforeach
-                                            @endisset
-                                        </tr>
+                                @endforeach
+                                @endisset
+                                </tr>
+                                <tr>
+                                    @isset($periods)
+                                    @foreach ($periods as $period)
+                                    <th>target</th>
+                                    <th>actual</th>
+                                    @endforeach
+                                    @endisset
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @isset($users)
+                                    @foreach ($users as $key => $user)
+                                    <tr>
+                                        <th>{{$key+1}}</th>
+                                        <td class="truncate" data-toggle="tooltip" title="{{$user->department->name}}">
+                                            {{$user->department->name}}</td>
+                                        <td class="truncate" data-toggle="tooltip" title="{{$user->name}}">
+                                            {{ $user->name }}</td>
+                                        @isset($user->total)
+                                        @foreach ($user->total as $total)
+                                        <td>
+                                            {{$total->target}}
+                                        </td>
+                                        <td>
+                                            {{$total->actual}}
+                                        </td>
                                         @endforeach
                                         @endisset
-                                    </tbody>
-                                    <tfoot>
-                                    </tfoot>
+                                    </tr>
+                                    @endforeach
+                                    @endisset
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
                                 </table> --}}
                             </div>
                         </div>

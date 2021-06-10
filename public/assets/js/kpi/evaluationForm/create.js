@@ -190,19 +190,30 @@ const addKeyTask = (e) => {
         .then(res => {
             if (res.status === 200) {
                 let row = evaluateForm.detail.find(obj => obj.rules.category_id === res.data.data.category_id)
+                console.log(row);
                 let detail = new EvaluateDetail()
                 detail.rule_id = res.data.data.id
                 detail.rules = Object.create(res.data.data)
-                detail.target = row.target
-                detail.max = row.max
-                detail.weight = row.weight
-                detail.weight_category = row.weight_category
-                detail.base_line = row.base_line
+                if (!row) {
+                    detail.target = 0.00
+                    detail.max = 0.00
+                    detail.weight = 0.00
+                    detail.weight_category = 0.00
+                    detail.base_line = 0.00
+                }else{
+                    detail.target = row.target
+                    detail.max = row.max
+                    detail.weight = row.weight
+                    detail.weight_category = row.weight_category
+                    detail.base_line = row.base_line
+                }
+                
                 evaluateForm.detail.push(detail)
                 e.offsetParent.querySelector('.close').click()
             }
         })
         .catch(error => {
+            console.log(error);
             toast(error.response.data.message, error.response.data.status)
         })
         .finally(() => {

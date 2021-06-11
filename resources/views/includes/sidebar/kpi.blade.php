@@ -102,7 +102,7 @@
                 {{-- end admin manager --}}
 
                 {{-- for eddy --}}
-                @if (auth()->user()->username === '70037455' || auth()->user()->username === '70037539')
+                @if (auth()->user()->username === '70037455' || auth()->user()->username === '70037539' || auth()->user()->username === '70038032')
                 <li class="app-sidebar__heading">Menu For Eddy</li>
                 <li class="{{Helper::isActive('kpi/for-eddy*')}}">
                     <a href="#" class="{{Helper::isActive('kpi/for-eddy*')}}">

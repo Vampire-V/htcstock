@@ -108,7 +108,7 @@
                                                 onchange="search_score()">
                                             </select>
                                             <select name="quarter" id="quarter" class="form-control-sm form-control"
-                                                onchange="search_score()">
+                                                onchange="search_score()" style="display: none;">
                                             </select>
                                         </div>
                                         <div class="col-md-3 mb-3">
@@ -136,8 +136,8 @@
                                             <th rowspan="2" style="vertical-align : middle;text-align:center;">Rate</th>
                                         </tr>
                                         <tr>
-                                            <th>70</th>
-                                            <th>30</th>
+                                            <th>0</th>
+                                            <th>0</th>
                                             <th>0</th>
                                         </tr>
                                     </thead>

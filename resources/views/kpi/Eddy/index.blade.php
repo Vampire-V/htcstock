@@ -162,7 +162,7 @@
                                     <tr>
                                         <td colspan="8"></td>
                                         <td><button class="mb-2 mr-2 btn btn-success btn-sm"
-                                                onclick="submitSetActual(this)">Submit</button>
+                                                onclick="submitSetActual(this)">Save</button>
                                         </td>
                                         <td colspan="2"></td>
                                     </tr>
@@ -280,7 +280,7 @@
                                     <tr>
                                         <td colspan="8"></td>
                                         <td><button class="mb-2 mr-2 btn btn-success btn-sm"
-                                                onclick="submitSetAch(this)">Submit</button>
+                                                onclick="submitSetAch(this)">Save</button>
                                         </td>
                                         <td colspan="2"></td>
                                     </tr>

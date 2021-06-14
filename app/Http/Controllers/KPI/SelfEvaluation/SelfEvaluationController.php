@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\KPI\SelfEvaluation;
 
 use App\Enum\KPIEnum;
+use App\Exports\KPI\EvaluatesExport;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\KPI\EvaluateDetailResource;
 use App\Http\Resources\KPI\EvaluateResource;
 use App\Mail\KPI\EvaluationSelfMail;
 use App\Models\KPI\Evaluate;
@@ -18,10 +20,13 @@ use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SelfEvaluationController extends Controller
 {
@@ -56,15 +61,17 @@ class SelfEvaluationController extends Controller
     public function index(Request $request)
     {
         $query = $request->all();
-        $selectedYear = empty($request->year) ? collect(date('Y')) : collect($request->year);
+        $selectedYear = collect($request->year ?? date('Y'));
+        $selectedUser = collect($request->user ?? auth()->id());
         $start_year = date('Y', strtotime('-10 years'));
         try {
-            $user = Auth::user();
+            $users = $this->userService->dropdown();
             $evaluates = $this->evaluateService->selfFilter($request);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.SelfEvaluation.index', \compact('start_year', 'user', 'selectedYear', 'evaluates'));
+
+        return \view('kpi.SelfEvaluation.index', \compact('start_year', 'users', 'selectedYear', 'selectedUser', 'evaluates'));
     }
 
     /**
@@ -300,5 +307,75 @@ class SelfEvaluationController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    public function excelevaluate(Request $request)
+    {
+        try {
+            $filename = Hash::make('testsetest') . '-test.xlsx';
+            Excel::store(new EvaluatesExport($request), $filename);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        return $this->successResponse($filename, 'excel', 200);
+    }
+
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $user
+     * @param  int  $quarter
+     * @param  int  $year
+     * @return \Illuminate\Http\Response
+     */
+    public function display_quarter($user, $quarter, $year)
+    {
+        try {
+            $category = $this->categoryService->dropdown();
+            $evaluate_quarter = $this->evaluateService->forQuarterYear($user, $quarter, $year);
+            $evaluate = $evaluate_quarter->first();
+            $detail = \collect();
+            $quarter_weight = \config('kpi.weight.quarter');
+            $evaluate_quarter->each(function ($item) use ($detail) {
+                foreach ($item->evaluateDetail as $key => $value) {
+                    
+                    $detail[] = $value;
+                }
+            });
+            $evaluate->evaluateDetail = $detail;
+
+            $evaluate  = new EvaluateResource($evaluate);
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
+        return \view('kpi.SelfEvaluation.quarter', \compact('evaluate', 'category','quarter_weight'));
+    }
+
+    private function quarter_summary(Collection $detail): Collection
+    {
+        $length = count($detail);
+        $temp = \collect();
+        for ($i = 0; $i < $length; $i++) {
+            $item = $detail[$i];
+            if (count($temp) === 0) {
+                $temp[] = $detail[$i];
+            } else {
+                $have_rule = $temp->search(function ($query) use($item){
+                    return $query->rule->id === $item->rule->id;
+                });
+                if ($have_rule) {
+                    $temp[$have_rule]->target += $item->target;
+                    $temp[$have_rule]->actual += $item->actual;
+                    $temp[$have_rule]->weight += $item->weight;
+                    $temp[$have_rule]->base_line += $item->base_line;
+                    $temp[$have_rule]->max_result += $item->max_result;
+                    // dd($temp[$have_rule],$item);
+                } else {
+                    $temp[] = $detail[$i];
+                }
+            }
+        }
+        return $temp;
     }
 }

@@ -64,7 +64,8 @@ class EvaluateDetail {
         weight_category = 0.00,
         base_line = 0.00,
         ach = 0.00,
-        cal = 0.00) {
+        cal = 0.00,
+        ) {
         this.evaluate_id = evaluate_id
         this.rule_id = rule_id
         this.rules = rules
@@ -78,6 +79,7 @@ class EvaluateDetail {
         this.base_line = base_line
         this.ach = ach
         this.cal = cal
+        this.average = []
     }
 }
 // KPI
@@ -113,6 +115,8 @@ var setDetail = (rule_temp) => {
         detail.rules = Object.create(element.rules)
         detail.target = typeof element.target === 'undefined' ? element.target_config : element.target
         detail.actual = typeof element.actual === 'undefined' ? 0.00 : element.actual
+        detail.average_actual = []
+        detail.average_target = []
         detail.max = element.max_result
         detail.weight = element.weight
         detail.weight_category = element.weight_category
@@ -592,4 +596,15 @@ var findActualPercent = (element, array) => {
         element.actual_pc = (element.actual / parent.actual) * 100
     }
     return element.actual_pc
+}
+
+var make_link = (url, text) => {
+    let x = document.createElement("A"),
+        t = document.createTextNode(text)
+    x.setAttribute("href", url)
+    x.setAttribute("target", "_blank")
+    x.setAttribute("rel", "noopener")
+    x.set
+    x.appendChild(t)
+    return x
 }

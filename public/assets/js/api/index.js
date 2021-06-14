@@ -203,3 +203,5 @@ const getOperationReportScore = (params) => axios.get('/kpi/operation/reportscor
 const getWeigthConfig = (params) => axios.get('/kpi/weigth/config', params)
 
 const postUploadFile = (form, config) => axios.post('/upload', form, config)
+
+const evaluate_excel = (params) => axios.get('/kpi/evaluate-report', params)

@@ -8,6 +8,8 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::get('dashboard', 'HomeController@index')->name('dashboard');
 
     Route::resource('self-evaluation', 'SelfEvaluation\SelfEvaluationController', ['only' => ['index', 'create', 'edit', 'update', 'store', 'destroy']]);
+    
+    Route::get('evaluate-report','SelfEvaluation\SelfEvaluationController@excelevaluate');
 
     Route::resource('evaluation-review', 'EvaluateReview\EvaluateReviewController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
 
@@ -43,4 +45,5 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     // new 
     Route::get('self-evaluation/evaluate', 'SelfEvaluation\SelfEvaluationController@create_new')->name('evaluate.create_new');
     Route::post('self-evaluation/evaluate', 'SelfEvaluation\SelfEvaluationController@store_new')->name('evaluate.store_new');
+    Route::get('self-evaluation/user/{user}/quarter/{quarter}/year/{year}','SelfEvaluation\SelfEvaluationController@display_quarter')->name('quarter');
 });

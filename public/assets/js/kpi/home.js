@@ -138,15 +138,16 @@ var search_score = () => {
     getOperationReportScore(config)
         .then(res => {
             if (res.status === 200) {
+                console.log(res.data.data)
                 for (let index = 0; index < res.data.data.length; index++) {
-                    const evaluate = res.data.data[index];
-                    const detail = evaluate.evaluate_detail;
+                    const evaluate = res.data.data[index],
+                        detail = evaluate.evaluate_detail
                     let kpi = detail.filter(item => item.rule.category.id === 1)
                     let key_task = detail.filter(item => item.rule.category.id === 2)
                     let omg = detail.filter(item => item.rule.category.id === 3)
 
                     score.push({
-                        user: evaluate.user,
+                        evaluate: evaluate,
                         kpi: kpi.reduce((a, c) => a + c.cal, 0),
                         key_task: key_task.reduce((a, c) => a + c.cal, 0),
                         omg: omg.reduce((a, c) => a + c.cal, 0)
@@ -165,8 +166,8 @@ var search_score = () => {
 }
 
 var render_score = (score) => {
-    let table = document.getElementById('table-report-score')
-    let body = table.tBodies[0]
+    let table = document.getElementById('table-report-score'),
+        body = table.tBodies[0]
     // head = table.tHead
     if (weigth_template.length > 0) {
         for (let index = 0; index < table.tHead.rows[1].cells.length; index++) {
@@ -174,32 +175,31 @@ var render_score = (score) => {
             element.textContent = weigth_template[index]
         }
     }
-
-    if (body.rows.length > 0) {
-        removeAllChildNodes(body)
-    }
+    removeAllChildNodes(body)
     if (score.length > 0) {
         for (let index = 0; index < score.length; index++) {
             const element = score[index]
             const rank_rate = calculator_score(element.score)
             let newRow = body.insertRow()
             let name = newRow.insertCell()
-            name.textContent = element.user.translations[0].name
+            let uri = document.getElementById('customSwitch1').checked ? `${window.origin}/kpi/self-evaluation/user/${element.evaluate.user_id}/quarter/${$("#quarter").val()}/year/${$("#year").val()}` : `${window.origin}/kpi/self-evaluation/${element.evaluate.id}/edit`;
+            name.appendChild(make_link(uri, element.evaluate.user.translations[0].name))
+            // name.textContent = element.user.translations[0].name
 
             let position = newRow.insertCell()
-            position.textContent = element.user.positions.name
+            position.textContent = element.evaluate.user.positions.name
 
             let kpi = newRow.insertCell()
-            kpi.textContent = element.kpi.toFixed(2)
+            kpi.textContent = element.kpi.toFixed(2) + `%`
 
             let task = newRow.insertCell()
-            task.textContent = element.key_task.toFixed(2)
+            task.textContent = element.key_task.toFixed(2) + `%`
 
             let omg = newRow.insertCell()
-            omg.textContent = element.omg.toFixed(2)
+            omg.textContent = element.omg.toFixed(2) + `%`
 
             let cscore = newRow.insertCell()
-            cscore.textContent = element.score
+            cscore.textContent = element.score.toFixed(2) + `%`
 
             let rank = newRow.insertCell()
             rank.textContent = index + 1
@@ -289,7 +289,7 @@ let quarter_sum = (objArr) => {
             item.score = 0.00
             temp.push(item)
         } else {
-            let t_index = temp.findIndex(t => t.user.id === item.user.id)
+            let t_index = temp.findIndex(t => t.evaluate.user.id === item.evaluate.user.id)
             if (t_index === -1) {
                 item.score = 0.00
                 temp.push(item)

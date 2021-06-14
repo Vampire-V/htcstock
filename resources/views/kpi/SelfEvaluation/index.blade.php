@@ -24,7 +24,51 @@
     </div>
 </div>
 {{-- end title  --}}
+@can('admin-kpi')
+<div class="col-lg-12">
+    <div class="main-card mb-3 card">
+        <div class="card-body">
+            <h5 class="card-title">Form search</h5>
+            <div class="position-relative form-group">
+                <form class="needs-validation" novalidate>
+                    <div class="form-row">
+                        <div class="col-md-3 mb-3">
+                            <label for="staffName">Staff Name</label>
+                            <select name="user[]" id="user" class="form-control form-control-sm">
+                                @isset($users)
+                                @foreach ($users as $item)
+                                <option value="{{$item->id}}" @if ($selectedUser->contains($item->id))
+                                    selected
+                                    @endif>{{$item->name}}</option>
+                                @endforeach
+                                @endisset
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="Year">Year</label>
+                            <select name="year[]" id="validationYear" class="form-control-sm form-control">
+                                @foreach (range(date('Y'), $start_year) as $year)
+                                <option value="{{$year}}" @if ($selectedYear->contains($year))
+                                    selected
+                                    @endif>{{$year}}</option>
+                                @endforeach
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid state.
+                            </div>
+                        </div>
 
+
+                        <div class="col-md-1" style="display: flex; justify-content: center; align-items: center;  ">
+                            <button class="btn btn-primary btn-sm mt-3" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@elsecan('user-kpi')
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
         <div class="card-body">
@@ -34,35 +78,31 @@
                     <div class="form-row">
                         <div class="col-md-2 mb-2">
                             <label for="staffName">Staff Name</label>
-                            <input type="text" class="form-control form-control-sm" id="staffName"
-                                placeholder="Staff Name" value="{{$user->name }}" readonly>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
+                            <input type="text" class="form-control form-control-sm" value="{{Auth::user()->name}}"
+                                placeholder="User" aria-describedby="inputGroupPrepend" readonly>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="Department">Department</label>
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm" id="Department"
-                                    value="{{$user->department->name}}" placeholder="Department"
+                                    value="{{Auth::user()->department->name}}" placeholder="Department"
                                     aria-describedby="inputGroupPrepend" readonly>
                                 <div class="invalid-feedback">
                                     Please choose a username.
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-md-3 mb-3">
                             <label for="Position">Position</label>
                             <input type="text" class="form-control form-control-sm" id="Position" placeholder="Position"
-                                value="{{$user->positions->name}}" readonly>
+                                value="{{Auth::user()->positions->name}}" readonly>
                             <div class="invalid-feedback">
                                 Please provide a valid city.
                             </div>
                         </div>
                         <div class="col-md-2 mb-2">
                             <label for="Year">Year</label>
-                            <select name="year[]" id="validationYear" class="form-control-sm form-control" multiple>
+                            <select name="year[]" id="validationYear" class="form-control-sm form-control">
                                 @foreach (range(date('Y'), $start_year) as $year)
                                 <option value="{{$year}}" @if ($selectedYear->contains($year))
                                     selected
@@ -82,7 +122,7 @@
         </div>
     </div>
 </div>
-
+@endcan
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
         <div class="card-body">
@@ -94,14 +134,18 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        @if (Auth::user()->hasRole('super-admin'))
+                        @can('for-superadmin')
                         <a href="{{route('kpi.evaluate.create_new')}}" class="btn-shadow btn btn-info mb-2 mr-2">
                             <span class="btn-icon-wrapper pr-2 opacity-7">
                                 <i class="pe-7s-plus"></i>
                             </span>
                             Create
                         </a>
-                        @endif
+                        <button onclick="report_excel()" class="btn-shadow btn btn-warning mb-2 mr-2">
+                            <i class="fa fa-fw" aria-hidden="true" title="Copy to use file-excel-o"></i>
+                            excel
+                        </button>
+                        @endcan
                     </div>
                 </div>
             </div>

@@ -7,7 +7,10 @@
             placeholder: 'Select Year',
             allowClear: true
         });
-
+        $("#user").select2({
+            placeholder: 'Select User',
+            allowClear: true
+        });
 
     })
 
@@ -19,3 +22,21 @@
     }, false);
 
 })();
+
+let report_excel = () => {
+    let config = {
+        params: {
+            user: [$("#user").val()],
+            year: [$("#validationYear").val()]
+        }
+    }
+
+    evaluate_excel(config)
+    .then(res => {
+        console.log(res);
+    })
+    .catch(error => {
+        console.log(error);
+        console.log(error.response.data.message);
+    })
+}

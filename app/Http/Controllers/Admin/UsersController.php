@@ -216,7 +216,7 @@ class UsersController extends Controller
                 }
                 User::whereNotIn('username', [...$list_users])->update(['resigned' => 1]); //update user ที่ออกไปแล้ว
                 $all_user = User::where('resigned', false)->get();
-                $systems = System::whereNotIn('slug', ['legal'])->get();
+                $systems = System::whereNotIn('slug', ['legal','it'])->get();
                 $roles = Role::whereNotIn('slug', [UserEnum::SUPERADMIN, UserEnum::ADMINIT, UserEnum::ADMINLEGAL, UserEnum::USERLEGAL, UserEnum::ADMINKPI])->get();
 
                 foreach ($all_user as $staff) {

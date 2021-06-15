@@ -28,7 +28,7 @@
     <div class="main-card mb-3 card">
         <div class="card-body">
             <div class="card-header">
-                <h5 class="card-title">title period</h5>
+                <h5 class="card-title">Quarter {{$evaluate->targetperiod->quarter}}</h5>
                 <div class="btn-actions-pane">
                     <div role="group" class="btn-group-sm btn-group">
                     </div>

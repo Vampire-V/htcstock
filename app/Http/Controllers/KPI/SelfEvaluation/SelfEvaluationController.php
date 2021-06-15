@@ -339,7 +339,6 @@ class SelfEvaluationController extends Controller
             $quarter_weight = \config('kpi.weight.quarter');
             $evaluate_quarter->each(function ($item) use ($detail) {
                 foreach ($item->evaluateDetail as $key => $value) {
-                    
                     $detail[] = $value;
                 }
             });

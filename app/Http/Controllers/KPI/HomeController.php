@@ -5,6 +5,7 @@ namespace App\Http\Controllers\KPI;
 use App\Enum\KPIEnum;
 use App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\KPI\EvaluateResource;
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\TargetPeriod;
 use App\Models\User;
@@ -120,11 +121,14 @@ class HomeController extends Controller
     {
         try {
             $evaluations = $this->evaluateService->scoreFilter($request);
+            // if ($request->month) {
             $this->calculation_summary($evaluations);
+            // }
+            $result = EvaluateResource::collection($evaluations);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), $e->getCode());
         }
-        return $this->successResponse($evaluations, 200);
+        return $this->successResponse($result, 200);
     }
 
     public function weigthconfig(Request $request)

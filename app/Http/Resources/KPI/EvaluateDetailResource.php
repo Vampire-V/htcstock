@@ -32,7 +32,12 @@ class EvaluateDetailResource extends JsonResource
             'ach' => $this->ach ?? 0.00,
             'cal' => $this->cal ?? 0.00,
             'target_pc' => $this->target_pc ?? 0.00,
-            'actual_pc' => $this->actual_pc ?? 0.00
+            'actual_pc' => $this->actual_pc ?? 0.00,
+            'average_actual' => [],
+            'average_target' => [],
+            'average_weight' => [],
+            'average_base_line' => [],
+            'average_max' => []
         ];
     }
 }

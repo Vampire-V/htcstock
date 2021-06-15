@@ -122,38 +122,56 @@ var tabActive = (e) => {
 
 var search_score = () => {
     let score = []
-    let month = {
-        month: [$("#period").val()],
-        year: [$("#year").val()]
-    }
-    let quarter = {
-        quarter: [$("#quarter").val()],
-        year: [$("#year").val()]
-    }
-    let config = {
-        params: document.getElementById('customSwitch1').checked ? quarter : month,
+    let checked = document.getElementById('customSwitch1').checked
+    let param
+    if (checked) {
+        param = {
+            quarter: [$("#quarter").val()],
+            year: [$("#year").val()]
+        }
+    } else {
+        param = {
+            month: [$("#period").val()],
+            year: [$("#year").val()]
+        }
     }
     let table = document.getElementById('table-report-score')
     table.previousElementSibling.classList.add('reload')
-    getOperationReportScore(config)
+    getOperationReportScore({
+            params: param
+        })
         .then(res => {
             if (res.status === 200) {
-                console.log(res.data.data)
                 for (let index = 0; index < res.data.data.length; index++) {
-                    const evaluate = res.data.data[index],
-                        detail = evaluate.evaluate_detail
-                    let kpi = detail.filter(item => item.rule.category.id === 1)
-                    let key_task = detail.filter(item => item.rule.category.id === 2)
-                    let omg = detail.filter(item => item.rule.category.id === 3)
+                    const evaluate = res.data.data[index]
+                    let kpi = evaluate.detail.filter(item => item.rules.categorys.name === `kpi`)
+                    let key_task = evaluate.detail.filter(item => item.rules.categorys.name === `key-task`)
+                    let omg = evaluate.detail.filter(item => item.rules.categorys.name === `omg`)
+                    let total_kpi = 0
+                    let total_key = 0
+                    let total_omg = 0
+                    let sum_total = 0
+                    if (checked) {
+                        total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0)
+                        total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0)
+                        total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
+                        sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
 
+                    } else {
+                        total_kpi = kpi.reduce((a, c) => a + c.cal, 0)
+                        total_key = key_task.reduce((a, c) => a + c.cal, 0)
+                        total_omg = omg.reduce((a, c) => a + c.cal, 0)
+                        sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
+
+                    }
                     score.push({
                         evaluate: evaluate,
-                        kpi: kpi.reduce((a, c) => a + c.cal, 0),
-                        key_task: key_task.reduce((a, c) => a + c.cal, 0),
-                        omg: omg.reduce((a, c) => a + c.cal, 0)
+                        kpi: total_kpi,
+                        key_task: total_key,
+                        omg: total_omg,
+                        score: sum_total / 100
                     })
                 }
-                score = quarter_sum(score)
             }
         })
         .catch(error => {
@@ -161,8 +179,53 @@ var search_score = () => {
             console.log(error.response.data);
         })
         .finally(() => {
-            setTimeout(render_score(score), 50000)
+            render_score(score.sort((a, b) => b.score - a.score))
+            // setTimeout(, 50000)
         })
+}
+let total_quarter = (objArr) => {
+    let temp = [];
+    try {
+        for (var i = 0; i < objArr.length; i++) {
+            let item = objArr[i]
+            if (temp.length < 1) {
+                item.average_weight.push(item.weight)
+                item.average_actual.push(item.actual)
+                item.average_target.push(item.target)
+                temp.push(item)
+            } else {
+                let t_index = temp.findIndex(t => t.rule_id === item.rule_id)
+                if (t_index === -1) {
+                    item.average_weight.push(item.weight)
+                    item.average_actual.push(item.actual)
+                    item.average_target.push(item.target)
+                    temp.push(item)
+                } else {
+                    temp[t_index].average_weight.push(item.weight)
+                    temp[t_index].average_actual.push(item.actual)
+                    temp[t_index].average_target.push(item.target)
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        for (let index = 0; index < temp.length; index++) {
+            const element = temp[index]
+            element.weight = element.average_weight.reduce((a, b) => a + b, 0) / 3
+            element.target = element.average_target.reduce((a, b) => a + b, 0) / element.average_target.length
+            element.actual = element.average_actual.reduce((a, b) => a + b, 0) / element.average_actual.length
+            element.actual_pc = findActualPercent(element, temp)
+            element.target_pc = findTargetPercent(element, temp)
+            element.ach = findAchValue(element)
+            element.cal = findCalValue(element, element.ach)
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    return temp
 }
 
 var render_score = (score) => {
@@ -189,6 +252,7 @@ var render_score = (score) => {
             name.appendChild(a)
 
             let position = newRow.insertCell()
+            position.style = `text-align: left;`
             position.textContent = element.evaluate.user.positions.name
 
             let kpi = newRow.insertCell()
@@ -283,7 +347,7 @@ let month_quarter = () => {
         })
 }
 
-let quarter_sum = (objArr) => {
+let month_sum = (objArr) => {
     let temp = [];
     for (var i = 0; i < objArr.length; i++) {
         let item = objArr[i]

@@ -45,7 +45,7 @@
                 {{-- @endcan --}}
                 {{-- end admin manager --}}
                 <li>
-                    <a href="{{route('kpi.self-evaluation.index')}}"
+                    <a href="{{route('kpi.self-evaluation.index',['user'=>[auth()->id()],'year'=>[date('Y')]])}}"
                         class="{{Helper::isActive('kpi/self-evaluation*')}}">
                         <i class="metismenu-icon pe-7s-file"></i>
                         Self Evaluation

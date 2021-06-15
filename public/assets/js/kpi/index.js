@@ -79,7 +79,6 @@ class EvaluateDetail {
         this.base_line = base_line
         this.ach = ach
         this.cal = cal
-        this.average = []
     }
 }
 // KPI
@@ -457,6 +456,38 @@ var findCalValue = (obj, ach) => {
 }
 
 /**
+ * @params {element} EvaluateDetail
+ * @params {array} EvaluateDetail list
+ * @return percent (element.target / parent.target) * 100
+ */
+ var findTargetPercent = (element, array) => {
+    element.target_pc = 100.00
+    if (element.rules.parent) {
+        let parent = array.find(item => item.rule_id === element.rules.parent)
+        let config = element.target_config ?? element.target
+        let parent_config = parent.target_config ?? parent.target
+        if (parent) {
+            element.target_pc = (config / parent_config) * 100
+        }
+    }
+    return element.target_pc
+}
+
+/**
+ * @params {element} EvaluateDetail
+ * @params {array} EvaluateDetail list
+ * @return percent (element.target / parent.target) * 100
+ */
+var findActualPercent = (element, array) => {
+    element.actual_pc = 100.00
+    if (element.rules.parent) {
+        let parent = array.find(item => item.rule_id === element.rules.parent)
+        element.actual_pc = (element.actual / parent.actual) * 100
+    }
+    return element.actual_pc
+}
+
+/**
  * @params {element} document.getElementById
  * @params {EvaluateDetail} EvaluateDetail
  * @return void
@@ -564,38 +595,6 @@ var changeTooltipCal = (befor, data) => {
         newTitle = "Ach% = Base Line : (Ach% * Weight) / 100"
     }
     return newTitle
-}
-
-/**
- * @params {element} EvaluateDetail
- * @params {array} EvaluateDetail list
- * @return percent (element.target / parent.target) * 100
- */
-var findTargetPercent = (element, array) => {
-    element.target_pc = 100.00
-    if (element.rules.parent) {
-        let parent = array.find(item => item.rule_id === element.rules.parent)
-        let config = element.target_config ?? element.target
-        let parent_config = parent.target_config ?? parent.target
-        if (parent) {
-            element.target_pc = (config / parent_config) * 100
-        }
-    }
-    return element.target_pc
-}
-
-/**
- * @params {element} EvaluateDetail
- * @params {array} EvaluateDetail list
- * @return percent (element.target / parent.target) * 100
- */
-var findActualPercent = (element, array) => {
-    element.actual_pc = 100.00
-    if (element.rules.parent) {
-        let parent = array.find(item => item.rule_id === element.rules.parent)
-        element.actual_pc = (element.actual / parent.actual) * 100
-    }
-    return element.actual_pc
 }
 
 var make_link = (url, text) => {

@@ -42,13 +42,23 @@ class HomeController extends Controller
         $selectedYear = empty($request->year) ? date('Y') : $request->year;
         $evaluations =  Evaluate::with('user', 'evaluateDetail.rule', 'targetperiod')->where('status', KPIEnum::approved)->get();
         $this->calculation_summary($evaluations);
-        $ofSelf = $this->targetPeriodService->selfApprovedEvaluationOfyear($selectedYear);
+        // $ofSelf = $this->targetPeriodService->selfApprovedEvaluationOfyear($selectedYear);
         $ofDept = $this->targetPeriodService->deptApprovedEvaluationOfyear($selectedYear);
         $periods = $this->targetPeriodService->query()->where('year', $selectedYear)->get();
         $users = $this->userService->evaluationOfYearReport($selectedYear);
         $rules = $this->ruleService->rulesInEvaluationReport($selectedYear);
 
-        return \view('kpi.home', \compact('ofSelf', 'ofDept', 'users', 'periods', 'rules', 'selectedYear'));
+        return \view('kpi.home', \compact('ofDept', 'users', 'periods', 'rules', 'selectedYear'));
+    }
+
+    public function report_your_self($year)
+    {
+        try {
+            $result = $this->targetPeriodService->selfApprovedEvaluationOfyear($year);
+        } catch (\Exception $e) {
+            throw $this->errorResponse($e->getMessage(),500);
+        }
+        return $this->successResponse($result,'get report your self',200);
     }
 
     /**

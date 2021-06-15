@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     let active_tab = localStorage.getItem('tab-dashboard')
+
     if (active_tab) {
         let content_id = null
         let ele_active = document.getElementById(active_tab)
@@ -64,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 element.firstElementChild.classList.remove('active')
             }
         }
-
         if (content_id) {
             let contents = document.getElementById(content_id).parentElement
             for (let index = 0; index < contents.children.length; index++) {
@@ -76,41 +76,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         }
+        render_self()
     }
 });
 
 let weigth_template = []
-document.getElementById('customSwitch1').addEventListener('click', () => {
-    month_quarter()
-    search_score()
-})
 
-var search_table = (e) => {
-    // Declare variables
-    var input, filter, table, tr, td, i, txtValue;
-    input = e;
-    filter = input.value.toUpperCase()
-    table = input.offsetParent.querySelector('table')
-    tr = table.tBodies[0].rows
-    // Loop through all table rows, and hide those who don't match the search query
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0]
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-            }
-        }
-    }
-}
-
-var search = () => {
-    document.forms['form-search'].submit();
-}
-
-var tabActive = (e) => {
+const tabActive = (e) => {
     window.localStorage.setItem('tab-dashboard', e.id)
     let active_tab = localStorage.getItem('tab-dashboard')
     if (active_tab === `tab-c-0`) {
@@ -118,9 +90,20 @@ var tabActive = (e) => {
         month_quarter()
         search_score()
     }
+    if (active_tab === `tab-c-1`) {
+        render_self()
+        // month_quarter()
+        // search_score()
+    }
 }
 
-var search_score = () => {
+// tab-c-0 method
+document.getElementById('customSwitch1').addEventListener('click', () => {
+    month_quarter()
+    search_score()
+})
+
+const search_score = () => {
     let score = []
     let checked = document.getElementById('customSwitch1').checked
     let param
@@ -183,6 +166,7 @@ var search_score = () => {
             // setTimeout(, 50000)
         })
 }
+
 let total_quarter = (objArr) => {
     let temp = [];
     try {
@@ -228,7 +212,7 @@ let total_quarter = (objArr) => {
     return temp
 }
 
-var render_score = (score) => {
+const render_score = (score) => {
     let table = document.getElementById('table-report-score'),
         body = table.tBodies[0]
     // head = table.tHead
@@ -314,7 +298,7 @@ const make_options = () => {
     }
 }
 
-let month_quarter = () => {
+const month_quarter = () => {
     let check = document.getElementById('customSwitch1').checked
     let period = document.getElementById('period')
     let quarter = document.getElementById('quarter')
@@ -347,33 +331,6 @@ let month_quarter = () => {
         })
 }
 
-let month_sum = (objArr) => {
-    let temp = [];
-    for (var i = 0; i < objArr.length; i++) {
-        let item = objArr[i]
-        if (temp.length < 1) {
-            item.score = 0.00
-            temp.push(item)
-        } else {
-            let t_index = temp.findIndex(t => t.evaluate.user.id === item.evaluate.user.id)
-            if (t_index === -1) {
-                item.score = 0.00
-                temp.push(item)
-            } else {
-                temp[t_index].kpi += item.kpi
-                temp[t_index].key_task += item.key_task
-                temp[t_index].omg += item.omg
-            }
-        }
-    }
-    for (let index = 0; index < temp.length; index++) {
-        const element = temp[index];
-        element.score = (element.kpi * weigth_template[0]) + (element.key_task * weigth_template[1]) + (element.omg * weigth_template[2])
-        element.score = element.score / 100
-    }
-    return temp.sort((a, b) => b.score - a.score)
-}
-
 let calculator_score = (number) => {
     if (number >= 110.00) {
         return "A"
@@ -390,4 +347,84 @@ let calculator_score = (number) => {
     if (number < 70.00) {
         return "D"
     }
+}
+
+// tab-c-1 method
+const search_table = (e) => {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    input = e;
+    filter = input.value.toUpperCase()
+    table = input.offsetParent.querySelector('table')
+    tr = table.tBodies[0].rows
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0]
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+const render_self = () => {
+    let data = []
+    document.getElementById('table-self-evaluation').previousElementSibling.classList.add('reload')
+    getReportYourSelf(2021)
+        .then(res => {
+            if (res.status == 200) {
+                data = res.data.data
+            }
+        })
+        .catch(error => {
+            console.log(error, error.response.data.message)
+        })
+        .finally(() => {
+            self_data_to_table(data)
+        })
+}
+
+const self_data_to_table = (data) => {
+    let table = document.getElementById('table-self-evaluation'),
+        head = table.tHead,
+        body = table.tBodies[0]
+
+    removeAllChildNodes(head)
+    removeAllChildNodes(body)
+    let rowH = head.insertRow()
+    rowH.insertCell().textContent = `#`
+
+    let rowBone = body.insertRow()
+    let tar = document.createElement('th')
+    tar.textContent = `Target`
+    rowBone.appendChild(tar)
+    let rowBtwo = body.insertRow()
+    let act = document.createElement('th')
+    act.textContent = `Actual`
+    rowBtwo.appendChild(act)
+    for (let index = 0; index < data.length; index++) {
+        const element = data[index];
+        // header
+        let th = document.createElement('th')
+        th.textContent = element.name
+        rowH.appendChild(th)
+        // body
+        let t_month = rowBone.insertCell()
+        if (element.evaluates.length > 0) {
+            t_month.textContent = element.evaluates[0].evaluate_detail.reduce((a, b) => a + b.target, 0).toFixed(2)
+        } else {
+            t_month.textContent = 0.00
+        }
+        let a_month = rowBtwo.insertCell()
+        if (element.evaluates.length > 0) {
+            a_month.textContent = element.evaluates[0].evaluate_detail.reduce((a, b) => a + b.actual, 0).toFixed(2)
+        } else {
+            a_month.textContent = 0.00
+        }
+    }
+    table.previousElementSibling.classList.remove('reload')
 }

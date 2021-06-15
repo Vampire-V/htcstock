@@ -6,7 +6,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('kpi/evaluation/{id}/verify', 'Auth\LoginController@authKpiEvaluation')->name('kpi.evaluation.verify');
 Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', 'HomeController@index')->name('dashboard');
-
+    Route::get('operation/reportscore','HomeController@reportscore');
+    Route::get('weigth/config','HomeController@weigthconfig');
+    Route::get('dashboard/you-self/{year}','HomeController@report_your_self');
+    
     Route::resource('self-evaluation', 'SelfEvaluation\SelfEvaluationController', ['only' => ['index', 'create', 'edit', 'update', 'store', 'destroy']]);
     
     Route::get('evaluate-report','SelfEvaluation\SelfEvaluationController@excelevaluate');
@@ -39,8 +42,6 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::put('for-eddy/{id}/updateAch', 'EddyMenu\AllEvaluationController@updateAch');
 
     Route::resource('set-period', 'SetPeriod\TargetPeriodController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
-    Route::get('operation/reportscore','HomeController@reportscore');
-    Route::get('weigth/config','HomeController@weigthconfig');
 
     // new 
     Route::get('self-evaluation/evaluate', 'SelfEvaluation\SelfEvaluationController@create_new')->name('evaluate.create_new');

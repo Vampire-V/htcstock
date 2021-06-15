@@ -43,14 +43,14 @@
                 <nav class="navbar">
                     <div class="d-inline-flex" style="width:100%;">
                         <ul class="tabs-animated-shadow tabs-animated nav">
-                            @can('admin-kpi')
+                            {{-- @can('admin-kpi') --}}
                             <li class="nav-item">
                                 <a role="tab" class="nav-link " id="tab-c-0" data-toggle="tab" href="#tab-operation"
                                     onclick="tabActive(this)">
                                     <span>Operation</span>
                                 </a>
                             </li>
-                            @endcan
+                            {{-- @endcan --}}
                             <li class="nav-item">
                                 <a role="tab" class="nav-link " id="tab-c-1" data-toggle="tab" href="#tab-all"
                                     onclick="tabActive(this)">
@@ -60,15 +60,15 @@
                         </ul>
                         <ul class="nav list-inline ml-auto">
                             <li class="nav-item">
-                                <form class="needs-validation" novalidate method="get" id="form-search">
-                                    {{-- <select class="form-control form-control-sm" name="year" id="year"
+                                {{-- <form class="needs-validation" novalidate method="get" id="form-search">
+                                    <select class="form-control form-control-sm" name="year" id="year"
                                         onchange="search()">
                                         @foreach (range(date('Y')-5,date('Y')+5) as $year)
                                         <option value="{{$year}}" @if (intVal($selectedYear)===$year) selected @endif>
                                     {{$year}}</option>
                                     @endforeach
-                                    </select> --}}
-                                </form>
+                                    </select>
+                                </form> --}}
                             </li>
                         </ul>
                     </div>
@@ -170,36 +170,31 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive" style="height: 110px;">
-                                @isset($ofSelf)
-                                {{-- <table class="mb-0 table table-sm" id="table-self-evaluation">
+                                {{-- @isset($ofSelf) --}}
+                                <table class="mb-0 table table-sm" id="table-self-evaluation">
                                     <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
+                                    </thead>
+                                    <tbody>
+                                        <div id="reload" class="reload"></div>
+                                        {{-- <tr>
+                                            <th scope="row">Target</th>
                                             @foreach ($ofSelf as $item)
-                                            <th scope="col">{{$item->name}}</th>
-                                @endforeach
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">Target</th>
-                                        @foreach ($ofSelf as $item)
-                                        <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}
-                                        </td>
-                                        @endforeach
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Actual</th>
-                                        @foreach ($ofSelf as $item)
-                                        <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}
-                                        </td>
-                                        @endforeach
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                </tfoot>
-                                </table> --}}
-                                @endisset
+                                            <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}
+                                            </td>
+                                            @endforeach
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Actual</th>
+                                            @foreach ($ofSelf as $item)
+                                            <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}
+                                            </td>
+                                            @endforeach
+                                        </tr> --}}
+                                    </tbody>
+                                    <tfoot>
+                                    </tfoot>
+                                </table>
+                                {{-- @endisset --}}
                             </div>
                         </div>
                     </div>

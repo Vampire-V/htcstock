@@ -205,3 +205,5 @@ const getWeigthConfig = (params) => axios.get('/kpi/weigth/config', params)
 const postUploadFile = (form, config) => axios.post('/upload', form, config)
 
 const evaluate_excel = (params) => axios.get('/kpi/evaluate-report', params)
+
+const getReportYourSelf = (year) => axios.get(`/kpi/dashboard/you-self/${year}`)

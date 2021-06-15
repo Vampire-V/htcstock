@@ -135,7 +135,7 @@
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
                         @can('for-superadmin')
-                        <a href="{{route('kpi.evaluate.create_new')}}" class="btn-shadow btn btn-info mb-2 mr-2">
+                        {{-- <a href="{{route('kpi.evaluate.create_new')}}" class="btn-shadow btn btn-info mb-2 mr-2">
                             <span class="btn-icon-wrapper pr-2 opacity-7">
                                 <i class="pe-7s-plus"></i>
                             </span>
@@ -144,7 +144,7 @@
                         <button onclick="report_excel()" class="btn-shadow btn btn-warning mb-2 mr-2">
                             <i class="fa fa-fw" aria-hidden="true" title="Copy to use file-excel-o"></i>
                             excel
-                        </button>
+                        </button> --}}
                         @endcan
                     </div>
                 </div>

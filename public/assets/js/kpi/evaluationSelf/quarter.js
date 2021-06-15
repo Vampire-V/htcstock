@@ -32,7 +32,6 @@
                     console.log(error.response.data)
                 })
                 .finally(() => {
-
                     let temp = []
                     for (var i = 0; i < evaluateForm.detail.length; i++) {
                         let item = evaluateForm.detail[i]
@@ -49,7 +48,7 @@
                             } else {
                                 temp[t_index].actual += item.actual
                                 temp[t_index].target += item.target
-                                temp[t_index].base_line += item.base_line
+                                // temp[t_index].base_line += item.base_line
                                 temp[t_index].weight += item.weight
                                 temp[t_index].average_actual.push(item.actual)
                                 temp[t_index].average_target.push(item.target)
@@ -59,7 +58,7 @@
                     // console.log(temp);
                     for (let index = 0; index < temp.length; index++) {
                         const element = temp[index]
-                        element.base_line = element.base_line / 3
+                        // element.base_line = element.base_line / 3
                         element.weight = element.weight / 3
                         element.target = average(element.average_target)
                         element.actual = average(element.average_actual)
@@ -67,7 +66,7 @@
                     evaluateForm.detail = temp
                     render_html()
                     // if (evaluate.status !== status.READY && evaluate.status !== status.DRAFT) {
-                    //     pageDisable()
+                    pageDisable()
                     // }
                 })
         }

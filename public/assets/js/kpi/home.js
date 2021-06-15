@@ -182,9 +182,11 @@ var render_score = (score) => {
             const rank_rate = calculator_score(element.score)
             let newRow = body.insertRow()
             let name = newRow.insertCell()
+            name.style = `text-align: left;`
             let uri = document.getElementById('customSwitch1').checked ? `${window.origin}/kpi/self-evaluation/user/${element.evaluate.user_id}/quarter/${$("#quarter").val()}/year/${$("#year").val()}` : `${window.origin}/kpi/self-evaluation/${element.evaluate.id}/edit`;
-            name.appendChild(make_link(uri, element.evaluate.user.translations[0].name))
-            // name.textContent = element.user.translations[0].name
+            let a = make_link(uri, element.evaluate.user.translations[0].name)
+            a.style = `padding-left: 20%`
+            name.appendChild(a)
 
             let position = newRow.insertCell()
             position.textContent = element.evaluate.user.positions.name

@@ -124,16 +124,16 @@
                                 <table class="mb-0 table table-sm" id="table-report-score">
                                     <thead>
                                         <tr>
-                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Name</th>
-                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Position
+                                            <th rowspan="2" style="vertical-align : middle;">Name</th>
+                                            <th rowspan="2" style="vertical-align : middle;">Position
                                             </th>
                                             <th>Kpi</th>
                                             <th>Key-task</th>
                                             <th>Omg</th>
-                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Score
+                                            <th rowspan="2" style="vertical-align : middle;">Score
                                             </th>
-                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Rank</th>
-                                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Rate</th>
+                                            <th rowspan="2" style="vertical-align : middle;">Rank</th>
+                                            <th rowspan="2" style="vertical-align : middle;">Rate</th>
                                         </tr>
                                         <tr>
                                             <th>0</th>

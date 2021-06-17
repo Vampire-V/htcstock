@@ -112,9 +112,15 @@
                     </a>
                     <ul>
                         <li>
-                            <a href="{{route('kpi.for-eddy.index')}}" class="{{Helper::isActive('kpi/for-eddy*')}}">
+                            <a href="{{route('kpi.for-eddy.index')}}" class="{{Helper::isActive('kpi/for-eddy')}}">
                                 <i class="metismenu-icon"></i>
                                 Edite actual / ach%
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{route('kpi.deadline')}}" class="{{Helper::isActive('kpi/for-eddy/config/deadline')}}">
+                                <i class="metismenu-icon"></i>
+                                Config Dead Line
                             </a>
                         </li>
                     </ul>

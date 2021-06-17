@@ -125,11 +125,11 @@
                                     <thead>
                                         <tr>
                                             <th rowspan="2" style="vertical-align : middle;">Name</th>
-                                            <th rowspan="2" style="vertical-align : middle;">Position
+                                            <th rowspan="2" style="vertical-align : middle;">Division
                                             </th>
-                                            <th>Kpi</th>
+                                            <th>KPI</th>
                                             <th>Key-task</th>
-                                            <th>Omg</th>
+                                            <th>OMG</th>
                                             <th rowspan="2" style="vertical-align : middle;">Score
                                             </th>
                                             <th rowspan="2" style="vertical-align : middle;">Rank</th>
@@ -164,37 +164,21 @@
                     <div class="card-header-tab card-header-tab-animation card-header">
                         <div class="card-header-title">
                             <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                            Evaluation Report Your self
+                            Evaluation Report {{date('Y')}} Your self
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive" style="height: 110px;">
-                                {{-- @isset($ofSelf) --}}
                                 <table class="mb-0 table table-sm" id="table-self-evaluation">
                                     <thead>
                                     </thead>
                                     <tbody>
                                         <div id="reload" class="reload"></div>
-                                        {{-- <tr>
-                                            <th scope="row">Target</th>
-                                            @foreach ($ofSelf as $item)
-                                            <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}
-                                            </td>
-                                            @endforeach
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Actual</th>
-                                            @foreach ($ofSelf as $item)
-                                            <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}
-                                            </td>
-                                            @endforeach
-                                        </tr> --}}
                                     </tbody>
                                     <tfoot>
                                     </tfoot>
                                 </table>
-                                {{-- @endisset --}}
                             </div>
                         </div>
                     </div>

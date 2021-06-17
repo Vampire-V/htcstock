@@ -235,9 +235,9 @@ const render_score = (score) => {
             a.style = `padding-left: 20%`
             name.appendChild(a)
 
-            let position = newRow.insertCell()
-            position.style = `text-align: left;`
-            position.textContent = element.evaluate.user.positions.name
+            let division = newRow.insertCell()
+            division.style = `text-align: left;`
+            division.textContent = element.evaluate.user.divisions.name
 
             let kpi = newRow.insertCell()
             kpi.textContent = element.kpi.toFixed(2) + `%`

@@ -16,6 +16,7 @@ use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
+use App\Services\KPI\Service\SettingActionService;
 // use Arcanedev\LogViewer\Entities\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +26,9 @@ use Illuminate\Support\Facades\Mail;
 class EvaluationFormController extends Controller
 {
 
-    protected $departmentService, $positionService, $userService, $targetPeriodService, $ruleTemplateService, $templateService, $categoryService, $ruleService, $evaluateService, $evaluateDetailService;
+    protected $departmentService, $positionService, $userService, $targetPeriodService, $ruleTemplateService, 
+    $templateService, $categoryService, $ruleService, $evaluateService, $evaluateDetailService, 
+    $setting_action_service;
     public function __construct(
         DepartmentServiceInterface $departmentServiceInterface,
         PositionServiceInterface $positionServiceInterface,
@@ -36,7 +39,8 @@ class EvaluationFormController extends Controller
         RuleTemplateServiceInterface $ruleTemplateServiceInterface,
         TemplateServiceInterface $templateServiceInterface,
         RuleCategory $categoryServiceInterface,
-        RuleServiceInterface $ruleServiceInterface
+        RuleServiceInterface $ruleServiceInterface,
+        SettingActionService $settingActionService
     ) {
         $this->departmentService = $departmentServiceInterface;
         $this->positionService = $positionServiceInterface;
@@ -48,6 +52,7 @@ class EvaluationFormController extends Controller
         $this->templateService = $templateServiceInterface;
         $this->categoryService = $categoryServiceInterface;
         $this->ruleService = $ruleServiceInterface;
+        $this->setting_action_service = $settingActionService;
     }
     /**
      * Display a listing of the resource.
@@ -98,6 +103,10 @@ class EvaluationFormController extends Controller
     {
         DB::beginTransaction();
         try {
+            // if ($request->next && !$this->setting_action_service->isNextStep('send-to-user')) {
+            //     return $this->errorResponse('เลยเวลาที่กำหนด', 500);
+            // }
+            
             $evaluate = $this->evaluateService->isDuplicate($staff, $period);
             if (!$evaluate) {
                 $evaluate = $this->evaluateService->create(
@@ -197,6 +206,10 @@ class EvaluationFormController extends Controller
     {
         DB::beginTransaction();
         try {
+            // if ($request->next && !$this->setting_action_service->isNextStep('send-to-user')) {
+            //     return $this->errorResponse('เลยเวลาที่กำหนด', 500);
+            // }
+            
             $evaluate = $this->evaluateService->findKeyEvaluate($staff, $period, $evaluate);
             if ($evaluate) {
                 // Update Header
@@ -219,7 +232,7 @@ class EvaluationFormController extends Controller
                 foreach ($request->detail as $key => $value) {
                     $rule_id = $value['rule_id'];
                     $target = $value['target'];
-                    $actual = 0;
+                    $actual = 0.00;
                     $weight = $value['weight'];
                     $weight_category = $value['weight_category'];
                     $base_line = $value['base_line'];

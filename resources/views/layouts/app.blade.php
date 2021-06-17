@@ -69,6 +69,9 @@
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
     <script src="{{asset('assets\js\index.js')}}" defer></script>
+    <script defer>
+        var locale = {!! json_encode(session('locale')) !!};
+    </script>
 
     @yield('second-script')
 </body>

@@ -207,3 +207,9 @@ const postUploadFile = (form, config) => axios.post('/upload', form, config)
 const evaluate_excel = (params) => axios.get('/kpi/evaluate-report', params)
 
 const getReportYourSelf = (year) => axios.get(`/kpi/dashboard/you-self/${year}`)
+
+const getDeadLine = () => axios.get(`/kpi/for-eddy/config/deadline/dropdown`)
+
+const getUserSettingAction = (id) => axios.get(`/kpi/for-eddy/user/actions/${id}`)
+
+const getOperation = () => axios.get(`/operations`)

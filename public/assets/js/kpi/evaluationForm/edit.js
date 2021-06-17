@@ -119,7 +119,7 @@ const submitToUser = () => {
             }
         }).catch(error => {
             toast(error.response.data.message, error.response.data.status)
-            console.log(error.response.data)
+            console.log(error.response.data.message)
         }).finally(() => {
             setVisible(false)
             evaluateForm.next = false

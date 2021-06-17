@@ -47,6 +47,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth', 
     Route::delete('{user}/removesystem', 'UsersController@removesystem')->name('users.removesystem');
     Route::post('uploadfileequipment', 'AccessoriesController@uploadfileequipment')->name('uploadfileequipment');
 });
+Route::get('/operations','Admin\UsersController@operations');
 Route::post('upload', 'UploadController@store');
 Route::delete('upload', 'UploadController@destroy');
 require __DIR__ . '/itstock.php';

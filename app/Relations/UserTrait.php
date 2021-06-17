@@ -7,6 +7,7 @@ use App\Models\Division;
 use App\Models\IT\Transactions;
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\Rule;
+use App\Models\KPI\SettingAction;
 use App\Models\KPI\TargetPeriod;
 use App\Models\KPI\Template;
 use App\Models\Legal\LegalApproval;
@@ -101,5 +102,10 @@ trait UserTrait
     public function template()
     {
         return $this->hasOne(Template::class)->withDefault();
+    }
+
+    public function setting_actions()
+    {
+        return $this->belongsToMany(SettingAction::class,'kpi_setting_action_user');
     }
 }

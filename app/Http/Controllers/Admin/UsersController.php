@@ -168,9 +168,6 @@ class UsersController extends Controller
                 $list_users = [];
                 foreach ($response as $value) {
                     $user = User::where('username', $value['username'])->first();
-                    $department = Department::where('process_id', $value['department_id'])->first();
-                    $division = Division::where('division_id', $value['division_id'])->first();
-
                     if (\is_null($user)) {
                         $user = new User;
                         $user->password = Hash::make(\substr($value['email'], 0, 1) . $value['username']);
@@ -180,7 +177,10 @@ class UsersController extends Controller
                     $user->translateOrNew('th')->name = $value['name'];
                     $user->name_th = $value['name'];
                     $user->email = $value['email'];
-                    if (!$user->department_id) {
+
+                    $department = Department::where('process_id', $value['department_id'])->first();
+                    
+                    // if (!$user->department_id) {
                         if (\is_null($department)) {
                             $dept = new Department();
                             $dept->name = $value['department'];
@@ -190,8 +190,9 @@ class UsersController extends Controller
                         } else {
                             $user->department_id = $department->id;
                         }
-                    }
-                    if (!$user->divisions_id) {
+                    // }
+                    $division = Division::where('division_id', $value['division_id'])->first();
+                    // if (!$user->divisions_id) {
                         if (\is_null($division)) {
                             $div = new Division();
                             $div->name = $value['division'];
@@ -209,8 +210,8 @@ class UsersController extends Controller
                         } else {
                             $user->divisions_id = $division->id;
                         }
-                    }
-                    $user->head_id = $user->head_id ? $user->head_id : $value['leader'];
+                    // }
+                    $user->head_id = $user->head_id ?? $value['leader'];
                     $user->save();
                     $list_users[] = $value['username'];
                 }
@@ -227,7 +228,6 @@ class UsersController extends Controller
                         }
                     }
                     foreach ($roles as $role) {
-
                         if (!$staff->roles->contains('slug', $role->slug)) {
                             if ($role->slug === UserEnum::MANAGERKPI && $staff->username === strval($staff->head_id)) {
                                 $staff->roles()->attach($role);
@@ -1414,5 +1414,15 @@ class UsersController extends Controller
         }
         DB::commit();
         return \response($user->systems->toJson());
+    }
+
+    public function operations()
+    {
+        try {
+            $users = User::whereHas('roles',fn($query) => $query->whereIn('role_id',[6]))->get();
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(),500);
+        }
+        return $this->successResponse($users,'get operation all',200);
     }
 }

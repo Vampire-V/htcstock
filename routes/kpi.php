@@ -40,6 +40,9 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::resource('set-actual', 'SetActual\SetActualController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
     Route::resource('for-eddy', 'EddyMenu\AllEvaluationController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
     Route::put('for-eddy/{id}/updateAch', 'EddyMenu\AllEvaluationController@updateAch');
+    Route::get('for-eddy/config/deadline','EddyMenu\DeadLineController@index')->name('deadline');
+    Route::get('for-eddy/config/deadline/dropdown','EddyMenu\DeadLineController@deadline');
+    Route::get('for-eddy/user/actions/{id}','EddyMenu\DeadLineController@setting_action_user');
 
     Route::resource('set-period', 'SetPeriod\TargetPeriodController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
 

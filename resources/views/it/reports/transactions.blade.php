@@ -86,6 +86,7 @@
                             <th>#</th>
                             <th>{{ __('itstock.work-history.equipment') }}</th>
                             <th>{{ __('itstock.work-history.status') }}</th>
+                            <th>{{ __('โดย') }}</th>
                             <th>{{ __('itstock.work-history.number') }}</th>
                             <th>{{ __('itstock.work-history.a-date') }}</th>
                             <th>{{ __('itstock.work-history.create-by') }}</th>
@@ -98,6 +99,7 @@
                             <th scope="row">{{$key+1}}</th>
                             <td>{{$item->accessorie->access_name}}</td>
                             <td>{{$item->trans_type}}</td>
+                            <td>{{$item->user->name}}</td>
                             <td>{{$item->qty}}</td>
                             <td>{{$item->created_at}}</td>
                             <td>{{$item->transactionCreated->name }}</td>

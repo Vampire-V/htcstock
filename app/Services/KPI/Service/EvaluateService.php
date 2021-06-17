@@ -130,7 +130,7 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function scoreFilter(Request $request): Collection
     {
         try {
-            return Evaluate::with('user.positions', 'evaluateDetail.rule.category', 'targetperiod')
+            return Evaluate::with('user.positions','user.divisions', 'evaluateDetail.rule.category', 'targetperiod')
                 ->whereIn('status', [KPIEnum::approved])
                 ->filter($request)
                 ->orderBy('user_id')

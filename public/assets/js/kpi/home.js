@@ -226,6 +226,7 @@ const render_score = (score) => {
     if (score.length > 0) {
         for (let index = 0; index < score.length; index++) {
             const element = score[index]
+            console.log(element);
             const rank_rate = calculator_score(element.score)
             let newRow = body.insertRow()
             let name = newRow.insertCell()

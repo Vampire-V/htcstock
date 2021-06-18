@@ -266,8 +266,22 @@ class EvaluationFormController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$staff,$period,$evaluate)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $item = $this->evaluateService->find($evaluate);
+            if ($item->status === KPIEnum::new) {
+                $this->evaluateService->destroy($evaluate);
+                $request->session()->flash('success',  ' has been remove');
+            }else{
+                return \redirect()->back()->with('error', "Error : This status cannot be deleted.");
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
+        DB::commit();
+        return \redirect()->back();
     }
 }

@@ -50,7 +50,8 @@
                             <select name="year" id="validationYear" class="form-control-sm form-control"
                                 onchange="this.form.submit()">
                                 @foreach (range(date('Y'), $start_year) as $year)
-                                <option value="{{$year}}" @if (intval($selectedYear)===$year) selected @endif>{{$year}}</option>
+                                <option value="{{$year}}" @if (intval($selectedYear)===$year) selected @endif>{{$year}}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -77,17 +78,28 @@
                     </thead>
                     <tbody>
                         @isset($periods)
-                        @foreach ($periods as $key => $row)
+                        @foreach ($periods as $key => $period)
                         <tr>
                             <th scope="row">{{$key+1}}</th>
-                            <td>{{$row->name}}</td>
+                            <td>{{$period->name}}</td>
                             <td>
-                                <span class="{{Helper::kpiStatusBadge($row->evaluate->status)}}"> {{$row->evaluate->status}}
+                                <span class="{{Helper::kpiStatusBadge($period->evaluate->status)}}">
+                                    {{$period->evaluate->status}}
                                 </span>
                             </td>
                             <td>
-                                <a href="{{$row->evaluate->status ? route('kpi.evaluate.edit',[$staff->id,$row->id,$row->evaluate->id]) : route('kpi.evaluate.create',[$staff->id,$row->id]) }}"
-                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">{{$row->evaluate->status ? "Edit" : "Create"}}
+                                @if ($period->evaluate->status)
+                                <form id="{{$key}}-remove"
+                                    action="{{route('kpi.evaluate.destroy',[$staff->id,$period->id,$period->evaluate->id])}}"
+                                    method="POST" style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                                <button type="button" class="mb-2 mr-2 btn btn-sm btn-outline-danger"
+                                    onclick="event.preventDefault(); document.getElementById('{{$key.'-remove'}}').submit();">Remove</button>
+                                @endif
+                                <a href="{{$period->evaluate->status ? route('kpi.evaluate.edit',[$staff->id,$period->id,$period->evaluate->id]) : route('kpi.evaluate.create',[$staff->id,$period->id]) }}"
+                                    class="mb-2 mr-2 btn btn-sm btn-outline-info">{{$period->evaluate->status ? "Edit" : "Create"}}
                                 </a>
                             </td>
                         </tr>

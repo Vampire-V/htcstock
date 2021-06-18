@@ -104,7 +104,7 @@
                             <td>{{$user->department->name}}</td>
                             <td>{{$user->positions->name}}</td>
                             <td><a href="{{route('kpi.staff.edit',$user->id)}}"
-                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Detail
+                                    class="mb-2 mr-2 btn btn-outline-info">Detail
                                 </a></td>
                         </tr>
                         @endforeach

@@ -11,6 +11,7 @@ use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
+use App\Services\KPI\Service\SettingActionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,19 +20,22 @@ use Illuminate\Support\Facades\Mail;
 
 class EvaluateReviewController extends Controller
 {
-    protected $userService, $targetPeriodService, $evaluateService, $evaluateDetailService, $categoryService;
+    protected $userService, $targetPeriodService, $evaluateService, $evaluateDetailService, 
+    $categoryService, $setting_action_service;
     public function __construct(
         UserServiceInterface $userServiceInterface,
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
         EvaluateServiceInterface $evaluateServiceInterface,
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
-        RuleCategoryServiceInterface $ruleCategoryServiceInterface
+        RuleCategoryServiceInterface $ruleCategoryServiceInterface,
+        SettingActionService $settingActionService
     ) {
         $this->userService = $userServiceInterface;
         $this->targetPeriodService = $targetPeriodServiceInterface;
         $this->evaluateService = $evaluateServiceInterface;
         $this->evaluateDetailService = $evaluateDetailServiceInterface;
         $this->categoryService = $ruleCategoryServiceInterface;
+        $this->setting_action_service = $settingActionService;
     }
     /**
      * Display a listing of the resource.
@@ -122,9 +126,14 @@ class EvaluateReviewController extends Controller
     public function update(Request $request, $id)
     {
         $message = "";
+        $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft, KPIEnum::submit]);
         DB::beginTransaction();
         try {
             $evaluate = $this->evaluateService->find($id);
+            $check = $this->setting_action_service->isNextStep('approved');
+            if ($status_list->contains($evaluate->status) && !$check) {
+                return $this->errorResponse("เลยเวลาที่กำหนด", 500);
+            }
             foreach ($request->detail as $value) {
                 $evaluate->evaluateDetail()
                     ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])

@@ -19,6 +19,7 @@ use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
+use App\Services\KPI\Service\SettingActionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -32,7 +33,7 @@ class SelfEvaluationController extends Controller
 {
     protected $evaluateService, $evaluateDetailService, $userService,
         $categoryService, $templateService, $ruleService, $periodService,
-        $ruleTemplateService;
+        $ruleTemplateService, $setting_action_service;
     public function __construct(
         EvaluateServiceInterface $evaluateServiceInterface,
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
@@ -41,7 +42,8 @@ class SelfEvaluationController extends Controller
         TemplateServiceInterface $templateServiceInterface,
         RuleServiceInterface $ruleServiceInterface,
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
-        RuleTemplateServiceInterface $ruleTemplateServiceInterface
+        RuleTemplateServiceInterface $ruleTemplateServiceInterface,
+        SettingActionService $settingActionService
 
     ) {
         $this->evaluateService = $evaluateServiceInterface;
@@ -52,6 +54,7 @@ class SelfEvaluationController extends Controller
         $this->ruleService = $ruleServiceInterface;
         $this->periodService = $targetPeriodServiceInterface;
         $this->ruleTemplateService = $ruleTemplateServiceInterface;
+        $this->setting_action_service = $settingActionService;
     }
     /**
      * Display a listing of the resource.
@@ -134,9 +137,15 @@ class SelfEvaluationController extends Controller
     public function update(Request $request, $id)
     {
         $message = KPIEnum::draft;
+        $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft]);
         DB::beginTransaction();
         try {
+
             $evaluate = $this->evaluateService->find($id);
+            $check = $this->setting_action_service->isNextStep('set-actual');
+            if ($status_list->contains($evaluate->status) && !$check) {
+                return $this->errorResponse("เลยเวลาที่กำหนด", 500);
+            }
             foreach ($request->detail as $value) {
                 $evaluate->evaluateDetail()
                     ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])
@@ -166,6 +175,9 @@ class SelfEvaluationController extends Controller
                     $message = KPIEnum::draft . " You don't have a manager!";
                     // $evaluate->user->head_id is null
                 }
+            } else {
+                $evaluate->status = KPIEnum::draft;
+                $evaluate->save();
             }
         } catch (\Exception $e) {
             DB::rollBack();
@@ -348,7 +360,7 @@ class SelfEvaluationController extends Controller
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.SelfEvaluation.quarter', \compact('evaluate', 'category','quarter_weight'));
+        return \view('kpi.SelfEvaluation.quarter', \compact('evaluate', 'category', 'quarter_weight'));
     }
 
     private function quarter_summary(Collection $detail): Collection
@@ -360,7 +372,7 @@ class SelfEvaluationController extends Controller
             if (count($temp) === 0) {
                 $temp[] = $detail[$i];
             } else {
-                $have_rule = $temp->search(function ($query) use($item){
+                $have_rule = $temp->search(function ($query) use ($item) {
                     return $query->rule->id === $item->rule->id;
                 });
                 if ($have_rule) {

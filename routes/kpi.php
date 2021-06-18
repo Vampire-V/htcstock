@@ -43,6 +43,9 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::get('for-eddy/config/deadline','EddyMenu\DeadLineController@index')->name('deadline');
     Route::get('for-eddy/config/deadline/dropdown','EddyMenu\DeadLineController@deadline');
     Route::get('for-eddy/user/actions/{id}','EddyMenu\DeadLineController@setting_action_user');
+    Route::post('for-eddy/attach/action/{action}','EddyMenu\DeadLineController@attach_authorization');
+    Route::post('for-eddy/detach/action/{action}','EddyMenu\DeadLineController@detach_authorization');
+    
 
     Route::resource('set-period', 'SetPeriod\TargetPeriodController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
 

@@ -213,3 +213,7 @@ const getDeadLine = () => axios.get(`/kpi/for-eddy/config/deadline/dropdown`)
 const getUserSettingAction = (id) => axios.get(`/kpi/for-eddy/user/actions/${id}`)
 
 const getOperation = () => axios.get(`/operations`)
+
+const postAttachAction = (form,id) => axios.post(`/kpi/for-eddy/attach/action/${id}`,form)
+
+const postDetachAction = (form,id) => axios.post(`/kpi/for-eddy/detach/action/${id}`,form)

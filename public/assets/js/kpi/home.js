@@ -110,12 +110,14 @@ const search_score = () => {
     if (checked) {
         param = {
             quarter: [$("#quarter").val()],
-            year: [$("#year").val()]
+            year: [$("#year").val()],
+            degree: [$("#degree").val()]
         }
     } else {
         param = {
             month: [$("#period").val()],
-            year: [$("#year").val()]
+            year: [$("#year").val()],
+            degree: [$("#degree").val()]
         }
     }
     let table = document.getElementById('table-report-score')
@@ -163,7 +165,6 @@ const search_score = () => {
         })
         .finally(() => {
             render_score(score.sort((a, b) => b.score - a.score))
-            // setTimeout(, 50000)
         })
 }
 
@@ -215,6 +216,8 @@ let total_quarter = (objArr) => {
 const render_score = (score) => {
     let table = document.getElementById('table-report-score'),
         body = table.tBodies[0]
+        console.log(body);
+        removeAllChildNodes(body)
     // head = table.tHead
     if (weigth_template.length > 0) {
         for (let index = 0; index < table.tHead.rows[1].cells.length; index++) {
@@ -222,11 +225,11 @@ const render_score = (score) => {
             element.textContent = weigth_template[index]
         }
     }
-    removeAllChildNodes(body)
+    
     if (score.length > 0) {
         for (let index = 0; index < score.length; index++) {
             const element = score[index]
-            console.log(element);
+            // console.log(element);
             const rank_rate = calculator_score(element.score)
             let newRow = body.insertRow()
             let name = newRow.insertCell()

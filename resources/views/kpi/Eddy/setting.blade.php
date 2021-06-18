@@ -11,6 +11,9 @@
     .badge:hover{
         background-color: #8b1631;
     }
+    .badge{
+        font-size: 100% !important;
+    }
 </style>
 @endsection
 @section('content')
@@ -92,7 +95,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="position-relative form-group">
-                                <button onclick="add()" class="btn btn-sm btn-success mt-4">Add</button>
+                                <input type="hidden" name="action" id="action">
+                                <button type="button" onclick="attach_authorized()" class="btn btn-sm btn-success mt-4">Add</button>
                             </div>
                         </div>
                     </div>

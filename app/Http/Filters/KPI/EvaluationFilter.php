@@ -3,6 +3,7 @@
 namespace App\Http\Filters\KPI;
 
 use App\Http\Filters\AbstractFilter;
+use App\Http\Filters\KPI\Query\DegreeWhereHas;
 use App\Http\Filters\KPI\Query\DepartmentWhereHas;
 use App\Http\Filters\KPI\Query\PositionWhereHas;
 use App\Http\Filters\KPI\Query\EvaluationPeriodIn;
@@ -22,6 +23,7 @@ class EvaluationFilter extends AbstractFilter
         'month' => MonthPeriodWhereHas::class,
         'quarter' => QuarterPeriodWhereHas::class,
         'period' => EvaluationPeriodIn::class,
-        'user' => UserWhereIn::class
+        'user' => UserWhereIn::class,
+        'degree' => DegreeWhereHas::class
     ];
 }

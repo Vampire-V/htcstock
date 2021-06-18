@@ -103,9 +103,9 @@ class EvaluationFormController extends Controller
     {
         DB::beginTransaction();
         try {
-            // if ($request->next && !$this->setting_action_service->isNextStep('send-to-user')) {
-            //     return $this->errorResponse('เลยเวลาที่กำหนด', 500);
-            // }
+            if ($request->next && !$this->setting_action_service->isNextStep('send-to-user')) {
+                return $this->errorResponse('เลยเวลาที่กำหนด', 500);
+            }
             
             $evaluate = $this->evaluateService->isDuplicate($staff, $period);
             if (!$evaluate) {
@@ -206,9 +206,9 @@ class EvaluationFormController extends Controller
     {
         DB::beginTransaction();
         try {
-            // if ($request->next && !$this->setting_action_service->isNextStep('send-to-user')) {
-            //     return $this->errorResponse('เลยเวลาที่กำหนด', 500);
-            // }
+            if ($request->next && !$this->setting_action_service->isNextStep('send-to-user')) {
+                return $this->errorResponse('เลยเวลาที่กำหนด', 500);
+            }
             
             $evaluate = $this->evaluateService->findKeyEvaluate($staff, $period, $evaluate);
             if ($evaluate) {

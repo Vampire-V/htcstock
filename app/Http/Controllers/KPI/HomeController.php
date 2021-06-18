@@ -131,12 +131,10 @@ class HomeController extends Controller
     {
         try {
             $evaluations = $this->evaluateService->scoreFilter($request);
-            // if ($request->month) {
             $this->calculation_summary($evaluations);
-            // }
             $result = EvaluateResource::collection($evaluations);
         } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(), $e->getCode());
+            return $this->errorResponse($e, 500);
         }
         return $this->successResponse($result, 200);
     }
@@ -150,7 +148,7 @@ class HomeController extends Controller
                 $config = config('kpi.weight')['month'];
             }
         } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(), $e->getCode());
+            return $this->errorResponse($e->getMessage(), 500);
         }
         return $this->successResponse($config, 'Get weigth config', 200);
     }

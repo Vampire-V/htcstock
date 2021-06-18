@@ -12,6 +12,7 @@ use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
+use App\Services\KPI\Service\SettingActionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,14 +20,15 @@ class SetActualController extends Controller
 {
     use CalculatorEvaluateTrait;
     protected $evaluateDetailService, $departmentService, $targetPeriodService, 
-    $categoryService, $ruleService, $userService;
+    $categoryService, $ruleService, $userService, $setting_action_service;
     public function __construct(
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
         DepartmentServiceInterface $departmentServiceInterface,
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
         RuleCategoryServiceInterface $ruleCategoryServiceInterface,
         RuleServiceInterface $ruleServiceInterface,
-        UserServiceInterface $userServiceInterface
+        UserServiceInterface $userServiceInterface,
+        SettingActionService $settingActionService
     ) {
         $this->evaluateDetailService = $evaluateDetailServiceInterface;
         $this->departmentService = $departmentServiceInterface;
@@ -34,6 +36,7 @@ class SetActualController extends Controller
         $this->categoryService = $ruleCategoryServiceInterface;
         $this->ruleService = $ruleServiceInterface;
         $this->userService = $userServiceInterface;
+        $this->setting_action_service = $settingActionService;
     }
     /**
      * Display a listing of the resource.
@@ -134,6 +137,10 @@ class SetActualController extends Controller
         $status_contain = collect([KPIEnum::draft, KPIEnum::ready]);
         DB::beginTransaction();
         try {
+            $check = $this->setting_action_service->isNextStep('set-actual');
+            if (!$check) {
+                return $this->errorResponse("เลยเวลาที่กำหนด", 500);
+            }
             for ($i = 0; $i < count($body); $i++) {
                 $element = $body[$i];
                 $detail = $this->evaluateDetailService->find($element['id']);

@@ -73,6 +73,7 @@ $('#modal-dead-line').on('show.bs.modal', function (event) {
 $('#modal-dead-line').on('hide.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var modal = $(this)
+    document.getElementById('form-authorization').reset()
     // var group = button.data('group') // Extract info from data-* attributes
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.

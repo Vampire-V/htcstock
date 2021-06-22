@@ -65,7 +65,6 @@ class UsersController extends Controller
             $departments = $this->departmentService->dropdown();
             $positions = $this->positionService->dropdown();
             $roles = $this->rolesService->dropdown();
-            // \dd($users[0]->roles);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }

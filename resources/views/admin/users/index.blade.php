@@ -141,7 +141,7 @@
                                 <td>{{$user->username}}</td>
                                 <td>{{$user->email}}</td>
                                 <td>
-                                    @foreach ($user->roles->pluck('name') as $item)
+                                    @foreach ($user->systems->pluck('name') as $item)
                                     <span class="badge badge-warning">{{$item}}</span>
                                     @endforeach
                                 </td>

@@ -135,7 +135,7 @@
                                     @isset($evaluateDetail)
                                     @foreach ($evaluateDetail as $key => $item)
 
-                                    <tr>
+                                    {{-- <tr>
                                         <th scope="row">{{$key+1}}</th>
                                         <td>{{$item->evaluate->user->name }}</td>
                                         <td>{{$item->evaluate->targetperiod->name}}
@@ -153,7 +153,7 @@
                                         </td>
                                         <td></td>
                                         <td></td>
-                                    </tr>
+                                    </tr> --}}
 
                                     @endforeach
                                     @endisset
@@ -161,8 +161,9 @@
                                 <tfoot>
                                     <tr>
                                         <td colspan="8"></td>
-                                        <td><button class="mb-2 mr-2 btn btn-success btn-sm"
-                                                onclick="submitSetActual(this)">Save</button>
+                                        <td>
+                                            {{-- <button class="mb-2 mr-2 btn btn-success btn-sm"
+                                                onclick="submitSetActual(this)">Save</button> --}}
                                         </td>
                                         <td colspan="2"></td>
                                     </tr>
@@ -253,7 +254,7 @@
                                 <tbody>
                                     @isset($evaluate)
                                     @foreach ($evaluate as $key => $item)
-                                    <tr>
+                                    {{-- <tr>
                                         <th id="{{$item->id}}">{{$key+1}}</th>
                                         <td>{{$item->user->name }}</td>
                                         <td>{{$item->targetperiod->name}} - {{$item->targetperiod->year}}</td>
@@ -272,15 +273,16 @@
                                         <td><input type="number" name="omg" value="{{$item->ach_omg}}" min="0"
                                                 step="0.01" class="form-control form-control-sm input-sm"
                                                 onchange="changeTotal(this)" /></td>
-                                    </tr>
+                                    </tr> --}}
                                     @endforeach
                                     @endisset
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <td colspan="8"></td>
-                                        <td><button class="mb-2 mr-2 btn btn-success btn-sm"
-                                                onclick="submitSetAch(this)">Save</button>
+                                        <td>
+                                            {{-- <button class="mb-2 mr-2 btn btn-success btn-sm"
+                                                onclick="submitSetAch(this)">Save</button> --}}
                                         </td>
                                         <td colspan="2"></td>
                                     </tr>

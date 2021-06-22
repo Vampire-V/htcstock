@@ -57,8 +57,8 @@
                     for (let index = 0; index < temp.length; index++) {
                         const element = temp[index]
                         element.weight = element.weight / 3
-                        element.target = average(element.average_target)
-                        element.actual = average(element.average_actual)
+                        element.target = quarter_cal_target(element)
+                        element.actual = quarter_cal_amount(element)
                     }
                     evaluateForm.detail = temp
                     render_html()
@@ -73,7 +73,6 @@ var template
 var rule = []
 var summary = []
 
-var average = (number) => number.reduce((a, b) => (a + b)) / number.length
 var render_html = () => {
     // create tr in table
     let tables = document.getElementById('group-table').getElementsByClassName('table')

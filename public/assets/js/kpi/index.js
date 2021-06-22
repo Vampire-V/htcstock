@@ -597,3 +597,27 @@ var make_link = (url, text) => {
     x.appendChild(t)
     return x
 }
+
+const quarter_cal_target = (rule) => {
+    if (rule.rules.quarter_cal === quarters.AVERAGE) {
+        return rule.average_target.reduce((a, b) => (a + b)) / rule.average_target.length
+    }
+    if (rule.rules.quarter_cal === quarters.LAST_MONTH) {
+        return rule.average_target[rule.average_target.length - 1]
+    }
+    if (rule.rules.quarter_cal === quarters.SUM) {
+        return rule.average_target.reduce((a, b) => (a + b))
+    }
+}
+
+const quarter_cal_amount = (rule) => {
+    if (rule.rules.quarter_cal === quarters.AVERAGE) {
+        return rule.average_actual.reduce((a, b) => (a + b)) / rule.average_actual.length
+    }
+    if (rule.rules.quarter_cal === quarters.LAST_MONTH) {
+        return rule.average_actual[rule.average_actual.length - 1]
+    }
+    if (rule.rules.quarter_cal === quarters.SUM) {
+        return rule.average_actual.reduce((a, b) => (a + b))
+    }
+}

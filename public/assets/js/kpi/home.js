@@ -200,8 +200,8 @@ let total_quarter = (objArr) => {
         for (let index = 0; index < temp.length; index++) {
             const element = temp[index]
             element.weight = element.average_weight.reduce((a, b) => a + b, 0) / 3
-            element.target = element.average_target.reduce((a, b) => a + b, 0) / element.average_target.length
-            element.actual = element.average_actual.reduce((a, b) => a + b, 0) / element.average_actual.length
+            element.target = quarter_cal_target(element)
+            element.actual = quarter_cal_amount(element)
             element.actual_pc = findActualPercent(element, temp)
             element.target_pc = findTargetPercent(element, temp)
             element.ach = findAchValue(element)
@@ -216,7 +216,7 @@ let total_quarter = (objArr) => {
 const render_score = (score) => {
     let table = document.getElementById('table-report-score'),
         body = table.tBodies[0]
-        removeAllChildNodes(body)
+    removeAllChildNodes(body)
     // head = table.tHead
     if (weigth_template.length > 0) {
         for (let index = 0; index < table.tHead.rows[1].cells.length; index++) {
@@ -224,7 +224,7 @@ const render_score = (score) => {
             element.textContent = weigth_template[index]
         }
     }
-    
+
     if (score.length > 0) {
         for (let index = 0; index < score.length; index++) {
             const element = score[index]

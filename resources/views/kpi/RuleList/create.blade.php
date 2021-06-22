@@ -141,7 +141,7 @@
                                     @endisset
                                 </select>
                                 <div class="invalid-feedback">
-                                    Please provide a valid Data Sources
+                                    Please provide a valid Quarter Calculate
                                 </div>
                                 <div class="valid-feedback">
                                     Looks good!

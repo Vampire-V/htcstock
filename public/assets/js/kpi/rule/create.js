@@ -16,7 +16,11 @@
             allowClear: true
         });
         $("#validationCalculateType").select2({
-            placeholder: 'Select agreements',
+            placeholder: 'Select Calculate Type',
+            allowClear: true
+        });
+        $("#quarter_cal").select2({
+            placeholder: 'Select Quarter Cal',
             allowClear: true
         });
         $("#validationDataSources").select2({

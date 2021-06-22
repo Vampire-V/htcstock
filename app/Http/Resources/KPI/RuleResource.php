@@ -22,6 +22,7 @@ class RuleResource extends JsonResource
             'measurement' => $this->measurement,
             'target_unit_id' => $this->target_unit_id,
             'calculate_type' => $this->calculate_type,
+            'quarter_cal' => $this->quarter_cal,
             'kpi_rule_types_id' => $this->kpi_rule_types_id,
             'base_line' => $this->base_line,
             'max' => $this->max,

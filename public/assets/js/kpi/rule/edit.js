@@ -15,6 +15,10 @@
             placeholder: 'Select status',
             allowClear: true
         });
+        $("#quarter_cal").select2({
+            placeholder: 'Select Quarter Cal',
+            allowClear: true
+        });
         $("#validationCalculateType").select2({
             placeholder: 'Select agreements',
             allowClear: true

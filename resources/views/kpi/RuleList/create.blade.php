@@ -87,7 +87,7 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="targetUnit">User set actual :</label>
                             <select id="validationUserActual" class="form-control-sm form-control" name="user_actual"
                                 required>
@@ -105,7 +105,7 @@
                                 Looks good!
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="position-relative form-group"><label for="Calculate-type" class="">Calculate
                                     Type
                                     :</label>
@@ -127,7 +127,28 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <div class="position-relative form-group"><label for="QuarterCal" class="">Quarter Calculate
+                                    :</label>
+                                <select id="quarter_cal" class="form-control form-control-sm"
+                                    name="quarter_cal" required>
+                                    <option value="">Choose...</option>
+                                    @isset($quarter_cals)
+                                    @foreach ($quarter_cals as $quarter_cal)
+                                    <option value="{{$quarter_cal}}">
+                                        {{$quarter_cal}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Data Sources
+                                </div>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="position-relative form-group"><label for="DataSources" class="">Data Sources
                                     :</label>
                                 <select id="validationDataSources" class="form-control form-control-sm"

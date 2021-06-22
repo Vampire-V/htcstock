@@ -15,4 +15,14 @@ abstract class KPIEnum extends BasicEnum
     const positive = 'Positive';
     const negative = 'Negative';
     const zero_oriented_kpi = 'Zero Oriented KPI';
+
+    // User Degree
+    const one = 'N-1';
+    const two = 'N-2';
+    const tree = 'N-3';
+
+    // calculate_for quarter
+    const average = 'Average';
+    const last_month = 'Last Month';
+    const sum = 'Sum';
 }

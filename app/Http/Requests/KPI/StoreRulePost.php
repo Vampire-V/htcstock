@@ -28,7 +28,8 @@ class StoreRulePost extends FormRequest
             'name' => 'required|unique:kpi_rules|max:255',
             'user_actual' => 'required',
             'calculate_type' => 'required',
-            'kpi_rule_types_id' => 'required'
+            'kpi_rule_types_id' => 'required',
+            'quarter_cal' => 'required'
         ];
         if ($this->route('rule_list')) {
             $rule['name'] = 'required|max:255';

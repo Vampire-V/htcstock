@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\KPIEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +15,7 @@ class AddDegreeToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('degree',['N-1','N-2','N-3'])->default('N-3')->after('divisions_id')->comment('ระดับผู้ประเมิณ ระบบ KPI');
+            $table->enum('degree',[KPIEnum::one,KPIEnum::two,KPIEnum::tree])->default(KPIEnum::tree)->after('divisions_id')->comment('ระดับผู้ประเมิณ ระบบ KPI');
         });
     }
 

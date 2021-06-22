@@ -77,9 +77,10 @@ class RuleController extends Controller
         $rulesType = $this->ruleTypeService->dropdown();
         $users = $this->userService->dropdown();
         $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
+        $quarter_cals = \collect([KPIEnum::average, KPIEnum::sum, KPIEnum::last_month]);
         $departments = $this->departmentService->dropdown();
         $rules = $this->ruleService->dropdown($category->firstWhere('name','kpi')->id);
-        return \view('kpi.RuleList.create', \compact('category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments', 'rules'));
+        return \view('kpi.RuleList.create', \compact('category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments', 'rules','quarter_cals'));
     }
 
     /**
@@ -132,9 +133,9 @@ class RuleController extends Controller
     public function edit($id)
     {
         $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
+        $quarter_cals = \collect([KPIEnum::average, KPIEnum::sum, KPIEnum::last_month]);
         try {
             $rule = Rule::with('parent_to')->where('id',$id)->first();
-            // dd($rule);
             $category = $this->ruleCategoryService->dropdown();
             $unit = $this->targetUnitService->dropdown();
             $rulesType = $this->ruleTypeService->dropdown();
@@ -144,7 +145,7 @@ class RuleController extends Controller
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.RuleList.edit', \compact('rule', 'rules', 'category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments'));
+        return \view('kpi.RuleList.edit', \compact('rule', 'rules', 'category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments','quarter_cals'));
     }
 
     /**

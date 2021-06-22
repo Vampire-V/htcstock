@@ -216,7 +216,6 @@ let total_quarter = (objArr) => {
 const render_score = (score) => {
     let table = document.getElementById('table-report-score'),
         body = table.tBodies[0]
-        console.log(body);
         removeAllChildNodes(body)
     // head = table.tHead
     if (weigth_template.length > 0) {

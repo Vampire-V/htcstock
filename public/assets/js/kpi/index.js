@@ -10,7 +10,17 @@ var calculate = {
         SUBMITTED: "Submitted",
         APPROVED: "Approved"
     },
-    className = ['form-control', 'form-control-sm']
+    degree = {
+        ONE:"N-1",
+        TWO:"N-2",
+        TREE:"N-3"
+    },
+    quarters = {
+        AVERAGE:"Average",
+        LAST_MONTH:"Last Month",
+        SUM:"Sum"
+    }
+className = ['form-control', 'form-control-sm']
 
 
 class EvaluateForm {

@@ -103,12 +103,12 @@
                     </thead>
                     <tbody>
                         @isset($templates)
-                        @foreach ($templates as $key => $item)
+                        @foreach ($templates as $key => $template)
                         <tr>
                             <th scope="row">{{$key+1}}</th>
-                            <td>{{$item->name}}</td>
-                            <td>{{$item->department->name}}</td>
-                            <td><a href="{{route('kpi.rule-template.create',[$item->id])}}"
+                            <td>{{$template->name}}</td>
+                            <td>{{$template->department->name}}</td>
+                            <td><a href="{{route('kpi.template.edit',[$template->id])}}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
                                 </a></td>
                         </tr>

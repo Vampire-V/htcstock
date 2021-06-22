@@ -7,11 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\KPI\StoreRuleTemplatePost;
 use App\Http\Resources\KPI\RuleTemplateCollection;
 use App\Http\Resources\KPI\RuleTemplateResource;
-use App\Models\KPI\RuleCategory;
+use App\Http\Resources\KPI\TemplateResource;
 use App\Models\KPI\RuleTemplate;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
+use App\Services\KPI\Service\RuleCategoryService;
 use App\Services\KPI\Service\RuleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class RuleTemplateController extends Controller
         RuleTemplateServiceInterface $ruleTemplateServiceInterface,
         DepartmentServiceInterface $departmentServiceInterface,
         TemplateServiceInterface $templateServiceInterface,
-        RuleCategory $categoryServiceInterface,
+        RuleCategoryService $categoryServiceInterface,
         RuleService $ruleServiceInterface
     ) {
         $this->ruleTemplateService = $ruleTemplateServiceInterface;
@@ -65,14 +66,13 @@ class RuleTemplateController extends Controller
     public function create($template)
     {
         try {
-            $category = $this->categoryService->all();
+            $category = $this->categoryService->dropdown();
             $template = $this->templateService->find($template);
             $rules = $this->ruleService->dropdown();
-            
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.RuleTemplate.create', \compact('category', 'template','rules'));
+        return \view('kpi.RuleTemplate.create', \compact('category', 'template', 'rules'));
     }
 
     /**
@@ -84,25 +84,27 @@ class RuleTemplateController extends Controller
     public function store($template, StoreRuleTemplatePost $request)
     {
         DB::beginTransaction();
-        $formValue = $request->except(['_token']);
         try {
-            $ruleTemplate = $this->ruleTemplateService->create($formValue);
-            if (\is_null($ruleTemplate->parent_rule_template_id)) {
-                $ruleTemplate->parent_rule_template_id = 1;
-            }
-            if (!$ruleTemplate) {
-                $request->session()->flash('error', ' has been create Rule Template fail');
-                return \back();
-            }
+            $template = $this->templateService->find($template);
+            $rule = $this->ruleService->find($request->rule_id);
+            $rule_template = $template->ruleTemplate->filter(fn ($item) => $item->rule->category_id === $rule->category_id);
 
-            $template = $this->templateService->ruleTemplate($template);
-            $request->session()->flash('success', ' has been create success');
+            $template->ruleTemplate()->create(
+                [
+                    'rule_id' => $rule->id,
+                    'parent_rule_template_id' => $rule_template->count() + 1,
+                    'base_line' => $rule->base_line,
+                    'max_result' => $rule->max,
+                ]
+            );
+            // $template->save();
+
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse($e->getMessage(), $e->getCode());
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return $this->successResponse(RuleTemplateResource::collection($template->ruleTemplate), "Created rule template", 200);
+        return $this->successResponse(new TemplateResource($template->refresh()), "Created rule template", 200);
     }
 
     /**
@@ -125,7 +127,7 @@ class RuleTemplateController extends Controller
     public function edit($id)
     {
         try {
-            $category = $this->categoryService->all();
+            $category = $this->categoryService->dropdown();
             $departments = $this->departmentService->dropdown();
             $ruletemplate = $this->ruleTemplateService->find($id);
         } catch (\Exception $e) {
@@ -170,24 +172,21 @@ class RuleTemplateController extends Controller
     {
         DB::beginTransaction();
         try {
-            $switch_id = $request->rule_template_id;
-            $switch_to = $request->rule_to_id;
-
-            $first = $this->ruleTemplateService->find($switch_id);
-            $second = $this->ruleTemplateService->find($switch_to);
+            $template = $this->templateService->find($id);
+            $first = $this->ruleTemplateService->find($request->rule_template_id);
+            $second = $this->ruleTemplateService->find($request->rule_to_id);
 
             $first->parent_rule_template_id = $second->getOriginal('parent_rule_template_id');
             $second->parent_rule_template_id = $first->getOriginal('parent_rule_template_id');
             $first->save();
             $second->save();
-
-            $template = $this->templateService->ruleTemplate($id);
+            $template->fresh();
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return $this->successResponse(RuleTemplateResource::collection($template->ruleTemplate), "Change number rule template", 200);
+        return $this->successResponse(new TemplateResource($template), "Change number rule template", 200);
     }
 
     public function deleteRuleTemplate(Request $request, $id)
@@ -207,6 +206,6 @@ class RuleTemplateController extends Controller
             return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return $this->successResponse(RuleTemplateResource::collection($template->ruleTemplate), "Deleted rule template", 200);
+        return $this->successResponse(new TemplateResource($template), "Deleted rule template", 200);
     }
 }

@@ -28,7 +28,6 @@ class RuleTemplateResource extends JsonResource
 
             'created_at' => (string) $this->created_at,
             'updated_at' => (string) $this->updated_at,
-            'templates' => new TemplateResource($this->template),
             'rules' => new RuleResource($this->rule)
         ];
     }

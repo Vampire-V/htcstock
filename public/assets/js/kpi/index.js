@@ -65,7 +65,7 @@ class EvaluateDetail {
         base_line = 0.00,
         ach = 0.00,
         cal = 0.00,
-        ) {
+    ) {
         this.evaluate_id = evaluate_id
         this.rule_id = rule_id
         this.rules = rules
@@ -460,14 +460,15 @@ var findCalValue = (obj, ach) => {
  * @params {array} EvaluateDetail list
  * @return percent (element.target / parent.target) * 100
  */
- var findTargetPercent = (element, array) => {
+var findTargetPercent = (element, array) => {
     element.target_pc = 100.00
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
         let config = element.target_config ?? element.target
         let parent_config = parent.target_config ?? parent.target
         if (parent) {
-            element.target_pc = (config / parent_config) * 100
+            let result = isNaN(config / parent_config) ? 0 : config / parent_config
+            element.target_pc = result === Infinity ? 1 / result : result * 100
         }
     }
     return element.target_pc
@@ -482,7 +483,8 @@ var findActualPercent = (element, array) => {
     element.actual_pc = 100.00
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
-        element.actual_pc = (element.actual / parent.actual) * 100
+        let result = isNaN(element.actual / parent.actual) ? 0 : element.actual / parent.actual
+        element.actual_pc = result === Infinity ? 1 / result : result * 100
     }
     return element.actual_pc
 }
@@ -554,28 +556,6 @@ var setTooltipCal = (e, data) => {
             })
         }
     }
-
-    // if (data.ach < data.base_line) {
-    //     setAttributes(e, {
-    //         "data-toggle": "tooltip",
-    //         "title": "Ach% < Base Line : Cal = 0.00",
-    //         "data-placement": "top"
-    //     })
-    // }
-    // if (data.ach > data.base_line) {
-    //     setAttributes(e, {
-    //         "data-toggle": "tooltip",
-    //         "title": "Ach% > Base Line  = (Base Line * Weight) / 100",
-    //         "data-placement": "top"
-    //     })
-    // }
-    // if (data.ach === data.base_line) {
-    //     setAttributes(e, {
-    //         "data-toggle": "tooltip",
-    //         "title": "(Ach% * Weight) / 100",
-    //         "data-placement": "top"
-    //     })
-    // }
 }
 
 /**

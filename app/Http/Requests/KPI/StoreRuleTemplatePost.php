@@ -38,11 +38,11 @@ class StoreRuleTemplatePost extends FormRequest
         return [
             // 'template_id' => 'required',
             'rule_id' => 'required',
-            'weight' => 'required',
-            'weight_category' => 'required',
-            'target_config' => 'required',
-            'base_line' => 'required',
-            'max_result' => 'required'
+            // 'weight' => 'required',
+            // 'weight_category' => 'required',
+            // 'target_config' => 'required',
+            // 'base_line' => 'required',
+            // 'max_result' => 'required'
         ];
     }
 
@@ -54,13 +54,13 @@ class StoreRuleTemplatePost extends FormRequest
     public function messages()
     {
         return [
-            'template_id.required' => 'A template is required',
+            // 'template_id.required' => 'A template is required',
             'rule_id.required' => 'A Rule Name is required',
-            'weight' =>  'A weight is required',
-            'weight_category' =>  'A Weight category is required',
-            'target_config' =>  'A Target config is required',
-            'base_line' =>  'A Base line is required',
-            'max_result' =>  'A Max is required'
+            // 'weight' =>  'A weight is required',
+            // 'weight_category' =>  'A Weight category is required',
+            // 'target_config' =>  'A Target config is required',
+            // 'base_line' =>  'A Base line is required',
+            // 'max_result' =>  'A Max is required'
         ];
     }
 }

@@ -39,12 +39,94 @@
                 } else {
                     pageDisable()
                 }
+                console.log(evaluate);
+                $("#validationTemplate").val(evaluate.template_id)
                 toastClear()
             })
     }, false);
 })();
 var evaluateForm = new EvaluateForm()
 
+const display_template = () => {
+    let tables = document.getElementById('all-table').querySelectorAll('table')
+    for (let i = 0; i < tables.length; i++) {
+        const table = tables[i]
+        let data_category = evaluateForm.detail.filter(value => value.rules.categorys.name === table.id.substring(6))
+        if (data_category.length > 0) {
+            removeAllChildNodes(table.tBodies[0])
+            for (let index = 0; index < data_category.length; index++) {
+                const element = data_category[index]
+                let newRow = table.tBodies[0].insertRow()
+
+                let cellIndex = newRow.insertCell()
+                cellIndex.textContent = index + 1
+
+                let cellName = newRow.insertCell()
+                cellName.textContent = element.rules.name
+                cellName.classList.add('truncate')
+                setAttributes(cellName, {
+                    "data-toggle": "tooltip",
+                    "title": `${element.rules.name}`,
+                    "data-placement": "top"
+                })
+
+                let cellDesc = newRow.insertCell()
+                cellDesc.textContent = element.rules.description
+                cellDesc.classList.add('truncate')
+                setAttributes(cellDesc, {
+                    "data-toggle": "tooltip",
+                    "title": `${element.rules.description}`,
+                    "data-placement": "top"
+                })
+
+
+                let cellBase_line = newRow.insertCell()
+                cellBase_line.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`))
+
+                let cellMax = newRow.insertCell()
+                cellMax.appendChild(newInput('number', className, 'max', element.max.toFixed(2), '', `changeValue(this)`))
+
+                let cellWeight = newRow.insertCell()
+                cellWeight.appendChild(newInput('number', className, 'weight', element.weight.toFixed(2), '', `changeValue(this)`))
+
+                let cellTarget = newRow.insertCell()
+                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`))
+
+                let cellTargetPC = newRow.insertCell()
+                cellTargetPC.textContent = findTargetPercent(element, data_category).toFixed(2)
+
+                // if (table.id.substring(6) === `key-task`) {
+                    let cellDelete = newRow.insertCell()
+                    let div = document.createElement('div')
+                    div.className = 'custom-checkbox custom-control'
+
+                    let checkbox = newInput('checkbox', 'custom-control-input', `check${element.rule_id}`, '', element.rule_id)
+
+                    let label = document.createElement('label')
+                    label.classList.add('custom-control-label')
+                    label.htmlFor = element.rule_id
+                    div.appendChild(checkbox)
+                    div.appendChild(label)
+                    cellDelete.appendChild(div)
+                // }
+            }
+            let sum_weight = data_category.reduce((total, cur) => total += cur.weight, 0.00)
+            evaluateForm.total_weight_kpi = table.id.substring(6) === 'kpi' ? sum_weight : evaluateForm.total_weight_kpi
+            evaluateForm.total_weight_key_task = table.id.substring(6) === 'key-task' ? sum_weight : evaluateForm.total_weight_key_task
+            evaluateForm.total_weight_omg = table.id.substring(6) === 'omg' ? sum_weight : evaluateForm.total_weight_omg
+            table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
+            // table.offsetParent.querySelector('.card-title').textContent = `${data_category[0].rules.categorys.name} : ${data_category[0].weight_category}%`
+        } else {
+            evaluateForm.total_weight_kpi = table.id.substring(6) === 'kpi' ? 0.00 : evaluateForm.total_weight_kpi
+            evaluateForm.total_weight_key_task = table.id.substring(6) === 'key-task' ? 0.00 : evaluateForm.total_weight_key_task
+            evaluateForm.total_weight_omg = table.id.substring(6) === 'omg' ? 0.00 : evaluateForm.total_weight_omg
+            table.tFoot.lastElementChild.cells[5].textContent = `0.00%`
+            removeAllChildNodes(table.tBodies[0])
+            table.offsetParent.querySelector('.card-title').textContent = table.id.substring(6)
+        }
+    }
+    $('[data-toggle="tooltip"]').tooltip()
+}
 
 // dropdown
 const changeValue = (e) => {
@@ -53,13 +135,14 @@ const changeValue = (e) => {
     for (const key in object) {
         object[key] = key === e.name ? parseFloat(e.value) : object[key]
     }
-    let table = e.offsetParent.offsetParent
+    e.parentElement.parentElement.cells[7].textContent = findTargetPercent(object,evaluateForm.detail).toFixed(2) + '%'
+    // let table = e.offsetParent.offsetParent
     let sum = evaluateForm.detail.reduce((total, cur) => cur.rules.category_id === object.rules.category_id ? total += cur.weight : total, 0.00)
     e.offsetParent.parentNode.parentNode.parentNode.tFoot.lastElementChild.cells[5].textContent = `${sum.toFixed(2)}%`
 
-    evaluateForm.total_weight_kpi = table.id.substring(6) === 'kpi' ? sum : evaluateForm.total_weight_kpi
-    evaluateForm.total_weight_key_task = table.id.substring(6) === 'key-task' ? sum : evaluateForm.total_weight_key_task
-    evaluateForm.total_weight_omg = table.id.substring(6) === 'omg' ? sum : evaluateForm.total_weight_omg
+    // evaluateForm.total_weight_kpi = table.id.substring(6) === 'kpi' ? sum : evaluateForm.total_weight_kpi
+    // evaluateForm.total_weight_key_task = table.id.substring(6) === 'key-task' ? sum : evaluateForm.total_weight_key_task
+    // evaluateForm.total_weight_omg = table.id.substring(6) === 'omg' ? sum : evaluateForm.total_weight_omg
 }
 
 // dropdown
@@ -77,6 +160,7 @@ const changeTemplate = (e) => {
                         detail.rule_id = element.rule_id
                         detail.rules = Object.create(element.rules)
                         detail.target = typeof element.target === 'undefined' ? element.target_config : element.target
+                        detail.target_pc = findTargetPercent(element,res.data.data).toFixed(2)
                         detail.actual = typeof element.actual === 'undefined' ? 0.00 : element.actual
                         detail.max = element.max_result
                         detail.weight = element.weight
@@ -84,19 +168,21 @@ const changeTemplate = (e) => {
                         detail.base_line = element.base_line
                         evaluateForm.detail.push(detail)
                     })
-                    display_template()
                 }
             })
             .catch(error => {
-                toast(error.response.data.message, 'error')
+                toast(error.response.data.message, error.response.data.status)
                 toastClear()
                 console.log(error.response.data)
             })
             .finally(() => {
                 pageEnable()
+                display_template()
                 setVisible(false)
+                
             })
     } else {
+        evaluateForm.detail = []
         display_template()
         pageDisable(`button,input`)
     }
@@ -181,6 +267,7 @@ $('#rule-modal').on('hide.bs.modal', function (event) {
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
     removeAllChildNodes(modal.find('.modal-body #rule-name')[0])
+    modal.find('.modal-body #reload').addClass('reload')
 })
 
 const dropdownRule = (category, modal) => {
@@ -201,7 +288,9 @@ const dropdownRule = (category, modal) => {
             toast(error.response.data.message, 'error')
             toastClear()
         })
-        .finally()
+        .finally(() => {
+            modal.find('.modal-body #reload').removeClass('reload')
+        })
 }
 
 const addKeyTask = (e) => {
@@ -220,7 +309,7 @@ const addKeyTask = (e) => {
                     detail.weight = 0.00
                     detail.weight_category = 0.00
                     detail.base_line = 0.00
-                }else{
+                } else {
                     detail.target = row.target
                     detail.max = row.max
                     detail.weight = row.weight
@@ -238,85 +327,4 @@ const addKeyTask = (e) => {
             display_template()
             toastClear()
         })
-}
-
-const display_template = () => {
-    let tables = document.getElementById('all-table').querySelectorAll('table')
-    for (let i = 0; i < tables.length; i++) {
-        const table = tables[i]
-        let data_category = evaluateForm.detail.filter(value => value.rules.categorys.name === table.id.substring(6))
-        if (data_category.length > 0) {
-            removeAllChildNodes(table.tBodies[0])
-            for (let index = 0; index < data_category.length; index++) {
-                const element = data_category[index]
-                let newRow = table.tBodies[0].insertRow()
-
-                let cellIndex = newRow.insertCell()
-                cellIndex.textContent = index + 1
-
-                let cellName = newRow.insertCell()
-                cellName.textContent = element.rules.name
-                cellName.classList.add('truncate')
-                setAttributes(cellName, {
-                    "data-toggle": "tooltip",
-                    "title": `${element.rules.name}`,
-                    "data-placement": "top"
-                })
-
-                let cellDesc = newRow.insertCell()
-                cellDesc.textContent = element.rules.description
-                cellDesc.classList.add('truncate')
-                setAttributes(cellDesc, {
-                    "data-toggle": "tooltip",
-                    "title": `${element.rules.description}`,
-                    "data-placement": "top"
-                })
-
-
-                let cellBase_line = newRow.insertCell()
-                cellBase_line.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`))
-
-                let cellMax = newRow.insertCell()
-                cellMax.appendChild(newInput('number', className, 'max', element.max.toFixed(2), '', `changeValue(this)`))
-
-                let cellWeight = newRow.insertCell()
-                cellWeight.appendChild(newInput('number', className, 'weight', element.weight.toFixed(2), '', `changeValue(this)`))
-
-                let cellTarget = newRow.insertCell()
-                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`))
-
-                let cellTargetPC = newRow.insertCell()
-                cellTargetPC.textContent = findTargetPercent(element, data_category).toFixed(2)
-
-                if (table.id.substring(6) === `key-task`) {
-                    let cellDelete = newRow.insertCell()
-                    let div = document.createElement('div')
-                    div.className = 'custom-checkbox custom-control'
-
-                    let checkbox = newInput('checkbox', 'custom-control-input', `check${element.rule_id}`, '', element.rule_id)
-
-                    let label = document.createElement('label')
-                    label.classList.add('custom-control-label')
-                    label.htmlFor = element.rule_id
-                    div.appendChild(checkbox)
-                    div.appendChild(label)
-                    cellDelete.appendChild(div)
-                }
-            }
-            let sum_weight = data_category.reduce((total, cur) => total += cur.weight, 0.00)
-            evaluateForm.total_weight_kpi = table.id.substring(6) === 'kpi' ? sum_weight : evaluateForm.total_weight_kpi
-            evaluateForm.total_weight_key_task = table.id.substring(6) === 'key-task' ? sum_weight : evaluateForm.total_weight_key_task
-            evaluateForm.total_weight_omg = table.id.substring(6) === 'omg' ? sum_weight : evaluateForm.total_weight_omg
-            table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
-            table.offsetParent.querySelector('.card-title').textContent = `${data_category[0].rules.categorys.name} : ${data_category[0].weight_category}%`
-        } else {
-            evaluateForm.total_weight_kpi = table.id.substring(6) === 'kpi' ? 0.00 : evaluateForm.total_weight_kpi
-            evaluateForm.total_weight_key_task = table.id.substring(6) === 'key-task' ? 0.00 : evaluateForm.total_weight_key_task
-            evaluateForm.total_weight_omg = table.id.substring(6) === 'omg' ? 0.00 : evaluateForm.total_weight_omg
-            table.tFoot.lastElementChild.cells[5].textContent = `0.00%`
-            removeAllChildNodes(table.tBodies[0])
-            table.offsetParent.querySelector('.card-title').textContent = table.id.substring(6)
-        }
-    }
-    $('[data-toggle="tooltip"]').tooltip()
 }

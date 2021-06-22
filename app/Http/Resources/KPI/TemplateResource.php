@@ -24,7 +24,8 @@ class TemplateResource extends JsonResource
             'created_at' => (string) $this->created_at,
             'updated_at' => (string) $this->updated_at,
             'departments' => $this->department,
-            'user_created' => $this->user
+            'user_created' => $this->user,
+            'ruleTemplate' => RuleTemplateResource::collection($this->ruleTemplate)
         ];
     }
 }

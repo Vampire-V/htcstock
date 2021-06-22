@@ -9,22 +9,24 @@ use App\Models\KPI\Template;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
+use App\Services\KPI\Service\RuleCategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class TemplateController extends Controller
 {
-    protected $templateService;
-    protected $ruleTemplateService;
-    protected $departmentService;
+    protected $templateService, $ruleTemplateService, $departmentService,
+    $categoryService;
     public function __construct(
         TemplateServiceInterface $templateServiceInterface,
         RuleTemplateServiceInterface $ruleTemplateServiceInterface,
-        DepartmentServiceInterface $departmentServiceInterface
+        DepartmentServiceInterface $departmentServiceInterface,
+        RuleCategoryService $categoryServiceInterface
     ) {
         $this->templateService = $templateServiceInterface;
         $this->ruleTemplateService = $ruleTemplateServiceInterface;
         $this->departmentService = $departmentServiceInterface;
+        $this->categoryService = $categoryServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -54,12 +56,13 @@ class TemplateController extends Controller
     public function create()
     {
         try {
+            $category = $this->categoryService->dropdown();
             $departments = $this->departmentService->dropdown();
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
-        return \view('kpi.RuleTemplate.Template.create', \compact('departments'));
+        return \view('kpi.RuleTemplate.Template.create', \compact('departments','category'));
     }
 
     /**
@@ -113,7 +116,9 @@ class TemplateController extends Controller
      */
     public function edit($id)
     {
-        //
+        $template = new TemplateResource($this->templateService->find($id));
+        $category = $this->categoryService->dropdown();
+        return \view('kpi.RuleTemplate.Template.edit', \compact('template','category'));
     }
 
     /**

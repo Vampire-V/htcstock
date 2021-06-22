@@ -131,14 +131,14 @@
                     </div>
                     <div class="btn-actions-pane-right">
                         <div role="group" class="btn-group-sm btn-group">
-                            @if ($group->name === 'key-task')
+                            {{-- @if ($group->name === 'key-task') --}}
                             <button class="mb-2 mr-2 btn btn-danger" id="rule-remove-modal"
                                 onclick="deleteRuleTemp(this)" disabled>Delete Selected
                                 Rule</button>
                             <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
                                 data-target="#rule-modal" id="rule-add-modal" disabled>Add
                                 New Rule</button>
-                            @endif
+                            {{-- @endif --}}
                         </div>
                     </div>
                 </div>
@@ -155,9 +155,9 @@
                                 <th style="width: 10%;">Weight %</th>
                                 <th style="width: 15%;">Target Amount</th>
                                 <th>Target %</th>
-                                @if ($group->name === 'key-task')
+                                {{-- @if ($group->name === 'key-task') --}}
                                 <th>#</th>
-                                @endif
+                                {{-- @endif --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -171,6 +171,7 @@
                                 <td></td>
                                 <td style="text-align: right;">Total Weight :</td>
                                 <td>0</td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -214,6 +215,7 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div id="reload" class="reload"></div>
                 <form id="form-rule">
                     <input type="hidden" name="parent_rule_template_id" value="">
                     <div class="form-row">

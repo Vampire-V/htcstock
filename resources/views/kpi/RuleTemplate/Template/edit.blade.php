@@ -49,14 +49,13 @@
                         <div class="col-md-4 mb-3">
                             <label for="ruleTemplateName">Template name :</label>
                             <input type="text" class="form-control form-control-sm" id="validationTemplate" name="name"
-                                value="" placeholder="Rule template name" required>
+                                value="{{$template->name}}" placeholder="Rule template name" required>
                             <div class="invalid-feedback">
                                 Please provide a valid Rule template.
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <button class="mb-2 mr-2 btn btn-sm btn-primary mt-4" type="button"
-                                onclick="create_template()">create</button>
+                            {{-- <button class="hide mb-2 mr-2 btn btn-sm btn-primary mt-4" type="button">create</button> --}}
                         </div>
                     </div>
                 </form>
@@ -64,6 +63,7 @@
         </div>
     </div>
 </div>
+
 @isset($category)
 <div id="all-table" class="hide">
     @foreach ($category as $group)
@@ -172,7 +172,7 @@
 <script src="{{asset('assets\js\index.js')}}" defer></script>
 <script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script>
+    var template = {!!json_encode($template)!!}
 </script>
-<script src="{{asset('assets\js\kpi\ruleTemplate\create.js')}}" defer></script>
-
+<script src="{{asset('assets\js\kpi\ruleTemplate\edit.js')}}" defer></script>
 @endsection

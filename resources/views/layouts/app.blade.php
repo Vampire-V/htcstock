@@ -51,8 +51,8 @@
                 </div>
                 {{-- @include('includes.footer') --}}
             </div>
-            <div id="loading"></div>
         </div>
+        <div id="loading"></div>
     </div>
     @yield('modal')
     <!-- JS, Popper.js, and jQuery -->

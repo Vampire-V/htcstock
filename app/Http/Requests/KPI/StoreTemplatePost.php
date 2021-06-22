@@ -24,8 +24,7 @@ class StoreTemplatePost extends FormRequest
     public function rules()
     {
         $template = [
-            'name' => 'required|unique:kpi_templates|max:255',
-            'department_id' => 'required'
+            'name' => 'required|unique:kpi_templates|max:255'
         ];
         if (strpos($this->path(),"dynamic")) {
             \array_splice($template, 1, 1);

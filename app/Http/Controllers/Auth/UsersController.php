@@ -155,9 +155,8 @@ class UsersController extends Controller
             if (Storage::disk('public')->exists($user->image)) {
                 Storage::disk('public')->delete($user->image);
             }
-            $path = $request->file('filepond')->store('public/images/avatars/' . $user->username);
-
-            $user->image = '/' . \str_replace("public", "", $path);
+            $path = $request->file('filepond')->storeAs('images/avatars/' . $user->username,$request->file('filepond')->getClientOriginalName());
+            $user->image = '/' . $path;
             $user->save();
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\UserEnum;
 use App\Http\Filters\All\Filter\UserFilter;
 use App\Permissions\HasPermissionsTrait;
 use App\Relations\UserTrait;
@@ -23,7 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
      * @var array
      */
     protected $fillable = [
-        'name_th', 'name_en', 'head_id', 'email', 'phone', 'username', 'password', 'department_id', 'incentive_type', 'locale', 'divisions_id', 'positions_id', 'resigned', 'degree'
+        'name_th', 'name_en', 'head_id', 'email', 'phone', 'username', 'password', 'department_id', 'incentive_type', 'locale', 'divisions_id', 'positions_id', 'resigned', 'degree', 'image'
     ];
 
     /**
@@ -48,5 +49,16 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
     public function scopeFilter(Builder $builder, $request)
     {
         return (new UserFilter($request))->filter($builder);
+    }
+
+        /**
+     * Get the user's first image.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getImageAttribute($value)
+    {
+        return $value ?? UserEnum::path;
     }
 }

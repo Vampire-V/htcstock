@@ -28,6 +28,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::namespace('Auth')->prefix('me')->name('me.')->group(function () {
         Route::resource('user', 'UsersController', ['only' => ['edit', 'update']]);
+        Route::group(['prefix' => '/user/{user}/edit', 'as' => 'user.edit'], function () {
+            Route::post('/upload', [
+                'as'   => '.upload', // me.user.edit.upload
+                'uses' => 'UsersController@upload'
+            ]);
+            Route::get('/fetch', [
+                'as'   => '.fetch', // me.user.edit.fetch
+                'uses' => 'UsersController@fetch'
+            ]);
+        });
     });
 });
 

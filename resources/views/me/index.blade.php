@@ -3,7 +3,39 @@
 @section('sidebar')
 @include('includes.sidebar.profile')
 @stop
+@section('style')
+<link href="{{ asset('assets\filepond-master\dist\filepond.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-preview.min.css') }}" rel="stylesheet" />
+<style>
+    /*
+ * FilePond Custom Styles
+ */
+    .filepond--drop-label {
+        color: #4c4e53;
+    }
 
+    .filepond--label-action {
+        text-decoration-color: #babdc0;
+    }
+
+    .filepond--panel-root {
+        background-color: #edf0f4;
+    }
+
+
+    /**
+ * Page Styles
+ */
+    /* html {
+        padding: 20vh 0 0;
+    } */
+
+    .filepond--root {
+        width: 170px;
+        margin: 0 auto;
+    }
+</style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -28,6 +60,8 @@
             <form class="" action="{{route('me.user.update',$user->id)}}" method="post">
                 @csrf
                 @method('PUT')
+                <input type="file" class="filepond" id="filepond" name="filepond"
+                    accept="image/png, image/jpeg, image/gif" />
                 <div class="form-row">
                     <div class="col-md-6">
                         <div class="position-relative form-group">
@@ -182,38 +216,18 @@
 @stop
 
 @section('second-script')
-<script>
-    (function () {
-        'use strict';
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Supporting Documents
-            $("#head_id").select2({
-                placeholder: 'Select Manager',
-                allowClear: true
-            });
-            $("#division").select2({
-                placeholder: 'Select Division',
-                allowClear: true
-            });
-            $("#department").select2({
-                placeholder: 'Select Department',
-                allowClear: true
-            });
-            $("#position").select2({
-                placeholder: 'Select Position',
-                allowClear: true
-            });
-        })
-
-        window.addEventListener('load', function () {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            let forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            validationForm(forms)
-
-        }, false);
-
-    })();
+<script src="{{ asset('assets\filepond-master\dist\filepond.js') }}" defer></script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-file-encode.min.js') }}" defer></script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-file-validate-type.min.js') }}" defer>
 </script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-exif-orientation.min.js') }}" defer>
+</script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-preview.min.js') }}" defer></script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-crop.min.js') }}" defer></script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-resize.min.js') }}" defer></script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-transform.min.js') }}" defer></script>
+<script>
+    var image = {!!json_encode(asset("/storage" . $user->image))!!}
+</script>
+<script src="{{asset('assets\js\profile\me.js')}}" defer></script>
 @endsection

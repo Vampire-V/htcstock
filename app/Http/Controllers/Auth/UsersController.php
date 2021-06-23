@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserPost;
+use App\Http\Resources\ALL\UserResource;
 use App\Models\User;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\IT\Interfaces\DivisionServiceInterface;
@@ -11,6 +12,8 @@ use App\Services\IT\Interfaces\PositionServiceInterface;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
@@ -74,6 +77,7 @@ class UsersController extends Controller
     {
         try {
             $user = $this->userService->find($id);
+            // dd(asset($user->image));
             $divisions = $this->divisionsService->dropdown();
             $departments = $this->departmentsService->dropdown();
             $positions = $this->positionsService->dropdown();
@@ -95,6 +99,7 @@ class UsersController extends Controller
     {
         DB::beginTransaction();
         try {
+            dd($request->filepond);
             $profile = User::find($id);
             $profile->translateOrNew('th')->name = $request['name:th'];
             $profile->translateOrNew('en')->name = $request['name:en'];
@@ -104,7 +109,7 @@ class UsersController extends Controller
             $profile->department_id = $request->department;
             $profile->positions_id = $request->position;
             $profile->save();
-            $request->session()->flash('success', $request['name:th'] .' ('.$request['name:en'].') user has been update');
+            $request->session()->flash('success', $request['name:th'] . ' (' . $request['name:en'] . ') user has been update');
         } catch (\Exception $e) {
             DB::rollBack();
             $request->session()->flash('error', 'error flash message!');
@@ -123,5 +128,57 @@ class UsersController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function upload(Request $request, $id)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'filepond' => 'required|mimes:jpg,jpeg,png,gif|max:2048',
+            ]
+        );
+        if ($validator->fails()) {
+            return $this->errorResponse($validator->errors(), 401);
+        }
+
+        try {
+
+            $user = $this->userService->find($id);
+            if (Storage::disk('public')->exists($user->image)) {
+                Storage::disk('public')->delete($user->image);
+            }
+            $path = $request->file('filepond')->store('public/images/avatars/' . $user->username);
+
+            $user->image = '/' . \str_replace("public", "", $path);
+            $user->save();
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+        return $this->successResponse($user,'upload success...',200);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function fetch($id)
+    {
+        try {
+            $user = $this->userService->find($id);
+            dd($user->image);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+        return $this->successResponse(new UserResource($user), 'get user...', 200);
     }
 }

@@ -176,6 +176,7 @@ class UsersController extends Controller
                     $user->translateOrNew('th')->name = $value['name'];
                     $user->name_th = $value['name'];
                     $user->email = $value['email'];
+                    $user->image = UserEnum::path;
 
                     $department = Department::where('process_id', $value['department_id'])->first();
                     

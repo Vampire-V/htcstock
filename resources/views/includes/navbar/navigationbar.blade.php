@@ -90,7 +90,7 @@
                             <div class="btn-group">
                                 <a data-toggle="usermanu" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
                                     <img width="42" class="rounded-circle"
-                                        src="{{asset('assets/images/avatars/2.jpg')}}" alt="">
+                                        src="{{asset('/storage'.Auth::user()->image)}}" alt="">
                                     <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                 </a>
                                 <div tabindex="-1" role="menu" aria-hidden="true"

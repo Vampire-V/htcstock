@@ -14,6 +14,6 @@ abstract class UserEnum extends BasicEnum
     const MANAGERKPI = 'manager-kpi';
 
     // url profile
-    const path = "/storage/images/avatars/unknown.jpg";
+    const path = "/images/avatars/unknown.jpg";
 
 }

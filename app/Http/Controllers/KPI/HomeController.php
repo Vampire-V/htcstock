@@ -141,8 +141,9 @@ class HomeController extends Controller
 
     public function weigthconfig(Request $request)
     {
+        $is_last = \collect(['03','06','09','12']);
         try {
-            if ($request->is_quarter === "true") {
+            if ($request->is_quarter === "true" || $is_last->contains($request->period)) {
                 $config = config('kpi.weight')['quarter'];
             } else {
                 $config = config('kpi.weight')['month'];

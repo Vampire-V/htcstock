@@ -206,6 +206,7 @@ const changeValue = (e) => {
 
                 // หา %Cal
                 let cal = findCalValue(rule, ach)
+                console.log(findCalValue(rule, ach));
                 tr.cells[11].firstChild.textContent = cal.toFixed(2) + '%'
                 tr.cells[11].dataset.originalTitle = changeTooltipCal(tr.cells[column + 2].dataset.originalTitle, rule)
                 rule.cal = cal

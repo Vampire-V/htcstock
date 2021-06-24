@@ -87,23 +87,20 @@ const tabActive = (e) => {
     let active_tab = localStorage.getItem('tab-dashboard')
     if (active_tab === `tab-c-0`) {
         make_options()
-        month_quarter()
         search_score()
     }
     if (active_tab === `tab-c-1`) {
         render_self()
-        // month_quarter()
-        // search_score()
     }
 }
 
 // tab-c-0 method
 document.getElementById('customSwitch1').addEventListener('click', () => {
-    month_quarter()
     search_score()
 })
 
 const search_score = () => {
+    month_quarter()
     let score = []
     let checked = document.getElementById('customSwitch1').checked
     let param
@@ -126,45 +123,82 @@ const search_score = () => {
             params: param
         })
         .then(res => {
+            let data = []
             if (res.status === 200) {
-                for (let index = 0; index < res.data.data.length; index++) {
-                    const evaluate = res.data.data[index]
-                    let kpi = evaluate.detail.filter(item => item.rules.categorys.name === `kpi`)
-                    let key_task = evaluate.detail.filter(item => item.rules.categorys.name === `key-task`)
-                    let omg = evaluate.detail.filter(item => item.rules.categorys.name === `omg`)
-                    let total_kpi = 0
-                    let total_key = 0
-                    let total_omg = 0
-                    let sum_total = 0
-                    if (checked) {
+                if (checked) {
+                    let item_unique = []
+                    for (let index = 0; index < res.data.data.length; index++) {
+                        const evaluate = res.data.data[index]
+                        if (item_unique.length < 1) {
+                            item_unique.push(evaluate)
+                        } else {
+                            let i = item_unique.findIndex(t => t.user_id === evaluate.user_id)
+                            if (i < 0) {
+                                item_unique.push(evaluate)
+                            } else {
+                                item_unique[i].detail = item_unique[i].detail.concat(evaluate.detail)
+                            }
+                        }
+                    }
+                    for (let index = 0; index < item_unique.length; index++) {
+                        const element = item_unique[index]
+                        let kpi = element.detail.filter(item => item.rules.categorys.name === `kpi`)
+                        let key_task = element.detail.filter(item => item.rules.categorys.name === `key-task`)
+                        let omg = element.detail.filter(item => item.rules.categorys.name === `omg`)
+                        let total_kpi = 0
+                        let total_key = 0
+                        let total_omg = 0
+                        let sum_total = 0
                         total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0)
                         total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0)
                         total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
                         sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
 
-                    } else {
+                        data.push({
+                            evaluate: element,
+                            kpi: total_kpi,
+                            key_task: total_key,
+                            omg: total_omg,
+                            score: sum_total / 100
+                        })
+                    }
+                } else {
+                    for (let index = 0; index < res.data.data.length; index++) {
+                        const evaluate = res.data.data[index]
+                        let kpi = evaluate.detail.filter(item => item.rules.categorys.name === `kpi`)
+                        let key_task = evaluate.detail.filter(item => item.rules.categorys.name === `key-task`)
+                        let omg = evaluate.detail.filter(item => item.rules.categorys.name === `omg`)
+                        let total_kpi = 0
+                        let total_key = 0
+                        let total_omg = 0
+                        let sum_total = 0
+
                         total_kpi = kpi.reduce((a, c) => a + c.cal, 0)
                         total_key = key_task.reduce((a, c) => a + c.cal, 0)
                         total_omg = omg.reduce((a, c) => a + c.cal, 0)
                         sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
 
+                        data.push({
+                            evaluate: evaluate,
+                            kpi: total_kpi,
+                            key_task: total_key,
+                            omg: total_omg,
+                            score: sum_total / 100
+                        })
                     }
-                    score.push({
-                        evaluate: evaluate,
-                        kpi: total_kpi,
-                        key_task: total_key,
-                        omg: total_omg,
-                        score: sum_total / 100
-                    })
                 }
             }
+            return data
+        })
+        .then(data => {
+            score = data.sort((a, b) => b.score - a.score)
         })
         .catch(error => {
             console.log(error);
             console.log(error.response.data);
         })
         .finally(() => {
-            render_score(score.sort((a, b) => b.score - a.score))
+            render_score(score)
         })
 }
 
@@ -193,7 +227,7 @@ let total_quarter = (objArr) => {
             }
         }
     } catch (error) {
-        console.log(error);
+        console.error(error)
     }
 
     try {
@@ -208,7 +242,7 @@ let total_quarter = (objArr) => {
             element.cal = findCalValue(element, element.ach)
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
     return temp
 }
@@ -307,7 +341,8 @@ const month_quarter = () => {
     let quarter = document.getElementById('quarter')
     let config = {
         params: {
-            is_quarter: check
+            is_quarter: check,
+            period: period.value
         },
     }
     getWeigthConfig(config)

@@ -184,7 +184,7 @@ class SelfEvaluationController extends Controller
             return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return $this->successResponse(new EvaluateResource($evaluate), "evaluate self status to : " . $message, 201);
+        return $this->successResponse(new EvaluateResource($evaluate->fresh()), "evaluate self status to : " . $message, 201);
     }
 
     /**

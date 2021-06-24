@@ -147,8 +147,8 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="mb-0 table table-sm" id="table-{{$group->name}}">
-                        <thead>
+                    <table class="mb-0 table table-sm table-bordered" id="table-{{$group->name}}">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>#</th>
                                 <th>Rule Name</th>
@@ -158,9 +158,9 @@
                                 <th style="width: 10%;">Weight %</th>
                                 <th style="width: 15%;">Target Amount</th>
                                 <th>Target %</th>
-                                @if ($group->name === 'key-task')
+                                {{-- @if ($group->name === 'key-task') --}}
                                 <th>#</th>
-                                @endif
+                                {{-- @endif --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -174,6 +174,7 @@
                                 <td></td>
                                 <td style="text-align: right;">Total Weight :</td>
                                 <td>0</td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                             </tr>

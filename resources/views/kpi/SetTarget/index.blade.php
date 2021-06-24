@@ -75,7 +75,7 @@
             <h5 class="card-title">Target Staff List</h5>
             <div class="table-responsive">
                 <table class="mb-0 table table-sm">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr>
                             <th>#</th>
                             <th>Staff Name</th>

@@ -52,7 +52,7 @@
             </div>
             <div class="table-responsive">
                 <table class="mb-0 table table-sm" id="table-steing-action">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr>
                             <th>#</th>
                             <th>Day</th>

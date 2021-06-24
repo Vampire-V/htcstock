@@ -118,8 +118,8 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="mb-0 table table-sm" id="table-{{$group->name}}">
-                        <thead>
+                    <table class="mb-0 table table-sm table-bordered" id="table-{{$group->name}}">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>#</th>
                                 <th>Rule Name</th>
@@ -173,8 +173,8 @@
         <div class="card-body">
             <h5 class="card-title">Calculation Summary</h5>
             <div class="table-responsive">
-                <table class="mb-0 table table-sm" id="table-calculation">
-                    <thead>
+                <table class="mb-0 table table-sm table-bordered" id="table-calculation">
+                    <thead class="thead-dark">
                         <tr>
                             <th>#</th>
                             <th>Weight</th>

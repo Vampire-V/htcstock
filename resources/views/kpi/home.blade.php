@@ -131,7 +131,7 @@
                             </div>
                             <div class="table-responsive">
                                 <table class="mb-0 table table-sm" id="table-report-score">
-                                    <thead>
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th rowspan="2" style="vertical-align : middle;">Name</th>
                                             <th rowspan="2" style="vertical-align : middle;">Division
@@ -180,7 +180,7 @@
                         <div class="tab-content">
                             <div class="table-responsive" style="height: 110px;">
                                 <table class="mb-0 table table-sm" id="table-self-evaluation">
-                                    <thead>
+                                    <thead class="thead-dark">
                                     </thead>
                                     <tbody>
                                         <div id="reload" class="reload"></div>
@@ -206,7 +206,7 @@
                             <div class="table-responsive" style="height: 110px;">
                                 @isset($ofDept)
                                 {{-- <table class="mb-0 table table-sm" id="table-dept-evaluation">
-                                    <thead>
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th scope="col">#</th>
                                             @foreach ($ofDept as $item)
@@ -256,7 +256,7 @@
                         <div class="tab-content">
                             <div class="table-responsive" style="height:300px">
                                 {{-- <table class="table table-sm table-bordered">
-                                    <thead>
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th rowspan="2" style="vertical-align : middle;">#</th>
                                             <th rowspan="2" style="vertical-align : middle;">full name</th>
@@ -317,7 +317,7 @@
                         <div class="tab-content">
                             <div class="table-responsive" style="height: 300px;">
                                 {{-- <table class="table table-sm table-bordered">
-                                    <thead>
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th rowspan="2" style="vertical-align : middle;">#</th>
                                             <th rowspan="2" style="vertical-align : middle;">Department</th>

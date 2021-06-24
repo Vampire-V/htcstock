@@ -93,7 +93,7 @@
             </div>
             <div class="table-responsive">
                 <table class="mb-0 table table-sm">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr>
                             <th>#</th>
                             <th>Rule Template Name</th>

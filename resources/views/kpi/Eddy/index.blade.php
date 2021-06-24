@@ -116,7 +116,7 @@
 
                         <div class="table-responsive-sm">
                             <table class="mb-0 table table-sm" id="table-set-actual">
-                                <thead>
+                                <thead class="thead-dark">
                                     <tr>
                                         <th>#</th>
                                         <th>Evaluation form</th>
@@ -237,7 +237,7 @@
 
                         <div class="table-responsive-sm">
                             <table class="mb-0 table table-sm" id="table-set-ach">
-                                <thead>
+                                <thead class="thead-dark">
                                     <tr>
                                         <th>#</th>
                                         <th>Evaluation form</th>

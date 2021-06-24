@@ -94,7 +94,7 @@
                 </div>
                 <div class="table-responsive">
                     <table class="mb-0 table table-sm" id="table-set-actual">
-                        <thead>
+                        <thead class="thead-dark">
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>

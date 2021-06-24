@@ -7,6 +7,10 @@
 <link href="{{ asset('assets\filepond-master\dist\filepond.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-preview.min.css') }}" rel="stylesheet" />
 <style>
+    label>span {
+        color: red
+    }
+
     /*
  * FilePond Custom Styles
  */
@@ -37,7 +41,7 @@
 </style>
 @endsection
 @section('content')
-<div class="app-page-title">
+{{-- <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
@@ -52,12 +56,12 @@
             </div>
         </div>
     </div>
-</div>
-<div class="row">
+</div> --}}
+<div class="col-12">
     <div class="main-card mb-3 card">
         <div class="card-body">
-            <h5 class="card-title">Profile</h5>
-            <form class="" action="{{route('me.user.update',$user->id)}}" method="post">
+            {{-- <h5 class="card-title">Profile</h5> --}}
+            <form class="" action="{{route('me.user.update',$user->id)}}" method="post" id="form-profile">
                 @csrf
                 @method('PUT')
                 <input type="file" class="filepond" id="filepond" name="filepond"
@@ -65,7 +69,7 @@
                 <div class="form-row">
                     <div class="col-md-6">
                         <div class="position-relative form-group">
-                            <label for="name" class="">{{ __('Name') }} (TH)</label>
+                            <label for="name" class="">{{ __('Name') }} (TH) <span>*</span></label>
                             <input name="name:th" id="name_th" placeholder="Name placeholder" type="text"
                                 class="form-control form-control-sm @error('name') is-invalid @enderror"
                                 value="{{ $user->translate('th') ? $user->translate('th')->name : null }}" required
@@ -80,7 +84,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="position-relative form-group">
-                            <label for="name" class="">{{ __('Name') }} (EN)</label>
+                            <label for="name" class="">{{ __('Name') }} (EN) <span>*</span></label>
                             <input name="name:en" id="name_en" placeholder="Name placeholder" type="text"
                                 class="form-control form-control-sm @error('name') is-invalid @enderror"
                                 value="{{ $user->translate('en') ? $user->translate('en')->name : null }}" required
@@ -148,7 +152,7 @@
                 <div class="form-row">
                     <div class="col-md-4">
                         <div class="position-relative form-group">
-                            <label for="Division" class="">{{ __('Division') }}</label>
+                            <label for="Division" class="">{{ __('Division') }} <span>*</span></label>
                             <select name="division" id="division" class="form-control form-control-sm">
                                 <option value="">Choose...</option>
                                 @isset($divisions)
@@ -168,7 +172,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="position-relative form-group">
-                            <label for="Department" class="">{{ __('Department') }}</label>
+                            <label for="Department" class="">{{ __('Department') }} <span>*</span></label>
                             <select name="department" id="department" class="form-control form-control-sm">
                                 <option value="">Choose...</option>
                                 @isset($departments)
@@ -207,7 +211,10 @@
                         </div>
                     </div>
                 </div>
-                <button class="mt-2 btn btn-primary">Update</button>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-danger mr-2" onclick="window.history.back()" type="button">Back</button>
+                    <button class="btn btn-primary">Save</button>
+                </div>
             </form>
         </div>
     </div>

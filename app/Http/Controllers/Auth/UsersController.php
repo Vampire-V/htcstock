@@ -99,7 +99,6 @@ class UsersController extends Controller
     {
         DB::beginTransaction();
         try {
-            dd($request->filepond);
             $profile = User::find($id);
             $profile->translateOrNew('th')->name = $request['name:th'];
             $profile->translateOrNew('en')->name = $request['name:en'];

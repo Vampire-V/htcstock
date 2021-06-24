@@ -132,7 +132,7 @@ class EvaluationFormController extends Controller
                     $rule = $this->evaluateDetailService->findLastRule($value['rule_id']);
                     $rule_id = $value['rule_id'];
                     $target = $value['target'];
-                    $actual = $rule->actual;
+                    $actual = $rule ? $rule->actual : 0.00;
                     $weight = $value['weight'];
                     $weight_category = $value['weight_category'];
                     $base_line = $value['base_line'];
@@ -232,9 +232,10 @@ class EvaluationFormController extends Controller
                 $detail = [];
                 // Insert new Detail
                 foreach ($request->detail as $key => $value) {
+                    $rule = $this->evaluateDetailService->findLastRule($value['rule_id']);
                     $rule_id = $value['rule_id'];
                     $target = $value['target'];
-                    $actual = 0.00;
+                    $actual = $rule ? $rule->actual : 0.00;
                     $weight = $value['weight'];
                     $weight_category = $value['weight_category'];
                     $base_line = $value['base_line'];

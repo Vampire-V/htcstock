@@ -27,6 +27,6 @@ class CreateGroupDivisionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('groupdivision');
+        Schema::dropIfExists('group_divisions');
     }
 }

@@ -129,13 +129,15 @@ class EvaluationFormController extends Controller
                 );
                 $detail = [];
                 foreach ($request->detail as $key => $value) {
+                    $rule = $this->evaluateDetailService->findLastRule($value['rule_id']);
                     $rule_id = $value['rule_id'];
                     $target = $value['target'];
+                    $actual = $rule->actual;
                     $weight = $value['weight'];
                     $weight_category = $value['weight_category'];
                     $base_line = $value['base_line'];
                     $max_result = $value['max'];
-                    \array_push($detail, compact("rule_id", "target", "weight", "weight_category", "base_line", "max_result"));
+                    \array_push($detail, compact("rule_id", "target", "weight", "weight_category", "base_line", "max_result", "actual"));
                 }
                 if (count($detail) > 0) {
                     $evaluate->evaluateDetail()->createMany($detail);

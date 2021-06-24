@@ -29,7 +29,7 @@ class AddCreatedToKpiTemplatesTable extends Migration
     public function down()
     {
         Schema::table('kpi_templates', function (Blueprint $table) {
-            $table->dropIndex('user_created');
+            $table->dropForeign('kpi_templates_user_created_foreign');
             $table->dropColumn(['user_created', 'weight_kpi', 'weight_key_task', 'weight_omg']);
         });
     }

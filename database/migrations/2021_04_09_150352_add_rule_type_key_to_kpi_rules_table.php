@@ -27,8 +27,10 @@ class AddRuleTypeKeyToKpiRulesTable extends Migration
     public function down()
     {
         Schema::table('kpi_rules', function (Blueprint $table) {
-            $table->dropForeign(['user_actual', 'kpi_rule_types_id']);
-            $table->dropColumn(['user_actual', 'kpi_rule_types_id']);
+            $table->dropForeign('kpi_rules_kpi_rule_types_id_foreign');
+            $table->dropForeign('kpi_rules_user_actual_foreign');
+
+            $table->dropColumn(['kpi_rule_types_id', 'user_actual']);
         });
     }
 }

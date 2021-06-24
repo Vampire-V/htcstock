@@ -26,8 +26,9 @@ class AddSystemidToPermission extends Migration
      */
     public function down()
     {
-        Schema::table('permission', function (Blueprint $table) {
-            $table->dropForeign('system_system_id_foreign');
+        Schema::table('permissions', function (Blueprint $table) {
+            $table->dropForeign('permissions_system_id_foreign');
+            $table->dropColumn(['system_id']);
         });
     }
 }

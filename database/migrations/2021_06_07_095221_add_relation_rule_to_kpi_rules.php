@@ -28,11 +28,5 @@ class AddRelationRuleToKpiRules extends Migration
         Schema::table('kpi_rules', function (Blueprint $table) {
             $table->dropColumn('parent');
         });
-        Schema::table('kpi_rule_templates', function (Blueprint $table) {
-            $table->dropColumn('amount');
-        });
-        Schema::table('kpi_evaluate_details', function (Blueprint $table) {
-            $table->dropColumn('amount');
-        });
     }
 }

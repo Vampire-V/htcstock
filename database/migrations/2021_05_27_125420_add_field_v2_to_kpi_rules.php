@@ -29,7 +29,7 @@ class AddFieldV2ToKpiRules extends Migration
     public function down()
     {
         Schema::table('kpi_rules', function (Blueprint $table) {
-            $table->dropIndex('department_id');
+            $table->dropForeign('kpi_rules_department_id_foreign');
             $table->dropColumn(['base_line', 'max', 'desc_m', 'department_id']);
         });
     }

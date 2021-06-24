@@ -34,7 +34,7 @@
                 toast(error.response.data.message, 'error')
             })
             .finally(() => {
-                if (evaluate.status === status.NEW || evaluate.status === status.SUBMITTED) {
+                if (evaluate.status === status.NEW) {
                     pageEnable()
                 } else {
                     pageDisable()

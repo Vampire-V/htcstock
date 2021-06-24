@@ -120,11 +120,16 @@ class SelfEvaluationController extends Controller
         try {
             $category = $this->categoryService->dropdown();
             $f_evaluate = $this->evaluateService->find($id);
+            if ($f_evaluate->evaluateDetail->groupBy(fn ($item) => $item->rules->category_id)->count() > 2) {
+                $weight_group = config('kpi.weight')['quarter'];
+            } else {
+                $weight_group = config('kpi.weight')['month'];
+            }
             $evaluate  = new EvaluateResource($f_evaluate);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category'));
+        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category', 'weight_group'));
     }
 
     /**

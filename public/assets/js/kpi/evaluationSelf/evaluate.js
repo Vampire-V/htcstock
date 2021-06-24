@@ -25,6 +25,9 @@
                 .then(res => {
                     if (res.status === 200) {
                         template = res.data.data
+                        template.weight_kpi = weight_group[0]
+                        template.weight_key_task = weight_group[1]
+                        template.weight_omg = weight_group[2]
                     }
                 })
                 .catch(error => {
@@ -32,6 +35,7 @@
                     console.log(error.response.data)
                 })
                 .finally(() => {
+                    console.log(template,weight_group)
                     render_html()
                     if (evaluate.status !== status.READY && evaluate.status !== status.DRAFT) {
                         pageDisable()

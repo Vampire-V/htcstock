@@ -263,6 +263,7 @@
     // variable
     const auth = {!!json_encode(Auth::user())!!}
     const evaluate = {!!json_encode($evaluate)!!}
+    const weight_group = {!!json_encode($weight_group)!!}
 </script>
 <script src="{{asset('assets\js\kpi\evaluationSelf\evaluate.js')}}" defer></script>
 @endsection

@@ -126,6 +126,7 @@ const search_score = () => {
             let data = []
             if (res.status === 200) {
                 if (checked) {
+                    // is quarter
                     let item_unique = []
                     for (let index = 0; index < res.data.data.length; index++) {
                         const evaluate = res.data.data[index]
@@ -233,7 +234,7 @@ let total_quarter = (objArr) => {
     try {
         for (let index = 0; index < temp.length; index++) {
             const element = temp[index]
-            element.weight = element.average_weight.reduce((a, b) => a + b, 0) / 3
+            element.weight = element.rules.categorys.name === `omg` ? element.average_weight.reduce((a, b) => a + b, 0) : element.average_weight.reduce((a, b) => a + b, 0) / 3
             element.target = quarter_cal_target(element)
             element.actual = quarter_cal_amount(element)
             element.actual_pc = findActualPercent(element, temp)

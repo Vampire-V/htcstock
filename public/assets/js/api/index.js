@@ -146,20 +146,6 @@ const putSetActual = (form, id) => axios({
     data: form
 })
 
-const putSetActualForEddy = (form, id) => axios({
-    method: 'PUT',
-    responseType: 'json',
-    url: `/kpi/for-eddy/${id}`,
-    data: form
-})
-
-const putSetAchForEddy = (form, id) => axios({
-    method: 'PUT',
-    responseType: 'json',
-    url: `/kpi/for-eddy/${id}/updateAch`,
-    data: form
-})
-
 const postRuleUpload = (form) => axios({
     method: 'POST',
     responseType: 'json',
@@ -198,16 +184,17 @@ const getTemplate = (id) => axios({
     url: `/kpi/template/${id}`
 })
 
-const getOperationReportScore = (params) => axios.get('/kpi/operation/reportscore', params)
+const getOperationReportScore = (filter) => axios.get('/kpi/operation/reportscore', filter)
 
-const getWeigthConfig = (params) => axios.get('/kpi/weigth/config', params)
+const getWeigthConfig = (filter) => axios.get('/kpi/weigth/config', filter)
 
 const postUploadFile = (form, config) => axios.post('/upload', form, config)
 
-const evaluate_excel = (params) => axios.get('/kpi/evaluate-report', params)
+const evaluate_excel = (filter) => axios.get('/kpi/evaluate-report', filter)
 
 const getReportYourSelf = (year) => axios.get(`/kpi/dashboard/you-self/${year}`)
 
+// for eddy page 
 const getDeadLine = () => axios.get(`/kpi/for-eddy/config/deadline/dropdown`)
 
 const getUserSettingAction = (id) => axios.get(`/kpi/for-eddy/user/actions/${id}`)
@@ -217,3 +204,5 @@ const getOperation = () => axios.get(`/operations`)
 const postAttachAction = (form,id) => axios.post(`/kpi/for-eddy/attach/action/${id}`,form)
 
 const postDetachAction = (form,id) => axios.post(`/kpi/for-eddy/detach/action/${id}`,form)
+
+const getUserEvaluate = (filter) => axios.get(`/kpi/for-eddy/user/evaluates`,filter)

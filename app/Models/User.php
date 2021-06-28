@@ -61,4 +61,14 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
     {
         return $value ?? UserEnum::path;
     }
+
+    public function scopeResigned(Builder $query)
+    {
+        return $query->whereIn('resigned',[1]);
+    }
+
+    public function scopeNotResigned(Builder $query)
+    {
+        return $query->whereIn('resigned',[0]);
+    }
 }

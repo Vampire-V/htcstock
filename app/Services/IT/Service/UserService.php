@@ -48,7 +48,7 @@ class UserService extends BaseService implements UserServiceInterface
     public function dropdownNotIn(array $username): Collection
     {
         try {
-            return User::whereNotIn('username', ...$username)->whereNotIn('resigned',[1])->get();
+            return User::whereNotIn('username', ...$username)->notResigned()->get();
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -57,7 +57,7 @@ class UserService extends BaseService implements UserServiceInterface
     public function dropdown(): Collection
     {
         try {
-            return User::whereNotIn('resigned',[1])->get();
+            return User::notResigned()->get();
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -65,7 +65,7 @@ class UserService extends BaseService implements UserServiceInterface
 
     public function filter(Request $request)
     {
-        return User::withTranslation()->with(['department', 'positions', 'roles', 'divisions', 'permissions','systems'])->filter($request)->whereNotIn('resigned',[1])->orderBy('divisions_id', 'desc')->paginate(10);
+        return User::withTranslation()->with(['department', 'positions', 'roles', 'divisions', 'permissions','systems'])->filter($request)->notResigned()->orderBy('divisions_id', 'desc')->paginate(10);
     }
 
     public function email(string $email)
@@ -81,7 +81,7 @@ class UserService extends BaseService implements UserServiceInterface
     {
         try {
             if ($division_id) {
-                return User::whereIn('divisions_id', [...$division_id])->whereNotIn('resigned',[1])->get();
+                return User::whereIn('divisions_id', [...$division_id])->notResigned()->get();
             } else {
                 return User::all();
             }
@@ -102,7 +102,7 @@ class UserService extends BaseService implements UserServiceInterface
     public function evaluationOfYearReport(string $year): Collection
     {
         try {
-            $users = User::with(['evaluates.evaluateDetail.rule.category'])->whereNotIn('resigned',[1])->orderBy('department_id','desc')->get();
+            $users = User::with(['evaluates.evaluateDetail.rule.category'])->notResigned()->orderBy('department_id','desc')->get();
             $periods = $this->periodService->query()->where('year',$year)->get();
             foreach ($users as $user) {
                 $total = \collect();

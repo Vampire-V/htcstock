@@ -34,16 +34,12 @@
         <div class="app-sidebar__inner" >
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Menu</li>
-                {{-- admin manager --}}
-                {{-- @can('admin-manager-kpi') --}}
                 <li>
                     <a href="{{route('kpi.dashboard')}}" class="{{Helper::isActive('kpi/dashboard*')}}">
                         <i class="metismenu-icon pe-7s-monitor"></i>
                         Dashboard
                     </a>
                 </li>
-                {{-- @endcan --}}
-                {{-- end admin manager --}}
                 <li>
                     <a href="{{route('kpi.self-evaluation.index',['user'=>[auth()->id()],'year'=>[date('Y')]])}}"
                         class="{{Helper::isActive('kpi/self-evaluation*')}}">
@@ -86,8 +82,9 @@
                 </li>
                 @endcan
                 {{-- end admin --}}
+                
                 {{-- admin manager --}}
-                @can('admin-manager-kpi')
+                @canany(['admin-kpi','manager-kpi'])
                 <li class="app-sidebar__heading">Menu For Manager</li>
                 <li class="{{Helper::isActive('kpi/evaluation-review*')}}">
                 <li>
@@ -98,7 +95,7 @@
                     </a>
                 </li>
                 </li>
-                @endcan
+                @endcanany
                 {{-- end admin manager --}}
 
                 {{-- for eddy --}}
@@ -118,7 +115,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{route('kpi.deadline')}}" class="{{Helper::isActive('kpi/for-eddy/config/deadline')}}">
+                            <a href="{{route('kpi.for-eddy.deadline')}}" class="{{Helper::isActive('kpi/for-eddy/config/deadline')}}">
                                 <i class="metismenu-icon"></i>
                                 Config Dead Line
                             </a>

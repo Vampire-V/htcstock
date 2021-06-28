@@ -97,21 +97,20 @@
                                     class="dropdown-menu dropdown-menu-right">
                                     <a href="{{ route('me.user.edit',Auth::user()->id) }}" tabindex="0"
                                         class="dropdown-item">{{ __('navigation.profile') }}</a>
-                                    @can('for-superadmin-admin')
+                                    @canany(['for-superadmin-admin','admin-kpi'])
                                     <a href="{{ route('admin.users.index') }}" tabindex="0"
                                         class="dropdown-item">{{ __('navigation.manage users') }}</a>
-                                    {{-- <a href="{{ route('it.check.budgets.index') }}" tabindex="0"
-                                    class="dropdown-item">{{ __('navigation.budgets manage') }}</a> --}}
+                                    
+                                    @endcanany
+
+                                    @canany(['for-superadmin-admin'])
                                     <a href="{{ route('admin.users.updateusers') }}" tabindex="0"
                                         class="dropdown-item">{{ __('navigation.update user') }}</a>
                                     <a href="{{ route('admin.vendor.updatevendor') }}" tabindex="0"
                                         class="dropdown-item">{{ __('navigation.update vendor') }}</a>
                                     <a href="{{ route('optimize-clear') }}" tabindex="0"
                                         class="dropdown-item">{{ __('navigation.optimize-system') }}</a>
-                                    @endcan
-                                    {{-- <button type="button" tabindex="0" class="dropdown-item">Settings</button>
-                                    <h6 tabindex="-1" class="dropdown-header">Header</h6>
-                                    <button type="button" tabindex="0" class="dropdown-item">Actions</button> --}}
+                                    @endcanany
                                     <div tabindex="-1" class="dropdown-divider"></div>
 
                                     <button type="button" href="{{ route('logout') }}" tabindex="0"

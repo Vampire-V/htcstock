@@ -1,3 +1,13 @@
+<style>
+    .back-sidebar:hover {
+        background: #e45959 !important;
+        color: #fff;
+        
+    }
+    .back-sidebar{
+        border: 1px solid red;
+    }
+</style>
 <div class="app-sidebar sidebar-shadow">
     <div class="app-header__logo">
         <div class="logo-src"></div>
@@ -46,64 +56,13 @@
                         Role
                     </a>
                 </li>
-                {{-- <li>
-                    <a href="{{route('admin.permissions.index')}}" class="{{Helper::isActive('admin/permissions*')}}">
-                        <i class="metismenu-icon pe-7s-rocket"></i>
-                        Permissions
+                <li>
+                    <a href="#" class="back-sidebar"  onclick="window.history.back()">
+                        <i class="metismenu-icon pe-7s-back"> </i>
+                        Back
                     </a>
-                </li> --}}
-                {{-- <li class="app-sidebar__heading">การทำงาน</li>
-                <li class="{{Helper::isActive('it/accessories/*')}}">
-                <a href="#" class="{{Helper::isActive('it/accessories/*')}}">
-                    <i class="metismenu-icon pe-7s-diamond"></i>
-                    อุปกรณ์
-                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                </a>
-                <ul>
-                    <li>
-                        <a href="{{route('it.equipment.buy.index')}}" class="{{Helper::isActive('it/accessories/buy/list')}}">
-                            <i class="metismenu-icon"></i>
-                            ซื้อ
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{route('it.equipment.requisition.index')}}"
-                            class="{{Helper::isActive('it/accessories/requisition/list')}}">
-                            <i class="metismenu-icon"></i>
-                            เบิก
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{route('it.equipment.lendings.index')}}"
-                            class="{{Helper::isActive('it/accessories/lendings/list')}}">
-                            <i class="metismenu-icon"></i>
-                            ยืม-คืน
-                        </a>
-                    </li>
-                </ul>
+                    {{-- <a class="btn btn-sm btn-transition btn btn-outline-danger btn-block" onclick="window.history.back()" ><i class="metismenu-icon pe-7s-back"> </i> Back</a> --}}
                 </li>
-                <li class="{{Helper::isActive('it/check/*')}}">
-                    <a href="#" class="{{Helper::isActive('it/check/*')}}">
-                        <i class="metismenu-icon pe-7s-car"></i>
-                        ตรวจสอบ
-                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                    </a>
-                    <ul>
-                        <li>
-                            <a href="{{route('it.check.transactions_list')}}"
-                                class="{{Helper::isActive('it/check/transactions')}}">
-                                <i class="metismenu-icon">
-                                </i>ประวัติการทำงาน
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('it.check.stocks_list')}}" class="{{Helper::isActive('it/check/stocks') }}">
-                                <i class="metismenu-icon">
-                                </i>คลัง
-                            </a>
-                        </li>
-                    </ul>
-                </li> --}}
             </ul>
         </div>
     </div>

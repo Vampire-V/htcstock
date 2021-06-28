@@ -80,8 +80,8 @@ class UsersController extends Controller
     public function edit($id)
     {
         try {
-            if (Gate::denies('for-superadmin-admin')) {
-                return \redirect()->route('admin.users.index');
+            if (Gate::denies('superadmin-admin') && Gate::denies('admin-kpi')) {
+                return \redirect()->back()->with('error', "No authorization...");
             }
             $user = $this->userService->find($id);
             $userRoles = $user->roles()->get();
@@ -169,20 +169,17 @@ class UsersController extends Controller
                     $user = User::where('username', $value['username'])->first();
                     if (\is_null($user)) {
                         $user = new User;
-                        $user->password = Hash::make(\substr($value['email'], 0, 1) . $value['username']);
                     }
-
-                    $user->username = $value['username'];
-                    $user->translateOrNew('th')->name = $value['name'];
-                    $user->name_th = $value['name'];
+                    $user->password = $user->password ?? Hash::make(\substr($value['email'], 0, 1) . $value['username']);
+                    $user->username = $user->username ?? $value['username'];
+                    $user->translateOrNew('th')->name = $user->translate('th')->name ?? $value['name'];
                     $user->email = $value['email'];
-                    
                     $user->head_id = $user->head_id ?? $value['leader'];
                     $user->save();
                     $list_users[] = $value['username'];
                 }
                 User::whereNotIn('username', [...$list_users])->update(['resigned' => 1]); //update user ที่ออกไปแล้ว
-                $all_user = User::where('resigned', false)->get();
+                $all_user = User::NotResigned()->get();
                 $systems = System::whereNotIn('slug', ['legal','it'])->get();
                 $roles = Role::whereNotIn('slug', [UserEnum::SUPERADMIN, UserEnum::ADMINIT, UserEnum::ADMINLEGAL, UserEnum::USERLEGAL, UserEnum::ADMINKPI])->get();
 
@@ -229,10 +226,10 @@ class UsersController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(),500);
         }
         DB::commit();
-        return \response($user->roles->toJson());
+        return $this->successResponse(true,"add role to user",200);
     }
 
     public function removerole(Request $request, $id)
@@ -243,10 +240,10 @@ class UsersController extends Controller
             $user->roles()->detach($request->role);
         } catch (\Exception $e) {
             DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(),500);
         }
         DB::commit();
-        return \response($user->roles->toJson());
+        return $this->successResponse(true,"remove role for user",200);
     }
 
     public function addsystem(Request $request, $id)
@@ -260,10 +257,10 @@ class UsersController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(),500);
         }
         DB::commit();
-        return \response($user->systems->toJson());
+        return $this->successResponse(true,"add system to user",200);
     }
 
     public function removesystem(Request $request, $id)
@@ -274,10 +271,10 @@ class UsersController extends Controller
             $user->systems()->detach($request->system);
         } catch (\Exception $e) {
             DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            return $this->errorResponse($e->getMessage(),500);
         }
         DB::commit();
-        return \response($user->systems->toJson());
+        return $this->successResponse(true,"remove system for user",200);
     }
 
     public function operations()

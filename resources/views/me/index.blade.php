@@ -67,9 +67,17 @@
                 <input type="file" class="filepond" id="filepond" name="filepond"
                     accept="image/png, image/jpeg, image/gif" />
                 <div class="form-row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="position-relative form-group">
-                            <label for="name" class="">{{ __('Name') }} (TH) <span>*</span></label>
+                            <label for="Username" class="">{{ __('profile.username') }} </label>
+                            <input name="username" id="username" placeholder="Username placeholder" type="text"
+                                class="form-control form-control-sm"
+                                value="{{ $user->username }}" disabled >
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="position-relative form-group">
+                            <label for="name" class="">{{ __('profile.name') }} (TH) <span>*</span></label>
                             <input name="name:th" id="name_th" placeholder="Name placeholder" type="text"
                                 class="form-control form-control-sm @error('name') is-invalid @enderror"
                                 value="{{ $user->translate('th') ? $user->translate('th')->name : null }}" required
@@ -82,9 +90,9 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="position-relative form-group">
-                            <label for="name" class="">{{ __('Name') }} (EN) <span>*</span></label>
+                            <label for="name" class="">{{ __('profile.name') }} (EN) <span>*</span></label>
                             <input name="name:en" id="name_en" placeholder="Name placeholder" type="text"
                                 class="form-control form-control-sm @error('name') is-invalid @enderror"
                                 value="{{ $user->translate('en') ? $user->translate('en')->name : null }}" required
@@ -102,7 +110,7 @@
                 <div class="form-row">
                     <div class="col-md-4">
                         <div class="position-relative form-group">
-                            <label for="email" class="">{{ __('E-Mail Address') }}</label>
+                            <label for="email" class="">{{ __('profile.email') }}</label>
                             <input name="email" id="email" placeholder="with a placeholder" type="email"
                                 value="{{ $user->email }}" required autocomplete="email" readonly
                                 class="form-control form-control-sm">
@@ -116,7 +124,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="position-relative form-group">
-                            <label for="Phone" class="">{{ __('Phone') }}</label>
+                            <label for="Phone" class="">{{ __('profile.phone') }}</label>
                             <input name="phone" id="phone" placeholder="Phone placeholder" type="text"
                                 class="form-control form-control-sm @error('phone') is-invalid @enderror"
                                 value="{{ $user->phone }}" required autocomplete="phone" autofocus>
@@ -129,8 +137,8 @@
                     </div>
                     <div class="col-md-4">
                         <div class="position-relative form-group">
-                            <label for="Manager" class="">{{ __('Manager') }}</label>
-                            <select name="head_id" id="head_id" class="form-control form-control-sm">
+                            <label for="Manager" class="">{{ __('profile.manager') }}</label>
+                            <select name="head_id" id="head_id" class="form-control form-control-sm" disabled>
                                 <option value="">Choose...</option>
                                 @isset($users)
                                 @foreach ($users as $item)
@@ -152,8 +160,8 @@
                 <div class="form-row">
                     <div class="col-md-4">
                         <div class="position-relative form-group">
-                            <label for="Division" class="">{{ __('Division') }} <span>*</span></label>
-                            <select name="division" id="division" class="form-control form-control-sm">
+                            <label for="Division" class="">{{ __('profile.division') }} </label>
+                            <select name="division" id="division" class="form-control form-control-sm" disabled>
                                 <option value="">Choose...</option>
                                 @isset($divisions)
                                 @foreach ($divisions as $division)
@@ -172,8 +180,8 @@
                     </div>
                     <div class="col-md-4">
                         <div class="position-relative form-group">
-                            <label for="Department" class="">{{ __('Department') }} <span>*</span></label>
-                            <select name="department" id="department" class="form-control form-control-sm">
+                            <label for="Department" class="">{{ __('profile.department') }} </label>
+                            <select name="department" id="department" class="form-control form-control-sm" disabled>
                                 <option value="">Choose...</option>
                                 @isset($departments)
                                 @foreach ($departments as $department)
@@ -192,8 +200,8 @@
                     </div>
                     <div class="col-md-4">
                         <div class="position-relative form-group">
-                            <label for="Position" class="">{{ __('Position') }}</label>
-                            <select name="position" id="position" class="form-control form-control-sm">
+                            <label for="Position" class="">{{ __('profile.position') }}</label>
+                            <select name="position" id="position" class="form-control form-control-sm" disabled>
                                 <option value="">Choose...</option>
                                 @isset($positions)
                                 @foreach ($positions as $position)

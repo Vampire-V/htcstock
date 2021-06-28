@@ -33,7 +33,7 @@
                     <div class="form-row">
                         <div class="col-md-6">
                             <div class="position-relative form-group">
-                                <label for="name" class="">{{ __('Name') }} (TH)</label>
+                                <label for="name" class="">{{ __('profile.name') }} (TH)</label>
                                 <input name="name:th" id="name_th" placeholder="Name placeholder" type="text"
                                     class="form-control form-control-sm @error('name') is-invalid @enderror" readonly
                                     value="{{ $user->translate('th') ? $user->translate('th')->name : null }}" required
@@ -48,12 +48,12 @@
                         </div>
                         <div class="col-md-6">
                             <div class="position-relative form-group">
-                                <label for="name" class="">{{ __('Name') }} (EN)</label>
+                                <label for="name" class="">{{ __('profile.name') }} (EN)</label>
                                 <input name="name:en" id="name_en" placeholder="Name placeholder" type="text"
                                     class="form-control form-control-sm @error('name') is-invalid @enderror" readonly
                                     value="{{ $user->translate('en') ? $user->translate('en')->name : null }}" required
                                     autocomplete="name" autofocus>
-                                    
+
                                 @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -66,7 +66,7 @@
                     <div class="form-row">
                         <div class="col-md-6">
                             <div class="position-relative form-group">
-                                <label for="email" class="">{{ __('E-Mail Address') }}</label>
+                                <label for="email" class="">{{ __('profile.email') }}</label>
                                 <input name="email" id="email" placeholder="with a placeholder" type="email"
                                     value="{{ $user->email }}" required autocomplete="email" readonly
                                     class="form-control form-control-sm">
@@ -80,7 +80,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="position-relative form-group">
-                                <label for="Phone" class="">{{ __('Phone') }}</label>
+                                <label for="Phone" class="">{{ __('profile.phone') }}</label>
                                 <input name="phone" id="phone" placeholder="Phone placeholder" type="text"
                                     class="form-control form-control-sm @error('phone') is-invalid @enderror"
                                     value="{{ $user->phone }}" required autocomplete="phone" autofocus readonly>
@@ -96,7 +96,7 @@
                     <div class="form-row">
                         <div class="col-md-4">
                             <div class="position-relative form-group">
-                                <label for="Division" class="">{{ __('Division') }}</label>
+                                <label for="Division" class="">{{ __('profile.division') }}</label>
                                 <input name="division" id="division" placeholder="with a placeholder" type="division"
                                     value="{{ $user->divisions->name }}" required autocomplete="division" readonly
                                     class="form-control form-control-sm">
@@ -109,7 +109,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="position-relative form-group">
-                                <label for="Department" class="">{{ __('Department') }}</label>
+                                <label for="Department" class="">{{ __('profile.department') }}</label>
                                 <input name="department" id="department" placeholder="Department placeholder"
                                     type="text"
                                     class="form-control form-control-sm @error('department') is-invalid @enderror"
@@ -124,7 +124,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="position-relative form-group">
-                                <label for="Position" class="">{{ __('Position') }}</label>
+                                <label for="Position" class="">{{ __('profile.position') }}</label>
                                 <input name="position" id="position" placeholder="with a placeholder" type="position"
                                     value="{{ $user->positions->name }}" required autocomplete="position" readonly
                                     class="form-control form-control-sm">
@@ -136,7 +136,7 @@
                             </div>
                         </div>
                     </div>
-                    <a class="btn btn-warning mr-2" type="button" href="{{url()->previous()}}">Back</a>
+                    {{-- <a class="btn btn-warning mr-2" type="button" href="{{url()->previous()}}">Back</a> --}}
                 </form>
             </div>
         </div>
@@ -144,12 +144,43 @@
 </div>
 
 <div class="row">
+    @canany(['super-admin','admin-kpi'])
+    <div class="col-md-4">
+        <div class="main-card mb-4 card">
+            <div class="card-header">KPI Level approve
+                <div class="btn-actions-pane-right">
+                    <div role="group" class="btn-group-sm btn-group">
+                        <button class="btn btn-focus" data-toggle="modal" data-target=".bd-role-modal-sm">Add</button>
+                        <button class="btn btn-focus" data-toggle="modal" data-target=".bd-role-modal-sm">Copy To</button>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="table-role">
+                    <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th>Name</th>
+                            <th>Lv</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-block text-center card-footer">
+            </div>
+        </div>
+    </div>
+    @endcanany
+    @can('super-admin')
     <div class="col-md-3">
         <div class="main-card mb-3 card">
             <div class="card-header">Role for users
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <button class="btn btn-focus" data-toggle="modal" data-target=".bd-role-modal-lg">Add</button>
+                        <button class="btn btn-focus" data-toggle="modal" data-target=".bd-role-modal-sm">Add</button>
                     </div>
                 </div>
             </div>
@@ -187,7 +218,7 @@
             <div class="card-header">System for users
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <button class="btn btn-focus" data-toggle="modal" data-target=".bd-system-modal-lg">Add</button>
+                        <button class="btn btn-focus" data-toggle="modal" data-target=".bd-system-modal-sm">Add</button>
                     </div>
                 </div>
             </div>
@@ -221,13 +252,17 @@
             </div>
         </div>
     </div>
-</div>
+    @endcan
 
+</div>
+@stop
+
+@section('modal')
 <!-- Role add user modal -->
 
-<div class="modal fade bd-role-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+<div class="modal fade bd-role-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Add role</h5>
@@ -238,7 +273,7 @@
             <div class="modal-body">
                 <form action="#" method="POST">
                     <div class="form-row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-12 mb-12">
                             <label for="validationRole" class="">{{ __('Role') }}</label>
                             <select class="form-control-sm form-control js-select-role-multiple" style="width: 100%"
                                 name="role[]" multiple>
@@ -263,9 +298,9 @@
 
 <!-- System add user modal -->
 
-<div class="modal fade bd-system-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+<div class="modal fade bd-system-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Add system</h5>
@@ -276,7 +311,7 @@
             <div class="modal-body">
                 <form action="#" method="POST">
                     <div class="form-row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-12 mb-12">
                             <label for="validationSystem" class="">{{ __('System') }}</label>
                             <select class="form-control-sm form-control js-select-system-multiple" style="width: 100%"
                                 name="system[]" multiple>
@@ -298,8 +333,7 @@
         </div>
     </div>
 </div>
-@stop
-
+@endsection
 @section('second-script')
 <script src="{{asset('assets\js\admin\user.js')}}" defer></script>
 @endsection

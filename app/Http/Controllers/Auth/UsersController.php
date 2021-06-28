@@ -103,10 +103,10 @@ class UsersController extends Controller
             $profile->translateOrNew('th')->name = $request['name:th'];
             $profile->translateOrNew('en')->name = $request['name:en'];
             $profile->phone = $request->phone;
-            $profile->head_id = $request->head_id;
-            $profile->divisions_id = $request->division;
-            $profile->department_id = $request->department;
-            $profile->positions_id = $request->position;
+            // $profile->head_id = $request->head_id;
+            // $profile->divisions_id = $request->division;
+            // $profile->department_id = $request->department;
+            // $profile->positions_id = $request->position;
             $profile->save();
             $request->session()->flash('success', $request['name:th'] . ' (' . $request['name:en'] . ') user has been update');
         } catch (\Exception $e) {

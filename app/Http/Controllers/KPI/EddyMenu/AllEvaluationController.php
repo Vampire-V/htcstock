@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\KPI\EddyMenu;
 
+use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ALL\UserEvaluateResource;
 use App\Http\Resources\KPI\EvaluateDetailResource;
 use App\Http\Resources\KPI\EvaluateResource;
+use App\Models\User;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
@@ -36,26 +39,7 @@ class AllEvaluationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = $request->all();
-        $tab = '';
-        $selectedYear = empty($request->year) ? collect(date('Y')) : collect($request->year);
-        $selectedDept = collect($request->department_id);
-        $selectedPeriod = collect($request->period);
-        $selectedUser = \intval($request->user);
-        $start_year = date('Y', strtotime('-10 years'));
-        
-        $months = $this->targetPeriodService->dropdown()->unique('name');
-        // $years = $months->unique('year');
-        $departments = $this->departmentService->dropdown();
-        $users = $this->userService->dropdown();
-        $evaluates = $this->evaluateService->editEvaluateFilter($request);
-        $details = \collect();
-        $evaluates->each(fn($value) => $value->evaluateDetail->each(fn($detail) => $details->push($detail)));
-        $evaluate = EvaluateResource::collection($evaluates);
-        $evaluateDetail = EvaluateDetailResource::collection($details);
-
-        // \dd($selectedDept,$departments);
-        return \view('kpi.Eddy.index', \compact('start_year', 'selectedYear', 'departments', 'selectedDept', 'months', 'selectedPeriod', 'users', 'selectedUser','evaluate','evaluateDetail'));
+        return \view('kpi.Eddy.index');
     }
 
     /**
@@ -110,30 +94,9 @@ class AllEvaluationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $body = $request->all();
-        // $status_contain = collect([KPIEnum::draft, KPIEnum::ready]);
-        $status = \false;
-        DB::beginTransaction();
-        try {
-            for ($i = 0; $i < count($body); $i++) {
-                $element = $body[$i];
-                $detail = $this->evaluateDetailService->find($element['id']);
-
-                if ($detail) {
-                    $detail->actual = floatval($element['actual']);
-                    $detail->save();
-                    $status = \true;
-                }
-            }
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
-        }
-        DB::commit();
-        return \response()->json(["status" => $status]);
     }
 
-        /**
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -142,28 +105,6 @@ class AllEvaluationController extends Controller
      */
     public function updateAch(Request $request, $id)
     {
-        $body = $request->all();
-        // $status_contain = collect([KPIEnum::draft, KPIEnum::ready]);
-        $status = \false;
-        DB::beginTransaction();
-        try {
-            for ($i = 0; $i < count($body); $i++) {
-                $element = $body[$i];
-                $evaluate = $this->evaluateService->find($element['id']);
-                if ($evaluate) {
-                    $evaluate->ach_kpi = floatval($element['ach_kpi']);
-                    $evaluate->ach_key_task = floatval($element['ach_key_task']);
-                    $evaluate->ach_omg = floatval($element['ach_omg']);
-                    $evaluate->save();
-                    $status = \true;
-                }
-            }
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
-        }
-        DB::commit();
-        return \response()->json(["status" => $status]);
     }
 
     /**
@@ -175,5 +116,20 @@ class AllEvaluationController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Display a listing of the resource.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function user_evaluates(Request $request)
+    {
+        try {
+            $data = User::with(['evaluate.evaluateDetail'])->notResigned()->get();
+            return $this->successResponse(UserEvaluateResource::collection($data),"user evaluates all",200);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 }

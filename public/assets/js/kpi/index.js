@@ -531,7 +531,7 @@ var setTooltipAch = (e, data) => {
     if (data.rules.calculate_type === calculate.ZERO) {
         setAttributes(e, {
             "data-toggle": "tooltip",
-            "title": "Zero Oriented KP : actual amount <= target amount? 100.00 : 0.00",
+            "title": "Zero Oriented KP : actual amount == target amount ? 100.00 : 0.00",
             "data-placement": "top"
         })
     }

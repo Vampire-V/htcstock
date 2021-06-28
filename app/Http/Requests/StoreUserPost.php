@@ -30,8 +30,8 @@ class StoreUserPost extends FormRequest
             'name:en' => 'required|max:255',
             // 'email' => 'required|email:rfc,dns',
             // 'phone' => 'required',
-            'division' => 'required',
-            'department' => 'required',
+            // 'division' => 'required',
+            // 'department' => 'required',
             // 'position' => 'required',
             // 'head_id' => 'required'
         ];

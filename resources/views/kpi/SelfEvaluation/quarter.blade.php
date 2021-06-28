@@ -156,8 +156,6 @@
 </div>
 @endisset
 
-
-
 {{-- Calculation Summary --}}
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
@@ -209,8 +207,6 @@
     </div>
 </div>
 @endsection
-
-
 
 @section('second-script')
 <script src="{{asset('assets\js\index.js')}}" defer></script>

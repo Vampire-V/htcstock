@@ -421,7 +421,7 @@ var findAchValue = (obj) => {
                 ach = parseFloat((2 - (obj.actual / obj.target)) * 100.00)
             }
             if (obj.rules.calculate_type === calculate.ZERO) {
-                ach = obj.actual <= obj.target ? 100.00 : 0.00
+                ach = obj.actual == obj.target ? 100.00 : 0.00
             }
         } else {
             if (obj.rules.calculate_type === calculate.POSITIVE) {

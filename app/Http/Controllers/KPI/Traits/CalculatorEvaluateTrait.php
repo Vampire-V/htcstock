@@ -44,7 +44,7 @@ trait CalculatorEvaluateTrait
                 $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
-                $item->ach = $ac <= $tar ? 100.00 : 0.00;
+                $item->ach = $ac == $tar ? 100.00 : 0.00;
             }
         } else {
             $ac = $item->actual_pc;

@@ -73,21 +73,21 @@ const display_template = () => {
 
                 let cellTargetPC = newRow.insertCell()
                 // console.log(element);
-                cellTargetPC.textContent = findTargetPercent(element,data_category).toFixed(2) + '%'
+                cellTargetPC.textContent = findTargetPercent(element, data_category).toFixed(2) + '%'
 
                 // if (table.id.substring(6) === `key-task`) {
-                    let cellDelete = newRow.insertCell()
-                    let div = document.createElement('div')
-                    div.className = 'custom-checkbox custom-control'
+                let cellDelete = newRow.insertCell()
+                let div = document.createElement('div')
+                div.className = 'custom-checkbox custom-control'
 
-                    let checkbox = newInput('checkbox', 'custom-control-input', `check${element.rule_id}`, '', element.rule_id)
+                let checkbox = newInput('checkbox', 'custom-control-input', `check${element.rule_id}`, '', element.rule_id)
 
-                    let label = document.createElement('label')
-                    label.classList.add('custom-control-label')
-                    label.htmlFor = element.rule_id
-                    div.appendChild(checkbox)
-                    div.appendChild(label)
-                    cellDelete.appendChild(div)
+                let label = document.createElement('label')
+                label.classList.add('custom-control-label')
+                label.htmlFor = element.rule_id
+                div.appendChild(checkbox)
+                div.appendChild(label)
+                cellDelete.appendChild(div)
                 // }
             }
             let sum_weight = data_category.reduce((total, cur) => total += cur.weight, 0.00)
@@ -115,7 +115,7 @@ const changeValue = (e) => {
         object[key] = key === e.name ? parseFloat(e.value) : object[key]
     }
     // object.target_pc = findTargetPercent(object,evaluateForm.detail)
-    e.parentElement.parentElement.cells[7].textContent = findTargetPercent(object,evaluateForm.detail).toFixed(2) + '%'
+    e.parentElement.parentElement.cells[7].textContent = findTargetPercent(object, evaluateForm.detail).toFixed(2) + '%'
     // let table = e.offsetParent.offsetParent
     let sum = evaluateForm.detail.reduce((total, cur) => cur.rules.category_id === object.rules.category_id ? total += cur.weight : total, 0.00)
     e.offsetParent.parentNode.parentNode.parentNode.tFoot.lastElementChild.cells[5].textContent = `${sum.toFixed(2)}%`
@@ -141,7 +141,12 @@ const changeTemplate = (e) => {
                         detail.rule_id = element.rule_id
                         detail.rules = Object.create(element.rules)
                         detail.target = typeof element.target === 'undefined' ? element.target_config : element.target
-                        detail.target_pc = findTargetPercent(element,res.data.data).toFixed(2)
+                        if (!element.rules.parent) {
+                            console.log('check parent rule...');
+                            console.log(element.rules, res.data.data)
+                        }
+
+                        detail.target_pc = findTargetPercent(element, res.data.data).toFixed(2)
                         detail.actual = typeof element.actual === 'undefined' ? 0.00 : element.actual
                         detail.max = element.max_result
                         detail.weight = element.weight
@@ -289,12 +294,12 @@ const addKeyTask = (e) => {
                     detail.target = 0.00
                     detail.weight = 0.00
                     detail.weight_category = 0.00
-                }else{
+                } else {
                     detail.target = row.target
                     detail.weight = row.weight
                     detail.weight_category = row.weight_category
                 }
-                
+
                 evaluateForm.detail.push(detail)
                 e.offsetParent.querySelector('.close').click()
             }

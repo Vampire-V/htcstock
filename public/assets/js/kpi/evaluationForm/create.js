@@ -152,6 +152,7 @@ const changeTemplate = (e) => {
                 }
             })
             .catch(error => {
+                console.log(error);
                 toast(error.response.data.message, error.response.data.status)
                 toastClear()
                 console.log(error.response.data)

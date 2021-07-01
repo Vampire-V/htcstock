@@ -172,20 +172,17 @@ class SelfEvaluationController extends Controller
 
             if ($request->next) {
                 # send mail to Manger
-                // dd($evaluate->nextlevel->approveBy->email);
+                if (!$evaluate->nextlevel->exists) {
+                    DB::rollBack();
+                    Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
+                    return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
+                }
                 $evaluate->status = KPIEnum::on_process;
-                $evaluate->save();
                 Mail::to($evaluate->nextlevel->approveBy->email)->send(new EvaluationSelfMail($evaluate));
-                // $user_approve = $this->userApproveService->findNextLevel($evaluate);
-                // if (!$user_approve->exists) {
-                //     DB::rollBack();
-                //     Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
-                //     return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
-                // }
             } else {
                 $evaluate->status = KPIEnum::draft;
-                $evaluate->save();
             }
+            $evaluate->save();
             DB::commit();
             return $this->successResponse(new EvaluateResource($evaluate->fresh()), "send mail to ".$evaluate->nextlevel->approveBy->name, 201);
         } catch (\Exception $e) {

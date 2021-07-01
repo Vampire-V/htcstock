@@ -31,8 +31,10 @@
                 @auth
                 <a href="{{ route('logout') }}" class="w3-bar-item w3-button w3-hide-small" onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();"><i class="fa fa-user"></i> LOGOUT</a>
+                @can('super-admin')
                 <a href="{{ url('log-viewer') }}" class="w3-bar-item w3-button w3-hide-small"><i
-                        class="fa fa-industry"></i>LOG-VIEWER</a>
+                    class="fa fa-industry"></i>LOG-VIEWER</a>
+                @endcan
                 @else
                 <a href="{{ route('login') }}" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-user"></i>
                     LOGIN</a>

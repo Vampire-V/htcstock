@@ -38,18 +38,20 @@ class StaffDataController extends Controller
     public function index(Request $request)
     {
         $query = $request->all();
-        $selectDepartment = \collect($request->department ?? \auth()->user()->department_id);
-        $selectPosition = \collect($request->position ?? \auth()->user()->positions_id);
-        $selectDivision = \collect($request->division ?? \auth()->user()->divisions_id);
+        $selectDepartment = \collect($request->department);
+        $selectPosition = \collect($request->position);
+        $selectDivision = \collect($request->division);
+        $selectUser = \collect($request->users);
         try {
             $users = $this->userService->filter($request);
+            $dropdown_users = $this->userService->dropdown();
             $divisions = $this->divisionService->dropdown();
             $departments = $this->departmentService->dropdown();
             $positions = $this->positionService->dropdown();
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.EvaluationForm.index', \compact('users', 'divisions', 'departments', 'positions', 'query', 'selectDivision', 'selectDepartment', 'selectPosition'));
+        return \view('kpi.EvaluationForm.index', \compact('users', 'divisions', 'departments', 'positions', 'query', 'selectDivision', 'selectDepartment', 'selectPosition', 'dropdown_users', 'selectUser'));
     }
 
     /**

@@ -31,6 +31,21 @@
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
+                            <label for="Users">User :</label>
+                            <select class="form-control form-control-sm" id="users" name="users[]"
+                                multiple>
+                                @isset($dropdown_users)
+                                @foreach ($dropdown_users as $item)
+                                <option value="{{$item->id}}" @if ($selectUser->contains($item->id))
+                                    selected
+                                    @endif>{{$item->name}}</option>
+                                @endforeach
+                                @endisset
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-3 mb-3">
                             <label for="division">Division :</label>
                             <select class="form-control form-control-sm" id="division" name="division[]"
                                 multiple>

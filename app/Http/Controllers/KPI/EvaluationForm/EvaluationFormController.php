@@ -62,14 +62,19 @@ class EvaluationFormController extends Controller
     public function index(Request $request)
     {
         $query = $request->all();
+        // 'selectDepartment', 'selectPosition',
+        $selectDepartment = \collect([$request->division]);
+        $selectPosition = \collect([$request->position]);
+        $selectUser = \collect([$request->users]);
         try {
             $users = $this->userService->filter($request);
             $departments = $this->departmentService->dropdown();
             $positions = $this->positionService->dropdown();
+            $dropdown_users = $this->userService->dropdown();
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.EvaluationForm.index', \compact('users', 'departments', 'positions', 'query', 'selectDepartment', 'selectPosition'));
+        return \view('kpi.EvaluationForm.index', \compact('users', 'departments', 'positions', 'query', 'selectDepartment', 'selectPosition', 'dropdown_users'));
     }
 
     /**

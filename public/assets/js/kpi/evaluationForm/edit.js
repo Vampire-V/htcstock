@@ -39,7 +39,6 @@
                 } else {
                     pageDisable()
                 }
-                console.log(evaluate);
                 $("#validationTemplate").val(evaluate.template_id)
                 toastClear()
             })

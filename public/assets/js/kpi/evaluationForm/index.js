@@ -4,6 +4,11 @@
     document.addEventListener('DOMContentLoaded', function () {
         // Supporting Documents
         
+        $("#users").select2({
+            placeholder: 'Select Users',
+            allowClear: true
+        })
+
         $("#division").select2({
             placeholder: 'Select Division',
             allowClear: true

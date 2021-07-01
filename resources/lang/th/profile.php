@@ -18,8 +18,8 @@ return [
     'email' => 'ที่อยู่อีเมล',
     'phone' => 'โทรศัพท์',
     'manager' => 'ผู้จัดการ',
-    'division' => 'แผนก',
-    'department' => 'สาขา',
+    'division' => 'ฝ่าย',
+    'department' => 'แผนก',
     'position' => 'ตำแหน่ง'
 
 ];

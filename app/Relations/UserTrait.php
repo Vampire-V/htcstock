@@ -10,6 +10,7 @@ use App\Models\KPI\Rule;
 use App\Models\KPI\SettingAction;
 use App\Models\KPI\TargetPeriod;
 use App\Models\KPI\Template;
+use App\Models\KPI\UserApprove;
 use App\Models\Legal\LegalApproval;
 use App\Models\Legal\LegalApprovalDetail;
 use App\Models\Legal\LegalContract;
@@ -107,5 +108,10 @@ trait UserTrait
     public function setting_actions()
     {
         return $this->belongsToMany(SettingAction::class,'kpi_setting_action_user');
+    }
+
+    public function user_approves()
+    {
+        return $this->hasMany(UserApprove::class)->orderBy('level');
     }
 }

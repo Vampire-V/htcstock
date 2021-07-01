@@ -46,6 +46,13 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
         'head_id' => 'int'
     ];
 
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    // protected $with = ['user_approves'];
+
     public function scopeFilter(Builder $builder, $request)
     {
         return (new UserFilter($request))->filter($builder);

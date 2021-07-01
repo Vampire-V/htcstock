@@ -206,3 +206,66 @@ const postAttachAction = (form,id) => axios.post(`/kpi/for-eddy/attach/action/${
 const postDetachAction = (form,id) => axios.post(`/kpi/for-eddy/detach/action/${id}`,form)
 
 const getUserEvaluate = (filter) => axios.get(`/kpi/for-eddy/user/evaluates`,filter)
+
+// Operation
+
+// API
+const addRoleApi = (user, roles) => {
+    return axios.post(`/admin/${user}/addrole`, {
+        roles: roles
+    })
+}
+
+const removeRoleApi = (user, role) => {
+    return axios.delete(`/admin/${user}/removerole`, {
+        data: {
+            role: role
+        }
+    })
+}
+
+const addSystemApi = (user, system) => {
+    console.log(system)
+    return axios.post(`/admin/${user}/addsystem`, {
+        system: system
+    })
+}
+
+const removeSystemApi = (user, system) => {
+    return axios.delete(`/admin/${user}/removesystem`, {
+        data: {
+            system: system
+        }
+    })
+}
+
+const postUserApproveKPI = (form,id) => axios({
+    method: 'POST',
+    responseType: 'json',
+    url: `/admin/create/user/${id}/approve`,
+    data: form
+})
+
+const putUserApproveKPI = (form,id) => axios({
+    method: 'PUT',
+    responseType: 'json',
+    url: `/admin/update/user/${id}/approve`,
+    data: form
+})
+
+const deleteUserApproveKPI = (form, id) => axios({
+    method: 'DELETE',
+    responseType: 'json',
+    url: `/admin/delete/user/${id}/approve`,
+    data: form
+})
+
+const postUserCopyApproveKPI = (form,id) => axios({
+    method: 'POST',
+    responseType: 'json',
+    url: `/admin/copy/user/${id}/approve`,
+    data: form
+})
+
+// dropdows
+const getusers = () => axios.get(`/users/dropdown`)

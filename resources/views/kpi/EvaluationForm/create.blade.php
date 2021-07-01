@@ -238,9 +238,6 @@
 @endsection
 
 @section('second-script')
-<script src="{{asset('assets\js\index.js')}}" defer>
-    // all method 
-</script>
 <script src="{{asset('assets\js\kpi\index.js')}}" defer>
     // all method KPI 
 </script>

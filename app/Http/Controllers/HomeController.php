@@ -18,6 +18,7 @@ class HomeController extends Controller
     {
         try {
             $systems = Auth::user()->systems;
+            \session()->put('locale',Auth::user()->locale);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }

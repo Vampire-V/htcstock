@@ -17,6 +17,7 @@
         defer></script> --}}
 
     {{-- <script src="https://unpkg.com/axios/dist/axios.min.js" defer></script> --}}
+    <script src="{{asset('assets/js/Sortable/Sortable.min.js')}}" referrerpolicy="no-referrer"></script>
     <script src="{{asset('assets/js/axios/axios.min.js')}}" defer></script>
     <script src="{{ asset('assets/js/template/app.js') }}" defer></script>
     <script src="{{ asset('assets/js/api/index.js') }}" defer></script>
@@ -41,7 +42,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.1/css/OverlayScrollbars.css"
         integrity="sha512-Ho1L8FTfzcVPAlvfkL1BV/Lmy1JDUVAP82/LkhmKbRX5PnQ7CNDHAUp2GZe7ybBpovS+ssJDf+SlBOswrpFr8g=="
         crossorigin="anonymous" /> --}}
-        <link rel="stylesheet" href="{{asset('assets/css/OverlayScrollbars.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/OverlayScrollbars.css')}}">
     @yield('style')
 </head>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enum\UserEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ALL\UserResource;
 use App\Models\Department;
 use App\Models\Division;
 use App\Models\GroupDivision;
@@ -16,6 +17,7 @@ use App\Models\User;
 use App\Services\IT\Interfaces\DivisionServiceInterface;
 use App\Services\IT\Interfaces\PositionServiceInterface;
 use App\Services\IT\Interfaces\SystemServiceInterface;
+use App\Services\KPI\Service\UserApproveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -24,19 +26,15 @@ use Illuminate\Support\Facades\Http;
 
 class UsersController extends Controller
 {
-    protected $userService;
-    protected $rolesService;
-    protected $departmentService;
-    protected $systemService;
-    protected $divisionService;
-    protected $positionService;
+    protected $userService, $rolesService, $departmentService, $systemService, $divisionService, $positionService, $userApproveService;
     public function __construct(
         UserServiceInterface $userServiceInterface,
         RoleServiceInterface $rolesServiceInterface,
         DepartmentServiceInterface $departmentServiceInterface,
         SystemServiceInterface $systemServiceInterface,
         DivisionServiceInterface $divisionServiceInterface,
-        PositionServiceInterface $positionServiceInterface
+        PositionServiceInterface $positionServiceInterface,
+        UserApproveService $userApproveService
     ) {
         $this->userService = $userServiceInterface;
         $this->rolesService = $rolesServiceInterface;
@@ -44,6 +42,7 @@ class UsersController extends Controller
         $this->systemService = $systemServiceInterface;
         $this->divisionService = $divisionServiceInterface;
         $this->positionService = $positionServiceInterface;
+        $this->userApproveService = $userApproveService;
     }
 
     /**
@@ -83,7 +82,9 @@ class UsersController extends Controller
             if (Gate::denies('superadmin-admin') && Gate::denies('admin-kpi')) {
                 return \redirect()->back()->with('error', "No authorization...");
             }
-            $user = $this->userService->find($id);
+            $user = User::with(['user_approves','department', 'divisions', 'positions'])->where('id',$id)->first();
+            // $this->userService->find($id);
+            // dd($user);
             $userRoles = $user->roles()->get();
             $userSystems = $user->systems()->get();
 
@@ -180,7 +181,7 @@ class UsersController extends Controller
                 }
                 User::whereNotIn('username', [...$list_users])->update(['resigned' => 1]); //update user ที่ออกไปแล้ว
                 $all_user = User::NotResigned()->get();
-                $systems = System::whereNotIn('slug', ['legal','it'])->get();
+                $systems = System::whereNotIn('slug', ['legal', 'it'])->get();
                 $roles = Role::whereNotIn('slug', [UserEnum::SUPERADMIN, UserEnum::ADMINIT, UserEnum::ADMINLEGAL, UserEnum::USERLEGAL, UserEnum::ADMINKPI])->get();
 
                 foreach ($all_user as $staff) {
@@ -226,10 +227,10 @@ class UsersController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse($e->getMessage(),500);
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return $this->successResponse(true,"add role to user",200);
+        return $this->successResponse(true, "add role to user", 200);
     }
 
     public function removerole(Request $request, $id)
@@ -240,10 +241,10 @@ class UsersController extends Controller
             $user->roles()->detach($request->role);
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse($e->getMessage(),500);
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return $this->successResponse(true,"remove role for user",200);
+        return $this->successResponse(true, "remove role for user", 200);
     }
 
     public function addsystem(Request $request, $id)
@@ -257,10 +258,10 @@ class UsersController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse($e->getMessage(),500);
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return $this->successResponse(true,"add system to user",200);
+        return $this->successResponse(true, "add system to user", 200);
     }
 
     public function removesystem(Request $request, $id)
@@ -271,19 +272,119 @@ class UsersController extends Controller
             $user->systems()->detach($request->system);
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse($e->getMessage(),500);
+            return $this->errorResponse($e->getMessage(), 500);
         }
         DB::commit();
-        return $this->successResponse(true,"remove system for user",200);
+        return $this->successResponse(true, "remove system for user", 200);
     }
 
     public function operations()
     {
         try {
-            $users = User::whereHas('roles',fn($query) => $query->whereIn('role_id',[6]))->get();
+            $users = User::whereHas('roles', fn ($query) => $query->whereIn('role_id', [6]))->get();
         } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(),500);
+            return $this->errorResponse($e->getMessage(), 500);
         }
-        return $this->successResponse($users,'get operation all',200);
+        return $this->successResponse($users, 'get operation all', 200);
+    }
+
+    public function dropdown()
+    {
+        try {
+            $users = $this->userService->dropdown();
+            return $this->successResponse($users, 'get user dropdown', 200);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    public function store_approve(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $users = [];
+            $user = User::with('user_approves')->where('id',$id)->first();
+            $level_start = $user->user_approves->count() + 1;
+            for ($i = 0; $i < count($request->users); $i++) {
+                $item = $request->users[$i];
+                $users[] = ['user_approve' => \intval($item), 'level' => $i + $level_start];
+            }
+
+            $user->user_approves()->createMany($users);
+            DB::commit();
+            $new = User::with('user_approves')->where('id',$id)->first();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+        return $this->successResponse($new, "add level approved", 200);
+    }
+
+    public function update_approve(Request $request, $id)
+    {
+        if (!$request->users) {
+            return $this->errorResponse("no information...", 500);
+        }
+        DB::beginTransaction();
+        try {
+            $length = count($request->users);
+            for ($i = 0; $i < $length; $i++) {
+                $item = $request->users[$i];
+                if (!$this->userApproveService->update(['level' => $item['level']], $item['id'])) {
+                    DB::rollBack();
+                    return $this->errorResponse("ไม่สามารถ แก้ไข user approve : " . $item['id'] . " นี้ได้", 500);
+                }
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+        return $this->successResponse(true, "Updated success.", 200);
+    }
+
+    public function delete_approve(Request $request, $id)
+    {
+        if (!$request->has('user_approve')) {
+            return $this->errorResponse("ไม่มี ข้อมูล ที่จะ ลบ", 500);
+        }
+        DB::beginTransaction();
+        try {
+            if (!$this->userApproveService->destroy($request->user_approve)) {
+                return $this->errorResponse("ไม่มี ข้อมูล ที่จะ ลบ", 500);
+            }
+            $user = $this->userService->find($id);
+            $user->user_approves->each(function ($item, $key) {
+                $item->level = $key + 1;
+                $item->save();
+            });
+            DB::commit();
+            return $this->successResponse(true, "Deleted success.", 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    public function copy_approve(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $to = $request->users;
+            $user = $this->userService->find($id);
+            $user->user_approves->each(function ($item) use ($to) {
+                foreach ($to as $key => $value) {
+                    $new = $item->replicate()->fill([
+                        'user_id' => intval($value)
+                    ]);
+                    $new->save();
+                }
+            });
+            DB::commit();
+            return $this->successResponse(true, "Copy success.", 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 }

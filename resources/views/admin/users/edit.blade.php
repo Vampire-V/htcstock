@@ -3,7 +3,17 @@
 @section('sidebar')
 @include('includes.sidebar.admin');
 @stop
+@section('style')
+<style>
+    label>span {
+        color: red;
+    }
 
+    li > span {
+        text-align: right;
+    }
+</style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -150,13 +160,15 @@
             <div class="card-header">KPI Level approve
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <button class="btn btn-focus" data-toggle="modal" data-target=".bd-role-modal-sm">Add</button>
-                        <button class="btn btn-focus" data-toggle="modal" data-target=".bd-role-modal-sm">Copy To</button>
+                        <button class="btn btn-sm btn-primary mr-2" data-toggle="modal" id="user-approve-modal"
+                            data-toggle="modal" data-target="#lv-approve-modal">Add</button>
+                        <button class="btn btn-sm btn-alternate" data-toggle="modal"
+                            data-target="#copy-to-modal">Copy To</button>
                     </div>
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="table-role">
+                <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="table-approve">
                     <thead>
                         <tr>
                             <th class="text-center">#</th>
@@ -165,7 +177,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                     </tbody>
                 </table>
             </div>
@@ -197,7 +209,7 @@
                         @foreach ($userRoles as $key => $item)
                         <tr>
                             <td class="text-center text-muted"><button onclick="removeRole({{$user->id}},{{$item->id}})"
-                                    class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i
+                                    class="mr-2 btn-icon btn-icon-only btn-sm btn btn-outline-danger"><i
                                         class="pe-7s-trash btn-icon-wrapper"> </i></button>
                             </td>
                             <td class="text-center">
@@ -236,7 +248,7 @@
                         <tr>
                             <td class="text-center text-muted"><button
                                     onclick="removeSystem({{$user->id}},{{$item->id}})"
-                                    class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i
+                                    class="mr-2 btn-icon btn-icon-only btn-sm btn btn-outline-danger"><i
                                         class="pe-7s-trash btn-icon-wrapper"> </i></button>
                             </td>
                             <td class="text-center">
@@ -258,8 +270,73 @@
 @stop
 
 @section('modal')
-<!-- Role add user modal -->
+<!-- Level Approve user modal -->
+<div class="modal fade" id="lv-approve-modal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="LevelApproveModalTitle">Add Level Approve</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="reload" class="reload"></div>
+                <form action="#" method="POST">
+                    <div class="form-row">
+                        <div class="col-md-12 mb-12">
+                            <label for="validationRole" class="">{{ __('User') }}
+                                <span>(เลือกหลายคนได้นะ)</span></label>
+                            <select class="form-control-sm form-control js-select-user-multiple" id="user" name="user[]"
+                                multiple>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="addLvApprove()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Copy level approve to user orther modal -->
+<div class="modal fade" id="copy-to-modal" tabindex="-1" role="dialog" aria-labelledby="copyToModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="copyToModalLabel">Copy To</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="reload" class="reload"></div>
+                <form action="#" method="POST">
+                    <div class="form-row">
+                        <div class="col-md-12 mb-12">
+                            <label for="validationRole" class="">{{ __('User') }}
+                                <span>(เลือกหลายคนได้นะ)</span></label>
+                            <select class="form-control-sm form-control js-select-user-copy-multiple" id="user_copy" name="user_copy[]"
+                                multiple>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="copy_to()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Role add user modal -->
 <div class="modal fade bd-role-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -297,7 +374,6 @@
 </div>
 
 <!-- System add user modal -->
-
 <div class="modal fade bd-system-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -335,5 +411,11 @@
 </div>
 @endsection
 @section('second-script')
+<script src="{{asset('assets\js\kpi\index.js')}}" defer>
+    // all method KPI 
+</script>
+<script>
+    var user = {!!json_encode($user)!!}
+</script>
 <script src="{{asset('assets\js\admin\user.js')}}" defer></script>
 @endsection

@@ -51,13 +51,20 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth', 
         'permissions' => 'PermissionsController',
         'roles' => 'RoleController'
     ]);
+    
     Route::post('{id}/addrole', 'UsersController@addrole')->name('users.addrole');
     Route::delete('{user}/removerole', 'UsersController@removerole')->name('users.removerole');
     Route::post('{id}/addsystem', 'UsersController@addsystem')->name('users.addsystem');
     Route::delete('{user}/removesystem', 'UsersController@removesystem')->name('users.removesystem');
     Route::post('uploadfileequipment', 'AccessoriesController@uploadfileequipment')->name('uploadfileequipment');
+
+    Route::post('create/user/{id}/approve', 'UsersController@store_approve')->name('users.store_approve');
+    Route::put('update/user/{id}/approve', 'UsersController@update_approve')->name('users.update_approve');
+    Route::delete('delete/user/{id}/approve', 'UsersController@delete_approve')->name('users.delete_approve');
+    Route::post('copy/user/{id}/approve', 'UsersController@copy_approve')->name('users.copy_approve');
 });
 Route::get('/operations','Admin\UsersController@operations');
+Route::get('users/dropdown','Admin\UsersController@dropdown')->name('users.dropdown');
 Route::post('upload', 'UploadController@store');
 Route::delete('upload', 'UploadController@destroy');
 require __DIR__ . '/itstock.php';

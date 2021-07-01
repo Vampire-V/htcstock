@@ -7,6 +7,7 @@ var calculate = {
         NEW: "New",
         READY: "Ready",
         DRAFT: "Draft",
+        ONPROCESS: "On Process",
         SUBMITTED: "Submitted",
         APPROVED: "Approved"
     },
@@ -40,7 +41,9 @@ class EvaluateForm {
         comment = null,
         detail = [],
         remove = [],
-        next = false, ) {
+        next = false,
+        next_level = null,
+        status = null ) {
         this.template = template
         this.minone = minone
         this.maxone = maxone
@@ -58,6 +61,8 @@ class EvaluateForm {
         this.detail = detail
         this.remove = remove
         this.next = next
+        this.next_level = next_level
+        this.status = status
     }
 }
 
@@ -111,6 +116,8 @@ var setEvaluate = (datas) => {
     evaluateForm.ach_omg = datas.ach_omg
 
     evaluateForm.comment = datas.comment
+    evaluateForm.status = datas.status
+    evaluateForm.next_level = datas.next_level
     evaluateForm.detail = setDetail(datas.detail).detail
     return evaluateForm
 }

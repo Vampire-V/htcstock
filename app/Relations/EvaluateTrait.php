@@ -3,9 +3,9 @@
 namespace App\Relations;
 
 use App\Models\KPI\EvaluateDetail;
-use App\Models\KPI\Rule;
 use App\Models\KPI\TargetPeriod;
 use App\Models\KPI\Template;
+use App\Models\KPI\UserApprove;
 use App\Models\User;
 
 trait EvaluateTrait
@@ -40,5 +40,10 @@ trait EvaluateTrait
     public function evaluateDetail()
     {
         return $this->hasMany(EvaluateDetail::class,'evaluate_id','id');
+    }
+
+    public function nextlevel()
+    {
+        return $this->belongsTo(UserApprove::class,'next_level')->withDefault();
     }
 }

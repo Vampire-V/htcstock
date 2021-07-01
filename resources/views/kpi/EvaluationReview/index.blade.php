@@ -32,7 +32,7 @@
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
-                        <div class="col-md-2 mb-3">
+                        {{-- <div class="col-md-2 mb-3">
                             <label for="department">Department :</label>
                             <input type="text" class="form-control form-control-sm" id="validationDepartment"
                                 value="{{$user->department->name}}" readonly>
@@ -41,7 +41,7 @@
                             <label for="position">Position :</label>
                             <input type="text" class="form-control form-control-sm" id="validationPosition"
                                 value="{{$user->positions->name}}" readonly>
-                        </div>
+                        </div> --}}
                         <div class="col-md-2 mb-3">
                             <label for="status">Status :</label>
                             <select name="status[]" id="validationStatus" class="form-control-sm form-control" multiple>

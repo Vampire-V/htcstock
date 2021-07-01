@@ -113,9 +113,8 @@ class LoginController extends Controller
                 Auth::login($user);
                 return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
                 break;
-            case KPIEnum::submit:
-                $user = $this->userService->all()->where('username',$evaluate->user->head_id)->firstOrFail();
-                Auth::login($user);
+            case KPIEnum::submit || KPIEnum::on_process:
+                Auth::login($evaluate->nextlevel->approveBy);
                 return \redirect()->route('kpi.evaluation-review.edit', $evaluate->id);
                 break;
             default:

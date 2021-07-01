@@ -17,6 +17,7 @@ use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
 use App\Services\KPI\Service\SettingActionService;
+use App\Services\KPI\Service\UserApproveService;
 // use Arcanedev\LogViewer\Entities\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,9 +27,9 @@ use Illuminate\Support\Facades\Mail;
 class EvaluationFormController extends Controller
 {
 
-    protected $departmentService, $positionService, $userService, $targetPeriodService, $ruleTemplateService, 
-    $templateService, $categoryService, $ruleService, $evaluateService, $evaluateDetailService, 
-    $setting_action_service;
+    protected $departmentService, $positionService, $userService, $targetPeriodService, $ruleTemplateService,
+        $templateService, $categoryService, $ruleService, $evaluateService, $evaluateDetailService,
+        $setting_action_service, $userApproveService;
     public function __construct(
         DepartmentServiceInterface $departmentServiceInterface,
         PositionServiceInterface $positionServiceInterface,
@@ -40,7 +41,8 @@ class EvaluationFormController extends Controller
         TemplateServiceInterface $templateServiceInterface,
         RuleCategory $categoryServiceInterface,
         RuleServiceInterface $ruleServiceInterface,
-        SettingActionService $settingActionService
+        SettingActionService $settingActionService,
+        UserApproveService $userApproveService
     ) {
         $this->departmentService = $departmentServiceInterface;
         $this->positionService = $positionServiceInterface;
@@ -53,6 +55,7 @@ class EvaluationFormController extends Controller
         $this->categoryService = $categoryServiceInterface;
         $this->ruleService = $ruleServiceInterface;
         $this->setting_action_service = $settingActionService;
+        $this->userApproveService = $userApproveService;
     }
     /**
      * Display a listing of the resource.
@@ -108,10 +111,10 @@ class EvaluationFormController extends Controller
     {
         DB::beginTransaction();
         try {
-            if ($request->next && !$this->setting_action_service->isNextStep('send-to-user')) {
+            if ($request->next && !$this->setting_action_service->isNextStep(KPIEnum::assign)) {
                 return $this->errorResponse('เลยเวลาที่กำหนด', 500);
             }
-            
+
             $evaluate = $this->evaluateService->isDuplicate($staff, $period);
             if (!$evaluate) {
                 $evaluate = $this->evaluateService->create(
@@ -132,6 +135,7 @@ class EvaluationFormController extends Controller
                         'total_weight_omg' => $request->total_weight_omg
                     ]
                 );
+
                 $detail = [];
                 foreach ($request->detail as $key => $value) {
                     $rule = $this->evaluateDetailService->findLastRule($value['rule_id']);
@@ -150,9 +154,17 @@ class EvaluationFormController extends Controller
                 }
 
                 if ($request->next) {
+                    $user_approve = $this->userApproveService->findNextLevel($evaluate);
+                    if (!$user_approve->exists) {
+                        DB::rollBack();
+                        Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
+                        return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
+                    }
+                    $evaluate->next_level = $user_approve->id;
+                    $evaluate->save();
                     # send mail to staff
                     Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
-                    Log::notice("User : " . \auth()->user()->id . " = Send evaluate mail : id = " . $evaluate->id);
+                    Log::notice("User : " . \auth()->user()->name . " = Send evaluate mail : id = " . $evaluate->id);
                 }
             }
         } catch (\Exception $e) {
@@ -213,15 +225,23 @@ class EvaluationFormController extends Controller
     {
         DB::beginTransaction();
         try {
-            if ($request->next && !$this->setting_action_service->isNextStep('send-to-user')) {
+            if ($request->next && !$this->setting_action_service->isNextStep(KPIEnum::assign)) {
                 return $this->errorResponse('เลยเวลาที่กำหนด', 500);
             }
-            
+
             $evaluate = $this->evaluateService->findKeyEvaluate($staff, $period, $evaluate);
+
             if ($evaluate) {
+                $user_approve = $this->userApproveService->findNextLevel($evaluate);
+                if (!$user_approve->exists) {
+                    DB::rollBack();
+                    Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
+                    return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
+                }
                 // Update Header
                 $evaluate->template_id = $request->template;
                 $evaluate->status = $request->next ? KPIEnum::ready : KPIEnum::new;
+                $evaluate->next_level = $user_approve->id;
                 $evaluate->main_rule_condition_1_min = $request->minone;
                 $evaluate->main_rule_condition_1_max = $request->maxone;
                 $evaluate->main_rule_condition_2_min = $request->mintwo;
@@ -250,13 +270,13 @@ class EvaluationFormController extends Controller
 
                 if (count($detail) > 0) {
                     $evaluate->evaluateDetail()->createMany($detail);
-                    Log::notice("User : " . \auth()->user()->id . " = Created evaluate form : id = " . $evaluate->id);
+                    Log::notice("User : " . \auth()->user()->name . " = Created evaluate form : id = " . $evaluate->id);
                 }
 
                 if ($request->next) {
                     # send mail to staff
                     Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
-                    Log::notice("User : " . \auth()->user()->id . " = Send mail evaluate form  : id = " . $evaluate->id);
+                    Log::notice("User : " . \auth()->user()->name . " = Send mail evaluate form  : id = " . $evaluate->id);
                 }
             }
         } catch (\Exception $e) {
@@ -274,7 +294,7 @@ class EvaluationFormController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request,$staff,$period,$evaluate)
+    public function destroy(Request $request, $staff, $period, $evaluate)
     {
         DB::beginTransaction();
         try {
@@ -282,7 +302,7 @@ class EvaluationFormController extends Controller
             if ($item->status === KPIEnum::new) {
                 $this->evaluateService->destroy($evaluate);
                 $request->session()->flash('success',  ' has been remove');
-            }else{
+            } else {
                 return \redirect()->back()->with('error', "Error : This status cannot be deleted.");
             }
         } catch (\Exception $e) {

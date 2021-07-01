@@ -137,7 +137,7 @@ class SetActualController extends Controller
         $status_contain = collect([KPIEnum::draft, KPIEnum::ready]);
         DB::beginTransaction();
         try {
-            $check = $this->setting_action_service->isNextStep('set-actual');
+            $check = $this->setting_action_service->isNextStep(KPIEnum::set_value);
             if (!$check) {
                 return $this->errorResponse("เลยเวลาที่กำหนด", 500);
             }

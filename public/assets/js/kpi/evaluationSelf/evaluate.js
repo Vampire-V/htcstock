@@ -35,7 +35,6 @@
                     console.log(error.response.data)
                 })
                 .finally(() => {
-                    console.log(template,weight_group)
                     render_html()
                     if (evaluate.status !== status.READY && evaluate.status !== status.DRAFT) {
                         pageDisable()
@@ -152,7 +151,7 @@ var render_html = () => {
             head_weight.value = template[head_weight.name].toFixed(2)
         }
         let sum_weight = temp_rules.reduce((total, cur) => total += cur.weight, 0.00)
-        let sum_ach = temp_rules.reduce((total, cur) => total += cur.ach, 0.00)
+        // let sum_ach = temp_rules.reduce((total, cur) => total += cur.ach, 0.00)
         let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00)
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
         // table.tFoot.lastElementChild.cells[10].textContent = `${sum_ach.toFixed(2)}%`
@@ -276,7 +275,7 @@ const submitToManager = () => {
             let label_status = document.getElementsByClassName('card-header')[0].querySelector('span')
             if (res.status === 201) {
                 label_status.textContent = res.data.data.status
-                if (res.data.data.status === status.SUBMITTED) {
+                if (res.data.data.status !== status.READY && res.data.data.status !== status.DRAFT) {
                     pageDisable()
                 }
                 toast(res.data.message, res.data.status)
@@ -284,7 +283,7 @@ const submitToManager = () => {
         })
         .catch(error => {
             toast(error.response.data.message, error.response.data.status)
-            console.log(error.response.data.message)
+            console.log(error.response.data)
         })
         .finally(() => {
             evaluateForm.next = !evaluateForm.next

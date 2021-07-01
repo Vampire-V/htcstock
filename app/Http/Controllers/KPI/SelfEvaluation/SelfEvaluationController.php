@@ -20,6 +20,7 @@ use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
 use App\Services\KPI\Service\SettingActionService;
+use App\Services\KPI\Service\UserApproveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,7 @@ class SelfEvaluationController extends Controller
 {
     protected $evaluateService, $evaluateDetailService, $userService,
         $categoryService, $templateService, $ruleService, $periodService,
-        $ruleTemplateService, $setting_action_service;
+        $ruleTemplateService, $setting_action_service, $userApproveService;
     public function __construct(
         EvaluateServiceInterface $evaluateServiceInterface,
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
@@ -43,7 +44,8 @@ class SelfEvaluationController extends Controller
         RuleServiceInterface $ruleServiceInterface,
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
         RuleTemplateServiceInterface $ruleTemplateServiceInterface,
-        SettingActionService $settingActionService
+        SettingActionService $settingActionService,
+        UserApproveService $userApproveService
 
     ) {
         $this->evaluateService = $evaluateServiceInterface;
@@ -55,6 +57,7 @@ class SelfEvaluationController extends Controller
         $this->periodService = $targetPeriodServiceInterface;
         $this->ruleTemplateService = $ruleTemplateServiceInterface;
         $this->setting_action_service = $settingActionService;
+        $this->userApproveService = $userApproveService;
     }
     /**
      * Display a listing of the resource.
@@ -141,16 +144,17 @@ class SelfEvaluationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $message = KPIEnum::draft;
         $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft]);
         DB::beginTransaction();
         try {
 
             $evaluate = $this->evaluateService->find($id);
-            $check = $this->setting_action_service->isNextStep('set-actual');
+            $check = $this->setting_action_service->isNextStep(KPIEnum::set_value);
+
             if ($status_list->contains($evaluate->status) && !$check) {
                 return $this->errorResponse("เลยเวลาที่กำหนด", 500);
             }
+
             foreach ($request->detail as $value) {
                 $evaluate->evaluateDetail()
                     ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])
@@ -168,28 +172,26 @@ class SelfEvaluationController extends Controller
 
             if ($request->next) {
                 # send mail to Manger
-                if ($evaluate->user->head_id) {
-                    $evaluate->status = KPIEnum::submit;
-                    $evaluate->save();
-                    $message = KPIEnum::submit;
-                    $manager = $this->userService->getManager($evaluate->user);
-                    Mail::to($manager->email)->send(new EvaluationSelfMail($evaluate));
-                } else {
-                    $evaluate->status = KPIEnum::draft;
-                    $evaluate->save();
-                    $message = KPIEnum::draft . " You don't have a manager!";
-                    // $evaluate->user->head_id is null
-                }
+                // dd($evaluate->nextlevel->approveBy->email);
+                $evaluate->status = KPIEnum::on_process;
+                $evaluate->save();
+                Mail::to($evaluate->nextlevel->approveBy->email)->send(new EvaluationSelfMail($evaluate));
+                // $user_approve = $this->userApproveService->findNextLevel($evaluate);
+                // if (!$user_approve->exists) {
+                //     DB::rollBack();
+                //     Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
+                //     return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
+                // }
             } else {
                 $evaluate->status = KPIEnum::draft;
                 $evaluate->save();
             }
+            DB::commit();
+            return $this->successResponse(new EvaluateResource($evaluate->fresh()), "send mail to ".$evaluate->nextlevel->approveBy->name, 201);
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), 500);
         }
-        DB::commit();
-        return $this->successResponse(new EvaluateResource($evaluate->fresh()), "evaluate self status to : " . $message, 201);
     }
 
     /**

@@ -79,10 +79,9 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function reviewFilter(Request $request)
     {
         try {
-            return Evaluate::with(['user' => function ($query) {
-                $query->with(['department', 'positions'])->where('department_id', \auth()->user()->department_id);
-            }, 'targetperiod'])
-                ->whereIn('status', [KPIEnum::submit, KPIEnum::approved])
+            return Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod'])
+                ->whereHas('nextlevel', fn ($query) => $query->where('user_approve', \auth()->user()->id))
+                ->whereIn('status', [KPIEnum::on_process, KPIEnum::submit, KPIEnum::approved])
                 ->filter($request)->orderBy('created_at', 'desc')
                 ->get();
         } catch (\Throwable $th) {
@@ -130,7 +129,7 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function scoreFilter(Request $request): Collection
     {
         try {
-            return Evaluate::with('user.positions','user.divisions', 'evaluateDetail.rule.category', 'targetperiod')
+            return Evaluate::with('user.positions', 'user.divisions', 'evaluateDetail.rule.category', 'targetperiod')
                 ->whereIn('status', [KPIEnum::approved])
                 ->filter($request)
                 ->orderBy('user_id')
@@ -143,7 +142,7 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function forQuarterYear($user, $quarter, $year): Collection
     {
         try {
-            return Evaluate::with('user.positions','user.roles', 'evaluateDetail.rule.category', 'targetperiod')
+            return Evaluate::with('user.positions', 'user.roles', 'evaluateDetail.rule.category', 'targetperiod')
                 ->whereHas('targetperiod', fn ($query) => $query->where(['quarter' => $quarter, 'year' => $year]))
                 ->where(['user_id' => $user, 'status' => KPIEnum::approved])
                 ->get();

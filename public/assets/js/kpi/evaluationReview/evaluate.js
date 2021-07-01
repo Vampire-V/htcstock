@@ -10,6 +10,7 @@
         // let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         // validationForm(forms)
+        console.log(status);
         if (evaluate) {
             evaluateForm = await setEvaluate(evaluate)
         }
@@ -26,9 +27,12 @@
                 })
                 .finally(() => {
                     render_html()
-                    // if (evaluate.status !== status.READY && evaluate.status !== status.DRAFT) {
-                    //     pageDisable()
-                    // }
+                    // console.log(evaluateForm);
+                    if (evaluateForm.next_level.user_approve.id === auth.id && evaluateForm.status === status.ONPROCESS) {
+                        pageEnable()
+                    }else{
+                        pageDisable()
+                    }
                 })
         }
     }, false);
@@ -249,7 +253,11 @@ const reject = async (e) => {
                 let status = document.getElementsByClassName('card-header')[0].querySelector('span')
                 if (res.status === 201) {
                     status.textContent = res.data.data.status
-                    pageDisable()
+                    if (res.data.data.next_level.user_approve.id === auth.id && res.data.data.status === status.ONPROCESS) {
+                        pageDisable()
+                    }else{
+                        pageEnable()
+                    }
                     toast(res.data.message, res.data.status)
                 }
             })
@@ -272,7 +280,13 @@ const approve = (e) => {
             let status = document.getElementsByClassName('card-header')[0].querySelector('span')
             if (res.status === 201) {
                 status.textContent = res.data.data.status
-                pageDisable()
+                // console.log(res.data.data.next_level.user_approve.id , auth.id);
+                // console.log(res.data.data.status , status.ONPROCESS);
+                if (res.data.data.next_level.user_approve.id === auth.id && res.data.data.status === status.ONPROCESS) {
+                    pageDisable()
+                }else{
+                    pageEnable()
+                }
                 toast(res.data.message, res.data.status)
             }
         })

@@ -6,12 +6,14 @@ use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\KPI\EvaluateResource;
 use App\Mail\KPI\EvaluationReviewMail;
+use App\Mail\KPI\EvaluationSelfMail;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Service\SettingActionService;
+use App\Services\KPI\Service\UserApproveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,15 +22,16 @@ use Illuminate\Support\Facades\Mail;
 
 class EvaluateReviewController extends Controller
 {
-    protected $userService, $targetPeriodService, $evaluateService, $evaluateDetailService, 
-    $categoryService, $setting_action_service;
+    protected $userService, $targetPeriodService, $evaluateService, $evaluateDetailService,
+        $categoryService, $setting_action_service,$userApproveService;
     public function __construct(
         UserServiceInterface $userServiceInterface,
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
         EvaluateServiceInterface $evaluateServiceInterface,
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
         RuleCategoryServiceInterface $ruleCategoryServiceInterface,
-        SettingActionService $settingActionService
+        SettingActionService $settingActionService,
+        UserApproveService $userApproveService
     ) {
         $this->userService = $userServiceInterface;
         $this->targetPeriodService = $targetPeriodServiceInterface;
@@ -36,6 +39,7 @@ class EvaluateReviewController extends Controller
         $this->evaluateDetailService = $evaluateDetailServiceInterface;
         $this->categoryService = $ruleCategoryServiceInterface;
         $this->setting_action_service = $settingActionService;
+        $this->userApproveService = $userApproveService;
     }
     /**
      * Display a listing of the resource.
@@ -49,7 +53,7 @@ class EvaluateReviewController extends Controller
         $selectedYear = collect($request->year);
         $selectedPeriod = collect($request->period);
         $start_year = date('Y', strtotime('-10 years'));
-        $status_list = [KPIEnum::submit, KPIEnum::approved];
+        $status_list = [KPIEnum::on_process, KPIEnum::submit, KPIEnum::approved];
         try {
             $user = Auth::user();
             $months = $this->targetPeriodService->dropdown()->unique('name');
@@ -125,42 +129,66 @@ class EvaluateReviewController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $message = "";
-        $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft, KPIEnum::submit]);
+        $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft, KPIEnum::on_process, KPIEnum::submit]);
         DB::beginTransaction();
         try {
             $evaluate = $this->evaluateService->find($id);
-            $check = $this->setting_action_service->isNextStep('approved');
+
+            $check = $this->setting_action_service->isNextStep(KPIEnum::approve);
             if ($status_list->contains($evaluate->status) && !$check) {
                 return $this->errorResponse("เลยเวลาที่กำหนด", 500);
             }
+
             foreach ($request->detail as $value) {
                 $evaluate->evaluateDetail()
                     ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])
                     ->update(['actual' => $value['actual']]);
             }
-            $evaluate->status = $request->next ? KPIEnum::approved : KPIEnum::draft;
-            $evaluate->comment = $request->comment;
-            $evaluate->save();
-            Log::notice("User : " . \auth()->user()->id . " = Update evaluate review : id = " . $evaluate->id);
-
-
             if ($request->next) {
-                $message = KPIEnum::approved;
+                // Approved
+                $user_approve = $this->userApproveService->findNextLevel($evaluate);
+                if (!$user_approve->exists) {
+                    // Error
+                    DB::rollBack();
+                    Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
+                    return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
+                }
+
+                if ($this->userApproveService->isLastLevel($evaluate)) {
+                    // Level last
+                    $evaluate->status = KPIEnum::approved;
+                    Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
+                    Log::notice("User : " . \auth()->user()->name . " = Update evaluate review End process : id = " . $evaluate->id);
+                    $message = "Approved";
+                }else{
+                    // Next level
+                    $evaluate->status = KPIEnum::on_process;
+                    Mail::to($user_approve->approveBy->email)->send(new EvaluationReviewMail($evaluate));
+                    Log::notice("User : " . \auth()->user()->name . " = Update evaluate review next step : id = " . $evaluate->id);
+                    $message = "Next step send to ".$user_approve->approveBy->name;
+                }
+                $evaluate->next_level = $user_approve->id;
+                
                 # send mail to approved
             } else {
-                $message = KPIEnum::draft;
+                $user_approve = $this->userApproveService->findFirstLevel($evaluate->user_id);
+                $evaluate->status = KPIEnum::draft;
+                $evaluate->comment = $request->comment;
+                $evaluate->next_level = $user_approve->id;
+                
                 # send mail to reject
-                Mail::to($evaluate->user->email)->send(new EvaluationReviewMail($evaluate));
-                Log::notice("User : " . \auth()->user()->id . " = Send mail evaluate review : id = " . $evaluate->id);
+                Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
+                Log::notice("User : " . \auth()->user()->name . " = Send mail reject evaluate = " . $evaluate->id);
+                $message = "Reject to " . $evaluate->user->name;
             }
+            $evaluate->save();
+            DB::commit();
+            return $this->successResponse(new EvaluateResource($evaluate), $message, 201);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
             return $this->errorResponse($e->getMessage(), 500);
         }
-        DB::commit();
-        return $this->successResponse(new EvaluateResource($evaluate), "evaluate review status to : " . $message, 201);
     }
 
     /**

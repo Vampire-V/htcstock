@@ -9,6 +9,7 @@ abstract class KPIEnum extends BasicEnum
     const ready = 'Ready';
     const draft = 'Draft';
     const submit = 'Submitted';
+    const on_process = 'On Process';
     const approved = 'Approved';
 
     // calculate_type
@@ -25,4 +26,8 @@ abstract class KPIEnum extends BasicEnum
     const average = 'Average';
     const last_month = 'Last Month';
     const sum = 'Sum';
+
+    const assign = 'step-assign-user';
+    const set_value = 'step-set-value';
+    const approve = 'step-approve';
 }

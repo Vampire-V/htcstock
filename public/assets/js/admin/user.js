@@ -170,7 +170,8 @@ var render_approve_table = (table) => {
             class="mr-2 btn-icon btn-sm btn-icon-only btn btn-outline-danger" onclick="deleteLvApprove(${element.id})"><i
                 class="pe-7s-trash btn-icon-wrapper"> </i></button>`
         let cellName = row.insertCell()
-        cellName.textContent = findNameUser(element.user_approve).name
+        console.log(element);
+        cellName.textContent = findNameUser(element.approve_by).name
         let level = row.insertCell()
         level.textContent = element.level
     })

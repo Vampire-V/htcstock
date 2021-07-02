@@ -186,7 +186,7 @@ $('#lv-approve-modal').on('show.bs.modal', function (event) {
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
     var modal = $(this)
     // fetch rules filter
-    filters = [user.id]
+    filters = []
     store_level.forEach(item => filters.push(item.user_approve.id))
     getusers()
         .then(res => {

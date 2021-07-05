@@ -167,7 +167,7 @@
 
     <div class="tab-pane " id="tab-all" role="tabpanel">
         {{--  --}}
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-xl-6">
                 <div class="mb-3 card">
                     <div class="card-header-tab card-header-tab-animation card-header">
@@ -193,7 +193,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="row">
             <div class="col-xl-12">

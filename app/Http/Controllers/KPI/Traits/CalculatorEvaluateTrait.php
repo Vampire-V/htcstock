@@ -53,7 +53,7 @@ trait CalculatorEvaluateTrait
                 if ($ac <= 0.00) {
                     $item->ach = 0.00;
                 } else {
-                    $item->ach = ($ac / $tar) * 100.00;
+                    $item->ach = ($ac / $this->isZeroNew($tar)) * 100.00;
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {

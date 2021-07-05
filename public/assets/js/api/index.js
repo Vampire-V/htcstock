@@ -184,6 +184,7 @@ const getTemplate = (id) => axios({
     url: `/kpi/template/${id}`
 })
 
+// Dashboard report
 const getOperationReportScore = (filter) => axios.get('/kpi/operation/reportscore', filter)
 
 const getWeigthConfig = (filter) => axios.get('/kpi/weigth/config', filter)
@@ -192,7 +193,10 @@ const postUploadFile = (form, config) => axios.post('/upload', form, config)
 
 const evaluate_excel = (filter) => axios.get('/kpi/evaluate-report', filter)
 
-const getReportYourSelf = (year) => axios.get(`/kpi/dashboard/you-self/${year}`)
+const getReportStaffEvaluate = (year) => axios.get(`/kpi/dashboard/staff-evaluate-of-year/${year}/report`)
+
+const getReportRuleOfYear = (year) => axios.get(`/kpi/dashboard/rule-of-year/${year}/report`)
+// 
 
 // for eddy page 
 const getDeadLine = () => axios.get(`/kpi/for-eddy/config/deadline/dropdown`)

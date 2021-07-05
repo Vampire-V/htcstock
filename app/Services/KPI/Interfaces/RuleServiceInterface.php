@@ -22,5 +22,5 @@ interface RuleServiceInterface
     public function filter(Request $request);
 
     public function isName(string $var): bool;
-    public function rulesInEvaluationReport(string $year);
+    public function rulesInEvaluationReport($year);
 }

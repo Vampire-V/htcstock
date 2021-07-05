@@ -65,9 +65,9 @@
                                         onchange="search()">
                                         @foreach (range(date('Y')-5,date('Y')+5) as $year)
                                         <option value="{{$year}}" @if (intVal($selectedYear)===$year) selected @endif>
-                                    {{$year}}</option>
-                                    @endforeach
-                                    </select>
+                                {{$year}}</option>
+                                @endforeach
+                                </select>
                                 </form> --}}
                             </li>
                         </ul>
@@ -120,7 +120,7 @@
                                         <div class="col-md-3 mb-3">
                                             <label for="Degree">EMC Group</label>
                                             <select name="degree" id="degree" class="form-control-sm form-control"
-                                            onchange="search_score()">
+                                                onchange="search_score()">
                                                 <option value="N-1">N-1</option>
                                                 <option value="N-2">N-2</option>
                                                 <option value="N-3">N-3</option>
@@ -193,52 +193,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-6">
-                <div class="mb-3 card">
-                    <div class="card-header-tab card-header-tab-animation card-header">
-                        <div class="card-header-title">
-                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                            Evaluation Report Department
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-content">
-                            <div class="table-responsive" style="height: 110px;">
-                                @isset($ofDept)
-                                {{-- <table class="mb-0 table table-sm" id="table-dept-evaluation">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            @foreach ($ofDept as $item)
-                                            <th scope="col">{{$item->name}}</th>
-                                @endforeach
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">Target</th>
-                                        @foreach ($ofDept as $item)
-                                        <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target'))}}
-                                        </td>
-                                        @endforeach
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Actual</th>
-                                        @foreach ($ofDept as $item)
-                                        <td>{{$item->evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual'))}}
-                                        </td>
-                                        @endforeach
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                </tfoot>
-                                </table> --}}
-                                @endisset
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="row">
@@ -255,46 +209,16 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive" style="height:300px">
-                                {{-- <table class="table table-sm table-bordered">
+                                <table class="mb-0 table table-sm" id="table-rule-evaluation">
                                     <thead class="thead-dark">
-                                        <tr>
-                                            <th rowspan="2" style="vertical-align : middle;">#</th>
-                                            <th rowspan="2" style="vertical-align : middle;">full name</th>
-                                            @isset($periods)
-                                            @foreach ($periods as $item)
-                                            <th colspan="2">{{$item->name}}</th>
-                                @endforeach
-                                @endisset
-                                </tr>
-                                <tr>
-                                    @isset($periods)
-                                    @foreach ($periods as $item)
-                                    <th>target</th>
-                                    <th>actual</th>
-                                    @endforeach
-                                    @endisset
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    @isset($rules)
-                                    @foreach ($rules as $key => $item)
-                                    <tr>
-                                        <th scope="row">{{$key+1}}</th>
-                                        <td class="truncate" data-toggle="tooltip" title="{{$item->name}}">
-                                            {{$item->name}}</td>
-                                        @isset($item->total)
-                                        @foreach ($item->total as $total)
-                                        <td>{{$total->target}}</td>
-                                        <td>{{$total->actual}}</td>
-                                        @endforeach
-                                        @endisset
-                                    </tr>
-                                    @endforeach
-                                    @endisset
-                                </tbody>
-                                <tfoot>
-                                </tfoot>
-                                </table> --}}
+                                    </thead>
+                                    <tbody>
+                                        <div id="reload" class="reload"></div>
+                                    </tbody>
+                                    <tfoot>
+                                    </tfoot>
+                                </table>
+                                
                             </div>
                         </div>
                     </div>
@@ -316,6 +240,15 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive" style="height: 300px;">
+                                <table class="mb-0 table table-sm" id="table-staff-evaluation">
+                                    <thead class="thead-dark">
+                                    </thead>
+                                    <tbody>
+                                        <div id="reload" class="reload"></div>
+                                    </tbody>
+                                    <tfoot>
+                                    </tfoot>
+                                </table>
                                 {{-- <table class="table table-sm table-bordered">
                                     <thead class="thead-dark">
                                         <tr>

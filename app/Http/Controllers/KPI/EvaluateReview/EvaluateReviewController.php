@@ -53,7 +53,7 @@ class EvaluateReviewController extends Controller
         $selectedYear = collect($request->year);
         $selectedPeriod = collect($request->period);
         $start_year = date('Y', strtotime('-10 years'));
-        $status_list = [KPIEnum::on_process, KPIEnum::submit, KPIEnum::approved];
+        $status_list = [KPIEnum::on_process, KPIEnum::approved];
         try {
             $user = Auth::user();
             $months = $this->targetPeriodService->dropdown()->unique('name');

@@ -10,6 +10,7 @@ use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RuleService extends BaseService implements RuleServiceInterface
 {
@@ -68,22 +69,27 @@ class RuleService extends BaseService implements RuleServiceInterface
         }
     }
 
-    public function rulesInEvaluationReport(string $year)
+    // Service ที่เรียก
+    public function rulesInEvaluationReport($year)
     {
         try {
-            $rules = Rule::with('evaluatesDetail.evaluate')->get();
+            // dd($year);
+            DB::enableQueryLog();
+            $rules = Rule::select('id','name')->with(['evaluatesDetail.evaluate.targetperiod' => function ($query) use($year){ 
+                return $query->where('year',$year);
+            } ,'evaluatesDetail.evaluate:id,user_id,template_id,status,period_id,next_level'])->get();
             $periods = $this->periodService->query()->where('year',$year)->get();
-            foreach ($rules as $key => $rule) {
+            foreach ($rules as $rule) {
                 $total = \collect();
                 foreach ($periods as $period) {
-                    $data_for_sum = $rule->evaluatesDetail->filter(function ($evaluate) use ($period) {
-                        return $evaluate->evaluate->status === KPIEnum::approved && $period->id === $evaluate->evaluate->period_id;
-                    });
-                    $data_for_sum->sum('target');
-                    $data_for_sum->sum('actual');
-                    $total_target = $data_for_sum->count() ? $data_for_sum->sum('target') : 0.00;
-                    $total_actual = $data_for_sum->count() ? $data_for_sum->sum('actual') : 0.00;
-                    $total->push((object)['target' => $total_target, 'actual' => $total_actual]);
+                    $data_for_sum = [];
+                    for ($i=0; $i < $rule->evaluatesDetail->count(); $i++) { 
+                        $item = $rule->evaluatesDetail[$i];
+                        if ($item->evaluate->status === KPIEnum::approved && $period->id === $item->evaluate->period_id) {
+                            $data_for_sum[] = $item;
+                        }
+                    }
+                    $total->push($data_for_sum);
                 }
                 $rule->total = $total;
             }

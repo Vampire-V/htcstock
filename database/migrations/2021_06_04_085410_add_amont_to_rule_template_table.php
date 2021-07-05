@@ -14,7 +14,7 @@ class AddAmontToRuleTemplateTable extends Migration
     public function up()
     {
         Schema::table('kpi_rule_templates', function (Blueprint $table) {
-            $table->decimal('amount',10,2)->default(0);
+            // $table->decimal('amount',10,2)->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AddAmontToRuleTemplateTable extends Migration
     public function down()
     {
         Schema::table('kpi_rule_templates', function (Blueprint $table) {
-            $table->dropColumn('amount');
+            // $table->dropColumn('amount');
         });
     }
 }

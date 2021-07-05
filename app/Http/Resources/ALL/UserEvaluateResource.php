@@ -19,6 +19,9 @@ class UserEvaluateResource extends JsonResource
             'id' => $this->id,
             'username' => $this->username,
             'evaluates' => EvaluateResource::collection($this->evaluates),
+            'translations' => $this->translations ,
+            'created_at' => (string) $this->created_at,
+            'updated_at' => (string) $this->updated_at
         ];
     }
 }

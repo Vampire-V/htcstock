@@ -24,4 +24,5 @@ class Rule extends Model
     {
         return (new RuleFilter($request))->filter($builder);
     }
+    
 }

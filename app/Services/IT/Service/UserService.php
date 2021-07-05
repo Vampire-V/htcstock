@@ -102,19 +102,9 @@ class UserService extends BaseService implements UserServiceInterface
     public function evaluationOfYearReport(string $year): Collection
     {
         try {
-            $users = User::with(['evaluates.evaluateDetail.rule.category'])->notResigned()->orderBy('department_id','desc')->get();
-            $periods = $this->periodService->query()->where('year',$year)->get();
-            foreach ($users as $user) {
-                $total = \collect();
-                foreach ($periods as $period) {
-                    $evaluates = $user->evaluates->whereIn('period_id', [$period->id])->where('status',KPIEnum::approved);
-                    $total_target = $evaluates ? $evaluates->sum(fn ($t) => $t->evaluateDetail->sum('target')) : 0.00;
-                    $total_actual = $evaluates ? $evaluates->sum(fn ($t) => $t->evaluateDetail->sum('actual')) : 0.00;
-                    $total->push((object)['target' => $total_target, 'actual' => $total_actual]);
-                }
-                $user->total = $total;
-            }
-
+            $users = User::with(['evaluates.evaluateDetail.rule.category',
+            'evaluates' => fn($query) => $query->where('status',KPIEnum::approved)->orderBy('period_id'),
+            'evaluates.targetperiod'])->notResigned()->orderBy('department_id','desc')->get();
             return $users;
         } catch (\Throwable $th) {
             throw $th;

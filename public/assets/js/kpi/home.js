@@ -76,7 +76,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         }
-        render_self()
+        render_rule()
+        render_staff_evaluate()
+
     }
 });
 
@@ -90,7 +92,9 @@ const tabActive = (e) => {
         search_score()
     }
     if (active_tab === `tab-c-1`) {
-        render_self()
+        render_rule()
+        render_staff_evaluate()
+
     }
 }
 
@@ -410,60 +414,232 @@ const search_table = (e) => {
     }
 }
 
-const render_self = () => {
-    let data = []
-    document.getElementById('table-self-evaluation').previousElementSibling.classList.add('reload')
-    getReportYourSelf(2021)
-        .then(res => {
-            if (res.status == 200) {
-                data = res.data.data
-            }
-        })
-        .catch(error => {
-            console.log(error, error.response.data.message)
-        })
-        .finally(() => {
-            self_data_to_table(data)
-        })
+const render_rule = async () => {
+    let table = document.getElementById('table-rule-evaluation')
+    try {
+        let result = await getReportRuleOfYear(2021)
+        await rules_data_to_table(result.data.data)
+        $('[data-toggle="tooltip"]').tooltip()
+        // table.previousElementSibling.classList.add('reload')
+        table.previousElementSibling.classList.remove('reload')
+    } catch (error) {
+        console.error(error)
+        toast(error)
+    }
+    toastClear()
 }
 
-const self_data_to_table = (data) => {
-    let table = document.getElementById('table-self-evaluation'),
+const rules_data_to_table = (data) => {
+    let table = document.getElementById('table-rule-evaluation'),
         head = table.tHead,
         body = table.tBodies[0]
-
     removeAllChildNodes(head)
     removeAllChildNodes(body)
-    let rowH = head.insertRow()
-    rowH.insertCell().textContent = `#`
 
-    let rowBone = body.insertRow()
-    let tar = document.createElement('th')
-    tar.textContent = `Target`
-    rowBone.appendChild(tar)
-    let rowBtwo = body.insertRow()
-    let act = document.createElement('th')
-    act.textContent = `Actual`
-    rowBtwo.appendChild(act)
-    for (let index = 0; index < data.length; index++) {
-        const element = data[index];
-        // header
-        let th = document.createElement('th')
-        th.textContent = element.name
-        rowH.appendChild(th)
-        // body
-        let t_month = rowBone.insertCell()
-        if (element.evaluates.length > 0) {
-            t_month.textContent = element.evaluates[0].evaluate_detail.reduce((a, b) => a + b.target, 0).toFixed(2)
+    let Hfirst = head.insertRow(),
+        Hsecond = head.insertRow(),
+        full_name = Hfirst.insertCell()
+    full_name.setAttribute('rowspan', 2)
+    full_name.textContent = `Rule Name`
+    for (let i = 0; i < data.periods.length; i++) {
+        const period = data.periods[i]
+        let month = Hfirst.insertCell()
+        month.style = `background-color: black; color:#fff;`
+        month.setAttribute('colspan', 2)
+        month.textContent = period.name
+
+        let target = Hsecond.insertCell(),
+            actual = Hsecond.insertCell()
+        target.style = `background-color: black; color:#fff;`
+        actual.style = `background-color: black; color:#fff;`
+        target.textContent = `Target`
+        actual.textContent = `Actual`
+    }
+
+    for (let i = 0; i < data.rules.length; i++) {
+        const rule = data.rules[i]
+        let row = body.insertRow(),
+            name = row.insertCell(),
+            jan_target = row.insertCell(),
+            jan_actual = row.insertCell(),
+            feb_target = row.insertCell(),
+            feb_actual = row.insertCell(),
+            mar_target = row.insertCell(),
+            mar_actual = row.insertCell(),
+            apr_target = row.insertCell(),
+            apr_actual = row.insertCell(),
+            may_target = row.insertCell(),
+            may_actual = row.insertCell(),
+            jun_target = row.insertCell(),
+            jun_actual = row.insertCell(),
+            jul_target = row.insertCell(),
+            jul_actual = row.insertCell(),
+            aug_target = row.insertCell(),
+            aug_actual = row.insertCell(),
+            sep_target = row.insertCell(),
+            sep_actual = row.insertCell(),
+            oct_target = row.insertCell(),
+            oct_actual = row.insertCell(),
+            nov_target = row.insertCell(),
+            nov_actual = row.insertCell(),
+            dec_target = row.insertCell(),
+            dec_actual = row.insertCell()
+
+        name.classList.add('truncate')
+        name.setAttribute('data-toggle', 'tooltip')
+        name.setAttribute('title', rule.name)
+        name.textContent = rule.name
+
+        jan_target.textContent = rule.total[0].length > 0 ? findLastValue(rule.total[0], 'target') : rule.total[0].length
+        jan_actual.textContent = rule.total[0].length > 0 ? findLastValue(rule.total[0], 'actual') : rule.total[0].length
+
+        feb_target.textContent = rule.total[1].length > 0 ? findLastValue(rule.total[1], 'target') : rule.total[1].length
+        feb_actual.textContent = rule.total[1].length > 0 ? findLastValue(rule.total[1], 'actual') : rule.total[1].length
+
+        mar_target.textContent = rule.total[2].length > 0 ? findLastValue(rule.total[2], 'target') : rule.total[2].length
+        mar_actual.textContent = rule.total[2].length > 0 ? findLastValue(rule.total[2], 'actual') : rule.total[2].length
+
+        apr_target.textContent = rule.total[3].length > 0 ? findLastValue(rule.total[3], 'target') : rule.total[3].length
+        apr_actual.textContent = rule.total[3].length > 0 ? findLastValue(rule.total[3], 'actual') : rule.total[3].length
+
+        may_target.textContent = rule.total[4].length > 0 ? findLastValue(rule.total[4], 'target') : rule.total[4].length
+        may_actual.textContent = rule.total[4].length > 0 ? findLastValue(rule.total[4], 'actual') : rule.total[4].length
+
+        jun_target.textContent = rule.total[5].length > 0 ? findLastValue(rule.total[5], 'target') : rule.total[5].length
+        jun_actual.textContent = rule.total[5].length > 0 ? findLastValue(rule.total[5], 'actual') : rule.total[5].length
+
+        jul_target.textContent = rule.total[6].length > 0 ? findLastValue(rule.total[6], 'target') : rule.total[6].length
+        jul_actual.textContent = rule.total[6].length > 0 ? findLastValue(rule.total[6], 'actual') : rule.total[6].length
+
+        aug_target.textContent = rule.total[7].length > 0 ? findLastValue(rule.total[7], 'target') : rule.total[7].length
+        aug_actual.textContent = rule.total[7].length > 0 ? findLastValue(rule.total[7], 'actual') : rule.total[7].length
+
+        sep_target.textContent = rule.total[8].length > 0 ? findLastValue(rule.total[8], 'target') : rule.total[8].length
+        sep_actual.textContent = rule.total[8].length > 0 ? findLastValue(rule.total[8], 'actual') : rule.total[8].length
+
+        oct_target.textContent = rule.total[9].length > 0 ? findLastValue(rule.total[9], 'target') : rule.total[9].length
+        oct_actual.textContent = rule.total[9].length > 0 ? findLastValue(rule.total[9], 'actual') : rule.total[9].length
+
+        nov_target.textContent = rule.total[10].length > 0 ? findLastValue(rule.total[10], 'target') : rule.total[10].length
+        nov_actual.textContent = rule.total[10].length > 0 ? findLastValue(rule.total[10], 'actual') : rule.total[10].length
+
+        dec_target.textContent = rule.total[11].length > 0 ? findLastValue(rule.total[11], 'target') : rule.total[11].length
+        dec_actual.textContent = rule.total[11].length > 0 ? findLastValue(rule.total[11], 'actual') : rule.total[11].length
+    }
+}
+
+const findLastValue = (array, key) => {
+    let result
+    for (let i = 0; i < array.length; i++) {
+        const element = array[i]
+        if (array[i][key] === element[key]) {
+            result = element[key]
         } else {
-            t_month.textContent = 0.00
-        }
-        let a_month = rowBtwo.insertCell()
-        if (element.evaluates.length > 0) {
-            a_month.textContent = element.evaluates[0].evaluate_detail.reduce((a, b) => a + b.actual, 0).toFixed(2)
-        } else {
-            a_month.textContent = 0.00
+            return `error inaccurate information..`
         }
     }
-    table.previousElementSibling.classList.remove('reload')
+    return result
+}
+
+// getReportStaffEvaluate
+
+const render_staff_evaluate = async () => {
+    let table = document.getElementById('table-staff-evaluation')
+    try {
+        let result = await getReportStaffEvaluate(2021)
+        console.log(result);
+        await staff_data_to_table(result.data.data)
+        // $('[data-toggle="tooltip"]').tooltip()
+        table.previousElementSibling.classList.remove('reload')
+    } catch (error) {
+        console.error(error)
+        toast(error,'error')
+    }
+    toastClear()
+}
+
+const staff_data_to_table = (data) => {
+    let table = document.getElementById('table-staff-evaluation'),
+        head = table.tHead,
+        body = table.tBodies[0]
+    removeAllChildNodes(head)
+    removeAllChildNodes(body)
+
+    let Hfirst = head.insertRow(),
+        full_name = Hfirst.insertCell()
+    full_name.textContent = `Name`
+    for (let i = 0; i < data.periods.length; i++) {
+        const period = data.periods[i]
+        let month = Hfirst.insertCell()
+        month.style = `background-color: black; color:#fff;`
+        // month.setAttribute('colspan', 2)
+        month.textContent = period.name
+    }
+
+    for (let i = 0; i < data.users.length; i++) {
+        const user = data.users[i]
+        let row = body.insertRow(),
+            name = row.insertCell(),
+            jan = row.insertCell(),
+            feb = row.insertCell(),
+            mar = row.insertCell(),
+            apr = row.insertCell(),
+            may = row.insertCell(),
+            jun = row.insertCell(),
+            jul = row.insertCell(),
+            aug = row.insertCell(),
+            sep = row.insertCell(),
+            oct = row.insertCell(),
+            nov = row.insertCell(),
+            dec = row.insertCell()
+
+        name.classList.add('truncate')
+        name.setAttribute('data-toggle', 'tooltip')
+        let translate = findNameUser(user)
+        name.setAttribute('title', translate.name)
+        name.textContent = translate.name
+
+        let result = calculator_evaluate_to_month(user.evaluates)
+
+        jan.textContent = result[0] ? result[0].score.toFixed(2) : 0.00
+        feb.textContent = result[1] ? result[1].score.toFixed(2) : 0.00
+        mar.textContent = result[2] ? result[2].score.toFixed(2) : 0.00
+        apr.textContent = result[3] ? result[3].score.toFixed(2) : 0.00
+        may.textContent = result[4] ? result[4].score.toFixed(2) : 0.00
+        jun.textContent = result[5] ? result[5].score.toFixed(2) : 0.00
+        jul.textContent = result[6] ? result[6].score.toFixed(2) : 0.00
+        aug.textContent = result[7] ? result[7].score.toFixed(2) : 0.00
+        sep.textContent = result[8] ? result[8].score.toFixed(2) : 0.00
+        oct.textContent = result[9] ? result[9].score.toFixed(2) : 0.00
+        nov.textContent = result[10] ? result[10].score.toFixed(2) : 0.00
+        dec.textContent = result[11] ? result[11].score.toFixed(2) : 0.00
+    }
+}
+
+const calculator_evaluate_to_month = (array) => {
+    let data = []
+    for (let index = 0; index < array.length; index++) {
+        const evaluate = array[index]
+        let kpi = evaluate.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
+        let key_task = evaluate.evaluate_detail.filter(item => item.rule.category.name === `key-task`)
+        let omg = evaluate.evaluate_detail.filter(item => item.rule.category.name === `omg`)
+        let total_kpi = 0
+        let total_key = 0
+        let total_omg = 0
+        let sum_total = 0
+        
+        total_kpi = kpi.reduce((a, c) => a + c.cal, 0)
+        total_key = key_task.reduce((a, c) => a + c.cal, 0)
+        total_omg = omg.reduce((a, c) => a + c.cal, 0)
+        sum_total = (total_kpi * evaluate.weigth[0]) + (total_key * evaluate.weigth[1]) + (total_omg * evaluate.weigth[2])
+
+        data.push({
+            evaluate: evaluate,
+            kpi: total_kpi,
+            key_task: total_key,
+            omg: total_omg,
+            score: sum_total / 100
+        })
+    }
+    return data
 }

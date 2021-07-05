@@ -8,7 +8,10 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::get('dashboard', 'HomeController@index')->name('dashboard');
     Route::get('operation/reportscore', 'HomeController@reportscore');
     Route::get('weigth/config', 'HomeController@weigthconfig');
-    Route::get('dashboard/you-self/{year}', 'HomeController@report_your_self');
+    Route::get('dashboard/you-self/{year}/report', 'HomeController@report_your_self');
+    Route::get('dashboard/rule-of-year/{year}/report', 'HomeController@report_rule_of_year');
+    Route::get('dashboard/staff-evaluate-of-year/{year}/report', 'HomeController@report_staff_evaluate_year');
+    
 
     Route::resource('self-evaluation', 'SelfEvaluation\SelfEvaluationController', ['only' => ['index', 'create', 'edit', 'update', 'store', 'destroy']]);
         // new 

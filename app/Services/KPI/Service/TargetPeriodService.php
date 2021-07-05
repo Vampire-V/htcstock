@@ -67,7 +67,7 @@ class TargetPeriodService extends BaseService implements TargetPeriodServiceInte
                 'evaluates' => function ($query) {
                     $query->select('id', 'user_id', 'period_id', 'status')
                         ->with('evaluateDetail')
-                        ->where(['status' => KPIEnum::approved, 'user_id' => \auth()->id()]);
+                        ->where(['status' => KPIEnum::draft, 'user_id' => \auth()->id()]);
                 }
             ])->where('year', $year)->get();
         } catch (\Throwable $th) {

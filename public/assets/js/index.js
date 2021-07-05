@@ -299,5 +299,5 @@ var round = (num) => {
 }
 
 var findNameUser = (user) => {
-    return user.translations.find(item => item.locale === locale) ?? item.translations[0]
+    return user.translations.find(item => item.locale === locale) ?? user.translations[0]
 }

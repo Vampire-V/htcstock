@@ -38,10 +38,10 @@ trait RuleTrait
     {
         return $this->hasOne(EvaluateDetail::class)->withDefault();
     }
-
+    // rule ที่มีใน EvaluateDetail ทั้งหมด
     public function evaluatesDetail()
     {
-        return $this->hasMany(EvaluateDetail::class);
+        return $this->hasMany(EvaluateDetail::class,'rule_id','id');
     }
 
     public function user()

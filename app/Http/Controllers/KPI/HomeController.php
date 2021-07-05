@@ -5,6 +5,7 @@ namespace App\Http\Controllers\KPI;
 use App\Enum\KPIEnum;
 use App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ALL\UserEvaluateResource;
 use App\Http\Resources\KPI\EvaluateResource;
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\TargetPeriod;
@@ -45,22 +46,60 @@ class HomeController extends Controller
         // $ofSelf = $this->targetPeriodService->selfApprovedEvaluationOfyear($selectedYear);
         $ofDept = $this->targetPeriodService->deptApprovedEvaluationOfyear($selectedYear);
         $periods = $this->targetPeriodService->query()->where('year', $selectedYear)->get();
-        $users = $this->userService->evaluationOfYearReport($selectedYear);
-        $rules = $this->ruleService->rulesInEvaluationReport($selectedYear);
+        // $users = $this->userService->evaluationOfYearReport($selectedYear);
+        // $rules = $this->ruleService->rulesInEvaluationReport($selectedYear);
 
-        return \view('kpi.home', \compact('ofDept', 'users', 'periods', 'rules', 'selectedYear'));
+        return \view('kpi.home', \compact('ofDept', 'periods', 'selectedYear'));
     }
 
     public function report_your_self($year)
     {
         try {
             $result = $this->targetPeriodService->selfApprovedEvaluationOfyear($year);
+            // dd($result);
         } catch (\Exception $e) {
-            throw $this->errorResponse($e->getMessage(),500);
+            return $this->errorResponse($e->getMessage(), 500);
         }
-        return $this->successResponse($result,'get report your self',200);
+        return $this->successResponse($result, 'get report your self', 200);
     }
 
+    // Controller ที่ใช้ url test http://127.0.0.1:8000/kpi/dashboard/rule-of-year/2021/report
+    public function report_rule_of_year($year)
+    {
+        try {
+            $rules = $this->ruleService->rulesInEvaluationReport($year);
+            $periods = $this->targetPeriodService->query()->where('year', $year)->get();
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+        return $this->successResponse(['rules' => $rules, 'periods' => $periods], 'get report rules of year', 200);
+    }
+
+    // Controller ที่ใช้ url test http://127.0.0.1:8000/kpi/dashboard/rule-of-year/2021/report
+    public function report_staff_evaluate_year($year)
+    {
+        try {
+            $users = $this->userService->evaluationOfYearReport($year);
+            $is_last = \collect(['03', '06', '09', '12','March', 'June', 'September', 'Depcember']);
+
+            for ($i = 0; $i < $users->count(); $i++) {
+                $user = $users[$i];
+                    $user->evaluates->each(function ($item) use($is_last){
+                        if ($is_last->contains($item->targetperiod->name)) {
+                            $item->weigth = config('kpi.weight')['quarter'];
+                        } else {
+                            $item->weigth = config('kpi.weight')['month'];
+                        }
+                    });
+                $this->calculation_summary($user->evaluates);
+                EvaluateResource::collection($user->evaluates);
+            }
+            $periods = $this->targetPeriodService->query()->where('year', $year)->get();
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+        return $this->successResponse(['users' => $users, 'periods' => $periods], 'get report staff evaluate of year', 200);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -141,7 +180,7 @@ class HomeController extends Controller
 
     public function weigthconfig(Request $request)
     {
-        $is_last = \collect(['03','06','09','12']);
+        $is_last = \collect(['03', '06', '09', '12']);
         try {
             if ($request->is_quarter === "true" || $is_last->contains($request->period)) {
                 $config = config('kpi.weight')['quarter'];

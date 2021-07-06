@@ -65,7 +65,7 @@ class UserService extends BaseService implements UserServiceInterface
 
     public function filter(Request $request)
     {
-        return User::withTranslation()->with(['department', 'positions', 'roles', 'divisions', 'permissions','systems'])->filter($request)->notResigned()->orderBy('divisions_id', 'desc')->paginate(10);
+        return User::withTranslation()->with(['department', 'positions', 'roles', 'divisions', 'permissions', 'systems'])->filter($request)->notResigned()->orderBy('divisions_id', 'desc')->paginate(10);
     }
 
     public function email(string $email)
@@ -102,9 +102,12 @@ class UserService extends BaseService implements UserServiceInterface
     public function evaluationOfYearReport(string $year): Collection
     {
         try {
-            $users = User::with(['evaluates.evaluateDetail.rule.category',
-            'evaluates' => fn($query) => $query->where('status',KPIEnum::approved)->orderBy('period_id'),
-            'evaluates.targetperiod'])->notResigned()->orderBy('department_id','desc')->get();
+            $users = User::select('id', 'email', 'username', 'department_id', 'degree')
+            ->with([
+                'department:id,name', 'evaluates.evaluateDetail.rule.category',
+                'evaluates' => fn ($query) => $query->select('id','user_id','period_id','status','template_id','next_level')->where('status', KPIEnum::approved)->orderBy('period_id'),
+                'evaluates.targetperiod:id,name,year,quarter'
+            ])->notResigned()->orderBy('department_id', 'desc')->get();
             return $users;
         } catch (\Throwable $th) {
             throw $th;
@@ -114,7 +117,7 @@ class UserService extends BaseService implements UserServiceInterface
     public function getManager(User $user): User
     {
         try {
-            return User::where('username',$user->head_id)->first();
+            return User::where('username', $user->head_id)->first();
         } catch (\Throwable $th) {
             throw $th;
         }

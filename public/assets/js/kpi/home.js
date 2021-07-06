@@ -78,8 +78,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         render_rule()
         render_staff_evaluate()
-
     }
+
+    // $("#department").select2({
+    //     placeholder: 'Select Department...',
+    //     allowClear: true
+    // })
+    // $("#degree_tab2").select2({
+    //     placeholder: 'Select EMC Group...',
+    //     allowClear: true
+    // })
 });
 
 let weigth_template = []
@@ -392,11 +400,12 @@ let calculator_score = (number) => {
     }
 }
 
-// tab-c-1 method
-const search_table = (e) => {
+//## tab-c-1 method
+
+const search_rule_table = (e) => {
     // Declare variables
     var input, filter, table, tr, td, i, txtValue;
-    input = e;
+    input = e
     filter = input.value.toUpperCase()
     table = input.offsetParent.querySelector('table')
     tr = table.tBodies[0].rows
@@ -406,13 +415,44 @@ const search_table = (e) => {
         if (td) {
             txtValue = td.textContent || td.innerText;
             if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
+                tr[i].style.display = ""
             } else {
-                tr[i].style.display = "none";
+                tr[i].style.display = "none"
             }
         }
     }
 }
+
+const search_staff_table = (e) => {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue, col;
+    input = e
+    filter = input.value.toUpperCase()
+    table = input.offsetParent.querySelector('table')
+    tr = table.tBodies[0].rows
+    if (input.name === `full_name`) {
+        col = 2
+    }
+    if (input.name === `department`) {
+        col = 1
+    }
+    if (input.name === `degree_tab2`) {
+        col = 0
+    }
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[col]
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = ""
+            } else {
+                tr[i].style.display = "none"
+            }
+        }
+    }
+}
+
 
 const render_rule = async () => {
     let table = document.getElementById('table-rule-evaluation')
@@ -440,6 +480,7 @@ const rules_data_to_table = (data) => {
         Hsecond = head.insertRow(),
         full_name = Hfirst.insertCell()
     full_name.setAttribute('rowspan', 2)
+    full_name.style = `background-color: black; color:#fff;`
     full_name.textContent = `Rule Name`
     for (let i = 0; i < data.periods.length; i++) {
         const period = data.periods[i]
@@ -541,19 +582,16 @@ const findLastValue = (array, key) => {
     return result
 }
 
-// getReportStaffEvaluate
-
 const render_staff_evaluate = async () => {
     let table = document.getElementById('table-staff-evaluation')
     try {
         let result = await getReportStaffEvaluate(2021)
-        console.log(result);
         await staff_data_to_table(result.data.data)
-        // $('[data-toggle="tooltip"]').tooltip()
+        $('[data-toggle="tooltip"]').tooltip()
         table.previousElementSibling.classList.remove('reload')
     } catch (error) {
         console.error(error)
-        toast(error,'error')
+        toast(error, 'error')
     }
     toastClear()
 }
@@ -566,7 +604,16 @@ const staff_data_to_table = (data) => {
     removeAllChildNodes(body)
 
     let Hfirst = head.insertRow(),
+        degree = Hfirst.insertCell(),
+        department = Hfirst.insertCell(),
         full_name = Hfirst.insertCell()
+    degree.style = `background-color: black; color:#fff;`
+    degree.textContent = `EMC Group`
+
+    department.style = `background-color: black; color:#fff;`
+    department.textContent = `Department`
+
+    full_name.style = `background-color: black; color:#fff;`
     full_name.textContent = `Name`
     for (let i = 0; i < data.periods.length; i++) {
         const period = data.periods[i]
@@ -579,6 +626,8 @@ const staff_data_to_table = (data) => {
     for (let i = 0; i < data.users.length; i++) {
         const user = data.users[i]
         let row = body.insertRow(),
+            degree_group = row.insertCell(),
+            dept = row.insertCell(),
             name = row.insertCell(),
             jan = row.insertCell(),
             feb = row.insertCell(),
@@ -593,11 +642,17 @@ const staff_data_to_table = (data) => {
             nov = row.insertCell(),
             dec = row.insertCell()
 
+        degree_group.textContent = user.degree
+
+        dept.classList.add('truncate')
+        dept.setAttribute('data-toggle', 'tooltip')
+        dept.setAttribute('title', user.department.name)
+        dept.textContent = user.department.name
+
         name.classList.add('truncate')
         name.setAttribute('data-toggle', 'tooltip')
-        let translate = findNameUser(user)
-        name.setAttribute('title', translate.name)
-        name.textContent = translate.name
+        name.setAttribute('title', user.name)
+        name.textContent = user.name
 
         let result = calculator_evaluate_to_month(user.evaluates)
 
@@ -627,7 +682,7 @@ const calculator_evaluate_to_month = (array) => {
         let total_key = 0
         let total_omg = 0
         let sum_total = 0
-        
+
         total_kpi = kpi.reduce((a, c) => a + c.cal, 0)
         total_key = key_task.reduce((a, c) => a + c.cal, 0)
         total_omg = omg.reduce((a, c) => a + c.cal, 0)

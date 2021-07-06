@@ -73,11 +73,10 @@ class RuleService extends BaseService implements RuleServiceInterface
     public function rulesInEvaluationReport($year)
     {
         try {
-            // dd($year);
             DB::enableQueryLog();
             $rules = Rule::select('id','name')->with(['evaluatesDetail.evaluate.targetperiod' => function ($query) use($year){ 
-                return $query->where('year',$year);
-            } ,'evaluatesDetail.evaluate:id,user_id,template_id,status,period_id,next_level'])->get();
+                return $query->select('id','name','year','quarter')->where('year',$year);
+            } ,'evaluatesDetail.evaluate:id,user_id,template_id,status,period_id'])->get();
             $periods = $this->periodService->query()->where('year',$year)->get();
             foreach ($rules as $rule) {
                 $total = \collect();

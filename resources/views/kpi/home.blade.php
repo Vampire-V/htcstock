@@ -10,6 +10,12 @@
     label {
         font-weight: bold;
     }
+
+    table thead {
+        position: -webkit-sticky;/* Safari */
+        position: sticky;
+        top: 0;
+    }
 </style>
 @endsection
 @section('content')
@@ -166,35 +172,6 @@
 
 
     <div class="tab-pane " id="tab-all" role="tabpanel">
-        {{--  --}}
-        {{-- <div class="row">
-            <div class="col-xl-6">
-                <div class="mb-3 card">
-                    <div class="card-header-tab card-header-tab-animation card-header">
-                        <div class="card-header-title">
-                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                            Evaluation Report {{date('Y')}} Your self
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-content">
-                            <div class="table-responsive" style="height: 110px;">
-                                <table class="mb-0 table table-sm" id="table-self-evaluation">
-                                    <thead class="thead-dark">
-                                    </thead>
-                                    <tbody>
-                                        <div id="reload" class="reload"></div>
-                                    </tbody>
-                                    <tfoot>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-
         <div class="row">
             <div class="col-xl-12">
                 <div class="mb-3 card">
@@ -202,14 +179,14 @@
                         <div class="card-header-title">
                             <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
                             Rule Evaluation Report
-                            &nbsp;&nbsp;&nbsp;<input type="text" onkeyup="search_table(this)"
+                            &nbsp;&nbsp;&nbsp;<input type="text" onkeyup="search_rule_table(this)"
                                 class="form-control-sm form-control" placeholder="Search for names..">
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive" style="height:300px">
-                                <table class="mb-0 table table-sm" id="table-rule-evaluation">
+                                <table class="mb-0 table table-sm table-bordered table-hover" id="table-rule-evaluation">
                                     <thead class="thead-dark">
                                     </thead>
                                     <tbody>
@@ -218,7 +195,7 @@
                                     <tfoot>
                                     </tfoot>
                                 </table>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -233,14 +210,32 @@
                         <div class="card-header-title">
                             <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
                             Staff Evaluation Report
-                            &nbsp;&nbsp;&nbsp;<input type="text" onkeyup="search_table(this)"
+                            &nbsp;&nbsp;&nbsp;<select name="degree_tab2" id="degree_tab2" onchange="search_staff_table(this)">
+                                <option value="">All</option>
+                                @isset($degree)
+                                @foreach ($degree as $item)
+                                <option value="{{$item}}">{{$item}}</option>
+                                @endforeach
+                                @endisset
+                            </select>
+                            &nbsp;&nbsp;&nbsp;<select name="department" id="department"
+                                onchange="search_staff_table(this)">
+                                <option value="">All</option>
+                                @isset($departments)
+                                @foreach ($departments as $department)
+                                <option value="{{$department->name}}">{{$department->name}}</option>
+                                @endforeach
+                                @endisset
+                            </select>
+
+                            &nbsp;&nbsp;&nbsp;<input type="text" onkeyup="search_staff_table(this)" name="full_name"
                                 class="form-control-sm form-control" placeholder="Search for names..">
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive" style="height: 300px;">
-                                <table class="mb-0 table table-sm" id="table-staff-evaluation">
+                                <table class="mb-0 table table-sm table-bordered table-hover" id="table-staff-evaluation">
                                     <thead class="thead-dark">
                                     </thead>
                                     <tbody>
@@ -249,53 +244,6 @@
                                     <tfoot>
                                     </tfoot>
                                 </table>
-                                {{-- <table class="table table-sm table-bordered">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th rowspan="2" style="vertical-align : middle;">#</th>
-                                            <th rowspan="2" style="vertical-align : middle;">Department</th>
-                                            <th rowspan="2" style="vertical-align : middle;">Full Name</th>
-                                            @isset($periods)
-                                            @foreach ($periods as $period)
-                                            <th colspan="2">{{$period->name}}</th>
-                                @endforeach
-                                @endisset
-                                </tr>
-                                <tr>
-                                    @isset($periods)
-                                    @foreach ($periods as $period)
-                                    <th>target</th>
-                                    <th>actual</th>
-                                    @endforeach
-                                    @endisset
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    @isset($users)
-                                    @foreach ($users as $key => $user)
-                                    <tr>
-                                        <th>{{$key+1}}</th>
-                                        <td class="truncate" data-toggle="tooltip" title="{{$user->department->name}}">
-                                            {{$user->department->name}}</td>
-                                        <td class="truncate" data-toggle="tooltip" title="{{$user->name}}">
-                                            {{ $user->name }}</td>
-                                        @isset($user->total)
-                                        @foreach ($user->total as $total)
-                                        <td>
-                                            {{$total->target}}
-                                        </td>
-                                        <td>
-                                            {{$total->actual}}
-                                        </td>
-                                        @endforeach
-                                        @endisset
-                                    </tr>
-                                    @endforeach
-                                    @endisset
-                                </tbody>
-                                <tfoot>
-                                </tfoot>
-                                </table> --}}
                             </div>
                         </div>
                     </div>
@@ -309,7 +257,7 @@
 @endsection
 
 @section('second-script')
-<script src="{{asset('assets\js\index.js')}}" defer></script>
+{{-- <script src="{{asset('assets\js\index.js')}}" defer></script> --}}
 <script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script defer>
     // variable

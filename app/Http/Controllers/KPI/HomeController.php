@@ -11,6 +11,7 @@ use App\Models\KPI\Evaluate;
 use App\Models\KPI\TargetPeriod;
 use App\Models\User;
 use App\Services\IT\Interfaces\UserServiceInterface;
+use App\Services\IT\Service\DepartmentService;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
@@ -21,17 +22,19 @@ use Illuminate\Support\Facades\DB;
 class HomeController extends Controller
 {
     use CalculatorEvaluateTrait;
-    protected $targetPeriodService, $userService, $ruleService, $evaluateService;
+    protected $targetPeriodService, $userService, $ruleService, $evaluateService, $departmentService;
     public function __construct(
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
         UserServiceInterface $userServiceInterface,
         RuleServiceInterface $ruleServiceInterface,
-        EvaluateServiceInterface $evaluateServiceInterface
+        EvaluateServiceInterface $evaluateServiceInterface,
+        DepartmentService $departmentService
     ) {
         $this->targetPeriodService = $targetPeriodServiceInterface;
         $this->userService = $userServiceInterface;
         $this->ruleService = $ruleServiceInterface;
         $this->evaluateService = $evaluateServiceInterface;
+        $this->departmentService = $departmentService;
     }
     /**
      * Display a listing of the resource.
@@ -40,16 +43,19 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $selectedYear = empty($request->year) ? date('Y') : $request->year;
-        $evaluations =  Evaluate::with('user', 'evaluateDetail.rule', 'targetperiod')->where('status', KPIEnum::approved)->get();
-        $this->calculation_summary($evaluations);
+        // $selectedYear = empty($request->year) ? date('Y') : $request->year;
+        // $evaluations =  Evaluate::with('user', 'evaluateDetail.rule', 'targetperiod')->where('status', KPIEnum::approved)->get();
+        // $this->calculation_summary($evaluations);
         // $ofSelf = $this->targetPeriodService->selfApprovedEvaluationOfyear($selectedYear);
-        $ofDept = $this->targetPeriodService->deptApprovedEvaluationOfyear($selectedYear);
-        $periods = $this->targetPeriodService->query()->where('year', $selectedYear)->get();
+        // $ofDept = $this->targetPeriodService->deptApprovedEvaluationOfyear($selectedYear);
+        // $periods = $this->targetPeriodService->query()->where('year', $selectedYear)->get();
         // $users = $this->userService->evaluationOfYearReport($selectedYear);
         // $rules = $this->ruleService->rulesInEvaluationReport($selectedYear);
+        $departments = $this->departmentService->dropdown();
+        $degree = \collect([KPIEnum::one,KPIEnum::two,KPIEnum::tree]);
+        
 
-        return \view('kpi.home', \compact('ofDept', 'periods', 'selectedYear'));
+        return \view('kpi.home', \compact('departments','degree'));
     }
 
     public function report_your_self($year)

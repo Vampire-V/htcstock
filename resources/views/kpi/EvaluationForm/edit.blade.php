@@ -13,6 +13,14 @@
     .select2-containe {
         display: inherit !important;
     }
+
+    label {
+        font-weight: bold;
+    }
+
+    label span {
+        color: red;
+    }
 </style>
 @endsection
 @section('sidebar')
@@ -90,7 +98,7 @@
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="template">Template</label>
+                            <label for="template">Template <span>*</span></label>
                             <select id="validationTemplate" class="form-control-sm form-control" name="template_id"
                                 required onchange="changeTemplate(this)">
                                 <option value="">Choose...</option>

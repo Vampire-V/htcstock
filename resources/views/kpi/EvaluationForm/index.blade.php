@@ -32,13 +32,13 @@
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
                             <label for="Users">User :</label>
-                            <select class="form-control form-control-sm" id="users" name="users[]"
-                                multiple>
+                            <select class="form-control form-control-sm" id="users" name="users[]" multiple>
                                 @isset($dropdown_users)
                                 @foreach ($dropdown_users as $item)
                                 <option value="{{$item->id}}" @if ($selectUser->contains($item->id))
                                     selected
-                                    @endif>{{$item->name}}</option>
+                                    @endif>{{$item->translate('th')->name}} ({{$item->translate('en')->name ?? null}})
+                                </option>
                                 @endforeach
                                 @endisset
                             </select>
@@ -47,8 +47,7 @@
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
                             <label for="division">Division :</label>
-                            <select class="form-control form-control-sm" id="division" name="division[]"
-                                multiple>
+                            <select class="form-control form-control-sm" id="division" name="division[]" multiple>
                                 @isset($divisions)
                                 @foreach ($divisions as $division)
                                 <option value="{{$division->id}}" @if ($selectDivision->contains($division->id))
@@ -60,8 +59,7 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="department">Department :</label>
-                            <select class="form-control form-control-sm" id="department" name="department[]"
-                                multiple>
+                            <select class="form-control form-control-sm" id="department" name="department[]" multiple>
                                 @isset($departments)
                                 @foreach ($departments as $dept)
                                 <option value="{{$dept->id}}" @if ($selectDepartment->contains($dept->id))

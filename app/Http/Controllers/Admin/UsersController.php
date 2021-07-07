@@ -174,6 +174,7 @@ class UsersController extends Controller
                     $user->password = $user->password ?? Hash::make(\substr($value['email'], 0, 1) . $value['username']);
                     $user->username = $user->username ?? $value['username'];
                     $user->translateOrNew('th')->name = $user->translate('th')->name ?? $value['name'];
+                    $user->name_th = $user->translate('th')->name ?? $value['name'];
                     $user->email = $value['email'];
                     $user->head_id = $user->head_id ?? $value['leader'];
                     $user->save();

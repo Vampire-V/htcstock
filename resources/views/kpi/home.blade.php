@@ -11,7 +11,7 @@
         font-weight: bold;
     }
 
-    table thead {
+    table thead tr td{
         position: -webkit-sticky;/* Safari */
         position: sticky;
         top: 0;

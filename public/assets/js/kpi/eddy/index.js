@@ -22,16 +22,21 @@
 })();
 
 const fetch_user_evalate = async () => {
-    let filter = {
-        params: {
-            department: []
-        }
-    }
+
+
     try {
-        let users = await getUserEvaluate(filter)
+        let filter = {
+            params : {
+                month: [],
+                year: [2021],
+                degree: ['N-1']
+            }
+        }
+        let users = await getOperationReportScore(filter)
         console.log(users);
     } catch (error) {
         console.error(error)
+        toast(error)
     }
 
 }

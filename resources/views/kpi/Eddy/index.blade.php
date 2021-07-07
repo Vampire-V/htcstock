@@ -9,10 +9,6 @@
         /* width: 50%; */
     }
 
-    table th,
-    td {
-        text-align: left;
-    }
 </style>
 @endsection
 @section('content')
@@ -34,15 +30,70 @@
 </div>
 
 {{-- end title  --}}
-
+<div class="row">
+    <div class="col-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <h5 class="card-title">search</h5>
+                <div class="position-relative form-group">
+                    <form class="needs-validation" novalidate>
+                        <div class="form-row">
+                            <div class="col-md-2 mb-2">
+                                <label for="staffName">Staff Name</label>
+                                <input type="text" class="form-control form-control-sm" value="{{Auth::user()->name}}"
+                                    placeholder="User" aria-describedby="inputGroupPrepend" readonly>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="Division">Division</label>
+                                <div class="input-group">
+                                    <select name="division[]" id="division" class="form-control-sm form-control">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <label for="EMCGroup">EMC Group</label>
+                                <div class="input-group">
+                                    <select name="degree[]" id="degree" class="form-control-sm form-control">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <label for="Month">Month</label>
+                                <div class="input-group">
+                                    <select name="period" id="period" class="form-control-sm form-control">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <label for="Year">Year</label>
+                                <select name="year[]" id="validationYear" class="form-control-sm form-control">
+                                    <option value=""></option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please provide a valid state.
+                                </div>
+                            </div>
+                            <div class="col-md-1" style="display: flex; justify-content: center; align-items: center;  ">
+                                <button class="btn btn-primary " type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="main-card mb-3 card">
             <div class="card-header">Active Users
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <button class="active btn btn-focus">Last Week</button>
-                        <button class="btn btn-focus">All Month</button>
+                        {{-- <button class="active btn btn-focus">Last Week</button>
+                        <button class="btn btn-focus">All Month</button> --}}
                     </div>
                 </div>
             </div>
@@ -50,241 +101,50 @@
                 <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                     <thead class="thead-dark">
                         <tr>
-                            <th class="text-center">#</th>
+                            <th>#</th>
                             <th>Name</th>
-                            <th class="text-center">City</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Actions</th>
+                            <th>Division</th>
+                            <th>KPI</th>
+                            <th class="text-center">Key-Task</th>
+                            <th class="text-center">OMG</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="text-center text-muted">#345</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle"
-                                                    src="{{asset('assets/images/avatars/4.jpg')}}" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">John Doe</div>
-                                            <div class="widget-subheading opacity-7">Web Developer
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">Madrid</td>
-                            <td class="text-center">
-                                <div class="badge badge-warning">Pending</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-1"
-                                    class="btn btn-primary btn-sm">Details</button>
-                            </td>
+                            <td>#345</td>
+                            <td>name</td>
+                            <td>Division</td>
+                            <td>kpi</td>
+                            <td>key-task</td>
+                            <td>omg</td>
                         </tr>
                         <tr>
-                            <td class="text-center text-muted">#347</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle"
-                                                    src="{{asset('assets/images/avatars/3.jpg')}}" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">Ruben Tillman</div>
-                                            <div class="widget-subheading opacity-7">Etiam sit amet
-                                                orci eget</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">Berlin</td>
-                            <td class="text-center">
-                                <div class="badge badge-success">Completed</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-2"
-                                    class="btn btn-primary btn-sm">Details</button>
-                            </td>
+                            <td>#345</td>
+                            <td>name</td>
+                            <td>Division</td>
+                            <td>kpi</td>
+                            <td>key-task</td>
+                            <td>omg</td>
                         </tr>
                         <tr>
-                            <td class="text-center text-muted">#321</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle"
-                                                    src="{{asset('assets/images/avatars/2.jpg')}}" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">Elliot Huber</div>
-                                            <div class="widget-subheading opacity-7">Lorem ipsum
-                                                dolor sic</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">London</td>
-                            <td class="text-center">
-                                <div class="badge badge-danger">In Progress</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-3"
-                                    class="btn btn-primary btn-sm">Details</button>
-                            </td>
+                            <td>#345</td>
+                            <td>name</td>
+                            <td>Division</td>
+                            <td>kpi</td>
+                            <td>key-task</td>
+                            <td>omg</td>
                         </tr>
                         <tr>
-                            <td class="text-center text-muted">#55</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle"
-                                                    src="{{asset('assets/images/avatars/1.jpg')}}" alt=""></div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">Vinnie Wagstaff</div>
-                                            <div class="widget-subheading opacity-7">UI Designer
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">Amsterdam</td>
-                            <td class="text-center">
-                                <div class="badge badge-info">On Hold</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-4"
-                                    class="btn btn-primary btn-sm">Details</button>
-                            </td>
+                            <td>#345</td>
+                            <td>name</td>
+                            <td>Division</td>
+                            <td>kpi</td>
+                            <td>key-task</td>
+                            <td>omg</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="d-block text-center card-footer">
-                <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i
-                        class="pe-7s-trash btn-icon-wrapper"> </i></button>
-                <button class="btn-wide btn btn-success">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="main-card mb-3 card">
-            <div class="card-header">Active Users
-                <div class="btn-actions-pane-right">
-                    <div role="group" class="btn-group-sm btn-group">
-                        <button class="active btn btn-focus">Last Week</button>
-                        <button class="btn btn-focus">All Month</button>
-                    </div>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>This a normal row</th>
-                            <th>item 1</th>
-                            <th>item 1</th>
-                            <th>item 1</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>User 1</td>
-                            <td>item 1</td>
-                            <td>item 1</td>
-                            <td>item 1</td>
-                        </tr>
-                        <tr>
-                            <th colspan="2" class="p-0">
-                                <div class="treeview">
-                                    <ul class="m-0">
-                                        <li>
-                                            <a class="p-3">Evaluate 1</a>
-                                            <ul>
-                                                <li>
-                                                    <table class="table">
-                                                        <tr>
-                                                            <th scope="row">1</th>
-                                                            <td>Mark</td>
-                                                            <td>Otto</td>
-                                                            <td>@mdo</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">2</th>
-                                                            <td>Jacob</td>
-                                                            <td>Thornton</td>
-                                                            <td>@fat</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">3</th>
-                                                            <td colspan="2">Larry the Bird</td>
-                                                            <td>@twitter</td>
-                                                        </tr>
-                                                    </table>
-                                                </li>
-
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </th>
-                            <th colspan="2"></th>
-                        </tr>
-                        <tr>
-                            <th colspan="2" class="p-0">
-                                <div class="treeview">
-                                    <ul class="m-0">
-                                        <li>
-                                            <a class="p-3">Evaluate 2</a>
-                                            <ul>
-                                                <li>
-                                                    <table class="table">
-                                                        <tr>
-                                                            <th scope="row">1</th>
-                                                            <td>Mark</td>
-                                                            <td>Otto</td>
-                                                            <td>@mdo</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">2</th>
-                                                            <td>Jacob</td>
-                                                            <td>Thornton</td>
-                                                            <td>@fat</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">3</th>
-                                                            <td colspan="2">Larry the Bird</td>
-                                                            <td>@twitter</td>
-                                                        </tr>
-                                                    </table>
-                                                </li>
-
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </th>
-                            <th colspan="2"></th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
             <div class="d-block text-center card-footer">
                 <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i
                         class="pe-7s-trash btn-icon-wrapper"> </i></button>
@@ -297,7 +157,6 @@
 @endsection
 
 @section('second-script')
-<script src="{{asset('assets\js\index.js')}}" defer></script>
 <script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script defer>
 

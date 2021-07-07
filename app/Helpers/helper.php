@@ -72,7 +72,7 @@ class Helper
             case KPIEnum::draft:
                 return "badge badge-pill badge-dark";
                 break;
-            case KPIEnum::submit || KPIEnum::on_process:
+            case KPIEnum::on_process:
                 return "badge badge-pill badge-warning";
                 break;
             case KPIEnum::approved:

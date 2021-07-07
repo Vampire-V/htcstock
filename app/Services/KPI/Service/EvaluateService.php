@@ -79,11 +79,21 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function reviewFilter(Request $request)
     {
         try {
-            return Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod'])
-                ->whereHas('nextlevel', fn ($query) => $query->where('user_approve', \auth()->user()->id))
-                ->whereIn('status', [KPIEnum::on_process, KPIEnum::submit, KPIEnum::approved])
-                ->filter($request)->orderBy('created_at', 'desc')
-                ->get();
+            if (\auth()->user()->email === "eddy.wen@haier.co.th") {
+                $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod'])
+                    // ->whereHas('nextlevel', fn ($query) => $query->where('user_approve', \auth()->user()->id))
+                    ->whereIn('status', [KPIEnum::on_process, KPIEnum::approved])
+                    ->filter($request)->orderBy('period_id', 'desc')
+                    ->get();
+            } else {
+                $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod'])
+                    ->whereHas('nextlevel', fn ($query) => $query->where('user_approve', \auth()->id()))
+                    ->whereIn('status', [KPIEnum::on_process, KPIEnum::approved])
+                    ->filter($request)->orderBy('period_id', 'desc')
+                    ->get();
+            }
+
+            return $result;
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -100,7 +110,7 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
                     ->get();
             } else {
                 $result = Evaluate::with(['user', 'targetperiod' => fn ($query) => $query->orderBy('id', 'asc')])
-                    ->where('user_id', \auth()->user()->id)
+                    ->where('user_id', \auth()->id())
                     ->whereNotIn('status', [KPIEnum::new])
                     ->filter($request)->orderBy('period_id')
                     ->get();

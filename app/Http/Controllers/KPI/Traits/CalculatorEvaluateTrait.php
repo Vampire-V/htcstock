@@ -81,7 +81,7 @@ trait CalculatorEvaluateTrait
 
     private function findTargetPC(EvaluateDetail $object, Collection $collection)
     {
-        $object->target_pc = $object->max;
+        $object->target_pc = $object->max_result;
         if ($object->rule->parent) {
             $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
             $parent = $collection[$index];
@@ -94,7 +94,7 @@ trait CalculatorEvaluateTrait
 
     private function findActualPC(EvaluateDetail $object, Collection $collection)
     {
-        $object->actual_pc =  $object->actual >= $object->target ? $object->max : ($object->actual / $this->isZeroNew($object->target)) * 100;
+        $object->actual_pc =  $object->actual >= $object->target ? $object->max_result : ($object->actual / $this->isZeroNew($object->target)) * 100;
         if ($object->rule->parent) {
             $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
             $parent = $collection[$index];

@@ -422,20 +422,20 @@ var findAchValue = (obj) => {
     if (typeof obj === `object`) {
         if (!obj.rules.parent) {
             if (obj.rules.calculate_type === calculate.POSITIVE) {
-                ach = obj.actual >= obj.target ? 100.00 : parseFloat((obj.actual / obj.target) * 100.00)
+                ach = obj.actual >= obj.target ? obj.max : parseFloat((obj.actual / obj.target) * 100.00)
             }
             if (obj.rules.calculate_type === calculate.NEGATIVE) {
-                ach = parseFloat((2 - (obj.actual / obj.target)) * 100.00)
+                ach = obj.actual >= obj.target ? obj.max : parseFloat((2 - (obj.actual / obj.target)) * 100.00)
             }
             if (obj.rules.calculate_type === calculate.ZERO) {
                 ach = obj.actual == obj.target ? 100.00 : 0.00
             }
         } else {
             if (obj.rules.calculate_type === calculate.POSITIVE) {
-                ach = obj.actual_pc >= obj.target_pc ? 100.00 : parseFloat((obj.actual_pc / obj.target_pc) * 100)
+                ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((obj.actual_pc / obj.target_pc) * 100)
             }
             if (obj.rules.calculate_type === calculate.NEGATIVE) {
-                ach = parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100)
+                ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100)
             }
             if (obj.rules.calculate_type === calculate.ZERO) {
                 ach = obj.actual_pc <= obj.target_pc ? 100.00 : 0.00
@@ -478,16 +478,14 @@ var findCalValue = (obj, ach) => {
  * @return percent (element.target / parent.target) * 100
  */
 var findTargetPercent = (element, array) => {
-    
+    element.target_pc = 100.00
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
         let target = element.target_config ?? element.target
         let parent_target = parent.target_config ?? parent.target
         if (parent) {
-            let result = isNaN(target / parent_target) ? 0 : target / parent_target
-            element.target_pc = result === Infinity ? 1 / result : result * 100
-
-            element.target_pc = element.target <= element.actual ? element.max ?? element.max_result :  result * 100
+            let result = target >= parent_target ? 100.00 : (target / parent_target) * 100
+            element.target_pc = result
         }
     }
     return element.target_pc
@@ -499,12 +497,11 @@ var findTargetPercent = (element, array) => {
  * @return percent (element.target / parent.target) * 100
  */
 var findActualPercent = (element, array) => {
-    element.actual_pc = element.actual >= element.target ? element.max ?? element.max_result : (element.actual / element.target) * 100
+    element.actual_pc = element.actual >= element.target ? 100.00 : (element.actual / element.target) * 100
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
-        let result = isNaN(element.actual / parent.actual) ? 0 : element.actual / parent.actual
-        element.actual_pc = result === Infinity ? 1 / result : result * 100
-        element.actual_pc =  element.actual >= element.target ? element.max ?? element.max_result : result * 100
+        let result = element.actual >= parent.target ? 100.00 : (element.actual / parent.actual) * 100
+        element.actual_pc = result 
     }
     return element.actual_pc
 }

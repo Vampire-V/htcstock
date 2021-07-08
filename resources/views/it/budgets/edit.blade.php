@@ -46,7 +46,7 @@
                             <label for="validationBudgetsOfMonth">{{ __('itstock.budget.budget-month') }}</label>
                             {{-- <input type="number" name="test"> --}}
                             <input type="number" class="form-control-sm form-control" id="budgets_of_month" name="budgets_of_month"
-                                min="1" value="{{$budget->budgets_of_month}}">
+                                min="1" step="0.01" value="{{$budget->budgets_of_month}}">
                         </div>
                         <div class="col-md-3 mb-3">
                             <button class="btn-shadow btn btn-primary" type="submit" style="margin-top: 30px">

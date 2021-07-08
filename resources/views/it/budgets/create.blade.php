@@ -46,7 +46,7 @@
                         <div class="col-md-4">
                             <input id="budgets_of_month" type="number"
                                 class="form-control-sm form-control @error('budgets_of_month') is-invalid @enderror"
-                                name="budgets_of_month" value="" min="1" required autocomplete="budgets_of_month"
+                                name="budgets_of_month" value="" min="1" required autocomplete="budgets_of_month" step="0.01"
                                 autofocus>
 
                             @error('budgets_of_month')

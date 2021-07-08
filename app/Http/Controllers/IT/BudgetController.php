@@ -110,7 +110,7 @@ class BudgetController extends Controller
      * @param  \App\Budgets  $budget
      * @return \Illuminate\Http\Response
      */
-    public function update(BudgetFormRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             if (Gate::denies('for-superadmin-admin')) {

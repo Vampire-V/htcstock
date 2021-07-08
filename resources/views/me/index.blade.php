@@ -161,7 +161,7 @@
                     <div class="col-md-4">
                         <div class="position-relative form-group">
                             <label for="Division" class="">{{ __('profile.division') }} </label>
-                            <select name="division" id="division" class="form-control form-control-sm" disabled>
+                            <select name="division" id="division" class="form-control form-control-sm" >
                                 <option value="">Choose...</option>
                                 @isset($divisions)
                                 @foreach ($divisions as $division)
@@ -181,7 +181,7 @@
                     <div class="col-md-4">
                         <div class="position-relative form-group">
                             <label for="Department" class="">{{ __('profile.department') }} </label>
-                            <select name="department" id="department" class="form-control form-control-sm" disabled>
+                            <select name="department" id="department" class="form-control form-control-sm" >
                                 <option value="">Choose...</option>
                                 @isset($departments)
                                 @foreach ($departments as $department)
@@ -201,7 +201,7 @@
                     <div class="col-md-4">
                         <div class="position-relative form-group">
                             <label for="Position" class="">{{ __('profile.position') }}</label>
-                            <select name="position" id="position" class="form-control form-control-sm" disabled>
+                            <select name="position" id="position" class="form-control form-control-sm" >
                                 <option value="">Choose...</option>
                                 @isset($positions)
                                 @foreach ($positions as $position)

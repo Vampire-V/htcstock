@@ -34,8 +34,8 @@ trait CalculatorEvaluateTrait
             $ac = $item->actual;
             $tar = $item->target;
             if ($item->rule->calculate_type === KPIEnum::positive) {
-                if ($ac <= 0) {
-                    $item->ach = 0.00;
+                if ($ac >= $tar) {
+                    $item->ach = 100.00;
                 } else {
                     $item->ach = ($ac / $this->isZeroNew($tar)) * 100.00;
                 }
@@ -50,8 +50,8 @@ trait CalculatorEvaluateTrait
             $ac = $item->actual_pc;
             $tar = $item->target_pc;
             if ($item->rule->calculate_type === KPIEnum::positive) {
-                if ($ac <= 0.00) {
-                    $item->ach = 0.00;
+                if ($ac >= $tar) {
+                    $item->ach = 100.00;
                 } else {
                     $item->ach = ($ac / $this->isZeroNew($tar)) * 100.00;
                 }
@@ -81,7 +81,7 @@ trait CalculatorEvaluateTrait
 
     private function findTargetPC(EvaluateDetail $object, Collection $collection)
     {
-        $object->target_pc = 100.00;
+        $object->target_pc = $object->max;
         if ($object->rule->parent) {
             $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
             $parent = $collection[$index];
@@ -94,7 +94,7 @@ trait CalculatorEvaluateTrait
 
     private function findActualPC(EvaluateDetail $object, Collection $collection)
     {
-        $object->actual_pc = 100.00;
+        $object->actual_pc =  $object->actual >= $object->target ? $object->max : ($object->actual / $object->target) * 100;
         if ($object->rule->parent) {
             $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
             $parent = $collection[$index];

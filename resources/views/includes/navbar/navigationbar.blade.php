@@ -69,7 +69,7 @@
                     </a>
                     <div class="dropdown-menu">
                         @foreach (config('translatable.locales') as $locale)
-                        <a class="dropdown-item "
+                        <a class="dropdown-item {{session('locale') === $locale ? "active" : ""}}"
                             href="{{route('switch.language',$locale)}}">{{ __('navigation.'.$locale) }}</a>
                         @endforeach
                         {{-- <a class="dropdown-item "

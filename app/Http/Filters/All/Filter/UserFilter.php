@@ -18,6 +18,7 @@ class UserFilter extends AbstractFilter
         'department' => DepartmentIn::class,
         'position' => PositionIn::class,
         'user_role' => UserRoleIn::class,
-        'users' => UserIn::class
+        'users' => UserIn::class,
+        // 'degree' => EMCGroupIn::class
     ];
 }

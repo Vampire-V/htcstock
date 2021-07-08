@@ -3,8 +3,8 @@
 namespace Helpers;
 
 use App\Enum\KPIEnum;
-use App\Models\KPI\Evaluate;
 use App\Models\KPI\Rule;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 
@@ -82,5 +82,15 @@ class Helper
                 return "badge badge-pill badge-light";
                 break;
         }
+    }
+
+    public static function convertToMonthName($m)
+    {
+        return Carbon::create()->day(1)->month($m)->format('F');
+    }
+
+    public static function convertToMonthNumber($m)
+    {
+        return Carbon::create()->day(1)->month($m)->format('m');
     }
 }

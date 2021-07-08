@@ -6,23 +6,20 @@ use App\Enum\KPIEnum;
 use App\Services\BaseService;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Models\User;
-use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class UserService extends BaseService implements UserServiceInterface
 {
-    protected $periodService;
     /**
      * UserService constructor.
      *
      * @param User $model
      */
-    public function __construct(User $model, TargetPeriodServiceInterface $targetPeriodServiceInterface)
+    public function __construct(User $model)
     {
         parent::__construct($model);
-        $this->periodService = $targetPeriodServiceInterface;
     }
 
     public function all(): Builder
@@ -103,11 +100,12 @@ class UserService extends BaseService implements UserServiceInterface
     {
         try {
             $users = User::select('id', 'email', 'username', 'department_id', 'degree')
+            ->notResigned()
             ->with([
                 'department:id,name', 'evaluates.evaluateDetail.rule.category',
                 'evaluates' => fn ($query) => $query->select('id','user_id','period_id','status','template_id','next_level')->where('status', KPIEnum::approved)->orderBy('period_id'),
                 'evaluates.targetperiod:id,name,year,quarter'
-            ])->notResigned()->orderBy('department_id', 'desc')->get();
+            ])->orderBy('department_id', 'desc')->get();
             return $users;
         } catch (\Throwable $th) {
             throw $th;
@@ -118,6 +116,15 @@ class UserService extends BaseService implements UserServiceInterface
     {
         try {
             return User::where('username', $user->head_id)->first();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function reportStaffEvaluate(Request $request)
+    {
+        try {
+            return User::NotResigned()->with(['evaluates' => fn ($query) => $query->where('period_id', 6)])->get();
         } catch (\Throwable $th) {
             throw $th;
         }

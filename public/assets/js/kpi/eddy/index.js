@@ -13,7 +13,7 @@
         // Loop over them and prevent submission
         // validationForm(forms)
 
-        fetch_user_evalate()
+        // fetch_user_evalate()
 
 
     }, false);
@@ -32,8 +32,8 @@ const fetch_user_evalate = async () => {
                 degree: ['N-1']
             }
         }
-        let users = await getOperationReportScore(filter)
-        console.log(users);
+        // let users = await getOperationReportScore(filter)
+        // console.log(users);
     } catch (error) {
         console.error(error)
         toast(error)

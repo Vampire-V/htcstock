@@ -39,7 +39,37 @@ class AllEvaluationController extends Controller
      */
     public function index(Request $request)
     {
-        return \view('kpi.Eddy.index');
+        $firsts = \collect([KPIEnum::ready, KPIEnum::draft]);
+        $second = \collect([KPIEnum::on_process]);
+        $third = \collect([KPIEnum::approved]);
+        $degree = \collect([KPIEnum::one,KPIEnum::two,KPIEnum::tree]);
+        try {
+            $departments = $this->departmentService->dropdown();
+            $users = $this->userService->reportStaffEvaluate($request);
+            foreach ($users as $key => $user) {
+                $user->first = \false;
+                $user->second = \false;
+                $user->third = \false;
+                if ($user->evaluates->count() > 0) {
+                    $status = $user->evaluates->first()->status;
+                    if ($firsts->contains($status)) {
+                        $user->first = \true;
+                    }
+                    if ($second->contains($status)) {
+                        $user->first = \true;
+                        $user->second = \true;
+                    }
+                    if ($third->contains($status)) {
+                        $user->first = \true;
+                        $user->second = \true;
+                        $user->third = \true;
+                    }
+                }
+            }
+            return \view('kpi.Eddy.index', \compact('users','departments','degree'));
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
     }
 
     /**
@@ -127,7 +157,7 @@ class AllEvaluationController extends Controller
     {
         try {
             $data = User::with(['evaluate.evaluateDetail'])->notResigned()->get();
-            return $this->successResponse(UserEvaluateResource::collection($data),"user evaluates all",200);
+            return $this->successResponse(UserEvaluateResource::collection($data), "user evaluates all", 200);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }

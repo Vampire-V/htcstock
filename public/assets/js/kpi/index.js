@@ -478,7 +478,8 @@ var findCalValue = (obj, ach) => {
  * @return percent (element.target / parent.target) * 100
  */
 var findTargetPercent = (element, array) => {
-    element.target_pc = element.max
+    element.target_pc = element.max ?? element.max_result
+    // console.log(element);
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
         let config = element.target_config ?? element.target

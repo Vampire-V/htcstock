@@ -176,7 +176,7 @@ class UsersController extends Controller
                     $user->translateOrNew('th')->name = $user->translate('th')->name ?? $value['name'];
                     $user->name_th = $user->translate('th')->name ?? $value['name'];
                     $user->email = $value['email'];
-                    $user->email_verifed_at = $user->email_verifed_at ?? \now();
+                    // $user->email_verifed_at = $user->email_verifed_at ?? \now();
                     $user->head_id = $user->head_id ?? $value['leader'];
                     $user->save();
                     $list_users[] = $value['username'];

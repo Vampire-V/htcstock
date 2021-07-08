@@ -81,24 +81,24 @@ trait CalculatorEvaluateTrait
 
     private function findTargetPC(EvaluateDetail $object, Collection $collection)
     {
-        $object->target_pc = $object->max_result;
+        $object->target_pc = $object->max_result ?? $object->max;
         if ($object->rule->parent) {
             $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
             $parent = $collection[$index];
             $target = $object->target_config ?? $object->target;
             $parent_target = $parent->target_config ?? $parent->target;
 
-            $object->target_pc =  ($target / $this->isZeroNew($parent_target)) * 100;
+            $object->target_pc =  $target <= $object->actual ? ($object->max_result ?? $object->max) : ($target / $this->isZeroNew($parent_target)) * 100;
         };
     }
 
     private function findActualPC(EvaluateDetail $object, Collection $collection)
     {
-        $object->actual_pc =  $object->actual >= $object->target ? $object->max_result : ($object->actual / $this->isZeroNew($object->target)) * 100;
+        $object->actual_pc =  $object->actual >= $object->target ? ($object->max_result ?? $object->max) : ($object->actual / $this->isZeroNew($object->target)) * 100;
         if ($object->rule->parent) {
             $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
             $parent = $collection[$index];
-            $object->actual_pc = ($object->actual / $this->isZeroNew($parent->actual)) * 100;
+            $object->actual_pc = $object->actual >= $object->target ? ($object->max_result ?? $object->max) : ($object->actual / $this->isZeroNew($parent->actual)) * 100;
             // $object->actual_pc =  ($object->actual / $parent->actual) * 100;
         };
     }

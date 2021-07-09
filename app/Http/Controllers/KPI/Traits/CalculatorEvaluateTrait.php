@@ -91,7 +91,7 @@ trait CalculatorEvaluateTrait
         if ($object->rule->parent) {
             $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
             $parent = $collection[$index];
-            $object->actual_pc = $object->actual >= $object->target ? 0.00 : ($object->actual / $this->isZeroNew($parent->actual)) * 100;
+            $object->actual_pc = $object->actual >= $parent->target ? 0.00 : ($object->actual / $this->isZeroNew($parent->actual)) * 100;
             // $object->actual_pc =  ($object->actual / $parent->actual) * 100;
         }else{
             $object->actual_pc = ($object->actual / $this->isZeroNew($object->target)) * 100;

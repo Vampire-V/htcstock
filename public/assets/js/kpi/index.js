@@ -12,14 +12,14 @@ var calculate = {
         APPROVED: "Approved"
     },
     degree = {
-        ONE:"N-1",
-        TWO:"N-2",
-        TREE:"N-3"
+        ONE: "N-1",
+        TWO: "N-2",
+        TREE: "N-3"
     },
     quarters = {
-        AVERAGE:"Average",
-        LAST_MONTH:"Last Month",
-        SUM:"Sum"
+        AVERAGE: "Average",
+        LAST_MONTH: "Last Month",
+        SUM: "Sum"
     }
 className = ['form-control', 'form-control-sm']
 
@@ -43,7 +43,7 @@ class EvaluateForm {
         remove = [],
         next = false,
         next_level = null,
-        status = null ) {
+        status = null) {
         this.template = template
         this.minone = minone
         this.maxone = maxone
@@ -478,7 +478,7 @@ var findCalValue = (obj, ach) => {
  * @return percent (element.target / parent.target) * 100
  */
 var findTargetPercent = (element, array) => {
-    
+
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
         let target = element.target_config ?? element.target
@@ -487,7 +487,7 @@ var findTargetPercent = (element, array) => {
             let result = target >= parent_target ? 0.00 : (target / parent_target) * 100
             element.target_pc = result
         }
-    }else{
+    } else {
         element.target_pc = 100.00
     }
     return element.target_pc
@@ -499,13 +499,13 @@ var findTargetPercent = (element, array) => {
  * @return percent (element.target / parent.target) * 100
  */
 var findActualPercent = (element, array) => {
-    
+
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
         let result = element.actual >= parent.target ? 0.00 : (element.actual / parent.actual) * 100
-        element.actual_pc = result 
-    }else{
-        element.actual_pc = (element.actual / element.target) * 100
+        element.actual_pc = result
+    } else {
+        element.actual_pc = (element.actual / (element.target === 0) ? 1 : element.target) * 100
     }
     return element.actual_pc
 }

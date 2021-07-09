@@ -104,6 +104,10 @@
                                 <i class="pe-7s-file"></i>
                                 Import
                             </span></button>
+                            <a href="{{route('kpi.rules.export')}}" class="mb-2 mr-2 btn-transition btn btn-outline-focus"><span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="pe-7s-file"></i>
+                                Export
+                            </span></a>
                         <a href="{{route('kpi.rule-list.create')}}" class="btn-shadow btn btn-info mb-2 mr-2">
                             <span class="btn-icon-wrapper pr-2 opacity-7">
                                 <i class="pe-7s-plus"></i>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\KPI\Rule;
 
 use App\Enum\KPIEnum;
+use App\Exports\KPI\RulesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\KPI\StoreRulePost;
 use App\Http\Requests\KPI\StoreRulePut;
@@ -332,5 +333,11 @@ class RuleController extends Controller
         }
         DB::commit();
         return $this->successResponse(['errors' => $this->excel_errors, 'status' => $status], $message, 200);
+    }
+
+
+    public function rulesdowload()
+    {
+        return Excel::download( new RulesExport(), "Rules_".now().".xlsx") ;
     }
 }

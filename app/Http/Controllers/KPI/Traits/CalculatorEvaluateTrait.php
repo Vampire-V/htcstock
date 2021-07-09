@@ -80,7 +80,7 @@ trait CalculatorEvaluateTrait
             $target = $object->target_config ?? $object->target;
             $parent_target = $parent->target_config ?? $parent->target;
 
-            $object->target_pc =  $target <= $parent_target ? 0.00 : ($target / $this->isZeroNew($parent_target)) * 100;
+            $object->target_pc =  $target >= $parent_target ? 0.00 : ($target / $this->isZeroNew($parent_target)) * 100;
         }else{
             $object->target_pc = 100.00;
         };

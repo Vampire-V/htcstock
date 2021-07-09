@@ -5308,7 +5308,7 @@ input[type="button"].btn-block {
     padding: .75rem 1.25rem;
     margin-bottom: 0;
     color: inherit;
-    background-color: #fff;
+    background-color: #eaeaea;
     border-bottom: 1px solid rgba(26, 54, 126, 0.125)
 }
 
@@ -25876,4 +25876,14 @@ input[type=number] {
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background-color: #20201fbd;
+}
+
+.fiexd-btn-botton {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    /* background-color: red; */
+    /* color: white; */
+    text-align: right;
 }

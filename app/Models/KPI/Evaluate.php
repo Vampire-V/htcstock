@@ -16,6 +16,7 @@ class Evaluate extends Model
         'period_id' => 'int',
         'head_id' => 'int',
         'template_id' => 'int',
+        'current_level' => 'int',
         'next_level' => 'int',
         'main_rule_condition_1_min' => 'float',
         'main_rule_condition_1_max' => 'float',
@@ -53,7 +54,7 @@ class Evaluate extends Model
     //     'comment'
     // ];
     protected $guarded = [];
-    protected $with = ['nextlevel'];
+    protected $with = ['nextlevel','currentlevel'];
 
     // service เรียกใช้ Filter
     public function scopeFilter(Builder $builder, $request)

@@ -46,4 +46,9 @@ trait EvaluateTrait
     {
         return $this->belongsTo(UserApprove::class,'next_level')->withDefault();
     }
+
+    public function currentlevel()
+    {
+        return $this->belongsTo(UserApprove::class,'current_level')->withDefault();
+    }
 }

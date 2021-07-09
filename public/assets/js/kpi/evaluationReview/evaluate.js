@@ -28,7 +28,7 @@
                 .finally(() => {
                     render_html()
                     // console.log(evaluateForm);
-                    if (evaluateForm.next_level.user_approve.id === auth.id && evaluateForm.status === status.ONPROCESS) {
+                    if (evaluateForm.current_level.user_approve.id === auth.id && evaluateForm.status === status.ONPROCESS) {
                         pageEnable()
                     }else{
                         pageDisable()
@@ -253,10 +253,10 @@ const reject = async (e) => {
                 let status = document.getElementsByClassName('card-header')[0].querySelector('span')
                 if (res.status === 201) {
                     status.textContent = res.data.data.status
-                    if (res.data.data.next_level.user_approve.id === auth.id && res.data.data.status === status.ONPROCESS) {
-                        pageDisable()
-                    }else{
+                    if (res.data.data.current_level.user_approve.id !== auth.id && res.data.data.status === status.ONPROCESS) {
                         pageEnable()
+                    }else{
+                        pageDisable()
                     }
                     toast(res.data.message, res.data.status)
                 }
@@ -282,10 +282,10 @@ const approve = (e) => {
                 status.textContent = res.data.data.status
                 // console.log(res.data.data.next_level.user_approve.id , auth.id);
                 // console.log(res.data.data.status , status.ONPROCESS);
-                if (res.data.data.next_level.user_approve.id === auth.id && res.data.data.status === status.ONPROCESS) {
-                    pageDisable()
-                }else{
+                if ((res.data.data.current_level.user_approve.id !== auth.id) && (res.data.data.status === status.ONPROCESS)) {
                     pageEnable()
+                }else{
+                    pageDisable()
                 }
                 toast(res.data.message, res.data.status)
             }

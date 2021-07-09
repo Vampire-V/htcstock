@@ -43,6 +43,7 @@ class EvaluateForm {
         remove = [],
         next = false,
         next_level = null,
+        current_level = null,
         status = null) {
         this.template = template
         this.minone = minone
@@ -62,6 +63,7 @@ class EvaluateForm {
         this.remove = remove
         this.next = next
         this.next_level = next_level
+        this.current_level = current_level
         this.status = status
     }
 }
@@ -118,6 +120,7 @@ var setEvaluate = (datas) => {
     evaluateForm.comment = datas.comment
     evaluateForm.status = datas.status
     evaluateForm.next_level = datas.next_level
+    evaluateForm.current_level = datas.current_level
     evaluateForm.detail = setDetail(datas.detail).detail
     return evaluateForm
 }

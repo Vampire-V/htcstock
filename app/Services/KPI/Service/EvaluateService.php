@@ -4,6 +4,7 @@ namespace App\Services\KPI\Service;
 
 use App\Enum\KPIEnum;
 use App\Models\KPI\Evaluate;
+use App\Models\KPI\UserApprove;
 use App\Services\BaseService;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -86,8 +87,10 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
                     ->filter($request)->orderBy('period_id', 'desc')
                     ->get();
             } else {
+                $keys = UserApprove::where('user_approve',\auth()->id())->get();
                 $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod'])
-                    ->whereHas('nextlevel', fn ($query) => $query->where('user_approve', \auth()->id()))
+                    // ->whereHas('nextlevel', fn ($query) => $query->where('user_approve', \auth()->id()))
+                    ->whereIn('current_level', $keys->pluck('id'))
                     ->whereIn('status', [KPIEnum::on_process, KPIEnum::approved])
                     ->filter($request)->orderBy('period_id', 'desc')
                     ->get();

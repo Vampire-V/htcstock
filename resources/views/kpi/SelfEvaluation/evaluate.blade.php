@@ -121,58 +121,58 @@
                                 onclick="removeInSelected(this)">Delete Selected
                                 Rule</button>
                             <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
-                                data-target="#rule-modal" id="rule-add-modal">Add
-                                New Rule</button>
-                        </div>
-                        @endif --}}
+                        data-target="#rule-modal" id="rule-add-modal">Add
+                        New Rule</button>
                     </div>
+                    @endif --}}
                 </div>
+            </div>
 
-                <div class="table-responsive">
-                    <table class="mb-0 table table-sm table-bordered" id="table-{{$group->name}}">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>#</th>
-                                <th>Rule Name</th>
-                                <th>Description</th>
-                                <th>Base Line %</th>
-                                <th>Max %</th>
-                                <th>Weight %</th>
-                                <th>Target Amount</th>
-                                <th>Target %</th>
-                                <th>Actual Amount</th>
-                                <th>Actual %</th>
-                                <th>%Ach</th>
-                                <th>%Cal</th>
-                                <th>#</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+            <div class="table-responsive">
+                <table class="mb-0 table table-sm table-bordered" id="table-{{$group->name}}">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Rule Name</th>
+                            <th>Description</th>
+                            <th>Base Line %</th>
+                            <th>Max %</th>
+                            <th>Weight %</th>
+                            <th>Target Amount</th>
+                            <th>Target %</th>
+                            <th>Actual Amount</th>
+                            <th>Actual %</th>
+                            <th>%Ach</th>
+                            <th>%Cal</th>
+                            <th>#</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th scope="row"></th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td style="text-align: right;">Weight</td>
-                                <td>0.00</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th scope="row"></th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: right;">Weight</td>
+                            <td>0.00</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
-    @endforeach
+</div>
+@endforeach
 </div>
 @endisset
 
@@ -222,11 +222,14 @@
         <div class="page-title-heading">
         </div>
         <div class="page-title-actions">
-            <button class="mb-2 mr-2 btn btn-primary" id="submit" onclick="submit()">Save</button>
-            <button class="mb-2 mr-2 btn btn-success" id="submit-to-user" onclick="submitToManager()">Save & Send to
-                manager</button>
+
         </div>
     </div>
+</div>
+<div class="page-title-actions fiexd-btn-botton">
+    <button class="mb-2 mr-2 btn btn-primary" id="submit" onclick="submit()">Save</button>
+    <button class="mb-2 mr-2 btn btn-success" id="submit-to-user" onclick="submitToManager()">Save & Send to
+        manager</button>
 </div>
 
 @endsection

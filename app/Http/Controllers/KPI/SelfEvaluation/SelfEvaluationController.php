@@ -177,14 +177,20 @@ class SelfEvaluationController extends Controller
                     Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
                     return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
                 }
+                $user_approve = $this->userApproveService->findNextLevel($evaluate);
                 $evaluate->status = KPIEnum::on_process;
+                $evaluate->current_level = $evaluate->getOriginal('next_level');
+                $evaluate->next_level = $user_approve->id;
+                // dd($evaluate);
                 Mail::to($evaluate->nextlevel->approveBy->email)->send(new EvaluationSelfMail($evaluate));
+                $message = "send mail to ".$evaluate->nextlevel->approveBy->name;
             } else {
                 $evaluate->status = KPIEnum::draft;
+                $message = "Draft evaluate of ".$evaluate->user->name;
             }
             $evaluate->save();
             DB::commit();
-            return $this->successResponse(new EvaluateResource($evaluate->fresh()), "send mail to ".$evaluate->nextlevel->approveBy->name, 201);
+            return $this->successResponse(new EvaluateResource($evaluate->fresh()),$message , 201);
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), 500);

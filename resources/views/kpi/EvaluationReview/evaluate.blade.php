@@ -209,12 +209,16 @@
 {{-- Button --}}
 <div class="app-page-title">
     <div class="page-title-wrapper">
-        <div class="page-title-heading"></div>
+        <div class="page-title-heading">
+        </div>
         <div class="page-title-actions">
-            <button class="mb-2 mr-2 btn btn-primary" onclick="approve(this)">Approve</button>
-            <button class="mb-2 mr-2 btn btn-warning" onclick="reject(this)">Reject</button>
+
         </div>
     </div>
+</div>
+<div class="page-title-actions fiexd-btn-botton">
+    <button class="mb-2 mr-2 btn btn-primary" onclick="approve(this)">Approve</button>
+            <button class="mb-2 mr-2 btn btn-warning" onclick="reject(this)">Reject</button>
 </div>
 
 @endsection

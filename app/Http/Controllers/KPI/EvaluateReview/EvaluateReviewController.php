@@ -167,6 +167,7 @@ class EvaluateReviewController extends Controller
                     Log::notice("User : " . \auth()->user()->name . " = Update evaluate review next step : id = " . $evaluate->id);
                     $message = "Next step send to ".$user_approve->approveBy->name;
                 }
+                $evaluate->current_level = $evaluate->getOriginal('next_level');
                 $evaluate->next_level = $user_approve->id;
                 
                 # send mail to approved
@@ -179,6 +180,7 @@ class EvaluateReviewController extends Controller
                 $user_approve = $this->userApproveService->findFirstLevel($evaluate->user_id);
                 $evaluate->status = KPIEnum::draft;
                 $evaluate->comment = $request->comment;
+                $evaluate->current_level = null;
                 $evaluate->next_level = $user_approve->id;
                 
                 # send mail to reject
@@ -188,7 +190,7 @@ class EvaluateReviewController extends Controller
             }
             $evaluate->save();
             DB::commit();
-            return $this->successResponse(new EvaluateResource($evaluate), $message, 201);
+            return $this->successResponse(new EvaluateResource($evaluate->fresh()), $message, 201);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());

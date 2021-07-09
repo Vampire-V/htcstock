@@ -105,7 +105,7 @@ var render_html = () => {
                 cellTargetPC.textContent = findTargetPercent(element,temp_rules).toFixed(2) + `%`
 
                 let cellActual = newRow.insertCell()
-                cellActual.appendChild(newInput('number', className, 'actual', element.actual.toFixed(2), '', `changeValue(this)`, readonly))
+                cellActual.appendChild(newInput('number', className, 'actual', element.actual.toFixed(2), '', `changeValue(this)`))
 
                 let cellActualPC = newRow.insertCell()
                 cellActualPC.textContent = findActualPercent(element,temp_rules).toFixed(2) + `%`

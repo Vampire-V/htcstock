@@ -34,25 +34,49 @@ trait CalculatorEvaluateTrait
             $ac = $item->actual;
             $tar = $item->target;
             if ($item->rule->calculate_type === KPIEnum::positive) {
-                $item->ach = $ac >= $tar ? $item->max_result ?? $item->max : ($ac / $this->isZeroNew($tar)) * 100.00;
+                if ($ac >= $tar) {
+                    $item->ach = $item->max_result ?? $item->max;
+                } else if($ac === 0.00) {
+                    $item->ach = 0.00;
+                }else{
+                    $item->ach = ($ac / $this->isZeroNew($tar)) * 100.00;
+                }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                $item->ach = $ac >= $tar ? $item->max_result ?? $item->max : (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
+                if ($ac >= $tar) {
+                    $item->ach = $item->max_result ?? $item->max;
+                } else if($ac === 0.00) {
+                    $item->ach = 0.00;
+                }else{
+                    $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
+                }
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
-                $item->ach = $ac == $tar ? $item->max_result ?? $item->max : 0.00;
+                $item->ach = $ac <= $tar ? 100.00 : 0.00;
             }
         } else {
             $ac = $item->actual_pc;
             $tar = $item->target_pc;
             if ($item->rule->calculate_type === KPIEnum::positive) {
-                $item->ach = $ac >= $tar ? $item->max_result ?? $item->max : ($ac / $this->isZeroNew($tar)) * 100.00;
+                if ($ac >= $tar) {
+                    $item->ach = $item->max_result ?? $item->max;
+                } else if($ac === 0.00) {
+                    $item->ach = 0.00;
+                }else{
+                    $item->ach = ($ac / $this->isZeroNew($tar)) * 100.00;
+                }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                $item->ach =  $ac >= $tar ? $item->max_result ?? $item->max : (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
+                if ($ac >= $tar) {
+                    $item->ach = $item->max_result ?? $item->max;
+                } else if($ac === 0.00) {
+                    $item->ach = 0.00;
+                }else{
+                    $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
+                }
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
-                $item->ach = $ac <= $tar ? $item->max_result ?? $item->max : 0.00;
+                $item->ach = $ac <= $tar ? 100.00 : 0.00;
             }
         }
     }
@@ -73,14 +97,20 @@ trait CalculatorEvaluateTrait
 
     private function findTargetPC(EvaluateDetail $object, Collection $collection)
     {
-        
         if ($object->rule->parent) {
             $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
             $parent = $collection[$index];
             $target = $object->target_config ?? $object->target;
             $parent_target = $parent->target_config ?? $parent->target;
 
-            $object->target_pc =  $target >= $parent_target ? 0.00 : ($target / $this->isZeroNew($parent_target)) * 100;
+            if ($target > $parent_target) {
+                $object->target_pc = 0.00;
+            } else if($target === 0.00 && $parent_target === 0.00 ){
+                $object->target_pc = 0.00;
+            } else {
+                $object->target_pc = ($target / $this->isZeroNew($parent_target)) * 100;
+            }
+            
         }else{
             $object->target_pc = 100.00;
         };
@@ -91,10 +121,52 @@ trait CalculatorEvaluateTrait
         if ($object->rule->parent) {
             $index = $collection->search(fn ($item) => $item->rule_id === $object->rule->parent);
             $parent = $collection[$index];
-            $object->actual_pc = $object->actual >= $parent->target ? 0.00 : ($object->actual / $this->isZeroNew($parent->actual)) * 100;
-            // $object->actual_pc =  ($object->actual / $parent->actual) * 100;
+
+            if ($object->rule->calculate_type === KPIEnum::positive) {
+                if ($object->actual > $parent->actual) {
+                    $object->ach = 0.00;
+                }else if ($object->actual === 0.00) {
+                    $object->ach = 0.00;
+                } else {
+                    $object->ach = ($object->actual / $this->isZeroNew($parent->actual)) * 100;
+                }
+            }
+            if ($object->rule->calculate_type === KPIEnum::negative) {
+                if ($object->actual > $parent->actual) {
+                    $object->ach = 0.00;
+                }else if ($object->actual === 0.00) {
+                    $object->ach = 0.00;
+                } else {
+                    $object->ach = ($object->actual / $this->isZeroNew($parent->actual)) * 100;
+                }
+            }
+            if ($object->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
+                $object->ach = $object->actual <= $parent->actual ? 100.00 : 0.00;
+            }
         }else{
-            $object->actual_pc = ($object->actual / $this->isZeroNew($object->target)) * 100;
+            if ($object->rule->calculate_type === KPIEnum::positive) {
+                if ($object->actual > $object->target) {
+                    $object->ach = 0.00;
+                }else if ($object->actual === 0.00) {
+                    $object->ach = 0.00;
+                } else {
+                    $object->ach = ($object->actual / $this->isZeroNew($object->target)) * 100;
+                }
+            }
+            if ($object->rule->calculate_type === KPIEnum::negative) {
+                if ($object->actual > $object->target) {
+                    $object->ach = 0.00;
+                }else if ($object->actual === 0.00) {
+                    $object->ach = 0.00;
+                } else {
+                    $object->ach = ($object->actual / $this->isZeroNew($object->target)) * 100;
+                }
+            }
+            if ($object->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
+                $object->ach = $object->actual <= $object->target ? 100.00 : 0.00;
+            }
+
+            // $object->actual_pc = ($object->actual / $this->isZeroNew($object->target)) * 100;
         };
     }
 

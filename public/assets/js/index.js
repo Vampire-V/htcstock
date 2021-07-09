@@ -267,7 +267,7 @@ var newInput = (type, classList = '', name = '', value = '', id = '', nameMethod
     }
 
     if (type === 'number') {
-        element.setAttribute(`min`, 0)
+        // element.setAttribute(`min`, 0)
         element.setAttribute(`step`, 0.01)
     }
     if (Array.isArray(classList)) {

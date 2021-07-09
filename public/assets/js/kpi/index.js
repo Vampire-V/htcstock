@@ -142,191 +142,6 @@ var setDetail = (rule_temp) => {
     return evaluateForm
 }
 
-var displayDetail = (evaluateForm) => {
-    // create tr in table
-    let tables = document.getElementsByClassName('app-main__inner')[0].querySelectorAll('table')
-    let weightForSum = []
-    let achForSum = []
-    for (let i = 0; i < tables.length; i++) {
-        const table = tables[i]
-        let data_category = evaluateForm.detail.filter(value => value.rules.categorys.name === table.id.substring(6))
-        let sum_weight = 0.00
-        let sum_ach = 0.00
-        let sum_cal = 0.00
-        if (window.location.pathname.search("self-evaluation") > 0 || window.location.pathname.search("evaluation-review") > 0) {
-            if (table.id === "table-kpi" || table.id === "table-key-task" || table.id === "table-omg") {
-                removeAllChildNodes(table.tBodies[0])
-                for (let index = 0; index < data_category.length; index++) {
-                    const element = data_category[index]
-                    let newRow = table.tBodies[0].insertRow()
-
-                    let cellIndex = newRow.insertCell()
-                    cellIndex.textContent = index + 1
-
-                    let cellName = newRow.insertCell()
-                    cellName.textContent = element.rules.name
-
-                    let cellBaseLine = newRow.insertCell()
-                    cellBaseLine.textContent = element.base_line
-
-                    let cellMax = newRow.insertCell()
-                    cellMax.textContent = element.max
-
-                    let cellWeight = newRow.insertCell()
-                    cellWeight.textContent = element.weight + '%'
-
-                    let cellTarget = newRow.insertCell()
-                    cellTarget.textContent = element.target
-
-                    let cellActual = newRow.insertCell()
-                    // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
-                    let readonly = auth === element.rules.user_actual.id || window.location.pathname.includes("evaluation-review") ? false : true
-                    cellActual.appendChild(newInput('number', className, 'actual', element.actual, '', `changeActualValue(this)`, readonly))
-
-                    let cellAch = newRow.insertCell()
-                    element.ach = findAchValue(element)
-                    cellAch.textContent = element.ach.toFixed(2) + '%'
-                    setTooltipAch(cellAch, element)
-
-                    let cellCal = newRow.insertCell()
-                    element.cal = findCalValue(element, element.ach)
-                    cellCal.textContent = element.cal.toFixed(2) + '%'
-                    setTooltipCal(cellCal, element)
-                }
-                sum_weight = data_category.reduce((total, cur) => total += cur.weight, sum_weight)
-                table.tFoot.lastElementChild.cells[4].textContent = `${sum_weight.toFixed(2)}%`
-
-                sum_ach = data_category.reduce((total, cur) => total += cur.ach, sum_ach)
-                table.tFoot.lastElementChild.cells[7].textContent = `${sum_ach.toFixed(2)}%`
-
-                sum_cal = data_category.reduce((total, cur) => total += cur.cal, sum_cal)
-                table.tFoot.lastElementChild.cells[8].textContent = `${sum_cal.toFixed(2)}%`
-
-                weightForSum.push(parseFloat(sum_weight))
-                achForSum.push(parseFloat(sum_ach))
-            }
-
-            if (table.id === "table-calculation") {
-                let body_cal = table.tBodies[0].rows
-                let sum_total = 0.00
-                for (let index = 0; index < body_cal.length; index++) {
-                    const row = body_cal[index]
-                    row.cells[1].textContent = weightForSum[index].toFixed(2) + '%'
-                    row.cells[2].textContent = achForSum[index].toFixed(2) + '%'
-                    let total = (parseFloat(achForSum[index]) * parseFloat(weightForSum[index]) / 100)
-                    row.cells[3].textContent = total.toFixed(2) + '%'
-                    setAttributes(row.cells[3], {
-                        "data-toggle": "tooltip",
-                        "title": "Total = (Ach% * Weight%) / 100",
-                        "data-placement": "top"
-                    })
-
-                    sum_total += parseFloat(total)
-                }
-                table.tFoot.lastElementChild.cells[3].textContent = sum_total.toFixed(2) + '%'
-            }
-
-        }
-        if (window.location.pathname.search("evaluation-form") > 0) {
-            if (table.id) {
-                let data_category = evaluateForm.detail.filter(value => value.rules.categorys.name === table.id.substring(6))
-                if (data_category.length > 0) {
-                    removeAllChildNodes(table.tBodies[0])
-                    for (let index = 0; index < data_category.length; index++) {
-                        const element = data_category[index]
-                        let newRow = table.tBodies[0].insertRow()
-
-                        let cellIndex = newRow.insertCell()
-                        cellIndex.textContent = index + 1
-
-                        let cellName = newRow.insertCell()
-                        cellName.textContent = element.rules.name
-
-                        let cellDesc = newRow.insertCell()
-                        cellDesc.textContent = element.rules.calculate_type
-
-                        let cellBase_line = newRow.insertCell()
-                        cellBase_line.appendChild(newInput('number', className, 'base_line', element.base_line, '', `changeValueRule(this)`))
-
-                        let cellMax = newRow.insertCell()
-                        cellMax.appendChild(newInput('number', className, 'max', element.max, '', `changeValueRule(this)`))
-
-                        let cellWeight = newRow.insertCell()
-                        cellWeight.appendChild(newInput('number', className, 'weight', element.weight, '', `changeValueRule(this)`))
-
-                        let cellTarget = newRow.insertCell()
-                        cellTarget.appendChild(newInput('number', className, 'target', element.target, '', `changeValueRule(this)`))
-
-                        if (table.id.substring(6) === `key-task`) {
-                            let cellDelete = newRow.insertCell()
-                            let div = document.createElement('div')
-                            div.className = 'custom-checkbox custom-control'
-
-                            let checkbox = newInput('checkbox', 'custom-control-input', `check${element.rule_id}`, '', element.rule_id)
-
-                            let label = document.createElement('label')
-                            label.classList.add('custom-control-label')
-                            label.htmlFor = element.rule_id
-                            div.appendChild(checkbox)
-                            div.appendChild(label)
-                            cellDelete.appendChild(div)
-                        }
-                    }
-                    let sum_weight = data_category.reduce((total, cur) => total += cur.weight, 0.00)
-                    evaluateForm.total_weight_kpi = table.id.substring(6) === 'kpi' ? sum_weight : evaluateForm.total_weight_kpi
-                    evaluateForm.total_weight_key_task = table.id.substring(6) === 'key-task' ? sum_weight : evaluateForm.total_weight_key_task
-                    evaluateForm.total_weight_omg = table.id.substring(6) === 'omg' ? sum_weight : evaluateForm.total_weight_omg
-                    table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
-                    table.offsetParent.querySelector('.card-title').textContent = `${data_category[0].rules.categorys.name} : ${data_category[0].weight_category}%`
-                } else {
-                    evaluateForm.total_weight_kpi = table.id.substring(6) === 'kpi' ? 0.00 : evaluateForm.total_weight_kpi
-                    evaluateForm.total_weight_key_task = table.id.substring(6) === 'key-task' ? 0.00 : evaluateForm.total_weight_key_task
-                    evaluateForm.total_weight_omg = table.id.substring(6) === 'omg' ? 0.00 : evaluateForm.total_weight_omg
-                    table.tFoot.lastElementChild.cells[5].textContent = `0.00%`
-                    removeAllChildNodes(table.tBodies[0])
-                    table.offsetParent.querySelector('.card-title').textContent = table.id.substring(6)
-                }
-            }
-        }
-
-    }
-}
-
-var sumTotalCalculationSummary = (table) => {
-    let total = 0.00
-    for (let index = 0; index < table.length; index++) {
-        const row = table[index]
-        total += parseFloat(row.cells[row.childElementCount - 1].textContent)
-        // row.cells[1].textContent = weightForSum[index].toFixed(2) + '%'
-        // row.cells[2].textContent = achForSum[index].toFixed(2) + '%'
-        // let total = (parseFloat(achForSum[index]) * parseFloat(weightForSum[index]) / 100)
-        // console.log(parseFloat(row.cells[row.childElementCount - 1].textContent));
-        // row.cells[3].textContent = total.toFixed(2) + '%'
-        // sum_total += parseFloat(total)
-    }
-    // console.log(total);
-}
-
-var changeValueRule = (e) => {
-    let object = evaluateForm.detail.find(obj => obj.rules.name === e.offsetParent.parentNode.cells[1].textContent)
-    for (const key in object) {
-        object[key] = key === e.name ? parseFloat(e.value) : object[key]
-    }
-    let table = e.offsetParent.offsetParent
-    let sum = evaluateForm.detail.reduce((total, cur) => cur.rules.category_id === object.rules.category_id ? total += cur.weight : total, 0.00)
-    e.offsetParent.parentNode.parentNode.parentNode.tFoot.lastElementChild.cells[5].textContent = `${sum.toFixed(2)}%`
-
-    evaluateForm.total_weight_kpi = table.id.substring(6) === 'kpi' ? sum : evaluateForm.total_weight_kpi
-    evaluateForm.total_weight_key_task = table.id.substring(6) === 'key-task' ? sum : evaluateForm.total_weight_key_task
-    evaluateForm.total_weight_omg = table.id.substring(6) === 'omg' ? sum : evaluateForm.total_weight_omg
-}
-
-var changeValueMainRule = (e) => {
-    for (const key in evaluateForm) {
-        evaluateForm[key] = (key === e.name) ? parseFloat(e.value) : evaluateForm[key]
-    }
-}
-
 var removeAllChildNodes = (parent) => {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
@@ -418,19 +233,76 @@ var formulaRuleDetail = (e, key) => {
     }
 }
 
+/**
+ * @params {element} EvaluateDetail
+ * @params {array} EvaluateDetail list
+ * @return percent (element.target / parent.target) * 100
+ */
+var findTargetPercent = (element, array) => {
+
+    if (element.rules.parent) {
+        let parent = array.find(item => item.rule_id === element.rules.parent)
+        let target = element.target_config ?? element.target
+        let parent_target = parent.target_config ?? parent.target
+        if (parent) {
+            let result = target > parent_target ? 0.00 : target === 0.00 && parent_target === 0.00 ? 0.00 : (target / parent_target) * 100
+            element.target_pc = result
+        }
+    } else {
+        element.target_pc = 100.00
+    }
+    return element.target_pc
+}
+
+/**
+ * @params {element} EvaluateDetail
+ * @params {array} EvaluateDetail list
+ * @return percent (element.target / parent.target) * 100
+ */
+var findActualPercent = (element, array) => {
+    let result = 0.00
+    if (element.rules.parent) {
+        let parent = array.find(item => item.rule_id === element.rules.parent)
+        if (element.rules.calculate_type === calculate.POSITIVE) {
+            result = element.actual > parent.actual ? 0.00 : element.actual === 0.00 ? 0.00 : (element.actual / parent.actual) * 100
+        }
+        if (element.rules.calculate_type === calculate.NEGATIVE) {
+            result = element.actual > parent.actual ? 0.00 : element.actual === 0.00 ? 0.00 : (element.actual / parent.actual) * 100
+        }
+        if (element.rules.calculate_type === calculate.ZERO) {
+            // ไม่มี
+            result = element.actual <= parent.actual ? 100.00 : 0.00
+        }
+    } else {
+        // result = (element.actual / (element.target === 0) ? 1 : element.target) * 100
+        if (element.rules.calculate_type === calculate.POSITIVE) {
+            result = element.actual > element.target ? 100.00 : element.actual === 0.00 ? 0.00 : (element.actual / element.target) * 100
+        }
+        if (element.rules.calculate_type === calculate.NEGATIVE) {
+            result = element.actual > element.target ? 100.00 : element.actual === 0.00 ? 0.00 : (element.actual / element.target) * 100
+        }
+        if (element.rules.calculate_type === calculate.ZERO) {
+            result = element.actual <= element.target ? 100.00 : 0.00
+        }
+    }
+    return element.actual_pc = result
+}
+
 var findAchValue = (obj) => {
     if (typeof obj === `object`) {
         if (!obj.rules.parent) {
+            // ใช้ amount หา
             if (obj.rules.calculate_type === calculate.POSITIVE) {
-                ach = obj.actual >= obj.target ? obj.max : parseFloat((obj.actual / obj.target) * 100.00)
+                ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)
             }
             if (obj.rules.calculate_type === calculate.NEGATIVE) {
-                ach = obj.actual >= obj.target ? obj.max : parseFloat((2 - (obj.actual / obj.target)) * 100.00)
+                ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((2 - (obj.actual / obj.target)) * 100.00)
             }
             if (obj.rules.calculate_type === calculate.ZERO) {
-                ach = obj.actual == obj.target ? 100.00 : 0.00
+                ach = obj.actual <= obj.target ? 100.00 : 0.00
             }
         } else {
+            // ใช้ % หา
             if (obj.rules.calculate_type === calculate.POSITIVE) {
                 ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((obj.actual_pc / obj.target_pc) * 100)
             }
@@ -470,44 +342,6 @@ var findCalValue = (obj, ach) => {
 
     }
     return isNaN(cal) || (cal === Infinity) ? 0.00 : cal
-}
-
-/**
- * @params {element} EvaluateDetail
- * @params {array} EvaluateDetail list
- * @return percent (element.target / parent.target) * 100
- */
-var findTargetPercent = (element, array) => {
-
-    if (element.rules.parent) {
-        let parent = array.find(item => item.rule_id === element.rules.parent)
-        let target = element.target_config ?? element.target
-        let parent_target = parent.target_config ?? parent.target
-        if (parent) {
-            let result = target >= parent_target ? 0.00 : (target / parent_target) * 100
-            element.target_pc = result
-        }
-    } else {
-        element.target_pc = 100.00
-    }
-    return element.target_pc
-}
-
-/**
- * @params {element} EvaluateDetail
- * @params {array} EvaluateDetail list
- * @return percent (element.target / parent.target) * 100
- */
-var findActualPercent = (element, array) => {
-
-    if (element.rules.parent) {
-        let parent = array.find(item => item.rule_id === element.rules.parent)
-        let result = element.actual >= parent.target ? 0.00 : (element.actual / parent.actual) * 100
-        element.actual_pc = result
-    } else {
-        element.actual_pc = (element.actual / (element.target === 0) ? 1 : element.target) * 100
-    }
-    return element.actual_pc
 }
 
 /**

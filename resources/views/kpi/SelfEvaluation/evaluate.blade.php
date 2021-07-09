@@ -115,7 +115,7 @@
                         </div>
                     </div>
                     <div class="btn-actions-pane-right">
-                        @if (Auth::user()->hasRole('super-admin'))
+                        {{-- @if (Auth::user()->hasRole('super-admin'))
                         <div role="group" class="btn-group-sm btn-group">
                             <button class="mb-2 mr-2 btn btn-danger" id="rule-remove-modal"
                                 onclick="removeInSelected(this)">Delete Selected
@@ -124,7 +124,7 @@
                                 data-target="#rule-modal" id="rule-add-modal">Add
                                 New Rule</button>
                         </div>
-                        @endif
+                        @endif --}}
                     </div>
                 </div>
 

@@ -146,7 +146,7 @@ trait CalculatorEvaluateTrait
         }else{
             if ($object->rule->calculate_type === KPIEnum::positive) {
                 if ($object->actual > $object->target) {
-                    $object->ach = 0.00;
+                    $object->ach = 100.00;
                 }else if ($object->actual === 0.00) {
                     $object->ach = 0.00;
                 } else {
@@ -155,7 +155,7 @@ trait CalculatorEvaluateTrait
             }
             if ($object->rule->calculate_type === KPIEnum::negative) {
                 if ($object->actual > $object->target) {
-                    $object->ach = 0.00;
+                    $object->ach = 100.00;
                 }else if ($object->actual === 0.00) {
                     $object->ach = 0.00;
                 } else {

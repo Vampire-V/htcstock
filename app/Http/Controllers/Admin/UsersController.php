@@ -8,6 +8,7 @@ use App\Http\Resources\ALL\UserResource;
 use App\Models\Department;
 use App\Models\Division;
 use App\Models\GroupDivision;
+use App\Models\KPI\UserApprove;
 use App\Models\Role;
 use App\Models\System;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
@@ -373,15 +374,21 @@ class UsersController extends Controller
         DB::beginTransaction();
         try {
             $to = $request->users;
+            foreach ($to as  $value) {
+                $model_to = $this->userService->find($value);
+                UserApprove::destroy($model_to->user_approves->pluck('id'));
+            }
+
             $user = $this->userService->find($id);
-            $user->user_approves->each(function ($item) use ($to) {
-                foreach ($to as $key => $value) {
-                    $new = $item->replicate()->fill([
+            $user->user_approves->each(function ($approve) use ($to) {
+                foreach ($to as $value) {
+                    $new = $approve->replicate()->fill([
                         'user_id' => intval($value)
                     ]);
                     $new->save();
                 }
             });
+
             DB::commit();
             return $this->successResponse(true, "Copy success.", 200);
         } catch (\Exception $e) {

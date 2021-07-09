@@ -87,7 +87,7 @@ var render_html = () => {
                 })
                 cellDesc.classList.add('truncate')
                 // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
-                let readonly = auth.id === element.rules.user_actual.id || auth.roles.find(item => item.slug === `admin-kpi`) ? false : true
+                let readonly = auth.id === element.user_id || auth.roles.find(item => item.slug === `admin-kpi`) ? false : true
                 // console.log(readonly);
                 let cellBaseLine = newRow.insertCell()
                 cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`, readonly))

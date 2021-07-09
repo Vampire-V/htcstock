@@ -478,15 +478,17 @@ var findCalValue = (obj, ach) => {
  * @return percent (element.target / parent.target) * 100
  */
 var findTargetPercent = (element, array) => {
-    element.target_pc = 100.00
+    
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
         let target = element.target_config ?? element.target
         let parent_target = parent.target_config ?? parent.target
         if (parent) {
-            let result = target >= parent_target ? 100.00 : (target / parent_target) * 100
+            let result = target >= parent_target ? 0.00 : (target / parent_target) * 100
             element.target_pc = result
         }
+    }else{
+        element.target_pc = 100.00
     }
     return element.target_pc
 }
@@ -497,11 +499,13 @@ var findTargetPercent = (element, array) => {
  * @return percent (element.target / parent.target) * 100
  */
 var findActualPercent = (element, array) => {
-    element.actual_pc = element.actual >= element.target ? 100.00 : (element.actual / element.target) * 100
+    
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
-        let result = element.actual >= parent.target ? 100.00 : (element.actual / parent.actual) * 100
+        let result = element.actual >= parent.target ? 0.00 : (element.actual / parent.actual) * 100
         element.actual_pc = result 
+    }else{
+        element.actual_pc = (element.actual / element.target) * 100
     }
     return element.actual_pc
 }

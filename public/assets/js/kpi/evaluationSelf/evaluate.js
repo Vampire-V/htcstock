@@ -79,7 +79,7 @@ var render_html = () => {
                 cellName.classList.add('truncate')
 
                 let cellDesc = newRow.insertCell()
-                cellDesc.textContent = element.rules.parent+"  "+element.rules.calculate_type 
+                cellDesc.textContent = element.rules.description 
                 setAttributes(cellDesc, {
                     "data-toggle": "tooltip",
                     "title": `${element.rules.description}`,

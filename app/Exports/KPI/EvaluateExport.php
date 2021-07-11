@@ -25,7 +25,7 @@ class EvaluateExport implements FromView
             $weight_group = config('kpi.weight')['month'];
         }
         
-        return view('kpi.SelfEvaluation.excel.excelevaluate', [
+        return view('kpi.SelfEvaluation.Excel.excelevaluate', [
             'evaluate' => $this->evaluate,
             'evaluate_detail' => $this->rules,
             'weight_group' => $weight_group,

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\KPI\SelfEvaluation;
 
 use App\Enum\KPIEnum;
+use App\Exports\KPI\EvaluateExport;
 use App\Exports\KPI\EvaluatesExport;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait;
 use App\Http\Resources\KPI\EvaluateDetailResource;
 use App\Http\Resources\KPI\EvaluateResource;
 use App\Mail\KPI\EvaluationSelfMail;
@@ -32,6 +34,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class SelfEvaluationController extends Controller
 {
+    use CalculatorEvaluateTrait;
     protected $evaluateService, $evaluateDetailService, $userService,
         $categoryService, $templateService, $ruleService, $periodService,
         $ruleTemplateService, $setting_action_service, $userApproveService;
@@ -183,14 +186,14 @@ class SelfEvaluationController extends Controller
                 $evaluate->next_level = $user_approve->id;
                 // dd($evaluate);
                 Mail::to($evaluate->nextlevel->approveBy->email)->send(new EvaluationSelfMail($evaluate));
-                $message = "send mail to ".$evaluate->nextlevel->approveBy->name;
+                $message = "send mail to " . $evaluate->nextlevel->approveBy->name;
             } else {
                 $evaluate->status = KPIEnum::draft;
-                $message = "Draft evaluate of ".$evaluate->user->name;
+                $message = "Draft evaluate of " . $evaluate->user->name;
             }
             $evaluate->save();
             DB::commit();
-            return $this->successResponse(new EvaluateResource($evaluate->fresh()),$message , 201);
+            return $this->successResponse(new EvaluateResource($evaluate->fresh()), $message, 201);
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), 500);
@@ -398,5 +401,18 @@ class SelfEvaluationController extends Controller
             }
         }
         return $temp;
+    }
+
+    public function evaluateExcel($id)
+    {
+        try {
+            $evaluate = $this->evaluateService->find($id);
+            $this->calculation_detail($evaluate->evaluateDetail);
+            $evaluate_detail = $evaluate->evaluateDetail->groupBy(fn ($item) => $item->rules->category_id);
+
+            return Excel::download(new EvaluateExport($evaluate, $evaluate_detail), "Evaluate" . $evaluate->user->name . ".xlsx");
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 }

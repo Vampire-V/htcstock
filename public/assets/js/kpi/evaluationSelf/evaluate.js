@@ -291,6 +291,10 @@ const submitToManager = () => {
         })
 }
 
+const download = () => {
+    window.open("/kpi/evaluation/"+evaluate.id+"/excel", "_blank");
+}
+
 // modal method
 
 $('#rule-modal').on('show.bs.modal', function (event) {

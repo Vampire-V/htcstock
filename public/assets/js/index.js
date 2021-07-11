@@ -235,15 +235,17 @@ var setVisible = (visible) => {
 var pageDisable = (elements = '') => {
     let inner_btn = document.getElementsByClassName('app-main__inner')[0].querySelectorAll(elements === '' ? `button,select,input` : elements)
     for (let index = 0; index < inner_btn.length; index++) {
-        const element = inner_btn[index];
-        element.disabled = true
+        const element = inner_btn[index]
+        if (!element.classList.contains('no-disable')) {
+            element.disabled = true
+        }
     }
 }
 
 var pageEnable = () => {
     let inner_btn = document.getElementsByClassName('app-main__inner')[0].querySelectorAll('button,select,input')
     for (let index = 0; index < inner_btn.length; index++) {
-        const element = inner_btn[index];
+        const element = inner_btn[index]
         element.disabled = false
     }
 }

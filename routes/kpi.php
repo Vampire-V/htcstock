@@ -14,6 +14,7 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     
 
     Route::resource('self-evaluation', 'SelfEvaluation\SelfEvaluationController', ['only' => ['index', 'create', 'edit', 'update', 'store', 'destroy']]);
+    Route::get('evaluation/{id}/excel','SelfEvaluation\SelfEvaluationController@evaluateExcel')->name('self.download');
         // new 
         // Route::get('self-evaluation/evaluate', 'SelfEvaluation\SelfEvaluationController@create_new')->name('evaluate.create_new');
         // Route::post('self-evaluation/evaluate', 'SelfEvaluation\SelfEvaluationController@store_new')->name('evaluate.store_new');

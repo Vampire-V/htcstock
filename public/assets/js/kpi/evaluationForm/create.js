@@ -136,6 +136,7 @@ const changeTemplate = (e) => {
                 if (res.status === 200) {
                     evaluateForm.detail = evaluateForm.detail.length > 0 ? [] : evaluateForm.detail
                     try {
+                        console.log(res.data.data);
                         res.data.data.forEach(element => {
                             let detail = new EvaluateDetail()
                             detail.evaluate_id = typeof element.evaluate_id === 'undefined' ? null : element.evaluate_id

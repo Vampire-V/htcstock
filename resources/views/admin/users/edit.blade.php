@@ -9,8 +9,12 @@
         color: red;
     }
 
-    li > span {
+    li>span {
         text-align: right;
+    }
+
+    img {
+        box-shadow: 0 8px 17px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19) !important;
     }
 </style>
 @endsection
@@ -41,14 +45,16 @@
                     @csrf
                     @method('PUT')
                     <div class="form-row">
-                        <div class="col-md-6">
-                            <div class="position-relative form-group">
+                        <div class="col-md-3">
+                            <img src="{{asset('/storage'.$user->image)}}" class="rounded z-depth-2" alt="...">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="position-absolute form-group fixed-bottom mr-2">
                                 <label for="name" class="">{{ __('profile.name') }} (TH)</label>
                                 <input name="name:th" id="name_th" placeholder="Name placeholder" type="text"
                                     class="form-control form-control-sm @error('name') is-invalid @enderror" readonly
                                     value="{{ $user->translate('th') ? $user->translate('th')->name : null }}" required
                                     autocomplete="name" autofocus>
-
                                 @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -56,8 +62,8 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="position-relative form-group">
+                        <div class="col-md-4">
+                            <div class="position-absolute form-group fixed-bottom">
                                 <label for="name" class="">{{ __('profile.name') }} (EN)</label>
                                 <input name="name:en" id="name_en" placeholder="Name placeholder" type="text"
                                     class="form-control form-control-sm @error('name') is-invalid @enderror" readonly
@@ -71,10 +77,10 @@
                                 @enderror
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                     <div class="form-row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="position-relative form-group">
                                 <label for="email" class="">{{ __('profile.email') }}</label>
                                 <input name="email" id="email" placeholder="with a placeholder" type="email"
@@ -88,7 +94,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="position-relative form-group">
                                 <label for="Phone" class="">{{ __('profile.phone') }}</label>
                                 <input name="phone" id="phone" placeholder="Phone placeholder" type="text"
@@ -102,7 +108,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="col-md-4">
                             <div class="position-relative form-group">
@@ -146,7 +151,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <a class="btn btn-warning mr-2" type="button" href="{{url()->previous()}}">Back</a> --}}
                 </form>
             </div>
         </div>
@@ -162,8 +166,8 @@
                     <div role="group" class="btn-group-sm btn-group">
                         <button class="btn btn-sm btn-primary mr-2" data-toggle="modal" id="user-approve-modal"
                             data-toggle="modal" data-target="#lv-approve-modal">Add</button>
-                        <button class="btn btn-sm btn-alternate" data-toggle="modal"
-                            data-target="#copy-to-modal">Copy To</button>
+                        <button class="btn btn-sm btn-alternate" data-toggle="modal" data-target="#copy-to-modal">Copy
+                            To</button>
                     </div>
                 </div>
             </div>
@@ -321,8 +325,8 @@
                         <div class="col-md-12 mb-12">
                             <label for="validationRole" class="">{{ __('User') }}
                                 <span>(เลือกหลายคนได้นะ)</span></label>
-                            <select class="form-control-sm form-control js-select-user-copy-multiple" id="user_copy" name="user_copy[]"
-                                multiple>
+                            <select class="form-control-sm form-control js-select-user-copy-multiple" id="user_copy"
+                                name="user_copy[]" multiple>
                             </select>
                         </div>
                     </div>

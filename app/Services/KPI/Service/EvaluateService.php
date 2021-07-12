@@ -80,7 +80,7 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function reviewFilter(Request $request)
     {
         try {
-            if (\auth()->user()->email === "eddy.wen@haier.co.th") {
+            if (Gate::any(['for-superadmin-admin'])) {
                 $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod'])
                     // ->whereHas('nextlevel', fn ($query) => $query->where('user_approve', \auth()->user()->id))
                     ->whereIn('status', [KPIEnum::on_process, KPIEnum::approved])

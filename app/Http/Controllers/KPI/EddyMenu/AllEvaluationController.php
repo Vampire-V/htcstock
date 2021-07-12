@@ -45,6 +45,7 @@ class AllEvaluationController extends Controller
         $degree = \collect([KPIEnum::one,KPIEnum::two,KPIEnum::tree]);
         try {
             $departments = $this->departmentService->dropdown();
+            $users_drop = $this->userService->dropdown();
             $users = $this->userService->reportStaffEvaluate($request);
             foreach ($users as $key => $user) {
                 $user->first = \false;
@@ -66,7 +67,7 @@ class AllEvaluationController extends Controller
                     }
                 }
             }
-            return \view('kpi.Eddy.index', \compact('users','departments','degree'));
+            return \view('kpi.Eddy.index', \compact('users','departments','degree','users_drop'));
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }

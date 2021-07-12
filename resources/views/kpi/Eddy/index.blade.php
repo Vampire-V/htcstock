@@ -44,12 +44,20 @@
                         <div class="form-row">
                             <div class="col-md-2 mb-2">
                                 <label for="staffName">Staff Name</label>
-                                <input type="text" class="form-control form-control-sm" value="{{Auth::user()->name}}"
-                                    placeholder="User" aria-describedby="inputGroupPrepend" readonly>
+                                {{-- <div class="input-group"> --}}
+                                    <select name="user[]" id="user" class="form-control-sm form-control">
+                                        <option value=""></option>
+                                        @isset($users_drop)
+                                        @foreach ($users_drop as $user)
+                                        <option value="{{$user->id}}">{{$user->name}}</option>
+                                        @endforeach
+                                        @endisset
+                                    </select>
+                                {{-- </div> --}}
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="Department">Department</label>
-                                <div class="input-group">
+                                {{-- <div class="input-group"> --}}
                                     <select name="department[]" id="department" class="form-control-sm form-control">
                                         <option value=""></option>
                                         @isset($departments)
@@ -58,11 +66,11 @@
                                         @endforeach
                                         @endisset
                                     </select>
-                                </div>
+                                {{-- </div> --}}
                             </div>
                             <div class="col-md-2 mb-2">
                                 <label for="EMCGroup">EMC Group</label>
-                                <div class="input-group">
+                                {{-- <div class="input-group"> --}}
                                     <select name="degree[]" id="degree" class="form-control-sm form-control">
                                         <option value=""></option>
                                         @isset($degree)
@@ -71,17 +79,17 @@
                                         @endforeach
                                         @endisset
                                     </select>
-                                </div>
+                                {{-- </div> --}}
                             </div>
                             <div class="col-md-2 mb-2">
                                 <label for="Month">Month</label>
-                                <div class="input-group">
+                                {{-- <div class="input-group"> --}}
                                     <select name="month" id="month" class="form-control-sm form-control">
                                         @foreach (range(1, 12) as $m)
                                     <option value="{{Helper::convertToMonthNumber($m)}}">{{Helper::convertToMonthName($m)}}</option>
                                     @endforeach
                                     </select>
-                                </div>
+                                {{-- </div> --}}
                             </div>
                             <div class="col-md-2 mb-2">
                                 <label for="Year">Year</label>
@@ -118,6 +126,7 @@
                     <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="table-users-result">
                         <thead class="thead-dark">
                             <tr>
+                                <th>EMC Group</th>
                                 <th>Name</th>
                                 <th>Department</th>
                                 <th>Position</th>
@@ -130,6 +139,7 @@
                             @isset($users)
                             @foreach ($users as $key => $user)
                             <tr>
+                                <td class="text-left">{{$user->degree}}</td>
                                 <td class="text-left">{{$user->name}}</td>
                                 <td class="text-left">{{$user->department->name}}</td>
                                 <td class="text-left">{{$user->positions->name}}</td>

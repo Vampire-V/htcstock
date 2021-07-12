@@ -44,7 +44,7 @@ trait CalculatorEvaluateTrait
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
                 if ($ac >= $tar) {
-                    $item->ach = $item->max_result ?? $item->max;
+                    $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
                 } else if($ac === 0.00) {
                     $item->ach = 0.00;
                 }else{
@@ -59,7 +59,7 @@ trait CalculatorEvaluateTrait
             $tar = $item->target_pc;
             if ($item->rule->calculate_type === KPIEnum::positive) {
                 if ($ac >= $tar) {
-                    $item->ach = $item->max_result ?? $item->max;
+                    $item->ach = ($ac / $this->isZeroNew($tar)) * 100.00;
                 } else if($ac === 0.00) {
                     $item->ach = 0.00;
                 }else{

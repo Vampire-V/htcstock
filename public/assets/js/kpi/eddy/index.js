@@ -4,7 +4,26 @@
     document.addEventListener('DOMContentLoaded', function () {
         // Supporting Documents
         // Set data object for form update
-
+        $("#user").select2({
+            placeholder: 'Select Staff',
+            allowClear: true
+        })
+        $("#department").select2({
+            placeholder: 'Select Department',
+            allowClear: true
+        })
+        $("#degree").select2({
+            placeholder: 'Select EMC Group',
+            allowClear: true
+        })
+        $("#month").select2({
+            placeholder: 'Select Month',
+            allowClear: true
+        })
+        $("#year").select2({
+            placeholder: 'Select Year',
+            allowClear: true
+        })
     })
 
     window.addEventListener('load', function () {

@@ -299,7 +299,7 @@ var findAchValue = (obj) => {
                 ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)
             }
             if (obj.rules.calculate_type === calculate.NEGATIVE) {
-                ach = obj.actual >= obj.target ?  parseFloat((2 - (obj.actual / obj.target)) * 100.00) : obj.actual === 0.00 ? 0.00 : parseFloat((2 - (obj.actual / obj.target)) * 100.00)
+                ach = obj.actual >= obj.target ?  parseFloat((2 - (obj.actual / obj.target)) * 100.00) : 0.00 
             }
             if (obj.rules.calculate_type === calculate.ZERO) {
                 ach = obj.actual <= obj.target ? 100.00 : 0.00
@@ -310,7 +310,7 @@ var findAchValue = (obj) => {
                 ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((obj.actual_pc / obj.target_pc) * 100)
             }
             if (obj.rules.calculate_type === calculate.NEGATIVE) {
-                ach = obj.actual_pc >= obj.target_pc ? parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100) : obj.actual_pc === 0.00 ? 0.00 : parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100)
+                ach = obj.actual_pc >= obj.target_pc ? parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100) : 0.00 
             }
             if (obj.rules.calculate_type === calculate.ZERO) {
                 ach = obj.actual_pc <= obj.target_pc ? 100.00 : 0.00

@@ -3,6 +3,7 @@
 namespace App\Services\IT\Service;
 
 use App\Enum\KPIEnum;
+use App\Models\KPI\TargetPeriod;
 use App\Services\BaseService;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Models\User;
@@ -124,7 +125,11 @@ class UserService extends BaseService implements UserServiceInterface
     public function reportStaffEvaluate(Request $request)
     {
         try {
-            return User::NotResigned()->with(['evaluates' => fn ($query) => $query->where('period_id', 6)])->get();
+            $period = TargetPeriod::where('name',$request->month ?? date('m'))->where('year',$request->year ?? date('Y'))->first();
+            return User::NotResigned()
+            ->filter($request)
+            ->with(['evaluates' => fn ($query) => $query->where('period_id', $period->id)])
+            ->orderBy('department_id','desc')->get();
         } catch (\Throwable $th) {
             throw $th;
         }

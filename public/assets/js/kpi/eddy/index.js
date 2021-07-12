@@ -4,11 +4,11 @@
     document.addEventListener('DOMContentLoaded', function () {
         // Supporting Documents
         // Set data object for form update
-        $("#user").select2({
+        $("#users_where").select2({
             placeholder: 'Select Staff',
             allowClear: true
         })
-        $("#department").select2({
+        $("#department_where").select2({
             placeholder: 'Select Department',
             allowClear: true
         })

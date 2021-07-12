@@ -12,7 +12,6 @@
     label {
         font-weight: bold;
     }
-
 </style>
 @endsection
 @section('content')
@@ -45,57 +44,70 @@
                             <div class="col-md-2 mb-2">
                                 <label for="staffName">Staff Name</label>
                                 {{-- <div class="input-group"> --}}
-                                    <select name="user[]" id="user" class="form-control-sm form-control">
-                                        <option value=""></option>
-                                        @isset($users_drop)
-                                        @foreach ($users_drop as $user)
-                                        <option value="{{$user->id}}">{{$user->name}}</option>
-                                        @endforeach
-                                        @endisset
-                                    </select>
+                                <select name="users_where[]" id="users_where" class="form-control-sm form-control" multiple>
+                                    <option value=""></option>
+                                    @isset($users_drop)
+                                    @foreach ($users_drop as $user)
+                                    <option value="{{$user->id}}"
+                                        @php
+                                            // dd($sel_user,$user->id);
+                                        @endphp
+                                        @if ($sel_user->contains($user->id))
+                                        selected
+                                    @endif>{{$user->name}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
                                 {{-- </div> --}}
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="Department">Department</label>
                                 {{-- <div class="input-group"> --}}
-                                    <select name="department[]" id="department" class="form-control-sm form-control">
-                                        <option value=""></option>
-                                        @isset($departments)
-                                        @foreach ($departments as $department)
-                                        <option value="{{$department->id}}">{{$department->name}}</option>
-                                        @endforeach
-                                        @endisset
-                                    </select>
+                                <select name="department_where[]" id="department_where" class="form-control-sm form-control" multiple>
+                                    <option value=""></option>
+                                    @isset($departments)
+                                    @foreach ($departments as $department)
+                                    <option value="{{$department->id}}"
+                                        @if ($sel_dept->contains($department->id))
+                                        selected
+                                    @endif>{{$department->name}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
                                 {{-- </div> --}}
                             </div>
                             <div class="col-md-2 mb-2">
                                 <label for="EMCGroup">EMC Group</label>
                                 {{-- <div class="input-group"> --}}
-                                    <select name="degree[]" id="degree" class="form-control-sm form-control">
-                                        <option value=""></option>
-                                        @isset($degree)
-                                        @foreach ($degree as $item)
-                                        <option value="{{$item}}">{{$item}}</option>
-                                        @endforeach
-                                        @endisset
-                                    </select>
+                                <select name="degree[]" id="degree" class="form-control-sm form-control" multiple>
+                                    <option value=""></option>
+                                    @isset($degree)
+                                    @foreach ($degree as $item)
+                                    <option value="{{$item}}" @if ($sel_degree->contains($item))
+                                        selected
+                                    @endif>{{$item}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
                                 {{-- </div> --}}
                             </div>
                             <div class="col-md-2 mb-2">
                                 <label for="Month">Month</label>
                                 {{-- <div class="input-group"> --}}
-                                    <select name="month" id="month" class="form-control-sm form-control">
-                                        @foreach (range(1, 12) as $m)
-                                    <option value="{{Helper::convertToMonthNumber($m)}}">{{Helper::convertToMonthName($m)}}</option>
+                                <select name="month" id="month" class="form-control-sm form-control">
+                                    @foreach (range(1, 12) as $m)
+                                    <option value="{{Helper::convertToMonthNumber($m)}}" 
+                                    @if ($sel_month===Helper::convertToMonthNumber($m)) selected @endif>
+                                        {{Helper::convertToMonthName($m)}}</option>
                                     @endforeach
-                                    </select>
+                                </select>
                                 {{-- </div> --}}
                             </div>
                             <div class="col-md-2 mb-2">
                                 <label for="Year">Year</label>
-                                <select name="year[]" id="year" class="form-control-sm form-control">
+                                <select name="year" id="year" class="form-control-sm form-control">
                                     @foreach (range(date('Y'), (date('Y') - 5)) as $year)
-                                    <option value="{{$year}}">{{$year}}</option>
+                                    <option value="{{$year}}" @if ($sel_year===$year) selected @endif>{{$year}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -123,7 +135,8 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="table-users-result">
+                    <table class="align-middle mb-0 table table-borderless table-striped table-hover"
+                        id="table-users-result">
                         <thead class="thead-dark">
                             <tr>
                                 <th>EMC Group</th>

@@ -39,10 +39,16 @@ class AllEvaluationController extends Controller
      */
     public function index(Request $request)
     {
+        
         $firsts = \collect([KPIEnum::ready, KPIEnum::draft]);
         $second = \collect([KPIEnum::on_process]);
         $third = \collect([KPIEnum::approved]);
         $degree = \collect([KPIEnum::one,KPIEnum::two,KPIEnum::tree]);
+        $sel_month = $request->month ?? date('m');
+        $sel_year = $request->year ?? date('Y');
+        $sel_user = \collect($request->users_where);
+        $sel_dept = \collect($request->department_where);
+        $sel_degree = \collect($request->degree);
         try {
             $departments = $this->departmentService->dropdown();
             $users_drop = $this->userService->dropdown();
@@ -67,7 +73,7 @@ class AllEvaluationController extends Controller
                     }
                 }
             }
-            return \view('kpi.Eddy.index', \compact('users','departments','degree','users_drop'));
+            return \view('kpi.Eddy.index', \compact('users','departments','degree','users_drop','sel_month','sel_year','sel_user','sel_dept','sel_degree'));
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }

@@ -43,6 +43,7 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::group(['prefix' => 'evaluation-form'], function () {
         Route::resource('staff', 'EvaluationForm\StaffDataController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
         Route::group(['prefix' => 'staff/{staff}/edit'], function () {
+            Route::put('period/{period}/evaluate/{evaluate}/pullback','EvaluationForm\EvaluationFormController@pullback')->name('evaluate.pullback');
             Route::resource('period/{period}/evaluate', 'EvaluationForm\EvaluationFormController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
         });
     });

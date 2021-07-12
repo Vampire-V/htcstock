@@ -138,10 +138,10 @@ class EvaluationFormController extends Controller
 
                 $detail = [];
                 foreach ($request->detail as $key => $value) {
-                    $rule = $this->evaluateDetailService->findLastRule($value['rule_id']);
+                    // $rule = $this->evaluateDetailService->findLastRule($value['rule_id']);
                     $rule_id = $value['rule_id'];
                     $target = $value['target'];
-                    $actual = $rule ? $rule->actual : 0.00;
+                    $actual = 0.00;
                     $weight = $value['weight'];
                     $weight_category = $value['weight_category'];
                     $base_line = $value['base_line'];
@@ -238,7 +238,7 @@ class EvaluationFormController extends Controller
                     Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
                     return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
                 }
-                
+
                 // Update Header
                 $evaluate->template_id = $request->template;
                 $evaluate->status = $request->next ? KPIEnum::ready : KPIEnum::new;
@@ -258,10 +258,10 @@ class EvaluationFormController extends Controller
                 $detail = [];
                 // Insert new Detail
                 foreach ($request->detail as $key => $value) {
-                    $rule = $this->evaluateDetailService->findLastRule($value['rule_id']);
+                    // $rule = $this->evaluateDetailService->findLastRule($value['rule_id']);
                     $rule_id = $value['rule_id'];
                     $target = $value['target'];
-                    $actual = $rule ? $rule->actual : 0.00;
+                    $actual = 0.00;
                     $weight = $value['weight'];
                     $weight_category = $value['weight_category'];
                     $base_line = $value['base_line'];
@@ -312,5 +312,28 @@ class EvaluationFormController extends Controller
         }
         DB::commit();
         return \redirect()->back();
+    }
+
+    public function pullback(Request $request, $staff, $period, $evaluate)
+    {
+        DB::beginTransaction();
+        $list = \collect([KPIEnum::ready, KPIEnum::draft]);
+        try {
+            $item = $this->evaluateService->find($evaluate);
+            if ($list->contains($item->status)) {
+                $item->status = KPIEnum::new;
+                $item->current_level = null;
+                $item->next_level = null;
+                $item->save();
+                $request->session()->flash('success',  ' has been Pull Back Evaluate..');
+                DB::commit();
+                return \redirect()->back();
+            } else {
+                return \redirect()->back()->with('error', "Error : This status cannot be pull back.");
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
     }
 }

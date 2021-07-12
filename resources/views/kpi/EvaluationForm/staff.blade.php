@@ -89,6 +89,14 @@
                             </td>
                             <td>
                                 @if ($period->evaluate->status)
+                                <form id="{{$key}}-back"
+                                    action="{{route('kpi.evaluate.pullback',[$staff->id,$period->id,$period->evaluate->id])}}"
+                                    method="POST" style="display: none;">
+                                    @csrf
+                                    @method('PUT')
+                                </form>
+                                <button type="button" class="mb-2 mr-2 btn btn-sm btn-outline-warning"
+                                    onclick="event.preventDefault(); document.getElementById('{{$key.'-back'}}').submit();">Pull Back</button>
                                 <form id="{{$key}}-remove"
                                     action="{{route('kpi.evaluate.destroy',[$staff->id,$period->id,$period->evaluate->id])}}"
                                     method="POST" style="display: none;">

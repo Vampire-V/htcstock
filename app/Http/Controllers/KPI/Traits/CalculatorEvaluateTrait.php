@@ -43,10 +43,10 @@ trait CalculatorEvaluateTrait
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                if ($ac >= $tar) {
+                if ($ac > $tar) {
                     $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
                 } else {
-                    $item->ach = 0.00;
+                    $item->ach = 100.00;
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
@@ -65,10 +65,10 @@ trait CalculatorEvaluateTrait
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                if ($ac >= $tar) {
+                if ($ac > $tar) {
                     $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
                 } else{
-                    $item->ach = 0.00;
+                    $item->ach = 100.00;
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {

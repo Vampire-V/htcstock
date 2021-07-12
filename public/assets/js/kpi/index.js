@@ -270,7 +270,7 @@ var findActualPercent = (element, array) => {
             result = element.actual > parent.actual ? 0.00 : element.actual === 0.00 ? 0.00 : (element.actual / parent.actual) * 100
         }
         if (element.rules.calculate_type === calculate.NEGATIVE) {
-            result = element.actual > parent.actual ? 0.00 : element.actual === 0.00 ? 0.00 : (element.actual / parent.actual) * 100
+            result = element.actual > parent.actual ? (element.actual / parent.actual) * 100 : 100.00
         }
         if (element.rules.calculate_type === calculate.ZERO) {
             // ไม่มี
@@ -282,7 +282,7 @@ var findActualPercent = (element, array) => {
             result = element.actual > element.target ? 100.00 : element.actual === 0.00 ? 0.00 : (element.actual / element.target) * 100
         }
         if (element.rules.calculate_type === calculate.NEGATIVE) {
-            result = element.actual > element.target ? 100.00 : element.actual === 0.00 ? 0.00 : (element.actual / element.target) * 100
+            result = element.actual > element.target ? (element.actual / element.target) * 100 : 100.00
         }
         if (element.rules.calculate_type === calculate.ZERO) {
             result = element.actual <= element.target ? 100.00 : 0.00
@@ -299,7 +299,7 @@ var findAchValue = (obj) => {
                 ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)
             }
             if (obj.rules.calculate_type === calculate.NEGATIVE) {
-                ach = obj.actual >= obj.target ?  parseFloat((2 - (obj.actual / obj.target)) * 100.00) : 0.00 
+                ach = obj.actual > obj.target ?  parseFloat((2 - (obj.actual / obj.target)) * 100.00) : 100.00
             }
             if (obj.rules.calculate_type === calculate.ZERO) {
                 ach = obj.actual <= obj.target ? 100.00 : 0.00
@@ -310,7 +310,7 @@ var findAchValue = (obj) => {
                 ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((obj.actual_pc / obj.target_pc) * 100)
             }
             if (obj.rules.calculate_type === calculate.NEGATIVE) {
-                ach = obj.actual_pc >= obj.target_pc ? parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100) : 0.00 
+                ach = obj.actual_pc > obj.target_pc ? parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100) : 100.00 
             }
             if (obj.rules.calculate_type === calculate.ZERO) {
                 ach = obj.actual_pc <= obj.target_pc ? 100.00 : 0.00

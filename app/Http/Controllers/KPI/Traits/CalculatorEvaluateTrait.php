@@ -128,12 +128,18 @@ trait CalculatorEvaluateTrait
                 }
             }
             if ($object->rule->calculate_type === KPIEnum::negative) {
+                // if ($object->actual > $parent->actual) {
+                //     $object->actual_pc = 0.00;
+                // }else if ($object->actual === 0.00) {
+                //     $object->actual_pc = 0.00;
+                // } else {
+                //     $object->actual_pc = ($object->actual / $this->isZeroNew($parent->actual)) * 100;
+                // }
+
                 if ($object->actual > $parent->actual) {
-                    $object->actual_pc = 0.00;
-                }else if ($object->actual === 0.00) {
-                    $object->actual_pc = 0.00;
-                } else {
-                    $object->actual_pc = ($object->actual / $this->isZeroNew($parent->actual)) * 100;
+                    $object->actual_pc = (2 - ($object->actual / $this->isZeroNew($parent->target))) * 100.00;
+                } else{
+                    $object->actual_pc = 100.00;
                 }
             }
             if ($object->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
@@ -150,12 +156,17 @@ trait CalculatorEvaluateTrait
                 }
             }
             if ($object->rule->calculate_type === KPIEnum::negative) {
+                // if ($object->actual > $object->target) {
+                //     $object->actual_pc = 100.00;
+                // }else if ($object->actual === 0.00) {
+                //     $object->actual_pc = 0.00;
+                // } else {
+                //     $object->actual_pc = ($object->actual / $this->isZeroNew($object->target)) * 100;
+                // }
                 if ($object->actual > $object->target) {
+                    $object->actual_pc = (2 - ($object->actual / $this->isZeroNew($object->target))) * 100.00;
+                } else{
                     $object->actual_pc = 100.00;
-                }else if ($object->actual === 0.00) {
-                    $object->actual_pc = 0.00;
-                } else {
-                    $object->actual_pc = ($object->actual / $this->isZeroNew($object->target)) * 100;
                 }
             }
             if ($object->rule->calculate_type === KPIEnum::zero_oriented_kpi) {

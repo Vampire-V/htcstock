@@ -270,7 +270,7 @@ var findActualPercent = (element, array) => {
             result = element.actual > parent.actual ? 0.00 : element.actual === 0.00 ? 0.00 : (element.actual / parent.actual) * 100
         }
         if (element.rules.calculate_type === calculate.NEGATIVE) {
-            result = element.actual > parent.actual ? (element.actual / parent.actual) * 100 : 100.00
+            result = element.actual > parent.actual ? (2 - (element.actual / parent.actual) * 100) : 100.00
         }
         if (element.rules.calculate_type === calculate.ZERO) {
             // ไม่มี
@@ -282,7 +282,7 @@ var findActualPercent = (element, array) => {
             result = element.actual > element.target ? 100.00 : element.actual === 0.00 ? 0.00 : (element.actual / element.target) * 100
         }
         if (element.rules.calculate_type === calculate.NEGATIVE) {
-            result = element.actual > element.target ? (element.actual / element.target) * 100 : 100.00
+            result = element.actual > element.target ? (2 - (element.actual / element.target) * 100) : 100.00
         }
         if (element.rules.calculate_type === calculate.ZERO) {
             result = element.actual <= element.target ? 100.00 : 0.00

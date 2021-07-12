@@ -137,7 +137,7 @@ trait CalculatorEvaluateTrait
                 // }
 
                 if ($parent->actual > $object->actual) {
-                    $object->actual_pc = (2 - ($object->actual / $this->isZeroNew($parent->target))) * 100.00;
+                    $object->actual_pc = ($object->actual / $this->isZeroNew($parent->target)) * 100.00;
                 } else{
                     $object->actual_pc = 0.00;
                 }

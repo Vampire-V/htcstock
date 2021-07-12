@@ -93,4 +93,10 @@ class Helper
     {
         return Carbon::create()->day(1)->month($m)->format('m');
     }
+
+    public static function randomBadge()
+    {
+        $list = collect(["badge-primary", "badge-secondary", "badge-success", "badge-info", "badge-warning", "badge-danger", "badge-focus", "badge-alternate", "badge-dark"]);
+        return $list->random();
+    }
 }

@@ -8,6 +8,9 @@
     label>span {
         color: red;
     }
+    label {
+        font-weight: bold;
+    }
 
     li>span {
         text-align: right;
@@ -217,7 +220,7 @@
                                         class="pe-7s-trash btn-icon-wrapper"> </i></button>
                             </td>
                             <td class="text-center">
-                                <div class="badge">{{$item->name}}</div>
+                                <div class="badge {{Helper::randomBadge()}}">{{$item->name}}</div>
                             </td>
                         </tr>
                         @endforeach
@@ -256,7 +259,7 @@
                                         class="pe-7s-trash btn-icon-wrapper"> </i></button>
                             </td>
                             <td class="text-center">
-                                <div class="badge badge-warning">{{$item->name}}</div>
+                                <div class="badge {{Helper::randomBadge()}}">{{$item->name}}</div>
                             </td>
                         </tr>
                         @endforeach

@@ -122,7 +122,7 @@
                                 <th>Name</th>
                                 <th>Username</th>
                                 <th>Email</th>
-                                <th>Role</th>
+                                <th>System</th>
                                 <th>Division</th>
                                 <th>Department</th>
                                 <th>Position</th>
@@ -142,7 +142,7 @@
                                 <td>{{$user->email}}</td>
                                 <td>
                                     @foreach ($user->systems->pluck('name') as $item)
-                                    <span class="badge badge-warning">{{$item}}</span>
+                                    <span class="badge {{Helper::randomBadge()}}">{{$item}}</span>
                                     @endforeach
                                 </td>
                                 <td>

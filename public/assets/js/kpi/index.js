@@ -296,15 +296,27 @@ var findAchValue = (obj) => {
         if (!obj.rules.parent) {
             // ใช้ amount หา
             if (obj.rules.calculate_type === calculate.POSITIVE) {
-                ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)
+                if (obj.target === 0.00 && obj.actual > obj.target) {
+                    ach = obj.max
+                } else if (obj.actual === 0.00) {
+                    ach = 0.00
+                }else{
+                    ach = parseFloat((obj.actual / obj.target) * 100.00)
+                }
+                // ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)
             }
             if (obj.rules.calculate_type === calculate.NEGATIVE) {
+                let dd = (obj.actual / obj.target)
+                if (dd === -Infinity) {
+                    dd = 0
+                }
                 // console.log(obj.actual);
                 // if (obj.actual !== 0.00) {
                 //     if (obj.actual < obj.target) {
                 //         ach = obj.max_result ?? obj.max
                 //     } else {
-                        ach = parseFloat((2 - (obj.actual / obj.target) ) * 100.00)
+                        ach = parseFloat((2 - dd ) * 100.00)
+                        // console.log(obj.rules.name,ach);
                     // }
                 // }else{
                 //     ach = 0.00
@@ -319,15 +331,28 @@ var findAchValue = (obj) => {
         } else {
             // ใช้ % หา
             if (obj.rules.calculate_type === calculate.POSITIVE) {
-                ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((obj.actual_pc / obj.target_pc) * 100)
+                if (obj.target_pc === 0.00 && obj.actual_pc > obj.target_pc) {
+                    ach = obj.max
+                } else if (obj.actual_pc === 0.00) {
+                    ach = 0.00
+                }else{
+                    ach = parseFloat((obj.actual_pc / obj.target_pc) * 100.00)
+                }
+                // ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((obj.actual_pc / obj.target_pc) * 100)
             }
             if (obj.rules.calculate_type === calculate.NEGATIVE) {
-                console.log(obj.actual_pc , obj.target_pc);
+                // console.log(obj.actual_pc , obj.target_pc);
+                let dd = (obj.actual_pc / obj.target_pc)
+                if (dd === -Infinity) {
+                    dd = 0
+                }
+                
                 // if (obj.actual_pc !== 0.00) {
                 //     if (obj.actual_pc < obj.target_pc) {
                 //         ach = obj.max ?? obj.max_result
                 //     } else {
-                        ach = parseFloat((2 - (obj.actual_pc / obj.target_pc) ) * 100.00)
+                        ach = parseFloat((2 - dd ) * 100.00)
+                        // console.log(obj.rules.name,ach);
                 //     }
                 // }else{
                 //     ach = 0.00
@@ -344,7 +369,7 @@ var findAchValue = (obj) => {
     if (typeof obj === `number`) {
         ach = obj
     }
-    return isNaN(ach) || (ach === Infinity) ? 0.00 : ach
+    return isNaN(ach) || (ach === Infinity || ach === -Infinity) ? 0.00 : ach
 }
 
 var findCalValue = (obj, ach) => {

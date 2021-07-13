@@ -49,7 +49,7 @@ trait CalculatorEvaluateTrait
                 //     $item->ach = $item->max_result ?? $item->max;
                 // }
                 if ($ac !== 0.00) {
-                    $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
+                    $item->ach = ($ac < $tar) ? $item->max_result ?? $item->max : (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
                 } else{
                     $item->ach = 0.00;
                 }
@@ -76,7 +76,7 @@ trait CalculatorEvaluateTrait
                 //     $item->ach = $item->max_result ?? $item->max;
                 // }
                 if ($ac !== 0.00) {
-                    $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
+                    $item->ach = ($ac < $tar) ? $item->max_result ?? $item->max : (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
                 } else{
                     $item->ach = 0.00;
                 }

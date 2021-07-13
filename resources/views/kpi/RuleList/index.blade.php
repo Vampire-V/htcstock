@@ -45,111 +45,115 @@
 </div>
 {{-- end title  --}}
 
-<div class="col-lg-12">
-    <div class="main-card mb-3 card">
-        <div class="card-header">Rule Search</div>
-        <div class="card-body">
-            <div class="position-relative form-group">
-                <form class="needs-validation" novalidate>
-                    <div class="form-row">
-                        <div class="col-md-3 col-xl-3">
-                            <label for="ruleName">Rule Name :</label>
-                            <input type="text" class="form-control form-control-sm" id="ruleName"
-                                placeholder="Rule Name" name="ruleName" value="{{$searchRuleName}}">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-card mb-3 card">
+            <div class="card-header">Rule Search</div>
+            <div class="card-body">
+                <div class="position-relative form-group">
+                    <form class="needs-validation" novalidate>
+                        <div class="form-row">
+                            <div class="col-md-3 col-xl-3">
+                                <label for="ruleName">Rule Name :</label>
+                                <input type="text" class="form-control form-control-sm" id="ruleName"
+                                    placeholder="Rule Name" name="ruleName" value="{{$searchRuleName}}">
+                            </div>
+                            <div class="col-md-3 col-xl-3">
+                                <label for="ruleCategory">Rule Category :</label>
+                                <select id="validationRuleCategory" class="form-control-sm form-control"
+                                    name="category_id[]" multiple>
+                                    @isset($category)
+                                    @foreach ($category as $item)
+                                    <option value="{{$item->id}}" @if ($selectedCategory->contains($item->id))
+                                        selected @endif>{{$item->name}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                            </div>
+                            <div class="col-md-3 col-xl-3">
+                                <label for="ruleType">Rule Type :</label>
+                                <select id="validationRuleType" class="form-control-sm form-control" name="rule_type[]"
+                                    multiple>
+                                    @isset($rulesType)
+                                    @foreach ($rulesType as $item)
+                                    <option value="{{$item->id}}" @if ($selectedRuleType->contains($item->id))
+                                        selected @endif>{{$item->name}}</option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <button class="mb-2 mr-2 btn btn-primary mt-4">Search</button>
+                            </div>
                         </div>
-                        <div class="col-md-3 col-xl-3">
-                            <label for="ruleCategory">Rule Category :</label>
-                            <select id="validationRuleCategory" class="form-control-sm form-control"
-                                name="category_id[]" multiple>
-                                @isset($category)
-                                @foreach ($category as $item)
-                                <option value="{{$item->id}}" @if ($selectedCategory->contains($item->id))
-                                    selected @endif>{{$item->name}}</option>
-                                @endforeach
-                                @endisset
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-xl-3">
-                            <label for="ruleType">Rule Type :</label>
-                            <select id="validationRuleType" class="form-control-sm form-control" name="rule_type[]"
-                                multiple>
-                                @isset($rulesType)
-                                @foreach ($rulesType as $item)
-                                <option value="{{$item->id}}" @if ($selectedRuleType->contains($item->id))
-                                    selected @endif>{{$item->name}}</option>
-                                @endforeach
-                                @endisset
-                            </select>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <button class="mb-2 mr-2 btn btn-primary mt-4">Search</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="col-lg-12">
-    <div class="main-card mb-3 card">
-        <div class="card-header">
-            <div class="btn-actions-pane">
-                Rule List
-                <div role="group" class="btn-group-sm btn-group">
-                    <button class="mb-2 mr-2 btn-transition btn btn-outline-focus" data-toggle="modal"
-                        data-target="#modal-import"><span class="btn-icon-wrapper pr-2 opacity-7">
-                            <i class="pe-7s-file"></i>
-                            Import
-                        </span></button>
-                    <a href="{{route('kpi.rules.export')}}" class="mb-2 mr-2 btn-transition btn btn-outline-focus"><span
-                            class="btn-icon-wrapper pr-2 opacity-7">
-                            <i class="pe-7s-file"></i>
-                            Export
-                        </span></a>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-card mb-3 card">
+            <div class="card-header">
+                <div class="btn-actions-pane">
+                    Rule List
+                    <div role="group" class="btn-group-sm btn-group">
+                        <button class="mb-2 mr-2 btn-transition btn btn-outline-focus" data-toggle="modal"
+                            data-target="#modal-import"><span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="pe-7s-file"></i>
+                                Import
+                            </span></button>
+                        <a href="{{route('kpi.rules.export')}}"
+                            class="mb-2 mr-2 btn-transition btn btn-outline-focus"><span
+                                class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="pe-7s-file"></i>
+                                Export
+                            </span></a>
+                    </div>
+                </div>
+                <div class="btn-actions-pane-right">
+                    <div role="group" class="btn-group-sm btn-group">
+                        <a href="{{route('kpi.rule-list.create')}}" class="btn-shadow btn btn-info mb-2 mr-2">
+                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="pe-7s-plus"></i>
+                            </span>
+                            Create
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="btn-actions-pane-right">
-                <div role="group" class="btn-group-sm btn-group">
-                    <a href="{{route('kpi.rule-list.create')}}" class="btn-shadow btn btn-info mb-2 mr-2">
-                        <span class="btn-icon-wrapper pr-2 opacity-7">
-                            <i class="pe-7s-plus"></i>
-                        </span>
-                        Create
-                    </a>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="mb-0 table table-sm">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Rule Name</th>
+                                <th>Rule Category</th>
+                                <th>Calculate Type</th>
+                                <th>Rule Type</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @isset($rules)
+                            @foreach ($rules as $key => $item)
+                            <tr>
+                                <th scope="row">{{$key + 1}}</th>
+                                <td>{{$item->name}}</td>
+                                <td class="truncate">{{$item->category->name}}</td>
+                                <td>{{$item->calculate_type}}</td>
+                                <td>{{$item->ruletype->name}}</td>
+                                <td><a href="{{route('kpi.rule-list.edit',$item->id)}}"
+                                        class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
+                                    </a></td>
+                            </tr>
+                            @endforeach
+                            @endisset
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="mb-0 table table-sm">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Rule Name</th>
-                            <th>Rule Category</th>
-                            <th>Calculate Type</th>
-                            <th>Rule Type</th>
-                            <th>#</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @isset($rules)
-                        @foreach ($rules as $key => $item)
-                        <tr>
-                            <th scope="row">{{$key + 1}}</th>
-                            <td>{{$item->name}}</td>
-                            <td class="truncate">{{$item->category->name}}</td>
-                            <td>{{$item->calculate_type}}</td>
-                            <td>{{$item->ruletype->name}}</td>
-                            <td><a href="{{route('kpi.rule-list.edit',$item->id)}}"
-                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
-                                </a></td>
-                        </tr>
-                        @endforeach
-                        @endisset
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>

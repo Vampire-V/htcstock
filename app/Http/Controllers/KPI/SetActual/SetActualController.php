@@ -19,8 +19,8 @@ use Illuminate\Support\Facades\DB;
 class SetActualController extends Controller
 {
     use CalculatorEvaluateTrait;
-    protected $evaluateDetailService, $departmentService, $targetPeriodService, 
-    $categoryService, $ruleService, $userService, $setting_action_service;
+    protected $evaluateDetailService, $departmentService, $targetPeriodService,
+        $categoryService, $ruleService, $userService, $setting_action_service;
     public function __construct(
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
         DepartmentServiceInterface $departmentServiceInterface,
@@ -135,6 +135,7 @@ class SetActualController extends Controller
     {
         $body = $request->all();
         $status_contain = collect([KPIEnum::draft, KPIEnum::ready]);
+        $errors = [];
         DB::beginTransaction();
         try {
             $check = $this->setting_action_service->isNextStep(KPIEnum::set_value);
@@ -149,14 +150,16 @@ class SetActualController extends Controller
                     $detail->actual = floatval($element['actual']);
                     $detail->target = floatval($element['target']);
                     $detail->save();
+                }else{
+                    $errors[] = ["name" => $detail->evaluate->user->name , "rule" => $detail->rules->name];
                 }
             }
+            DB::commit();
+            return $this->successResponse($errors, "Updated actual", 201);
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), 500);
         }
-        DB::commit();
-        return $this->successResponse(null, "Updated actual", 201);
     }
 
     /**

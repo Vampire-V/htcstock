@@ -197,7 +197,14 @@ var submit = async (e) => {
             putSetActual(detail, detail[0].rules.user_actual.id)
                 .then(res => {
                     if (res.status === 201) {
+                        console.log(res.data.data);
                         toast(res.data.message, res.data.status)
+                        if (res.data.data.length > 0) {
+                            for (let i = 0; i < res.data.data.length; i++) {
+                                const errors = res.data.data[i];
+                                toast(`${errors.rule} of ${errors.name} : The status is no longer Ready.`,'error')
+                            }
+                        }
                     }
                 })
                 .catch(error => {

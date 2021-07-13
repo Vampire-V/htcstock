@@ -150,7 +150,7 @@ class EvaluationFormController extends Controller
                 }
                 if (count($detail) > 0) {
                     $evaluate->evaluateDetail()->createMany($detail);
-                    Log::notice("User : " . \auth()->user()->id . " = Create evaluate form : id = " . $evaluate->id);
+                    Log::notice("User : " . \auth()->user()->name . " = Create evaluate form : id = " . $evaluate->id);
                 }
 
                 if ($request->next) {

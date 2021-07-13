@@ -11,6 +11,9 @@
     .hide {
         display: none;
     }
+    label {
+        font-weight: bold;
+    }
 </style>
 @endsection
 @section('content')
@@ -39,8 +42,8 @@
 {{-- end title  --}}
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">Teamplate</div>
         <div class="card-body">
-            <h5 class="card-title">Teamplate</h5>
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate method="POST" action="{{route('kpi.template.store')}}"
                     enctype="multipart/form-data">
@@ -69,23 +72,23 @@
     @foreach ($category as $group)
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div class="card-header">
-                    <div class="btn-actions-pane">
-                        <div role="group" class="btn-group-sm btn-group">
-                            <h5 class="card-title">{{$group->name}}</h5>
-                        </div>
-                    </div>
-                    <div class="btn-actions-pane-right">
-                        <div role="group" class="btn-group-sm btn-group">
-                            <button class="mb-2 mr-2 btn btn-danger" onclick="remove('table-{{$group->name}}')"
-                                data-group="{{$group->name}}" data-group-id="{{$group->id}}">Delete Selected
-                                Rule</button>
-                            <button class="mb-2 mr-2 btn btn-primary" data-toggle="modal" data-target="#modal-add-rule"
-                                data-group="{{$group}}">Add new rule</button>
-                        </div>
+            <div class="card-header">
+                <div class="btn-actions-pane">
+                    <div role="group" class="btn-group-sm btn-group">
+                        <h5 class="card-title">{{$group->name}}</h5>
                     </div>
                 </div>
+                <div class="btn-actions-pane-right">
+                    <div role="group" class="btn-group-sm btn-group">
+                        <button class="mb-2 mr-2 btn btn-danger" onclick="remove('table-{{$group->name}}')"
+                            data-group="{{$group->name}}" data-group-id="{{$group->id}}">Delete Selected
+                            Rule</button>
+                        <button class="mb-2 mr-2 btn btn-primary" data-toggle="modal" data-target="#modal-add-rule"
+                            data-group="{{$group}}">Add new rule</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="mb-0 table table-sm {{$group->name}}" id="table-{{$group->name}}">
                         <thead class="thead-dark">

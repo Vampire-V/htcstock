@@ -1,5 +1,12 @@
 @extends('layouts.app')
 @section('sidebar')
+@section('style')
+    <style>
+        label {
+            font-weight: bold;
+        }
+    </style>
+@endsection
 @include('includes.sidebar.it');
 @stop
 @section('content')
@@ -34,8 +41,11 @@
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            {{ __('itstock.buy-accessorie.purchase-form') }}
+        </div>
         <div class="card-body">
-            <h5 class="card-title">{{ __('itstock.buy-accessorie.purchase-form') }}</h5>
+            {{-- <h5 class="card-title">{{ __('itstock.buy-accessorie.purchase-form') }}</h5> --}}
             <form class="needs-validation" novalidate action="{{route('it.equipment.buy.update',$transaction->id)}}"
                 method="POST" enctype="multipart/form-data">
                 @csrf

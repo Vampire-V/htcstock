@@ -42,19 +42,19 @@
 {{-- Display user detail --}}
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header">
-                <h5 class="card-title"></h5>
-                <div class="btn-actions-pane">
-                    <div role="group" class="btn-group-sm btn-group">
-                    </div>
-                </div>
-                <div class="btn-actions-pane-right">
-                    <div role="group" class="btn-group-sm btn-group">
-                        <h5>Status <span class="badge badge-info"></span></h5>
-                    </div>
+        <div class="card-header">
+            <h5 class="card-title"></h5>
+            <div class="btn-actions-pane">
+                <div role="group" class="btn-group-sm btn-group">
                 </div>
             </div>
+            <div class="btn-actions-pane-right">
+                <div role="group" class="btn-group-sm btn-group">
+                    <h5>Status <span class="badge badge-info"></span></h5>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
             <div class="position-relative form-group">
                 <form class="needs-validation" id="create-evaluate" novalidate>
                     <div class="form-row">
@@ -158,31 +158,30 @@
         @foreach ($category as $group)
         <div class="col-lg-12">
             <div class="main-card mb-3 card">
-                <div class="card-body">
-                    <div class="card-header">
-                        <label for="department" class="mb-2 mr-2">{{$group->name}} (Weight) :</label>
-                        <div class="btn-actions-pane">
-                            <div role="group" class="btn-group-sm btn-group">
-                                <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
-                                    id="weight-{{$group->name}}" name="weight_{{str_replace("-","_",$group->name)}}"
-                                    readonly> %
-                            </div>
-                        </div>
-                        <div class="btn-actions-pane-right">
-                            <div role="group" class="btn-group-sm btn-group">
-                                <button class="mb-2 mr-2 btn btn-danger" id="rule-remove-modal"
-                                    onclick="removeInSelected(this)">Delete Selected
-                                    Rule</button>
-                                {{-- @if ($group->name === "kpi") --}}
-                                <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
-                                    data-target="#rule-modal" id="rule-add-modal">Add
-                                    New Rule</button>
-                                {{-- @endif --}}
-
-                            </div>
+                <div class="card-header">
+                    <label for="department" class="mb-2 mr-2">{{$group->name}} (Weight) :</label>
+                    <div class="btn-actions-pane">
+                        <div role="group" class="btn-group-sm btn-group">
+                            <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
+                                id="weight-{{$group->name}}" name="weight_{{str_replace("-","_",$group->name)}}"
+                                readonly> %
                         </div>
                     </div>
+                    <div class="btn-actions-pane-right">
+                        <div role="group" class="btn-group-sm btn-group">
+                            <button class="mb-2 mr-2 btn btn-danger" id="rule-remove-modal"
+                                onclick="removeInSelected(this)">Delete Selected
+                                Rule</button>
+                            {{-- @if ($group->name === "kpi") --}}
+                            <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
+                                data-target="#rule-modal" id="rule-add-modal">Add
+                                New Rule</button>
+                            {{-- @endif --}}
 
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
                     <div class="table-responsive">
                         <table class="mb-0 table table-sm" id="table-{{$group->name}}">
                             <thead class="thead-dark">
@@ -231,8 +230,8 @@
 {{-- Calculation Summary --}}
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">Calculation Summary</div>
         <div class="card-body">
-            <h5 class="card-title">Calculation Summary</h5>
             <div class="table-responsive">
                 <table class="mb-0 table table-sm" id="table-calculation">
                     <thead class="thead-dark">

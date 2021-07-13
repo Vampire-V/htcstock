@@ -25,8 +25,11 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="main-card mb-12 card">
+            <div class="card-header">
+                {{ __('Edit') }}
+            </div>
             <div class="card-body">
-                <h5 class="card-title">Edit</h5>
+                {{-- <h5 class="card-title">Edit</h5> --}}
                 <form action="{{route('admin.roles.update',$role->id)}}" method="POST">
                     @csrf
                     @method('PUT')
@@ -74,7 +77,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit form</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </form>
                 <script src="{{asset('assets\js\admin\role.js')}}"></script>
             </div>

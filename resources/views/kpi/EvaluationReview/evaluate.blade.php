@@ -2,6 +2,13 @@
 @section('sidebar')
 @include('includes.sidebar.kpi')
 @stop
+@section('style')
+<style>
+    label {
+        font-weight: bold;
+    }
+</style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -28,20 +35,20 @@
 {{-- Display user detail --}}
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header">
-                <h5 class="card-title">{{$evaluate->targetperiod->name}} {{$evaluate->targetperiod->year}}</h5>
-                <div class="btn-actions-pane">
-                    <div role="group" class="btn-group-sm btn-group">
-                    </div>
-                </div>
-                <div class="btn-actions-pane-right">
-                    <div role="group" class="btn-group-sm btn-group">
-                        <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}}
-                            </span></h5>
-                    </div>
+        <div class="card-header">
+            <h5 class="card-title">{{$evaluate->targetperiod->name}} {{$evaluate->targetperiod->year}}</h5>
+            <div class="btn-actions-pane">
+                <div role="group" class="btn-group-sm btn-group">
                 </div>
             </div>
+            <div class="btn-actions-pane-right">
+                <div role="group" class="btn-group-sm btn-group">
+                    <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}}
+                        </span></h5>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
@@ -95,75 +102,73 @@
     @foreach ($category as $group)
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div class="card-header">
-                    <label for="department" class="mb-2 mr-2">{{$group->name}} (Weight) :</label>
-                    <div class="btn-actions-pane">
-                        <div role="group" class="btn-group-sm btn-group">
-                            <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
-                                id="weight-{{$group->name}}" name="weight_{{str_replace("-","_",$group->name)}}"
-                                readonly> %
-                        </div>
-                    </div>
-                    <div class="btn-actions-pane-right">
-                        {{-- @if (Auth::user()->hasRole('super-admin'))
-                        <div role="group" class="btn-group-sm btn-group">
-                            <button class="mb-2 mr-2 btn btn-danger" id="rule-remove-modal"
-                                onclick="removeInSelected(this)">Delete Selected
-                                Rule</button>
-                            <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
-                                data-target="#rule-modal" id="rule-add-modal">Add
-                                New Rule</button>
-                        </div>
-                        @endif --}}
+            <div class="card-header">
+                <label for="department" class="mb-2 mr-2">{{$group->name}} (Weight) :</label>
+                <div class="btn-actions-pane">
+                    <div role="group" class="btn-group-sm btn-group">
+                        <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
+                            id="weight-{{$group->name}}" name="weight_{{str_replace("-","_",$group->name)}}" readonly> %
                     </div>
                 </div>
-
-                <div class="table-responsive">
-                    <table class="mb-0 table table-sm table-bordered" id="table-{{$group->name}}">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>#</th>
-                                <th>Rule Name</th>
-                                <th>Description</th>
-                                <th>Base Line %</th>
-                                <th>Max %</th>
-                                <th>Weight %</th>
-                                <th>Target Amount</th>
-                                <th>Target %</th>
-                                <th>Actual Amount</th>
-                                <th>Actual %</th>
-                                <th>%Ach</th>
-                                <th>%Cal</th>
-                                <th>#</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th scope="row"></th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td style="text-align: right;">Weight</td>
-                                <td>0.00</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                <div class="btn-actions-pane-right">
+                    {{-- @if (Auth::user()->hasRole('super-admin'))
+                    <div role="group" class="btn-group-sm btn-group">
+                        <button class="mb-2 mr-2 btn btn-danger" id="rule-remove-modal"
+                            onclick="removeInSelected(this)">Delete Selected
+                            Rule</button>
+                        <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
+                    data-target="#rule-modal" id="rule-add-modal">Add
+                    New Rule</button>
                 </div>
+                @endif --}}
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="mb-0 table table-sm table-bordered" id="table-{{$group->name}}">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Rule Name</th>
+                            <th>Description</th>
+                            <th>Base Line %</th>
+                            <th>Max %</th>
+                            <th>Weight %</th>
+                            <th>Target Amount</th>
+                            <th>Target %</th>
+                            <th>Actual Amount</th>
+                            <th>Actual %</th>
+                            <th>%Ach</th>
+                            <th>%Cal</th>
+                            <th>#</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th scope="row"></th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: right;">Weight</td>
+                            <td>0.00</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
-    @endforeach
+</div>
+@endforeach
 </div>
 @endisset
 
@@ -171,8 +176,8 @@
 {{-- Calculation Summary --}}
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">{{__('Calculation Summary')}}</div>
         <div class="card-body">
-            <h5 class="card-title">Calculation Summary</h5>
             <div class="table-responsive">
                 <table class="mb-0 table table-sm" id="table-calculation">
                     <thead class="thead-dark">
@@ -218,7 +223,7 @@
 </div>
 <div class="page-title-actions fiexd-btn-botton">
     <button class="mb-2 mr-2 btn btn-primary" onclick="approve(this)">Approve</button>
-            <button class="mb-2 mr-2 btn btn-warning" onclick="reject(this)">Reject</button>
+    <button class="mb-2 mr-2 btn btn-warning" onclick="reject(this)">Reject</button>
 </div>
 
 @endsection

@@ -42,14 +42,16 @@
 <div class="row">
     <div class="col-md-12">
         <div class="main-card mb-3 card">
+            <div class="card-header">
+                {{ __('Form user') }}
+            </div>
             <div class="card-body">
-                <h5 class="card-title">{{ __('Form user') }}</h5>
                 <form class="" action="{{route('me.user.update',$user->id)}}" method="post">
                     @csrf
                     @method('PUT')
                     <div class="form-row">
                         <div class="col-md-3">
-                            <img src="{{asset('/storage'.$user->image)}}" class="rounded z-depth-2" alt="...">
+                            <img src="{{asset('/storage'.$user->image)}}" class="img-thumbnail">
                         </div>
                         <div class="col-md-4">
                             <div class="position-absolute form-group fixed-bottom mr-2">

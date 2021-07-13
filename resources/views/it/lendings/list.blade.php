@@ -1,5 +1,12 @@
 @extends('layouts.app')
 @section('sidebar')
+@section('style')
+    <style>
+        label {
+            font-weight: bold;
+        }
+    </style>
+@endsection
 @include('includes.sidebar.it');
 @stop
 @section('content')
@@ -33,6 +40,9 @@
 </div>
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            {{ __('Form search') }}
+        </div>
         <div class="card-body">
             <form action="{{route('it.equipment.lendings.index')}}" method="GET">
                 <div class="form-row">
@@ -88,8 +98,11 @@
 </div>
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            {{ __('itstock.lendings-accessorie.borrow-list') }}
+        </div>
         <div class="card-body">
-            <h5 class="card-title">{{ __('itstock.lendings-accessorie.borrow-list') }}</h5>
+            {{-- <h5 class="card-title">{{ __('itstock.lendings-accessorie.borrow-list') }}</h5> --}}
             <div class="table-responsive">
                 <table class="mb-0 table table-hover">
                     <thead>

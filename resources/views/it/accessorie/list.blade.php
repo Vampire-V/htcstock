@@ -40,6 +40,9 @@
 </div>
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            {{ __('Form search') }}
+        </div>
         <div class="card-body">
             <form action="#" method="GET">
                 <div class="form-row">
@@ -88,8 +91,11 @@
 </div>
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            {{ __('itstock.manage-accessorie.equipment-list') }}
+        </div>
         <div class="card-body">
-            <h5 class="card-title">{{ __('itstock.manage-accessorie.equipment-list') }}</h5>
+            {{-- <h5 class="card-title">{{ __('itstock.manage-accessorie.equipment-list') }}</h5> --}}
             <div class="tab-content">
                 <div class="tab-pane tabs-animation fade show active" id="tab-content-1" role="tabpanel">
                     <div class="row">

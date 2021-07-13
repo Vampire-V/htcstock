@@ -49,19 +49,19 @@
 {{-- Display user detail --}}
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header">
-                <h5 class="card-title">{{$period->name}} {{$period->year}}</h5>
-                <div class="btn-actions-pane">
-                    <div role="group" class="btn-group-sm btn-group">
-                    </div>
-                </div>
-                <div class="btn-actions-pane-right">
-                    <div role="group" class="btn-group-sm btn-group">
-                        <h5>Status <span class="badge badge-info"></span></h5>
-                    </div>
+        <div class="card-header">
+            <h5 class="card-title">{{$period->name}} {{$period->year}}</h5>
+            <div class="btn-actions-pane">
+                <div role="group" class="btn-group-sm btn-group">
                 </div>
             </div>
+            <div class="btn-actions-pane-right">
+                <div role="group" class="btn-group-sm btn-group">
+                    <h5>Status <span class="badge badge-info"></span></h5>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
@@ -129,27 +129,26 @@
     @foreach ($category as $group)
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div class="card-header">
-                    <div class="btn-actions-pane">
-                        <div role="group" class="btn-group-sm btn-group">
-                            <h5 class="card-title">{{$group->name}}</h5>
-                        </div>
-                    </div>
-                    <div class="btn-actions-pane-right">
-                        <div role="group" class="btn-group-sm btn-group">
-                            {{-- @if ($group->name === 'key-task') --}}
-                            <button class="mb-2 mr-2 btn btn-danger" id="rule-remove-modal"
-                                onclick="deleteRuleTemp(this)" disabled>Delete Selected
-                                Rule</button>
-                            <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
-                                data-target="#rule-modal" id="rule-add-modal" disabled>Add
-                                New Rule</button>
-                            {{-- @endif --}}
-                        </div>
+            <div class="card-header">
+                <div class="btn-actions-pane">
+                    <div role="group" class="btn-group-sm btn-group">
+                        <h5 class="card-title">{{$group->name}}</h5>
                     </div>
                 </div>
-
+                <div class="btn-actions-pane-right">
+                    <div role="group" class="btn-group-sm btn-group">
+                        {{-- @if ($group->name === 'key-task') --}}
+                        <button class="mb-2 mr-2 btn btn-danger" id="rule-remove-modal"
+                            onclick="deleteRuleTemp(this)" disabled>Delete Selected
+                            Rule</button>
+                        <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
+                            data-target="#rule-modal" id="rule-add-modal" disabled>Add
+                            New Rule</button>
+                        {{-- @endif --}}
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="mb-0 table table-sm table-bordered" id="table-{{$group->name}}">
                         <thead class="thead-dark">

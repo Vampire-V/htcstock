@@ -36,8 +36,11 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="main-card mb-12 card">
+            <div class="card-header">
+                {{ __('Create') }}
+            </div>
             <div class="card-body">
-                <h5 class="card-title">Create</h5>
+                {{-- <h5 class="card-title">Create</h5> --}}
                 <form action="{{route('admin.roles.store')}}" method="POST">
                     @csrf
                     <div class="form-group row">
@@ -80,7 +83,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit form</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
                 </form>
                 <script>
                     function replateValue (e){

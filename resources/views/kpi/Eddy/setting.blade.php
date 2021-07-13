@@ -38,18 +38,18 @@
 {{-- tabs --}}
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header">
-                <h5 class="card-title">Setting Dead Line</h5>
-                <div class="btn-actions-pane">
-                    <div role="group" class="btn-group-sm btn-group">
-                    </div>
-                </div>
-                <div class="btn-actions-pane-right">
-                    <div role="group" class="btn-group-sm btn-group">
-                    </div>
+        <div class="card-header">
+            {{__('Setting Dead Line')}}
+            <div class="btn-actions-pane">
+                <div role="group" class="btn-group-sm btn-group">
                 </div>
             </div>
+            <div class="btn-actions-pane-right">
+                <div role="group" class="btn-group-sm btn-group">
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
             <div class="table-responsive">
                 <table class="mb-0 table table-sm" id="table-steing-action">
                     <thead class="thead-dark">

@@ -27,8 +27,8 @@
 @can('admin-kpi')
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">Form search</div>
         <div class="card-body">
-            <h5 class="card-title">Form search</h5>
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
@@ -57,8 +57,6 @@
                                 Please provide a valid state.
                             </div>
                         </div>
-
-
                         <div class="col-md-1" style="display: flex; justify-content: center; align-items: center;  ">
                             <button class="btn btn-primary btn-sm mt-3" type="submit">Search</button>
                         </div>
@@ -71,8 +69,8 @@
 @elsecan('user-kpi')
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">Form search</div>
         <div class="card-body">
-            <h5 class="card-title">Form search</h5>
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
@@ -125,31 +123,30 @@
 @endcan
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header">
-                <h5 class="card-title">Self Evaluate List</h5>
-                <div class="btn-actions-pane">
-                    <div role="group" class="btn-group-sm btn-group">
-                    </div>
-                </div>
-                <div class="btn-actions-pane-right">
-                    <div role="group" class="btn-group-sm btn-group">
-                        @can('for-superadmin')
-                        {{-- <a href="{{route('kpi.evaluate.create_new')}}" class="btn-shadow btn btn-info mb-2 mr-2">
-                            <span class="btn-icon-wrapper pr-2 opacity-7">
-                                <i class="pe-7s-plus"></i>
-                            </span>
-                            Create
-                        </a>
-                        <button onclick="report_excel()" class="btn-shadow btn btn-warning mb-2 mr-2">
-                            <i class="fa fa-fw" aria-hidden="true" title="Copy to use file-excel-o"></i>
-                            excel
-                        </button> --}}
-                        @endcan
-                    </div>
+        <div class="card-header">
+            <h5 class="card-title">Self Evaluate List</h5>
+            <div class="btn-actions-pane">
+                <div role="group" class="btn-group-sm btn-group">
                 </div>
             </div>
-
+            <div class="btn-actions-pane-right">
+                <div role="group" class="btn-group-sm btn-group">
+                    @can('for-superadmin')
+                    {{-- <a href="{{route('kpi.evaluate.create_new')}}" class="btn-shadow btn btn-info mb-2 mr-2">
+                        <span class="btn-icon-wrapper pr-2 opacity-7">
+                            <i class="pe-7s-plus"></i>
+                        </span>
+                        Create
+                    </a>
+                    <button onclick="report_excel()" class="btn-shadow btn btn-warning mb-2 mr-2">
+                        <i class="fa fa-fw" aria-hidden="true" title="Copy to use file-excel-o"></i>
+                        excel
+                    </button> --}}
+                    @endcan
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
             <div class="table-responsive">
                 <table class="mb-0 table table-sm">
                     <thead class="thead-dark">

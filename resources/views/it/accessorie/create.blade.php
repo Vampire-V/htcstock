@@ -8,6 +8,9 @@
     .show-progress {
         display: block;
     }
+    label {
+        font-weight: bold;
+    }
 </style>
 @endsection
 @section('sidebar')
@@ -45,8 +48,11 @@
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            {{ __('itstock.manage-accessorie.equipment-form') }}
+        </div>
         <div class="card-body">
-            <h5 class="card-title">{{ __('itstock.manage-accessorie.equipment-form') }}</h5>
+            {{-- <h5 class="card-title">{{ __('itstock.manage-accessorie.equipment-form') }}</h5> --}}
             <form class="needs-validation" novalidate action="{{route('it.equipment.management.store')}}"
                 method="POST" enctype="multipart/form-data">
                 @csrf
@@ -82,7 +88,7 @@
                         </div>
                     </div>
                     <div class="col-md-5 mb-5">
-                        <img src="" alt="image">
+                        <img src="" alt="image.....">
                     </div>
                 </div>
                 <button class="btn btn-primary" type="submit" style="margin-top: 5px">{{ __('itstock.manage-accessorie.submit-form') }}</button>

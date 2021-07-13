@@ -2,6 +2,13 @@
 @section('sidebar')
 @include('includes.sidebar.kpi')
 @stop
+@section('style')
+<style>
+    label {
+        font-weight: bold;
+    }
+</style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -27,8 +34,8 @@
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">{{__('Form search')}}</div>
         <div class="card-body">
-            <h5 class="card-title">Form search</h5>
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
@@ -36,58 +43,59 @@
                             <label for="department">Department :</label>
                             <input type="text" class="form-control form-control-sm" id="validationDepartment"
                                 value="{{$user->department->name}}" readonly>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <label for="position">Position :</label>
-                            <input type="text" class="form-control form-control-sm" id="validationPosition"
-                                value="{{$user->positions->name}}" readonly>
-                        </div> --}}
-                        <div class="col-md-2 mb-3">
-                            <label for="status">Status :</label>
-                            <select name="status[]" id="validationStatus" class="form-control-sm form-control" multiple>
-                                @isset($status_list)
-                                @foreach ($status_list as $status)
-                                <option value="{{$status}}" @if($selectedStatus->contains($status))
-                                    selected @endif>{{$status}}</option>
-                                @endforeach
-                                @endisset
-                            </select>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <label for="year">Year :</label>
-                            <select name="year[]" id="validationYear" class="form-control-sm form-control" multiple>
-                                @foreach (range(date('Y'),$start_year) as $year)
-                                <option value="{{$year}}" @if($selectedYear->contains($year))
-                                    selected @endif>{{$year}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <label for="period">Period :</label>
-                            <select name="period[]" id="validationPeriod" class="form-control-sm form-control" multiple>
-                                @isset($months)
-                                @foreach ($months as $month)
-                                <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if($selectedPeriod->contains($month->name))
-                                    selected @endif>{{$month->name}}</option>
-                                @endforeach
-                                @endisset
-                            </select>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <button class="mb-2 mr-2 btn btn-primary mt-4 ml-3" type="submit">Search</button>
-                        </div>
                     </div>
-                </form>
+                    <div class="col-md-2 mb-3">
+                        <label for="position">Position :</label>
+                        <input type="text" class="form-control form-control-sm" id="validationPosition"
+                            value="{{$user->positions->name}}" readonly>
+                    </div> --}}
+                    <div class="col-md-2 mb-3">
+                        <label for="status">Status :</label>
+                        <select name="status[]" id="validationStatus" class="form-control-sm form-control" multiple>
+                            @isset($status_list)
+                            @foreach ($status_list as $status)
+                            <option value="{{$status}}" @if($selectedStatus->contains($status))
+                                selected @endif>{{$status}}</option>
+                            @endforeach
+                            @endisset
+                        </select>
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label for="year">Year :</label>
+                        <select name="year[]" id="validationYear" class="form-control-sm form-control" multiple>
+                            @foreach (range(date('Y'),$start_year) as $year)
+                            <option value="{{$year}}" @if($selectedYear->contains($year))
+                                selected @endif>{{$year}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label for="period">Period :</label>
+                        <select name="period[]" id="validationPeriod" class="form-control-sm form-control" multiple>
+                            @isset($months)
+                            @foreach ($months as $month)
+                            <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if($selectedPeriod->
+                                contains($month->name))
+                                selected @endif>{{$month->name}}</option>
+                            @endforeach
+                            @endisset
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <button class="mb-2 mr-2 btn btn-primary mt-4 ml-3" type="submit">Search</button>
+                    </div>
             </div>
+            </form>
         </div>
     </div>
+</div>
 </div>
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">{{__('Staff List')}}</div>
         <div class="card-body">
-            <h5 class="card-title">Staff List</h5>
             <div class="table-responsive">
                 <table class="mb-0 table table-sm">
                     <thead class="thead-dark">

@@ -1,5 +1,12 @@
 @extends('layouts.app')
 @section('sidebar')
+@section('style')
+    <style>
+        label {
+            font-weight: bold;
+        }
+    </style>
+@endsection
 @include('includes.sidebar.it');
 @stop
 @section('content')
@@ -33,6 +40,9 @@
 </div>
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            {{ __('Form search') }}
+        </div>
         <div class="card-body">
             <form action="{{route('it.check.stocks_list')}}" method="GET">
                 <div class="form-row">
@@ -64,8 +74,11 @@
 </div>
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            {{ __('itstock.stock.stock') }}
+        </div>
         <div class="card-body">
-            <h5 class="card-title">{{ __('itstock.stock.stock') }}</h5>
+            {{-- <h5 class="card-title">{{ __('itstock.stock.stock') }}</h5> --}}
         <a href="{{route('it.generateAccessoriesPDF')}}" target="_blank"
         rel="noopener noreferrer" class="card-subtitle mb-2 btn btn-warning float-right">{{ __('itstock.stock.print') }}</a>
             <div class="table-responsive">

@@ -2,6 +2,13 @@
 @section('sidebar')
 @include('includes.sidebar.it');
 @stop
+@section('style')
+    <style>
+        label {
+            font-weight: bold;
+        }
+    </style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -29,8 +36,11 @@
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            {{ __('itstock.requisition-accessorie.requisition-form') }}
+        </div>
         <div class="card-body">
-            <h5 class="card-title">{{ __('itstock.requisition-accessorie.requisition-form') }}</h5>
+            {{-- <h5 class="card-title">{{ __('itstock.requisition-accessorie.requisition-form') }}</h5> --}}
             <form class="needs-validation" novalidate action="{{route('it.equipment.requisition.update',$transaction->id)}}" method="POST"
                 enctype="multipart/form-data">
                 @csrf

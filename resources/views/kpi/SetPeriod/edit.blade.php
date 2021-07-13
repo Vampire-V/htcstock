@@ -2,6 +2,13 @@
 @section('sidebar')
 @include('includes.sidebar.kpi')
 @stop
+@section('style')
+    <style>
+        label {
+            font-weight: bold;
+        }
+    </style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -25,8 +32,8 @@
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">Form Period</div>
         <div class="card-body">
-            <h5 class="card-title">Form Period</h5>
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate action="{{route('kpi.set-period.update',$period->id)}}"
                     method="POST" enctype="multipart/form-data">

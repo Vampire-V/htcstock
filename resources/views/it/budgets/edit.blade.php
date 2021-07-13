@@ -1,5 +1,14 @@
 @extends('layouts.app')
 @section('sidebar')
+@section('style')
+
+<style>
+    label {
+        font-weight: bold;
+    }
+</style>
+    
+@endsection
 @include('includes.sidebar.it');
 @stop
 @section('content')
@@ -36,6 +45,9 @@
 <div class="row">
     <div class="col-lg-6">
         <div class="main-card mb-3 card">
+            <div class="card-header">
+                {{ __('Budget') }} {{date("F", mktime(0, 0, 0, $budget->month, 1))}} {{$budget->year}}
+            </div>
             <div class="card-body">
                 <form class="needs-validation" novalidate action="{{route('it.check.budgets.update',$budget->id)}}"
                     method="POST" enctype="multipart/form-data">
@@ -70,8 +82,10 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="main-card mb-12 card">
+            <div class="card-header">
+                {{date("F", mktime(0, 0, 0, $budget->month, 1))}} {{$budget->year}}
+            </div>
             <div class="card-body">
-                <h5 class="card-title">{{date("F", mktime(0, 0, 0, $budget->month, 1))}} {{$budget->year}}</h5>
                 <table class="mb-0 table table-hover" id="table-budgets-transaction">
                     <thead>
                         <tr>

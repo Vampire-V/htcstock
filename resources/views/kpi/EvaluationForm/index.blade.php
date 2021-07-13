@@ -2,6 +2,13 @@
 @section('sidebar')
 @include('includes.sidebar.kpi')
 @stop
+@section('style')
+<style>
+    label {
+        font-weight: bold;
+    }
+</style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -25,8 +32,8 @@
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">{{__('Evaluation Search')}}</div>
         <div class="card-body">
-            <h5 class="card-title">Evaluation Search</h5>
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
@@ -93,8 +100,8 @@
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">{{__('Staff List')}}</div>
         <div class="card-body">
-            <h5 class="card-title">Staff List</h5>
             <div class="table-responsive">
                 <table class="mb-0 table table-sm">
                     <thead class="thead-dark">

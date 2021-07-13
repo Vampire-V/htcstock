@@ -33,6 +33,9 @@
 </div>
 {{-- <div class="col-lg-12"> --}}
 <div class="main-card mb-3 card">
+    <div class="card-header">
+        {{ __('Form search') }}
+    </div>
     <div class="card-body">
         <form action="#" method="GET">
             <div class="form-row">
@@ -49,7 +52,7 @@
                 </div>
 
                 <div class="col-md-2 mb-2">
-                    <button class="btn-shadow btn btn-info" type="submit" style="margin-top: 30px">
+                    <button class="btn-shadow btn btn-info mb-1" type="submit" style="margin-top: 30px">
                         <span class="btn-icon-wrapper pr-2 opacity-7">
                             <i class="fa fa-fw" aria-hidden="true" title="Copy to use search"></i>
                         </span>
@@ -75,8 +78,11 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
+            <div class="card-header">
+                {{ __('Role list') }}
+            </div>
             <div class="card-body">
-                <h5 class="card-title">Roles</h5>
+                {{-- <h5 class="card-title">Roles</h5> --}}
                 <div class="table-responsive">
                     <table class="mb-0 table table-hover" id="table-roles">
                         <thead>
@@ -90,7 +96,7 @@
                             <tr>
                                 <td>
                                     <a href="{{route('admin.roles.edit',$role->id)}}"><button type="button"
-                                            class="btn btn-primary btn-sm float-left">Edit</button></a>
+                                            class="btn btn-primary btn-sm float-left mr-2">Edit</button></a>
                                     @can('super-admin')
                                     <form action="{{route('admin.roles.destroy',$role->id)}}" method="POST"
                                         class="float-left">

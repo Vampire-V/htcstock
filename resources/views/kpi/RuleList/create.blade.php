@@ -36,8 +36,8 @@
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">{{__('Rule Management')}}</div>
         <div class="card-body">
-            <h5 class="card-title">Rule Management</h5>
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate action="{{route('kpi.rule-list.store')}}" method="POST"
                     enctype="multipart/form-data">
@@ -215,14 +215,18 @@
                                 rows="3"></textarea>
                         </div>
                     </div>
-                    <div class="form-row">
+                    {{-- <div class="form-row">
                         <div class="col-md-4">
-                            <button class="mb-2 mr-2 mt-2 btn btn-success">Save</button>
+                            
                         </div>
-                    </div>
-                </form>
+                    </div> --}}
+                
             </div>
         </div>
+        <div class="card-footer">
+            <button class="mb-2 mr-2 mt-2 btn btn-success">Save</button>
+        </div>
+    </form>
     </div>
 </div>
 @endsection

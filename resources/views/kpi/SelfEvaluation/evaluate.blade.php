@@ -35,9 +35,9 @@
     </div>
 </div>
 {{-- Display user detail --}}
-<div class="col-lg-12">
-    <div class="main-card mb-3 card">
-        <div class="card-body">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-card mb-3 card">
             <div class="card-header">
                 <h5 class="card-title">{{$evaluate->targetperiod->name}} {{$evaluate->targetperiod->year}}</h5>
                 <div class="btn-actions-pane">
@@ -51,60 +51,61 @@
                     </div>
                 </div>
             </div>
-            <div class="position-relative form-group">
-                <form class="needs-validation" novalidate>
-                    <div class="form-row">
-                        <div class="col-md-3 mb-3">
-                            <label for="staffName">Staff Name</label>
-                            <input type="text" class="form-control form-control-sm" id="staffName"
-                                placeholder="Staff Name" value="{{$evaluate->user->name }}" readonly>
-                            <div class="valid-feedback">
-                                Looks good!
+            <div class="card-body">
+                <div class="position-relative form-group">
+                    <form class="needs-validation" novalidate>
+                        <div class="form-row">
+                            <div class="col-md-3 mb-3">
+                                <label for="staffName">Staff Name</label>
+                                <input type="text" class="form-control form-control-sm" id="staffName"
+                                    placeholder="Staff Name" value="{{$evaluate->user->name }}" readonly>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="Department">Department</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" id="Department"
-                                    value="{{$evaluate->user->department->name}}" placeholder="Department"
-                                    aria-describedby="inputGroupPrepend" readonly>
+                            <div class="col-md-3 mb-3">
+                                <label for="Department">Department</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" id="Department"
+                                        value="{{$evaluate->user->department->name}}" placeholder="Department"
+                                        aria-describedby="inputGroupPrepend" readonly>
+                                    <div class="invalid-feedback">
+                                        Please choose a username.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="Position">Position</label>
+                                <input type="text" class="form-control form-control-sm" id="Position"
+                                    placeholder="Position" value="{{$evaluate->user->positions->name}}" disabled>
                                 <div class="invalid-feedback">
-                                    Please choose a username.
+                                    Please provide a valid city.
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="Template">Template</label>
+                                <input type="text" class="form-control form-control-sm" id="Template"
+                                    placeholder="Template" value="{{$evaluate->template->name}}" disabled>
+                                <div class="invalid-feedback">
+                                    Please provide a valid city.
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="Position">Position</label>
-                            <input type="text" class="form-control form-control-sm" id="Position" placeholder="Position"
-                                value="{{$evaluate->user->positions->name}}" disabled>
-                            <div class="invalid-feedback">
-                                Please provide a valid city.
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="Template">Template</label>
-                            <input type="text" class="form-control form-control-sm" id="Template" placeholder="Template"
-                                value="{{$evaluate->template->name}}" disabled>
-                            <div class="invalid-feedback">
-                                Please provide a valid city.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
+                        <div class="form-row">
 
-                    </div>
-                </form>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 @isset($category)
 <div id="group-table">
     @foreach ($category as $group)
-    <div class="col-lg-12">
-        <div class="main-card mb-3 card">
-            <div class="card-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="main-card mb-3 card">
                 <div class="card-header">
                     <label for="department" class="mb-2 mr-2">{{$group->name}} (Weight) :</label>
                     <div class="btn-actions-pane">
@@ -115,107 +116,99 @@
                         </div>
                     </div>
                     <div class="btn-actions-pane-right">
-                        {{-- @if (Auth::user()->hasRole('super-admin'))
-                        <div role="group" class="btn-group-sm btn-group">
-                            <button class="mb-2 mr-2 btn btn-danger" id="rule-remove-modal"
-                                onclick="removeInSelected(this)">Delete Selected
-                                Rule</button>
-                            <button class="mb-2 mr-2 btn btn-primary" data-group="{{$group}}" data-toggle="modal"
-                        data-target="#rule-modal" id="rule-add-modal">Add
-                        New Rule</button>
                     </div>
-                    @endif --}}
                 </div>
-            </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="mb-0 table table-sm table-bordered" id="table-{{$group->name}}">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Rule Name</th>
+                                    <th>Description</th>
+                                    <th>Base Line %</th>
+                                    <th>Max %</th>
+                                    <th>Weight %</th>
+                                    <th>Target Amount</th>
+                                    <th>Target %</th>
+                                    <th>Actual Amount</th>
+                                    <th>Actual %</th>
+                                    <th>%Ach</th>
+                                    <th>%Cal</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-            <div class="table-responsive">
-                <table class="mb-0 table table-sm table-bordered" id="table-{{$group->name}}">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Rule Name</th>
-                            <th>Description</th>
-                            <th>Base Line %</th>
-                            <th>Max %</th>
-                            <th>Weight %</th>
-                            <th>Target Amount</th>
-                            <th>Target %</th>
-                            <th>Actual Amount</th>
-                            <th>Actual %</th>
-                            <th>%Ach</th>
-                            <th>%Cal</th>
-                            <th>#</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th scope="row"></th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td style="text-align: right;">Weight</td>
-                            <td>0.00</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="text-align: right;">Weight</td>
+                                    <td>0.00</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-@endforeach
+    @endforeach
 </div>
 @endisset
 
 
 
 {{-- Calculation Summary --}}
-<div class="col-lg-12">
-    <div class="main-card mb-3 card">
-        <div class="card-body">
-            <h5 class="card-title">Calculation Summary</h5>
-            <div class="table-responsive">
-                <table class="mb-0 table table-sm table-bordered" id="table-calculation">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Weight</th>
-                            <th>%Cal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @isset($category)
-                        @foreach ($category as $item)
-                        <tr>
-                            <th>{{$item->name}}</th>
-                            <td>0.00%</td>
-                            <td>0.00%</td>
-                        </tr>
-                        @endforeach
-                        @endisset
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th scope="row">Total</th>
-                            <td>0.00%</td>
-                            <td>0.00%</td>
-                        </tr>
-                    </tfoot>
-                </table>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-card mb-3 card">
+            <div class="card-header">Calculation Summary</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="mb-0 table table-sm table-bordered" id="table-calculation">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Weight</th>
+                                <th>%Cal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @isset($category)
+                            @foreach ($category as $item)
+                            <tr>
+                                <th>{{$item->name}}</th>
+                                <td>0.00%</td>
+                                <td>0.00%</td>
+                            </tr>
+                            @endforeach
+                            @endisset
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th scope="row">Total</th>
+                                <td>0.00%</td>
+                                <td>0.00%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 {{-- Button --}}
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -230,7 +223,7 @@
     @can('admin-kpi')
     <button class="mb-2 mr-2 btn btn-alternate no-disable" onclick="download()">Download</button>
     @endcan
-    
+
     <button class="mb-2 mr-2 btn btn-primary" id="submit" onclick="submit()">Save</button>
     <button class="mb-2 mr-2 btn btn-success" id="submit-to-user" onclick="submitToManager()">Save & Send to
         manager</button>

@@ -2,6 +2,13 @@
 @section('sidebar')
 @include('includes.sidebar.it');
 @stop
+@section('style')
+<style>
+    label {
+        font-weight: bold;
+    }
+</style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -34,13 +41,15 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
+            <div class="card-header"> {{__('Form search')}} </div>
             <div class="card-body">
                 <form action="{{route('it.equipment.requisition.index')}}" method="GET">
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
-                            <label for="validationAccess_id" class="">{{ __('itstock.requisition-accessorie.equipment') }}</label>
-                            <select class="form-control-sm form-control js-select-accessory-multiple" style="width: 100%"
-                                name="accessory[]" multiple>
+                            <label for="validationAccess_id"
+                                class="">{{ __('itstock.requisition-accessorie.equipment') }}</label>
+                            <select class="form-control-sm form-control js-select-accessory-multiple"
+                                style="width: 100%" name="accessory[]" multiple>
                                 @isset($accessorys)
                                 @foreach ($accessorys as $item)
                                 <option value="{{$item->access_id}}" @if($selectedAccessorys->
@@ -53,13 +62,14 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="validationCreated_at">{{ __('itstock.requisition-accessorie.a-date') }}</label>
-                            <input type="date" class="form-control-sm form-control" id="validationSCreated_at" name="start_at"
-                                value="{{$start_at}}" oninput="changeValue(this)">
+                            <input type="date" class="form-control-sm form-control" id="validationSCreated_at"
+                                name="start_at" value="{{$start_at}}" oninput="changeValue(this)">
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="validationCreated_at">{{ __('itstock.requisition-accessorie.up-to-date') }}</label>
-                            <input type="date" class="form-control-sm form-control" id="validationECreated_at" name="end_at"
-                                value="{{$end_at}}" readonly>
+                            <label
+                                for="validationCreated_at">{{ __('itstock.requisition-accessorie.up-to-date') }}</label>
+                            <input type="date" class="form-control-sm form-control" id="validationECreated_at"
+                                name="end_at" value="{{$end_at}}" readonly>
                         </div>
                         <div class="col-md-2 mb-2">
                             <button class="btn-shadow btn btn-info" type="submit" style="margin-top: 30px">
@@ -83,8 +93,9 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
+            <div class="card-header"> {{ __('itstock.requisition-accessorie.drawdown-list') }} </div>
             <div class="card-body">
-                <h5 class="card-title">{{ __('itstock.requisition-accessorie.drawdown-list') }}</h5>
+                {{-- <h5 class="card-title">{{ __('itstock.requisition-accessorie.drawdown-list') }}</h5> --}}
                 <div class="table-responsive">
                     <table class="mb-0 table table-hover">
                         <thead>
@@ -107,7 +118,8 @@
                                 <td>{{$item->user->name }}</td>
                                 <td>{{$item->created_at}}</td>
                                 <td><a href="{{route('it.equipment.requisition.edit',$item->id)}}"><button type="button"
-                                            class="btn btn-primary btn-sm float-left">{{ __('itstock.requisition-accessorie.detail') }}</button></a></td>
+                                            class="btn btn-primary btn-sm float-left">{{ __('itstock.requisition-accessorie.detail') }}</button></a>
+                                </td>
                             </tr>
                             @endforeach
                             @endisset

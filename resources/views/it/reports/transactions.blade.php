@@ -2,6 +2,13 @@
 @section('sidebar')
 @include('includes.sidebar.it');
 @stop
+@section('style')
+    <style>
+        label {
+            font-weight: bold;
+        }
+    </style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -33,6 +40,9 @@
 </div>
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            {{ __('Form search') }}
+        </div>
         <div class="card-body">
             <form action="{{route('it.check.transactions_list')}}" method="GET">
                 <div class="form-row">
@@ -77,8 +87,11 @@
 </div>
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            {{ __('itstock.work-history.transaction-history') }}
+        </div>
         <div class="card-body">
-            <h5 class="card-title">{{ __('itstock.work-history.transaction-history') }}</h5>
+            {{-- <h5 class="card-title">{{ __('itstock.work-history.transaction-history') }}</h5> --}}
             <div class="table-responsive">
                 <table class="mb-0 table table-hover">
                     <thead>

@@ -8,6 +8,10 @@
     div #loading {
         background-position: 50% 2%;
     }
+
+    label {
+        font-weight: bold;
+    }
 </style>
 @endsection
 @section('content')
@@ -43,8 +47,8 @@
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">Rule Search</div>
         <div class="card-body">
-            <h5 class="card-title">Rule Search</h5>
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
@@ -89,34 +93,34 @@
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
-        <div class="card-body">
-
-            <div class="card-header">
-                <h5 class="card-title">Rule List</h5>
-                <div class="btn-actions-pane">
-                    <div role="group" class="btn-group-sm btn-group">
-                    </div>
-                </div>
-                <div class="btn-actions-pane-right">
-                    <div role="group" class="btn-group-sm btn-group">
-                        <button class="mb-2 mr-2 btn-transition btn btn-outline-focus" data-toggle="modal"
-                            data-target="#modal-import"><span class="btn-icon-wrapper pr-2 opacity-7">
-                                <i class="pe-7s-file"></i>
-                                Import
-                            </span></button>
-                            <a href="{{route('kpi.rules.export')}}" class="mb-2 mr-2 btn-transition btn btn-outline-focus"><span class="btn-icon-wrapper pr-2 opacity-7">
-                                <i class="pe-7s-file"></i>
-                                Export
-                            </span></a>
-                        <a href="{{route('kpi.rule-list.create')}}" class="btn-shadow btn btn-info mb-2 mr-2">
-                            <span class="btn-icon-wrapper pr-2 opacity-7">
-                                <i class="pe-7s-plus"></i>
-                            </span>
-                            Create
-                        </a>
-                    </div>
+        <div class="card-header">
+            <div class="btn-actions-pane">
+                Rule List
+                <div role="group" class="btn-group-sm btn-group">
+                    <button class="mb-2 mr-2 btn-transition btn btn-outline-focus" data-toggle="modal"
+                        data-target="#modal-import"><span class="btn-icon-wrapper pr-2 opacity-7">
+                            <i class="pe-7s-file"></i>
+                            Import
+                        </span></button>
+                    <a href="{{route('kpi.rules.export')}}" class="mb-2 mr-2 btn-transition btn btn-outline-focus"><span
+                            class="btn-icon-wrapper pr-2 opacity-7">
+                            <i class="pe-7s-file"></i>
+                            Export
+                        </span></a>
                 </div>
             </div>
+            <div class="btn-actions-pane-right">
+                <div role="group" class="btn-group-sm btn-group">
+                    <a href="{{route('kpi.rule-list.create')}}" class="btn-shadow btn btn-info mb-2 mr-2">
+                        <span class="btn-icon-wrapper pr-2 opacity-7">
+                            <i class="pe-7s-plus"></i>
+                        </span>
+                        Create
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
             <div class="table-responsive">
                 <table class="mb-0 table table-sm">
                     <thead class="thead-dark">

@@ -55,6 +55,7 @@ var render_html = () => {
     let tables = document.getElementById('group-table').getElementsByClassName('table')
     for (let i = 0; i < tables.length; i++) {
         const table = tables[i]
+        console.log(table.tBodies[0]);
         let temp_rules = evaluateForm.detail.filter(value => value.rules.categorys.name === table.id.substring(6))
 
         if (table.tBodies[0].rows.length > 0) {

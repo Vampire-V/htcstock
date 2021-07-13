@@ -36,8 +36,11 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="main-card mb-12 card">
+            <div class="card-header">
+                {{ __('Create') }}
+            </div>
             <div class="card-body">
-                <h5 class="card-title">Create</h5>
+                {{-- <h5 class="card-title">Create</h5> --}}
                 <form action="{{route('admin.permissions.store')}}" method="POST">
                     @csrf
                     <div class="form-group row">

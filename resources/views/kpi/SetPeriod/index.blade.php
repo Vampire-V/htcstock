@@ -2,6 +2,13 @@
 @section('sidebar')
 @include('includes.sidebar.kpi')
 @stop
+@section('style')
+    <style>
+        label {
+            font-weight: bold;
+        }
+    </style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -74,24 +81,24 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div class="card-header">
-                    <h5 class="card-title">Set Periods</h5>
-                    <div class="btn-actions-pane">
-                        <div role="group" class="btn-group-sm btn-group">
-                        </div>
-                    </div>
-                    <div class="btn-actions-pane-right">
-                        <div role="group" class="btn-group-sm btn-group">
-                            <a href="{{route('kpi.set-period.create')}}" class="btn-shadow btn btn-info mb-2 mr-2">
-                                <span class="btn-icon-wrapper pr-2 opacity-7">
-                                    <i class="pe-7s-plus"></i>
-                                </span>
-                                Create
-                            </a>
-                        </div>
+            <div class="card-header">
+                <h5 class="card-title">Set Periods</h5>
+                <div class="btn-actions-pane">
+                    <div role="group" class="btn-group-sm btn-group">
                     </div>
                 </div>
+                <div class="btn-actions-pane-right">
+                    <div role="group" class="btn-group-sm btn-group">
+                        <a href="{{route('kpi.set-period.create')}}" class="btn-shadow btn btn-info mb-2 mr-2">
+                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="pe-7s-plus"></i>
+                            </span>
+                            Create
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="mb-0 table table-sm" id="table-set-actual">
                         <thead class="thead-dark">

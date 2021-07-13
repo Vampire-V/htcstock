@@ -33,6 +33,9 @@
 </div>
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            {{ __('Form search') }}
+        </div>
         <div class="card-body">
             <form action="#" method="GET">
                 <div class="form-row">
@@ -91,8 +94,11 @@
 </div>
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            {{ __('itstock.buy-accessorie.purchase-list') }}
+        </div>
         <div class="card-body">
-            <h5 class="card-title">{{ __('itstock.buy-accessorie.purchase-list') }}</h5>
+            {{-- <h5 class="card-title">{{ __('itstock.buy-accessorie.purchase-list') }}</h5> --}}
             <div class="table-responsive">
                 <table class="mb-0 table table-hover">
                     <thead>

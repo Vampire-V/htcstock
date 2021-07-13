@@ -36,8 +36,9 @@
 <div class="row">
     <div class="col-12">
         <div class="main-card mb-3 card">
+            <div class="card-header"> {{__('Form search')}} </div>
             <div class="card-body">
-                <h5 class="card-title">search</h5>
+                {{-- <h5 class="card-title">search</h5> --}}
                 <div class="position-relative form-group">
                     <form class="needs-validation" novalidate>
                         <div class="form-row">

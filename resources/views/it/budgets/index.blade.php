@@ -1,5 +1,14 @@
 @extends('layouts.app')
 @section('sidebar')
+
+@section('style')
+<style>
+    label {
+        font-weight: bold;
+    }
+</style>
+    
+@endsection
 @include('includes.sidebar.it');
 @stop
 @section('content')
@@ -34,6 +43,9 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
+            <div class="card-header">
+                {{ __('Form search') }}
+            </div>
             <div class="card-body">
                 <form action="#" method="GET">
                     <div class="form-row">
@@ -81,8 +93,11 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
+            <div class="card-header">
+                {{ __('itstock.budget.budget-manage') }}
+            </div>
             <div class="card-body">
-                <h5 class="card-title">{{ __('itstock.budget.budget-manage') }}</h5>
+                {{-- <h5 class="card-title">{{ __('itstock.budget.budget-manage') }}</h5> --}}
                 <table class="mb-0 table table-hover" id="table-budgets">
                     <thead>
                         <tr>

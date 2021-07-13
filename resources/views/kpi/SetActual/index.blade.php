@@ -2,6 +2,20 @@
 @section('sidebar')
 @include('includes.sidebar.kpi')
 @stop
+@section('style')
+<style>
+    label {
+        font-weight: bold;
+    }
+
+    table thead tr th {
+        position: -webkit-sticky;
+        /* Safari */
+        position: sticky;
+        top: 0;
+    }
+</style>
+@endsection
 @section('content')
 <div class="app-page-title">
     <div class="page-title-wrapper">
@@ -126,9 +140,9 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
+            <div class="card-header">Set Actual for : {{Auth::user()->name}}</div>
             <div class="card-body">
-                <h5 class="card-title">Set Actual for : {{Auth::user()->name}}</h5>
-                <div class="table-responsive">
+                <div class="table-responsive" style="height:450px">
                     <table class="mb-0 table table-sm" id="table-set-actual">
                         <thead class="thead-dark">
                             <tr>
@@ -162,13 +176,13 @@
                                 <td>{{number_format(floatval($item->max_result), 2, '.', '')}}%</td>
                                 <td>{{number_format(floatval($item->weight), 2, '.', '')}}%</td>
                                 <td><input type="number" name="target" id="target_{{$item->id}}"
-                                        value="{{number_format(floatval($item->target), 2, '.', '')}}" step="0.01" class="form-control form-control-sm"
-                                        onchange="changeTarget(this)" />
+                                        value="{{number_format(floatval($item->target), 2, '.', '')}}" step="0.01"
+                                        class="form-control form-control-sm" onchange="changeTarget(this)" />
                                 </td>
                                 <td>{{number_format(floatval($item->target_pc), 2, '.', '')}}%</td>
-                                <td><input type="number" name="actual" id="{{$item->id}}" value="{{number_format(floatval($item->actual), 2, '.', '')}}"
-                                        step="0.01" class="form-control form-control-sm"
-                                        onchange="changeActual(this)" />
+                                <td><input type="number" name="actual" id="{{$item->id}}"
+                                        value="{{number_format(floatval($item->actual), 2, '.', '')}}" step="0.01"
+                                        class="form-control form-control-sm" onchange="changeActual(this)" />
                                 </td>
                                 <td>{{number_format(floatval($item->actual_pc), 2, '.', '')}}%</td>
                                 <td>{{number_format(floatval($item->ach), 2, '.', '')}}%</td>
@@ -180,14 +194,16 @@
                         <tfoot>
                             <tr>
                                 <td colspan="10"></td>
-                                <td><button class="mb-2 mr-2 btn btn-success btn-sm"
-                                        onclick="submit(this)">Save</button>
+                                <td>
                                 </td>
                                 <td colspan="3"></td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
+            </div>
+            <div class="card-footer d-flex justify-content-center"><button class="btn btn-success btn-sm"
+                    onclick="submit(this)">Save</button>
             </div>
         </div>
     </div>

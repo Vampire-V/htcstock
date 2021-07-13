@@ -19,6 +19,19 @@ class Rule extends Model
     ];
     protected $guarded = [];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_by = \auth()->id();
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = \auth()->id();
+        });
+    }
+
     // service เรียกใช้ Filter
     public function scopeFilter(Builder $builder, $request)
     {

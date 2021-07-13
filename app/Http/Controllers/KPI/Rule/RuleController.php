@@ -136,7 +136,7 @@ class RuleController extends Controller
         $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
         $quarter_cals = \collect([KPIEnum::average, KPIEnum::sum, KPIEnum::last_month]);
         try {
-            $rule = Rule::with('parent_to')->where('id',$id)->first();
+            $rule = Rule::with(['parent_to','updatedby'])->where('id',$id)->first();
             $category = $this->ruleCategoryService->dropdown();
             $unit = $this->targetUnitService->dropdown();
             $rulesType = $this->ruleTypeService->dropdown();

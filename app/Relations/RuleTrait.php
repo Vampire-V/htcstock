@@ -63,4 +63,9 @@ trait RuleTrait
     {
         return $this->belongsTo(Rule::class, 'parent')->withDefault();
     }
+
+    public function updatedby()
+    {
+        return $this->belongsTo(User::class, 'updated_by')->withDefault();
+    }
 }

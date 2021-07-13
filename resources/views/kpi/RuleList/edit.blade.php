@@ -38,6 +38,12 @@
     <div class="main-card mb-3 card">
         <div class="card-header">
             Rule
+            <div class="btn-actions-pane">
+                
+            </div>
+            <div class="btn-actions-pane-right">
+                last updated : {{$rule->updatedby->name}}
+            </div>
         </div>
         <div class="card-body">
             {{-- <h5 class="card-title">Rule</h5> --}}

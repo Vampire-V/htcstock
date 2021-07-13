@@ -134,7 +134,6 @@
 @endsection
 
 @section('second-script')
-<script src="{{asset('assets\js\index.js')}}" defer></script>
 <script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script defer>
     // variable

@@ -3,8 +3,7 @@
 @include('includes.sidebar.legal');
 @stop
 @section('content')
-<!-- Back to top button -->
-<a id="btnontop"></a>
+
 <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
@@ -19,18 +18,14 @@
         </div>
         <div class="page-title-actions">
             <div class="d-inline-block">
-                <a href="{{route('legal.contract-request.create')}}" class="btn-shadow btn btn-info"
-                    data-toggle="tooltip" title="create contract" data-placement="bottom">
-                    <span class="btn-icon-wrapper pr-2 opacity-7">
-                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                    </span>
-                    Create</a>
+
             </div>
         </div>
     </div>
 </div>
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">Form search</div>
         <div class="card-body">
             <form action="{{route('legal.contract-request.index')}}" method="GET">
                 <div class="form-row">
@@ -45,7 +40,8 @@
                         </select>
                     </div>
                     <div class="col-md-2 mb-2">
-                        <select class="form-control-sm form-control js-select-agreements-multiple" name="agreement[]" multiple>
+                        <select class="form-control-sm form-control js-select-agreements-multiple" name="agreement[]"
+                            multiple>
                             @isset($agreements)
                             @foreach ($agreements as $item)
                             <option value="{{$item->id}}" @if($selectedAgree->contains($item->id)) selected
@@ -88,13 +84,31 @@
 </div>
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
+        <div class="card-header">
+            <div class="btn-actions-pane">
+                Contract item
+                <div role="group" class="btn-group-sm btn-group">
+
+                </div>
+            </div>
+            <div class="btn-actions-pane-right">
+                <div role="group" class="btn-group-sm btn-group">
+                    <a href="{{route('legal.contract-request.create')}}" class="btn-shadow btn btn-info"
+                        data-toggle="tooltip" title="create contract" data-placement="bottom">
+                        <span class="btn-icon-wrapper pr-2 opacity-7">
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                        </span>
+                        Create</a>
+                </div>
+            </div>
+        </div>
         <div class="card-body">
-            <h5 class="card-title">Contract item</h5>
             <div class="table-responsive">
                 <table class="mb-0 table table-hover table-sm table-bordered">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr>
                             <th>#</th>
+                            <th>Name Request</th>
                             <th>Full name (Company’s, Person’s) </th>
                             <th>Legal Representative </th>
                             <th>Legal Agreement </th>
@@ -128,6 +142,7 @@
                                 </form>
                                 @endif
                             </td>
+                            <td>{{$item->createdBy->name}}</td>
                             <td>{{$item->company_name}}</td>
                             <td>{{$item->representative}}</td>
                             <td>{{$item->legalAgreement->name}}</td>

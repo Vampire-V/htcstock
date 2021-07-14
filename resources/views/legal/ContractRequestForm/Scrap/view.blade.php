@@ -6,8 +6,7 @@
 @include('includes.sidebar.legal');
 @stop
 @section('content')
-<!-- Back to top button -->
-<a id="btnontop"></a>
+
 <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
@@ -22,10 +21,10 @@
             </div>
         </div>
         <div class="page-title-actions">
-            <a style="color: white" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
+            {{-- <a style="color: white" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
                 class="btn-shadow mr-3 btn btn-dark" href="{{route('legal.pdf',$legalContract->id)}}">
                 <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-            </a>
+            </a> --}}
             <div class="d-inline-block">
                 
             </div>
@@ -33,6 +32,7 @@
     </div>
 </div>
 
+<div class="row">
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
         <div class="card-body">
@@ -326,11 +326,33 @@
             <hr>
 
 
-            <a class="btn-shadow mr-3 btn btn-dark" type="button" href="{{url()->previous()}}">Back</a>
+            {{-- <a class="btn-shadow mr-3 btn btn-dark" type="button" href="{{url()->previous()}}">Back</a>
             <button class="mr-3 btn btn-success" type="submit" onclick="event.preventDefault();
-            document.getElementById('approval-contract-form').submit();">Submit</button>
+            document.getElementById('approval-contract-form').submit();">Submit</button> --}}
         </div>
     </div>
+</div>
+</div>
+
+
+{{-- Button --}}
+<div class="app-page-title">
+    <div class="page-title-wrapper">
+        <div class="page-title-heading">
+        </div>
+        <div class="page-title-actions">
+
+        </div>
+    </div>
+</div>
+<div class="page-title-actions fiexd-btn-botton">
+    <a style="color: white" data-toggle="tooltip" title="PDF" data-placement="bottom"
+        class="btn-shadow mb-3  mr-3 btn btn-dark" href="{{route('legal.pdf',$legalContract->id)}}" target="_blank"
+        rel="noopener">
+        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+    </a>
+    <button class="mb-3 mr-3 btn btn-success" type="submit" onclick="event.preventDefault();
+            document.getElementById('approval-contract-form').submit();">Send Contract</button>
 </div>
 @stop
 

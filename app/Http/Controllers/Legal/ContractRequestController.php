@@ -243,7 +243,7 @@ class ContractRequestController extends Controller
     public function update(StoreContractRequest $request, $id)
     {
         $attributes = $request->except(['_token', '_method']);
-
+        // dd($id);
         DB::beginTransaction();
         try {
             $contractRequest = $this->contractRequestService->find($id);

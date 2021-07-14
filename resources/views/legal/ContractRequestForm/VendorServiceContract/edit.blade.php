@@ -6,8 +6,7 @@
 @include('includes.sidebar.legal');
 @stop
 @section('content')
-<!-- Back to top button -->
-<a id="btnontop"></a>
+
 <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">

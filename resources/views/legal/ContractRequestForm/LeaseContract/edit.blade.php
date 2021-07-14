@@ -6,8 +6,7 @@
 @include('includes.sidebar.legal');
 @stop
 @section('content')
-<!-- Back to top button -->
-<a id="btnontop"></a>
+
 <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
@@ -39,7 +38,7 @@
             <span class="badge badge-primary">Sub-type of Contract</span>
             <form class="needs-validation" novalidate
                 action="{{route('legal.contract-request.leasecontract.update',$leaseContract->id)}}" method="POST"
-                enctype="multipart/form-data">
+                enctype="multipart/form-data" id="form-leasecontract">
                 @csrf
                 @method('PUT')
                 <div class="form-row">
@@ -87,8 +86,9 @@
                                 style="color: red;">*</span> <a href="{{url('storage/'.$leaseContract->quotation)}}"
                                 target="_blank"
                                 rel="noopener noreferrer">{{$leaseContract->quotation ? 'view file' : ""}}</a></label>
-                        <input type="file" class="form-control-sm form-control" id="validationQuotationFile" onchange="uploadFileContract(this)"
-                            data-cache="{{substr($leaseContract->quotation,9)}}" data-name="quotation" required>
+                        <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
+                            onchange="uploadFileContract(this)" data-cache="{{substr($leaseContract->quotation,9)}}"
+                            data-name="quotation" required>
                         <div class="mb-3 progress hide-contract">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                 aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
@@ -126,7 +126,8 @@
                     <div class="col-md-4 mb-4">
                         <label for="validationScope"><strong>Scope of Work</strong> <span
                                 style="color: red;">*</span></label>
-                        <input type="text" class="form-control-sm form-control" id="validationScope" name="scope_of_work"
+                        <input type="text" class="form-control-sm form-control" id="validationScope"
+                            name="scope_of_work"
                             value="{{isset($leaseContract->legalComercialTerm) ? $leaseContract->legalComercialTerm->scope_of_work : ""}}"
                             required>
                         <div class="invalid-feedback">
@@ -146,7 +147,8 @@
                     <div class="col-md-4 mb-4">
                         <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong> <span
                                 style="color: red;">*</span></label>
-                        <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo" name="purchase_order_no"
+                        <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo"
+                            name="purchase_order_no"
                             value="{{isset($leaseContract->legalComercialTerm) ? $leaseContract->legalComercialTerm->purchase_order_no : ""}}"
                             required>
                         <div class="invalid-feedback">
@@ -158,7 +160,8 @@
                     <div class="col-md-3 mb-3">
                         <label for="validationQuotationNo"><strong>Quotation No</strong> <span
                                 style="color: red;">*</span></label>
-                        <input type="text" class="form-control-sm form-control" id="validationQuotationNo" name="quotation_no"
+                        <input type="text" class="form-control-sm form-control" id="validationQuotationNo"
+                            name="quotation_no"
                             value="{{isset($leaseContract->legalComercialTerm) ? $leaseContract->legalComercialTerm->quotation_no : ""}}"
                             required>
                         <div class="invalid-feedback">
@@ -177,7 +180,8 @@
                     <div class="col-md-3 mb-3">
                         <label for="validationContractPeriod"><strong>Contract period</strong> <span
                                 style="color: red;">*</span></label>
-                        <input type="date" class="form-control-sm form-control" id="validationContractPeriod" name="contract_period"
+                        <input type="date" class="form-control-sm form-control" id="validationContractPeriod"
+                            name="contract_period"
                             value="{{isset($leaseContract->legalComercialTerm->contract_period) ? $leaseContract->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
                             required>
                         <div class="invalid-feedback">
@@ -214,16 +218,16 @@
                                         name="description" min="0" step=0.01>
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control-sm form-control" id="validationUnitPrice" name="unit_price"
-                                        min="0" step=0.01>
+                                    <input type="number" class="form-control-sm form-control" id="validationUnitPrice"
+                                        name="unit_price" min="0" step=0.01>
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control-sm form-control" id="validationDiscount" name="discount"
-                                        min="0" step=0.01>
+                                    <input type="number" class="form-control-sm form-control" id="validationDiscount"
+                                        name="discount" min="0" step=0.01>
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control-sm form-control" id="validationAmount" name="amount"
-                                        min="0" step=0.01>
+                                    <input type="number" class="form-control-sm form-control" id="validationAmount"
+                                        name="amount" min="0" step=0.01>
                                 </td>
                                 <input type="hidden" class="form-control-sm form-control" id="validationContractDestsId"
                                     name="contract_dests_id" value="{{$leaseContract->id}}">
@@ -272,9 +276,10 @@
                         <div class="col-md-3 mb-3">
                             <label for="validationMonthly"><strong>Monthly</strong> <span
                                     style="color: red;">*</span></label>
-                            <input type="number" class="form-control-sm form-control" id="validationMonthly" name="monthly" min="0"
+                            <input type="number" class="form-control-sm form-control" id="validationMonthly"
+                                name="monthly" min="0"
                                 value="{{isset($leaseContract->legalPaymentTerm) ? $leaseContract->legalPaymentTerm->monthly : 0}}"
-                                required>
+                                >
                             <div class="invalid-feedback">
                                 Please provide a valid Monthly.
                             </div>
@@ -303,8 +308,10 @@
                         </ul>
                     </div>
                 </div>
+
                 <hr>
-                <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px" type="button"
+
+                <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
                     href="{{route('legal.contract-request.edit',$leaseContract->legalcontract->id)}}">Back</a>
                 <button class="btn btn-primary" type="submit" style="margin-top: 5px">Next</button>
             </form>

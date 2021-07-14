@@ -26,18 +26,12 @@ className = ['form-control', 'form-control-sm']
 
 class EvaluateForm {
     constructor(template = null,
-        minone = 0,
-        maxone = 0,
-        mintwo = 0,
-        maxtwo = 0,
-        mintree = 0,
-        maxtree = 0,
         total_weight_kpi = 0.00,
         total_weight_key_task = 0.00,
         total_weight_omg = 0.00,
-        ach_kpi = 0.00,
-        ach_key_task = 0.00,
-        ach_omg = 0.00,
+        // cal_kpi = 0.00,
+        // cal_key_task = 0.00,
+        // cal_omg = 0.00,
         comment = null,
         detail = [],
         remove = [],
@@ -46,18 +40,12 @@ class EvaluateForm {
         current_level = null,
         status = null) {
         this.template = template
-        this.minone = minone
-        this.maxone = maxone
-        this.mintwo = mintwo
-        this.maxtwo = maxtwo
-        this.mintree = mintree
-        this.maxtree = maxtree
         this.total_weight_kpi = total_weight_kpi
         this.total_weight_key_task = total_weight_key_task
         this.total_weight_omg = total_weight_omg
-        this.ach_kpi = ach_kpi
-        this.ach_key_task = ach_key_task
-        this.ach_omg = ach_omg
+        // this.cal_kpi = cal_kpi
+        // this.cal_key_task = cal_key_task
+        // this.cal_omg = cal_omg
         this.comment = comment
         this.detail = detail
         this.remove = remove
@@ -103,19 +91,19 @@ class EvaluateDetail {
 var setEvaluate = (datas) => {
     var evaluateForm = new EvaluateForm()
     evaluateForm.template = datas.template_id
-    evaluateForm.minone = datas.main_rule_condition_1_min
-    evaluateForm.maxone = datas.main_rule_condition_1_max
-    evaluateForm.mintwo = datas.main_rule_condition_2_min
-    evaluateForm.maxtwo = datas.main_rule_condition_2_max
-    evaluateForm.mintree = datas.main_rule_condition_3_min
+    // evaluateForm.minone = datas.main_rule_condition_1_min
+    // evaluateForm.maxone = datas.main_rule_condition_1_max
+    // evaluateForm.mintwo = datas.main_rule_condition_2_min
+    // evaluateForm.maxtwo = datas.main_rule_condition_2_max
+    // evaluateForm.mintree = datas.main_rule_condition_3_min
 
     evaluateForm.total_weight_kpi = datas.total_weight_kpi
     evaluateForm.total_weight_key_task = datas.total_weight_key_task
     evaluateForm.total_weight_omg = datas.total_weight_omg
 
-    evaluateForm.ach_kpi = datas.ach_kpi
-    evaluateForm.ach_key_task = datas.ach_key_task
-    evaluateForm.ach_omg = datas.ach_omg
+    // evaluateForm.cal_kpi = datas.cal_kpi
+    // evaluateForm.cal_key_task = datas.cal_key_task
+    // evaluateForm.cal_omg = datas.cal_omg
 
     evaluateForm.comment = datas.comment
     evaluateForm.status = datas.status
@@ -129,11 +117,11 @@ var setDetail = (rule_temp) => {
     evaluateForm.detail = evaluateForm.detail.length > 0 ? [] : evaluateForm.detail
     rule_temp.forEach(element => {
         let detail = new EvaluateDetail()
-        detail.evaluate_id = typeof element.evaluate_id === 'undefined' ? null : element.evaluate_id
+        detail.evaluate_id = element.evaluate_id ?? null
         detail.rule_id = element.rule_id
-        detail.rules = Object.create(element.rules)
-        detail.target = typeof element.target === 'undefined' ? element.target_config : element.target
-        detail.actual = typeof element.actual === 'undefined' ? 0.00 : element.actual
+        detail.rules = element.rules
+        detail.target = element.target_config ?? element.target
+        detail.actual = element.actual ?? 0.00
         detail.average_actual = []
         detail.average_target = []
         detail.max = element.max_result
@@ -165,12 +153,6 @@ const validityForm = () => {
 // kpi Evaluate-Form Update
 var setEvaluateForm = (evaluate) => {
     evaluateForm.template = evaluate.template_id
-    evaluateForm.minone = evaluate.main_rule_condition_1_min
-    evaluateForm.maxone = evaluate.main_rule_condition_1_max
-    evaluateForm.mintwo = evaluate.main_rule_condition_2_min
-    evaluateForm.maxtwo = evaluate.main_rule_condition_2_max
-    evaluateForm.mintree = evaluate.main_rule_condition_3_min
-    evaluateForm.maxtree = evaluate.main_rule_condition_3_max
     evaluateForm.total_weight_kpi = evaluate.total_weight_kpi
     evaluateForm.total_weight_key_task = evaluate.total_weight_key_task
     evaluateForm.total_weight_omg = evaluate.total_weight_omg
@@ -282,7 +264,7 @@ var findActualPercent = (element, array) => {
             result = element.actual > element.target ? 100.00 : element.actual === 0.00 ? 0.00 : (element.actual / element.target) * 100
         }
         if (element.rules.calculate_type === calculate.NEGATIVE) {
-            result = element.actual > element.target ? (2 - (element.actual / element.target) * 100) : 100.00
+            result = element.actual > element.target ? ((element.actual / element.target) * 100) : 100.00
         }
         if (element.rules.calculate_type === calculate.ZERO) {
             result = element.actual <= element.target ? 100.00 : 0.00

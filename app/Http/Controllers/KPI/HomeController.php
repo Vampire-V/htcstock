@@ -52,10 +52,10 @@ class HomeController extends Controller
         // $users = $this->userService->evaluationOfYearReport($selectedYear);
         // $rules = $this->ruleService->rulesInEvaluationReport($selectedYear);
         $departments = $this->departmentService->dropdown();
-        $degree = \collect([KPIEnum::one,KPIEnum::two,KPIEnum::tree]);
-        
+        $degree = \collect([KPIEnum::one, KPIEnum::two, KPIEnum::tree]);
 
-        return \view('kpi.home', \compact('departments','degree'));
+
+        return \view('kpi.home', \compact('departments', 'degree'));
     }
 
     public function report_your_self($year)
@@ -86,17 +86,17 @@ class HomeController extends Controller
     {
         try {
             $users = $this->userService->evaluationOfYearReport($year);
-            $is_last = \collect(['03', '06', '09', '12','March', 'June', 'September', 'Depcember']);
+            $is_last = \collect(['03', '06', '09', '12', 'March', 'June', 'September', 'Depcember']);
 
             for ($i = 0; $i < $users->count(); $i++) {
                 $user = $users[$i];
-                    $user->evaluates->each(function ($item) use($is_last){
-                        if ($is_last->contains($item->targetperiod->name)) {
-                            $item->weigth = config('kpi.weight')['quarter'];
-                        } else {
-                            $item->weigth = config('kpi.weight')['month'];
-                        }
-                    });
+                $user->evaluates->each(function ($item) use ($is_last) {
+                    if ($is_last->contains($item->targetperiod->name)) {
+                        $item->weigth = config('kpi.weight')['quarter'];
+                    } else {
+                        $item->weigth = config('kpi.weight')['month'];
+                    }
+                });
                 $this->calculation_summary($user->evaluates);
                 EvaluateResource::collection($user->evaluates);
             }
@@ -176,9 +176,9 @@ class HomeController extends Controller
     {
         try {
             $evaluations = $this->evaluateService->scoreFilter($request);
-            $is_last = \collect(['03', '06', '09', '12','March', 'June', 'September', 'Depcember']);
-            $evaluations->each(function ($item) use($is_last){
-                if ($is_last->contains($item->targetperiod->name)) {
+            $is_last = \collect(['03', '06', '09', '12', 'March', 'June', 'September', 'Depcember']);
+            $evaluations->each(function ($item) use ($is_last) {
+                if ($is_last->contains($item->targetperiod->name) || $item->user->degree === KPIEnum::one) {
                     $item->weigth = config('kpi.weight')['quarter'];
                 } else {
                     $item->weigth = config('kpi.weight')['month'];
@@ -194,11 +194,12 @@ class HomeController extends Controller
 
     public function weigthconfig(Request $request)
     {
-        $is_last = \collect(['03', '06', '09', '12']);
+        $is_last = \collect(['03', '06', '09', '12', 'March', 'June', 'September', 'Depcember']);
         try {
             if ($request->is_quarter === "true" || $is_last->contains($request->period)) {
                 $config = config('kpi.weight')['quarter'];
-            } else {
+            } 
+            if ($request->degree !== KPIEnum::one){
                 $config = config('kpi.weight')['month'];
             }
         } catch (\Exception $e) {

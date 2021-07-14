@@ -352,15 +352,18 @@ const month_quarter = () => {
     let check = document.getElementById('customSwitch1').checked
     let period = document.getElementById('period')
     let quarter = document.getElementById('quarter')
+    let degree = document.getElementById('degree')
     let config = {
         params: {
             is_quarter: check,
-            period: period.value
+            period: period.value,
+            degree: degree.value
         },
     }
     getWeigthConfig(config)
         .then(res => {
             if (res.status === 200) {
+                console.log(res.data.data);
                 weigth_template = res.data.data
             }
         })

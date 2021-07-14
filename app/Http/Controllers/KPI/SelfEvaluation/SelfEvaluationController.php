@@ -126,11 +126,11 @@ class SelfEvaluationController extends Controller
         try {
             $category = $this->categoryService->dropdown();
             $f_evaluate = $this->evaluateService->find($id);
-            if ($f_evaluate->evaluateDetail->groupBy(fn ($item) => $item->rules->category_id)->count() > 2) {
-                $weight_group = config('kpi.weight')['quarter'];
-            } else {
-                $weight_group = config('kpi.weight')['month'];
-            }
+            // if ($f_evaluate->evaluateDetail->groupBy(fn ($item) => $item->rules->category_id)->count() > 2) {
+            //     $weight_group = config('kpi.weight')['quarter'];
+            // } else {
+            $weight_group = config('kpi.weight')['month'];
+            // }
             $evaluate  = new EvaluateResource($f_evaluate);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
@@ -156,7 +156,7 @@ class SelfEvaluationController extends Controller
             if ($status_list->contains($evaluate->status) && !$check) {
                 return $this->errorResponse("เลยเวลาที่กำหนด", 500);
             }
-
+            // New version รออัพเดท ข้อมูล
             // $detail = collect($request->detail);
             // $g = $detail->groupBy(fn($item) => $item['rules']['category_id']);
             // $total = [];

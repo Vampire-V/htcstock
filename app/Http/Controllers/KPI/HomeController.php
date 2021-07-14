@@ -176,9 +176,9 @@ class HomeController extends Controller
     {
         try {
             $evaluations = $this->evaluateService->scoreFilter($request);
-            $is_last = \collect(['03', '06', '09', '12', 'March', 'June', 'September', 'Depcember']);
+            // $is_last = \collect(['03', '06', '09', '12', 'March', 'June', 'September', 'Depcember']);
             $evaluations->each(function ($item) use ($request) {
-                if ($request->quarter === "true" || $request->degree === KPIEnum::one) {
+                if ($request->quarter === "true" && $request->degree === KPIEnum::one) {
                     $item->weigth = config('kpi.weight')['quarter'];
                 }else{
                     $item->weigth = config('kpi.weight')['month'];
@@ -202,7 +202,7 @@ class HomeController extends Controller
     {
         // $is_last = \collect(['03', '06', '09', '12', 'March', 'June', 'September', 'Depcember']);
         try {
-            if ($request->is_quarter === "true" || $request->degree === KPIEnum::one) {
+            if ($request->is_quarter === "true" && $request->degree === KPIEnum::one) {
                 $config = config('kpi.weight')['quarter'];
             }else{
                 $config = config('kpi.weight')['month'];

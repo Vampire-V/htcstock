@@ -175,7 +175,7 @@ const search_score = () => {
                             score: sum_total / 100
                         })
                         if (element.user_id === 113) {
-                            console.log(total_kpi);
+                            console.log(kpi);
                         }
                     }
                 } else {

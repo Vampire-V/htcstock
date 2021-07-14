@@ -150,13 +150,24 @@ class SelfEvaluationController extends Controller
         $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft]);
         DB::beginTransaction();
         try {
-
             $evaluate = $this->evaluateService->find($id);
             $check = $this->setting_action_service->isNextStep(KPIEnum::set_value);
 
             if ($status_list->contains($evaluate->status) && !$check) {
                 return $this->errorResponse("เลยเวลาที่กำหนด", 500);
             }
+
+            // $detail = collect($request->detail);
+            // $g = $detail->groupBy(fn($item) => $item['rules']['category_id']);
+            // $total = [];
+            // foreach ($g as $value) {
+            //     $total[] = $value->reduce(function($a,$b)  {
+            //         return $b['cal'] + $a;
+            //     },0);
+            // }
+            // $evaluate->cal_kpi = $total[0] ?? 0.00;
+            // $evaluate->cal_key_task = $total[1] ?? 0.00;
+            // $evaluate->cal_omg = $total[2] ?? 0.00;
 
             foreach ($request->detail as $value) {
                 $evaluate->evaluateDetail()
@@ -361,7 +372,7 @@ class SelfEvaluationController extends Controller
             $evaluate_quarter = $this->evaluateService->forQuarterYear($user, $quarter, $year);
             $evaluate = $evaluate_quarter->first();
             $detail = \collect();
-            $quarter_weight = \config('kpi.weight.quarter');
+            $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
             $evaluate_quarter->each(function ($item) use ($detail) {
                 foreach ($item->evaluateDetail as $key => $value) {
                     $detail[] = $value;

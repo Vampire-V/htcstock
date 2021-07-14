@@ -174,6 +174,9 @@ const search_score = () => {
                             omg: total_omg,
                             score: sum_total / 100
                         })
+                        if (element.user_id === 113) {
+                            console.log(total_kpi);
+                        }
                     }
                 } else {
                     for (let index = 0; index < res.data.data.length; index++) {

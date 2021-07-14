@@ -178,12 +178,13 @@ class HomeController extends Controller
             $evaluations = $this->evaluateService->scoreFilter($request);
             $is_last = \collect(['03', '06', '09', '12', 'March', 'June', 'September', 'Depcember']);
             $evaluations->each(function ($item) use ($is_last) {
-                if ($is_last->contains($item->targetperiod->name) || $item->user->degree === KPIEnum::one) {
-                    $item->weigth = config('kpi.weight')['quarter'];
-                } else {
+                if (!$is_last->contains($item->targetperiod->name) && $item->user->degree !== KPIEnum::one) {
                     $item->weigth = config('kpi.weight')['month'];
+                } else {
+                    $item->weigth = config('kpi.weight')['quarter'];
                 }
             });
+            // dd($evaluations);
             $this->calculation_summary($evaluations);
             $result = EvaluateResource::collection($evaluations);
         } catch (\Exception $e) {
@@ -198,8 +199,7 @@ class HomeController extends Controller
         try {
             if ($request->is_quarter === "true" || $is_last->contains($request->period)) {
                 $config = config('kpi.weight')['quarter'];
-            } 
-            if ($request->degree !== KPIEnum::one || !$is_last->contains($request->period)){
+            }else if ($request->degree !== KPIEnum::one && !$is_last->contains($request->period) && $request->is_quarter !== "true"){
                 $config = config('kpi.weight')['month'];
             }
         } catch (\Exception $e) {

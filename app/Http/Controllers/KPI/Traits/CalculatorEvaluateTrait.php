@@ -100,7 +100,7 @@ trait CalculatorEvaluateTrait
                 
                 $dd = $this->isZeroNew($tar) === 1 ? 0 : ($ac / $this->isZeroNew($tar));
                 // if ($ac !== 0.00) {
-                $item->ach = $ac < $tar ? (2 - $dd) * 100.00 : 0.00;
+                $item->ach = (2 - $dd) * 100.00;
                 
                 // } else{
                 //     $item->ach = 0.00;

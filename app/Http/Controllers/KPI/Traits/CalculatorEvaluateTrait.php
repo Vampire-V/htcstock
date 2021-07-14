@@ -98,9 +98,15 @@ trait CalculatorEvaluateTrait
                 //     $item->ach = $item->max_result ?? $item->max;
                 // }
                 
-                $dd = $this->isZeroNew($tar) === 1 ? 0 : ($ac / $this->isZeroNew($tar));
+                $dd = ($ac / $this->isZeroNew($tar));
                 // if ($ac !== 0.00) {
-                $item->ach = (2 - $dd) * 100.00;
+                    if ($tar === 0.00) {
+                        $item->ach = 0.00;
+                    } else {
+                        $item->ach = (2 - $dd) * 100.00;
+                    }
+                    
+                
                 
                 // } else{
                 //     $item->ach = 0.00;

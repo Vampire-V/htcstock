@@ -184,15 +184,16 @@ const search_score = () => {
                         let kpi = evaluate.detail.filter(item => item.rules.categorys.name === `kpi`)
                         let key_task = evaluate.detail.filter(item => item.rules.categorys.name === `key-task`)
                         let omg = evaluate.detail.filter(item => item.rules.categorys.name === `omg`)
-                        let total_kpi = 0
-                        let total_key = 0
-                        let total_omg = 0
-                        let sum_total = 0
+                        let total_kpi = 0.00
+                        let total_key = 0.00
+                        let total_omg = 0.00
+                        let sum_total = 0.00
 
                         total_kpi = kpi.reduce((a, c) => a + c.cal, 0)
                         total_key = key_task.reduce((a, c) => a + c.cal, 0)
-                        total_omg = omg.reduce((a, c) => a + c.cal, 0)
-                        sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
+                        // total_omg = omg.reduce((a, c) => a + c.cal, 0)
+                        sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) 
+                        // + (total_omg * weigth_template[2])
 
                         data.push({
                             evaluate: evaluate,

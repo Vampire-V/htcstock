@@ -208,6 +208,8 @@ class HomeController extends Controller
                 $config = config('kpi.weight')['month'];
             }else if ($request->is_quarter === "true" && $request->degree !== KPIEnum::one) {
                 $config = config('kpi.weight')['month'];
+            }else if($request->is_quarter !== "true" && $request->degree === KPIEnum::one && !$is_last->contains($request->period)){
+                $config = config('kpi.weight')['month'];
             }
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);

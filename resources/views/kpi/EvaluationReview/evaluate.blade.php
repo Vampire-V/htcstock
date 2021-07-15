@@ -43,7 +43,7 @@
             </div>
             <div class="btn-actions-pane-right">
                 <div role="group" class="btn-group-sm btn-group">
-                    <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}} {{$evaluate->currentlevel->user->name}}
+                    <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}} {{$evaluate->currentlevel->createdBy->name}}
                         </span></h5>
                 </div>
             </div>

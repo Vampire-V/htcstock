@@ -72,4 +72,13 @@ class UserApproveService extends BaseService
             throw $th;
         }
     }
+
+    public function findLastLevel(Evaluate $evaluate): ?UserApprove
+    {
+        try {
+            return UserApprove::where('user_id', $evaluate->user_id)->orderBy('level', 'desc')->first();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Mail;
 class EvaluateReviewController extends Controller
 {
     protected $userService, $targetPeriodService, $evaluateService, $evaluateDetailService,
-        $categoryService, $setting_action_service,$userApproveService;
+        $categoryService, $setting_action_service, $userApproveService;
     public function __construct(
         UserServiceInterface $userServiceInterface,
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
@@ -140,12 +140,12 @@ class EvaluateReviewController extends Controller
             }
 
             $detail = collect($request->detail);
-            $g = $detail->groupBy(fn($item) => $item['rules']['category_id']);
+            $g = $detail->groupBy(fn ($item) => $item['rules']['category_id']);
             $total = [];
             foreach ($g as $value) {
-                $total[] = $value->reduce(function($a,$b)  {
+                $total[] = $value->reduce(function ($a, $b) {
                     return $b['cal'] + $a;
-                },0);
+                }, 0);
             }
             $evaluate->cal_kpi = $total[0] ?? 0.00;
             $evaluate->cal_key_task = $total[1] ?? 0.00;
@@ -165,22 +165,26 @@ class EvaluateReviewController extends Controller
                     Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
                     return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
                 }
+
                 if ($this->userApproveService->isLastLevel($evaluate)) {
                     // Level last
+                    $last_level = $this->userApproveService->findLastLevel($evaluate);
                     $evaluate->status = KPIEnum::approved;
                     Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
                     Log::notice("User : " . \auth()->user()->name . " = Update evaluate review End process : id = " . $evaluate->id);
                     $message = "Approved";
-                }else{
+                    $evaluate->current_level = $last_level->id;
+                    $evaluate->next_level = $last_level->id;
+                } else {
                     // Next level
                     $evaluate->status = KPIEnum::on_process;
                     Mail::to($user_approve->approveBy->email)->send(new EvaluationReviewMail($evaluate));
                     Log::notice("User : " . \auth()->user()->name . " = Update evaluate review next step : id = " . $evaluate->id);
-                    $message = "Next step send to ".$user_approve->approveBy->name;
+                    $message = "Next step send to " . $user_approve->approveBy->name;
+                    $evaluate->current_level = $evaluate->getOriginal('next_level');
+                    $evaluate->next_level = $user_approve->id;
                 }
-                $evaluate->current_level = $evaluate->getOriginal('next_level');
-                $evaluate->next_level = $user_approve->id;
-                
+
                 # send mail to approved
             } else {
                 if (!$evaluate->nextlevel->exists) {
@@ -193,7 +197,7 @@ class EvaluateReviewController extends Controller
                 $evaluate->comment = $request->comment;
                 $evaluate->current_level = null;
                 $evaluate->next_level = $user_approve->id;
-                
+
                 # send mail to reject
                 Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
                 Log::notice("User : " . \auth()->user()->name . " = Send mail reject evaluate = " . $evaluate->id);

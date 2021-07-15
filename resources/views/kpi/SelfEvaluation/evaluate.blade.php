@@ -219,7 +219,7 @@
         </div>
     </div>
 </div>
-<div class="page-title-actions fiexd-btn-botton">
+<div class="page-title-actions">
     @can('admin-kpi')
     <button class="mb-2 mr-2 btn btn-alternate no-disable" onclick="download()">Download</button>
     @endcan

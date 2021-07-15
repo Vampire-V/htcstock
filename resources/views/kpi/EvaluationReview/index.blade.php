@@ -114,7 +114,9 @@
                         @isset($evaluates)
                         @foreach ($evaluates as $key => $evaluate)
                         @isset($evaluate->user)
-                        <tr>
+                        <tr @if ($evaluate->currentlevel->user_approve === 113)
+                            style="background-color: greenyellow"
+                        @endif >
                             <th scope="row">{{$key+1}}</th>
                             <td>{{$evaluate->user->name }}</td>
                             <td>{{$evaluate->user->department->name}}</td>

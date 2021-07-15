@@ -46,8 +46,9 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}} {{$evaluate->currentlevel->createdBy->name}}
+                        <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}} 
                             </span></h5>
+                            {{$evaluate->currentlevel->approveBy->name}}
                     </div>
                 </div>
             </div>

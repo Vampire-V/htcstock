@@ -191,6 +191,17 @@ class HomeController extends Controller
             });
             // dd($evaluations);
             $this->calculation_summary($evaluations);
+            // $evaluations->each(function ($item) {
+            //     if ($item->id === 104) {
+            //         $ddd = $item->evaluateDetail->groupBy(fn($item) => $item->rules->category_id);
+            //         $ddd[1]->each(function($kpi) {
+            //             dump($kpi->rule->name);
+            //             dump($kpi);
+            //         });
+            //         exit;
+            //     }
+            // });
+            
             $result = EvaluateResource::collection($evaluations);
         } catch (\Exception $e) {
             return $this->errorResponse($e, 500);

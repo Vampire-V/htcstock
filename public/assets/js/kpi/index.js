@@ -328,12 +328,12 @@ var findAchValue = (obj) => {
                 if (dd === -Infinity) {
                     dd = 0
                 }
-                
+                ach = parseFloat((2 - dd ) * 100.00)
                 // if (obj.actual_pc !== 0.00) {
                 //     if (obj.actual_pc < obj.target_pc) {
                 //         ach = obj.max ?? obj.max_result
                 //     } else {
-                        ach = parseFloat((2 - dd ) * 100.00)
+                        // ach = parseFloat((2 - dd ) * 100.00)
                         // console.log(obj.rules.name,ach);
                 //     }
                 // }else{

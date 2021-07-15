@@ -54,6 +54,7 @@ class UserApproveService extends BaseService
 
     public function isLastLevel(Evaluate $evaluate): bool
     {
+        // auth id ตรงกับ Last Level return true
         try {
             $level_approve = UserApprove::with('approveBy')->where('user_id', $evaluate->user_id)->orderBy('level', 'desc')->first();
             return \auth()->id() === $level_approve->user_approve ? \true : \false;

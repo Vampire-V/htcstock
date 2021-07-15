@@ -139,6 +139,18 @@ class EvaluateReviewController extends Controller
                 return $this->errorResponse("เลยเวลาที่กำหนด", 500);
             }
 
+            $detail = collect($request->detail);
+            $g = $detail->groupBy(fn($item) => $item['rules']['category_id']);
+            $total = [];
+            foreach ($g as $value) {
+                $total[] = $value->reduce(function($a,$b)  {
+                    return $b['cal'] + $a;
+                },0);
+            }
+            $evaluate->cal_kpi = $total[0] ?? 0.00;
+            $evaluate->cal_key_task = $total[1] ?? 0.00;
+            $evaluate->cal_omg = $total[2] ?? 0.00;
+
             foreach ($request->detail as $value) {
                 $evaluate->evaluateDetail()
                     ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])
@@ -153,7 +165,6 @@ class EvaluateReviewController extends Controller
                     Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
                     return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
                 }
-
                 if ($this->userApproveService->isLastLevel($evaluate)) {
                     // Level last
                     $evaluate->status = KPIEnum::approved;

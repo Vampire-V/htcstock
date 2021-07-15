@@ -157,17 +157,17 @@ class SelfEvaluationController extends Controller
                 return $this->errorResponse("เลยเวลาที่กำหนด", 500);
             }
             // New version รออัพเดท ข้อมูล
-            // $detail = collect($request->detail);
-            // $g = $detail->groupBy(fn($item) => $item['rules']['category_id']);
-            // $total = [];
-            // foreach ($g as $value) {
-            //     $total[] = $value->reduce(function($a,$b)  {
-            //         return $b['cal'] + $a;
-            //     },0);
-            // }
-            // $evaluate->cal_kpi = $total[0] ?? 0.00;
-            // $evaluate->cal_key_task = $total[1] ?? 0.00;
-            // $evaluate->cal_omg = $total[2] ?? 0.00;
+            $detail = collect($request->detail);
+            $g = $detail->groupBy(fn($item) => $item['rules']['category_id']);
+            $total = [];
+            foreach ($g as $value) {
+                $total[] = $value->reduce(function($a,$b)  {
+                    return $b['cal'] + $a;
+                },0);
+            }
+            $evaluate->cal_kpi = $total[0] ?? 0.00;
+            $evaluate->cal_key_task = $total[1] ?? 0.00;
+            $evaluate->cal_omg = $total[2] ?? 0.00;
 
             foreach ($request->detail as $value) {
                 $evaluate->evaluateDetail()

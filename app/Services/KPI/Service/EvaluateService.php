@@ -142,8 +142,7 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function scoreFilter(Request $request): Collection
     {
         try {
-            return Evaluate::select('id', 'period_id', 'status', 'template_id', 'user_id', 'created_at', 'updated_at')
-                ->with(['user:id,username,positions_id,department_id,divisions_id,email,degree,created_at,updated_at',
+            return Evaluate::with(['user:id,username,positions_id,department_id,divisions_id,email,degree,created_at,updated_at',
                  'user.positions:id,name', 
                  'user.divisions:id,name', 
                  'targetperiod:id,name,year,quarter', 

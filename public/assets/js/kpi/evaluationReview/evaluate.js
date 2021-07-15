@@ -10,7 +10,7 @@
         // let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         // validationForm(forms)
-        console.log(status);
+        // console.log(status);
         if (evaluate) {
             evaluateForm = await setEvaluate(evaluate)
         }
@@ -29,9 +29,14 @@
                     render_html()
                     // console.log(evaluateForm);
                     if (evaluateForm.current_level.user_approve.id === auth.id && evaluateForm.status === status.ONPROCESS) {
-                        pageEnable()
+                        
                     }else{
-                        pageDisable()
+                        if (auth.id === 51) {
+                            pageEnable()
+                        }else{
+                            pageDisable()
+                        }
+                        
                     }
                 })
         }
@@ -41,6 +46,7 @@ var evaluateForm = new EvaluateForm()
 var template
 var rule = []
 var summary = []
+var disable_for = ['kpi','omg']
 
 var render_html = () => {
     // create tr in table
@@ -55,6 +61,9 @@ var render_html = () => {
 
         for (let index = 0; index < temp_rules.length; index++) {
             const element = temp_rules[index]
+            // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
+            
+            let readonly = disable_for.includes(element.rules.categorys.name)
             try {
                 let newRow = table.tBodies[0].insertRow()
 
@@ -78,26 +87,25 @@ var render_html = () => {
                     "data-placement": "top"
                 })
                 cellDesc.classList.add('truncate')
-                // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
-                let readonly = true
+                
                 let cellBaseLine = newRow.insertCell()
-                cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`, readonly))
+                cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`, true))
 
                 let cellMax = newRow.insertCell()
-                cellMax.appendChild(newInput('number', className, 'max', element.max.toFixed(2), '', `changeValue(this)`, readonly))
+                cellMax.appendChild(newInput('number', className, 'max', element.max.toFixed(2), '', `changeValue(this)`, true))
 
                 let cellWeight = newRow.insertCell()
-                cellWeight.appendChild(newInput('number', className, 'weight', element.weight.toFixed(2), '', `changeValue(this)`, readonly))
+                cellWeight.appendChild(newInput('number', className, 'weight', element.weight.toFixed(2), '', `changeValue(this)`, true))
 
                 let cellTarget = newRow.insertCell()
-                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`, readonly))
+                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`, true))
 
                 let cellTargetPC = newRow.insertCell()
                 cellTargetPC.textContent = findTargetPercent(element,temp_rules).toFixed(2) + '%'
 
 
                 let cellActual = newRow.insertCell()
-                cellActual.appendChild(newInput('number', className, 'actual', element.actual.toFixed(2), '', `changeValue(this)`, false))
+                cellActual.appendChild(newInput('number', className, 'actual', element.actual.toFixed(2), '', `changeValue(this)`, readonly))
 
                 let cellActualPC = newRow.insertCell()
                 cellActualPC.textContent = findActualPercent(element,temp_rules).toFixed(2) + '%'
@@ -115,23 +123,25 @@ var render_html = () => {
                 cellCal.textContent = element.cal.toFixed(2) + '%'
 
                 let cellCheck = newRow.insertCell()
-                let div = document.createElement('div')
-                div.className = 'custom-checkbox custom-control'
+                // cellIndex.textContent = index + 1
+                // let cellCheck = newRow.insertCell()
+                // let div = document.createElement('div')
+                // div.className = 'custom-checkbox custom-control'
 
-                let checkbox = document.createElement('input')
-                checkbox.type = `checkbox`
-                checkbox.name = `rule-${element.rule_id}`
-                checkbox.className = `custom-control-input`
-                checkbox.id = element.rule_id
-                checkbox.setAttribute('onclick', 'selectToRemove(this)')
+                // let checkbox = document.createElement('input')
+                // checkbox.type = `checkbox`
+                // checkbox.name = `rule-${element.rule_id}`
+                // checkbox.className = `custom-control-input`
+                // checkbox.id = element.rule_id
+                // checkbox.setAttribute('onclick', 'selectToRemove(this)')
 
-                let label = document.createElement('label')
-                label.classList.add('custom-control-label')
-                label.htmlFor = element.rule_id
+                // let label = document.createElement('label')
+                // label.classList.add('custom-control-label')
+                // label.htmlFor = element.rule_id
 
-                div.appendChild(checkbox)
-                div.appendChild(label)
-                cellCheck.appendChild(div)
+                // div.appendChild(checkbox)
+                // div.appendChild(label)
+                // cellCheck.appendChild(div)
             } catch (error) {
                 console.log(error)
             }
@@ -142,10 +152,10 @@ var render_html = () => {
             head_weight.value = template[head_weight.name]
         }
         let sum_weight = temp_rules.reduce((total, cur) => total += cur.weight, 0.00)
-        let sum_ach = temp_rules.reduce((total, cur) => total += cur.ach, 0.00)
+        // let sum_ach = temp_rules.reduce((total, cur) => total += cur.ach, 0.00)
         let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00)
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
-        table.tFoot.lastElementChild.cells[10].textContent = `${sum_ach.toFixed(2)}%`
+        // table.tFoot.lastElementChild.cells[10].textContent = `${sum_ach.toFixed(2)}%`
         table.tFoot.lastElementChild.cells[11].textContent = `${sum_cal.toFixed(2)}%`
         summary.push({
             'weight': parseFloat(head_weight.value),

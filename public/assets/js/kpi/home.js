@@ -136,9 +136,37 @@ const search_score = () => {
         })
         .then(res => {
             let data = []
+            // let newData = []
             if (res.status === 200) {
+                console.log(res.data.data);
                 if (checked) {
                     // is quarter
+                    // New function for quarter
+                    // let group = res.data.data.reduce((r, a) => {
+                    //     r[a.user_id] = [...r[a.user_id] || [], a];
+                    //     return r;
+                    // }, {})
+                    //    let total_kpi = 0
+                    //     let total_key = 0
+                    //     let total_omg = 0
+                    // for (const key in group) {
+                    //     if (Object.hasOwnProperty.call(group, key)) {
+                    //         const element = group[key]
+                    //         total_kpi = element.reduce((a, c) => a + c.cal_kpi, 0) / 3
+                    //         total_key = element.reduce((a, c) => a + c.cal_key_task, 0) / 3
+                    //         total_omg = element.reduce((a, c) => a + c.cal_omg, 0) / 3
+                    //         sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1])
+                    //         newData.push({
+                    //             evaluate: element[element.length-1],
+                    //             kpi: total_kpi,
+                    //             key_task: total_key,
+                    //             omg: total_omg,
+                    //             score: sum_total / 100
+                    //         })
+                    //     }
+                    // }
+                    // console.log(newData);
+                    // End New function for quarter
                     let item_unique = []
                     for (let index = 0; index < res.data.data.length; index++) {
                         const evaluate = res.data.data[index]
@@ -174,16 +202,13 @@ const search_score = () => {
                             omg: total_omg,
                             score: sum_total / 100
                         })
-                        if (element.user_id === 113) {
-                            console.log(kpi);
-                        }
                     }
                 } else {
                     for (let index = 0; index < res.data.data.length; index++) {
                         const evaluate = res.data.data[index]
                         let kpi = evaluate.detail.filter(item => item.rules.categorys.name === `kpi`)
                         let key_task = evaluate.detail.filter(item => item.rules.categorys.name === `key-task`)
-                        let omg = evaluate.detail.filter(item => item.rules.categorys.name === `omg`)
+                        // let omg = evaluate.detail.filter(item => item.rules.categorys.name === `omg`)
                         let total_kpi = 0.00
                         let total_key = 0.00
                         let total_omg = 0.00
@@ -202,6 +227,16 @@ const search_score = () => {
                             omg: total_omg,
                             score: sum_total / 100
                         })
+
+                        // New version รอ อัพเดทข้อมูลใน database ครบก่อน
+                        // sum_total = (evaluate.cal_kpi * weigth_template[0]) + (evaluate.cal_key_task * weigth_template[1])
+                        // data.push({
+                        //     evaluate: evaluate,
+                        //     kpi: evaluate.cal_kpi,
+                        //     key_task: evaluate.cal_key_task,
+                        //     omg: 0.00, //evaluate.cal_omg,
+                        //     score: sum_total / 100
+                        // })
                     }
                 }
             }
@@ -218,6 +253,7 @@ const search_score = () => {
             render_score(score)
         })
 }
+
 
 let total_quarter = (objArr) => {
     let temp = [];

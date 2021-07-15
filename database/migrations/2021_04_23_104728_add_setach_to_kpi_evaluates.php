@@ -14,9 +14,9 @@ class AddSetachToKpiEvaluates extends Migration
     public function up()
     {
         Schema::table('kpi_evaluates', function (Blueprint $table) {
-            $table->decimal('ach_kpi', 5, 2)->nullable()->comment('คะแนนของ Ach KPI fixed');
-            $table->decimal('ach_key_task', 5, 2)->nullable()->comment('คะแนนของ Ach Key-Task fixed');
-            $table->decimal('ach_omg', 5, 2)->nullable()->comment('คะแนนของ Ach OMG fixed');
+            $table->decimal('cal_kpi', 5, 2)->nullable()->comment('คะแนนของ Cal KPI fixed');
+            $table->decimal('cal_key_task', 5, 2)->nullable()->comment('คะแนนของ Cal Key-Task fixed');
+            $table->decimal('cal_omg', 5, 2)->nullable()->comment('คะแนนของ Cal OMG fixed');
         });
     }
 
@@ -28,7 +28,7 @@ class AddSetachToKpiEvaluates extends Migration
     public function down()
     {
         Schema::table('kpi_evaluates', function (Blueprint $table) {
-            $table->dropColumn(['ach_kpi', 'ach_key_task', 'ach_omg']);
+            $table->dropColumn(['cal_kpi', 'cal_key_task', 'cal_omg']);
         });
     }
 }

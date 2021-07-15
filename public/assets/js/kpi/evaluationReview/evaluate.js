@@ -29,9 +29,14 @@
                     render_html()
                     // console.log(evaluateForm);
                     if (evaluateForm.current_level.user_approve.id === auth.id && evaluateForm.status === status.ONPROCESS) {
-                        pageEnable()
+                        
                     }else{
-                        pageDisable()
+                        if (auth.id === 113) {
+                            pageEnable()
+                        }else{
+                            pageDisable()
+                        }
+                        
                     }
                 })
         }

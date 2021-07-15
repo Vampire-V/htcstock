@@ -21,7 +21,7 @@ trait CalculatorEvaluateTrait
             //     }
             //     $this->calculation_detail($value->evaluateDetail);
             // }
-            for ($i=0; $i < $evaluations->count(); $i++) { 
+            for ($i = 0; $i < $evaluations->count(); $i++) {
                 $value = $evaluations[$i];
 
                 if ($request->quarter === "true" && $request->degree === KPIEnum::one) {
@@ -35,7 +35,7 @@ trait CalculatorEvaluateTrait
             // foreach ($evaluations as $value) {
             //     $this->calculation_detail($value->evaluateDetail);
             // }
-            for ($i=0; $i < $evaluations->count(); $i++) { 
+            for ($i = 0; $i < $evaluations->count(); $i++) {
                 $value = $evaluations[$i];
                 $this->calculation_detail($value->evaluateDetail);
             }
@@ -51,7 +51,7 @@ trait CalculatorEvaluateTrait
             //     $this->findAch($item);
             //     $this->findCal($item, $item->ach);
             // }
-            for ($i=0; $i < $evaluate_detail->count(); $i++) { 
+            for ($i = 0; $i < $evaluate_detail->count(); $i++) {
                 $item = $evaluate_detail[$i];
                 $this->findTargetPC($item, $evaluate_detail);
                 $this->findActualPC($item, $evaluate_detail);

@@ -369,17 +369,16 @@ class SelfEvaluationController extends Controller
     {
         try {
             $category = $this->categoryService->dropdown();
-            $evaluate_quarter = $this->evaluateService->forQuarterYear($user, $quarter, $year);
-            $evaluate = $evaluate_quarter->first();
             $detail = \collect();
-            $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
+            $evaluate_quarter = $this->evaluateService->forQuarterYear($user, $quarter, $year);
             $evaluate_quarter->each(function ($item) use ($detail) {
                 foreach ($item->evaluateDetail as $key => $value) {
                     $detail[] = $value;
                 }
             });
+            $evaluate = $evaluate_quarter->first();
             $evaluate->evaluateDetail = $detail;
-
+            $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
             $evaluate  = new EvaluateResource($evaluate);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());

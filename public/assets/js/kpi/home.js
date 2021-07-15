@@ -138,7 +138,7 @@ const search_score = () => {
             let data = []
             // let newData = []
             if (res.status === 200) {
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 if (checked) {
                     // is quarter
                     // New function for quarter
@@ -168,6 +168,19 @@ const search_score = () => {
                     // console.log(newData);
                     // End New function for quarter
                     let item_unique = []
+                    
+                    // let group = res.data.data.reduce((r, a) => {
+                    //     r[a.user_id] = [...r[a.user_id] || [], a];
+                    //     return r;
+                    // }, {})
+                    res.data.data.sort(function(a, b) {
+                        var keyA = a.period_id,
+                          keyB = b.period_id;
+                        // Compare the 2 dates
+                        if (keyA < keyB) return -1;
+                        if (keyA > keyB) return 1;
+                        return 0;
+                      })
                     for (let index = 0; index < res.data.data.length; index++) {
                         const evaluate = res.data.data[index]
                         if (item_unique.length < 1) {
@@ -191,6 +204,7 @@ const search_score = () => {
                         let total_key = 0
                         let total_omg = 0
                         let sum_total = 0
+                        
                         total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0)
                         total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0)
                         total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
@@ -259,7 +273,8 @@ const search_score = () => {
 
 
 let total_quarter = (objArr) => {
-    let temp = [];
+    let temp = []
+    
     try {
         for (var i = 0; i < objArr.length; i++) {
             let item = objArr[i]

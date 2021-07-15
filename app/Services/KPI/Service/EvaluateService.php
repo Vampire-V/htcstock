@@ -160,10 +160,11 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function forQuarterYear($user, $quarter, $year): Collection
     {
         try {
-            return Evaluate::with('user.positions', 'user.roles', 'evaluateDetail.rule.category', 'targetperiod')
-                ->whereHas('targetperiod', fn ($query) => $query->where(['quarter' => $quarter, 'year' => $year]))
-                ->where(['user_id' => $user, 'status' => KPIEnum::approved])
-                ->get();
+            $result = Evaluate::with('user.positions', 'user.roles', 'evaluateDetail.rule.category', 'targetperiod')
+            ->whereHas('targetperiod', fn ($query) => $query->where(['quarter' => $quarter, 'year' => $year]))
+            ->where(['user_id' => $user, 'status' => KPIEnum::approved])
+            ->get();
+            return $result->sortBy(fn($item) => $item->targetperiod->id);
         } catch (\Throwable $th) {
             throw $th;
         }

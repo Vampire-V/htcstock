@@ -204,7 +204,7 @@ class HomeController extends Controller
             //         exit;
             //     }
             // });
-            // dd($evaluations);
+            // dd($evaluations->sortBy(fn($item) => $item->period_id));
             $result = $evaluations;//EvaluateResource::collection($evaluations);
         } catch (\Exception $e) {
             return $this->errorResponse($e, 500);

@@ -177,20 +177,23 @@ class HomeController extends Controller
         try {
             $evaluations = $this->evaluateService->scoreFilter($request);
             // $is_last = \collect(['03', '06', '09', '12', 'March', 'June', 'September', 'Depcember']);
-            $evaluations->each(function ($item) use ($request) {
-                if ($request->quarter === "true" && $request->degree === KPIEnum::one) {
-                    $item->weigth = config('kpi.weight')['quarter'];
-                }else{
-                    $item->weigth = config('kpi.weight')['month'];
-                }
-                // if ($is_last->contains($item->targetperiod->name) || $item->user->degree === KPIEnum::one) {
-                    
-                // } else {
-                    
-                // }
-            });
-            // dd($evaluations);
-            $this->calculation_summary($evaluations);
+            // $evaluations->each(function ($item) use ($request) {
+            //     if ($request->quarter === "true" && $request->degree === KPIEnum::one) {
+            //         $item->weigth = config('kpi.weight')['quarter'];
+            //     }else{
+            //         $item->weigth = config('kpi.weight')['month'];
+            //     }
+            // });
+            $this->calculation_summary($evaluations,$request);
+            // $group_user = $evaluations->groupBy(fn($item) => $item->user_id);
+            // $group_user->each(function($u){
+                // $u->each(function($e){
+                    // $rule_group = $e->evaluateDetail->groupBy(fn($rules) => $rules->rule->category_id);
+                    // dump($e->user->name);
+                    // dump($rule_group);
+                // });
+            // });
+            // exit;
             // $evaluations->each(function ($item) {
             //     if ($item->id === 104) {
             //         $ddd = $item->evaluateDetail->groupBy(fn($item) => $item->rules->category_id);
@@ -201,8 +204,8 @@ class HomeController extends Controller
             //         exit;
             //     }
             // });
-            
-            $result = EvaluateResource::collection($evaluations);
+            // dd($evaluations);
+            $result = $evaluations;//EvaluateResource::collection($evaluations);
         } catch (\Exception $e) {
             return $this->errorResponse($e, 500);
         }

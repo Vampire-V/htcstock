@@ -4,22 +4,55 @@ namespace App\Http\Controllers\KPI\Traits;
 
 use App\Enum\KPIEnum;
 use App\Models\KPI\EvaluateDetail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 trait CalculatorEvaluateTrait
 {
 
-    protected function calculation_summary(Collection $evaluations)
+    protected function calculation_summary(Collection $evaluations, Request $request = null)
     {
-        foreach ($evaluations as $value) {
-            $this->calculation_detail($value->evaluateDetail);
+        if ($request) {
+            // foreach ($evaluations as $value) {
+            //     if ($request->quarter === "true" && $request->degree === KPIEnum::one) {
+            //         $value->weigth = config('kpi.weight')['quarter'];
+            //     } else {
+            //         $value->weigth = config('kpi.weight')['month'];
+            //     }
+            //     $this->calculation_detail($value->evaluateDetail);
+            // }
+            for ($i=0; $i < $evaluations->count(); $i++) { 
+                $value = $evaluations[$i];
+
+                if ($request->quarter === "true" && $request->degree === KPIEnum::one) {
+                    $value->weigth = config('kpi.weight')['quarter'];
+                } else {
+                    $value->weigth = config('kpi.weight')['month'];
+                }
+                $this->calculation_detail($value->evaluateDetail);
+            }
+        } else {
+            // foreach ($evaluations as $value) {
+            //     $this->calculation_detail($value->evaluateDetail);
+            // }
+            for ($i=0; $i < $evaluations->count(); $i++) { 
+                $value = $evaluations[$i];
+                $this->calculation_detail($value->evaluateDetail);
+            }
         }
     }
 
     protected function calculation_detail(Collection $evaluate_detail)
     {
         if ($evaluate_detail) {
-            foreach ($evaluate_detail as $item) {
+            // foreach ($evaluate_detail as $item) {
+            //     $this->findTargetPC($item, $evaluate_detail);
+            //     $this->findActualPC($item, $evaluate_detail);
+            //     $this->findAch($item);
+            //     $this->findCal($item, $item->ach);
+            // }
+            for ($i=0; $i < $evaluate_detail->count(); $i++) { 
+                $item = $evaluate_detail[$i];
                 $this->findTargetPC($item, $evaluate_detail);
                 $this->findActualPC($item, $evaluate_detail);
                 $this->findAch($item);
@@ -46,7 +79,7 @@ trait CalculatorEvaluateTrait
                     $item->ach = $item->max_result ?? $item->max;
                 } else if ($ac === 0.00) {
                     $item->ach = 0.00;
-                }else{
+                } else {
                     $item->ach = ($ac / $this->isZeroNew($tar)) * 100.00;
                 }
             }
@@ -58,7 +91,7 @@ trait CalculatorEvaluateTrait
                 // }
                 $dd = ($ac / $this->isZeroNew($tar));
                 // if ($ac !== 0.00) {
-                $item->ach =  (2 - $dd) * 100.00 ;
+                $item->ach =  (2 - $dd) * 100.00;
                 // } else{
                 //     $item->ach = 0.00;
                 // }
@@ -87,7 +120,7 @@ trait CalculatorEvaluateTrait
                     $item->ach = $item->max_result ?? $item->max;
                 } else if ($ac === 0.00) {
                     $item->ach = 0.00;
-                }else{
+                } else {
                     $item->ach = ($ac / $this->isZeroNew($tar)) * 100.00;
                 }
             }
@@ -97,17 +130,17 @@ trait CalculatorEvaluateTrait
                 // } else{
                 //     $item->ach = $item->max_result ?? $item->max;
                 // }
-                
+
                 $dd = ($ac / $this->isZeroNew($tar));
                 // if ($ac !== 0.00) {
-                    if ($tar === 0.00) {
-                        $item->ach = 0.00;
-                    } else {
-                        $item->ach = (2 - $dd) * 100.00;
-                    }
-                    
-                
-                
+                if ($tar === 0.00) {
+                    $item->ach = 0.00;
+                } else {
+                    $item->ach = (2 - $dd) * 100.00;
+                }
+
+
+
                 // } else{
                 //     $item->ach = 0.00;
                 // }
@@ -147,13 +180,12 @@ trait CalculatorEvaluateTrait
 
             if ($target > $parent_target) {
                 $object->target_pc = 0.00;
-            } else if($target === 0.00 && $parent_target === 0.00 ){
+            } else if ($target === 0.00 && $parent_target === 0.00) {
                 $object->target_pc = 0.00;
             } else {
                 $object->target_pc = ($target / $this->isZeroNew($parent_target)) * 100;
             }
-            
-        }else{
+        } else {
             $object->target_pc = 100.00;
         };
     }
@@ -167,7 +199,7 @@ trait CalculatorEvaluateTrait
             if ($object->rule->calculate_type === KPIEnum::positive) {
                 if ($object->actual > $parent->actual) {
                     $object->actual_pc = 0.00;
-                }else if ($object->actual === 0.00) {
+                } else if ($object->actual === 0.00) {
                     $object->actual_pc = 0.00;
                 } else {
                     $object->actual_pc = ($object->actual / $this->isZeroNew($parent->actual)) * 100;
@@ -183,18 +215,18 @@ trait CalculatorEvaluateTrait
                 // }
                 if ($parent->actual > $object->actual) {
                     $object->actual_pc = ($object->actual / $this->isZeroNew($parent->actual)) * 100.00;
-                } else{
+                } else {
                     $object->actual_pc = 0.00;
                 }
             }
             if ($object->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $object->actual_pc = $object->actual <= $parent->actual ? 100.00 : 0.00;
             }
-        }else{
+        } else {
             if ($object->rule->calculate_type === KPIEnum::positive) {
                 if ($object->actual > $object->target) {
                     $object->actual_pc = 100.00;
-                }else if ($object->actual === 0.00) {
+                } else if ($object->actual === 0.00) {
                     $object->actual_pc = 0.00;
                 } else {
                     $object->actual_pc = ($object->actual / $this->isZeroNew($object->target)) * 100;
@@ -210,7 +242,7 @@ trait CalculatorEvaluateTrait
                 // }
                 if ($object->actual > $object->target) {
                     $object->actual_pc = (($object->actual / $this->isZeroNew($object->target))) * 100.00;
-                } else{
+                } else {
                     $object->actual_pc = 100.00;
                 }
             }

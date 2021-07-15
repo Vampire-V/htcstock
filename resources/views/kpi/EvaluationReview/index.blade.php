@@ -75,8 +75,7 @@
                         <select name="period[]" id="validationPeriod" class="form-control-sm form-control" multiple>
                             @isset($months)
                             @foreach ($months as $month)
-                            <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if($selectedPeriod->
-                                contains($month->name))
+                            <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if($selectedPeriod->contains($month->name))
                                 selected @endif>{{$month->name}}</option>
                             @endforeach
                             @endisset

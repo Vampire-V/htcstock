@@ -18,6 +18,7 @@ use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class HomeController extends Controller
 {
@@ -82,7 +83,10 @@ class HomeController extends Controller
                     for ($i = 0; $i < $rule->evaluatesDetail->count(); $i++) {
                         $item = $rule->evaluatesDetail[$i];
                         if ($item->evaluate->status === KPIEnum::approved && $period->id === $item->evaluate->period_id) {
-                            $data_for_sum[] = 0;
+                            $row = new stdClass();
+                            $row->actual = $item->actual;
+                            $row->target = $item->target;
+                            $data_for_sum[] = $row;
                         }
                     }
                     $total->push($data_for_sum);

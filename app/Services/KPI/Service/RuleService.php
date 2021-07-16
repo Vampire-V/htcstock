@@ -75,7 +75,7 @@ class RuleService extends BaseService implements RuleServiceInterface
         try {
             return Rule::select('id', 'name')->with(['evaluatesDetail.evaluate.targetperiod' => function ($query) use ($year) {
                 return $query->select('id', 'name', 'year', 'quarter')->where('year', $year);
-            }])->get();
+            },'evaluatesDetail.evaluate.user'])->get();
         } catch (\Throwable $th) {
             throw $th;
         }

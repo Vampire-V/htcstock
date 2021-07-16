@@ -11,8 +11,9 @@
         font-weight: bold;
     }
 
-    table thead tr td{
-        position: -webkit-sticky;/* Safari */
+    table thead tr td {
+        position: -webkit-sticky;
+        /* Safari */
         position: sticky;
         top: 0;
     }
@@ -172,6 +173,7 @@
 
 
     <div class="tab-pane " id="tab-all" role="tabpanel">
+        @if (Auth::user()->degree === 'N-1')
         <div class="row">
             <div class="col-xl-12">
                 <div class="mb-3 card">
@@ -186,7 +188,8 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive" style="height:300px">
-                                <table class="mb-0 table table-sm table-bordered table-hover" id="table-rule-evaluation">
+                                <table class="mb-0 table table-sm table-bordered table-hover"
+                                    id="table-rule-evaluation">
                                     <thead class="thead-dark">
                                     </thead>
                                     <tbody>
@@ -202,6 +205,7 @@
                 </div>
             </div>
         </div>
+        @endif
 
         <div class="row">
             <div class="col-xl-12">
@@ -210,7 +214,8 @@
                         <div class="card-header-title">
                             <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
                             Staff Evaluation Report
-                            &nbsp;&nbsp;&nbsp;<select name="degree_tab2" id="degree_tab2" onchange="search_staff_table(this)">
+                            &nbsp;&nbsp;&nbsp;<select name="degree_tab2" id="degree_tab2"
+                                onchange="search_staff_table(this)">
                                 <option value="">All</option>
                                 @isset($degree)
                                 @foreach ($degree as $item)
@@ -235,7 +240,8 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive" style="height: 300px;">
-                                <table class="mb-0 table table-sm table-bordered table-hover" id="table-staff-evaluation">
+                                <table class="mb-0 table table-sm table-bordered table-hover"
+                                    id="table-staff-evaluation">
                                     <thead class="thead-dark">
                                     </thead>
                                     <tbody>
@@ -260,7 +266,7 @@
 {{-- <script src="{{asset('assets\js\index.js')}}" defer></script> --}}
 <script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script defer>
-    // variable
+    var is_degree = {!!json_encode(Auth::user()->degree)!!}
 </script>
 <script src="{{asset('assets\js\kpi\home.js')}}" defer></script>
 

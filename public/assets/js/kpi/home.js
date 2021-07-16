@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     //The first argument are the elements to which the plugin shall be initialized
     //The second argument has to be at least a empty object or a object with your desired options
-    window.localStorage.setItem('tab-dashboard', `tab-c-1`)
+
     OverlayScrollbars(document.getElementsByClassName('table-responsive'), {
         className: "os-theme-dark",
         resize: "both",
@@ -51,9 +51,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     let active_tab = localStorage.getItem('tab-dashboard')
-
+    if (!active_tab) {
+        window.localStorage.setItem('tab-dashboard', `tab-c-1`)
+    }
     if (active_tab) {
-        let content_id = null
+        // let content_id = null
         let ele_active = document.getElementById(active_tab)
         let scope = ele_active.parentNode.parentNode.parentNode
         for (let index = 0; index < scope.firstElementChild.children.length; index++) {
@@ -76,10 +78,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         }
-        render_rule()
-        render_staff_evaluate()
-    }
+        if (active_tab === 'tab-c-0') {
+            make_options()
+            search_score()
+        } else {
+            render_rule()
+            render_staff_evaluate()
+        }
 
+    }
     // $("#department").select2({
     //     placeholder: 'Select Department...',
     //     allowClear: true
@@ -91,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 let weigth_template = []
+let option_search_score = null
 
 const tabActive = (e) => {
     window.localStorage.setItem('tab-dashboard', e.id)
@@ -118,7 +126,7 @@ const search_score = () => {
     let param
     if (checked) {
         param = {
-            quarter: [$("#quarter").val()],
+            quarter: $("#quarter").val() === '' ? [1,2,3,4] : [$("#quarter").val()],
             year: [$("#year").val()],
             degree: [$("#degree").val()]
         }
@@ -168,19 +176,19 @@ const search_score = () => {
                     // console.log(newData);
                     // End New function for quarter
                     let item_unique = []
-                    
+
                     // let group = res.data.data.reduce((r, a) => {
                     //     r[a.user_id] = [...r[a.user_id] || [], a];
                     //     return r;
                     // }, {})
-                    res.data.data.sort(function(a, b) {
+                    res.data.data.sort(function (a, b) {
                         var keyA = a.period_id,
-                          keyB = b.period_id;
+                            keyB = b.period_id;
                         // Compare the 2 dates
                         if (keyA < keyB) return -1;
                         if (keyA > keyB) return 1;
                         return 0;
-                      })
+                    })
                     for (let index = 0; index < res.data.data.length; index++) {
                         const evaluate = res.data.data[index]
                         if (item_unique.length < 1) {
@@ -194,7 +202,7 @@ const search_score = () => {
                             }
                         }
                     }
-                    
+
                     for (let index = 0; index < item_unique.length; index++) {
                         const element = item_unique[index]
                         let kpi = element.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
@@ -204,7 +212,7 @@ const search_score = () => {
                         let total_key = 0
                         let total_omg = 0
                         let sum_total = 0
-                        
+
                         total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0)
                         total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0)
                         total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
@@ -232,7 +240,7 @@ const search_score = () => {
                         total_kpi = kpi.reduce((a, c) => a + c.cal, 0)
                         total_key = key_task.reduce((a, c) => a + c.cal, 0)
                         // total_omg = omg.reduce((a, c) => a + c.cal, 0)
-                        sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) 
+                        sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1])
                         // + (total_omg * weigth_template[2])
 
                         data.push({
@@ -273,8 +281,8 @@ const search_score = () => {
 
 
 let total_quarter = (objArr) => {
-    let temp = []
-    
+    let temp = [] , quarter_all = $("#quarter").val() === '' ? 12 : 3
+
     try {
         for (var i = 0; i < objArr.length; i++) {
             let item = objArr[i]
@@ -307,7 +315,7 @@ let total_quarter = (objArr) => {
     try {
         for (let index = 0; index < temp.length; index++) {
             const element = temp[index]
-            element.weight = element.rule.category.name === `omg` ? element.average_weight.reduce((a, b) => a + b, 0) : element.average_weight.reduce((a, b) => a + b, 0) / 3
+            element.weight = element.rule.category.name === `omg` ? element.average_weight.reduce((a, b) => a + b, 0) : element.average_weight.reduce((a, b) => a + b, 0) / quarter_all
             element.target = score_quarter_cal_target(element)
             element.actual = score_quarter_cal_amount(element)
             element.actual_pc = score_findActualPercent(element, temp)
@@ -350,7 +358,7 @@ const score_quarter_cal_amount = (rule) => {
  * @params {array} EvaluateDetail list
  * @return percent (element.target / parent.target) * 100
  */
- var score_findActualPercent = (element, array) => {
+var score_findActualPercent = (element, array) => {
     let result = 0.00
     if (element.rule.parent) {
         let parent = array.find(item => item.rule_id === element.rule.parent)
@@ -358,7 +366,7 @@ const score_quarter_cal_amount = (rule) => {
             result = element.actual > parent.actual ? 0.00 : element.actual === 0.00 ? 0.00 : (element.actual / parent.actual) * 100
         }
         if (element.rule.calculate_type === calculate.NEGATIVE) {
-            result = parent.actual > element.actual ?  (element.actual / parent.actual) * 100 : 0.00
+            result = parent.actual > element.actual ? (element.actual / parent.actual) * 100 : 0.00
         }
         if (element.rule.calculate_type === calculate.ZERO) {
             // ไม่มี
@@ -384,7 +392,7 @@ const score_quarter_cal_amount = (rule) => {
  * @params {array} EvaluateDetail list
  * @return percent (element.target / parent.target) * 100
  */
- var score_findTargetPercent = (element, array) => {
+var score_findTargetPercent = (element, array) => {
 
     if (element.rule.parent) {
         let parent = array.find(item => item.rule_id === element.rule.parent)
@@ -410,7 +418,7 @@ const score_findAchValue = (obj) => {
                     ach = obj.max
                 } else if (obj.actual === 0.00) {
                     ach = 0.00
-                }else{
+                } else {
                     ach = parseFloat((obj.actual / obj.target) * 100.00)
                 }
                 // ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)
@@ -425,9 +433,9 @@ const score_findAchValue = (obj) => {
                 //     if (obj.actual < obj.target) {
                 //         ach = obj.max_result ?? obj.max
                 //     } else {
-                        ach = parseFloat((2 - dd ) * 100.00)
-                        // console.log(obj.rules.name,ach);
-                    // }
+                ach = parseFloat((2 - dd) * 100.00)
+                // console.log(obj.rules.name,ach);
+                // }
                 // }else{
                 //     ach = 0.00
                 // }
@@ -445,7 +453,7 @@ const score_findAchValue = (obj) => {
                     ach = obj.max
                 } else if (obj.actual_pc === 0.00) {
                     ach = 0.00
-                }else{
+                } else {
                     ach = parseFloat((obj.actual_pc / obj.target_pc) * 100.00)
                 }
                 // ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((obj.actual_pc / obj.target_pc) * 100)
@@ -456,13 +464,13 @@ const score_findAchValue = (obj) => {
                 if (dd === -Infinity) {
                     dd = 0
                 }
-                ach = parseFloat((2 - dd ) * 100.00)
+                ach = parseFloat((2 - dd) * 100.00)
                 // if (obj.actual_pc !== 0.00) {
                 //     if (obj.actual_pc < obj.target_pc) {
                 //         ach = obj.max ?? obj.max_result
                 //     } else {
-                        // ach = parseFloat((2 - dd ) * 100.00)
-                        // console.log(obj.rules.name,ach);
+                // ach = parseFloat((2 - dd ) * 100.00)
+                // console.log(obj.rules.name,ach);
                 //     }
                 // }else{
                 //     ach = 0.00
@@ -589,6 +597,7 @@ const make_options = () => {
         selectMonth.add(new Option(monthName, value, false, selected))
     }
     // quarter
+    selectQuarter.add(new Option(`All`, '', true, false))
     for (let q = 1; q <= 4; q++) {
         selectQuarter.add(new Option(`Quarter ${q}`, q, true, false))
     }
@@ -606,6 +615,15 @@ const month_quarter = () => {
             degree: degree.value
         },
     }
+    if (check) {
+        period.previousElementSibling.textContent = 'Quarter'
+        quarter.style.display = 'block'
+        period.style.display = 'none'
+    } else {
+        period.previousElementSibling.textContent = 'Month'
+        quarter.style.display = 'none'
+        period.style.display = 'block'
+    }
     getWeigthConfig(config)
         .then(res => {
             if (res.status === 200) {
@@ -618,15 +636,7 @@ const month_quarter = () => {
             toast(error.response.data.message, error.response.data.status)
         })
         .finally(() => {
-            if (check) {
-                period.previousElementSibling.textContent = 'Quarter'
-                quarter.style.display = 'block'
-                period.style.display = 'none'
-            } else {
-                period.previousElementSibling.textContent = 'Month'
-                quarter.style.display = 'none'
-                period.style.display = 'block'
-            }
+            
             toastClear()
         })
 }
@@ -704,18 +714,21 @@ const search_staff_table = (e) => {
 
 
 const render_rule = async () => {
-    let table = document.getElementById('table-rule-evaluation')
-    try {
-        let result = await getReportRuleOfYear(2021)
-        await rules_data_to_table(result.data.data)
-        $('[data-toggle="tooltip"]').tooltip()
-        // table.previousElementSibling.classList.add('reload')
-        table.previousElementSibling.classList.remove('reload')
-    } catch (error) {
-        console.error(error)
-        toast(error)
+    if (is_degree === degree.ONE) {
+        let table = document.getElementById('table-rule-evaluation')
+        try {
+            let result = await getReportRuleOfYear(2021)
+            await rules_data_to_table(result.data.data)
+            $('[data-toggle="tooltip"]').tooltip()
+            // table.previousElementSibling.classList.add('reload')
+            table.previousElementSibling.classList.remove('reload')
+        } catch (error) {
+            console.error(error)
+            toast(error)
+        }
+        toastClear()
     }
-    toastClear()
+
 }
 
 const rules_data_to_table = (data) => {

@@ -59,10 +59,6 @@
                     for (let index = 0; index < temp.length; index++) {
                         const element = temp[index]
                         // console.log(element);
-                        if (element.rules.id === 46) {
-                            console.log(element.average_actual);
-                            console.log(element.average_actual[(element.average_actual.length - 1)]);
-                        }
                         element.weight = element.rules.categorys.name === `omg` ? element.weight : element.weight / 3
                         element.target = quarter_cal_target(element)
                         element.actual = quarter_cal_amount(element)

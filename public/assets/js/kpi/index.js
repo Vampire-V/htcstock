@@ -270,7 +270,7 @@ var findActualPercent = (element, array) => {
             result = element.actual <= element.target ? 100.00 : 0.00
         }
     }
-    return element.actual_pc = result
+    return element.actual_pc = result === Infinity || result === -Infinity ||  isNaN(result) ? 0.00 : result
 }
 
 var findAchValue = (obj) => {

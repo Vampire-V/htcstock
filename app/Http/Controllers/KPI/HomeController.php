@@ -75,6 +75,20 @@ class HomeController extends Controller
         try {
             $rules = $this->ruleService->rulesInEvaluationReport($year);
             $periods = $this->targetPeriodService->query()->where('year', $year)->get();
+            foreach ($rules as $rule) {
+                $total = \collect();
+                foreach ($periods as $period) {
+                    $data_for_sum = [];
+                    for ($i = 0; $i < $rule->evaluatesDetail->count(); $i++) {
+                        $item = $rule->evaluatesDetail[$i];
+                        if ($item->evaluate->status === KPIEnum::approved && $period->id === $item->evaluate->period_id) {
+                            $data_for_sum[] = $item;
+                        }
+                    }
+                    $total->push($data_for_sum);
+                }
+                $rule->total = $total;
+            }
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }

@@ -73,25 +73,9 @@ class RuleService extends BaseService implements RuleServiceInterface
     public function rulesInEvaluationReport($year)
     {
         try {
-            $rules = Rule::select('id', 'name')->with(['evaluatesDetail.evaluate.targetperiod' => function ($query) use ($year) {
+            return Rule::select('id', 'name')->with(['evaluatesDetail.evaluate.targetperiod' => function ($query) use ($year) {
                 return $query->select('id', 'name', 'year', 'quarter')->where('year', $year);
             }])->get();
-            $periods = $this->periodService->query()->where('year', $year)->get();
-            foreach ($rules as $rule) {
-                $total = \collect();
-                foreach ($periods as $period) {
-                    $data_for_sum = [];
-                    for ($i = 0; $i < $rule->evaluatesDetail->count(); $i++) {
-                        $item = $rule->evaluatesDetail[$i];
-                        if ($item->evaluate->status === KPIEnum::approved && $period->id === $item->evaluate->period_id) {
-                            $data_for_sum[] = $item;
-                        }
-                    }
-                    $total->push($data_for_sum);
-                }
-                $rule->total = $total;
-            }
-            return $rules;
         } catch (\Throwable $th) {
             throw $th;
         }

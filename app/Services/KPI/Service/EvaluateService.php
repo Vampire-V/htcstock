@@ -87,7 +87,7 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
                     ->filter($request)->orderBy('period_id', 'desc')
                     ->get();
             } else {
-                $keys = UserApprove::where('user_approve',\auth()->id())->get();
+                $keys = UserApprove::where('user_approve', \auth()->id())->get();
                 $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod'])
                     // ->whereHas('nextlevel', fn ($query) => $query->where('user_approve', \auth()->id()))
                     ->whereIn('current_level', $keys->pluck('id'))
@@ -142,12 +142,14 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function scoreFilter(Request $request): Collection
     {
         try {
-            return Evaluate::with(['user:id,username,positions_id,department_id,divisions_id,email,degree,created_at,updated_at',
-                 'user.positions:id,name', 
-                 'user.divisions:id,name', 
-                 'targetperiod:id,name,year,quarter', 
-                 'evaluateDetail.rule:id,name,calculate_type,category_id,kpi_rule_types_id,quarter_cal,parent,created_at,updated_at', 
-                 'evaluateDetail.rule.category:id,name'])
+            return Evaluate::with([
+                'user:id,username,positions_id,department_id,divisions_id,email,degree,created_at,updated_at',
+                'user.positions:id,name',
+                'user.divisions:id,name',
+                'targetperiod:id,name,year,quarter',
+                'evaluateDetail.rule:id,name,calculate_type,category_id,kpi_rule_types_id,quarter_cal,parent,created_at,updated_at',
+                'evaluateDetail.rule.category:id,name'
+            ])
                 ->whereIn('status', [KPIEnum::approved])
                 ->filter($request)
                 ->orderBy('user_id')
@@ -161,10 +163,23 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     {
         try {
             $result = Evaluate::with('user.positions', 'user.roles', 'evaluateDetail.rule.category', 'targetperiod')
-            ->whereHas('targetperiod', fn ($query) => $query->where(['quarter' => $quarter, 'year' => $year]))
-            ->where(['user_id' => $user, 'status' => KPIEnum::approved])
-            ->get();
-            return $result->sortBy(fn($item) => $item->targetperiod->id);
+                ->whereHas('targetperiod', fn ($query) => $query->where(['quarter' => $quarter, 'year' => $year]))
+                ->where(['user_id' => $user, 'status' => KPIEnum::approved])
+                ->get();
+            return $result->sortBy(fn ($item) => $item->targetperiod->id);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function forYear($user, $year): Collection
+    {
+        try {
+            $result = Evaluate::with('user.positions', 'user.roles', 'evaluateDetail.rule.category', 'targetperiod')
+                ->whereHas('targetperiod', fn ($query) => $query->where('year', $year))
+                ->where(['user_id' => $user, 'status' => KPIEnum::approved])
+                ->get();
+            return $result->sortBy(fn ($item) => $item->targetperiod->id);
         } catch (\Throwable $th) {
             throw $th;
         }

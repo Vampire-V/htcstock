@@ -379,11 +379,40 @@ class SelfEvaluationController extends Controller
             $evaluate = $evaluate_quarter->first();
             $evaluate->evaluateDetail = $detail;
             $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
-            $evaluate  = new EvaluateResource($evaluate);
+            // $evaluate  = new EvaluateResource($evaluate);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         return \view('kpi.SelfEvaluation.quarter', \compact('evaluate', 'category', 'quarter_weight'));
+    }
+
+        /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $user
+     * @param  int  $year
+     * @return \Illuminate\Http\Response
+     */
+    public function display_all_quarter($user, $year)
+    {
+        try {
+            $category = $this->categoryService->dropdown();
+            $detail = \collect();
+            $evaluate_quarter = $this->evaluateService->forYear($user, $year);
+            $evaluate_quarter->each(function ($item) use ($detail) {
+                foreach ($item->evaluateDetail as $key => $value) {
+                    $detail[] = $value;
+                }
+            });
+            $evaluate = $evaluate_quarter->first();
+            
+            $evaluate->evaluateDetail = $detail;
+            $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
+            // $evaluate  = new EvaluateResource($evaluate);
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
+        return \view('kpi.SelfEvaluation.allquarter', \compact('evaluate', 'category', 'quarter_weight'));
     }
 
     private function quarter_summary(Collection $detail): Collection

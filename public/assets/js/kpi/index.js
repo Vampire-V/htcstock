@@ -224,7 +224,6 @@ var formulaRuleDetail = (e, key) => {
  * @return percent (element.target / parent.target) * 100
  */
 var findTargetPercent = (element, array) => {
-
     if (element.rules.parent) {
         let parent = array.find(item => item.rule_id === element.rules.parent)
         let target = element.target_config ?? element.target
@@ -477,26 +476,284 @@ var make_link = (url, text) => {
     return x
 }
 
-const quarter_cal_target = (rule) => {
-    if (rule.rules.quarter_cal === quarters.AVERAGE) {
+const quarter_cal_target = (item) => {
+    if (item.rule.quarter_cal === quarters.AVERAGE) {
+        return item.average_target.reduce((a, b) => (a + b)) / item.average_target.length
+    }
+    if (item.rule.quarter_cal === quarters.LAST_MONTH) {
+        return item.average_target[item.average_target.length - 1]
+    }
+    if (item.rule.quarter_cal === quarters.SUM) {
+        return item.average_target.reduce((a, b) => (a + b))
+    }
+}
+
+const quarter_cal_amount = (item) => {
+    if (item.rule.quarter_cal === quarters.AVERAGE) {
+        return item.average_actual.reduce((a, b) => (a + b)) / item.average_actual.length
+    }
+    if (item.rule.quarter_cal === quarters.LAST_MONTH) {
+        return item.average_actual[item.average_actual.length - 1]
+    }
+    if (item.rule.quarter_cal === quarters.SUM) {
+        return item.average_actual.reduce((a, b) => (a + b))
+    }
+}
+
+
+
+const score_quarter_cal_target = (rule) => {
+    if (rule.rule.quarter_cal === quarters.AVERAGE) {
         return rule.average_target.reduce((a, b) => (a + b)) / rule.average_target.length
     }
-    if (rule.rules.quarter_cal === quarters.LAST_MONTH) {
+    if (rule.rule.quarter_cal === quarters.LAST_MONTH) {
         return rule.average_target[rule.average_target.length - 1]
     }
-    if (rule.rules.quarter_cal === quarters.SUM) {
+    if (rule.rule.quarter_cal === quarters.SUM) {
         return rule.average_target.reduce((a, b) => (a + b))
     }
 }
 
-const quarter_cal_amount = (rule) => {
-    if (rule.rules.quarter_cal === quarters.AVERAGE) {
+const score_quarter_cal_amount = (rule) => {
+    if (rule.rule.quarter_cal === quarters.AVERAGE) {
         return rule.average_actual.reduce((a, b) => (a + b)) / rule.average_actual.length
     }
-    if (rule.rules.quarter_cal === quarters.LAST_MONTH) {
+    if (rule.rule.quarter_cal === quarters.LAST_MONTH) {
         return rule.average_actual[rule.average_actual.length - 1]
     }
-    if (rule.rules.quarter_cal === quarters.SUM) {
+    if (rule.rule.quarter_cal === quarters.SUM) {
         return rule.average_actual.reduce((a, b) => (a + b))
     }
 }
+
+/**
+ * @params {element} EvaluateDetail
+ * @params {array} EvaluateDetail list
+ * @return percent (element.target / parent.target) * 100
+ */
+var score_findActualPercent = (element, array) => {
+    let result = 0.00
+    if (element.rule.parent) {
+        let parent = array.find(item => item.rule_id === element.rule.parent)
+        if (element.rule.calculate_type === calculate.POSITIVE) {
+            result = element.actual > parent.actual ? 0.00 : element.actual === 0.00 ? 0.00 : (element.actual / parent.actual) * 100
+        }
+        if (element.rule.calculate_type === calculate.NEGATIVE) {
+            result = parent.actual > element.actual ? (element.actual / parent.actual) * 100 : 0.00
+        }
+        if (element.rule.calculate_type === calculate.ZERO) {
+            // ไม่มี
+            result = element.actual <= parent.actual ? 100.00 : 0.00
+        }
+    } else {
+        // result = (element.actual / (element.target === 0) ? 1 : element.target) * 100
+        if (element.rule.calculate_type === calculate.POSITIVE) {
+            result = element.actual > element.target ? 100.00 : element.actual === 0.00 ? 0.00 : (element.actual / element.target) * 100
+        }
+        if (element.rule.calculate_type === calculate.NEGATIVE) {
+            result = element.actual > element.target ? ((element.actual / element.target) * 100) : 100.00
+        }
+        if (element.rule.calculate_type === calculate.ZERO) {
+            result = element.actual <= element.target ? 100.00 : 0.00
+        }
+    }
+    return element.actual_pc = result
+}
+
+/**
+ * @params {element} EvaluateDetail
+ * @params {array} EvaluateDetail list
+ * @return percent (element.target / parent.target) * 100
+ */
+var score_findTargetPercent = (element, array) => {
+
+    if (element.rule.parent) {
+        let parent = array.find(item => item.rule_id === element.rule.parent)
+        let target = element.target_config ?? element.target
+        let parent_target = parent.target_config ?? parent.target
+        if (parent) {
+            let result = target > parent_target ? 0.00 : target === 0.00 && parent_target === 0.00 ? 0.00 : (target / parent_target) * 100
+            element.target_pc = result
+        }
+    } else {
+        element.target_pc = 100.00
+    }
+    return element.target_pc
+}
+
+
+const score_findAchValue = (obj) => {
+    if (typeof obj === `object`) {
+        if (!obj.rule.parent) {
+            // ใช้ amount หา
+            if (obj.rule.calculate_type === calculate.POSITIVE) {
+                if (obj.target === 0.00 && obj.actual > obj.target) {
+                    ach = obj.max
+                } else if (obj.actual === 0.00) {
+                    ach = 0.00
+                } else {
+                    ach = parseFloat((obj.actual / obj.target) * 100.00)
+                }
+                // ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)
+            }
+            if (obj.rule.calculate_type === calculate.NEGATIVE) {
+                let dd = (obj.actual / obj.target)
+                if (dd === -Infinity) {
+                    dd = 0
+                }
+                // console.log(obj.actual);
+                // if (obj.actual !== 0.00) {
+                //     if (obj.actual < obj.target) {
+                //         ach = obj.max_result ?? obj.max
+                //     } else {
+                ach = parseFloat((2 - dd) * 100.00)
+                // console.log(obj.rules.name,ach);
+                // }
+                // }else{
+                //     ach = 0.00
+                // }
+
+                // ach = obj.actual !== 0.00 ?  parseFloat((2 - (obj.actual / obj.target)) * 100.00) : obj.max #version 2
+                // ach = obj.actual > obj.target ?  parseFloat((2 - (obj.actual / obj.target)) * 100.00) : obj.max #version 1
+            }
+            if (obj.rule.calculate_type === calculate.ZERO) {
+                ach = obj.actual <= obj.target ? 100.00 : 0.00
+            }
+        } else {
+            // ใช้ % หา
+            if (obj.rule.calculate_type === calculate.POSITIVE) {
+                if (obj.target_pc === 0.00 && obj.actual_pc > obj.target_pc) {
+                    ach = obj.max
+                } else if (obj.actual_pc === 0.00) {
+                    ach = 0.00
+                } else {
+                    ach = parseFloat((obj.actual_pc / obj.target_pc) * 100.00)
+                }
+                // ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((obj.actual_pc / obj.target_pc) * 100)
+            }
+            if (obj.rule.calculate_type === calculate.NEGATIVE) {
+                // console.log(obj.actual_pc , obj.target_pc);
+                let dd = (obj.actual_pc / obj.target_pc)
+                if (dd === -Infinity) {
+                    dd = 0
+                }
+                ach = parseFloat((2 - dd) * 100.00)
+                // if (obj.actual_pc !== 0.00) {
+                //     if (obj.actual_pc < obj.target_pc) {
+                //         ach = obj.max ?? obj.max_result
+                //     } else {
+                // ach = parseFloat((2 - dd ) * 100.00)
+                // console.log(obj.rules.name,ach);
+                //     }
+                // }else{
+                //     ach = 0.00
+                // }
+
+                // ach = obj.actual_pc !== 0.00 ? parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100) : 0.00  #version 2
+                // ach = obj.actual_pc > obj.target_pc ? parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100) : obj.max  #version 1
+            }
+            if (obj.rule.calculate_type === calculate.ZERO) {
+                ach = obj.actual_pc <= obj.target_pc ? 100.00 : 0.00
+            }
+        }
+    }
+    if (typeof obj === `number`) {
+        ach = obj
+    }
+    return isNaN(ach) || (ach === Infinity || ach === -Infinity) ? 0.00 : ach
+}
+
+var score_findCalValue = (obj, ach) => {
+    // console.log(obj,ach);
+    if (ach < obj.base_line) {
+        cal = 0.00
+    } else {
+        if ('max_result' in obj) {
+            if (ach >= obj.max_result) {
+                cal = parseFloat(obj.max_result) * parseFloat(obj.weight) / 100
+            } else {
+                cal = ach * parseFloat(obj.weight) / 100
+            }
+        }
+        if ('max' in obj) {
+            if (ach >= obj.max) {
+                cal = parseFloat(obj.max) * parseFloat(obj.weight) / 100
+            } else {
+                cal = ach * parseFloat(obj.weight) / 100
+            }
+        }
+
+    }
+    return isNaN(cal) || (cal === Infinity) ? 0.00 : cal
+}
+
+
+/**
+ * @params {element} document.getElementById
+ * @params {EvaluateDetail} EvaluateDetail
+ * @return void
+ */
+ var score_setTooltipAch = (e, data) => {
+    if (data.rule.calculate_type === calculate.POSITIVE) {
+        if (data.target_pc === 100) {
+            setAttributes(e, {
+                "data-toggle": "tooltip",
+                "title": "Positive : (actual amount / target amount) * 100",
+                "data-placement": "top"
+            })
+        } else {
+            setAttributes(e, {
+                "data-toggle": "tooltip",
+                "title": "Positive : (Actual % / Target %) * 100",
+                "data-placement": "top"
+            })
+        }
+
+    }
+    if (data.rule.calculate_type === calculate.NEGATIVE) {
+        setAttributes(e, {
+            "data-toggle": "tooltip",
+            "title": "Negative : (2 - (actual amount / target amount)) * 100",
+            "data-placement": "top"
+        })
+    }
+    if (data.rule.calculate_type === calculate.ZERO) {
+        setAttributes(e, {
+            "data-toggle": "tooltip",
+            "title": "Zero Oriented KP : actual amount == target amount ? 100.00 : 0.00",
+            "data-placement": "top"
+        })
+    }
+}
+
+/**
+ * @params {element} document.getElementById
+ * @params {EvaluateDetail} EvaluateDetail
+ * @return void
+ */
+var score_setTooltipCal = (e, data) => {
+    if (data.ach < data.base_line) {
+        setAttributes(e, {
+            "data-toggle": "tooltip",
+            "title": "Ach% < Base Line : Cal = 0.00",
+            "data-placement": "top"
+        })
+    } else {
+        if (data.ach >= data.max_result) {
+            // cal = parseFloat(obj.max_result) * parseFloat(obj.weight) / 100
+            setAttributes(e, {
+                "data-toggle": "tooltip",
+                "title": "Ach% >= Max  = (Max * Weight) / 100",
+                "data-placement": "top"
+            })
+        } else {
+            // cal = ach * parseFloat(obj.weight) / 100
+            setAttributes(e, {
+                "data-toggle": "tooltip",
+                "title": "(Ach% * Weight) / 100",
+                "data-placement": "top"
+            })
+        }
+    }
+}
+

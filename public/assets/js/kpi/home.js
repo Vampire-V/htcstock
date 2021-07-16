@@ -119,14 +119,14 @@ document.getElementById('customSwitch1').addEventListener('click', () => {
     search_score()
 })
 
-const search_score = () => {
+const search_score = async () => {
     month_quarter()
     let score = []
     let checked = document.getElementById('customSwitch1').checked
     let param
     if (checked) {
         param = {
-            quarter: $("#quarter").val() === '' ? [1,2,3,4] : [$("#quarter").val()],
+            quarter: $("#quarter").val() === '' ? [1, 2, 3, 4] : [$("#quarter").val()],
             year: [$("#year").val()],
             degree: [$("#degree").val()]
         }
@@ -139,149 +139,283 @@ const search_score = () => {
     }
     let table = document.getElementById('table-report-score')
     table.previousElementSibling.classList.add('reload')
-    getOperationReportScore({
+    try {
+        let fetch_data = await getOperationReportScore({
             params: param
         })
-        .then(res => {
-            let data = []
-            // let newData = []
-            if (res.status === 200) {
-                // console.log(res.data.data);
-                if (checked) {
-                    // is quarter
-                    // New function for quarter
-                    // let group = res.data.data.reduce((r, a) => {
-                    //     r[a.user_id] = [...r[a.user_id] || [], a];
-                    //     return r;
-                    // }, {})
-                    //    let total_kpi = 0
-                    //     let total_key = 0
-                    //     let total_omg = 0
-                    // for (const key in group) {
-                    //     if (Object.hasOwnProperty.call(group, key)) {
-                    //         const element = group[key]
-                    //         total_kpi = element.reduce((a, c) => a + c.cal_kpi, 0) / 3
-                    //         total_key = element.reduce((a, c) => a + c.cal_key_task, 0) / 3
-                    //         total_omg = element.reduce((a, c) => a + c.cal_omg, 0) / 3
-                    //         sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1])
-                    //         newData.push({
-                    //             evaluate: element[element.length-1],
-                    //             kpi: total_kpi,
-                    //             key_task: total_key,
-                    //             omg: total_omg,
-                    //             score: sum_total / 100
-                    //         })
-                    //     }
-                    // }
-                    // console.log(newData);
-                    // End New function for quarter
-                    let item_unique = []
+        let information = await combine_information(fetch_data.data.data)
+        // debugger
+        score = information.sort((a, b) => b.score - a.score)
+    } catch (error) {
+        console.error(error)
+        toast(error, 'error')
+    } finally {
+        render_score(score)
+        toastClear()
+    }
+    // getOperationReportScore({
+    //         params: param
+    //     })
+    //     .then(res => {
+    //         let data = []
+    //         // let newData = []
+    //         if (res.status === 200) {
+    //             // console.log(res.data.data);
+    //             if (checked) {
+    //                 // is quarter
+    //                 // New function for quarter
+    //                 // let group = res.data.data.reduce((r, a) => {
+    //                 //     r[a.user_id] = [...r[a.user_id] || [], a];
+    //                 //     return r;
+    //                 // }, {})
+    //                 //    let total_kpi = 0
+    //                 //     let total_key = 0
+    //                 //     let total_omg = 0
+    //                 // for (const key in group) {
+    //                 //     if (Object.hasOwnProperty.call(group, key)) {
+    //                 //         const element = group[key]
+    //                 //         total_kpi = element.reduce((a, c) => a + c.cal_kpi, 0) / 3
+    //                 //         total_key = element.reduce((a, c) => a + c.cal_key_task, 0) / 3
+    //                 //         total_omg = element.reduce((a, c) => a + c.cal_omg, 0) / 3
+    //                 //         sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1])
+    //                 //         newData.push({
+    //                 //             evaluate: element[element.length-1],
+    //                 //             kpi: total_kpi,
+    //                 //             key_task: total_key,
+    //                 //             omg: total_omg,
+    //                 //             score: sum_total / 100
+    //                 //         })
+    //                 //     }
+    //                 // }
+    //                 // console.log(newData);
+    //                 // End New function for quarter
+    //                 let item_unique = []
 
-                    // let group = res.data.data.reduce((r, a) => {
-                    //     r[a.user_id] = [...r[a.user_id] || [], a];
-                    //     return r;
-                    // }, {})
-                    res.data.data.sort(function (a, b) {
-                        var keyA = a.period_id,
-                            keyB = b.period_id;
-                        // Compare the 2 dates
-                        if (keyA < keyB) return -1;
-                        if (keyA > keyB) return 1;
-                        return 0;
-                    })
-                    for (let index = 0; index < res.data.data.length; index++) {
-                        const evaluate = res.data.data[index]
-                        if (item_unique.length < 1) {
-                            item_unique.push(evaluate)
-                        } else {
-                            let i = item_unique.findIndex(t => t.user_id === evaluate.user_id)
-                            if (i < 0) {
-                                item_unique.push(evaluate)
-                            } else {
-                                item_unique[i].evaluate_detail = item_unique[i].evaluate_detail.concat(evaluate.evaluate_detail)
-                            }
-                        }
-                    }
+    //                 // let group = res.data.data.reduce((r, a) => {
+    //                 //     r[a.user_id] = [...r[a.user_id] || [], a];
+    //                 //     return r;
+    //                 // }, {})
+    //                 res.data.data.sort(function (a, b) {
+    //                     var keyA = a.period_id,
+    //                         keyB = b.period_id;
+    //                     // Compare the 2 dates
+    //                     if (keyA < keyB) return -1;
+    //                     if (keyA > keyB) return 1;
+    //                     return 0;
+    //                 })
+    //                 for (let index = 0; index < res.data.data.length; index++) {
+    //                     const evaluate = res.data.data[index]
+    //                     if (item_unique.length < 1) {
+    //                         item_unique.push(evaluate)
+    //                     } else {
+    //                         let i = item_unique.findIndex(t => t.user_id === evaluate.user_id)
+    //                         if (i < 0) {
+    //                             item_unique.push(evaluate)
+    //                         } else {
+    //                             item_unique[i].evaluate_detail = item_unique[i].evaluate_detail.concat(evaluate.evaluate_detail)
+    //                         }
+    //                     }
+    //                 }
 
-                    for (let index = 0; index < item_unique.length; index++) {
-                        const element = item_unique[index]
-                        let kpi = element.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
-                        let key_task = element.evaluate_detail.filter(item => item.rule.category.name === `key-task`)
-                        let omg = element.evaluate_detail.filter(item => item.rule.category.name === `omg`)
-                        let total_kpi = 0
-                        let total_key = 0
-                        let total_omg = 0
-                        let sum_total = 0
+    //                 for (let index = 0; index < item_unique.length; index++) {
+    //                     const element = item_unique[index]
+    //                     let kpi = element.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
+    //                     let key_task = element.evaluate_detail.filter(item => item.rule.category.name === `key-task`)
+    //                     let omg = element.evaluate_detail.filter(item => item.rule.category.name === `omg`)
+    //                     let total_kpi = 0
+    //                     let total_key = 0
+    //                     let total_omg = 0
+    //                     let sum_total = 0
 
-                        total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0)
-                        total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0)
-                        total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
-                        sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
+    //                     total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0)
+    //                     total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0)
+    //                     total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
+    //                     sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
 
-                        data.push({
-                            evaluate: element,
-                            kpi: total_kpi,
-                            key_task: total_key,
-                            omg: total_omg,
-                            score: sum_total / 100
-                        })
-                    }
-                } else {
-                    for (let index = 0; index < res.data.data.length; index++) {
-                        const evaluate = res.data.data[index]
-                        let kpi = evaluate.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
-                        let key_task = evaluate.evaluate_detail.filter(item => item.rule.category.name === `key-task`)
-                        // let omg = evaluate.detail.filter(item => item.rule.categorys.name === `omg`)
-                        let total_kpi = 0.00
-                        let total_key = 0.00
-                        let total_omg = 0.00
-                        let sum_total = 0.00
+    //                     data.push({
+    //                         evaluate: element,
+    //                         kpi: total_kpi,
+    //                         key_task: total_key,
+    //                         omg: total_omg,
+    //                         score: sum_total / 100
+    //                     })
+    //                 }
+    //             } else {
+    //                 for (let index = 0; index < res.data.data.length; index++) {
+    //                     const evaluate = res.data.data[index]
+    //                     let kpi = evaluate.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
+    //                     let key_task = evaluate.evaluate_detail.filter(item => item.rule.category.name === `key-task`)
+    //                     // let omg = evaluate.detail.filter(item => item.rule.categorys.name === `omg`)
+    //                     let total_kpi = 0.00
+    //                     let total_key = 0.00
+    //                     let total_omg = 0.00
+    //                     let sum_total = 0.00
 
-                        total_kpi = kpi.reduce((a, c) => a + c.cal, 0)
-                        total_key = key_task.reduce((a, c) => a + c.cal, 0)
-                        // total_omg = omg.reduce((a, c) => a + c.cal, 0)
-                        sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1])
-                        // + (total_omg * weigth_template[2])
+    //                     total_kpi = kpi.reduce((a, c) => a + c.cal, 0)
+    //                     total_key = key_task.reduce((a, c) => a + c.cal, 0)
+    //                     // total_omg = omg.reduce((a, c) => a + c.cal, 0)
+    //                     sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1])
+    //                     // + (total_omg * weigth_template[2])
 
-                        data.push({
-                            evaluate: evaluate,
-                            kpi: total_kpi,
-                            key_task: total_key,
-                            omg: total_omg,
-                            score: sum_total / 100
-                        })
+    //                     data.push({
+    //                         evaluate: evaluate,
+    //                         kpi: total_kpi,
+    //                         key_task: total_key,
+    //                         omg: total_omg,
+    //                         score: sum_total / 100
+    //                     })
 
-                        // New version รอ อัพเดทข้อมูลใน database ครบก่อน
-                        // sum_total = (evaluate.cal_kpi * weigth_template[0]) + (evaluate.cal_key_task * weigth_template[1])
-                        // data.push({
-                        //     evaluate: evaluate,
-                        //     kpi: evaluate.cal_kpi,
-                        //     key_task: evaluate.cal_key_task,
-                        //     omg: 0.00, //evaluate.cal_omg,
-                        //     score: sum_total / 100
-                        // })
-                    }
-                }
-            }
-            return data
-        })
-        .then(data => {
-            score = data.sort((a, b) => b.score - a.score)
-        })
-        .catch(error => {
-            console.log(error);
-            console.log(error.response.data);
-            toast(error.response.data.message, error.response.data.status)
-        })
-        .finally(() => {
-            render_score(score)
-            toastClear()
-        })
+    //                     // New version รอ อัพเดทข้อมูลใน database ครบก่อน
+    //                     // sum_total = (evaluate.cal_kpi * weigth_template[0]) + (evaluate.cal_key_task * weigth_template[1])
+    //                     // data.push({
+    //                     //     evaluate: evaluate,
+    //                     //     kpi: evaluate.cal_kpi,
+    //                     //     key_task: evaluate.cal_key_task,
+    //                     //     omg: 0.00, //evaluate.cal_omg,
+    //                     //     score: sum_total / 100
+    //                     // })
+    //                 }
+    //             }
+    //         }
+    //         return data
+    //     })
+    //     .then(data => {
+    //         score = data.sort((a, b) => b.score - a.score)
+    //     })
+    //     .catch(error => {
+    //         console.log(error)
+    //         console.log(error.response.data)
+    //         toast(error.response.data.message, error.response.data.status)
+    //     })
+    //     .finally(() => {
+    //         render_score(score)
+    //         toastClear()
+    //     })
 }
 
+let combine_information = (fetch_data) => {
+    let data = []
+    if (document.getElementById('customSwitch1').checked) {
+        // is quarter
+        // New function for quarter
+        // let group = res.data.data.reduce((r, a) => {
+        //     r[a.user_id] = [...r[a.user_id] || [], a];
+        //     return r;
+        // }, {})
+        //    let total_kpi = 0
+        //     let total_key = 0
+        //     let total_omg = 0
+        // for (const key in group) {
+        //     if (Object.hasOwnProperty.call(group, key)) {
+        //         const element = group[key]
+        //         total_kpi = element.reduce((a, c) => a + c.cal_kpi, 0) / 3
+        //         total_key = element.reduce((a, c) => a + c.cal_key_task, 0) / 3
+        //         total_omg = element.reduce((a, c) => a + c.cal_omg, 0) / 3
+        //         sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1])
+        //         newData.push({
+        //             evaluate: element[element.length-1],
+        //             kpi: total_kpi,
+        //             key_task: total_key,
+        //             omg: total_omg,
+        //             score: sum_total / 100
+        //         })
+        //     }
+        // }
+        // console.log(newData);
+        // End New function for quarter
+        let item_unique = []
+
+        // let group = res.data.data.reduce((r, a) => {
+        //     r[a.user_id] = [...r[a.user_id] || [], a];
+        //     return r;
+        // }, {})
+        fetch_data.sort(function (a, b) {
+            var keyA = a.period_id,
+                keyB = b.period_id;
+            // Compare the 2 dates
+            if (keyA < keyB) return -1;
+            if (keyA > keyB) return 1;
+            return 0;
+        })
+        for (let index = 0; index < fetch_data.length; index++) {
+            const evaluate = fetch_data[index]
+            if (item_unique.length < 1) {
+                item_unique.push(evaluate)
+            } else {
+                let i = item_unique.findIndex(t => t.user_id === evaluate.user_id)
+                if (i < 0) {
+                    item_unique.push(evaluate)
+                } else {
+                    item_unique[i].evaluate_detail = item_unique[i].evaluate_detail.concat(evaluate.evaluate_detail)
+                }
+            }
+        }
+
+        for (let index = 0; index < item_unique.length; index++) {
+            const element = item_unique[index]
+            let kpi = element.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
+            let key_task = element.evaluate_detail.filter(item => item.rule.category.name === `key-task`)
+            let omg = element.evaluate_detail.filter(item => item.rule.category.name === `omg`)
+            let total_kpi = 0
+            let total_key = 0
+            let total_omg = 0
+            let sum_total = 0
+
+            total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0)
+            total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0)
+            total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
+            sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
+
+            data.push({
+                evaluate: element,
+                kpi: total_kpi,
+                key_task: total_key,
+                omg: total_omg,
+                score: sum_total / 100
+            })
+        }
+    } else {
+        for (let index = 0; index < fetch_data.length; index++) {
+            const evaluate = fetch_data[index]
+            let kpi = evaluate.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
+            let key_task = evaluate.evaluate_detail.filter(item => item.rule.category.name === `key-task`)
+            // let omg = evaluate.detail.filter(item => item.rule.categorys.name === `omg`)
+            let total_kpi = 0.00
+            let total_key = 0.00
+            let total_omg = 0.00
+            let sum_total = 0.00
+
+            total_kpi = kpi.reduce((a, c) => a + c.cal, 0)
+            total_key = key_task.reduce((a, c) => a + c.cal, 0)
+            // total_omg = omg.reduce((a, c) => a + c.cal, 0)
+            sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1])
+            // + (total_omg * weigth_template[2])
+
+            data.push({
+                evaluate: evaluate,
+                kpi: total_kpi,
+                key_task: total_key,
+                omg: total_omg,
+                score: sum_total / 100
+            })
+
+            // New version รอ อัพเดทข้อมูลใน database ครบก่อน
+            // sum_total = (evaluate.cal_kpi * weigth_template[0]) + (evaluate.cal_key_task * weigth_template[1])
+            // data.push({
+            //     evaluate: evaluate,
+            //     kpi: evaluate.cal_kpi,
+            //     key_task: evaluate.cal_key_task,
+            //     omg: 0.00, //evaluate.cal_omg,
+            //     score: sum_total / 100
+            // })
+        }
+    }
+    return data
+}
 
 let total_quarter = (objArr) => {
-    let temp = [] , quarter_all = $("#quarter").val() === '' ? 12 : 3
+    let temp = [],
+        quarter_all = $("#quarter").val() === '' ? 12 : 3
 
     try {
         for (var i = 0; i < objArr.length; i++) {
@@ -329,194 +463,11 @@ let total_quarter = (objArr) => {
     return temp
 }
 
-const score_quarter_cal_target = (rule) => {
-    if (rule.rule.quarter_cal === quarters.AVERAGE) {
-        return rule.average_target.reduce((a, b) => (a + b)) / rule.average_target.length
-    }
-    if (rule.rule.quarter_cal === quarters.LAST_MONTH) {
-        return rule.average_target[rule.average_target.length - 1]
-    }
-    if (rule.rule.quarter_cal === quarters.SUM) {
-        return rule.average_target.reduce((a, b) => (a + b))
-    }
-}
-
-const score_quarter_cal_amount = (rule) => {
-    if (rule.rule.quarter_cal === quarters.AVERAGE) {
-        return rule.average_actual.reduce((a, b) => (a + b)) / rule.average_actual.length
-    }
-    if (rule.rule.quarter_cal === quarters.LAST_MONTH) {
-        return rule.average_actual[rule.average_actual.length - 1]
-    }
-    if (rule.rule.quarter_cal === quarters.SUM) {
-        return rule.average_actual.reduce((a, b) => (a + b))
-    }
-}
-
-/**
- * @params {element} EvaluateDetail
- * @params {array} EvaluateDetail list
- * @return percent (element.target / parent.target) * 100
- */
-var score_findActualPercent = (element, array) => {
-    let result = 0.00
-    if (element.rule.parent) {
-        let parent = array.find(item => item.rule_id === element.rule.parent)
-        if (element.rule.calculate_type === calculate.POSITIVE) {
-            result = element.actual > parent.actual ? 0.00 : element.actual === 0.00 ? 0.00 : (element.actual / parent.actual) * 100
-        }
-        if (element.rule.calculate_type === calculate.NEGATIVE) {
-            result = parent.actual > element.actual ? (element.actual / parent.actual) * 100 : 0.00
-        }
-        if (element.rule.calculate_type === calculate.ZERO) {
-            // ไม่มี
-            result = element.actual <= parent.actual ? 100.00 : 0.00
-        }
-    } else {
-        // result = (element.actual / (element.target === 0) ? 1 : element.target) * 100
-        if (element.rule.calculate_type === calculate.POSITIVE) {
-            result = element.actual > element.target ? 100.00 : element.actual === 0.00 ? 0.00 : (element.actual / element.target) * 100
-        }
-        if (element.rule.calculate_type === calculate.NEGATIVE) {
-            result = element.actual > element.target ? ((element.actual / element.target) * 100) : 100.00
-        }
-        if (element.rule.calculate_type === calculate.ZERO) {
-            result = element.actual <= element.target ? 100.00 : 0.00
-        }
-    }
-    return element.actual_pc = result
-}
-
-/**
- * @params {element} EvaluateDetail
- * @params {array} EvaluateDetail list
- * @return percent (element.target / parent.target) * 100
- */
-var score_findTargetPercent = (element, array) => {
-
-    if (element.rule.parent) {
-        let parent = array.find(item => item.rule_id === element.rule.parent)
-        let target = element.target_config ?? element.target
-        let parent_target = parent.target_config ?? parent.target
-        if (parent) {
-            let result = target > parent_target ? 0.00 : target === 0.00 && parent_target === 0.00 ? 0.00 : (target / parent_target) * 100
-            element.target_pc = result
-        }
-    } else {
-        element.target_pc = 100.00
-    }
-    return element.target_pc
-}
-
-
-const score_findAchValue = (obj) => {
-    if (typeof obj === `object`) {
-        if (!obj.rule.parent) {
-            // ใช้ amount หา
-            if (obj.rule.calculate_type === calculate.POSITIVE) {
-                if (obj.target === 0.00 && obj.actual > obj.target) {
-                    ach = obj.max
-                } else if (obj.actual === 0.00) {
-                    ach = 0.00
-                } else {
-                    ach = parseFloat((obj.actual / obj.target) * 100.00)
-                }
-                // ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)
-            }
-            if (obj.rule.calculate_type === calculate.NEGATIVE) {
-                let dd = (obj.actual / obj.target)
-                if (dd === -Infinity) {
-                    dd = 0
-                }
-                // console.log(obj.actual);
-                // if (obj.actual !== 0.00) {
-                //     if (obj.actual < obj.target) {
-                //         ach = obj.max_result ?? obj.max
-                //     } else {
-                ach = parseFloat((2 - dd) * 100.00)
-                // console.log(obj.rules.name,ach);
-                // }
-                // }else{
-                //     ach = 0.00
-                // }
-
-                // ach = obj.actual !== 0.00 ?  parseFloat((2 - (obj.actual / obj.target)) * 100.00) : obj.max #version 2
-                // ach = obj.actual > obj.target ?  parseFloat((2 - (obj.actual / obj.target)) * 100.00) : obj.max #version 1
-            }
-            if (obj.rule.calculate_type === calculate.ZERO) {
-                ach = obj.actual <= obj.target ? 100.00 : 0.00
-            }
-        } else {
-            // ใช้ % หา
-            if (obj.rule.calculate_type === calculate.POSITIVE) {
-                if (obj.target_pc === 0.00 && obj.actual_pc > obj.target_pc) {
-                    ach = obj.max
-                } else if (obj.actual_pc === 0.00) {
-                    ach = 0.00
-                } else {
-                    ach = parseFloat((obj.actual_pc / obj.target_pc) * 100.00)
-                }
-                // ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((obj.actual_pc / obj.target_pc) * 100)
-            }
-            if (obj.rule.calculate_type === calculate.NEGATIVE) {
-                // console.log(obj.actual_pc , obj.target_pc);
-                let dd = (obj.actual_pc / obj.target_pc)
-                if (dd === -Infinity) {
-                    dd = 0
-                }
-                ach = parseFloat((2 - dd) * 100.00)
-                // if (obj.actual_pc !== 0.00) {
-                //     if (obj.actual_pc < obj.target_pc) {
-                //         ach = obj.max ?? obj.max_result
-                //     } else {
-                // ach = parseFloat((2 - dd ) * 100.00)
-                // console.log(obj.rules.name,ach);
-                //     }
-                // }else{
-                //     ach = 0.00
-                // }
-
-                // ach = obj.actual_pc !== 0.00 ? parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100) : 0.00  #version 2
-                // ach = obj.actual_pc > obj.target_pc ? parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100) : obj.max  #version 1
-            }
-            if (obj.rule.calculate_type === calculate.ZERO) {
-                ach = obj.actual_pc <= obj.target_pc ? 100.00 : 0.00
-            }
-        }
-    }
-    if (typeof obj === `number`) {
-        ach = obj
-    }
-    return isNaN(ach) || (ach === Infinity || ach === -Infinity) ? 0.00 : ach
-}
-
-var score_findCalValue = (obj, ach) => {
-    // console.log(obj,ach);
-    if (ach < obj.base_line) {
-        cal = 0.00
-    } else {
-        if ('max_result' in obj) {
-            if (ach >= obj.max_result) {
-                cal = parseFloat(obj.max_result) * parseFloat(obj.weight) / 100
-            } else {
-                cal = ach * parseFloat(obj.weight) / 100
-            }
-        }
-        if ('max' in obj) {
-            if (ach >= obj.max) {
-                cal = parseFloat(obj.max) * parseFloat(obj.weight) / 100
-            } else {
-                cal = ach * parseFloat(obj.weight) / 100
-            }
-        }
-
-    }
-    return isNaN(cal) || (cal === Infinity) ? 0.00 : cal
-}
 
 const render_score = (score) => {
     let table = document.getElementById('table-report-score'),
-        body = table.tBodies[0]
+        body = table.tBodies[0],
+        is_all_quarter = $("#quarter").val() === '' ? 'all' : $("#quarter").val()
     removeAllChildNodes(body)
     // head = table.tHead
     if (weigth_template.length > 0) {
@@ -529,13 +480,22 @@ const render_score = (score) => {
     if (score.length > 0) {
         for (let index = 0; index < score.length; index++) {
             const element = score[index]
-            // console.log(element);
+            let uri = '#'
+            if (document.getElementById('customSwitch1').checked) {
+                if ($("#quarter").val() === '') {
+                    uri = `${window.origin}/kpi/self-evaluation/user/${element.evaluate.user_id}/year/${$("#year").val()}`
+                } else {
+                    uri = `${window.origin}/kpi/self-evaluation/user/${element.evaluate.user_id}/quarter/${$("#quarter").val()}/year/${$("#year").val()}`
+                }
+            } else {
+                uri = `${window.origin}/kpi/self-evaluation/${element.evaluate.id}/edit`
+            }
             const rank_rate = calculator_score(element.score)
             let newRow = body.insertRow()
             let name = newRow.insertCell()
             name.style = `text-align: left;`
-            let uri = document.getElementById('customSwitch1').checked ? `${window.origin}/kpi/self-evaluation/user/${element.evaluate.user_id}/quarter/${$("#quarter").val()}/year/${$("#year").val()}` : `${window.origin}/kpi/self-evaluation/${element.evaluate.id}/edit`;
-            let a = make_link(uri, element.evaluate.user.translations[0].name)
+           
+            let a = make_link(uri, element.evaluate.user.name)
             a.style = `padding-left: 20%`
             name.appendChild(a)
 
@@ -636,7 +596,7 @@ const month_quarter = () => {
             toast(error.response.data.message, error.response.data.status)
         })
         .finally(() => {
-            
+
             toastClear()
         })
 }

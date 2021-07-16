@@ -47,7 +47,7 @@
             for (let index = 0; index < temp.length; index++) {
                 const element = temp[index]
                 // console.log(element);
-                element.weight = element.rule.category.name === `omg` ? element.weight : element.weight / 3
+                element.weight = element.rule.category.name === `omg` ? element.weight : element.weight / 12
                 element.target = quarter_cal_target(element)
                 element.actual = quarter_cal_amount(element)
                 

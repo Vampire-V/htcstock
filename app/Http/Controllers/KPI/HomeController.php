@@ -79,17 +79,20 @@ class HomeController extends Controller
             foreach ($rules as $rule) {
                 $total = \collect();
                 foreach ($periods as $period) {
-                    $data_for_sum = [];
-                    for ($i = 0; $i < $rule->evaluatesDetail->count(); $i++) {
-                        $item = $rule->evaluatesDetail[$i];
-                        if ($item->evaluate->status === KPIEnum::approved && $period->id === $item->evaluate->period_id) {
-                            $row = new stdClass();
-                            $row->actual = $item->actual;
-                            $row->target = $item->target;
-                            $data_for_sum[] = $row;
-                        }
-                    }
-                    $total->push($data_for_sum);
+                    // $data_for_sum = [];
+                    $filtered = $rule->evaluatesDetail->filter(function ($value, $key) use($period) {
+                        return $value->evaluate->status === KPIEnum::approved && $period->id === $value->evaluate->period_id;
+                    });
+                    // for ($i = 0; $i < $rule->evaluatesDetail->count(); $i++) {
+                    //     $item = $rule->evaluatesDetail[$i];
+                    //     if ($item->evaluate->status === KPIEnum::approved && $period->id === $item->evaluate->period_id) {
+                    //         $row = new stdClass();
+                    //         $row->actual = $item->actual;
+                    //         $row->target = $item->target;
+                    //         $data_for_sum[] = $row;
+                    //     }
+                    // }
+                    $total->push($filtered);
                 }
                 $rule->total = $total;
             }

@@ -101,7 +101,7 @@ class LoginController extends Controller
             throw $e;
         }
 
-        
+
         switch ($evaluate->status) {
             case KPIEnum::ready:
                 $user = $evaluate->user;
@@ -113,9 +113,14 @@ class LoginController extends Controller
                 Auth::login($user);
                 return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
                 break;
-            case KPIEnum::submit || KPIEnum::on_process:
-                Auth::login($evaluate->nextlevel->approveBy);
+            case KPIEnum::on_process:
+                Auth::login($evaluate->currentlevel->approveBy);
                 return \redirect()->route('kpi.evaluation-review.edit', $evaluate->id);
+                break;
+            case KPIEnum::approved:
+                $user = $evaluate->user;
+                Auth::login($user);
+                return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
                 break;
             default:
                 return abort(404);

@@ -82,7 +82,7 @@ class HomeController extends Controller
                     for ($i = 0; $i < $rule->evaluatesDetail->count(); $i++) {
                         $item = $rule->evaluatesDetail[$i];
                         // if ($item->evaluate->status === KPIEnum::approved && $period->id === $item->evaluate->period_id) {
-                        //     $data_for_sum[] = $item;
+                            $data_for_sum[] = $item;
                         // }
                     }
                     $total->push($data_for_sum);

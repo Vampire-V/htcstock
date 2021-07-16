@@ -86,21 +86,12 @@ class HomeController extends Controller
     {
         try {
             $users = $this->userService->evaluationOfYearReport($year);
-            $is_last = \collect(['03', '06', '09', '12', 'March', 'June', 'September', 'Depcember']);
-
+            $periods = $this->targetPeriodService->query()->where('year', $year)->get();
             for ($i = 0; $i < $users->count(); $i++) {
                 $user = $users[$i];
-                $user->evaluates->each(function ($item) use ($is_last) {
-                    if ($is_last->contains($item->targetperiod->name)) {
-                        $item->weigth = config('kpi.weight')['quarter'];
-                    } else {
-                        $item->weigth = config('kpi.weight')['month'];
-                    }
-                });
                 $this->calculation_summary($user->evaluates);
-                EvaluateResource::collection($user->evaluates);
             }
-            $periods = $this->targetPeriodService->query()->where('year', $year)->get();
+            
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }

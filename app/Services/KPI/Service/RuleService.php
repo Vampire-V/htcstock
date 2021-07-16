@@ -51,7 +51,7 @@ class RuleService extends BaseService implements RuleServiceInterface
 
     public function filter(Request $request)
     {
-        return Rule::with(['category', 'user', 'ruleType','updatedby'])
+        return Rule::with(['category', 'user', 'ruleType', 'updatedby'])
             ->filter($request)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -73,16 +73,15 @@ class RuleService extends BaseService implements RuleServiceInterface
     public function rulesInEvaluationReport($year)
     {
         try {
-            DB::enableQueryLog();
-            $rules = Rule::select('id','name')->with(['evaluatesDetail.evaluate.targetperiod' => function ($query) use($year){ 
-                return $query->select('id','name','year','quarter')->where('year',$year);
-            } ,'evaluatesDetail.evaluate:id,user_id,template_id,status,period_id'])->get();
-            $periods = $this->periodService->query()->where('year',$year)->get();
+            $rules = Rule::select('id', 'name')->with(['evaluatesDetail.evaluate.targetperiod' => function ($query) use ($year) {
+                return $query->select('id', 'name', 'year', 'quarter')->where('year', $year);
+            }])->get();
+            $periods = $this->periodService->query()->where('year', $year)->get();
             foreach ($rules as $rule) {
                 $total = \collect();
                 foreach ($periods as $period) {
                     $data_for_sum = [];
-                    for ($i=0; $i < $rule->evaluatesDetail->count(); $i++) { 
+                    for ($i = 0; $i < $rule->evaluatesDetail->count(); $i++) {
                         $item = $rule->evaluatesDetail[$i];
                         if ($item->evaluate->status === KPIEnum::approved && $period->id === $item->evaluate->period_id) {
                             $data_for_sum[] = $item;

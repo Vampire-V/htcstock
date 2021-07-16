@@ -35,8 +35,14 @@ trait CalculatorEvaluateTrait
             // foreach ($evaluations as $value) {
             //     $this->calculation_detail($value->evaluateDetail);
             // }
+            
             for ($i = 0; $i < $evaluations->count(); $i++) {
                 $value = $evaluations[$i];
+                if ($value->user->degree === KPIEnum::one) {
+                    $value->weigth = config('kpi.weight')['quarter'];
+                }else{
+                    $value->weigth = config('kpi.weight')['month'];
+                }
                 $this->calculation_detail($value->evaluateDetail);
             }
         }

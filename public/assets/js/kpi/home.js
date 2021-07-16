@@ -53,39 +53,36 @@ document.addEventListener("DOMContentLoaded", function () {
     let active_tab = localStorage.getItem('tab-dashboard')
     if (!active_tab) {
         window.localStorage.setItem('tab-dashboard', `tab-c-1`)
-    }
-    if (active_tab) {
-        // let content_id = null
-        let ele_active = document.getElementById(active_tab)
-        let scope = ele_active.parentNode.parentNode.parentNode
-        for (let index = 0; index < scope.firstElementChild.children.length; index++) {
-            const element = scope.firstElementChild.children[index];
-            if (element.firstElementChild.id === active_tab) {
-                element.firstElementChild.classList.add('active')
-                content_id = element.firstElementChild.href.substring(element.firstElementChild.href.search("#") + 1, element.firstElementChild.href.length)
-            } else {
-                element.firstElementChild.classList.remove('active')
-            }
-        }
-        if (content_id) {
-            let contents = document.getElementById(content_id).parentElement
-            for (let index = 0; index < contents.children.length; index++) {
-                const element = contents.children[index];
-                if (content_id === element.id) {
-                    element.classList.add('active')
-                } else {
-                    element.classList.remove('active')
-                }
-            }
-        }
-        if (active_tab === 'tab-c-0') {
-            make_options()
-            search_score()
+        active_tab = localStorage.getItem('tab-dashboard')
+    } 
+    let ele_active = document.getElementById(active_tab)
+    let scope = ele_active.parentNode.parentNode.parentNode
+    for (let index = 0; index < scope.firstElementChild.children.length; index++) {
+        const element = scope.firstElementChild.children[index];
+        if (element.firstElementChild.id === active_tab) {
+            element.firstElementChild.classList.add('active')
+            content_id = element.firstElementChild.href.substring(element.firstElementChild.href.search("#") + 1, element.firstElementChild.href.length)
         } else {
-            render_rule()
-            render_staff_evaluate()
+            element.firstElementChild.classList.remove('active')
         }
-
+    }
+    if (content_id) {
+        let contents = document.getElementById(content_id).parentElement
+        for (let index = 0; index < contents.children.length; index++) {
+            const element = contents.children[index];
+            if (content_id === element.id) {
+                element.classList.add('active')
+            } else {
+                element.classList.remove('active')
+            }
+        }
+    }
+    if (active_tab === 'tab-c-0') {
+        make_options()
+        search_score()
+    } else {
+        render_rule()
+        render_staff_evaluate()
     }
     // $("#department").select2({
     //     placeholder: 'Select Department...',
@@ -98,7 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 let weigth_template = []
-let option_search_score = null
 
 const tabActive = (e) => {
     window.localStorage.setItem('tab-dashboard', e.id)
@@ -494,7 +490,7 @@ const render_score = (score) => {
             let newRow = body.insertRow()
             let name = newRow.insertCell()
             name.style = `text-align: left;`
-           
+
             let a = make_link(uri, element.evaluate.user.name)
             a.style = `padding-left: 20%`
             name.appendChild(a)
@@ -677,7 +673,9 @@ const render_rule = async () => {
     if (is_degree === degree.ONE) {
         let table = document.getElementById('table-rule-evaluation')
         try {
-            let result = await getReportRuleOfYear(2021)
+            let d = new Date()
+            let result = await getReportRuleOfYear(d.getFullYear())
+            console.log(result.data.data);
             await rules_data_to_table(result.data.data)
             $('[data-toggle="tooltip"]').tooltip()
             // table.previousElementSibling.classList.add('reload')
@@ -807,7 +805,8 @@ const findLastValue = (array, key) => {
 const render_staff_evaluate = async () => {
     let table = document.getElementById('table-staff-evaluation')
     try {
-        let result = await getReportStaffEvaluate(2021)
+        let d = new Date()
+        let result = await getReportStaffEvaluate(d.getFullYear())
         await staff_data_to_table(result.data.data)
         $('[data-toggle="tooltip"]').tooltip()
         table.previousElementSibling.classList.remove('reload')
@@ -819,6 +818,7 @@ const render_staff_evaluate = async () => {
 }
 
 const staff_data_to_table = (data) => {
+    console.log(data);
     let table = document.getElementById('table-staff-evaluation'),
         head = table.tHead,
         body = table.tBodies[0]
@@ -876,47 +876,42 @@ const staff_data_to_table = (data) => {
         name.setAttribute('title', user.name)
         name.textContent = user.name
 
-        let result = calculator_evaluate_to_month(user.evaluates)
-
-        jan.textContent = result[0] ? result[0].score.toFixed(2) : 0.00
-        feb.textContent = result[1] ? result[1].score.toFixed(2) : 0.00
-        mar.textContent = result[2] ? result[2].score.toFixed(2) : 0.00
-        apr.textContent = result[3] ? result[3].score.toFixed(2) : 0.00
-        may.textContent = result[4] ? result[4].score.toFixed(2) : 0.00
-        jun.textContent = result[5] ? result[5].score.toFixed(2) : 0.00
-        jul.textContent = result[6] ? result[6].score.toFixed(2) : 0.00
-        aug.textContent = result[7] ? result[7].score.toFixed(2) : 0.00
-        sep.textContent = result[8] ? result[8].score.toFixed(2) : 0.00
-        oct.textContent = result[9] ? result[9].score.toFixed(2) : 0.00
-        nov.textContent = result[10] ? result[10].score.toFixed(2) : 0.00
-        dec.textContent = result[11] ? result[11].score.toFixed(2) : 0.00
+        // let result = calculator_evaluate_of_month('April',user.evaluates)
+        // console.log(result);
+        jan.textContent = calculator_evaluate_of_month('January', user.evaluates)
+        feb.textContent = calculator_evaluate_of_month('February', user.evaluates)
+        mar.textContent = calculator_evaluate_of_month('March', user.evaluates)
+        apr.textContent = calculator_evaluate_of_month('April', user.evaluates)
+        may.textContent = calculator_evaluate_of_month('May', user.evaluates)
+        jun.textContent = calculator_evaluate_of_month('June', user.evaluates)
+        jul.textContent = calculator_evaluate_of_month('July', user.evaluates)
+        aug.textContent = calculator_evaluate_of_month('August', user.evaluates)
+        sep.textContent = calculator_evaluate_of_month('September', user.evaluates)
+        oct.textContent = calculator_evaluate_of_month('October', user.evaluates)
+        nov.textContent = calculator_evaluate_of_month('November', user.evaluates)
+        dec.textContent = calculator_evaluate_of_month('December', user.evaluates)
     }
 }
 
-const calculator_evaluate_to_month = (array) => {
-    let data = []
-    for (let index = 0; index < array.length; index++) {
-        const evaluate = array[index]
+const calculator_evaluate_of_month = (month, array) => {
+    // let data = []
+    let index = array.findIndex(item => item.targetperiod.name === month)
+    let total_kpi = 0,
+        total_key = 0,
+        total_omg = 0,
+        sum_total = 0
+    if (index >= 0) {
+        let evaluate = array[index]
         let kpi = evaluate.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
         let key_task = evaluate.evaluate_detail.filter(item => item.rule.category.name === `key-task`)
         let omg = evaluate.evaluate_detail.filter(item => item.rule.category.name === `omg`)
-        let total_kpi = 0
-        let total_key = 0
-        let total_omg = 0
-        let sum_total = 0
+
 
         total_kpi = kpi.reduce((a, c) => a + c.cal, 0)
         total_key = key_task.reduce((a, c) => a + c.cal, 0)
         total_omg = omg.reduce((a, c) => a + c.cal, 0)
-        sum_total = (total_kpi * evaluate.weigth[0]) + (total_key * evaluate.weigth[1]) + (total_omg * evaluate.weigth[2])
-
-        data.push({
-            evaluate: evaluate,
-            kpi: total_kpi,
-            key_task: total_key,
-            omg: total_omg,
-            score: sum_total / 100
-        })
+        sum_total = (total_kpi * 70) + (total_key * 30) //+ (total_omg * evaluate.weigth[2])
     }
-    return data
+
+    return (sum_total / 100).toFixed(2)
 }

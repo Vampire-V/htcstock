@@ -288,20 +288,26 @@ const search_score = async () => {
     //         toastClear()
     //     })
 }
-
+let getQuarter = (date) => {
+    var month = date.getMonth() + 1;
+    return (Math.ceil(month / 3));
+  }
 let combine_information = (fetch_data) => {
     let data = [],average_omg
-    if ($("#quarter").val() === 1) {
+    if ($("#quarter").val() === '1') {
         average_omg = 1
     }
-    if ($("#quarter").val() === 2) {
+    if ($("#quarter").val() === '2') {
         average_omg = 2
     }
-    if ($("#quarter").val() === 3) {
+    if ($("#quarter").val() === '3') {
         average_omg = 3
     }
-    if ($("#quarter").val() === 4 || $("#quarter").val() === '') {
+    if ($("#quarter").val() === '4') {
         average_omg = 4
+    }
+    if ($("#quarter").val() === '') {
+        average_omg = getQuarter(new Date()) - 1
     }
     if (document.getElementById('customSwitch1').checked) {
         // is quarter
@@ -358,7 +364,7 @@ let combine_information = (fetch_data) => {
                 }
             }
         }
-
+        console.log(item_unique);
         for (let index = 0; index < item_unique.length; index++) {
             const element = item_unique[index]
             let kpi = element.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
@@ -371,11 +377,12 @@ let combine_information = (fetch_data) => {
 
             total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0)
             total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0)
-            if (element.user_id === 113) {
-                console.log(total_quarter(omg));
-            }
-            total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
-            // (total_omg <= 0 ? 0 : total_omg / average_omg)
+            let cal_o = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
+            total_omg = cal_o / average_omg
+            // if (element.user_id === 571) {
+            //     console.log(total_omg,average_omg);
+            //     console.log(total_omg/average_omg);
+            // }
             sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
 
             data.push({

@@ -359,17 +359,17 @@ let combine_information = (fetch_data) => {
 
             total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0)
             total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0)
-            if (element.user_id === 571) {
-                console.log(omg);
-            }
-            total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0) / omg.length
+            // if (element.user_id === 571) {
+            //     console.log(omg);
+            // }
+            total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
             sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
 
             data.push({
                 evaluate: element,
                 kpi: total_kpi,
                 key_task: total_key,
-                omg: total_omg,
+                omg: total_omg <= 0 ? 0 : total_omg / omg.length,
                 score: sum_total / 100
             })
         }

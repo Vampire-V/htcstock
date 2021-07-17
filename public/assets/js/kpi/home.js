@@ -382,7 +382,7 @@ let combine_information = (fetch_data) => {
                 evaluate: element,
                 kpi: total_kpi,
                 key_task: total_key,
-                omg: total_omg <= 0 ? 0 : total_omg / average_omg,
+                omg: total_omg,
                 score: sum_total / 100
             })
         }

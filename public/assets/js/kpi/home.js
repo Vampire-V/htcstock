@@ -290,7 +290,19 @@ const search_score = async () => {
 }
 
 let combine_information = (fetch_data) => {
-    let data = []
+    let data = [],average_omg
+    if ($("#quarter").val() === 1) {
+        average_omg = 1
+    }
+    if ($("#quarter").val() === 2) {
+        average_omg = 2
+    }
+    if ($("#quarter").val() === 3) {
+        average_omg = 3
+    }
+    if ($("#quarter").val() === 4 || $("#quarter").val() === '') {
+        average_omg = 4
+    }
     if (document.getElementById('customSwitch1').checked) {
         // is quarter
         // New function for quarter
@@ -363,13 +375,14 @@ let combine_information = (fetch_data) => {
             //     console.log(omg);
             // }
             total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
-            sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
+            
+            sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + ((total_omg <= 0 ? 0 : total_omg / average_omg) * weigth_template[2])
 
             data.push({
                 evaluate: element,
                 kpi: total_kpi,
                 key_task: total_key,
-                omg: total_omg <= 0 ? 0 : total_omg / omg.length,
+                omg: total_omg <= 0 ? 0 : total_omg / average_omg,
                 score: sum_total / 100
             })
         }

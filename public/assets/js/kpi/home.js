@@ -375,8 +375,8 @@ let combine_information = (fetch_data) => {
             //     console.log(omg);
             // }
             total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
-            
-            sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + ((total_omg <= 0 ? 0 : total_omg / average_omg) * weigth_template[2])
+            // (total_omg <= 0 ? 0 : total_omg / average_omg)
+            sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
 
             data.push({
                 evaluate: element,

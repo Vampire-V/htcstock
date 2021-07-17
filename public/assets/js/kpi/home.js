@@ -359,7 +359,10 @@ let combine_information = (fetch_data) => {
 
             total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0)
             total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0)
-            total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
+            if (element.user_id === 571) {
+                console.log(omg);
+            }
+            total_omg = total_quarter(omg).reduce((a, c) => a + c.cal, 0) / omg.length
             sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
 
             data.push({
@@ -410,9 +413,10 @@ let combine_information = (fetch_data) => {
 }
 
 let total_quarter = (objArr) => {
+    const d = new Date();
     let temp = [],
-        quarter_all = $("#quarter").val() === '' ? 12 : 3
-
+        quarter_all = $("#quarter").val() === '' ? d.getMonth() : 3
+    // console.log(quarter_all);
     try {
         for (var i = 0; i < objArr.length; i++) {
             let item = objArr[i]
@@ -462,8 +466,7 @@ let total_quarter = (objArr) => {
 
 const render_score = (score) => {
     let table = document.getElementById('table-report-score'),
-        body = table.tBodies[0],
-        is_all_quarter = $("#quarter").val() === '' ? 'all' : $("#quarter").val()
+        body = table.tBodies[0]
     removeAllChildNodes(body)
     // head = table.tHead
     if (weigth_template.length > 0) {

@@ -75,24 +75,30 @@ class HomeController extends Controller
     {
         try {
             $rules = $this->ruleService->rulesInEvaluationReport($year);
+            // $new = $rules->each(function ($item) {
+            //     $item->evaluatesDetail->each(function ($v) {
+            //         return $v->groupBy('evaluate_id');
+            //     });
+            // });
+            // return \response()->json($new);
             $periods = $this->targetPeriodService->query()->where('year', $year)->get();
             foreach ($rules as $rule) {
                 $total = \collect();
                 foreach ($periods as $period) {
-                    // $data_for_sum = [];
-                    $filtered = $rule->evaluatesDetail->filter(function ($value, $key) use($period) {
-                        return $value->evaluate->status === KPIEnum::approved && $period->id === $value->evaluate->period_id;
-                    });
-                    // for ($i = 0; $i < $rule->evaluatesDetail->count(); $i++) {
-                    //     $item = $rule->evaluatesDetail[$i];
-                    //     if ($item->evaluate->status === KPIEnum::approved && $period->id === $item->evaluate->period_id) {
-                    //         $row = new stdClass();
-                    //         $row->actual = $item->actual;
-                    //         $row->target = $item->target;
-                    //         $data_for_sum[] = $row;
-                    //     }
-                    // }
-                    $total->push($filtered);
+                    $data_for_sum = [];
+                    // $filtered = $rule->evaluatesDetail->filter(function ($value, $key) use ($period) {
+                    //     return $value->evaluate->status === KPIEnum::approved && $period->id === $value->evaluate->period_id;
+                    // });
+                    for ($i = 0; $i < $rule->evaluatesDetail->count(); $i++) {
+                        $item = $rule->evaluatesDetail[$i];
+                        if ($item->evaluate->status === KPIEnum::approved && $period->id === $item->evaluate->period_id) {
+                            // $row = new stdClass();
+                            // $row->actual = $item->actual;
+                            // $row->target = $item->target;
+                            $data_for_sum[] = $item;
+                        }
+                    }
+                    $total->push($data_for_sum);
                 }
                 $rule->total = $total;
             }
@@ -112,7 +118,6 @@ class HomeController extends Controller
                 $user = $users[$i];
                 $this->calculation_summary($user->evaluates);
             }
-            
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
@@ -196,14 +201,14 @@ class HomeController extends Controller
             //         $item->weigth = config('kpi.weight')['month'];
             //     }
             // });
-            $this->calculation_summary($evaluations,$request);
+            $this->calculation_summary($evaluations, $request);
             // $group_user = $evaluations->groupBy(fn($item) => $item->user_id);
             // $group_user->each(function($u){
-                // $u->each(function($e){
-                    // $rule_group = $e->evaluateDetail->groupBy(fn($rules) => $rules->rule->category_id);
-                    // dump($e->user->name);
-                    // dump($rule_group);
-                // });
+            // $u->each(function($e){
+            // $rule_group = $e->evaluateDetail->groupBy(fn($rules) => $rules->rule->category_id);
+            // dump($e->user->name);
+            // dump($rule_group);
+            // });
             // });
             // exit;
             // $evaluations->each(function ($item) {
@@ -217,7 +222,7 @@ class HomeController extends Controller
             //     }
             // });
             // dd($evaluations->sortBy(fn($item) => $item->period_id));
-            $result = $evaluations;//EvaluateResource::collection($evaluations);
+            $result = $evaluations; //EvaluateResource::collection($evaluations);
         } catch (\Exception $e) {
             return $this->errorResponse($e, 500);
         }
@@ -230,7 +235,7 @@ class HomeController extends Controller
         try {
             if ($request->is_quarter === "true" && $request->degree === KPIEnum::one) {
                 $config = config('kpi.weight')['quarter'];
-            }else{
+            } else {
                 $config = config('kpi.weight')['month'];
             }
             // else if ($request->is_quarter === "true" && $request->degree !== KPIEnum::one) {

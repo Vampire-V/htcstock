@@ -816,7 +816,7 @@ const findLastValue = (array, key) => {
     let result
     for (let i = 0; i < array.length; i++) {
         const element = array[i]
-        if (array[i][key] === element[key]) {
+        if (array[0][key] === element[key]) {
             result = element[key]
         } else {
             return `error inaccurate information..`

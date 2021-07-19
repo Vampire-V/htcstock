@@ -103,7 +103,7 @@ class UserService extends BaseService implements UserServiceInterface
             $users = User::select('id','degree','department_id')->notResigned()
             ->with([
                 'department:id,name',
-                'evaluates' => fn ($query) => $query->select('id','user_id','period_id','status')->with('evaluateDetail.rule.category')->with('targetperiod')->where('status', KPIEnum::approved)->orderBy('period_id'),
+                'evaluates' => fn ($query) => $query->select('id','user_id','period_id','status')->with('evaluateDetail.rule.category:id,name')->with('targetperiod')->where('status', KPIEnum::approved)->orderBy('period_id'),
             ])->orderBy('department_id', 'desc')->get();
             return $users;
         } catch (\Throwable $th) {

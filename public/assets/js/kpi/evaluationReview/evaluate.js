@@ -31,7 +31,7 @@
                         pageEnable()
                     }else{
                         is_disable = auth.roles.findIndex(item => item.slug === 'super-admin') >= 0 ? false : true
-                        if (!is_disable && (evaluateForm.status === status.ONPROCESS)) {
+                        if (!is_disable && evaluateForm.current_level.user_approve.id === auth.id) {
                             pageEnable()
                         }else{
                             pageDisable()
@@ -39,7 +39,6 @@
                     }
                 })
         }
-        console.log(evaluateForm);
     }, false);
 })();
 var evaluateForm = new EvaluateForm()

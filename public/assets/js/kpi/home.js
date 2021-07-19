@@ -148,18 +148,18 @@ let getQuarter = (date) => {
   }
 let combine_information = (fetch_data) => {
     let data = [],average_omg
-    if ($("#quarter").val() === '1') {
-        average_omg = 1
-    }
-    if ($("#quarter").val() === '2') {
-        average_omg = 2
-    }
-    if ($("#quarter").val() === '3') {
-        average_omg = 3
-    }
-    if ($("#quarter").val() === '4') {
-        average_omg = 4
-    }
+    // if ($("#quarter").val() === '1') {
+    //     average_omg = 1
+    // }
+    // if ($("#quarter").val() === '2') {
+    //     average_omg = 2
+    // }
+    // if ($("#quarter").val() === '3') {
+    //     average_omg = 3
+    // }
+    // if ($("#quarter").val() === '4') {
+    //     average_omg = 4
+    // }
     if ($("#quarter").val() === '') {
         average_omg = getQuarter(new Date()) - 1
     }
@@ -218,7 +218,7 @@ let combine_information = (fetch_data) => {
                 }
             }
         }
-        console.log(item_unique);
+        // console.log(item_unique);
         for (let index = 0; index < item_unique.length; index++) {
             const element = item_unique[index]
             let kpi = element.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
@@ -232,7 +232,7 @@ let combine_information = (fetch_data) => {
             total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0)
             total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0)
             let cal_o = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
-            total_omg = cal_o / average_omg
+            total_omg = average_omg ? cal_o / average_omg : cal_o
             // if (element.user_id === 571) {
             //     console.log(total_omg,average_omg);
             //     console.log(total_omg/average_omg);
@@ -460,7 +460,7 @@ const month_quarter = () => {
     getWeigthConfig(config)
         .then(res => {
             if (res.status === 200) {
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 weigth_template = res.data.data
             }
         })
@@ -805,7 +805,6 @@ $('#list-invalid-modal').on('show.bs.modal', function (event) {
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
     var modal = $(this)
     modal.find('.modal-body #reload').removeClass('reload')
-    console.log(window.location.origin);
     modal.find('.modal-body ul').append(`<li><a href="${window.location.origin}/kpi/evaluation-review/${first}/edit" target="_blank" rel="noopener">${first_name}</a></li>
     <li><a href="${window.location.origin}/kpi/evaluation-review/${second}/edit" target="_blank" rel="noopener">${second_name}</a></li>`)
     // fetch rules filter

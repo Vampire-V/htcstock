@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\KPI\EvaluateReview;
 
 use App\Enum\KPIEnum;
+use App\Enum\UserEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\KPI\EvaluateResource;
 use App\Mail\KPI\EvaluationReviewMail;
@@ -17,6 +18,7 @@ use App\Services\KPI\Service\UserApproveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -129,7 +131,7 @@ class EvaluateReviewController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft, KPIEnum::on_process, KPIEnum::submit]);
+        $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft, KPIEnum::on_process]);
         DB::beginTransaction();
         try {
             $evaluate = $this->evaluateService->find($id);
@@ -154,7 +156,7 @@ class EvaluateReviewController extends Controller
             foreach ($request->detail as $value) {
                 $evaluate->evaluateDetail()
                     ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])
-                    ->update(['actual' => $value['actual']]);
+                    ->update(['actual' => $value['actual'],'target' => $value['target'],'remark' => $value['remark']]);
             }
             if ($request->next) {
                 // Approved
@@ -222,5 +224,51 @@ class EvaluateReviewController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+        /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function evaluateEdit(Request $request, $id)
+    {
+        $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft, KPIEnum::on_process]);
+        // dd($request->all());
+        if (Gate::denies(UserEnum::SUPERADMIN)) {
+            return $this->errorResponse("ไม่มีสิทธิ์", 500);
+        }
+        DB::beginTransaction();
+        try {
+            $evaluate = $this->evaluateService->find($id);
+
+            $detail = collect($request->detail);
+            $g = $detail->groupBy(fn ($item) => $item['rules']['category_id']);
+            $total = [];
+            foreach ($g as $value) {
+                $total[] = $value->reduce(function ($a, $b) {
+                    return $b['cal'] + $a;
+                }, 0);
+            }
+            $evaluate->cal_kpi = $total[0] ?? 0.00;
+            $evaluate->cal_key_task = $total[1] ?? 0.00;
+            $evaluate->cal_omg = $total[2] ?? 0.00;
+
+            foreach ($request->detail as $value) {
+                $evaluate->evaluateDetail()
+                    ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])
+                    ->update(['actual' => $value['actual'],'target' => $value['target'],'remark' => $value['remark']]);
+            }
+ 
+            $evaluate->save();
+            DB::commit();
+            return $this->successResponse(new EvaluateResource($evaluate->fresh()), "update success...", 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 }

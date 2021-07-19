@@ -70,6 +70,7 @@ class EvaluateDetail {
         base_line = 0.00,
         ach = 0.00,
         cal = 0.00,
+        remark = null
     ) {
         this.evaluate_id = evaluate_id
         this.rule_id = rule_id
@@ -84,6 +85,7 @@ class EvaluateDetail {
         this.base_line = base_line
         this.ach = ach
         this.cal = cal
+        this.remark = remark
     }
 }
 // KPI
@@ -116,6 +118,7 @@ var setEvaluate = (datas) => {
 var setDetail = (rule_temp) => {
     evaluateForm.detail = evaluateForm.detail.length > 0 ? [] : evaluateForm.detail
     rule_temp.forEach(element => {
+        console.log(element);
         let detail = new EvaluateDetail()
         detail.evaluate_id = element.evaluate_id ?? null
         detail.rule_id = element.rule_id
@@ -128,6 +131,7 @@ var setDetail = (rule_temp) => {
         detail.weight = element.weight
         detail.weight_category = element.weight_category
         detail.base_line = element.base_line
+        detail.remark = element.remark
         evaluateForm.detail.push(detail)
     })
     return evaluateForm

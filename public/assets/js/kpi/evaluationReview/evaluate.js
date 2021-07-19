@@ -27,19 +27,19 @@
                 })
                 .finally(() => {
                     render_html()
-                    // console.log(evaluateForm);
                     if (evaluateForm.current_level.user_approve.id === auth.id && evaluateForm.status === status.ONPROCESS) {
-                        
+                        pageEnable()
                     }else{
-                        if (auth.id === 113) {
+                        is_disable = auth.roles.findIndex(item => item.slug === 'super-admin') >= 0 ? false : true
+                        if (!is_disable) {
                             pageEnable()
                         }else{
                             pageDisable()
                         }
-                        
                     }
                 })
         }
+        console.log(evaluateForm);
     }, false);
 })();
 var evaluateForm = new EvaluateForm()
@@ -47,6 +47,7 @@ var template
 var rule = []
 var summary = []
 var disable_for = ['kpi','omg']
+let is_disable = false
 
 var render_html = () => {
     // create tr in table
@@ -63,7 +64,7 @@ var render_html = () => {
             const element = temp_rules[index]
             // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
             
-            let readonly = disable_for.includes(element.rules.categorys.name)
+            let readonly = disable_for.includes(element.rules.categorys.name) && is_disable
             try {
                 let newRow = table.tBodies[0].insertRow()
 
@@ -98,7 +99,7 @@ var render_html = () => {
                 cellWeight.appendChild(newInput('number', className, 'weight', element.weight.toFixed(2), '', `changeValue(this)`, true))
 
                 let cellTarget = newRow.insertCell()
-                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`, true))
+                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`, readonly))
 
                 let cellTargetPC = newRow.insertCell()
                 cellTargetPC.textContent = findTargetPercent(element,temp_rules).toFixed(2) + '%'
@@ -122,7 +123,8 @@ var render_html = () => {
                 setTooltipCal(cellCal, element)
                 cellCal.textContent = element.cal.toFixed(2) + '%'
 
-                let cellCheck = newRow.insertCell()
+                let remark = newRow.insertCell()
+                remark.appendChild(newInput('text', className, 'remark', element.remark ?? '', `remark_${element.rules.id}`, `remark(this)`, readonly))
                 // cellIndex.textContent = index + 1
                 // let cellCheck = newRow.insertCell()
                 // let div = document.createElement('div')
@@ -143,7 +145,10 @@ var render_html = () => {
                 // div.appendChild(label)
                 // cellCheck.appendChild(div)
             } catch (error) {
-                console.log(error)
+                console.error(error)
+                toast(error.response.data.message,'error')
+            } finally {
+                toastClear()
             }
         }
 
@@ -241,6 +246,15 @@ const changeValue = (e) => {
     })
 }
 
+const remark = (e) => {
+    evaluateForm.detail.forEach((element, key) => {
+        if (e.offsetParent.parentNode.cells[1].textContent === element.rules.name) {
+            // create new method formula 
+            element[e.name] = e.value
+        }
+    })
+}
+
 const reject = async (e) => {
     // Save & reject
     // /kpi/evaluation-review/update
@@ -308,4 +322,18 @@ const approve = (e) => {
             setVisible(false)
             toastClear()
         })
+}
+
+const save = async () => {
+    console.log(evaluateForm);
+    try {
+        let result = await putEvaluateReviewEdit(evaluate.id, evaluateForm)
+        console.log(result.data);
+        toast(result.data.message,result.data.status)
+    } catch (error) {
+        console.error(error)
+        toast(error.response.data.message,'error')
+    } finally {
+        toastClear()
+    }
 }

@@ -45,7 +45,7 @@
                 <div role="group" class="btn-group-sm btn-group">
                     <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}}
                         </span></h5>
-                        {{$evaluate->currentlevel->approveBy->name}}
+                    {{$evaluate->currentlevel->approveBy->name}}
                 </div>
             </div>
         </div>
@@ -131,7 +131,7 @@
                                 <th>Actual %</th>
                                 <th>%Ach</th>
                                 <th>%Cal</th>
-                                <th>#</th>
+                                <th>Remark</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -213,8 +213,14 @@
     </div>
 </div>
 <div class="page-title-actions fiexd-btn-botton">
+    @can('super-admin')
+    <button class="mb-2 mr-2 btn btn-success" onclick="save(this)">Save</button>
+    @endcan
+    @if ($evaluate->status !== 'Approved')
     <button class="mb-2 mr-2 btn btn-primary" onclick="approve(this)">Approve</button>
     <button class="mb-2 mr-2 btn btn-warning" onclick="reject(this)">Reject</button>
+    @endif
+
 </div>
 
 @endsection

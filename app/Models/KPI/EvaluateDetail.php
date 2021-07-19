@@ -19,23 +19,20 @@ class EvaluateDetail extends Model
         'max_result' => 'float',
         'actual' => 'float'
     ];
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    // protected $fillable = [
-    //     'evaluate_id',
-    //     'rule_id',
-    //     'target',
-    //     'actual',
-    //     'weight',
-    //     'weight_category',
-    //     'base_line',
-    //     'max_result'
-    // ];
 
     protected $guarded = [];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_by = \auth()->id();
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = \auth()->id();
+        });
+    }
 
     // service เรียกใช้ Filter
     public function scopeSetActualFilter(Builder $builder, $request)

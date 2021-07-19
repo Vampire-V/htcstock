@@ -31,7 +31,7 @@
                         pageEnable()
                     }else{
                         is_disable = auth.roles.findIndex(item => item.slug === 'super-admin') >= 0 ? false : true
-                        if (!is_disable) {
+                        if (!is_disable && (evaluateForm.status === status.ONPROCESS)) {
                             pageEnable()
                         }else{
                             pageDisable()

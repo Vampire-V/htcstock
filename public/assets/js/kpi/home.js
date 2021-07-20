@@ -142,10 +142,7 @@ const search_score = async () => {
         toastClear()
     }
 }
-let getQuarter = (date) => {
-    var month = date.getMonth() + 1;
-    return (Math.ceil(month / 3));
-  }
+
 let combine_information = (fetch_data) => {
     let data = [],average_omg
     // if ($("#quarter").val() === '1') {
@@ -160,10 +157,11 @@ let combine_information = (fetch_data) => {
     // if ($("#quarter").val() === '4') {
     //     average_omg = 4
     // }
-    if ($("#quarter").val() === '') {
-        average_omg = getQuarter(new Date()) - 1
-    }
+    
     if (document.getElementById('customSwitch1').checked) {
+        if ($("#quarter").val() === '') {
+            average_omg = getQuarterForHaier(new Date())
+        }
         // is quarter
         // New function for quarter
         // let group = res.data.data.reduce((r, a) => {
@@ -289,7 +287,7 @@ let combine_information = (fetch_data) => {
 let total_quarter = (objArr) => {
     const d = new Date();
     let temp = [],
-        quarter_all = $("#quarter").val() === '' ? d.getMonth() : 3
+        quarter_all = $("#quarter").val() === '' ? (d.getMonth()+1) - 1 : 3
     // console.log(quarter_all);
     try {
         for (var i = 0; i < objArr.length; i++) {

@@ -16,7 +16,7 @@
         // let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         // validationForm(forms)
-        console.log(evaluate)
+        let d = new Date()
         if (evaluate) {
             // evaluateForm = await setEvaluate(evaluate)
             let temp = []
@@ -47,7 +47,7 @@
             for (let index = 0; index < temp.length; index++) {
                 const element = temp[index]
                 // console.log(element);
-                element.weight = element.rule.category.name === `omg` ? element.weight : element.weight / 12
+                element.weight = element.rule.category.name === `omg` ? element.weight / getQuarterForHaier(d) : element.weight / (d.getMonth()+1) - 1
                 element.target = quarter_cal_target(element)
                 element.actual = quarter_cal_amount(element)
                 
@@ -56,55 +56,6 @@
             render_html()
             pageDisable()
         }
-        // if (evaluateForm.template) {
-        //     getTemplate(evaluateForm.template)
-        //         .then(res => {
-        //             if (res.status === 200) {
-        //                 template = res.data.data
-        //             }
-        //         })
-        //         .catch(error => {
-        //             toast(error.response.data.message, error.response.data.status)
-        //             console.log(error.response.data)
-        //         })
-        //         .finally(() => {
-        //             let temp = []
-        //             // console.log(evaluateForm.detail);
-        //             for (var i = 0; i < evaluateForm.detail.length; i++) {
-        //                 let item = evaluateForm.detail[i]
-        //                 if (temp.length < 1) {
-        //                     item.average_actual.push(item.actual)
-        //                     item.average_target.push(item.target)
-        //                     temp.push(item)
-        //                 } else {
-        //                     let t_index = temp.findIndex(t => t.rule_id === item.rule_id)
-        //                     if (t_index === -1) {
-        //                         item.average_actual.push(item.actual)
-        //                         item.average_target.push(item.target)
-        //                         temp.push(item)
-        //                     } else {
-        //                         temp[t_index].actual += item.actual
-        //                         temp[t_index].target += item.target
-        //                         temp[t_index].weight += item.weight
-        //                         temp[t_index].average_actual.push(item.actual)
-        //                         temp[t_index].average_target.push(item.target)
-        //                     }
-        //                 }
-        //             }
-                    
-        //             for (let index = 0; index < temp.length; index++) {
-        //                 const element = temp[index]
-        //                 // console.log(element);
-        //                 element.weight = element.rules.categorys.name === `omg` ? element.weight : element.weight / 3
-        //                 element.target = quarter_cal_target(element)
-        //                 element.actual = quarter_cal_amount(element)
-                        
-        //             }
-        //             evaluateForm.detail = temp
-        //             render_html()
-        //             pageDisable()
-        //         })
-        // }
     }, false);
 })();
 

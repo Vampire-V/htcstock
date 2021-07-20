@@ -22,6 +22,10 @@ var calculate = {
         SUM: "Sum"
     }
 className = ['form-control', 'form-control-sm']
+month_q1 = [1,2,3]
+month_q2 = [4,5,6]
+month_q3 = [7,8,9]
+month_q4 = [10,11,0]
 
 
 class EvaluateForm {
@@ -761,3 +765,23 @@ var score_setTooltipCal = (e, data) => {
     }
 }
 
+var getQuarter = (date) => {
+    var month = date.getMonth()
+    return (Math.ceil(month / 3))
+}
+
+var getQuarterForHaier = (date) => {
+    if (month_q1.includes(date.getMonth())) {
+        return 1
+    }
+    if (month_q2.includes(date.getMonth())) {
+        return 2
+    }
+    if (month_q3.includes(date.getMonth())) {
+        return 3
+    }
+    if (month_q4.includes(date.getMonth())) {
+        return 4
+    }
+    return 0
+}

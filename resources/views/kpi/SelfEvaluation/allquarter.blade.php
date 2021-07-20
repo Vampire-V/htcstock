@@ -20,7 +20,7 @@
             <div class="page-title-icon">
                 <i class="pe-7s-monitor icon-gradient bg-mean-fruit"> </i>
             </div>
-            <div>Self Evaluate
+            <div>Self Evaluate  <span style="color: red;">({{ __('validation.process_edit') }})</span>
                 <div class="page-title-subheading">This is an example self evaluate created using
                     build-in elements and components.
                 </div>

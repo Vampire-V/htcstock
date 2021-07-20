@@ -148,4 +148,9 @@ return [
 
     'attributes' => [],
 
+    /**
+     * Custom tao pipat
+     */
+
+    'process_edit' => 'อยู่ในขั้นตอนแก้ไข',
 ];

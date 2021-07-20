@@ -1,5 +1,7 @@
 @extends('layouts.app')
 @section('style')
+<link href="{{ asset('assets\filepond-master\dist\filepond.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-preview.min.css') }}" rel="stylesheet" />
 <style>
     .hide-progress {
         display: none;
@@ -73,28 +75,44 @@
                             Please provide a valid Unit.
                         </div>
                     </div>
-                    <div class="col-md-2 mb-2">
+                    <div class="col-md-7 mb-12">
                         <label for="validationEquipmentImage">{{ __('itstock.manage-accessorie.equipment-image') }}
                         </label>
-                        <input type="file" class="form-control-sm form-control" id="validationEquipmentImage"
-                            data-name="image" onchange="uploadFileEquipment(this)" >
-                        <div class="mb-3 progress hide-progress">
+                        <input type="file" class="filepond" id="validationEquipmentImage"
+                            data-name="image" name="file" data-allow-reorder="true" accept="image/png, image/jpeg, image/gif" >
+                        {{-- <div class="mb-3 progress hide-progress">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                 aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-                        </div>
-                        <input type="hidden" type="text" name="image" value="">
+                        </div> --}}
+                        {{-- <input type="hidden" type="text" name="image" value="">
                         <div class="invalid-feedback">
                             Please provide a valid Image Equipment.
-                        </div>
+                        </div> --}}
                     </div>
-                    <div class="col-md-5 mb-5">
+                    {{-- <div class="col-md-5 mb-5">
                         <img src="" alt="image.....">
-                    </div>
+                    </div> --}}
                 </div>
                 <button class="btn btn-primary" type="submit" style="margin-top: 5px">{{ __('itstock.manage-accessorie.submit-form') }}</button>
             </form>
-            <script src="{{asset('assets\js\transactions\accessorie.js')}}" defer></script>
+            
         </div>
     </div>
 </div>
 @stop
+
+@section('second-script')
+<script src="{{ asset('assets\filepond-master\dist\filepond.js') }}" defer></script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-file-encode.min.js') }}" defer></script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-file-validate-type.min.js') }}" defer>
+</script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-exif-orientation.min.js') }}" defer>
+</script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-preview.min.js') }}" defer></script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-crop.min.js') }}" defer></script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-resize.min.js') }}" defer></script>
+<script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-transform.min.js') }}" defer></script>
+<script>
+</script>
+<script src="{{asset('assets\js\transactions\accessorie.js')}}" defer></script>
+@endsection

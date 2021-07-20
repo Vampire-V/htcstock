@@ -9,6 +9,7 @@ use App\Services\IT\Interfaces\AccessoriesServiceInterface;
 use App\Services\IT\Interfaces\TransactionsServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class AccessoriesController extends Controller
 {
@@ -37,7 +38,7 @@ class AccessoriesController extends Controller
         }
     }
 
-        /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -78,7 +79,11 @@ class AccessoriesController extends Controller
     public function store(AccessorieFormRequest $request)
     {
         try {
-            $isCreate = $this->accessoriesService->create($request->except(['_token']));
+            $keys = array_keys($request->all());
+            $keys[array_search('file', $keys)] = 'image';
+            $newArr = array_combine($keys, $request->all());
+            unset($newArr['_token']);
+            $isCreate = $this->accessoriesService->create($newArr);
             if (!$isCreate) {
                 $request->session()->flash('error', ' has been create fail');
                 return \back();
@@ -127,11 +132,21 @@ class AccessoriesController extends Controller
     public function update(AccessorieFormRequest $request, $id)
     {
         try {
-            // \dd($request->equipment_image);
-            $isUpdate = $this->accessoriesService->update($request->except(['_token', '_method']), $id);
+            $accessorie = Accessories::find($id);
+            
+            $keys = array_keys($request->all());
+            $keys[array_search('file', $keys)] = 'image';
+            $newArr = array_combine($keys, $request->all());
+            unset($newArr['_token']);
+            unset($newArr['_method']);
+            
+            $isUpdate = $this->accessoriesService->update($newArr, $id);
             if (!$isUpdate) {
                 $request->session()->flash('error', ' has been update fail');
                 return \back();
+            }
+            if (Storage::disk('public')->exists($accessorie->image)) {
+                Storage::disk('public')->delete($accessorie->image);
             }
             $request->session()->flash('success', ' has been update success');
             return \redirect()->route('it.equipment.management.edit', $id);
@@ -154,11 +169,14 @@ class AccessoriesController extends Controller
                 Session::flash('error',  ' has been delete fail');
                 return \back();
             }
-
+            // dd($accessorie->image,Storage::disk('public')->exists($accessorie->image));
             $delete = $this->accessoriesService->destroy($id);
             if (!$delete) {
                 Session::flash('error',  ' has been delete fail');
                 return \back();
+            }
+            if (Storage::disk('public')->exists($accessorie->image)) {
+                Storage::disk('public')->delete($accessorie->image);
             }
             Session::flash('success',  ' has been delete');
             return \back();

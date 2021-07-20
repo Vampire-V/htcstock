@@ -288,7 +288,7 @@ let total_quarter = (objArr) => {
     const d = new Date();
     let temp = [],
         quarter_all = $("#quarter").val() === '' ? (d.getMonth()+1) - 1 : 3
-    // console.log(quarter_all);
+    //(d.getMonth()+1) - 1 จะมีปัญหา สิ้นปี
     try {
         for (var i = 0; i < objArr.length; i++) {
             let item = objArr[i]

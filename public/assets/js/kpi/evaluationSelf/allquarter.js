@@ -46,8 +46,10 @@
             
             for (let index = 0; index < temp.length; index++) {
                 const element = temp[index]
-                // console.log(element);
-                element.weight = element.rule.category.name === `omg` ? element.weight / getQuarterForHaier(d) : element.weight / (d.getMonth()+1) - 1
+                // สิ้นปี อาจมีปัญหา
+                let month_now = (d.getMonth() + 1) - 1
+                
+                element.weight = element.rule.category.name === `omg` ? element.weight / getQuarterForHaier(d) : element.weight / month_now
                 element.target = quarter_cal_target(element)
                 element.actual = quarter_cal_amount(element)
                 

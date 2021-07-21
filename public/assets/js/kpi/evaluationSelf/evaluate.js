@@ -41,7 +41,7 @@
                     }
                 })
         }
-        console.log(evaluateForm);
+        // console.log(evaluateForm);
     }, false);
 })();
 
@@ -65,7 +65,9 @@ var render_html = () => {
             const element = temp_rules[index]
             try {
                 let newRow = table.tBodies[0].insertRow()
-
+                if (element.weight <= 0.00) {
+                    newRow.classList.add(bg_color)
+                }
                 let cellIndex = newRow.insertCell()
                 cellIndex.textContent = index + 1
 
@@ -142,7 +144,7 @@ var render_html = () => {
                 div.appendChild(label)
                 cellCheck.appendChild(div)
             } catch (error) {
-                console.log(error)
+                console.error(error)
             }
         }
 
@@ -184,7 +186,7 @@ var render_html = () => {
 }
 
 const changeValue = (e) => {
-    console.log(evaluateForm.detail)
+    // console.log(evaluateForm.detail)
     evaluateForm.detail.forEach((element, key) => {
         if (e.offsetParent.parentNode.cells[1].textContent === element.rules.name) {
             // create new method formula 

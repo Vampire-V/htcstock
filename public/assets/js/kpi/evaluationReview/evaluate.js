@@ -66,7 +66,9 @@ var render_html = () => {
             let readonly = disable_for.includes(element.rules.categorys.name) && is_disable
             try {
                 let newRow = table.tBodies[0].insertRow()
-
+                if (element.weight <= 0.00) {
+                    newRow.classList.add(bg_color)
+                }
                 let cellIndex = newRow.insertCell()
                 cellIndex.textContent = index + 1
 

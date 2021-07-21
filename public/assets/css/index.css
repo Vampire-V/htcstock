@@ -88,3 +88,7 @@
     text-overflow: ellipsis;
     max-width: 150px;
   }
+
+  .color_weight {
+      background-color: #6c757d;
+  }

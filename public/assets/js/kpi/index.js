@@ -20,12 +20,13 @@ var calculate = {
         AVERAGE: "Average",
         LAST_MONTH: "Last Month",
         SUM: "Sum"
-    }
-className = ['form-control', 'form-control-sm']
-month_q1 = [1,2,3]
-month_q2 = [4,5,6]
-month_q3 = [7,8,9]
-month_q4 = [10,11,0]
+    },
+    className = ['form-control', 'form-control-sm']
+bg_color = 'color_weight',
+month_q1 = [1, 2, 3],
+month_q2 = [4, 5, 6],
+month_q3 = [7, 8, 9],
+month_q4 = [10, 11, 0]
 
 
 class EvaluateForm {
@@ -122,7 +123,6 @@ var setEvaluate = (datas) => {
 var setDetail = (rule_temp) => {
     evaluateForm.detail = evaluateForm.detail.length > 0 ? [] : evaluateForm.detail
     rule_temp.forEach(element => {
-        console.log(element);
         let detail = new EvaluateDetail()
         detail.evaluate_id = element.evaluate_id ?? null
         detail.rule_id = element.rule_id
@@ -259,7 +259,7 @@ var findActualPercent = (element, array) => {
             result = element.actual > parent.actual ? 0.00 : element.actual === 0.00 ? 0.00 : (element.actual / parent.actual) * 100
         }
         if (element.rules.calculate_type === calculate.NEGATIVE) {
-            result = parent.actual > element.actual ?  (element.actual / parent.actual) * 100 : 0.00
+            result = parent.actual > element.actual ? (element.actual / parent.actual) * 100 : 0.00
         }
         if (element.rules.calculate_type === calculate.ZERO) {
             // ไม่มี
@@ -277,7 +277,7 @@ var findActualPercent = (element, array) => {
             result = element.actual <= element.target ? 100.00 : 0.00
         }
     }
-    return element.actual_pc = result === Infinity || result === -Infinity ||  isNaN(result) ? 0.00 : result
+    return element.actual_pc = result === Infinity || result === -Infinity || isNaN(result) ? 0.00 : result
 }
 
 var findAchValue = (obj) => {
@@ -289,7 +289,7 @@ var findAchValue = (obj) => {
                     ach = obj.max
                 } else if (obj.actual === 0.00) {
                     ach = 0.00
-                }else{
+                } else {
                     ach = parseFloat((obj.actual / obj.target) * 100.00)
                 }
                 // ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)
@@ -304,9 +304,9 @@ var findAchValue = (obj) => {
                 //     if (obj.actual < obj.target) {
                 //         ach = obj.max_result ?? obj.max
                 //     } else {
-                        ach = parseFloat((2 - dd ) * 100.00)
-                        // console.log(obj.rules.name,ach);
-                    // }
+                ach = parseFloat((2 - dd) * 100.00)
+                // console.log(obj.rules.name,ach);
+                // }
                 // }else{
                 //     ach = 0.00
                 // }
@@ -324,7 +324,7 @@ var findAchValue = (obj) => {
                     ach = obj.max
                 } else if (obj.actual_pc === 0.00) {
                     ach = 0.00
-                }else{
+                } else {
                     ach = parseFloat((obj.actual_pc / obj.target_pc) * 100.00)
                 }
                 // ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((obj.actual_pc / obj.target_pc) * 100)
@@ -335,13 +335,13 @@ var findAchValue = (obj) => {
                 if (dd === -Infinity) {
                     dd = 0
                 }
-                ach = parseFloat((2 - dd ) * 100.00)
+                ach = parseFloat((2 - dd) * 100.00)
                 // if (obj.actual_pc !== 0.00) {
                 //     if (obj.actual_pc < obj.target_pc) {
                 //         ach = obj.max ?? obj.max_result
                 //     } else {
-                        // ach = parseFloat((2 - dd ) * 100.00)
-                        // console.log(obj.rules.name,ach);
+                // ach = parseFloat((2 - dd ) * 100.00)
+                // console.log(obj.rules.name,ach);
                 //     }
                 // }else{
                 //     ach = 0.00
@@ -701,7 +701,7 @@ var score_findCalValue = (obj, ach) => {
  * @params {EvaluateDetail} EvaluateDetail
  * @return void
  */
- var score_setTooltipAch = (e, data) => {
+var score_setTooltipAch = (e, data) => {
     if (data.rule.calculate_type === calculate.POSITIVE) {
         if (data.target_pc === 100) {
             setAttributes(e, {

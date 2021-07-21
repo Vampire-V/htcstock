@@ -292,10 +292,12 @@ let total_quarter = (objArr) => {
     try {
         for (var i = 0; i < objArr.length; i++) {
             let item = objArr[i]
+            item.average_max = []
             item.average_weight = []
             item.average_actual = []
             item.average_target = []
             if (temp.length < 1) {
+                item.average_max.push(item.max_result)
                 item.average_weight.push(item.weight)
                 item.average_actual.push(item.actual)
                 item.average_target.push(item.target)
@@ -303,11 +305,13 @@ let total_quarter = (objArr) => {
             } else {
                 let t_index = temp.findIndex(t => t.rule_id === item.rule_id)
                 if (t_index === -1) {
+                    item.average_max.push(item.max_result)
                     item.average_weight.push(item.weight)
                     item.average_actual.push(item.actual)
                     item.average_target.push(item.target)
                     temp.push(item)
                 } else {
+                    temp[t_index].average_max.push(item.max_result)
                     temp[t_index].average_weight.push(item.weight)
                     temp[t_index].average_actual.push(item.actual)
                     temp[t_index].average_target.push(item.target)
@@ -321,6 +325,7 @@ let total_quarter = (objArr) => {
     try {
         for (let index = 0; index < temp.length; index++) {
             const element = temp[index]
+            element.max_result = element.average_max[element.average_max.length - 1]
             element.weight = element.rule.category.name === `omg` ? element.average_weight.reduce((a, b) => a + b, 0) : element.average_weight.reduce((a, b) => a + b, 0) / quarter_all
             element.target = score_quarter_cal_target(element)
             element.actual = score_quarter_cal_amount(element)

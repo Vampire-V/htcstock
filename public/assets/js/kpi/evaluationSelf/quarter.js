@@ -16,21 +16,24 @@
         // let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         // validationForm(forms)
-        console.log(evaluate)
+        // console.log(evaluate.evaluateDetail)
         if (evaluate) {
             // evaluateForm = await setEvaluate(evaluate)
             let temp = []
             for (var i = 0; i < evaluate.evaluateDetail.length; i++) {
                 let item = evaluate.evaluateDetail[i]
+                item.average_max = []
                 item.average_actual = []
                 item.average_target = []
                 if (temp.length < 1) {
+                    item.average_max.push(item.max_result)
                     item.average_actual.push(item.actual)
                     item.average_target.push(item.target)
                     temp.push(item)
                 } else {
                     let t_index = temp.findIndex(t => t.rule_id === item.rule_id)
                     if (t_index === -1) {
+                        item.average_max.push(item.max_result)
                         item.average_actual.push(item.actual)
                         item.average_target.push(item.target)
                         temp.push(item)
@@ -38,15 +41,16 @@
                         temp[t_index].actual += item.actual
                         temp[t_index].target += item.target
                         temp[t_index].weight += item.weight
+                        temp[t_index].average_max.push(item.max_result)
                         temp[t_index].average_actual.push(item.actual)
                         temp[t_index].average_target.push(item.target)
                     }
                 }
             }
-            
+            // console.log(temp);
             for (let index = 0; index < temp.length; index++) {
                 const element = temp[index]
-                // console.log(element);
+                element.max_result = element.average_max[element.average_max.length - 1]
                 element.weight = element.rule.category.name === `omg` ? element.weight : element.weight / 3
                 element.target = quarter_cal_target(element)
                 element.actual = quarter_cal_amount(element)
@@ -240,5 +244,9 @@ var render_html = () => {
     summary_table.tFoot.rows[0].cells[2].textContent = `${total.toFixed(2)} %`
     summary_table.tFoot.rows[0].cells[1].textContent = `${sum_weight.toFixed(2)} %`
     $('[data-toggle="tooltip"]').tooltip()
+}
+
+const download = () => {
+    window.open(`/kpi/evaluation/user/${evaluate.user_id}/quarter/${evaluate.targetperiod.quarter}/year/${evaluate.targetperiod.year}/excel`, "_blank");
 }
 

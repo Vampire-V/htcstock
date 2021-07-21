@@ -24,11 +24,11 @@
             <td>{{$rule->rule->name}}</td>
             <td>{{$rule->rule->description}}</td>
             <td>{{$rule->base_line}}</td>
-            <td>{{$rule->max_result}}</td>
-            <td>{{$rule->weight}}</td>
-            <td>{{$rule->target}}</td>
+            <td>{{round($rule->max_result,2)}}</td>
+            <td>{{round($rule->weight,2)}}</td>
+            <td>{{round($rule->target,2)}}</td>
             <td>{{round($rule->target_pc,2)}}</td>
-            <td>{{$rule->actual}}</td>
+            <td>{{round($rule->actual,2)}}</td>
             <td>{{round($rule->actual_pc,2)}}</td>
             <td>{{round($rule->ach, 2)}}</td>
             <td>{{round($rule->cal, 2)}}</td>
@@ -60,7 +60,7 @@
 
 {{-- Calculation Summary --}}
 @php
-    $total = [];
+$total = [];
 @endphp
 <table>
     <thead>

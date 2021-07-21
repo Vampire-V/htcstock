@@ -464,10 +464,10 @@ class SelfEvaluationController extends Controller
                 $target = $this->quarter_cal_target($item);
                 $actual = $this->quarter_cal_actual($item);
                 $item->each(function ($value) use ($max, $weight, $target, $actual) {
-                    $value->max_result = \round($max,2);
-                    $value->weight = \round($weight,2);
-                    $value->target = \round($target,2);
-                    $value->actual = \round($actual,2);
+                    $value->max_result = $max;
+                    $value->weight = $weight;
+                    $value->target = $target;
+                    $value->actual = $actual;
                 });
             });
             $detail = \collect();
@@ -499,10 +499,10 @@ class SelfEvaluationController extends Controller
                 $target = $this->quarter_cal_target($item);
                 $actual = $this->quarter_cal_actual($item);
                 $item->each(function ($value) use ($max, $weight, $target, $actual) {
-                    $value->max_result = \round($max,2);
-                    $value->weight = \round($weight,2);
-                    $value->target = \round($target,2);
-                    $value->actual = \round($actual,2);
+                    $value->max_result = $max;
+                    $value->weight = $weight;
+                    $value->target = $target;
+                    $value->actual = $actual;
                 });
             });
             $detail = \collect();

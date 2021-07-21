@@ -22,6 +22,9 @@
             let temp = []
             for (var i = 0; i < evaluate.evaluateDetail.length; i++) {
                 let item = evaluate.evaluateDetail[i]
+                if (item.rule_id === 588) {
+                    console.log(item.id,item.max_result);
+                }
                 item.average_max = []
                 item.average_actual = []
                 item.average_target = []

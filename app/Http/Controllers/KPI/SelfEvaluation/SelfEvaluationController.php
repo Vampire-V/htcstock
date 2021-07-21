@@ -4,13 +4,16 @@ namespace App\Http\Controllers\KPI\SelfEvaluation;
 
 use App\Enum\KPIEnum;
 use App\Exports\KPI\EvaluateExport;
+use App\Exports\KPI\EvaluateQuarterExport;
 use App\Exports\KPI\EvaluatesExport;
+use App\Exports\KPI\EvaluateYearExport;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait;
 use App\Http\Resources\KPI\EvaluateDetailResource;
 use App\Http\Resources\KPI\EvaluateResource;
 use App\Mail\KPI\EvaluationSelfMail;
 use App\Models\KPI\Evaluate;
+use App\Models\KPI\EvaluateDetail;
 use App\Models\KPI\RuleTemplate;
 use App\Models\User;
 use App\Services\IT\Interfaces\UserServiceInterface;
@@ -30,6 +33,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Response;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SelfEvaluationController extends Controller
@@ -38,6 +42,8 @@ class SelfEvaluationController extends Controller
     protected $evaluateService, $evaluateDetailService, $userService,
         $categoryService, $templateService, $ruleService, $periodService,
         $ruleTemplateService, $setting_action_service, $userApproveService;
+
+
     public function __construct(
         EvaluateServiceInterface $evaluateServiceInterface,
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
@@ -158,12 +164,12 @@ class SelfEvaluationController extends Controller
             }
             // New version รออัพเดท ข้อมูล
             $detail = collect($request->detail);
-            $g = $detail->groupBy(fn($item) => $item['rules']['category_id']);
+            $g = $detail->groupBy(fn ($item) => $item['rules']['category_id']);
             $total = [];
             foreach ($g as $value) {
-                $total[] = $value->reduce(function($a,$b)  {
+                $total[] = $value->reduce(function ($a, $b) {
                     return $b['cal'] + $a;
-                },0);
+                }, 0);
             }
             $evaluate->cal_kpi = $total[0] ?? 0.00;
             $evaluate->cal_key_task = $total[1] ?? 0.00;
@@ -345,18 +351,6 @@ class SelfEvaluationController extends Controller
         }
     }
 
-    public function excelevaluate(Request $request)
-    {
-        try {
-            $filename = Hash::make('testsetest') . '-test.xlsx';
-            Excel::store(new EvaluatesExport($request), $filename);
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-        return $this->successResponse($filename, 'excel', 200);
-    }
-
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -386,7 +380,7 @@ class SelfEvaluationController extends Controller
         return \view('kpi.SelfEvaluation.quarter', \compact('evaluate', 'category', 'quarter_weight'));
     }
 
-        /**
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $user
@@ -405,7 +399,7 @@ class SelfEvaluationController extends Controller
                 }
             });
             $evaluate = $evaluate_quarter->first();
-            
+
             $evaluate->evaluateDetail = $detail;
             $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
             // $evaluate  = new EvaluateResource($evaluate);
@@ -453,5 +447,125 @@ class SelfEvaluationController extends Controller
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
+    }
+
+    public function evaluateQuarterExcel($user, $quarter, $year)
+    {
+        try {
+            $detail = \collect();
+            $evaluate_quarter = $this->evaluateService->forQuarterYear($user, $quarter, $year);
+
+            $evaluate_quarter->each(function ($item) use ($detail) {
+                $item->evaluateDetail->each(fn ($value) => $detail->add($value));
+            });
+            $new = $detail->groupBy('rule_id')->each(function ($item) {
+                $max = $item->last()->max_result;
+                $weight = $item->last()->rule->category->name === 'omg' ? $item->sum('weight') : $item->sum('weight') / 3;
+                $target = $this->quarter_cal_target($item);
+                $actual = $this->quarter_cal_actual($item);
+                $item->each(function ($value) use ($max, $weight, $target, $actual) {
+                    $value->max_result = \round($max,2);
+                    $value->weight = \round($weight,2);
+                    $value->target = \round($target,2);
+                    $value->actual = \round($actual,2);
+                });
+            });
+            $detail = \collect();
+            $new->each(function ($item) use ($detail) {
+                $detail->add($item->unique('rule_id')->first());
+            });
+
+            $this->calculation_detail($detail);
+            $user = $this->userService->find($user);
+            return Excel::download(new EvaluateQuarterExport($user, $detail), "Evaluate-quarter-" . $user->name . ".xlsx");
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    public function evaluateYearExcel($user, $year)
+    {
+
+        try {
+            $detail = \collect();
+            $evaluate_quarter = $this->evaluateService->forYear($user, $year);
+
+            $evaluate_quarter->each(function ($item) use ($detail) {
+                $item->evaluateDetail->each(fn ($value) => $detail->add($value));
+            });
+            $new = $detail->groupBy('rule_id')->each(function ($item) {
+                $max = $item->last()->max_result;
+                $weight = $item->last()->rule->category->name === 'omg' ? $item->sum('weight') / $this->check_quarter($this->get_month_haier()) : $item->sum('weight') / $this->get_month_haier();
+                $target = $this->quarter_cal_target($item);
+                $actual = $this->quarter_cal_actual($item);
+                $item->each(function ($value) use ($max, $weight, $target, $actual) {
+                    $value->max_result = \round($max,2);
+                    $value->weight = \round($weight,2);
+                    $value->target = \round($target,2);
+                    $value->actual = \round($actual,2);
+                });
+            });
+            $detail = \collect();
+            $new->each(function ($item) use ($detail) {
+                $detail->add($item->unique('rule_id')->first());
+            });
+
+            $this->calculation_detail($detail);
+            $user = $this->userService->find($user);
+            return Excel::download(new EvaluateYearExport($user, $detail), "Evaluate-year-" . $user->name . ".xlsx");
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    private function quarter_cal_target(Collection $items)
+    {
+        if ($items->first()->rule->quarter_cal === KPIEnum::average) {
+            return $items->avg('target');
+        }
+        if ($items->first()->rule->quarter_cal === KPIEnum::last_month) {
+            return $items->last()->target;
+        }
+        if ($items->first()->rule->quarter_cal === KPIEnum::sum) {
+            return $items->sum('target');
+        }
+    }
+
+    private function quarter_cal_actual(Collection $items)
+    {
+        if ($items->first()->rule->quarter_cal === KPIEnum::average) {
+            return $items->avg('actual');
+        }
+        if ($items->first()->rule->quarter_cal === KPIEnum::last_month) {
+            return $items->last()->actual;
+        }
+        if ($items->first()->rule->quarter_cal === KPIEnum::sum) {
+            return $items->sum('actual');
+        }
+    }
+
+    private function check_quarter($date)
+    {
+        $month_q1 = \collect([2, 3, 4]);
+        $month_q2 = \collect([5, 6, 7]);
+        $month_q3 = \collect([8, 9, 10]);
+        $month_q4 = \collect([11, 12, 1]);
+        if ($month_q1->contains($date)) {
+            return 1;
+        }
+        if ($month_q2->contains($date)) {
+            return 2;
+        }
+        if ($month_q3->contains($date)) {
+            return 3;
+        }
+        if ($month_q4->contains($date)) {
+            return 4;
+        }
+    }
+
+    private function get_month_haier()
+    {
+       return intval(date('n', strtotime('-1 month')));
     }
 }

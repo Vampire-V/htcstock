@@ -4,7 +4,7 @@ namespace App\Exports\KPI;
 
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\RuleCategory;
-use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
+// use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromView;

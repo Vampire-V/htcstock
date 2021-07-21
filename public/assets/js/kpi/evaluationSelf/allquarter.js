@@ -206,3 +206,7 @@ var render_html = () => {
     $('[data-toggle="tooltip"]').tooltip()
 }
 
+const download = () => {
+    window.open(`/kpi/evaluation/user/${evaluate.user_id}/year/${evaluate.targetperiod.year}/excel`, "_blank");
+}
+

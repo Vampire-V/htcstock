@@ -214,6 +214,9 @@
         <div class="page-title-heading">
         </div>
         <div class="page-title-actions">
+            @can('admin-kpi')
+            <button class="mb-2 mr-2 btn btn-alternate no-disable" onclick="download()">Download</button>
+            @endcan
             {{-- <button class="mb-2 mr-2 btn btn-primary" id="submit" onclick="submit()">Save</button>
             <button class="mb-2 mr-2 btn btn-success" id="submit-to-user" onclick="submitToManager()">Save & Send to
                 manager</button> --}}

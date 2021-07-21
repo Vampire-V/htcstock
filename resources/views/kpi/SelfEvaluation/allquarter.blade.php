@@ -7,10 +7,6 @@
     label {
         font-weight: bold;
     }
-
-    label span {
-        color: red;
-    }
 </style>
 @endsection
 @section('content')
@@ -20,7 +16,7 @@
             <div class="page-title-icon">
                 <i class="pe-7s-monitor icon-gradient bg-mean-fruit"> </i>
             </div>
-            <div>Self Evaluate  <span style="color: red;">({{ __('validation.process_edit') }})</span>
+            <div>Self Evaluate 
                 <div class="page-title-subheading">This is an example self evaluate created using
                     build-in elements and components.
                 </div>
@@ -214,6 +210,9 @@
         <div class="page-title-heading">
         </div>
         <div class="page-title-actions">
+            @can('admin-kpi')
+            <button class="mb-2 mr-2 btn btn-alternate no-disable" onclick="download()">Download</button>
+            @endcan
             {{-- <button class="mb-2 mr-2 btn btn-primary" id="submit" onclick="submit()">Save</button>
             <button class="mb-2 mr-2 btn btn-success" id="submit-to-user" onclick="submitToManager()">Save & Send to
                 manager</button> --}}

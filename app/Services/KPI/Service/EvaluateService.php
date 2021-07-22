@@ -25,19 +25,21 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
         parent::__construct($model);
     }
 
-    public function findId($id)
-    {
-        try {
-            return Evaluate::with([
-                'user',
-                'targetperiod',
-                'template' => fn ($q) => $q->with(['ruleTemplate' => fn ($q) => $q->with(['rule' => fn ($q) => $q->with('category')])]),
-                'evaluateDetail' => fn ($q) => $q->with(['rule' => fn ($q) => $q->with('category')])
-            ])->find($id);
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    }
+    // public function findId($id)
+    // {
+    //     try {
+    //         return Evaluate::with([
+    //             'user',
+    //             'targetperiod',
+    //             'template' => function ($q) {
+    //                 return $q->with(['ruleTemplate' => fn ($q) => $q->with(['rule' => fn ($q) => $q->with('category')])]);
+    //             },
+    //             'evaluateDetail' => fn ($q) => $q->with(['rule' => fn ($q) => $q->with('category')])
+    //         ])->find($id);
+    //     } catch (\Throwable $th) {
+    //         throw $th;
+    //     }
+    // }
 
     public function all(): Builder
     {

@@ -13,7 +13,7 @@ interface EvaluateServiceInterface
     public function all(): Builder;
     public function create(array $attributes): Model;
     public function find($id): Model;
-    public function findId($id);
+    // public function findId($id);
 
     public function update(array $attributes, int $id): bool;
     public function destroy($id);

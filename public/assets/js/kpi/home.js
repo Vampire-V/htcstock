@@ -834,7 +834,8 @@ $('#list-invalid-modal').on('show.bs.modal', async function (event) {
     let all = button.data('arr')
     let rule_name = button.data('rulename')
     var modal = $(this)
-    modal.find('#rule-modal-label').val(rule_name)
+    console.log(modal.find('#rule-modal-label'));
+    modal.find('#rule-modal-label').text(rule_name)
     await fetch_evaluate_modal(all,modal.find('.modal-body ul')[0])
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.

@@ -681,7 +681,8 @@ const findLastValue = (name,array, key) => {
              data-target="#list-invalid-modal" >error..</span>`
         }
     }
-    return result
+    return `<span style="cursor: pointer; " data-toggle="modal" data-arr="${array.map(el => el.evaluate_id).join(",")}" data-rulename="${name}"
+    data-target="#list-invalid-modal" >${result}</span>`
 }
 
 const render_staff_evaluate = async () => {

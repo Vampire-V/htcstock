@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!active_tab) {
         window.localStorage.setItem('tab-dashboard', `tab-c-1`)
         active_tab = localStorage.getItem('tab-dashboard')
-    } 
+    }
     let ele_active = document.getElementById(active_tab)
     let scope = ele_active.parentNode.parentNode.parentNode
     for (let index = 0; index < scope.firstElementChild.children.length; index++) {
@@ -144,7 +144,8 @@ const search_score = async () => {
 }
 
 let combine_information = (fetch_data) => {
-    let data = [],average_omg
+    let data = [],
+        average_omg
     // if ($("#quarter").val() === '1') {
     //     average_omg = 1
     // }
@@ -157,7 +158,7 @@ let combine_information = (fetch_data) => {
     // if ($("#quarter").val() === '4') {
     //     average_omg = 4
     // }
-    
+
     if (document.getElementById('customSwitch1').checked) {
         if ($("#quarter").val() === '') {
             average_omg = getQuarterForHaier(new Date())
@@ -287,7 +288,7 @@ let combine_information = (fetch_data) => {
 let total_quarter = (objArr) => {
     const d = new Date();
     let temp = [],
-        quarter_all = $("#quarter").val() === '' ? (d.getMonth()+1) - 1 : 3
+        quarter_all = $("#quarter").val() === '' ? (d.getMonth() + 1) - 1 : 3
     //(d.getMonth()+1) - 1 จะมีปัญหา สิ้นปี
     try {
         for (var i = 0; i < objArr.length; i++) {
@@ -631,53 +632,53 @@ const rules_data_to_table = (data) => {
         name.setAttribute('title', rule.name)
         name.textContent = rule.name
 
-        jan_target.innerHTML = findLastValue(rule.total[0], 'target')
-        jan_actual.innerHTML = findLastValue(rule.total[0], 'actual')
+        jan_target.innerHTML = findLastValue(rule.name,rule.total[0], 'target')
+        jan_actual.innerHTML = findLastValue(rule.name,rule.total[0], 'actual')
 
-        feb_target.innerHTML = findLastValue(rule.total[1], 'target')
-        feb_actual.innerHTML = findLastValue(rule.total[1], 'actual')
+        feb_target.innerHTML = findLastValue(rule.name,rule.total[1], 'target')
+        feb_actual.innerHTML = findLastValue(rule.name,rule.total[1], 'actual')
 
-        mar_target.innerHTML = findLastValue(rule.total[2], 'target')
-        mar_actual.innerHTML = findLastValue(rule.total[2], 'actual')
+        mar_target.innerHTML = findLastValue(rule.name,rule.total[2], 'target')
+        mar_actual.innerHTML = findLastValue(rule.name,rule.total[2], 'actual')
 
-        apr_target.innerHTML = findLastValue(rule.total[3], 'target')
-        apr_actual.innerHTML = findLastValue(rule.total[3], 'actual')
+        apr_target.innerHTML = findLastValue(rule.name,rule.total[3], 'target')
+        apr_actual.innerHTML = findLastValue(rule.name,rule.total[3], 'actual')
 
-        may_target.innerHTML = findLastValue(rule.total[4], 'target')
-        may_actual.innerHTML = findLastValue(rule.total[4], 'actual')
+        may_target.innerHTML = findLastValue(rule.name,rule.total[4], 'target')
+        may_actual.innerHTML = findLastValue(rule.name,rule.total[4], 'actual')
 
-        jun_target.innerHTML = findLastValue(rule.total[5], 'target')
-        jun_actual.innerHTML = findLastValue(rule.total[5], 'actual')
+        jun_target.innerHTML = findLastValue(rule.name,rule.total[5], 'target')
+        jun_actual.innerHTML = findLastValue(rule.name,rule.total[5], 'actual')
 
-        jul_target.innerHTML = findLastValue(rule.total[6], 'target')
-        jul_actual.innerHTML = findLastValue(rule.total[6], 'actual')
+        jul_target.innerHTML = findLastValue(rule.name,rule.total[6], 'target')
+        jul_actual.innerHTML = findLastValue(rule.name,rule.total[6], 'actual')
 
-        aug_target.innerHTML = findLastValue(rule.total[7], 'target')
-        aug_actual.innerHTML = findLastValue(rule.total[7], 'actual')
+        aug_target.innerHTML = findLastValue(rule.name,rule.total[7], 'target')
+        aug_actual.innerHTML = findLastValue(rule.name,rule.total[7], 'actual')
 
-        sep_target.innerHTML = findLastValue(rule.total[8], 'target')
-        sep_actual.innerHTML = findLastValue(rule.total[8], 'actual')
+        sep_target.innerHTML = findLastValue(rule.name,rule.total[8], 'target')
+        sep_actual.innerHTML = findLastValue(rule.name,rule.total[8], 'actual')
 
-        oct_target.innerHTML = findLastValue(rule.total[9], 'target')
-        oct_actual.innerHTML = findLastValue(rule.total[9], 'actual')
+        oct_target.innerHTML = findLastValue(rule.name,rule.total[9], 'target')
+        oct_actual.innerHTML = findLastValue(rule.name,rule.total[9], 'actual')
 
-        nov_target.innerHTML = findLastValue(rule.total[10], 'target')
-        nov_actual.innerHTML = findLastValue(rule.total[10], 'actual')
+        nov_target.innerHTML = findLastValue(rule.name,rule.total[10], 'target')
+        nov_actual.innerHTML = findLastValue(rule.name,rule.total[10], 'actual')
 
-        dec_target.innerHTML = findLastValue(rule.total[11], 'target')
-        dec_actual.innerHTML = findLastValue(rule.total[11], 'actual')
+        dec_target.innerHTML = findLastValue(rule.name,rule.total[11], 'target')
+        dec_actual.innerHTML = findLastValue(rule.name,rule.total[11], 'actual')
     }
 }
 
-const findLastValue = (array, key) => {
+const findLastValue = (name,array, key) => {
     let result = 0.00
     for (let i = 0; i < array.length; i++) {
         const element = array[i]
         if (array[0][key] === element[key]) {
             result = element[key]
         } else {
-            return `<span style="cursor: pointer; color:red;" data-toggle="modal" data-first="${array[0].evaluate_id}" data-second="${element.evaluate_id}"
-            data-namefirst="${array[0].evaluate.user.name}" data-namesecond="${element.evaluate.user.name}" data-target="#list-invalid-modal" >error..</span>`
+            return `<span style="cursor: pointer; color:red;" data-toggle="modal" data-arr="${array.map(el => el.evaluate_id).join(",")}" data-rulename="${name}"
+             data-target="#list-invalid-modal" >error..</span>`
         }
     }
     return result
@@ -797,20 +798,48 @@ const calculator_evaluate_of_month = (month, array) => {
     return (sum_total / 100).toFixed(2)
 }
 
+const fetch_evaluate_modal = async (datas,el) => {
+    let result
+    try {
+        result = await getEvaluateReviewIn({
+            params: {
+                evaluate: datas
+            }
+        })
+    } catch (error) {
+        console.error(error);
+    } finally {
+        if (result.status === 200) {
+            // let link
+            for (let index = 0; index < result.data.data.length; index++) {
+                const element = result.data.data[index]
+                console.log(element);
+                let li = document.createElement("LI")
+                let a = document.createElement("A")
+                a.target = "_blank"
+                a.href = `${window.location.origin}/kpi/evaluation-review/${element.id}/edit`
+                a.rel = "noopener"
+                a.textContent = element.user.name
+                li.appendChild(a)
+                el.appendChild(li)
+                // link += `<li><a href="${window.location.origin}/kpi/evaluation-review/${element.id}/edit" target="_blank" rel="noopener">${element.user_id}</a></li>`
+            }
+            // console.log(link);
+        }
+    }
+}
 // modal method
-$('#list-invalid-modal').on('show.bs.modal', function (event) {
+$('#list-invalid-modal').on('show.bs.modal', async function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
-    let first = button.data('first') // Extract info from data-* attributes
-    let second = button.data('second') // Extract info from data-* attributes
-    let first_name = button.data('namefirst') // Extract info from data-* attributes
-    let second_name = button.data('namesecond') // Extract info from data-* attributes
+    let all = button.data('arr')
+    let rule_name = button.data('rulename')
+    var modal = $(this)
+    modal.find('#rule-modal-label').val(rule_name)
+    await fetch_evaluate_modal(all,modal.find('.modal-body ul')[0])
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-    var modal = $(this)
+    
     modal.find('.modal-body #reload').removeClass('reload')
-    modal.find('.modal-body ul').append(`<li><a href="${window.location.origin}/kpi/evaluation-review/${first}/edit" target="_blank" rel="noopener">${first_name}</a></li>
-    <li><a href="${window.location.origin}/kpi/evaluation-review/${second}/edit" target="_blank" rel="noopener">${second_name}</a></li>`)
-    // fetch rules filter
 })
 
 $('#list-invalid-modal').on('hide.bs.modal', function (event) {

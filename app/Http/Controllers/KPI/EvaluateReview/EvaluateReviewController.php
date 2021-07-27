@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\KPI\EvaluateResource;
 use App\Mail\KPI\EvaluationReviewMail;
 use App\Mail\KPI\EvaluationSelfMail;
+use App\Models\KPI\Evaluate;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
@@ -156,7 +157,7 @@ class EvaluateReviewController extends Controller
             foreach ($request->detail as $value) {
                 $evaluate->evaluateDetail()
                     ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])
-                    ->update(['actual' => $value['actual'],'target' => $value['target'],'remark' => $value['remark']]);
+                    ->update(['actual' => $value['actual'], 'target' => $value['target'], 'remark' => $value['remark']]);
             }
             if ($request->next) {
                 // Approved
@@ -226,7 +227,7 @@ class EvaluateReviewController extends Controller
         //
     }
 
-        /**
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -259,14 +260,26 @@ class EvaluateReviewController extends Controller
             foreach ($request->detail as $value) {
                 $evaluate->evaluateDetail()
                     ->where(['rule_id' => $value['rule_id'], 'evaluate_id' => $value['evaluate_id']])
-                    ->update(['actual' => $value['actual'],'target' => $value['target'],'remark' => $value['remark']]);
+                    ->update(['actual' => $value['actual'], 'target' => $value['target'], 'remark' => $value['remark']]);
             }
- 
+
             $evaluate->save();
             DB::commit();
             return $this->successResponse(new EvaluateResource($evaluate->fresh()), "update success...", 201);
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    public function evaluateReviewErrors(Request $request)
+    {
+        $ids = explode(",", $request->evaluate);
+        try {
+            $result = Evaluate::with('user')->whereIn('id',[...$ids])->get();
+            return $this->successResponse($result, "query success...", 200);
+        } catch (\Exception $e) {
             Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
             return $this->errorResponse($e->getMessage(), 500);
         }

@@ -27,6 +27,7 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
 
     Route::resource('evaluation-review', 'EvaluateReview\EvaluateReviewController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
     Route::put('evaluation-review/{id}/evaluateEdit','EvaluateReview\EvaluateReviewController@evaluateEdit');
+    Route::get('errors/evaluation-review','EvaluateReview\EvaluateReviewController@evaluateReviewErrors');
 
     Route::resource('rule-list', 'Rule\RuleController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
     Route::get('rule-dropdown/{group}', 'Rule\RuleController@dropdown')->name('rule-dropdown');

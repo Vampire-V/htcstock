@@ -132,6 +132,8 @@ const getEvaluateSelf = (staff, period, evaluate) => axios({
     url: `/kpi/evaluation-form/staff/${staff}/edit/period/${period}/evaluate/${evaluate}`
 })
 
+const getEvaluateReviewIn = (filter) => axios.get('/kpi/errors/evaluation-review', filter)
+
 const putEvaluateReview = (review_evaluation, form) => axios({
     method: 'PUT',
     responseType: 'json',

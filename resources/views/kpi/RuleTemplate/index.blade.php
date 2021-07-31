@@ -3,11 +3,11 @@
 @include('includes.sidebar.kpi')
 @stop
 @section('style')
-    <style>
-        label {
-            font-weight: bold;
-        }
-    </style>
+<style>
+    label {
+        font-weight: bold;
+    }
+</style>
 @endsection
 @section('content')
 <div class="app-page-title">
@@ -117,7 +117,20 @@
                             <td>{{$template->department->name}}</td>
                             <td><a href="{{route('kpi.template.edit',[$template->id])}}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
-                                </a></td>
+                                </a>
+                                <a href="{{ route('kpi.template.destroy',['template' => $template->id]) }}">
+                                    <button type="button"
+                                    onclick="event.preventDefault();
+                                    document.getElementById('delete-template-form').submit();"
+                                    class="btn btn-sm btn-danger">Delete</button>
+                                </a>
+                                
+                                <form id="delete-template-form" action="{{ route('kpi.template.destroy',['template' => $template->id]) }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </td>
                         </tr>
                         @endforeach
                         @endisset

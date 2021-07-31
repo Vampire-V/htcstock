@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 class TemplateController extends Controller
 {
     protected $templateService, $ruleTemplateService, $departmentService,
-    $categoryService;
+        $categoryService;
     public function __construct(
         TemplateServiceInterface $templateServiceInterface,
         RuleTemplateServiceInterface $ruleTemplateServiceInterface,
@@ -62,7 +62,7 @@ class TemplateController extends Controller
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
-        return \view('kpi.RuleTemplate.Template.create', \compact('departments','category'));
+        return \view('kpi.RuleTemplate.Template.create', \compact('departments', 'category'));
     }
 
     /**
@@ -118,7 +118,7 @@ class TemplateController extends Controller
     {
         $template = new TemplateResource($this->templateService->find($id));
         $category = $this->categoryService->dropdown();
-        return \view('kpi.RuleTemplate.Template.edit', \compact('template','category'));
+        return \view('kpi.RuleTemplate.Template.edit', \compact('template', 'category'));
     }
 
     /**
@@ -141,7 +141,17 @@ class TemplateController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $template = $this->templateService->find($id);
+            $template->remove = 'Y';
+            $template->save();
+            DB::commit();
+            return \redirect()->back();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
     }
 
     /**
@@ -172,7 +182,7 @@ class TemplateController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update_dynamic(Request $request,$id)
+    public function update_dynamic(Request $request, $id)
     {
         DB::beginTransaction();
         try {

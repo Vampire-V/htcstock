@@ -51,7 +51,7 @@
             for (let index = 0; index < temp.length; index++) {
                 const element = temp[index]
                 // สิ้นปี อาจมีปัญหา
-                let month_now = (d.getMonth() + 1)
+                let month_now = (d.getMonth() + 1) - 2
                 element.max_result = element.average_max[element.average_max.length - 1]
                 element.weight = element.rule.category.name === `omg` ? element.weight / getQuarterForHaier(d) : element.weight / month_now
                 element.target = quarter_cal_target(element)

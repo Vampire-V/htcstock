@@ -47,16 +47,17 @@
                     }
                 }
             }
-            console.log(temp);
+
+            let month_now = d.getDate() > 12 ? (d.getMonth() + 1) - 1: (d.getMonth() + 1) - 2
             for (let index = 0; index < temp.length; index++) {
                 const element = temp[index]
                 // สิ้นปี อาจมีปัญหา
-                let month_now = (d.getMonth() + 1) - 2
+
                 element.max_result = element.average_max[element.average_max.length - 1]
                 element.weight = element.rule.category.name === `omg` ? element.weight / getQuarterForHaier(d) : element.weight / month_now
                 element.target = quarter_cal_target(element)
                 element.actual = quarter_cal_amount(element)
-                
+
             }
             evaluate.evaluate_detail = temp
             render_html()
@@ -202,4 +203,3 @@ var render_html = () => {
 const download = () => {
     window.open(`/kpi/evaluation/user/${evaluate.user_id}/year/${evaluate.targetperiod.year}/excel`, "_blank");
 }
-

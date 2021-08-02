@@ -22,9 +22,6 @@
             let temp = []
             for (var i = 0; i < evaluate.evaluateDetail.length; i++) {
                 let item = evaluate.evaluateDetail[i]
-                if (item.rule_id === 588) {
-                    console.log(item.id,item.max_result);
-                }
                 item.average_max = []
                 item.average_actual = []
                 item.average_target = []
@@ -50,16 +47,12 @@
                     }
                 }
             }
-            
+            console.log(temp);
             for (let index = 0; index < temp.length; index++) {
                 const element = temp[index]
                 // สิ้นปี อาจมีปัญหา
                 let month_now = (d.getMonth() + 1) - 1
                 element.max_result = element.average_max[element.average_max.length - 1]
-                
-                if (element.rule_id === 588) {
-                    console.log(element);
-                }
                 element.weight = element.rule.category.name === `omg` ? element.weight / getQuarterForHaier(d) : element.weight / month_now
                 element.target = quarter_cal_target(element)
                 element.actual = quarter_cal_amount(element)

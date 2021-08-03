@@ -546,10 +546,10 @@ class SelfEvaluationController extends Controller
 
     private function check_quarter($date)
     {
-        $month_q1 = \collect([2, 3, 4]);
-        $month_q2 = \collect([5, 6, 7]);
-        $month_q3 = \collect([8, 9, 10]);
-        $month_q4 = \collect([11, 12, 1]);
+        $month_q1 = \collect([3, 4, 5]);
+        $month_q2 = \collect([6, 7, 8]);
+        $month_q3 = \collect([9, 10, 11]);
+        $month_q4 = \collect([12, 1, 2]);
         if ($month_q1->contains($date)) {
             return 1;
         }
@@ -566,6 +566,7 @@ class SelfEvaluationController extends Controller
 
     private function get_month_haier()
     {
-       return intval(date('n', strtotime('-1 month')));
+       return date('d') > 12 ? intval(date('n', strtotime('-1 month'))) : intval(date('n', strtotime('-2 month')));
+    //    intval(date('n', strtotime('-1 month')));
     }
 }

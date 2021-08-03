@@ -22,10 +22,12 @@
             let temp = []
             for (var i = 0; i < evaluate.evaluateDetail.length; i++) {
                 let item = evaluate.evaluateDetail[i]
+                item.weigth_list = []
                 item.average_max = []
                 item.average_actual = []
                 item.average_target = []
                 if (temp.length < 1) {
+                    item.weigth_list.push(item.weight)
                     item.average_max.push(item.max_result)
                     item.average_actual.push(item.actual)
                     item.average_target.push(item.target)
@@ -33,6 +35,7 @@
                 } else {
                     let t_index = temp.findIndex(t => t.rule_id === item.rule_id)
                     if (t_index === -1) {
+                        item.weigth_list.push(item.weight)
                         item.average_max.push(item.max_result)
                         item.average_actual.push(item.actual)
                         item.average_target.push(item.target)
@@ -41,6 +44,7 @@
                         temp[t_index].actual += item.actual
                         temp[t_index].target += item.target
                         temp[t_index].weight += item.weight
+                        temp[t_index].weigth_list.push(item.weight)
                         temp[t_index].average_max.push(item.max_result)
                         temp[t_index].average_actual.push(item.actual)
                         temp[t_index].average_target.push(item.target)
@@ -49,10 +53,10 @@
             }
 
             let month_now = d.getDate() > 12 ? (d.getMonth() + 1) - 1: (d.getMonth() + 1) - 2
+            // console.log(getQuarterForHaier(d));
             for (let index = 0; index < temp.length; index++) {
                 const element = temp[index]
                 // สิ้นปี อาจมีปัญหา
-
                 element.max_result = element.average_max[element.average_max.length - 1]
                 element.weight = element.rule.category.name === `omg` ? element.weight / getQuarterForHaier(d) : element.weight / month_now
                 element.target = quarter_cal_target(element)

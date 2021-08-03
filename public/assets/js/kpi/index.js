@@ -23,10 +23,10 @@ var calculate = {
     },
     className = ['form-control', 'form-control-sm']
 bg_color = 'color_weight',
-month_q1 = [1, 2, 3],
-month_q2 = [4, 5, 6],
-month_q3 = [7, 8, 9],
-month_q4 = [10, 11, 0]
+month_q1 = [2, 3, 4],
+month_q2 = [5, 6, 7],
+month_q3 = [8, 9, 10],
+month_q4 = [11, 0, 1]
 
 
 class EvaluateForm {

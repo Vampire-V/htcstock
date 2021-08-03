@@ -493,9 +493,15 @@ class SelfEvaluationController extends Controller
             $evaluate_quarter->each(function ($item) use ($detail) {
                 $item->evaluateDetail->each(fn ($value) => $detail->add($value));
             });
-            $new = $detail->groupBy('rule_id')->each(function ($item) {
+            $new = $detail->groupBy('rule_id')->each(function ($item) use($year){
+                $quarter = 4;
+                $month = 12;
+                if ($year === date('Y')) {
+                    $quarter = $this->check_quarter($this->get_month_haier());
+                    $month = $this->get_month_haier();
+                }
                 $max = $item->last()->max_result;
-                $weight = $item->last()->rule->category->name === 'omg' ? $item->sum('weight') / $this->check_quarter($this->get_month_haier()) : $item->sum('weight') / $this->get_month_haier();
+                $weight = $item->last()->rule->category->name === 'omg' ? $item->sum('weight') / $quarter : $item->sum('weight') / $month;
                 $target = $this->quarter_cal_target($item);
                 $actual = $this->quarter_cal_actual($item);
                 $item->each(function ($value) use ($max, $weight, $target, $actual) {

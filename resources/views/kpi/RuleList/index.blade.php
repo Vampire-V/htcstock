@@ -145,9 +145,21 @@
                                 <td class="truncate">{{$item->category->name}}</td>
                                 <td>{{$item->calculate_type}}</td>
                                 <td>{{$item->ruletype->name}}</td>
-                                <td><a href="{{route('kpi.rule-list.edit',$item->id)}}"
+                                <td>
+                                    <a href="{{route('kpi.rule-list.edit',$item->id)}}"
                                         class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
-                                    </a></td>
+                                    </a>
+                                    <a href="{{route('kpi.rule-list.destroy',$item->id)}}"
+                                        class="mb-2 mr-2 border-0 btn-danger btn btn-outline-info" onclick="event.preventDefault();
+    document.getElementById('delete-form-{{ $item->id }}').submit();">Remove
+                                    </a>
+                                    <form id="delete-form-{{ $item->id }}"
+                                        action="{{ route('kpi.rule-list.destroy', $item->id) }}" method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
                             </tr>
                             @endforeach
                             @endisset

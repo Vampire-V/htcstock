@@ -80,8 +80,8 @@ class RuleController extends Controller
         $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
         $quarter_cals = \collect([KPIEnum::average, KPIEnum::sum, KPIEnum::last_month]);
         $departments = $this->departmentService->dropdown();
-        $rules = $this->ruleService->dropdown($category->firstWhere('name','kpi')->id);
-        return \view('kpi.RuleList.create', \compact('category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments', 'rules','quarter_cals'));
+        $rules = $this->ruleService->dropdown($category->firstWhere('name', 'kpi')->id);
+        return \view('kpi.RuleList.create', \compact('category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments', 'rules', 'quarter_cals'));
     }
 
     /**
@@ -136,17 +136,17 @@ class RuleController extends Controller
         $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
         $quarter_cals = \collect([KPIEnum::average, KPIEnum::sum, KPIEnum::last_month]);
         try {
-            $rule = Rule::with(['parent_to','updatedby'])->where('id',$id)->first();
+            $rule = Rule::with(['parent_to', 'updatedby'])->where('id', $id)->first();
             $category = $this->ruleCategoryService->dropdown();
             $unit = $this->targetUnitService->dropdown();
             $rulesType = $this->ruleTypeService->dropdown();
             $users = $this->userService->dropdown();
             $departments = $this->departmentService->dropdown();
-            $rules = $this->ruleService->dropdown($category->firstWhere('name','kpi')->id);
+            $rules = $this->ruleService->dropdown($category->firstWhere('name', 'kpi')->id);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.RuleList.edit', \compact('rule', 'rules', 'category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments','quarter_cals'));
+        return \view('kpi.RuleList.edit', \compact('rule', 'rules', 'category', 'unit', 'calcuTypes', 'rulesType', 'users', 'departments', 'quarter_cals'));
     }
 
     /**
@@ -180,7 +180,17 @@ class RuleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $rule = $this->ruleService->find($id);
+            $rule->remove = 'Y';
+            $rule->save();
+            DB::commit();
+            return \back()->with('success', "has been remove success..");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
     }
 
     /**
@@ -240,7 +250,7 @@ class RuleController extends Controller
                 $user = $users->filter(fn ($obj) => $obj->username === strval($username));
                 $department = $departments->filter(fn ($obj) => $obj->name === strval($dept_name));
                 $checkName = $this->ruleService->isName($rule_name);
-                
+
                 if ($checkName) {
                     $error = new stdClass;
                     $error->row = $row;
@@ -297,7 +307,7 @@ class RuleController extends Controller
                     $error->message = 'ไม่มี';
                     array_push($this->excel_errors, $error);
                 }
- 
+
                 if ($group->count() > 0 && !is_null($calcu_name) && $type->count() > 0 && !$checkName && $user->count() > 0 && $department->count() > 0 && !is_null($base_line) && !is_null($max)) {
                     \array_push(
                         $this->rule_attrs,
@@ -317,7 +327,6 @@ class RuleController extends Controller
                         ]
                     );
                 }
-
             });
 
             if ($this->rule_attrs) {
@@ -338,6 +347,6 @@ class RuleController extends Controller
 
     public function rulesdowload()
     {
-        return Excel::download( new RulesExport(), "Rules_".now().".xlsx") ;
+        return Excel::download(new RulesExport(), "Rules_" . now() . ".xlsx");
     }
 }

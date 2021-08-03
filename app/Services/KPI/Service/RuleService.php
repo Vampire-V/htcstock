@@ -39,10 +39,10 @@ class RuleService extends BaseService implements RuleServiceInterface
     {
         try {
             if (is_null($group)) {
-                return Rule::all();
+                return Rule::where('remove','<>','Y')->get();
             } else {
                 return Rule::with('category')
-                    ->where('category_id', $group)->get();
+                    ->where('category_id', $group)->where('remove','<>','Y')->get();
             }
         } catch (\Throwable $th) {
             throw $th;
@@ -53,6 +53,7 @@ class RuleService extends BaseService implements RuleServiceInterface
     {
         return Rule::with(['category', 'user', 'ruleType', 'updatedby'])
             ->filter($request)
+            ->where('remove','<>','Y')
             ->orderBy('created_at', 'desc')
             ->get();
     }
@@ -75,7 +76,8 @@ class RuleService extends BaseService implements RuleServiceInterface
         try {
             return Rule::select('id', 'name','quarter_cal')->with(['evaluatesDetail.evaluate.targetperiod' => function ($query) use ($year) {
                 return $query->select('id', 'name', 'year', 'quarter')->where('year', $year);
-            },'evaluatesDetail.evaluate:id,period_id,status,user_id','evaluatesDetail.evaluate.user','evaluatesDetail:id,evaluate_id,rule_id,target,actual'])->get();
+            },'evaluatesDetail.evaluate:id,period_id,status,user_id','evaluatesDetail.evaluate.user','evaluatesDetail:id,evaluate_id,rule_id,target,actual'])
+            ->where('remove','<>','Y')->get()->get();
         } catch (\Throwable $th) {
             throw $th;
         }

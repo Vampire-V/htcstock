@@ -51,14 +51,19 @@
                     }
                 }
             }
-
-            let month_now = d.getDate() > 12 ? (d.getMonth() + 1) - 1: (d.getMonth() + 1) - 2
+            let month_now = 12
+            let quarter = 4
+            if (d.getFullYear() === parseInt(evaluate.targetperiod.year)) {
+                month_now = d.getDate() > 12 ? (d.getMonth() + 1) - 1: (d.getMonth() + 1) - 2
+                quarter = getQuarterForHaier(d)
+            }
+            
             // console.log(getQuarterForHaier(d));
             for (let index = 0; index < temp.length; index++) {
                 const element = temp[index]
                 // สิ้นปี อาจมีปัญหา
                 element.max_result = element.average_max[element.average_max.length - 1]
-                element.weight = element.rule.category.name === `omg` ? element.weight / getQuarterForHaier(d) : element.weight / month_now
+                element.weight = element.rule.category.name === `omg` ? element.weight / quarter : element.weight / month_now
                 element.target = quarter_cal_target(element)
                 element.actual = quarter_cal_amount(element)
 

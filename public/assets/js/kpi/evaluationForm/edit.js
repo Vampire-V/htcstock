@@ -24,8 +24,12 @@
         getEvaluateForm(staff.id, period.id, evaluate.id)
             .then(async res => {
                 if (res.status === 200) {
-                    await setEvaluateForm(res.data.data)
-                    await display_template()
+                    try {
+                        await setEvaluateForm(res.data.data)
+                        await display_template()
+                    } catch (error) {
+                        toast(error, 'error')
+                    }
                 }
             })
             .catch(error => {

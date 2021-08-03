@@ -246,7 +246,9 @@ var findTargetPercent = (element, array) => {
         }
         return element.target_pc
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        toast(`${element.rules.name} parent not found`,'error')
+        return `parent not found..`
     }
     
 }

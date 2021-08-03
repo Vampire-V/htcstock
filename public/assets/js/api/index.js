@@ -176,6 +176,13 @@ const putTemplate = (from, id) => axios({
     data: from
 })
 
+const putTemplateName = (from, id) => axios({
+    method: 'PUT',
+    responseType: 'json',
+    url: `/kpi/template/${id}/rename`,
+    data: from
+})
+
 const postEvaluateSelf = (period, year, form) => axios({
     method: 'POST',
     responseType: 'json',

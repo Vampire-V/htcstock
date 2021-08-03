@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            {{-- <button class="hide mb-2 mr-2 btn btn-sm btn-primary mt-4" type="button">create</button> --}}
+                            <button class="mb-2 mr-2 btn btn-sm btn-success mt-4" type="button" onclick="rename_template()">Change name</button>
                         </div>
                     </div>
                 </form>

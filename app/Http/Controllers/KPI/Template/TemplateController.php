@@ -198,4 +198,17 @@ class TemplateController extends Controller
         DB::commit();
         return $this->successResponse(new TemplateResource($template), "Update weight success!", 200);
     }
+
+    public function rename(Request $request,$id)
+    {
+        try {
+            $template = Template::find($id);
+            $template->name = $request->name;
+            DB::commit();
+            return $this->successResponse(true, "Rename template success!", 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
+    }
 }

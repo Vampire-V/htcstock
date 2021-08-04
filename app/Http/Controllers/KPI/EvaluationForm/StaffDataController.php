@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\KPI\EvaluationForm;
 
+use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ALL\UserResource;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
@@ -42,16 +43,18 @@ class StaffDataController extends Controller
         $selectPosition = \collect($request->position);
         $selectDivision = \collect($request->division);
         $selectUser = \collect($request->users);
+        $selectDegree = \collect($request->degree);
         try {
             $users = $this->userService->filter($request);
             $dropdown_users = $this->userService->dropdown();
             $divisions = $this->divisionService->dropdown();
             $departments = $this->departmentService->dropdown();
             $positions = $this->positionService->dropdown();
+            $degrees = \collect([KPIEnum::one, KPIEnum::two, KPIEnum::tree]);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.EvaluationForm.index', \compact('users', 'divisions', 'departments', 'positions', 'query', 'selectDivision', 'selectDepartment', 'selectPosition', 'dropdown_users', 'selectUser'));
+        return \view('kpi.EvaluationForm.index', \compact('users', 'divisions', 'departments', 'positions', 'query', 'selectDivision', 'selectDepartment', 'selectPosition', 'dropdown_users', 'selectUser', 'degrees', 'selectDegree'));
     }
 
     /**

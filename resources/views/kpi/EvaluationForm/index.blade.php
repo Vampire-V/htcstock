@@ -50,6 +50,19 @@
                                 @endisset
                             </select>
                         </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="Users">EMC Group :</label>
+                            <select class="form-control form-control-sm" id="degree" name="degree[]" multiple>
+                                @isset($degrees)
+                                @foreach ($degrees as $item)
+                                <option value="{{$item}}" @if ($selectDegree->contains($item))
+                                    selected
+                                    @endif>{{$item}}
+                                </option>
+                                @endforeach
+                                @endisset
+                            </select>
+                        </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
@@ -111,6 +124,7 @@
                             <th>Division</th>
                             <th>Department</th>
                             <th>Position</th>
+                            <th>EMC Group</th>
                             <th>#</th>
                         </tr>
                     </thead>
@@ -123,6 +137,7 @@
                             <td>{{$user->divisions->name}}</td>
                             <td>{{$user->department->name}}</td>
                             <td>{{$user->positions->name}}</td>
+                            <td>{{$user->degree }}</td>
                             <td><a href="{{route('kpi.staff.edit',$user->id)}}"
                                     class="mb-2 mr-2 btn btn-outline-info">Detail
                                 </a></td>

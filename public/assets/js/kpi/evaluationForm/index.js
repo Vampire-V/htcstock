@@ -9,6 +9,11 @@
             allowClear: true
         })
 
+        $("#degree").select2({
+            placeholder: 'Select EMC Group',
+            allowClear: true
+        })
+
         $("#division").select2({
             placeholder: 'Select Division',
             allowClear: true
@@ -25,7 +30,6 @@
             placeholder: 'Select Year',
             allowClear: true
         })
-        
     })
 
     window.addEventListener('load', function () {

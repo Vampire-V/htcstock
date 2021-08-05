@@ -238,7 +238,7 @@ var findTargetPercent = (element, array) => {
             let target = element.target_config ?? element.target
             let parent_target = parent.target_config ?? parent.target
             if (parent) {
-                let result = target > parent_target ? 0.00 : target === 0.00 && parent_target === 0.00 ? 0.00 : (target / parent_target) * 100
+                let result = (target > parent_target) ? 0.00 : (target === 0.00) && (parent_target === 0.00) ? 0.00 : (target / parent_target) * 100
                 element.target_pc = result
             }
         } else {

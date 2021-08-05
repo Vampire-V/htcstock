@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\KPI;
 
 use App\Enum\KPIEnum;
+use App\Enum\UserEnum;
 use App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ALL\UserEvaluateResource;
@@ -18,6 +19,7 @@ use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use stdClass;
 
 class HomeController extends Controller
@@ -54,9 +56,11 @@ class HomeController extends Controller
         // $rules = $this->ruleService->rulesInEvaluationReport($selectedYear);
         $departments = $this->departmentService->dropdown();
         $degree = \collect([KPIEnum::one, KPIEnum::two, KPIEnum::tree]);
+        $show_rules = Gate::allows(UserEnum::SUPERADMIN) || (\auth()->user()->degree === KPIEnum::one) ? true : false;
+        // $report_rules = (Auth::user()->degree === $degree[0])
+        // dd(\auth()->user()->hasRole(UserEnum::SUPERADMIN));
 
-
-        return \view('kpi.home', \compact('departments', 'degree'));
+        return \view('kpi.home', \compact('departments', 'degree', 'show_rules'));
     }
 
     public function report_your_self($year)

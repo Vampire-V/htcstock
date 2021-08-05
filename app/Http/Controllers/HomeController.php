@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\System;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -96,10 +95,9 @@ class HomeController extends Controller
         try {
             $uri = System::where('slug',$name)->first();
             \session()->put('system',$name);
+            return \redirect()->route($uri->slug.".dashboard");
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \redirect()->route($uri->slug.".dashboard");
-        
     }
 }

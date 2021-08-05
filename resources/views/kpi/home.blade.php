@@ -173,7 +173,7 @@
 
 
     <div class="tab-pane " id="tab-all" role="tabpanel">
-        @if (Auth::user()->degree === 'N-1')
+        @if ($show_rules)
         <div class="row">
             <div class="col-xl-12">
                 <div class="mb-3 card">
@@ -290,7 +290,7 @@
 {{-- <script src="{{asset('assets\js\index.js')}}" defer></script> --}}
 <script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script defer>
-    var is_degree = {!!json_encode(Auth::user()->degree)!!}
+    var show_rules = {!!json_encode($show_rules)!!}
 </script>
 <script src="{{asset('assets\js\kpi\home.js')}}" defer></script>
 

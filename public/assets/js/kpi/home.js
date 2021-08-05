@@ -551,7 +551,8 @@ const search_staff_table = (e) => {
 
 
 const render_rule = async () => {
-    if (is_degree === degree.ONE) {
+    console.log(show_rules);
+    if (show_rules) {
         let table = document.getElementById('table-rule-evaluation')
         try {
             let d = new Date()

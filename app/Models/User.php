@@ -23,9 +23,10 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
      *
      * @var array
      */
-    protected $fillable = [
-        'name_th', 'name_en', 'head_id', 'email', 'phone', 'username', 'password', 'department_id', 'incentive_type', 'locale', 'divisions_id', 'positions_id', 'resigned', 'degree', 'image'
-    ];
+    // protected $fillable = [
+    //     'name_th', 'name_en', 'head_id', 'email', 'phone', 'username', 'password', 'department_id', 'incentive_type', 'locale', 'divisions_id', 'positions_id', 'resigned', 'degree', 'image'
+    // ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -58,7 +59,7 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
         return (new UserFilter($request))->filter($builder);
     }
 
-        /**
+    /**
      * Get the user's first image.
      *
      * @param  string  $value
@@ -71,11 +72,11 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
 
     public function scopeResigned(Builder $query)
     {
-        return $query->whereIn('resigned',[1]);
+        return $query->whereIn('resigned', [1]);
     }
 
     public function scopeNotResigned(Builder $query)
     {
-        return $query->whereIn('resigned',[0]);
+        return $query->whereIn('resigned', [0]);
     }
 }

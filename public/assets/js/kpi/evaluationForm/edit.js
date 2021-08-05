@@ -96,7 +96,13 @@ const display_template = () => {
                 cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`))
 
                 let cellTargetPC = newRow.insertCell()
-                cellTargetPC.textContent = Number.isInteger(findTargetPercent(element, data_category)) ? findTargetPercent(element, data_category).toFixed(2) : findTargetPercent(element, data_category)
+                let tgpc = findTargetPercent(element, data_category)
+                if (typeof tgpc === 'string') {
+                    cellTargetPC.textContent = tgpc
+                }else{
+                    cellTargetPC.textContent = tgpc.toFixed(2)
+                }
+                // cellTargetPC.textContent = Number.isInteger(findTargetPercent(element, data_category)) ? findTargetPercent(element, data_category).toFixed(2) : findTargetPercent(element, data_category)
 
                 // if (table.id.substring(6) === `key-task`) {
                 let cellDelete = newRow.insertCell()

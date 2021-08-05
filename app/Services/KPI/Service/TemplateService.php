@@ -65,7 +65,7 @@ class TemplateService extends BaseService implements TemplateServiceInterface
     public function forCreated(int $id)
     {
         try {
-            return Template::where('user_created', $id)->get();
+            return Template::where('user_created', $id)->where('remove', 'N')->get();
         } catch (\Throwable $th) {
             throw $th;
         }

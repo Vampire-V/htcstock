@@ -29,7 +29,7 @@ class EvaluationFormController extends Controller
 
     protected $departmentService, $positionService, $userService, $targetPeriodService, $ruleTemplateService,
         $templateService, $categoryService, $ruleService, $evaluateService, $evaluateDetailService,
-        $setting_action_service, $userApproveService;
+        $settingActionService, $userApproveService;
     public function __construct(
         DepartmentServiceInterface $departmentServiceInterface,
         PositionServiceInterface $positionServiceInterface,
@@ -54,7 +54,7 @@ class EvaluationFormController extends Controller
         $this->templateService = $templateServiceInterface;
         $this->categoryService = $categoryServiceInterface;
         $this->ruleService = $ruleServiceInterface;
-        $this->setting_action_service = $settingActionService;
+        $this->settingActionService = $settingActionService;
         $this->userApproveService = $userApproveService;
     }
     /**
@@ -111,7 +111,7 @@ class EvaluationFormController extends Controller
     {
         DB::beginTransaction();
         try {
-            if ($request->next && !$this->setting_action_service->isNextStep(KPIEnum::assign)) {
+            if ($request->next && !$this->settingActionService->isNextStep(KPIEnum::assign)) {
                 return $this->errorResponse('เลยเวลาที่กำหนด', 500);
             }
 
@@ -225,7 +225,7 @@ class EvaluationFormController extends Controller
     {
         DB::beginTransaction();
         try {
-            if ($request->next && !$this->setting_action_service->isNextStep(KPIEnum::assign)) {
+            if ($request->next && !$this->settingActionService->isNextStep(KPIEnum::assign)) {
                 return $this->errorResponse('เลยเวลาที่กำหนด', 500);
             }
 

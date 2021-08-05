@@ -7,26 +7,30 @@ use App\Http\Requests\KPI\StoreTemplatePost;
 use App\Http\Resources\KPI\TemplateResource;
 use App\Models\KPI\Template;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
+use App\Services\IT\Service\UserService;
 use App\Services\KPI\Interfaces\RuleTemplateServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
 use App\Services\KPI\Service\RuleCategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class TemplateController extends Controller
 {
     protected $templateService, $ruleTemplateService, $departmentService,
-        $categoryService;
+        $categoryService, $userService;
     public function __construct(
         TemplateServiceInterface $templateServiceInterface,
         RuleTemplateServiceInterface $ruleTemplateServiceInterface,
         DepartmentServiceInterface $departmentServiceInterface,
-        RuleCategoryService $categoryServiceInterface
+        RuleCategoryService $categoryServiceInterface,
+        UserService $userService
     ) {
         $this->templateService = $templateServiceInterface;
         $this->ruleTemplateService = $ruleTemplateServiceInterface;
         $this->departmentService = $departmentServiceInterface;
         $this->categoryService = $categoryServiceInterface;
+        $this->userService = $userService;
     }
     /**
      * Display a listing of the resource.
@@ -199,8 +203,17 @@ class TemplateController extends Controller
         return $this->successResponse(new TemplateResource($template), "Update weight success!", 200);
     }
 
-    public function rename(Request $request,$id)
+    public function rename(Request $request, $id)
     {
+        $validate = Validator::make(
+            $request->only('name'),
+            ['name' => 'required']
+        );
+
+        if ($validate->fails()) {
+            return $this->errorResponse($validate->errors(), 500);
+        }
+
         try {
             $template = Template::find($id);
             $template->name = $request->name;
@@ -209,6 +222,31 @@ class TemplateController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+
+    public function transferToUser(Request $request, $id)
+    {
+        $validate = Validator::make(
+            $request->only('user'),
+            ['user' => 'required']
+        );
+
+        if ($validate->fails()) {
+            return $this->errorResponse($validate->errors(), 500);
+        }
+        DB::beginTransaction();
+        try {
+            $this->userService->find($request->user);
+            $template = $this->templateService->find($id);
+            $template->user_created = $request->user;
+            $template->save();
+            DB::commit();
+            return $this->successResponse(true, "Transfer to ", 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), 500);
         }
     }
 }

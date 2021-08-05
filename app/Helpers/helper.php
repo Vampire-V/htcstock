@@ -2,8 +2,10 @@
 
 namespace Helpers;
 
+use App\Enum\ContractEnum;
 use App\Enum\KPIEnum;
 use App\Models\KPI\Rule;
+use App\Models\Legal\LegalContract;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
@@ -98,5 +100,31 @@ class Helper
     {
         $list = collect(["badge-primary", "badge-secondary", "badge-success", "badge-info", "badge-warning", "badge-danger", "badge-focus", "badge-alternate", "badge-dark"]);
         return $list->random();
+    }
+
+    public static function legalStatusStep(LegalContract $model)
+    {
+        // $request = \collect([ContractEnum::R]);
+        // $request = \collect([ContractEnum::R,ContractEnum::CK]);
+        // $request = \collect([ContractEnum::R,ContractEnum::CK,ContractEnum::P]);
+        // $request = \collect([ContractEnum::R,ContractEnum::CK,ContractEnum::P,ContractEnum::CP]);
+        try {
+            // \dump($model->status);
+            if ($model->status !== ContractEnum::CP) {
+                return "todo";
+            }
+            if ($model->status !== ContractEnum::P) {
+                return "todo";
+            }
+            if ($model->status !== ContractEnum::CK) {
+                return "todo";
+            }
+            if ($model->status !== ContractEnum::R) {
+                return "todo";
+            }
+            return "done";
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }

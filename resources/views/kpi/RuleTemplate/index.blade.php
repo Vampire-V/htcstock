@@ -55,7 +55,7 @@
                                 @endisset
                             </select>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        {{-- <div class="col-md-4 mb-3">
                             <label for="department">Department :</label>
                             <select id="validationDepartment" class="form-control-sm form-control"
                                 name="department_id[]" multiple>
@@ -67,7 +67,7 @@
                                 @endforeach
                                 @endisset
                             </select>
-                        </div>
+                        </div> --}}
                         <div class="col-md-4 mb-3">
                             <button class="mb-2 mr-2 btn btn-primary mt-4">Search</button>
                         </div>
@@ -104,7 +104,7 @@
                         <tr>
                             <th>#</th>
                             <th>Rule Template Name</th>
-                            <th>Department</th>
+                            {{-- <th>Department</th> --}}
                             <th>#</th>
                         </tr>
                     </thead>
@@ -114,7 +114,7 @@
                         <tr>
                             <th scope="row">{{$key+1}}</th>
                             <td>{{$template->name}}</td>
-                            <td>{{$template->department->name}}</td>
+                            {{-- <td>{{$template->department->name}}</td> --}}
                             <td>
                                 <a href="{{route('kpi.template.edit',[$template->id])}}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-sm btn-info">Edit
@@ -132,8 +132,8 @@
                                     @method('DELETE')
                                 </form>
 
-                                <button class="mb-2 mr-2 btn btn-sm btn-warning" data-toggle="modal"
-                                    data-target="#transfer-modal" >Transfer</button>
+                                <button class="mb-2 mr-2 btn btn-sm btn-warning" data-template="{{$template->id}}" data-toggle="modal"
+                                    data-target="#transfer-modal">Transfer</button>
                             </td>
                         </tr>
                         @endforeach
@@ -147,6 +147,42 @@
 
 @endsection
 
+@section('modal')
+{{-- Modal --}}
+<div class="modal fade" id="transfer-modal" tabindex="-1" role="dialog" aria-labelledby="transfer-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transfer-modal-label">Transfer To</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="reload" class="reload"></div>
+                <form id="form-transfer">
+                    <input type="hidden" name="template" id="template">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group"><label for="User" class="">User
+                                    :</label>
+                                <select id="user" class="form-control form-control-sm" name="user">
+                                </select></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="transfer_template()">Transfer</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
 @section('second-script')
+<script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script src="{{asset('assets\js\kpi\ruleTemplate\index.js')}}" defer></script>
 @endsection

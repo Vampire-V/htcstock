@@ -25887,3 +25887,10 @@ input[type=number] {
     /* color: white; */
     text-align: right;
 }
+
+.fiexd-div-top {
+    position: fixed;
+    top: 15%;
+    width: 100%;
+    /* text-align: right; */
+}

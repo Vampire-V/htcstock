@@ -31,12 +31,12 @@ var rename_template = async () => {
         name: document.getElementById('validationTemplate').value
     }
     try {
-        let result = await putTemplateName(form,template.id)
+        let result = await putTemplateName(form, template.id)
         console.log(result.data.message)
-        toast(result.data.message,result.data.status)
+        toast(result.data.message, result.data.status)
     } catch (error) {
         console.error(error)
-        toast(error,'error')
+        toast(error, 'error')
     } finally {
         toastClear()
     }

@@ -115,21 +115,25 @@
                             <th scope="row">{{$key+1}}</th>
                             <td>{{$template->name}}</td>
                             <td>{{$template->department->name}}</td>
-                            <td><a href="{{route('kpi.template.edit',[$template->id])}}"
-                                    class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
+                            <td>
+                                <a href="{{route('kpi.template.edit',[$template->id])}}"
+                                    class="mb-2 mr-2 border-0 btn-transition btn btn-sm btn-info">Edit
                                 </a>
                                 <a href="{{ route('kpi.template.destroy',['template' => $template->id]) }}">
-                                    <button type="button"
-                                    onclick="event.preventDefault();
-                                    document.getElementById('delete-template-form').submit();"
-                                    class="btn btn-sm btn-danger">Delete</button>
+                                    <button type="button" onclick="event.preventDefault();
+                                    document.getElementById('delete-template-form{{$template->id}}').submit();"
+                                        class="btn btn-sm btn-danger">Delete</button>
                                 </a>
-                                
-                                <form id="delete-template-form" action="{{ route('kpi.template.destroy',['template' => $template->id]) }}" method="POST"
-                                    style="display: none;">
+
+                                <form id="delete-template-form{{$template->id}}}"
+                                    action="{{ route('kpi.template.destroy',['template' => $template->id]) }}"
+                                    method="POST" style="display: none;">
                                     @csrf
                                     @method('DELETE')
                                 </form>
+
+                                <button class="mb-2 mr-2 btn btn-sm btn-warning" data-toggle="modal"
+                                    data-target="#transfer-modal" >Transfer</button>
                             </td>
                         </tr>
                         @endforeach

@@ -80,7 +80,7 @@
     <ol class="progress-meter">
         @isset($status)
             @foreach ($status as $item)
-            <li class="progress-point {{$legalContract->status === $item ? " done" : "todo"}}">{{$item}}</li>
+            <li class="progress-point {{ Helper::legalStatusStep($legalContract,$loop->iteration)}}">{{$item}}</li>
             @endforeach
         @endisset
         {{-- <li class="progress-point done">05:20 mins</li>

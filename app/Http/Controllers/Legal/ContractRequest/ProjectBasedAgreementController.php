@@ -92,7 +92,7 @@ class ProjectBasedAgreementController extends Controller
     public function edit($id)
     {
         try {
-            $projectBased = $this->contractDescService->find($id);
+            $projectBased = $this->contractDescService->search($id);
             $subtypeContract = $this->subtypeContractService->dropdown($projectBased->legalcontract->agreement_id);
             $paymentType = $this->paymentTypeService->dropdown($projectBased->legalcontract->agreement_id);
         } catch (\Exception $e) {

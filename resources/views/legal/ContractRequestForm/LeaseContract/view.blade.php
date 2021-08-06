@@ -7,7 +7,7 @@
 @stop
 @section('content')
 
-<div class="app-page-title">
+{{-- <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
@@ -15,23 +15,26 @@
                 </i>
             </div>
             <div>Lease Contract <span class="badge badge-primary">{{$legalContract->status}}</span>
-                <div class="page-title-subheading">This is an example dashboard created using
-                    build-in elements and components.
-                </div>
-            </div>
-        </div>
-        <div class="page-title-actions">
-            {{-- <a style="color: white" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
-                class="btn-shadow mr-3 btn btn-dark" href="{{route('legal.pdf',$legalContract->id)}}">
-            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-            </a> --}}
-            <div class="d-inline-block">
-            </div>
-        </div>
+<div class="page-title-subheading">This is an example dashboard created using
+    build-in elements and components.
+</div>
+</div>
+</div>
+<div class="page-title-actions">
+    <a style="color: white" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
+        class="btn-shadow mr-3 btn btn-dark" href="{{route('legal.pdf',$legalContract->id)}}">
+        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+    </a>
+    <div class="d-inline-block">
     </div>
 </div>
-
+</div>
+</div> --}}
 <div class="row">
+    <x-head-status-legal :legalContract="$legalContract" />
+</div>
+
+<div class="row" style="margin-top: 10%;">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-body">
@@ -123,7 +126,8 @@
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span> </label>
                             <div>
-                                <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}" target="_blank"
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}"
+                                    target="_blank"
                                     rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
                             </div>
                         </div>

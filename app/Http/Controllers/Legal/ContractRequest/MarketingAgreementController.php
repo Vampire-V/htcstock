@@ -88,7 +88,7 @@ class MarketingAgreementController extends Controller
     public function edit($id)
     {
         try {
-            $marketing = $this->contractDescService->find($id);
+            $marketing = $this->contractDescService->search($id);
             $subtypeContract = $this->subtypeContractService->dropdown($marketing->legalcontract->agreement_id);
             $paymentType = $this->paymentTypeService->dropdown($marketing->legalcontract->agreement_id);
         } catch (\Exception $e) {

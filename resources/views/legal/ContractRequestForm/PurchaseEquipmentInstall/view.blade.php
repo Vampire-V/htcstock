@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="page-title-actions">
-            
+
             <div class="d-inline-block">
             </div>
         </div>
@@ -29,6 +29,10 @@
 </div>
 
 <div class="row">
+    <x-head-status-legal :legalContract="$legalContract" />
+</div>
+
+<div class="row" style="margin-top: 10%;">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-body">
@@ -397,9 +401,10 @@
 </div>
 <div class="page-title-actions fiexd-btn-botton">
     <a style="color: white" data-toggle="tooltip" title="PDF" data-placement="bottom"
-                class="btn-shadow mb-3  mr-3 btn btn-dark" href="{{route('legal.pdf',$legalContract->id)}}" target="_blank" rel="noopener">
-                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-            </a>
+        class="btn-shadow mb-3  mr-3 btn btn-dark" href="{{route('legal.pdf',$legalContract->id)}}" target="_blank"
+        rel="noopener">
+        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+    </a>
     <button class="mb-3 mr-3 btn btn-success" type="submit" onclick="event.preventDefault();
             document.getElementById('approval-contract-form').submit();">Send Contract</button>
 </div>

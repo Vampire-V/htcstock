@@ -102,27 +102,22 @@ class Helper
         return $list->random();
     }
 
-    public static function legalStatusStep(LegalContract $model)
+    public static function legalStatusStep(LegalContract $model, $iteration = null)
     {
-        // $request = \collect([ContractEnum::R]);
-        // $request = \collect([ContractEnum::R,ContractEnum::CK]);
-        // $request = \collect([ContractEnum::R,ContractEnum::CK,ContractEnum::P]);
-        // $request = \collect([ContractEnum::R,ContractEnum::CK,ContractEnum::P,ContractEnum::CP]);
         try {
-            // \dump($model->status);
-            if ($model->status !== ContractEnum::CP) {
-                return "todo";
+            if (ContractEnum::R === $model->status && $iteration < 2) {
+                return "done";
             }
-            if ($model->status !== ContractEnum::P) {
-                return "todo";
+            if (ContractEnum::CK === $model->status && $iteration < 3) {
+                return "done";
             }
-            if ($model->status !== ContractEnum::CK) {
-                return "todo";
+            if (ContractEnum::P === $model->status && $iteration < 4) {
+                return "done";
             }
-            if ($model->status !== ContractEnum::R) {
-                return "todo";
+            if (ContractEnum::CP === $model->status && $iteration < 5) {
+                return "done";
             }
-            return "done";
+            return "todo";
         } catch (\Exception $e) {
             throw $e;
         }

@@ -25,4 +25,9 @@ class ContractDescService extends BaseService implements ContractDescServiceInte
             throw $th;
         }
     }
+
+    public function search($id)
+    {
+        return LegalContractDest::where('id',$id)->with('legalcontract')->first();
+    }
 }

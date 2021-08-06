@@ -84,7 +84,7 @@ class PurchaseEquipmentInstallController extends Controller
     public function edit($id)
     {
         try {
-            $purchaseequipmentinstall = $this->contractDescService->find($id);
+            $purchaseequipmentinstall = $this->contractDescService->search($id);
             if ($purchaseequipmentinstall->value_of_contract) {
                 $purchaseequipmentinstall->value_of_contract = explode(",", $purchaseequipmentinstall->value_of_contract);
             }

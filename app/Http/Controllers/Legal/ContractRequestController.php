@@ -20,6 +20,7 @@ use App\Services\Legal\Interfaces\SubtypeContractServiceInterface;
 use App\Services\Utils\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
@@ -541,24 +542,26 @@ class ContractRequestController extends Controller
     {
         // max 20 MB.
         $validator = Validator::make($request->all(), [
-            'file' => 'required|mimes:pdf|max:20480',
+            'file' => 'required|mimes:pdf|max:30500',
         ]);
 
         if ($validator->fails()) {
-            return \response()->json($validator->messages(), 400);
+            return \response()->json($validator->errors(), 500);
         }
         $date =  new Carbon();
         $segments = explode('/', \substr(url()->previous(), strlen($request->root())));
         try {
-            $path = Storage::disk('public')->put(
-                $segments[1] . '/' . $segments[2] . '/' . $date->isoFormat('YYYYMD'),
-                $request->file('file'),
+            $path = Storage::disk('public')->putFileAs(
+                $segments[1] . '/' . $segments[2] . '/' . $date->isoFormat('OYMMDD'),
+                new File($request->file('file')),
+                $request->file('file')->getClientOriginalName(),
             );
+            return \response()->json(['path' => $path]);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
-        return \response()->json(['path' => $path]);
+        
     }
 
     /**

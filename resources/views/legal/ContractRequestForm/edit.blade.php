@@ -15,7 +15,7 @@
 @stop
 @section('content')
 
-<div class="app-page-title">
+{{-- <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
@@ -37,6 +37,9 @@
             </div>
         </div>
     </div>
+</div> --}}
+<div class="row" style="margin-top: 10%;">
+    <x-head-status-legal :legalContract="$contract" />
 </div>
 
 <div class="col-lg-12">
@@ -67,7 +70,8 @@
                     <div class="col-md-6 mb-6">
                         <label for="validationAgreements"><strong>General Agreements</strong> <span
                                 style="color: red;">*</span></label>
-                        <select name="agreement_id" id="validationAgreements" class="form-control-sm form-control" required>
+                        <select name="agreement_id" id="validationAgreements" class="form-control-sm form-control"
+                            required>
                             <option value="">Shoose....</option>
                             @isset($agreements)
                             @foreach ($agreements as $agreement)
@@ -87,8 +91,8 @@
                     <div class="col-md-6 mb-6">
                         <label for="validationCompanyName"><strong>Full name (Company’s, Person’s)</strong> <span
                                 style="color: red;">*</span></label>
-                        <input type="text" class="form-control-sm form-control" id="validationCompanyName" name="company_name"
-                            value="{{$contract->company_name}}" required>
+                        <input type="text" class="form-control-sm form-control" id="validationCompanyName"
+                            name="company_name" value="{{$contract->company_name}}" required>
                         <div class="invalid-feedback">
                             Please provide a valid PO No.
                         </div>
@@ -115,8 +119,8 @@
                     <div class="col-md-6 mb-6">
                         <label for="validationRepresentative"><strong>Legal Representative</strong> <span
                                 style="color: red;">*</span></label>
-                        <input type="text" class="form-control-sm form-control" id="validationRepresentative" name="representative"
-                            value="{{$contract->representative}}" required>
+                        <input type="text" class="form-control-sm form-control" id="validationRepresentative"
+                            name="representative" value="{{$contract->representative}}" required>
                         <div class="invalid-feedback">
                             Please provide a valid PO No.
                         </div>
@@ -126,9 +130,9 @@
                                 style="color: red;">*</span><a href="{{url('storage/'.$contract->representative_cer)}}"
                                 target="_blank"
                                 rel="noopener noreferrer">{{$contract->representative_cer ? 'view file' : ""}}</a></label>
-                        <input type="file" class="form-control-sm form-control" id="validationRepresen" onchange="uploadFileContract(this)"
-                            data-name="representative_cer" data-cache="{{substr($contract->representative_cer,9)}}"
-                            required>
+                        <input type="file" class="form-control-sm form-control" id="validationRepresen"
+                            onchange="uploadFileContract(this)" data-name="representative_cer"
+                            data-cache="{{substr($contract->representative_cer,9)}}" required>
                         <div class="mb-3 progress hide-contract">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                 aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>

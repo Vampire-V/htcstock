@@ -84,7 +84,7 @@ class MouldController extends Controller
     public function edit($id)
     {
         try {
-            $mould = $this->contractDescService->find($id);
+            $mould = $this->contractDescService->search($id);
 
             if ($mould->value_of_contract) {
                 $mould->value_of_contract = explode(",", $mould->value_of_contract);

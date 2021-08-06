@@ -91,7 +91,7 @@ class VendorServiceContractController extends Controller
     public function edit($id)
     {
         try {
-            $vendorservice = $this->contractDescService->find($id);
+            $vendorservice = $this->contractDescService->search($id);
             $subtypeContract = $this->subtypeContractService->dropdown($vendorservice->legalcontract->agreement_id);
             $paymentType = $this->paymentTypeService->dropdown($vendorservice->legalcontract->agreement_id);
         } catch (\Exception $e) {

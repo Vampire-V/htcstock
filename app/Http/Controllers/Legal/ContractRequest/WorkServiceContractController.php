@@ -84,7 +84,7 @@ class WorkServiceContractController extends Controller
     public function edit($id)
     {
         try {
-            $workservicecontract = $this->contractDescService->find($id);
+            $workservicecontract = $this->contractDescService->search($id);
             if ($workservicecontract->value_of_contract) {
                 $workservicecontract->value_of_contract = explode(",", $workservicecontract->value_of_contract);
             }

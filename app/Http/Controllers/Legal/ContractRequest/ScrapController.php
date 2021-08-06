@@ -84,7 +84,7 @@ class ScrapController extends Controller
     public function edit($id)
     {
         try {
-            $scrap = $this->contractDescService->find($id);
+            $scrap = $this->contractDescService->search($id);
 
             if ($scrap->value_of_contract) {
                 $scrap->value_of_contract = explode(",", $scrap->value_of_contract);

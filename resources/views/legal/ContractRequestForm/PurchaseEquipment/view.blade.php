@@ -10,8 +10,6 @@
     <x-head-status-legal :legalContract="$legalContract" />
 </div>
 
-
-
 <div class="row" style="margin-top: 10%;">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">

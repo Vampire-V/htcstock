@@ -92,7 +92,7 @@ class LeaseContractController extends Controller
     public function edit($id)
     {
         try {
-            $leaseContract = $this->contractDescService->find($id);
+            $leaseContract = $this->contractDescService->search($id);
 
             if ($leaseContract->value_of_contract) {
                 $leaseContract->value_of_contract = explode(",", $leaseContract->value_of_contract);

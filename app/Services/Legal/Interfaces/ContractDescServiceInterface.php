@@ -9,6 +9,7 @@ interface ContractDescServiceInterface
     public function all();
     public function create(array $attributes): Model;
     public function find(int $id): Model;
+    public function search($id);
 
     public function update(array $attributes, int $id): bool;
     public function destroy(int $id);

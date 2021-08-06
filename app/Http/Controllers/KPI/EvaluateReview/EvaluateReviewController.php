@@ -277,7 +277,7 @@ class EvaluateReviewController extends Controller
     {
         $ids = explode(",", $request->evaluate);
         try {
-            $result = Evaluate::with('user')->whereIn('id',[...$ids])->get();
+            $result = Evaluate::with(['user','evaluateDetail' => fn($q) => $q->where('rule_id',$request->rule_id)])->whereIn('id',[...$ids])->get();
             return $this->successResponse($result, "query success...", 200);
         } catch (\Exception $e) {
             Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());

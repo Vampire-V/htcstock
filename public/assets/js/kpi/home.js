@@ -551,7 +551,6 @@ const search_staff_table = (e) => {
 
 
 const render_rule = async () => {
-    console.log(show_rules);
     if (show_rules) {
         let table = document.getElementById('table-rule-evaluation')
         try {
@@ -559,14 +558,17 @@ const render_rule = async () => {
             let result = await getReportRuleOfYear(d.getFullYear())
             console.log(result.data.data);
             await rules_data_to_table(result.data.data)
+            
+        } catch (error) {
+            console.error(error)
+            // toast(error)
+        } finally {
             $('[data-toggle="tooltip"]').tooltip()
             // table.previousElementSibling.classList.add('reload')
             table.previousElementSibling.classList.remove('reload')
-        } catch (error) {
-            console.error(error)
-            toast(error)
+            toastClear()
         }
-        toastClear()
+        
     }
 
 }
@@ -633,56 +635,56 @@ const rules_data_to_table = (data) => {
         name.setAttribute('title', rule.name)
         name.textContent = rule.name
 
-        jan_target.innerHTML = findLastValue(rule.name,rule.total[0], 'target')
-        jan_actual.innerHTML = findLastValue(rule.name,rule.total[0], 'actual')
+        jan_target.innerHTML = findLastValue(rule,rule.total[0], 'target')
+        jan_actual.innerHTML = findLastValue(rule,rule.total[0], 'actual')
 
-        feb_target.innerHTML = findLastValue(rule.name,rule.total[1], 'target')
-        feb_actual.innerHTML = findLastValue(rule.name,rule.total[1], 'actual')
+        feb_target.innerHTML = findLastValue(rule,rule.total[1], 'target')
+        feb_actual.innerHTML = findLastValue(rule,rule.total[1], 'actual')
 
-        mar_target.innerHTML = findLastValue(rule.name,rule.total[2], 'target')
-        mar_actual.innerHTML = findLastValue(rule.name,rule.total[2], 'actual')
+        mar_target.innerHTML = findLastValue(rule,rule.total[2], 'target')
+        mar_actual.innerHTML = findLastValue(rule,rule.total[2], 'actual')
 
-        apr_target.innerHTML = findLastValue(rule.name,rule.total[3], 'target')
-        apr_actual.innerHTML = findLastValue(rule.name,rule.total[3], 'actual')
+        apr_target.innerHTML = findLastValue(rule,rule.total[3], 'target')
+        apr_actual.innerHTML = findLastValue(rule,rule.total[3], 'actual')
 
-        may_target.innerHTML = findLastValue(rule.name,rule.total[4], 'target')
-        may_actual.innerHTML = findLastValue(rule.name,rule.total[4], 'actual')
+        may_target.innerHTML = findLastValue(rule,rule.total[4], 'target')
+        may_actual.innerHTML = findLastValue(rule,rule.total[4], 'actual')
 
-        jun_target.innerHTML = findLastValue(rule.name,rule.total[5], 'target')
-        jun_actual.innerHTML = findLastValue(rule.name,rule.total[5], 'actual')
+        jun_target.innerHTML = findLastValue(rule,rule.total[5], 'target')
+        jun_actual.innerHTML = findLastValue(rule,rule.total[5], 'actual')
 
-        jul_target.innerHTML = findLastValue(rule.name,rule.total[6], 'target')
-        jul_actual.innerHTML = findLastValue(rule.name,rule.total[6], 'actual')
+        jul_target.innerHTML = findLastValue(rule,rule.total[6], 'target')
+        jul_actual.innerHTML = findLastValue(rule,rule.total[6], 'actual')
 
-        aug_target.innerHTML = findLastValue(rule.name,rule.total[7], 'target')
-        aug_actual.innerHTML = findLastValue(rule.name,rule.total[7], 'actual')
+        aug_target.innerHTML = findLastValue(rule,rule.total[7], 'target')
+        aug_actual.innerHTML = findLastValue(rule,rule.total[7], 'actual')
 
-        sep_target.innerHTML = findLastValue(rule.name,rule.total[8], 'target')
-        sep_actual.innerHTML = findLastValue(rule.name,rule.total[8], 'actual')
+        sep_target.innerHTML = findLastValue(rule,rule.total[8], 'target')
+        sep_actual.innerHTML = findLastValue(rule,rule.total[8], 'actual')
 
-        oct_target.innerHTML = findLastValue(rule.name,rule.total[9], 'target')
-        oct_actual.innerHTML = findLastValue(rule.name,rule.total[9], 'actual')
+        oct_target.innerHTML = findLastValue(rule,rule.total[9], 'target')
+        oct_actual.innerHTML = findLastValue(rule,rule.total[9], 'actual')
 
-        nov_target.innerHTML = findLastValue(rule.name,rule.total[10], 'target')
-        nov_actual.innerHTML = findLastValue(rule.name,rule.total[10], 'actual')
+        nov_target.innerHTML = findLastValue(rule,rule.total[10], 'target')
+        nov_actual.innerHTML = findLastValue(rule,rule.total[10], 'actual')
 
-        dec_target.innerHTML = findLastValue(rule.name,rule.total[11], 'target')
-        dec_actual.innerHTML = findLastValue(rule.name,rule.total[11], 'actual')
+        dec_target.innerHTML = findLastValue(rule,rule.total[11], 'target')
+        dec_actual.innerHTML = findLastValue(rule,rule.total[11], 'actual')
     }
 }
 
-const findLastValue = (name,array, key) => {
+const findLastValue = (rule,array, key) => {
     let result = 0.00
     for (let i = 0; i < array.length; i++) {
         const element = array[i]
         if (array[0][key] === element[key]) {
             result = element[key]
         } else {
-            return `<span style="cursor: pointer; color:red;" data-toggle="modal" data-arr="${array.map(el => el.evaluate_id).join(",")}" data-rulename="${name}"
+            return `<span style="cursor: pointer; color:red;" data-toggle="modal" data-arr="${array.map(el => el.evaluate_id).join(",")}" data-id="${rule.id}" data-rulename="${rule.name}"
              data-target="#list-invalid-modal" >error..</span>`
         }
     }
-    return `<span style="cursor: pointer; " data-toggle="modal" data-arr="${array.map(el => el.evaluate_id).join(",")}" data-rulename="${name}"
+    return `<span style="cursor: pointer; " data-toggle="modal" data-arr="${array.map(el => el.evaluate_id).join(",")}" data-id="${rule.id}" data-rulename="${rule.name}"
     data-target="#list-invalid-modal" >${result}</span>`
 }
 
@@ -800,11 +802,12 @@ const calculator_evaluate_of_month = (month, array) => {
     return (sum_total / 100).toFixed(2)
 }
 
-const fetch_evaluate_modal = async (datas,el) => {
+const fetch_evaluate_modal = async (rule ,datas,el) => {
     let result
     try {
         result = await getEvaluateReviewIn({
             params: {
+                rule_id : rule,
                 evaluate: datas
             }
         })
@@ -812,16 +815,18 @@ const fetch_evaluate_modal = async (datas,el) => {
         console.error(error);
     } finally {
         if (result.status === 200) {
+            // console.log(result);
             // let link
             for (let index = 0; index < result.data.data.length; index++) {
                 const element = result.data.data[index]
-                console.log(element);
                 let li = document.createElement("LI")
                 let a = document.createElement("A")
                 a.target = "_blank"
                 a.href = `${window.location.origin}/kpi/evaluation-review/${element.id}/edit`
                 a.rel = "noopener"
-                a.textContent = element.user.name
+                a.innerHTML = `<span style="color:red;">Target: ${element.evaluate_detail[0].target}</span>
+                <span style="color:#9ACD32;">Actual: ${element.evaluate_detail[0].actual}</span> = ${element.user.name}`
+                // a.textContent = `Target: ${element.evaluate_detail[0].target}  Actual: ${element.evaluate_detail[0].actual} = ${element.user.name}`
                 li.appendChild(a)
                 el.appendChild(li)
                 // link += `<li><a href="${window.location.origin}/kpi/evaluation-review/${element.id}/edit" target="_blank" rel="noopener">${element.user_id}</a></li>`
@@ -834,11 +839,11 @@ const fetch_evaluate_modal = async (datas,el) => {
 $('#list-invalid-modal').on('show.bs.modal', async function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     let all = button.data('arr')
+    let id = button.data('id')
     let rule_name = button.data('rulename')
     var modal = $(this)
-    console.log(modal.find('#rule-modal-label'));
     modal.find('#rule-modal-label').text(rule_name)
-    await fetch_evaluate_modal(all,modal.find('.modal-body ul')[0])
+    await fetch_evaluate_modal(id,all,modal.find('.modal-body ul')[0])
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
     

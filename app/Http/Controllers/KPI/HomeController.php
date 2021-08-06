@@ -8,6 +8,7 @@ use App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ALL\UserEvaluateResource;
 use App\Http\Resources\KPI\EvaluateResource;
+use App\Models\Department;
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\TargetPeriod;
 use App\Models\User;

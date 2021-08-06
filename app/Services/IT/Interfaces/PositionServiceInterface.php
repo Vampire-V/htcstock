@@ -16,5 +16,6 @@ interface PositionServiceInterface
     public function destroy(int $id);
 
     public function dropdown(): Collection;
+    public function dropdownForUser(): Collection;
 
 }

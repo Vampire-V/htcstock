@@ -61,9 +61,23 @@ class UserService extends BaseService implements UserServiceInterface
         }
     }
 
+    public function dropdownEvaluationForm(): Collection
+    {
+        try {
+            return User::notResigned()->ofDivision()->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     public function filter(Request $request)
     {
         return User::withTranslation()->with(['department', 'positions', 'roles', 'divisions', 'permissions', 'systems'])->filter($request)->notResigned()->orderBy('divisions_id', 'desc')->paginate(10);
+    }
+
+    public function filterForEvaluateForm(Request $request)
+    {
+        return User::withTranslation()->with(['department', 'positions', 'roles', 'divisions', 'permissions', 'systems'])->filter($request)->notResigned()->ofDivision()->orderBy('divisions_id', 'desc')->paginate(10);
     }
 
     public function email(string $email)

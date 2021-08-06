@@ -3,6 +3,7 @@
 namespace App\Services\IT\Service;
 
 use App\Models\Department;
+use App\Models\User;
 use App\Services\BaseService;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,6 +34,16 @@ class DepartmentService extends BaseService implements DepartmentServiceInterfac
     {
         try {
             return Department::all();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function dropdownForUser(): Collection
+    {
+        try {
+            $users = User::select('department_id')->notResigned()->where('divisions_id', \auth()->user()->divisions_id)->groupBy('department_id')->get();
+            return Department::find($users->pluck('department_id'));
         } catch (\Throwable $th) {
             throw $th;
         }

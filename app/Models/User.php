@@ -79,4 +79,9 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
     {
         return $query->whereIn('resigned', [0]);
     }
+
+    public function scopeOfDivision(Builder $query)
+    {
+        return $query->whereIn('divisions_id', [\auth()->user()->divisions_id]);
+    }
 }

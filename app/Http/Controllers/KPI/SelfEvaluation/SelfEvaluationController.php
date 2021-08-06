@@ -80,7 +80,7 @@ class SelfEvaluationController extends Controller
         $selectedUser = collect($request->user ?? auth()->id());
         $start_year = date('Y', strtotime('-10 years'));
         try {
-            $users = $this->userService->dropdown();
+            $users = $this->userService->dropdownEvaluationForm();
             $evaluates = $this->evaluateService->selfFilter($request);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());

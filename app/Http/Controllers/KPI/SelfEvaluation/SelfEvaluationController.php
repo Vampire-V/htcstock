@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\KPI\SelfEvaluation;
 
 use App\Enum\KPIEnum;
+use App\Enum\UserEnum;
 use App\Exports\KPI\EvaluateExport;
 use App\Exports\KPI\EvaluateQuarterExport;
 use App\Exports\KPI\EvaluatesExport;
@@ -30,6 +31,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -80,7 +82,7 @@ class SelfEvaluationController extends Controller
         $selectedUser = collect($request->user ?? auth()->id());
         $start_year = date('Y', strtotime('-10 years'));
         try {
-            $users = $this->userService->dropdownEvaluationForm();
+            $users = Gate::allows(UserEnum::SUPERADMIN) ? $this->userService->dropdown() : $this->userService->dropdownEvaluationForm();
             $evaluates = $this->evaluateService->selfFilter($request);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());

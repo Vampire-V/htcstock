@@ -97,7 +97,7 @@ class AccessoriesController extends Controller
             'file' => 'required|mimes:jpeg,jpg,png|max:20480',
         ]);
         if ($validator->fails()) {
-            return \response()->json($validator->messages(), 400);
+            return \response()->json($validator->errors(), 400);
         }
         $date =  new Carbon();
         $segments = explode('/', \substr(url()->previous(), strlen($request->root())));

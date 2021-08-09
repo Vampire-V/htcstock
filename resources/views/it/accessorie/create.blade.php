@@ -78,8 +78,8 @@
                     <div class="col-md-7 mb-12">
                         <label for="validationEquipmentImage">{{ __('itstock.manage-accessorie.equipment-image') }}
                         </label>
-                        <input type="file" class="filepond" id="validationEquipmentImage"
-                            data-name="image" name="file" data-allow-reorder="true" accept="image/png, image/jpeg, image/gif" >
+                        <input type="file" class="filepond" id="validationEquipmentImage" data-name="image" name="file"
+                            data-allow-reorder="true" accept="image/png, image/jpeg, image/gif">
                         {{-- <div class="mb-3 progress hide-progress">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                 aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
@@ -113,6 +113,7 @@
 <script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-resize.min.js') }}" defer></script>
 <script src="{{ asset('assets\filepond-master\dist\plugin\filepond-plugin-image-transform.min.js') }}" defer></script>
 <script>
+    var image = {!!json_encode(asset("/storage/images/avatars/unknown.jpg"))!!}
 </script>
 <script src="{{asset('assets\js\transactions\accessorie.js')}}" defer></script>
 @endsection

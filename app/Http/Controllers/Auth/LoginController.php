@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
@@ -78,12 +79,17 @@ class LoginController extends Controller
         ]);
 
         $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $user = User::where([$fieldType => $input['username']])->first();
+        if (!$user) {
+            $errors = new MessageBag(['username' => [$fieldType . " invalid. (ไม่มีในระบบ)"]]);
+            return \redirect()->back()->withErrors($errors)->withInput($input);
+        }
         $credentials = array($fieldType => $input['username'], 'password' => $input['password']);
         if (Auth::attempt($credentials)) {
             return \redirect()->route('welcome')->with('alert-success', 'You are now logged in.');
         }
 
-        $errors = new MessageBag(['password' => ['Email and/or password invalid.'], 'username' => ['']]);
+        $errors = new MessageBag(['password' => ['Password invalid. (ไม่มีในระบบ)']]);
         return \redirect()->back()->withErrors($errors)->withInput($input);
     }
 
@@ -100,7 +106,6 @@ class LoginController extends Controller
         } catch (\Exception $e) {
             throw $e;
         }
-
 
         switch ($evaluate->status) {
             case KPIEnum::ready:
@@ -123,7 +128,7 @@ class LoginController extends Controller
                 return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
                 break;
             default:
-                return abort(404);
+                return abort(404, 'ไม่พบข้อมูล ติดต่อ Operation');
                 break;
         }
     }

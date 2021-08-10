@@ -20,13 +20,13 @@ class RedirectIfAuthenticated
     {
         if (Auth::guard($guard)->check()) {
             if ($request->route()->getName() === 'legal.approval.verify') {
-                Auth::guard()->logout();
+                Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
                 return \redirect()->route('legal.approval.verify', $request->route()->parameters);
             }
             if ($request->route()->getName() === 'kpi.evaluation.verify') {
-                Auth::guard()->logout();
+                Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
                 return \redirect()->route('kpi.evaluation.verify', $request->route()->parameters);

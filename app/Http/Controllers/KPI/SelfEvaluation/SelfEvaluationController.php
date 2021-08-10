@@ -82,7 +82,8 @@ class SelfEvaluationController extends Controller
         $selectedUser = collect($request->user ?? auth()->id());
         $start_year = date('Y', strtotime('-10 years'));
         try {
-            $users = Gate::allows(UserEnum::SUPERADMIN) ? $this->userService->dropdown() : $this->userService->dropdownEvaluationForm();
+            $users = $this->userService->dropdown();
+            // $users = Gate::allows(UserEnum::SUPERADMIN) ? $this->userService->dropdown() : $this->userService->dropdownEvaluationForm();
             $evaluates = $this->evaluateService->selfFilter($request);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
@@ -444,7 +445,6 @@ class SelfEvaluationController extends Controller
             $evaluate = $this->evaluateService->find($id);
             $this->calculation_detail($evaluate->evaluateDetail);
             $evaluate_detail = $evaluate->evaluateDetail->groupBy(fn ($item) => $item->rules->category_id);
-
             return Excel::download(new EvaluateExport($evaluate, $evaluate_detail), "Evaluate" . $evaluate->user->name . ".xlsx");
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);

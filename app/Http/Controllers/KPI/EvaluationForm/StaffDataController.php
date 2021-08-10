@@ -47,8 +47,8 @@ class StaffDataController extends Controller
         try {
             $users = $this->userService->filter($request);
             $dropdown_users = $this->userService->dropdown();
-            $divisions = \collect([$this->divisionService->find(\auth()->user()->divisions_id)]);
-            // $this->divisionService->dropdown();
+            // $divisions = \collect([$this->divisionService->find(\auth()->user()->divisions_id)]);
+            $divisions = $this->divisionService->dropdown();
             $departments = $this->departmentService->dropdown();
             $positions = $this->positionService->dropdown();
             $degrees = \collect([KPIEnum::one, KPIEnum::two, KPIEnum::tree]);

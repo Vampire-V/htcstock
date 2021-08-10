@@ -4,28 +4,29 @@
     document.addEventListener('DOMContentLoaded', function () {
         // Supporting Documents
         // Set data object for form update
-        if (detail.length > 0) {
-            let tBody = document.getElementById('table-set-actual').tBodies[0]
-            for (let index = 0; index < tBody.rows.length; index++) {
-                const element = tBody.rows[index]
-                let actual = element.cells[10]
-                let Ach = element.cells[12]
-                let Cal = element.cells[13]
-                let obj = detail.find(value => value.id === parseInt(actual.firstChild.id))
-                if (obj.rules.calculate_type !== calculate.NEGATIVE && obj.rules.calculate_type !== calculate.ZERO) {
-                    actual.setAttribute("min", 0.00);
-                }
-                // let ach = findAchValue(obj)
-                // let cal = findCalValue(obj, ach)
-                // obj.ach = ach
-                // obj.cal = cal
-                setTooltipAch(Ach, obj)
-                setTooltipCal(Cal, obj)
-                // Ach.textContent = ach.toFixed(2) + '%'
-                // Cal.textContent = cal.toFixed(2) + '%'
-            }
-            $('[data-toggle="tooltip"]').tooltip()
-        }
+
+        // if (detail.length > 0) {
+        //     let tBody = document.getElementById('table-set-actual').tBodies[0]
+        //     for (let index = 0; index < tBody.rows.length; index++) {
+        //         const element = tBody.rows[index]
+        //         let actual = element.cells[10]
+        //         let Ach = element.cells[12]
+        //         let Cal = element.cells[13]
+        //         let obj = detail.find(value => value.id === parseInt(actual.firstChild.id))
+        //         if (obj.rules.calculate_type !== calculate.NEGATIVE && obj.rules.calculate_type !== calculate.ZERO) {
+        //             actual.setAttribute("min", 0.00);
+        //         }
+        //         // let ach = findAchValue(obj)
+        //         // let cal = findCalValue(obj, ach)
+        //         // obj.ach = ach
+        //         // obj.cal = cal
+        //         setTooltipAch(Ach, obj)
+        //         setTooltipCal(Cal, obj)
+        //         // Ach.textContent = ach.toFixed(2) + '%'
+        //         // Cal.textContent = cal.toFixed(2) + '%'
+        //     }
+        //     $('[data-toggle="tooltip"]').tooltip()
+        // }
 
         $("#user").select2({
             placeholder: 'Select User',
@@ -113,39 +114,16 @@
 
 var changeActual = (e) => {
     let row = e.parentNode.parentNode
+    let keys = row.cells[0].id.split("_")
+    let id ,rule_id,period_id
+    id = parseInt(keys[0]), rule_id = parseInt(keys[1]), period_id = parseInt(keys[2])
+    let rule = detail.find(item => item.id === id)
     if (Array.isArray(e.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
         for (let index = 0; index < detail.length; index++) {
             const element = detail[index]
-            
-            if (element.id === parseInt(e.id)) {
+            if (element.rule_id === rule.rule_id && element.evaluate.period_id === rule.evaluate.period_id) {
                 element.actual = parseFloat(e.value).toFixed(2)
-                let actual_pc = findActualPercent(element,detail)
-                let ach = findAchValue(element)
-                let cal = findCalValue(element, ach)
-                element.actual_pc = actual_pc
-                element.ach = ach
-                element.cal = cal
-                row.cells[11].textContent = actual_pc.toFixed(2) + '%'
-                row.cells[12].textContent = ach.toFixed(2) + '%'
-                row.cells[13].textContent = cal.toFixed(2) + '%'
-                row.cells[13].dataset.originalTitle = changeTooltipCal(row.cells[12].dataset.originalTitle, element)
-            }
-
-            if (row.cells[4].textContent === element.rules.name && row.cells[3].textContent === `${element.evaluate.targetperiod.name} ${element.evaluate.targetperiod.year}`) {
-                element.actual = parseFloat(e.value).toFixed(2)
-                let actual_pc = findActualPercent(element,detail)
-                let ach = findAchValue(element)
-                let cal = findCalValue(element, ach)
-                element.actual_pc = actual_pc
-                element.ach = ach
-                element.cal = cal
-                let input = document.getElementById(element.id)
-                let duplicate_row = input.parentNode.parentNode
-                input.value = parseFloat(e.value).toFixed(2)
-                duplicate_row.cells[11].textContent = actual_pc.toFixed(2) + '%'
-                duplicate_row.cells[12].textContent = ach.toFixed(2) + '%'
-                duplicate_row.cells[13].textContent = cal.toFixed(2) + '%'
-                duplicate_row.cells[13].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[12].dataset.originalTitle, element)
+                document.getElementById(`actual_${element.id}`).value = parseFloat(e.value).toFixed(2)
             }
         }
     }
@@ -153,38 +131,16 @@ var changeActual = (e) => {
 
 var changeTarget = (e) => {
     let row = e.parentNode.parentNode
+    let keys = row.cells[0].id.split("_")
+    let id ,rule_id,period_id
+    id = parseInt(keys[0]), rule_id = parseInt(keys[1]), period_id = parseInt(keys[2])
+    let rule = detail.find(item => item.id === id)
     if (Array.isArray(e.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
         for (let index = 0; index < detail.length; index++) {
             const element = detail[index]
-            let id = parseInt(e.id.substr(e.id.search("_") + 1,e.id.length))
-            if (element.id === id) {
+            if (element.rule_id === rule.rule_id && element.evaluate.period_id === rule.evaluate.period_id) {
                 element.target = parseFloat(e.value).toFixed(2)
-                let target_pc = findTargetPercent(element,detail)
-                let ach = findAchValue(element)
-                let cal = findCalValue(element, ach)
-                element.target_pc = target_pc
-                element.ach = ach
-                element.cal = cal
-                row.cells[9].textContent = target_pc.toFixed(2) + '%'
-                row.cells[12].textContent = ach.toFixed(2) + '%'
-                row.cells[13].textContent = cal.toFixed(2) + '%'
-                row.cells[13].dataset.originalTitle = changeTooltipCal(row.cells[12].dataset.originalTitle, element)
-            }
-            if (row.cells[4].textContent === element.rules.name && row.cells[3].textContent === `${element.evaluate.targetperiod.name} ${element.evaluate.targetperiod.year}`) {
-                element.target = parseFloat(e.value).toFixed(2)
-                let target_pc = findTargetPercent(element,detail)
-                let ach = findAchValue(element)
-                let cal = findCalValue(element, ach)
-                element.target_pc = target_pc
-                element.ach = ach
-                element.cal = cal
-                let input = document.getElementById(`target_${element.id}`)
-                let duplicate_row = input.parentNode.parentNode
-                input.value = parseFloat(e.value).toFixed(2)
-                duplicate_row.cells[9].textContent = target_pc.toFixed(2) + '%'
-                duplicate_row.cells[12].textContent = ach.toFixed(2) + '%'
-                duplicate_row.cells[13].textContent = cal.toFixed(2) + '%'
-                duplicate_row.cells[13].dataset.originalTitle = changeTooltipCal(duplicate_row.cells[12].dataset.originalTitle, element)
+                document.getElementById(`target_${element.id}`).value = parseFloat(e.value).toFixed(2)
             }
         }
     }
@@ -225,12 +181,12 @@ var validationActual = () => {
     let tBody = document.getElementById('table-set-actual').tBodies[0]
     for (let index = 0; index < tBody.rows.length; index++) {
         const element = tBody.rows[index];
-        if (!Array.isArray(element.cells[10].firstChild.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
-            element.cells[10].firstChild.focus()
+        if (!Array.isArray(element.cells[6].firstChild.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
+            element.cells[6].firstChild.focus()
             return false
         }
-        if (!Array.isArray(element.cells[8].firstChild.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
-            element.cells[8].firstChild.focus()
+        if (!Array.isArray(element.cells[5].firstChild.value.match(/^-?(\d+\.?\d*|\.\d+)$/))) {
+            element.cells[5].firstChild.focus()
             return false
         }
     }

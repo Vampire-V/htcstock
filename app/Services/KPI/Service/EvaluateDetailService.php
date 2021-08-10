@@ -45,11 +45,11 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
     public function setActualFilter(Request $request)
     {
         try {
-            $result = EvaluateDetail::with(['evaluate.user', 'evaluate.targetperiod', 'rule.category'])
+            $result = EvaluateDetail::select('id','evaluate_id','rule_id','target','actual')->with(['evaluate.user', 'evaluate.targetperiod', 'rule.category'])
                 ->whereHas('rule', fn ($query) => $query->where('user_actual', \auth()->id()))
                 ->whereHas('evaluate', fn ($query) => $query->whereNotIn('status', [KPIEnum::approved, KPIEnum::new, KPIEnum::on_process]))
                 // ->whereHas('evaluate.user', fn ($query) => $query->where('divisions_id', \auth()->user()->divisions_id))
-                ->setActualFilter($request)
+                ->setActualFilter($request)->orderBy('rule_id')
                 ->get();
         } catch (\Throwable $th) {
             throw $th;

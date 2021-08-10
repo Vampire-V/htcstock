@@ -151,42 +151,42 @@
                                 <th>Name</th>
                                 <th>Target Period</th>
                                 <th>Rule Name</th>
-                                <th>Base Line%</th>
+                                {{-- <th>Base Line%</th>
                                 <th>Max%</th>
-                                <th>Weight%</th>
+                                <th>Weight%</th> --}}
                                 <th style="width: 12%;">Target Amount</th>
-                                <th>target %</th>
+                                {{-- <th>target %</th> --}}
                                 <th style="width: 12%;">Actual Amount</th>
-                                <th>actual %</th>
+                                {{-- <th>actual %</th>
                                 <th>Ach%</th>
-                                <th>Cal%</th>
+                                <th>Cal%</th> --}}
                             </tr>
                         </thead>
                         <tbody>
                             @isset($evaluateDetail)
                             @foreach ($evaluateDetail as $key => $item)
                             <tr>
-                                <th scope="row">{{$key+1}}</th>
+                                <th scope="row" id="{{$item->id}}_{{$item->rule_id}}_{{$item->evaluate->period_id}}">{{$key+1}}</th>
                                 <td>{{$item->rule->category->name }}</td>
                                 <td>{{$item->evaluate->user->name }}</td>
                                 <td>{{$item->evaluate->targetperiod->name}} {{$item->evaluate->targetperiod->year}}</td>
                                 <td class="truncate" data-toggle="tooltip" title="" data-placement="top"
                                     data-original-title="{{$item->rule->name}}">{{$item->rule->name}}</td>
-                                <td>{{number_format(floatval($item->base_line), 2, '.', '')}}%</td>
+                                {{-- <td>{{number_format(floatval($item->base_line), 2, '.', '')}}%</td>
                                 <td>{{number_format(floatval($item->max_result), 2, '.', '')}}%</td>
-                                <td>{{number_format(floatval($item->weight), 2, '.', '')}}%</td>
+                                <td>{{number_format(floatval($item->weight), 2, '.', '')}}%</td> --}}
                                 <td><input type="number" name="target" id="target_{{$item->id}}"
                                         value="{{number_format(floatval($item->target), 2, '.', '')}}" step="0.01"
                                         class="form-control form-control-sm" onchange="changeTarget(this)" />
                                 </td>
-                                <td>{{number_format(floatval($item->target_pc), 2, '.', '')}}%</td>
-                                <td><input type="number" name="actual" id="{{$item->id}}"
+                                {{-- <td>{{number_format(floatval($item->target_pc), 2, '.', '')}}%</td> --}}
+                                <td><input type="number" name="actual" id="actual_{{$item->id}}"
                                         value="{{number_format(floatval($item->actual), 2, '.', '')}}" step="0.01"
                                         class="form-control form-control-sm" onchange="changeActual(this)" />
                                 </td>
-                                <td>{{number_format(floatval($item->actual_pc), 2, '.', '')}}%</td>
+                                {{-- <td>{{number_format(floatval($item->actual_pc), 2, '.', '')}}%</td>
                                 <td>{{number_format(floatval($item->ach), 2, '.', '')}}%</td>
-                                <td>{{number_format(floatval($item->cal), 2, '.', '')}}%</td>
+                                <td>{{number_format(floatval($item->cal), 2, '.', '')}}%</td> --}}
                             </tr>
                             @endforeach
                             @endisset

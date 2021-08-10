@@ -52,7 +52,7 @@ class SetActualController extends Controller
         $selectedCategory = $request->category;
         $selectedRule = $request->rule;
         $selectedUser = $request->user;
-        $start_year = date('Y', strtotime('-10 years'));
+        $start_year = date('Y', strtotime('-5 years'));
 
         $months = $this->targetPeriodService->dropdown()->unique('name');
         $users = $this->userService->dropdown();

@@ -125,7 +125,7 @@
                                         class="btn btn-sm btn-danger">Delete</button>
                                 </a>
 
-                                <form id="delete-template-form{{$template->id}}}"
+                                <form id="delete-template-form{{$template->id}}"
                                     action="{{ route('kpi.template.destroy',['template' => $template->id]) }}"
                                     method="POST" style="display: none;">
                                     @csrf

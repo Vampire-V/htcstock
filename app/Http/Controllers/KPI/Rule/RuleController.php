@@ -9,6 +9,7 @@ use App\Http\Requests\KPI\StoreRulePost;
 use App\Http\Requests\KPI\StoreRulePut;
 use App\Http\Resources\KPI\RuleResource;
 use App\Imports\KPI\RulesImport;
+use App\Models\KPI\EvaluateDetail;
 use App\Models\KPI\Rule;
 use App\Models\TemporaryFile;
 use App\Services\IT\Interfaces\UserServiceInterface;
@@ -348,5 +349,31 @@ class RuleController extends Controller
     public function rulesdowload()
     {
         return Excel::download(new RulesExport(), "Rules_" . now() . ".xlsx");
+    }
+
+    public function rulesnotin(Request $request)
+    {
+        try {
+            $rules = Rule::whereNotIn('id',[...$request->rules])->where('category_id',$request->group)->get();
+            return $this->successResponse($rules,"Success rules...", 200);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    public function switchrule(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $new_rule = $this->ruleService->find($request->new_rule);
+            $row = EvaluateDetail::find($request->form_detail_id);
+            $row->rule_id = $new_rule->id;
+            $row->save();
+            DB::commit();
+            return $this->successResponse($new_rule,"Success update...", 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 }

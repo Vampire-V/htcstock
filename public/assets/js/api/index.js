@@ -56,9 +56,24 @@ function ISOtoDate(isoString, locale = "en-US") {
     const date = new Date(isoString);
     return new Intl.DateTimeFormat(locale, options).format(date)
 }
-
+axios.create({
+    baseURL: window.location.origin,
+    timeout: 1000,
+  });
 
 // api KPI-System
+const putRuleInEvaluate = (form) => axios({
+    method: 'PUT',
+    responseType: 'json',
+    url: `/kpi/rule/put/evaluate`,
+    data: form
+})
+const postRulesNotIn = (form) => axios({
+    method: 'POST',
+    responseType: 'json',
+    url: `/kpi/rules/notin`,
+    data: form
+})
 
 const getRuleDropdown = (group) => axios({
     method: 'GET',

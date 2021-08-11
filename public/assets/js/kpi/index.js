@@ -97,6 +97,7 @@ class EvaluateDetail {
 // kpi Evaluate-Form Create
 var setEvaluate = (datas) => {
     var evaluateForm = new EvaluateForm()
+    evaluateForm.id = datas.id ?? null
     evaluateForm.template = datas.template_id
     // evaluateForm.minone = datas.main_rule_condition_1_min
     // evaluateForm.maxone = datas.main_rule_condition_1_max
@@ -124,6 +125,7 @@ var setDetail = (rule_temp) => {
     evaluateForm.detail = evaluateForm.detail.length > 0 ? [] : evaluateForm.detail
     rule_temp.forEach(element => {
         let detail = new EvaluateDetail()
+        detail.id = element.id ?? null
         detail.evaluate_id = element.evaluate_id ?? null
         detail.rule_id = element.rule_id
         detail.rules = element.rules

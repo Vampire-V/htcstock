@@ -33,6 +33,8 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::get('rule-dropdown/{group}', 'Rule\RuleController@dropdown')->name('rule-dropdown');
     Route::post('rule-list/upload', 'Rule\RuleController@upload');
     Route::get('rules/download', 'Rule\RuleController@rulesdowload')->name('rules.export');
+    Route::post('rules/notin', 'Rule\RuleController@rulesnotin');
+    Route::put('rule/put/evaluate','Rule\RuleController@switchrule');
     
 
     Route::resource('template', 'Template\TemplateController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);

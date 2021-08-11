@@ -7,7 +7,7 @@
         $("#rule_name").select2({
             placeholder: 'Select RuleTemplate',
             allowClear: true,
-            dropdownParent: $('#rule-modal')
+            dropdownParent: $('#switch-rule-modal')
         })
     })
 
@@ -69,6 +69,13 @@ var render_html = () => {
                     newRow.classList.add(bg_color)
                 }
                 let cellIndex = newRow.insertCell()
+                if (auth.roles.find(item => item.slug === `super-admin`)) {
+                    cellIndex.setAttribute('data-toggle', 'modal')
+                    cellIndex.setAttribute('data-target', '#switch-rule-modal')
+                    cellIndex.setAttribute('data-group', element.rules.category_id)
+                    cellIndex.setAttribute('data-id', element.id)
+                }
+
                 cellIndex.textContent = index + 1
 
                 let cellName = newRow.insertCell()
@@ -104,13 +111,13 @@ var render_html = () => {
                 cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`, readonly))
 
                 let cellTargetPC = newRow.insertCell()
-                cellTargetPC.textContent = findTargetPercent(element,temp_rules).toFixed(2) + `%`
+                cellTargetPC.textContent = findTargetPercent(element, temp_rules).toFixed(2) + `%`
 
                 let cellActual = newRow.insertCell()
                 cellActual.appendChild(newInput('number', className, 'actual', element.actual.toFixed(2), '', `changeValue(this)`))
 
                 let cellActualPC = newRow.insertCell()
-                cellActualPC.textContent = findActualPercent(element,temp_rules).toFixed(2) + `%`
+                cellActualPC.textContent = findActualPercent(element, temp_rules).toFixed(2) + `%`
 
                 let cellAch = newRow.insertCell()
                 element.ach = findAchValue(element)
@@ -199,10 +206,10 @@ const changeValue = (e) => {
 
             if (rule.rules.calculate_type !== null) {
                 // หา target %
-                let targetPC = findTargetPercent(rule,evaluateForm.detail)
+                let targetPC = findTargetPercent(rule, evaluateForm.detail)
                 tr.cells[7].firstChild.textContent = targetPC.toFixed(2) + '%'
                 // หา actual %
-                let actualPC = findActualPercent(rule,evaluateForm.detail)
+                let actualPC = findActualPercent(rule, evaluateForm.detail)
                 tr.cells[9].firstChild.textContent = actualPC.toFixed(2) + '%'
                 // หา %Ach
                 let ach = findAchValue(rule)
@@ -227,8 +234,8 @@ const changeValue = (e) => {
                 // foot.lastElementChild.cells[10].textContent = parseFloat(sumAch).toFixed(2) + '%'
                 foot.lastElementChild.cells[11].textContent = parseFloat(sumCal).toFixed(2) + '%'
                 summary[sumary_index].cal = parseFloat(sumCal)
-                
-                
+
+
                 /**  table-calculation */
                 let table = document.getElementById('table-calculation')
                 let total = 0.00
@@ -244,7 +251,7 @@ const changeValue = (e) => {
                 }
                 table.tFoot.rows[0].cells[1].textContent = `${sum_weight.toFixed(2)} %`
                 table.tFoot.rows[0].cells[2].textContent = `${total.toFixed(2)} %`
-                
+
             }
         }
     })
@@ -294,10 +301,79 @@ const submitToManager = () => {
 }
 
 const download = () => {
-    window.open("/kpi/evaluation/"+evaluate.id+"/excel", "_blank");
+    window.open("/kpi/evaluation/" + evaluate.id + "/excel", "_blank");
+}
+
+const changerule = async () => {
+    let r_id = $("#rule_name").val()
+    let c_id = $("#current_item").val()
+    let form = {
+        form_id: evaluateForm.id,
+        new_rule: r_id,
+        form_detail_id: c_id
+    }
+    try {
+        let result = await putRuleInEvaluate(form)
+        if (result.status === 200) {
+            toast(result.data.message, result.data.status)
+            document.getElementById('switch-rule-modal').querySelector('.close').click()
+        }
+        console.log(result)
+    } catch (error) {
+        console.error(error)
+    } finally {
+        window.location.reload()
+    }
 }
 
 // modal method
+$('#switch-rule-modal').on('show.bs.modal', async function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var group = button.data('group') // Extract info from data-* attributes
+    var id = button.data('id') // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    var modal = $(this)
+    // fetch rules filter
+    let arr = []
+    for (let elements of evaluate.detail.values()) {
+        arr.push(elements.rule_id)
+    }
+    let form = {
+        group: group,
+        rules: arr
+    }
+    try {
+        let rules = await postRulesNotIn(form)
+        if (rules.status === 200) {
+            document.getElementById('current_item').value = id
+            let select = modal.find('.modal-body #rule_name')[0]
+            for (let index = 0; index < rules.data.data.length; index++) {
+                const rule = rules.data.data[index]
+                select.add(new Option(rule.name, rule.id))
+            }
+        }
+    } catch (error) {
+
+    } finally {
+        modal.find('.modal-body #reload').removeClass('reload')
+    }
+    // console.log(evaluateForm.detail.values());
+    // setDropdowToModal(group, modal)
+    // 
+})
+
+$('#switch-rule-modal').on('hide.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var modal = $(this)
+    // var group = button.data('group') // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    removeAllChildNodes(modal.find('.modal-body #rule_name')[0])
+    document.getElementById('current_item').value = ""
+    // modal.find('.modal-body #reload').addClass('reload')
+})
+
 
 $('#rule-modal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal

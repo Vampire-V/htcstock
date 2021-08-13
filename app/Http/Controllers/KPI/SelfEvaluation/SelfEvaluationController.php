@@ -160,10 +160,13 @@ class SelfEvaluationController extends Controller
         DB::beginTransaction();
         try {
             $evaluate = $this->evaluateService->find($id);
-            $check = $this->setting_action_service->isNextStep(KPIEnum::set_value);
+            $check_set = $this->setting_action_service->isNextStep(KPIEnum::set_value);
+            $check_app = $this->setting_action_service->isNextStep(KPIEnum::approve);
 
-            if ($status_list->contains($evaluate->status) && !$check) {
-                return $this->errorResponse("เลยเวลาที่กำหนด", 500);
+            if ($status_list->contains($evaluate->status)) {
+                if (!$check_set && !$check_app) {
+                    return $this->errorResponse("เลยเวลาที่กำหนด", 500);
+                }
             }
             // New version รออัพเดท ข้อมูล
             $detail = collect($request->detail);

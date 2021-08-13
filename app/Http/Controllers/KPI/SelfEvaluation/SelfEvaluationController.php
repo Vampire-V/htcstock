@@ -164,8 +164,14 @@ class SelfEvaluationController extends Controller
             $check_app = $this->setting_action_service->isNextStep(KPIEnum::approve);
 
             if ($status_list->contains($evaluate->status)) {
-                if (!$check_set && !$check_app) {
-                    return $this->errorResponse("เลยเวลาที่กำหนด", 500);
+                if ($request->next) {
+                    if (!$check_app) {
+                        return $this->errorResponse("เลยเวลาที่กำหนด", 500);
+                    }
+                } else {
+                    if (!$check_set) {
+                        return $this->errorResponse("เลยเวลาที่กำหนด", 500);
+                    }
                 }
             }
             // New version รออัพเดท ข้อมูล

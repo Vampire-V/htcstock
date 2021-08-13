@@ -21,10 +21,10 @@ class UserApproveService extends BaseService
         parent::__construct($model);
     }
 
-    public function findFirstLevel($id): ?UserApprove
+    public function findFirstLevel($user_id): ?UserApprove
     {
         try {
-            return UserApprove::where('user_id', $id)->where('level', 1)->first();
+            return UserApprove::where('user_id', $user_id)->where('level', 1)->first();
         } catch (\Throwable $th) {
             throw $th;
         }

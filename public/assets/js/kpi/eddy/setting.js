@@ -65,6 +65,7 @@ $('#modal-dead-line').on('show.bs.modal', function (event) {
     var modal = $(this)
     modal.find('.modal-body #action').val(id)
     // modal.find('.modal-body #reload').addClass('reload')
+    console.log(id);
     render_modal_action(id)
 
     // fetch rules filter
@@ -92,7 +93,7 @@ const render_modal_action = (id) => {
             console.log(error, error.response.data.message)
         })
         .finally(() => {
-            getOperation()
+            getusers()
                 .then(res => {
                     if (res.status === 200) {
                         users = res.data.data

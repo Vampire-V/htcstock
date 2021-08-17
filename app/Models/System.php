@@ -13,7 +13,7 @@ class System extends Model
      *
      * @var string
      */
-    protected $table = 'system';
+    protected $table = 'systems';
 
        /**
     * The attributes that are mass assignable.

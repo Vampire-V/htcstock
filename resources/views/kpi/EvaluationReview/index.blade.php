@@ -118,7 +118,7 @@
                         $is_eddy = $evaluate->userApprove->firstWhere('level',$evaluate->current_level);
 
                         @endphp
-                        <tr @if ($is_eddy && $is_eddy->approveBy->username === "70037455")
+                        <tr @if ($is_eddy && $is_eddy->approveBy->username === "70037455" && $evaluate->status === "On Process")
                             style="background-color: greenyellow"
                             @endif >
                             <th scope="row">{{$key+1}}</th>

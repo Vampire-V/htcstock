@@ -15,7 +15,7 @@ class AddSystemidToPermission extends Migration
     {
         Schema::table('permissions', function (Blueprint $table) {
             //
-            $table->foreignId('system_id')->nullable()->constrained('system')->comment('Id ของ system')->after('icon');
+            $table->foreignId('system_id')->nullable()->constrained('systems')->comment('Id ของ systems')->after('icon');
         });
     }
 

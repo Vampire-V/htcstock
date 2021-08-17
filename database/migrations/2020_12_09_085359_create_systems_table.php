@@ -13,7 +13,7 @@ class CreateSystemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('system', function (Blueprint $table) {
+        Schema::create('systems', function (Blueprint $table) {
             $table->id();
             $table->string('name',45)->unique();
             $table->string('slug',45)->unique();
@@ -29,6 +29,6 @@ class CreateSystemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('system');
+        Schema::dropIfExists('systems');
     }
 }

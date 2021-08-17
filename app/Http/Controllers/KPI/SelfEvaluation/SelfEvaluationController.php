@@ -135,16 +135,13 @@ class SelfEvaluationController extends Controller
         try {
             $category = $this->categoryService->dropdown();
             $f_evaluate = $this->evaluateService->find($id);
-            // if ($f_evaluate->evaluateDetail->groupBy(fn ($item) => $item->rules->category_id)->count() > 2) {
-            //     $weight_group = config('kpi.weight')['quarter'];
-            // } else {
             $weight_group = config('kpi.weight')['month'];
-            // }
+            $current = $this->userApproveService->findCurrentLevel($f_evaluate);
             $evaluate  = new EvaluateResource($f_evaluate);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category', 'weight_group'));
+        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category', 'weight_group', 'current'));
     }
 
     /**
@@ -204,18 +201,22 @@ class SelfEvaluationController extends Controller
 
             if ($request->next) {
                 # send mail to Manger
-                if (!$evaluate->nextlevel->exists) {
+                if (!$evaluate->next_level) {
                     DB::rollBack();
                     Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
                     return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
                 }
+                $evaluate->next_level = $evaluate->next_level+1;
                 $user_approve = $this->userApproveService->findNextLevel($evaluate);
+                
                 $evaluate->status = KPIEnum::on_process;
-                $evaluate->current_level = $evaluate->getOriginal('next_level');
-                $evaluate->next_level = $user_approve->id;
-                // dd($evaluate);
-                Mail::to($evaluate->nextlevel->approveBy->email)->send(new EvaluationSelfMail($evaluate));
-                $message = "send mail to " . $evaluate->nextlevel->approveBy->name;
+                $evaluate->current_level = $evaluate->getOriginal('next_level'); 
+                $evaluate->next_level = $user_approve->level;
+
+                $user_cur = $this->userApproveService->findCurrentLevel($evaluate);
+                // dd($user_approve->user_approve,$user_cur->user_approve);
+                Mail::to($user_cur->approveBy->email)->send(new EvaluationSelfMail($evaluate));
+                $message = "send mail to " . $user_cur->approveBy->name;
             } else {
                 $evaluate->status = KPIEnum::draft;
                 $message = "Draft evaluate of " . $evaluate->user->name;

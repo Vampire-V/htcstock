@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
+use App\Services\KPI\Service\UserApproveService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -36,17 +37,19 @@ class LoginController extends Controller
     protected $redirectTo = RouteServiceProvider::HOME;
     protected $evaluateService;
     protected $userService;
+    protected $userApproveService;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(EvaluateServiceInterface $evaluateServiceInterface, UserServiceInterface $userServiceInterface)
+    public function __construct(EvaluateServiceInterface $evaluateServiceInterface, UserServiceInterface $userServiceInterface, UserApproveService $userApproveService)
     {
         $this->middleware('guest')->except('logout');
         $this->evaluateService = $evaluateServiceInterface;
         $this->userService = $userServiceInterface;
+        $this->userApproveService = $userApproveService;
     }
 
     public function showLoginForm()
@@ -119,7 +122,8 @@ class LoginController extends Controller
                 return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
                 break;
             case KPIEnum::on_process:
-                Auth::login($evaluate->currentlevel->approveBy);
+                $current_lv = $this->userApproveService->findCurrentLevel($evaluate);
+                Auth::login($current_lv->approveBy);
                 return \redirect()->route('kpi.evaluation-review.edit', $evaluate->id);
                 break;
             case KPIEnum::approved:

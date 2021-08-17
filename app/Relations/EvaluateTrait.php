@@ -42,13 +42,12 @@ trait EvaluateTrait
         return $this->hasMany(EvaluateDetail::class,'evaluate_id','id');
     }
 
-    public function nextlevel()
+    /**
+     * Get the UserApprove that owns the Evaluate.
+     */
+    public function userApprove()
     {
-        return $this->belongsTo(UserApprove::class,'next_level')->withDefault();
+        return $this->hasMany(UserApprove::class,'user_id','user_id');
     }
 
-    public function currentlevel()
-    {
-        return $this->belongsTo(UserApprove::class,'current_level')->withDefault();
-    }
 }

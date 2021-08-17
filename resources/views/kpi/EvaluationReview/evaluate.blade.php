@@ -45,7 +45,7 @@
                 <div role="group" class="btn-group-sm btn-group">
                     <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}}
                         </span></h5>
-                    {{$evaluate->currentlevel->approveBy->name}}
+                    {{$current ? $current->approveBy->name : null}}
                 </div>
             </div>
         </div>
@@ -213,14 +213,15 @@
     </div>
 </div>
 <div class="page-title-actions fiexd-btn-botton">
+
+    @if ($evaluate->status === 'Approved')
     @can('super-admin')
     <button class="mb-2 mr-2 btn btn-success" onclick="save(this)">Save</button>
     @endcan
-    @if ($evaluate->status !== 'Approved')
+    @else
     <button class="mb-2 mr-2 btn btn-primary" onclick="approve(this)">Approve</button>
     <button class="mb-2 mr-2 btn btn-warning" onclick="reject(this)">Reject</button>
     @endif
-
 </div>
 
 @endsection
@@ -232,6 +233,7 @@
     // variable
     const auth = {!!json_encode(Auth::user())!!}
     const evaluate = {!!json_encode($evaluate)!!}
+    const current = {!!json_encode($current)!!}
 </script>
 <script src="{{asset('assets\js\kpi\evaluationReview\evaluate.js')}}" defer></script>
 @endsection

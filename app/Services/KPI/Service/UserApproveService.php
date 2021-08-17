@@ -33,20 +33,11 @@ class UserApproveService extends BaseService
     public function findNextLevel(Evaluate $evaluate): ?UserApprove
     {
         try {
-            $level_approve = UserApprove::with('approveBy')->where('user_id', $evaluate->user_id)->orderBy('level')->get();
-            if ($level_approve->count() === 0) {
+            $user_approve = UserApprove::with('approveBy')->where(['user_id' => $evaluate->user_id, 'level' => $evaluate->next_level])->orderBy('level')->first();
+            if (!$user_approve) {
                 return new UserApprove();
             }
-            if ($evaluate->next_level) {
-                $userIndex = $level_approve->search(fn ($item) => $item->id === $evaluate->next_level);
-                if ($level_approve->count() === ($userIndex + 1)) {
-                    return $level_approve[$userIndex];
-                } else {
-                    return $level_approve[$userIndex + 1];
-                }
-            } else {
-                return $level_approve->first();
-            }
+            return $user_approve;
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -77,6 +68,15 @@ class UserApproveService extends BaseService
     {
         try {
             return UserApprove::where('user_id', $evaluate->user_id)->orderBy('level', 'desc')->first();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function findCurrentLevel(Evaluate $evaluate): ?UserApprove
+    {
+        try {
+            return UserApprove::where(['user_id'=> $evaluate->user_id,'level' => $evaluate->current_level])->first();
         } catch (\Throwable $th) {
             throw $th;
         }

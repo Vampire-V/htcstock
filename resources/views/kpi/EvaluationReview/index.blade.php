@@ -75,7 +75,8 @@
                         <select name="period[]" id="validationPeriod" class="form-control-sm form-control" multiple>
                             @isset($months)
                             @foreach ($months as $month)
-                            <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if($selectedPeriod->contains($month->name))
+                            <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if($selectedPeriod->
+                                contains($month->name))
                                 selected @endif>{{$month->name}}</option>
                             @endforeach
                             @endisset
@@ -113,9 +114,13 @@
                         @isset($evaluates)
                         @foreach ($evaluates as $key => $evaluate)
                         @isset($evaluate->user)
-                        <tr @if ($evaluate->currentlevel->user_approve === 113)
+                        @php
+                        $is_eddy = $evaluate->userApprove->firstWhere('level',$evaluate->current_level);
+
+                        @endphp
+                        <tr @if ($is_eddy && $is_eddy->approveBy->username === "70037455")
                             style="background-color: greenyellow"
-                        @endif >
+                            @endif >
                             <th scope="row">{{$key+1}}</th>
                             <td>{{$evaluate->user->name }}</td>
                             <td>{{$evaluate->user->department->name}}</td>

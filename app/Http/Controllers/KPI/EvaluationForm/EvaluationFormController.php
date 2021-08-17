@@ -123,13 +123,8 @@ class EvaluationFormController extends Controller
                         'period_id' => $period,
                         'head_id' => $staff,
                         'status' => $request->next ? KPIEnum::ready : KPIEnum::new,
+                        'next_level' => 1,
                         'template_id' => $request->template,
-                        // 'main_rule_condition_1_min' => $request->minone,
-                        // 'main_rule_condition_1_max' => $request->maxone,
-                        // 'main_rule_condition_2_min' => $request->mintwo,
-                        // 'main_rule_condition_2_max' => $request->maxtwo,
-                        // 'main_rule_condition_3_min' => $request->mintree,
-                        // 'main_rule_condition_3_max' => $request->maxtree,
                         'total_weight_kpi' => $request->total_weight_kpi,
                         'total_weight_key_task' => $request->total_weight_key_task,
                         'total_weight_omg' => $request->total_weight_omg
@@ -160,7 +155,7 @@ class EvaluationFormController extends Controller
                         Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
                         return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
                     }
-                    $evaluate->next_level = $user_approve->id;
+                    $evaluate->next_level = $user_approve->level;
                     $evaluate->save();
                     # send mail to staff
                     Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
@@ -232,6 +227,7 @@ class EvaluationFormController extends Controller
             $evaluate = $this->evaluateService->findKeyEvaluate($staff, $period, $evaluate);
 
             if ($evaluate) {
+                $evaluate->next_level = 1;
                 $user_approve = $this->userApproveService->findNextLevel($evaluate);
                 if (!$user_approve->exists) {
                     DB::rollBack();
@@ -242,13 +238,7 @@ class EvaluationFormController extends Controller
                 // Update Header
                 $evaluate->template_id = $request->template;
                 $evaluate->status = $request->next ? KPIEnum::ready : KPIEnum::new;
-                $evaluate->next_level = $user_approve->id;
-                // $evaluate->main_rule_condition_1_min = $request->minone;
-                // $evaluate->main_rule_condition_1_max = $request->maxone;
-                // $evaluate->main_rule_condition_2_min = $request->mintwo;
-                // $evaluate->main_rule_condition_2_max = $request->maxtwo;
-                // $evaluate->main_rule_condition_3_min = $request->mintree;
-                // $evaluate->main_rule_condition_3_max = $request->maxtree;
+                $evaluate->next_level = 1;
                 $evaluate->total_weight_kpi = $request->total_weight_kpi;
                 $evaluate->total_weight_key_task = $request->total_weight_key_task;
                 $evaluate->total_weight_omg = $request->total_weight_omg;

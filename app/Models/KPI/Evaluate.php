@@ -18,12 +18,6 @@ class Evaluate extends Model
         'template_id' => 'int',
         'current_level' => 'int',
         'next_level' => 'int',
-        // 'main_rule_condition_1_min' => 'float',
-        // 'main_rule_condition_1_max' => 'float',
-        // 'main_rule_condition_2_min' => 'float',
-        // 'main_rule_condition_2_max' => 'float',
-        // 'main_rule_condition_3_min' => 'float',
-        // 'main_rule_condition_3_max' => 'float',
         'total_weight_kpi' => 'float',
         'total_weight_key_task' => 'float',
         'total_weight_omg' => 'float',
@@ -31,30 +25,9 @@ class Evaluate extends Model
         'cal_key_task' => 'float',
         'cal_omg' => 'float',
     ];
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    // protected $fillable = [
-    //     'user_id',
-    //     'period_id',
-    //     'head_id',
-    //     'status',
-    //     'template_id',
-    //     'main_rule_condition_1_min',
-    //     'main_rule_condition_1_max',
-    //     'main_rule_condition_2_min',
-    //     'main_rule_condition_2_max',
-    //     'main_rule_condition_3_min',
-    //     'main_rule_condition_3_max',
-    //     'total_weight_kpi',
-    //     'total_weight_key_task',
-    //     'total_weight_omg',
-    //     'comment'
-    // ];
+
     protected $guarded = [];
-    protected $with = ['nextlevel','currentlevel'];
+    // protected $with = ['nextlevel','currentlevel'];
 
     // service เรียกใช้ Filter
     public function scopeFilter(Builder $builder, $request)

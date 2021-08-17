@@ -82,22 +82,21 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function reviewFilter(Request $request)
     {
         try {
-            if (Gate::any(['for-superadmin-admin'])) {
-                $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod'])
+            if (Gate::any(['admin-kpi','super-admin'])) {
+                $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod', 'userApprove'])
                     // ->whereHas('nextlevel', fn ($query) => $query->where('user_approve', \auth()->user()->id))
                     ->whereIn('status', [KPIEnum::on_process, KPIEnum::approved])
                     ->filter($request)->orderBy('period_id', 'desc')
                     ->get();
             } else {
                 $keys = UserApprove::where('user_approve', \auth()->id())->get();
-                $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod'])
+                $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod', 'userApprove'])
                     // ->whereHas('nextlevel', fn ($query) => $query->where('user_approve', \auth()->id()))
-                    ->whereIn('current_level', $keys->pluck('id'))
+                    ->whereIn('user_id', $keys->pluck('user_id'))
                     ->whereIn('status', [KPIEnum::on_process, KPIEnum::approved])
                     ->filter($request)->orderBy('period_id', 'desc')
                     ->get();
             }
-
             return $result;
         } catch (\Throwable $th) {
             throw $th;

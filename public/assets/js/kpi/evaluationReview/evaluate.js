@@ -26,12 +26,13 @@
                     console.log(error.response.data)
                 })
                 .finally(() => {
+                    console.log(current.user_approve , auth.id , evaluateForm.status , status.ONPROCESS);
                     render_html()
-                    if (evaluateForm.current_level.user_approve.id === auth.id && evaluateForm.status === status.ONPROCESS) {
+                    if (current.user_approve === auth.id && evaluateForm.status === status.ONPROCESS) {
                         pageEnable()
                     }else{
                         is_disable = auth.roles.findIndex(item => item.slug === 'super-admin') >= 0 ? false : true
-                        if (!is_disable && evaluateForm.current_level.user_approve.id === auth.id) {
+                        if (!is_disable && current.user_approve === auth.id) {
                             pageEnable()
                         }else{
                             pageDisable()
@@ -307,11 +308,11 @@ const approve = (e) => {
                 status.textContent = res.data.data.status
                 // console.log(res.data.data.next_level.user_approve.id , auth.id);
                 // console.log(res.data.data.status , status.ONPROCESS);
-                if ((res.data.data.current_level.user_approve.id !== auth.id) && (res.data.data.status === status.ONPROCESS)) {
-                    pageEnable()
-                }else{
-                    pageDisable()
-                }
+                // if ((res.data.data.current_level.user_approve.id !== auth.id) && (res.data.data.status === status.ONPROCESS)) {
+                //     pageEnable()
+                // }else{
+                //     pageDisable()
+                // }
                 toast(res.data.message, res.data.status)
             }
         })
@@ -322,6 +323,7 @@ const approve = (e) => {
             evaluateForm.next = !evaluateForm.next
             setVisible(false)
             toastClear()
+            window.location.reload()
         })
 }
 

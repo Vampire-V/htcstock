@@ -556,7 +556,7 @@ const render_rule = async () => {
         try {
             let d = new Date()
             let result = await getReportRuleOfYear(d.getFullYear())
-            console.log(result.data.data);
+            // console.log(result.data.data);
             await rules_data_to_table(result.data.data)
             
         } catch (error) {
@@ -698,7 +698,7 @@ const render_staff_evaluate = async () => {
         table.previousElementSibling.classList.remove('reload')
     } catch (error) {
         console.error(error)
-        toast(error, 'error')
+        // toast(error, 'error')
     }
     toastClear()
 }

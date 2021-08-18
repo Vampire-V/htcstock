@@ -29,15 +29,17 @@ var transfer_template = async () => {
     let form = {
         user: document.getElementById('user').value
     }
-    console.log(form);
     try {
         let result = await putTemplateTransfer(form, document.getElementById('template').value)
-        console.log(result.data);
+        if (!result.data) {
+            toast("error", 'error')
+        }
     } catch (error) {
         console.error(error);
         toast(error, 'error')
     } finally {
         toastClear()
+        window.location.reload()
     }
 }
 

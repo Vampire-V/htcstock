@@ -63,55 +63,7 @@
             render_html()
             pageDisable()
         }
-        // if (evaluateForm.template) {
-        //     getTemplate(evaluateForm.template)
-        //         .then(res => {
-        //             if (res.status === 200) {
-        //                 template = res.data.data
-        //             }
-        //         })
-        //         .catch(error => {
-        //             toast(error.response.data.message, error.response.data.status)
-        //             console.log(error.response.data)
-        //         })
-        //         .finally(() => {
-        //             let temp = []
-        //             // console.log(evaluateForm.detail);
-        //             for (var i = 0; i < evaluateForm.detail.length; i++) {
-        //                 let item = evaluateForm.detail[i]
-        //                 if (temp.length < 1) {
-        //                     item.average_actual.push(item.actual)
-        //                     item.average_target.push(item.target)
-        //                     temp.push(item)
-        //                 } else {
-        //                     let t_index = temp.findIndex(t => t.rule_id === item.rule_id)
-        //                     if (t_index === -1) {
-        //                         item.average_actual.push(item.actual)
-        //                         item.average_target.push(item.target)
-        //                         temp.push(item)
-        //                     } else {
-        //                         temp[t_index].actual += item.actual
-        //                         temp[t_index].target += item.target
-        //                         temp[t_index].weight += item.weight
-        //                         temp[t_index].average_actual.push(item.actual)
-        //                         temp[t_index].average_target.push(item.target)
-        //                     }
-        //                 }
-        //             }
-                    
-        //             for (let index = 0; index < temp.length; index++) {
-        //                 const element = temp[index]
-        //                 // console.log(element);
-        //                 element.weight = element.rules.categorys.name === `omg` ? element.weight : element.weight / 3
-        //                 element.target = quarter_cal_target(element)
-        //                 element.actual = quarter_cal_amount(element)
-                        
-        //             }
-        //             evaluateForm.detail = temp
-        //             render_html()
-        //             pageDisable()
-        //         })
-        // }
+        
     }, false);
 })();
 
@@ -125,6 +77,7 @@ var render_html = () => {
     let tables = document.getElementById('group-table').getElementsByClassName('table')
     for (let i = 0; i < tables.length; i++) {
         const table = tables[i]
+        let reduce = 0
         let temp_rules = evaluate.evaluate_detail.filter(item => item.rule.category.name === table.id.substring(6))
 
         if (table.tBodies[0].rows.length > 0) {
@@ -216,11 +169,19 @@ var render_html = () => {
             }
         }
 
+        if (temp_rules[0].rule.category.name === category.KPI) {
+            reduce = evaluate.kpi_reduce
+        }
+        if (temp_rules[0].rule.category.name === category.KEYTASK) {
+            reduce = evaluate.key_task_reduce
+        }
+        if (temp_rules[0].rule.category.name === category.OMG) {
+            reduce = evaluate.omg_reduce
+        }
+
         let sum_weight = temp_rules.reduce((total, cur) => total += cur.weight, 0.00)
-        // let sum_ach = temp_rules.reduce((total, cur) => total += cur.ach, 0.00)
-        let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00)
+        let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00) - reduce
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
-        // table.tFoot.lastElementChild.cells[10].textContent = `${sum_ach.toFixed(2)}%`
         table.tFoot.lastElementChild.cells[11].textContent = `${sum_cal.toFixed(2)}%`
         summary.push({
             'weight': parseFloat(weight_quarter[i]),

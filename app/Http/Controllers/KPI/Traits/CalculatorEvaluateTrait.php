@@ -13,14 +13,6 @@ trait CalculatorEvaluateTrait
     protected function calculation_summary(Collection $evaluations, Request $request = null)
     {
         if ($request) {
-            // foreach ($evaluations as $value) {
-            //     if ($request->quarter === "true" && $request->degree === KPIEnum::one) {
-            //         $value->weigth = config('kpi.weight')['quarter'];
-            //     } else {
-            //         $value->weigth = config('kpi.weight')['month'];
-            //     }
-            //     $this->calculation_detail($value->evaluateDetail);
-            // }
             for ($i = 0; $i < $evaluations->count(); $i++) {
                 $value = $evaluations[$i];
 
@@ -30,12 +22,9 @@ trait CalculatorEvaluateTrait
                     $value->weigth = config('kpi.weight')['month'];
                 }
                 $this->calculation_detail($value->evaluateDetail);
+                // dd($value,$value->evaluateDetail->groupBy(fn($item) => $item->rule->category_id));
             }
         } else {
-            // foreach ($evaluations as $value) {
-            //     $this->calculation_detail($value->evaluateDetail);
-            // }
-            
             for ($i = 0; $i < $evaluations->count(); $i++) {
                 $value = $evaluations[$i];
                 if ($value->user->degree === KPIEnum::one) {
@@ -51,18 +40,13 @@ trait CalculatorEvaluateTrait
     protected function calculation_detail(Collection $evaluate_detail)
     {
         if ($evaluate_detail) {
-            // foreach ($evaluate_detail as $item) {
-            //     $this->findTargetPC($item, $evaluate_detail);
-            //     $this->findActualPC($item, $evaluate_detail);
-            //     $this->findAch($item);
-            //     $this->findCal($item, $item->ach);
-            // }
             for ($i = 0; $i < $evaluate_detail->count(); $i++) {
                 $item = $evaluate_detail[$i];
                 $this->findTargetPC($item, $evaluate_detail);
                 $this->findActualPC($item, $evaluate_detail);
                 $this->findAch($item);
                 $this->findCal($item, $item->ach);
+                // $item->reduce_point = $item->rule->category_id === 2 ? 10 : 0;
             }
         }
     }

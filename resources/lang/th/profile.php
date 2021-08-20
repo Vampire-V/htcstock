@@ -20,6 +20,7 @@ return [
     'manager' => 'ผู้จัดการ',
     'division' => 'ฝ่าย',
     'department' => 'แผนก',
-    'position' => 'ตำแหน่ง'
+    'position' => 'ตำแหน่ง',
+    'degree' => 'EMC-Group'
 
 ];

@@ -51,12 +51,25 @@ $cal_result = [];
             <td></td>
             <td></td>
             <td></td>
-            <td>{{round($rules->sum('cal'),2)}} %</td>
+            @php
+                $reduce = 0;
+                if ($rules->first()->rule->category->name === 'kpi') {
+                    $reduce = $evaluate->kpi_reduce;
+                }
+                if ($rules->first()->rule->category->name === 'key-task') {
+                    $reduce = $evaluate->key_task_reduce;
+                }
+                if ($rules->first()->rule->category->name === 'omg') {
+                    $reduce = $evaluate->omg_reduce;
+                }
+                $total = round($rules->sum('cal'),2) - $reduce;
+            @endphp
+            <td>{{$total}} %</td>
         </tr>
     </tfoot>
 </table>
 @php
-$cal_result[] = $rules->sum('cal')
+$cal_result[] = $total;
 @endphp
 @endforeach
 @endisset
@@ -82,15 +95,16 @@ $cal_result[] = $rules->sum('cal')
         <tr>
             <th>{{$item->name}}</th>
             <td>{{$weight_group[$key] ?? 0.00}} %</td>
-            @if (isset($cal_result[$key]))
+            
+            @isset($cal_result[$key])
             @php
-                $cal = ($cal_result[$key] * $weight_group[$key]) / 100;
-                $total[] = $cal;
+            $cal = ($cal_result[$key] * $weight_group[$key]) / 100;
+            $total[] = $cal;
             @endphp
+            @endisset
+            
             <td>{{round($cal,2)}} %</td>
-            @else
-            <td>0.00 %</td>
-            @endif
+           
             
         </tr>
         @endforeach

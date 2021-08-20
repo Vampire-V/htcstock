@@ -24,6 +24,9 @@ class Evaluate extends Model
         'cal_kpi' => 'float',
         'cal_key_task' => 'float',
         'cal_omg' => 'float',
+        'kpi_reduce' => 'float',
+        'key_task_reduce' => 'float',
+        'omg_reduce' => 'float'
     ];
 
     protected $guarded = [];

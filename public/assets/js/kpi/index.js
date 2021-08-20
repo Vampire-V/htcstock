@@ -21,6 +21,11 @@ var calculate = {
         LAST_MONTH: "Last Month",
         SUM: "Sum"
     },
+    category = {
+        KPI: "kpi",
+        KEYTASK: "key-task",
+        OMG: "omg",
+    },
     className = ['form-control', 'form-control-sm']
 bg_color = 'color_weight',
 month_q1 = [2, 3, 4],
@@ -34,9 +39,9 @@ class EvaluateForm {
         total_weight_kpi = 0.00,
         total_weight_key_task = 0.00,
         total_weight_omg = 0.00,
-        // cal_kpi = 0.00,
-        // cal_key_task = 0.00,
-        // cal_omg = 0.00,
+        kpi_reduce = 0.00,
+        key_task_reduce = 0.00,
+        omg_reduce = 0.00,
         comment = null,
         detail = [],
         remove = [],
@@ -48,9 +53,9 @@ class EvaluateForm {
         this.total_weight_kpi = total_weight_kpi
         this.total_weight_key_task = total_weight_key_task
         this.total_weight_omg = total_weight_omg
-        // this.cal_kpi = cal_kpi
-        // this.cal_key_task = cal_key_task
-        // this.cal_omg = cal_omg
+        this.kpi_reduce = kpi_reduce
+        this.key_task_reduce = key_task_reduce
+        this.omg_reduce = omg_reduce
         this.comment = comment
         this.detail = detail
         this.remove = remove

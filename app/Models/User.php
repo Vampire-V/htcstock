@@ -43,8 +43,8 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'head_id' => 'int'
+        'email_verified_at' => 'datetime'
+        // 'head_id' => 'int'
     ];
 
     /**

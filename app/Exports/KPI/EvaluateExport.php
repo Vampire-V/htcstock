@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\FromView;
 
 class EvaluateExport implements FromView
 {
-    public function __construct(Evaluate $model,Collection $rules)
+    public function __construct(Evaluate $model, $rules)
     {
         $this->evaluate = $model;
         $this->rules = $rules;

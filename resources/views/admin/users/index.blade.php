@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @section('sidebar')
 @section('style')
-    <style>
-        label {
-            font-weight: bold;
-        }
-    </style>
+<style>
+    label {
+        font-weight: bold;
+    }
+</style>
 @endsection
 @include('includes.sidebar.admin');
 @stop
@@ -50,8 +50,8 @@
                         </div>
                         <div class="col-md-2 mb-2">
                             <label for="department">Department</label>
-                            <select class="form-control-sm form-control js-select-department-multiple" name="department[]"
-                                multiple>
+                            <select class="form-control-sm form-control js-select-department-multiple"
+                                name="department[]" multiple>
                                 @isset($departments)
                                 @foreach ($departments as $item)
                                 <option value="{{$item->id}}" @if($selectedDept->contains($item->id)) selected
@@ -129,7 +129,7 @@
                 {{ __('List Employees') }}
             </div>
             <div class="card-body">
-                {{-- <h5 class="card-title">Users</h5> --}}
+                <h5 class="card-title">Total: <span class="badge badge-success">{{$users->total()}}</span></h5>
                 <div class="table-responsive">
                     <table class="mb-0 table table-hover" id="table-users">
                         <thead>
@@ -176,8 +176,8 @@
                         </tbody>
                     </table>
                 </div>
+                {{ $users->appends($query)->links() }}
             </div>
-            {{ $users->appends($query)->links() }}
         </div>
     </div>
 </div>

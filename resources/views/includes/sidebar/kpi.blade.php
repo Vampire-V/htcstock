@@ -44,7 +44,7 @@
                     <a href="{{route('kpi.self-evaluation.index',['user'=>[auth()->id()],'year'=>[date('Y')]])}}"
                         class="{{Helper::isActive('kpi/self-evaluation*')}}">
                         <i class="metismenu-icon pe-7s-file"></i>
-                        Self Evaluation
+                        Evaluation Self
                     </a>
                 </li>
                 <li>
@@ -55,7 +55,7 @@
                 </li>
                 {{-- admin --}}
                 @can('admin-kpi')
-                <li class="app-sidebar__heading">Menu For Operation</li>
+                <li class="app-sidebar__heading">Operation</li>
                 <li>
                     <a href="{{route('kpi.set-period.index')}}" class="{{Helper::isActive('kpi/set-period*')}}">
                         <i class="metismenu-icon pe-7s-date"></i>
@@ -71,7 +71,7 @@
                 <li>
                     <a href="{{route('kpi.template.index')}}" class="{{Helper::isActive('kpi/template*')}}">
                         <i class="metismenu-icon pe-7s-box1"></i>
-                        Rule Template
+                        Template
                     </a>
                 </li>
                 <li>
@@ -85,7 +85,7 @@
                 
                 {{-- admin manager --}}
                 @canany(['admin-kpi','manager-kpi'])
-                <li class="app-sidebar__heading">Menu For Manager</li>
+                <li class="app-sidebar__heading">Manager</li>
                 <li class="{{Helper::isActive('kpi/evaluation-review*')}}">
                 <li>
                     <a href="{{route('kpi.evaluation-review.index')}}"
@@ -111,7 +111,7 @@
                         <li>
                             <a href="{{route('kpi.for-eddy.index')}}" class="{{Helper::isActive('kpi/for-eddy')}}">
                                 <i class="metismenu-icon"></i>
-                                Edite actual / ach%
+                                Employee report
                             </a>
                         </li>
                         <li>

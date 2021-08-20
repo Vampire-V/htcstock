@@ -3,18 +3,14 @@
 namespace App\Http\Controllers\KPI\SelfEvaluation;
 
 use App\Enum\KPIEnum;
-use App\Enum\UserEnum;
 use App\Exports\KPI\EvaluateExport;
 use App\Exports\KPI\EvaluateQuarterExport;
-use App\Exports\KPI\EvaluatesExport;
 use App\Exports\KPI\EvaluateYearExport;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait;
-use App\Http\Resources\KPI\EvaluateDetailResource;
 use App\Http\Resources\KPI\EvaluateResource;
 use App\Mail\KPI\EvaluationSelfMail;
 use App\Models\KPI\Evaluate;
-use App\Models\KPI\EvaluateDetail;
 use App\Models\KPI\RuleTemplate;
 use App\Models\User;
 use App\Services\IT\Interfaces\UserServiceInterface;
@@ -29,13 +25,9 @@ use App\Services\KPI\Service\SettingActionService;
 use App\Services\KPI\Service\UserApproveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Response;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SelfEvaluationController extends Controller
@@ -206,11 +198,11 @@ class SelfEvaluationController extends Controller
                     Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
                     return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
                 }
-                $evaluate->next_level = $evaluate->next_level+1;
+                $evaluate->next_level = $evaluate->next_level + 1;
                 $user_approve = $this->userApproveService->findNextLevel($evaluate);
-                
+
                 $evaluate->status = KPIEnum::on_process;
-                $evaluate->current_level = $evaluate->getOriginal('next_level'); 
+                $evaluate->current_level = $evaluate->getOriginal('next_level');
                 $evaluate->next_level = $user_approve->level;
 
                 $user_cur = $this->userApproveService->findCurrentLevel($evaluate);
@@ -374,16 +366,27 @@ class SelfEvaluationController extends Controller
      */
     public function display_quarter($user, $quarter, $year)
     {
+        $kpi_reduce = 0.0;
+        $key_task_reduce = 0.0;
+        $omg_reduce = 0.0;
         try {
             $category = $this->categoryService->dropdown();
-            $detail = \collect();
+            $detail = new Collection();
             $evaluate_quarter = $this->evaluateService->forQuarterYear($user, $quarter, $year);
-            $evaluate_quarter->each(function ($item) use ($detail) {
+
+            foreach ($evaluate_quarter as $key => $item) {
+                $kpi_reduce += $item->kpi_reduce;
+                $key_task_reduce += $item->key_task_reduce;
+                $omg_reduce += $item->omg_reduce;
                 foreach ($item->evaluateDetail as $key => $value) {
-                    $detail[] = $value;
+                    $detail->push($value);
                 }
-            });
+            }
+
             $evaluate = $evaluate_quarter->first();
+            $evaluate->kpi_reduce = $kpi_reduce;
+            $evaluate->key_task_reduce = $key_task_reduce;
+            $evaluate->omg_reduce = $omg_reduce;
             $evaluate->evaluateDetail = $detail;
             $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
             // $evaluate  = new EvaluateResource($evaluate);
@@ -402,24 +405,33 @@ class SelfEvaluationController extends Controller
      */
     public function display_all_quarter($user, $year)
     {
+        $kpi_reduce = 0.0;
+        $key_task_reduce = 0.0;
+        $omg_reduce = 0.0;
         try {
             $category = $this->categoryService->dropdown();
-            $detail = \collect();
+            $detail = new Collection();
             $evaluate_quarter = $this->evaluateService->forYear($user, $year);
-            $evaluate_quarter->each(function ($item) use ($detail) {
+
+            foreach ($evaluate_quarter as $key => $item) {
+                $kpi_reduce += $item->kpi_reduce;
+                $key_task_reduce += $item->key_task_reduce;
+                $omg_reduce += $item->omg_reduce;
                 foreach ($item->evaluateDetail as $key => $value) {
-                    $detail[] = $value;
+                    $detail->push($value);
                 }
-            });
+            }
             $evaluate = $evaluate_quarter->first();
+            $evaluate->kpi_reduce = $kpi_reduce;
+            $evaluate->key_task_reduce = $key_task_reduce;
+            $evaluate->omg_reduce = $omg_reduce;
 
             $evaluate->evaluateDetail = $detail;
             $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
-            // $evaluate  = new EvaluateResource($evaluate);
+            return \view('kpi.SelfEvaluation.allquarter', \compact('evaluate', 'category', 'quarter_weight'));
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.SelfEvaluation.allquarter', \compact('evaluate', 'category', 'quarter_weight'));
     }
 
     private function quarter_summary(Collection $detail): Collection
@@ -452,7 +464,7 @@ class SelfEvaluationController extends Controller
     public function evaluateExcel($id)
     {
         try {
-            $evaluate = $this->evaluateService->find($id);
+            $evaluate = Evaluate::with(['evaluateDetail.rule.category'])->find($id);
             $this->calculation_detail($evaluate->evaluateDetail);
             $evaluate_detail = $evaluate->evaluateDetail->groupBy(fn ($item) => $item->rules->category_id);
             return Excel::download(new EvaluateExport($evaluate, $evaluate_detail), "Evaluate" . $evaluate->user->name . ".xlsx");
@@ -463,13 +475,20 @@ class SelfEvaluationController extends Controller
 
     public function evaluateQuarterExcel($user, $quarter, $year)
     {
+        $kpi_reduce = 0;
+        $key_task_reduce = 0;
+        $omg_reduce = 0;
         try {
             $detail = \collect();
             $evaluate_quarter = $this->evaluateService->forQuarterYear($user, $quarter, $year);
 
-            $evaluate_quarter->each(function ($item) use ($detail) {
+            foreach ($evaluate_quarter as $item) {
+                $kpi_reduce += $item->kpi_reduce;
+                $key_task_reduce += $item->key_task_reduce;
+                $omg_reduce += $item->omg_reduce;
                 $item->evaluateDetail->each(fn ($value) => $detail->add($value));
-            });
+            }
+
             $new = $detail->groupBy('rule_id')->each(function ($item) {
                 $max = $item->last()->max_result;
                 $weight = $item->last()->rule->category->name === 'omg' ? $item->sum('weight') : $item->sum('weight') / 3;
@@ -487,9 +506,14 @@ class SelfEvaluationController extends Controller
                 $detail->add($item->unique('rule_id')->first());
             });
 
+            $evaluate = $evaluate_quarter->first();
+            $evaluate->kpi_reduce = $kpi_reduce;
+            $evaluate->key_task_reduce = $key_task_reduce;
+            $evaluate->omg_reduce = $omg_reduce;
+
             $this->calculation_detail($detail);
             $user = $this->userService->find($user);
-            return Excel::download(new EvaluateQuarterExport($user, $detail), "Evaluate-quarter-" . $user->name . ".xlsx");
+            return Excel::download(new EvaluateQuarterExport($user,$evaluate, $detail), "Evaluate-quarter-" . $user->name . ".xlsx");
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
@@ -497,15 +521,23 @@ class SelfEvaluationController extends Controller
 
     public function evaluateYearExcel($user, $year)
     {
-
+        $kpi_reduce = 0;
+        $key_task_reduce = 0;
+        $omg_reduce = 0;
         try {
             $detail = \collect();
             $evaluate_quarter = $this->evaluateService->forYear($user, $year);
 
-            $evaluate_quarter->each(function ($item) use ($detail) {
+            // $evaluate_quarter->each(function ($item) use ($detail) {
+            //     $item->evaluateDetail->each(fn ($value) => $detail->add($value));
+            // });
+            foreach ($evaluate_quarter as $item) {
+                $kpi_reduce += $item->kpi_reduce;
+                $key_task_reduce += $item->key_task_reduce;
+                $omg_reduce += $item->omg_reduce;
                 $item->evaluateDetail->each(fn ($value) => $detail->add($value));
-            });
-            $new = $detail->groupBy('rule_id')->each(function ($item) use($year){
+            }
+            $new = $detail->groupBy('rule_id')->each(function ($item) use ($year) {
                 $quarter = 4;
                 $month = 12;
                 if ($year === date('Y')) {
@@ -529,8 +561,12 @@ class SelfEvaluationController extends Controller
             });
 
             $this->calculation_detail($detail);
+            $evaluate = $evaluate_quarter->first();
+            $evaluate->kpi_reduce = $kpi_reduce;
+            $evaluate->key_task_reduce = $key_task_reduce;
+            $evaluate->omg_reduce = $omg_reduce;
             $user = $this->userService->find($user);
-            return Excel::download(new EvaluateYearExport($user, $detail), "Evaluate-year-" . $user->name . ".xlsx");
+            return Excel::download(new EvaluateYearExport($user,$evaluate, $detail), "Evaluate-year-" . $user->name . ".xlsx");
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
@@ -584,7 +620,7 @@ class SelfEvaluationController extends Controller
 
     private function get_month_haier()
     {
-       return date('d') > 12 ? intval(date('n', strtotime('-1 month'))) : intval(date('n', strtotime('-2 month')));
-    //    intval(date('n', strtotime('-1 month')));
+        return date('d') > 12 ? intval(date('n', strtotime('-1 month'))) : intval(date('n', strtotime('-2 month')));
+        //    intval(date('n', strtotime('-1 month')));
     }
 }

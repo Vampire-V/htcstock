@@ -131,9 +131,7 @@ const search_score = async () => {
         let fetch_data = await getOperationReportScore({
             params: param
         })
-        let information = await combine_information(fetch_data.data.data)
-        // debugger
-        score = information.sort((a, b) => b.score - a.score)
+        score = await combine_information(fetch_data.data.data).sort((a, b) => b.score - a.score)
     } catch (error) {
         console.error(error)
         toast(error, 'error')
@@ -146,143 +144,101 @@ const search_score = async () => {
 let combine_information = (fetch_data) => {
     let data = [],
         average_omg
-    // if ($("#quarter").val() === '1') {
-    //     average_omg = 1
-    // }
-    // if ($("#quarter").val() === '2') {
-    //     average_omg = 2
-    // }
-    // if ($("#quarter").val() === '3') {
-    //     average_omg = 3
-    // }
-    // if ($("#quarter").val() === '4') {
-    //     average_omg = 4
-    // }
 
-    if (document.getElementById('customSwitch1').checked) {
-        if ($("#quarter").val() === '') {
-            average_omg = getQuarterForHaier(new Date())
-        }
-        // is quarter
-        // New function for quarter
-        // let group = res.data.data.reduce((r, a) => {
-        //     r[a.user_id] = [...r[a.user_id] || [], a];
-        //     return r;
-        // }, {})
-        //    let total_kpi = 0
-        //     let total_key = 0
-        //     let total_omg = 0
-        // for (const key in group) {
-        //     if (Object.hasOwnProperty.call(group, key)) {
-        //         const element = group[key]
-        //         total_kpi = element.reduce((a, c) => a + c.cal_kpi, 0) / 3
-        //         total_key = element.reduce((a, c) => a + c.cal_key_task, 0) / 3
-        //         total_omg = element.reduce((a, c) => a + c.cal_omg, 0) / 3
-        //         sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1])
-        //         newData.push({
-        //             evaluate: element[element.length-1],
-        //             kpi: total_kpi,
-        //             key_task: total_key,
-        //             omg: total_omg,
-        //             score: sum_total / 100
-        //         })
-        //     }
-        // }
-        // console.log(newData);
-        // End New function for quarter
-        let item_unique = []
+    fetch_data.sort(function (a, b) {
+        var keyA = a.period_id,
+            keyB = b.period_id;
+        // Compare the 2 dates
+        if (keyA < keyB) return -1;
+        if (keyA > keyB) return 1;
+        return 0;
+    })
 
-        // let group = res.data.data.reduce((r, a) => {
-        //     r[a.user_id] = [...r[a.user_id] || [], a];
-        //     return r;
-        // }, {})
-        fetch_data.sort(function (a, b) {
-            var keyA = a.period_id,
-                keyB = b.period_id;
-            // Compare the 2 dates
-            if (keyA < keyB) return -1;
-            if (keyA > keyB) return 1;
-            return 0;
-        })
-        for (let index = 0; index < fetch_data.length; index++) {
-            const evaluate = fetch_data[index]
-            if (item_unique.length < 1) {
-                item_unique.push(evaluate)
-            } else {
-                let i = item_unique.findIndex(t => t.user_id === evaluate.user_id)
-                if (i < 0) {
+    try {
+        if (document.getElementById('customSwitch1').checked) {
+            if ($("#quarter").val() === '') {
+                average_omg = getQuarterForHaier(new Date())
+            }
+            let item_unique,
+                kpi_reduce_point,
+                keytask_reduce_point,
+                omg_reduce_point
+
+            item_unique = []
+            kpi_reduce_point = 0
+            keytask_reduce_point = 0
+            omg_reduce_point = 0
+            for (let index = 0; index < fetch_data.length; index++) {
+                const evaluate = fetch_data[index]
+
+                kpi_reduce_point += evaluate.kpi_reduce
+                keytask_reduce_point += evaluate.key_task_reduce
+                omg_reduce_point += evaluate.omg_reduce
+                if (item_unique.length < 1) {
                     item_unique.push(evaluate)
                 } else {
-                    item_unique[i].evaluate_detail = item_unique[i].evaluate_detail.concat(evaluate.evaluate_detail)
+                    let i = item_unique.findIndex(t => t.user_id === evaluate.user_id)
+                    if (i < 0) {
+                        item_unique.push(evaluate)
+                    } else {
+                        item_unique[i].evaluate_detail = item_unique[i].evaluate_detail.concat(evaluate.evaluate_detail)
+                    }
                 }
             }
+
+            for (let index = 0; index < item_unique.length; index++) {
+                const element = item_unique[index]
+                let kpi = element.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
+                let key_task = element.evaluate_detail.filter(item => item.rule.category.name === `key-task`)
+                let omg = element.evaluate_detail.filter(item => item.rule.category.name === `omg`)
+
+                let total_kpi, total_key, total_omg, sum_total
+                total_kpi = 0
+                total_key = 0
+                total_omg = 0
+                sum_total = 0
+
+
+                total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0) - kpi_reduce_point
+                total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0) - keytask_reduce_point
+
+                let cal_o = total_quarter(omg).reduce((a, c) => a + c.cal, 0) - omg_reduce_point
+                total_omg = average_omg ? cal_o / average_omg : cal_o
+
+                sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
+
+                data.push({
+                    evaluate: element,
+                    kpi: total_kpi,
+                    key_task: total_key,
+                    omg: total_omg,
+                    score: sum_total / 100
+                })
+            }
+        } else {
+            for (let index = 0; index < fetch_data.length; index++) {
+                let total_kpi, total_key, total_omg, sum_total
+                const evaluate = fetch_data[index]
+                total_kpi = evaluate.evaluate_detail.filter(item => item.rule.category.name === `kpi`).reduce((a, c) => a + c.cal, 0) - evaluate.kpi_reduce
+                total_key = evaluate.evaluate_detail.filter(item => item.rule.category.name === `key-task`).reduce((a, c) => a + c.cal, 0) - evaluate.key_task_reduce
+                total_omg = 0.00
+                sum_total = 0.00
+
+                sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1])
+
+                data.push({
+                    evaluate: evaluate,
+                    kpi: total_kpi,
+                    key_task: total_key,
+                    omg: total_omg,
+                    score: sum_total / 100
+                })
+            }
         }
-        // console.log(item_unique);
-        for (let index = 0; index < item_unique.length; index++) {
-            const element = item_unique[index]
-            let kpi = element.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
-            let key_task = element.evaluate_detail.filter(item => item.rule.category.name === `key-task`)
-            let omg = element.evaluate_detail.filter(item => item.rule.category.name === `omg`)
-            let total_kpi = 0
-            let total_key = 0
-            let total_omg = 0
-            let sum_total = 0
-
-            total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0)
-            total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0)
-            let cal_o = total_quarter(omg).reduce((a, c) => a + c.cal, 0)
-            total_omg = average_omg ? cal_o / average_omg : cal_o
-            // if (element.user_id === 571) {
-            //     console.log(total_omg,average_omg);
-            //     console.log(total_omg/average_omg);
-            // }
-            sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
-
-            data.push({
-                evaluate: element,
-                kpi: total_kpi,
-                key_task: total_key,
-                omg: total_omg,
-                score: sum_total / 100
-            })
-        }
-    } else {
-        for (let index = 0; index < fetch_data.length; index++) {
-            const evaluate = fetch_data[index]
-            let kpi = evaluate.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
-            let key_task = evaluate.evaluate_detail.filter(item => item.rule.category.name === `key-task`)
-            // let omg = evaluate.detail.filter(item => item.rule.categorys.name === `omg`)
-            let total_kpi = 0.00
-            let total_key = 0.00
-            let total_omg = 0.00
-            let sum_total = 0.00
-
-            total_kpi = kpi.reduce((a, c) => a + c.cal, 0)
-            total_key = key_task.reduce((a, c) => a + c.cal, 0)
-            // total_omg = omg.reduce((a, c) => a + c.cal, 0)
-            sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1])
-            // + (total_omg * weigth_template[2])
-
-            data.push({
-                evaluate: evaluate,
-                kpi: total_kpi,
-                key_task: total_key,
-                omg: total_omg,
-                score: sum_total / 100
-            })
-
-            // New version รอ อัพเดทข้อมูลใน database ครบก่อน
-            // sum_total = (evaluate.cal_kpi * weigth_template[0]) + (evaluate.cal_key_task * weigth_template[1])
-            // data.push({
-            //     evaluate: evaluate,
-            //     kpi: evaluate.cal_kpi,
-            //     key_task: evaluate.cal_key_task,
-            //     omg: 0.00, //evaluate.cal_omg,
-            //     score: sum_total / 100
-            // })
-        }
+        return data
+    } catch (error) {
+        console.error(error)
     }
-    return data
 }
 
 let total_quarter = (objArr) => {
@@ -293,6 +249,9 @@ let total_quarter = (objArr) => {
     try {
         for (var i = 0; i < objArr.length; i++) {
             let item = objArr[i]
+            if ((item.rule_id === 271) || (item.rule_id === 272) || item.rule_id === 273 || item.rule_id === 274) {
+                // console.log(item.evaluate_id);
+            }
             item.average_max = []
             item.average_weight = []
             item.average_actual = []
@@ -558,7 +517,7 @@ const render_rule = async () => {
             let result = await getReportRuleOfYear(d.getFullYear())
             // console.log(result.data.data);
             await rules_data_to_table(result.data.data)
-            
+
         } catch (error) {
             console.error(error)
             // toast(error)
@@ -568,7 +527,7 @@ const render_rule = async () => {
             table.previousElementSibling.classList.remove('reload')
             toastClear()
         }
-        
+
     }
 
 }
@@ -635,45 +594,45 @@ const rules_data_to_table = (data) => {
         name.setAttribute('title', rule.name)
         name.textContent = rule.name
 
-        jan_target.innerHTML = findLastValue(rule,rule.total[0], 'target')
-        jan_actual.innerHTML = findLastValue(rule,rule.total[0], 'actual')
+        jan_target.innerHTML = findLastValue(rule, rule.total[0], 'target')
+        jan_actual.innerHTML = findLastValue(rule, rule.total[0], 'actual')
 
-        feb_target.innerHTML = findLastValue(rule,rule.total[1], 'target')
-        feb_actual.innerHTML = findLastValue(rule,rule.total[1], 'actual')
+        feb_target.innerHTML = findLastValue(rule, rule.total[1], 'target')
+        feb_actual.innerHTML = findLastValue(rule, rule.total[1], 'actual')
 
-        mar_target.innerHTML = findLastValue(rule,rule.total[2], 'target')
-        mar_actual.innerHTML = findLastValue(rule,rule.total[2], 'actual')
+        mar_target.innerHTML = findLastValue(rule, rule.total[2], 'target')
+        mar_actual.innerHTML = findLastValue(rule, rule.total[2], 'actual')
 
-        apr_target.innerHTML = findLastValue(rule,rule.total[3], 'target')
-        apr_actual.innerHTML = findLastValue(rule,rule.total[3], 'actual')
+        apr_target.innerHTML = findLastValue(rule, rule.total[3], 'target')
+        apr_actual.innerHTML = findLastValue(rule, rule.total[3], 'actual')
 
-        may_target.innerHTML = findLastValue(rule,rule.total[4], 'target')
-        may_actual.innerHTML = findLastValue(rule,rule.total[4], 'actual')
+        may_target.innerHTML = findLastValue(rule, rule.total[4], 'target')
+        may_actual.innerHTML = findLastValue(rule, rule.total[4], 'actual')
 
-        jun_target.innerHTML = findLastValue(rule,rule.total[5], 'target')
-        jun_actual.innerHTML = findLastValue(rule,rule.total[5], 'actual')
+        jun_target.innerHTML = findLastValue(rule, rule.total[5], 'target')
+        jun_actual.innerHTML = findLastValue(rule, rule.total[5], 'actual')
 
-        jul_target.innerHTML = findLastValue(rule,rule.total[6], 'target')
-        jul_actual.innerHTML = findLastValue(rule,rule.total[6], 'actual')
+        jul_target.innerHTML = findLastValue(rule, rule.total[6], 'target')
+        jul_actual.innerHTML = findLastValue(rule, rule.total[6], 'actual')
 
-        aug_target.innerHTML = findLastValue(rule,rule.total[7], 'target')
-        aug_actual.innerHTML = findLastValue(rule,rule.total[7], 'actual')
+        aug_target.innerHTML = findLastValue(rule, rule.total[7], 'target')
+        aug_actual.innerHTML = findLastValue(rule, rule.total[7], 'actual')
 
-        sep_target.innerHTML = findLastValue(rule,rule.total[8], 'target')
-        sep_actual.innerHTML = findLastValue(rule,rule.total[8], 'actual')
+        sep_target.innerHTML = findLastValue(rule, rule.total[8], 'target')
+        sep_actual.innerHTML = findLastValue(rule, rule.total[8], 'actual')
 
-        oct_target.innerHTML = findLastValue(rule,rule.total[9], 'target')
-        oct_actual.innerHTML = findLastValue(rule,rule.total[9], 'actual')
+        oct_target.innerHTML = findLastValue(rule, rule.total[9], 'target')
+        oct_actual.innerHTML = findLastValue(rule, rule.total[9], 'actual')
 
-        nov_target.innerHTML = findLastValue(rule,rule.total[10], 'target')
-        nov_actual.innerHTML = findLastValue(rule,rule.total[10], 'actual')
+        nov_target.innerHTML = findLastValue(rule, rule.total[10], 'target')
+        nov_actual.innerHTML = findLastValue(rule, rule.total[10], 'actual')
 
-        dec_target.innerHTML = findLastValue(rule,rule.total[11], 'target')
-        dec_actual.innerHTML = findLastValue(rule,rule.total[11], 'actual')
+        dec_target.innerHTML = findLastValue(rule, rule.total[11], 'target')
+        dec_actual.innerHTML = findLastValue(rule, rule.total[11], 'actual')
     }
 }
 
-const findLastValue = (rule,array, key) => {
+const findLastValue = (rule, array, key) => {
     let result = 0.00
     for (let i = 0; i < array.length; i++) {
         const element = array[i]
@@ -802,12 +761,12 @@ const calculator_evaluate_of_month = (month, array) => {
     return (sum_total / 100).toFixed(2)
 }
 
-const fetch_evaluate_modal = async (rule ,datas,el) => {
+const fetch_evaluate_modal = async (rule, datas, el) => {
     let result
     try {
         result = await getEvaluateReviewIn({
             params: {
-                rule_id : rule,
+                rule_id: rule,
                 evaluate: datas
             }
         })
@@ -843,10 +802,10 @@ $('#list-invalid-modal').on('show.bs.modal', async function (event) {
     let rule_name = button.data('rulename')
     var modal = $(this)
     modal.find('#rule-modal-label').text(rule_name)
-    await fetch_evaluate_modal(id,all,modal.find('.modal-body ul')[0])
+    await fetch_evaluate_modal(id, all, modal.find('.modal-body ul')[0])
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-    
+
     modal.find('.modal-body #reload').removeClass('reload')
 })
 

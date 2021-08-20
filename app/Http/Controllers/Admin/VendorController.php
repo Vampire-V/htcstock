@@ -102,11 +102,15 @@ class VendorController extends Controller
                 $request->session()->flash('error', 'has been update vendor no auth');
                 return back();
             }
-            $response = Http::retry(2, 100)->get(ENV('VENDOR_UPDATE'))->json();
-            foreach ($response as $data) {
-                $vendor = Vendor::firstOrNew(['code' => $data['code'] ]);
-                $vendor->name = $data['name'];
-                $vendor->address = $data['address'];
+            // DB::connection('vendor')->enableQueryLog(); // Enable query log
+            $result = DB::connection('vendor')->select("SELECT [VendorCode], [name], [Address] FROM [ChequeDirect].[dbo].[Vendor] WHERE [VendorCode] LIKE 'B%'");
+            // \dump($result);
+            // dd(DB::connection('vendor')->getQueryLog());
+            // $response = Http::retry(2, 100)->get(ENV('VENDOR_UPDATE'))->json();
+            foreach ($result as $data) {
+                $vendor = Vendor::firstOrNew(['code' => $data->VendorCode ]);
+                $vendor->name = $data->name;
+                $vendor->address = $data->Address;
                 $vendor->save();
             }
         } catch (\Exception $e) {

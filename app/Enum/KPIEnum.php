@@ -27,7 +27,13 @@ abstract class KPIEnum extends BasicEnum
     const last_month = 'Last Month';
     const sum = 'Sum';
 
+    // steo approve
     const assign = 'step-assign-user';
     const set_value = 'step-set-value';
     const approve = 'step-approve';
+
+    // Category
+    const KPI = 'kpi';
+    const KEY = 'key-task';
+    const OMG = 'omg';
 }

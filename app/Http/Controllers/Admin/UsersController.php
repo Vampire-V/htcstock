@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\KPIEnum;
 use App\Enum\UserEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ALL\UserResource;
@@ -84,8 +85,7 @@ class UsersController extends Controller
                 return \redirect()->back()->with('error', "No authorization...");
             }
             $user = User::with(['user_approves','department', 'divisions', 'positions'])->where('id',$id)->first();
-            // $this->userService->find($id);
-            // dd($user);
+            $degree = \collect([KPIEnum::one,KPIEnum::two,KPIEnum::tree]);
             $userRoles = $user->roles()->get();
             $userSystems = $user->systems()->get();
 
@@ -94,7 +94,7 @@ class UsersController extends Controller
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('admin.users.edit', \compact('user', 'roles', 'systems', 'userRoles', 'userSystems'));
+        return \view('admin.users.edit', \compact('user', 'roles', 'systems', 'userRoles', 'userSystems', 'degree'));
     }
 
     /**
@@ -163,36 +163,54 @@ class UsersController extends Controller
             if (Gate::denies('for-superadmin-admin')) {
                 return back();
             }
-
-            $response = Http::get(ENV('USERS_UPDATE'))->json();
-            if (!\is_null($response)) {
+            // DB::connection('sqlsrv')->enableQueryLog(); // Enable query log
+            // HR ต้องเพิ่มในระบบสแกนนิ้วก่อนถึงจะมีข้อมูลพนักงานใหม่
+            $result = DB::connection('sqlsrv')->select("SELECT Staff.[ID],
+            UserInfo.[Name],
+            Staff.[ProcessID],
+            Process.[ProcessNameEN],
+            Division.[DivisionID],
+            Division.[DivisionNameEN],
+            GroupDivision.[GDivisionID],
+            GroupDivision.[GDivisionDescEN],
+            UserInfo.[EMail],
+            Process.[IDLeader]
+            FROM [HRPortal].[dbo].[tbStaff] AS Staff
+            LEFT JOIN [NitgenAccessManager].[dbo].[NGAC_USERINFO] AS UserInfo ON Staff.[ID] = UserInfo.[ID] 
+            LEFT JOIN [HRPortal].[dbo].[tbProcess] AS Process ON Staff.[ProcessID] = Process.[ProcessID] 
+            LEFT JOIN [HRPortal].[dbo].[tbDivision] AS Division ON Process.[DivisionID] = Division.[DivisionID] 
+            LEFT JOIN [HRPortal].[dbo].[tbGroupDivision] AS GroupDivision ON Division.[GDivisionID] = GroupDivision.[GDivisionID] 
+            WHERE UserInfo.[expDate] >= GETDATE() 
+            AND UserInfo.[EMail] <> ''
+            ORDER BY [DivisionID],[ProcessID]");
+            // dd(DB::connection('sqlsrv')->getQueryLog());
+            // $response = Http::get(ENV('USERS_UPDATE'))->json();
+            if (!\is_null($result)) {
                 $list_users = [];
-                foreach ($response as $value) {
-                    $user = User::where('username', $value['username'])->first();
+                foreach ($result as $value) {
+                    $user = User::where('username', $value->ID)->first();
                     if (\is_null($user)) {
                         $user = new User;
                     }
-                    $user->password = $user->password ?? Hash::make(\substr($value['email'], 0, 1) . $value['username']);
-                    $user->username = $user->username ?? $value['username'];
-                    $user->translateOrNew('th')->name = $user->translate('th')->name ?? $value['name'];
-                    $user->name_th = $user->translate('th')->name ?? $value['name'];
-                    $user->email = $value['email'];
+                    $user->password = $user->password ?? Hash::make(\substr($value->EMail, 0, 1) . $value->ID);
+                    $user->username = $user->username ?? $value->ID;
+                    $user->translateOrNew('th')->name = $user->translate('th')->name ?? $value->Name;
+                    $user->name_th = $user->translate('th')->name ?? $value->Name;
+                    $user->email = $value->EMail;
                     // $user->email_verifed_at = $user->email_verifed_at ?? \now();
-                    $user->head_id = $user->head_id ?? $value['leader'];
+                    $user->head_id = $user->head_id ?? $value->IDLeader;
                     $user->save();
-                    $list_users[] = $value['username'];
+                    $list_users[] = $value->ID;
                 }
                 User::whereNotIn('username', [...$list_users])->update(['resigned' => 1]); //update user ที่ออกไปแล้ว
                 $all_user = User::NotResigned()->get();
-                $systems = System::whereNotIn('slug', ['legal', 'it'])->get();
+                $system = System::where('slug','kpi')->first();
                 $roles = Role::whereNotIn('slug', [UserEnum::SUPERADMIN, UserEnum::ADMINIT, UserEnum::ADMINLEGAL, UserEnum::USERLEGAL, UserEnum::ADMINKPI])->get();
 
                 foreach ($all_user as $staff) {
                     // $staff->roles()->detach($roles->filter(fn($q) => $q->slug === UserEnum::MANAGERKPI)->first());
-                    foreach ($systems as $system) {
-                        if (!$staff->systems->contains('slug', $system->slug)) {
-                            $staff->systems()->attach($system);
-                        }
+                    if (!$staff->systems->contains('slug', $system->slug)) {
+                        $staff->systems()->attach($system);
                     }
                     foreach ($roles as $role) {
                         if (!$staff->roles->contains('slug', $role->slug)) {
@@ -207,7 +225,7 @@ class UsersController extends Controller
                 }
                 $request->session()->flash('success', 'has been update user');
             } else {
-                $request->session()->flash('error', 'ติดต่อ กับ ' . ENV('USERS_UPDATE') . "ไม่ได้");
+                $request->session()->flash('error', 'ติดต่อ กับ Server ไม่ได้');
             }
         } catch (\Exception $e) {
             // dd($user->department_id, $department);

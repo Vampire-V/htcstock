@@ -54,8 +54,9 @@ var render_html = () => {
     let tables = document.getElementById('group-table').getElementsByClassName('table')
     for (let i = 0; i < tables.length; i++) {
         const table = tables[i]
+        let reduce = 0
         let temp_rules = evaluateForm.detail.filter(value => value.rules.categorys.name === table.id.substring(6))
-
+        
         if (table.tBodies[0].rows.length > 0) {
             removeAllChildNodes(table.tBodies[0])
         }
@@ -154,15 +155,25 @@ var render_html = () => {
             }
         }
 
+        if (temp_rules.length > 0) {
+            if (temp_rules[0].rules.categorys.name === category.KPI) {
+                reduce = evaluate.kpi_reduce
+            }
+            if (temp_rules[0].rules.categorys.name === category.KEYTASK) {
+                reduce = evaluate.key_task_reduce
+            }
+            if (temp_rules[0].rules.categorys.name === category.OMG) {
+                reduce = evaluate.omg_reduce
+            }
+        }
+
         head_weight = table.offsetParent.firstElementChild.querySelector('input')
         if (head_weight && head_weight.name in template) {
             head_weight.value = template[head_weight.name]
         }
         let sum_weight = temp_rules.reduce((total, cur) => total += cur.weight, 0.00)
-        // let sum_ach = temp_rules.reduce((total, cur) => total += cur.ach, 0.00)
-        let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00)
+        let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00) - reduce
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
-        // table.tFoot.lastElementChild.cells[10].textContent = `${sum_ach.toFixed(2)}%`
         table.tFoot.lastElementChild.cells[11].textContent = `${sum_cal.toFixed(2)}%`
         summary.push({
             'weight': parseFloat(head_weight.value),

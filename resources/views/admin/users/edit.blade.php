@@ -8,6 +8,7 @@
     label>span {
         color: red;
     }
+
     label {
         font-weight: bold;
     }
@@ -106,6 +107,29 @@
                                     class="form-control form-control-sm @error('phone') is-invalid @enderror"
                                     value="{{ $user->phone }}" required autocomplete="phone" autofocus readonly>
                                 @error('phone')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="position-relative form-group">
+                                <label for="EMC-Group" class="">{{ __('profile.degree') }}</label>
+                                <select class="form-control form-control-sm @error('degree') is-invalid @enderror"
+                                    name="degree" id="degree" disabled>
+                                    @isset($degree)
+                                    <option value="">......</option>
+                                    @foreach ($degree as $item)
+                                    <option value="{{$item}}" @if ($item === $user->degree) selected @endif>{{$item}}
+                                    </option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                                {{-- <input name="degree" id="degree" placeholder="EMC-Group placeholder" type="text"
+                                    class="form-control form-control-sm @error('degree') is-invalid @enderror"
+                                    value="{{ $user->degree }}" required autocomplete="degree" autofocus readonly> --}}
+                                @error('degree')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>

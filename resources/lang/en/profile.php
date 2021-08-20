@@ -20,6 +20,7 @@ return [
     'manager' => 'Manager',
     'division' => 'Division',
     'department' => 'Department',
-    'position' => 'Position'
+    'position' => 'Position',
+    'degree' => 'EMC-Group'
 
 ];

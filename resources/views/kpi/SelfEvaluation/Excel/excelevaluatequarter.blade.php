@@ -1,5 +1,5 @@
 @isset($rules)
-@foreach ($rules as $group)
+@foreach ($rules as $key => $group)
 <table>
     <thead>
         <tr>
@@ -18,7 +18,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($group as $key => $rule)
+        @foreach ($group as $rule)
         <tr>
             <td>{{$loop->iteration}}</td>
             <td>{{$rule->rule->name}}</td>
@@ -48,7 +48,20 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{round($group->sum('cal'),2)}} %</td>
+            @php
+            $reduce = 0;
+            if ($key === 'kpi') {
+            $reduce = $evaluate->kpi_reduce;
+            }
+            if ($key === 'key-task') {
+            $reduce = $evaluate->key_task_reduce;
+            }
+            if ($key === 'omg') {
+            $reduce = $evaluate->omg_reduce;
+            }
+            $sum = round($group->sum('cal'),2) - $reduce;
+            @endphp
+            <td>{{$sum}} %</td>
         </tr>
     </tfoot>
 </table>
@@ -60,7 +73,7 @@
 
 {{-- Calculation Summary --}}
 @php
-    $total = [];
+$total = [];
 @endphp
 <table>
     <thead>
@@ -72,13 +85,23 @@
     </thead>
     <tbody>
         @isset($rules)
-        @foreach ($rules as $key => $item)
+        @foreach ($rules as $i => $item)
         @php
-        $cal = ($item->sum('cal') * $quarter_weight[$loop->index]) / 100;
+        $result = $item->sum('cal');
+        if ($i === 'kpi') {
+            $result = $result - $evaluate->kpi_reduce;
+        }
+        if ($i === 'key-task') {
+            $result = $result - $evaluate->key_task_reduce;
+        }
+        if ($i === 'omg') {
+            $result = $result - $evaluate->omg_reduce;
+        }
+        $cal = ($result * $quarter_weight[$loop->index]) / 100;
         $total[] = $cal;
         @endphp
         <tr>
-            <th>{{$key}}</th>
+            <th>{{$i}}</th>
             <td>{{$quarter_weight[$loop->index]}} %</td>
             <td>{{round($cal,2)}} %</td>
         </tr>

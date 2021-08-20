@@ -27,9 +27,9 @@
             </div>
         </div>
         <div class="page-title-actions">
-            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="top"
-                class="btn-shadow mr-3 btn btn-dark">
-                <i class="fa fa-star"></i>
+            <button type="button" data-toggle="modal" title="Click" data-placement="top"
+                class="btn-shadow mr-3 btn btn-dark no-disable" data-target="#comment-modal" id="show-comment">
+                <span class="fa fa-star">&nbsp;Comment</span>
             </button>
         </div>
     </div>
@@ -46,9 +46,9 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}} 
+                        <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}}
                             </span></h5>
-                            {{$current ? $current->approveBy->name : null}}
+                        {{$current ? $current->approveBy->name : null}}
                     </div>
                 </div>
             </div>
@@ -266,38 +266,62 @@
 @endsection --}}
 
 @section('modal')
-    {{-- Modal --}}
+{{-- Modal --}}
 
 <div class="modal fade" id="switch-rule-modal" tabindex="-1" role="dialog" aria-labelledby="switch-rule-modal-label"
-aria-hidden="true">
-<div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="switch-rule-modal-label">New Rule</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div id="reload" class="reload"></div>
-            <input type="hidden" id="current_item" name="current_item">
-            <form id="form-rule">
-                <div class="form-row">
-                    <div class="col-md-12">
-                        <div class="position-relative form-group"><label for="rule-name" class="">Rule Name
-                                :</label>
-                            <select id="rule_name" class="form-control form-control-sm" name="rule_name">
-                            </select></div>
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="switch-rule-modal-label">New Rule</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="reload" class="reload"></div>
+                <input type="hidden" id="current_item" name="current_item">
+                <form id="form-rule">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group"><label for="rule-name" class="">Rule Name
+                                    :</label>
+                                <select id="rule_name" class="form-control form-control-sm" name="rule_name">
+                                </select></div>
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="changerule()">Add</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="changerule()">Add</button>
+            </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="comment-modal" tabindex="-1" role="dialog" aria-labelledby="comment-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="comment-modal-label">Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="reload" class="reload"></div>
+                        <div class="col-md-12">
+                            <textarea class="form-control" name="comment" id="comment" rows="5">{{$evaluate->comment}}</textarea>
+                        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="changerule()">Add</button>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 

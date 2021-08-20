@@ -21,6 +21,9 @@
             evaluateForm = await setEvaluate(evaluate)
         }
         if (evaluateForm.template) {
+            if (evaluate.status !== status.READY && evaluate.status !== status.DRAFT) {
+                pageDisable()
+            }
             getTemplate(evaluateForm.template)
                 .then(res => {
                     if (res.status === 200) {
@@ -36,9 +39,6 @@
                 })
                 .finally(() => {
                     render_html()
-                    if (evaluate.status !== status.READY && evaluate.status !== status.DRAFT) {
-                        pageDisable()
-                    }
                 })
         }
         // console.log(evaluateForm);
@@ -49,6 +49,8 @@ var evaluateForm = new EvaluateForm()
 var template
 var rule = []
 var summary = []
+
+
 
 var render_html = () => {
     // create tr in table
@@ -407,6 +409,34 @@ $('#rule-modal').on('hide.bs.modal', function (event) {
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
     removeAllChildNodes(modal.find('.modal-body #rule_name')[0])
     rule = []
+})
+
+
+$('#comment-modal').on('show.bs.modal', async function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    // var group = button.data('group') // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    var modal = $(this)
+    // fetch rules filter
+    try {
+    } catch (error) {
+        console.error(error);
+    } finally {
+        modal.find('.modal-body #reload').removeClass('reload')
+    }
+    // console.log(evaluateForm.detail.values());
+    // setDropdowToModal(group, modal)
+    // 
+})
+
+$('#comment-modal').on('hide.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var modal = $(this)
+    // var group = button.data('group') // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    modal.find('.modal-body #reload').addClass('reload')
 })
 
 // dropdown

@@ -26,7 +26,6 @@
                     console.log(error.response.data)
                 })
                 .finally(() => {
-                    console.log(current.user_approve , auth.id , evaluateForm.status , status.ONPROCESS);
                     render_html()
                     if (current.user_approve === auth.id && evaluateForm.status === status.ONPROCESS) {
                         pageEnable()
@@ -38,6 +37,7 @@
                             pageDisable()
                         }
                     }
+                    console.log(evaluateForm);
                 })
         }
     }, false);
@@ -128,25 +128,6 @@ var render_html = () => {
 
                 let remark = newRow.insertCell()
                 remark.appendChild(newInput('text', className, 'remark', element.remark ?? '', `remark_${element.rules.id}`, `remark(this)`, readonly))
-                // cellIndex.textContent = index + 1
-                // let cellCheck = newRow.insertCell()
-                // let div = document.createElement('div')
-                // div.className = 'custom-checkbox custom-control'
-
-                // let checkbox = document.createElement('input')
-                // checkbox.type = `checkbox`
-                // checkbox.name = `rule-${element.rule_id}`
-                // checkbox.className = `custom-control-input`
-                // checkbox.id = element.rule_id
-                // checkbox.setAttribute('onclick', 'selectToRemove(this)')
-
-                // let label = document.createElement('label')
-                // label.classList.add('custom-control-label')
-                // label.htmlFor = element.rule_id
-
-                // div.appendChild(checkbox)
-                // div.appendChild(label)
-                // cellCheck.appendChild(div)
             } catch (error) {
                 console.error(error)
                 toast(error.response.data.message,'error')
@@ -156,18 +137,22 @@ var render_html = () => {
         }
 
         if (temp_rules.length > 0) {
+            let reduce_input = table.offsetParent.firstElementChild.lastElementChild.querySelector('input')
             if (temp_rules[0].rules.categorys.name === category.KPI) {
                 reduce = evaluate.kpi_reduce
+                reduce_input.value = evaluate.kpi_reduce
             }
             if (temp_rules[0].rules.categorys.name === category.KEYTASK) {
                 reduce = evaluate.key_task_reduce
+                reduce_input.value = evaluate.key_task_reduce
             }
             if (temp_rules[0].rules.categorys.name === category.OMG) {
                 reduce = evaluate.omg_reduce
+                reduce_input.value = evaluate.omg_reduce
             }
         }
 
-        head_weight = table.offsetParent.firstElementChild.querySelector('input')
+        let head_weight = table.offsetParent.firstElementChild.querySelector('input')
         if (head_weight && head_weight.name in template) {
             head_weight.value = template[head_weight.name]
         }
@@ -259,6 +244,11 @@ const changeValue = (e) => {
     })
 }
 
+const set_reduce = e => {
+    if (e.name in evaluateForm) {
+        evaluateForm[e.name] = parseFloat(e.value)
+    } 
+}
 const remark = (e) => {
     evaluateForm.detail.forEach((element, key) => {
         if (e.offsetParent.parentNode.cells[1].textContent === element.rules.name) {
@@ -349,5 +339,6 @@ const save = async () => {
         toast(error.response.data.message,'error')
     } finally {
         toastClear()
+        window.location.reload()
     }
 }

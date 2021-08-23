@@ -152,6 +152,10 @@ class EvaluateReviewController extends Controller
                     return $b['cal'] + $a;
                 }, 0);
             }
+            $evaluate->kpi_reduce = $request->kpi_reduce;
+            $evaluate->key_task_reduce = $request->key_task_reduce;
+            $evaluate->omg_reduce = $request->omg_reduce;
+
             $evaluate->cal_kpi = $total[0] ?? 0.00;
             $evaluate->cal_key_task = $total[1] ?? 0.00;
             $evaluate->cal_omg = $total[2] ?? 0.00;
@@ -258,6 +262,10 @@ class EvaluateReviewController extends Controller
                     return $b['cal'] + $a;
                 }, 0);
             }
+            $evaluate->kpi_reduce = $request->kpi_reduce;
+            $evaluate->key_task_reduce = $request->key_task_reduce;
+            $evaluate->omg_reduce = $request->omg_reduce;
+            
             $evaluate->cal_kpi = $total[0] ?? 0.00;
             $evaluate->cal_key_task = $total[1] ?? 0.00;
             $evaluate->cal_omg = $total[2] ?? 0.00;

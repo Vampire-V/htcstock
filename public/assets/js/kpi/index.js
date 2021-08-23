@@ -104,16 +104,13 @@ var setEvaluate = (datas) => {
     var evaluateForm = new EvaluateForm()
     evaluateForm.id = datas.id ?? null
     evaluateForm.template = datas.template_id
-    // evaluateForm.minone = datas.main_rule_condition_1_min
-    // evaluateForm.maxone = datas.main_rule_condition_1_max
-    // evaluateForm.mintwo = datas.main_rule_condition_2_min
-    // evaluateForm.maxtwo = datas.main_rule_condition_2_max
-    // evaluateForm.mintree = datas.main_rule_condition_3_min
 
     evaluateForm.total_weight_kpi = datas.total_weight_kpi
     evaluateForm.total_weight_key_task = datas.total_weight_key_task
     evaluateForm.total_weight_omg = datas.total_weight_omg
-
+    kpi_reduce = datas.kpi_reduce,
+    key_task_reduce = datas.key_task_reduce,
+    omg_reduce = datas.omg_reduce,
     // evaluateForm.cal_kpi = datas.cal_kpi
     // evaluateForm.cal_key_task = datas.cal_key_task
     // evaluateForm.cal_omg = datas.cal_omg

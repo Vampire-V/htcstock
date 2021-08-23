@@ -113,7 +113,7 @@
                 </div>
                 
                 <div class="btn-actions-pane-right">
-                    <label for="department" class="mb-2 mr-2">(ตัดคะแนน) :</label>
+                    <label for="Reduce" class="mb-2 mr-2">(ตัดคะแนน) :</label>
                     <div role="group" class="btn-group-sm btn-group">
                         <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
                             value="0" id="{{str_replace("-","_",$group->name)}}_reduce"

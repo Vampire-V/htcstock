@@ -117,6 +117,13 @@
                         </div>
                     </div>
                     <div class="btn-actions-pane-right">
+                        <label for="Reduce" class="mb-2 mr-2">(ตัดคะแนน) :</label>
+                        <div role="group" class="btn-group-sm btn-group">
+                            <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
+                                value="0" id="{{str_replace("-","_",$group->name)}}_reduce"
+                                name="{{str_replace("-","_",$group->name)}}_reduce" @cannot('super-admin') readonly
+                                @endcannot > %
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -312,9 +319,10 @@
             </div>
             <div class="modal-body">
                 <div id="reload" class="reload"></div>
-                        <div class="col-md-12">
-                            <textarea class="form-control" name="comment" id="comment" rows="5">{{$evaluate->comment}}</textarea>
-                        </div>
+                <div class="col-md-12">
+                    <textarea class="form-control" name="comment" id="comment"
+                        rows="5">{{$evaluate->comment}}</textarea>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

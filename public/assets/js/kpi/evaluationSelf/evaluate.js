@@ -135,38 +135,26 @@ var render_html = () => {
                 setTooltipCal(cellCal, element)
                 cellCal.textContent = element.cal.toFixed(2) + '%'
 
-                let cellCheck = newRow.insertCell()
-                let div = document.createElement('div')
-                div.className = 'custom-checkbox custom-control'
-
-                let checkbox = document.createElement('input')
-                checkbox.type = `checkbox`
-                checkbox.name = `rule-${element.rule_id}`
-                checkbox.className = `custom-control-input`
-                checkbox.id = element.rule_id
-                checkbox.setAttribute('onclick', 'selectToRemove(this)')
-
-                let label = document.createElement('label')
-                label.classList.add('custom-control-label')
-                label.htmlFor = element.rule_id
-
-                div.appendChild(checkbox)
-                div.appendChild(label)
-                cellCheck.appendChild(div)
+                let remark = newRow.insertCell()
+                remark.appendChild(newInput('text', className, 'remark', element.remark ?? '', `remark_${element.rules.id}`, '', true))
             } catch (error) {
                 console.error(error)
             }
         }
 
         if (temp_rules.length > 0) {
+            let reduce_input = table.offsetParent.firstElementChild.lastElementChild.querySelector('input')
             if (temp_rules[0].rules.categorys.name === category.KPI) {
                 reduce = evaluate.kpi_reduce
+                reduce_input.value = evaluate.kpi_reduce
             }
             if (temp_rules[0].rules.categorys.name === category.KEYTASK) {
                 reduce = evaluate.key_task_reduce
+                reduce_input.value = evaluate.key_task_reduce
             }
             if (temp_rules[0].rules.categorys.name === category.OMG) {
                 reduce = evaluate.omg_reduce
+                reduce_input.value = evaluate.omg_reduce
             }
         }
 

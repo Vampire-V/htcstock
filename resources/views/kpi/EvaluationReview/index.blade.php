@@ -39,16 +39,16 @@
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
                     <div class="form-row">
-                        {{-- <div class="col-md-2 mb-3">
-                            <label for="department">Department :</label>
-                            <input type="text" class="form-control form-control-sm" id="validationDepartment"
-                                value="{{$user->department->name}}" readonly>
+                        <div class="col-md-3 mb-3">
+                            <label for="department">User :</label>
+                            <select class="form-control form-control-sm" name="user[]" id="user" multiple>
+                                <option value=""></option>
+                                @foreach ($users as $item)
+                                <option value="{{$item->id}}" @if($selectedUser->contains($item->id))
+                                    selected @endif>{{$item->name}}</option>
+                                @endforeach
+                            </select>
                     </div>
-                    <div class="col-md-2 mb-3">
-                        <label for="position">Position :</label>
-                        <input type="text" class="form-control form-control-sm" id="validationPosition"
-                            value="{{$user->positions->name}}" readonly>
-                    </div> --}}
                     <div class="col-md-2 mb-3">
                         <label for="status">Status :</label>
                         <select name="status[]" id="validationStatus" class="form-control-sm form-control" multiple>

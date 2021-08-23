@@ -3,6 +3,11 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         // Supporting Documents
+        $("#user").select2({
+            placeholder: 'Select User',
+            allowClear: true
+        });
+
         $("#validationStatus").select2({
             placeholder: 'Select Status',
             allowClear: true

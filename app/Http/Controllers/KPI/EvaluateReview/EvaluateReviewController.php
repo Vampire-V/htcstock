@@ -53,12 +53,14 @@ class EvaluateReviewController extends Controller
     {
         $query = $request->all();
         $selectedStatus = collect($request->status);
+        $selectedUser = collect($request->user);
         $selectedYear = collect($request->year);
         $selectedPeriod = collect($request->period);
         $start_year = date('Y', strtotime('-10 years'));
         $status_list = [KPIEnum::on_process, KPIEnum::approved];
         try {
             $user = Auth::user();
+            $users = $this->userService->dropdown();
             $months = $this->targetPeriodService->dropdown()->unique('name');
             $years = $months->unique('year');
             $evaluates = $this->evaluateService->reviewfilter($request);
@@ -69,7 +71,7 @@ class EvaluateReviewController extends Controller
 
         return \view(
             'kpi.EvaluationReview.index',
-            \compact('start_year', 'user', 'status_list', 'months', 'evaluates', 'query', 'selectedStatus', 'selectedYear', 'selectedPeriod')
+            \compact('start_year', 'user', 'status_list', 'months', 'evaluates', 'query', 'users', 'selectedStatus', 'selectedYear', 'selectedPeriod', 'selectedUser')
         );
     }
 
@@ -175,7 +177,7 @@ class EvaluateReviewController extends Controller
                     Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
                     return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
                 }
-                
+
                 if ($this->userApproveService->isLastLevel($evaluate)) {
                     // Level last
                     $last_level = $this->userApproveService->findLastLevel($evaluate);
@@ -192,7 +194,7 @@ class EvaluateReviewController extends Controller
                     $message = "Next step send to " . $user_approve->approveBy->name;
                     $evaluate->status = KPIEnum::on_process;
                     $evaluate->current_level = $user_approve->level;
-                    $evaluate->next_level = $evaluate->next_level+1;
+                    $evaluate->next_level = $evaluate->next_level + 1;
                     $next = $this->userApproveService->findNextLevel($evaluate);
                     $evaluate->next_level = $next->exists ? $next->level : $evaluate->current_level;
                 }
@@ -265,7 +267,7 @@ class EvaluateReviewController extends Controller
             $evaluate->kpi_reduce = $request->kpi_reduce;
             $evaluate->key_task_reduce = $request->key_task_reduce;
             $evaluate->omg_reduce = $request->omg_reduce;
-            
+
             $evaluate->cal_kpi = $total[0] ?? 0.00;
             $evaluate->cal_key_task = $total[1] ?? 0.00;
             $evaluate->cal_omg = $total[2] ?? 0.00;
@@ -290,7 +292,7 @@ class EvaluateReviewController extends Controller
     {
         $ids = explode(",", $request->evaluate);
         try {
-            $result = Evaluate::with(['user','evaluateDetail' => fn($q) => $q->where('rule_id',$request->rule_id)])->whereIn('id',[...$ids])->get();
+            $result = Evaluate::with(['user', 'evaluateDetail' => fn ($q) => $q->where('rule_id', $request->rule_id)])->whereIn('id', [...$ids])->get();
             return $this->successResponse($result, "query success...", 200);
         } catch (\Exception $e) {
             Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());

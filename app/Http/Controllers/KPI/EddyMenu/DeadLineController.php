@@ -140,4 +140,19 @@ class DeadLineController extends Controller
         DB::commit();
         return $this->successResponse(\true, 'detach user to next action', 200);
     }
+
+    public function update_endday(Request $request, $action)
+    {
+        DB::beginTransaction();
+        try {
+            $setting = $this->setting_action->find($action);
+            $setting->end = $request->end;
+            $setting->save();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+        DB::commit();
+        return $this->successResponse(\true, 'update day success...', 200);
+    }
 }

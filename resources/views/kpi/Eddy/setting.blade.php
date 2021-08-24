@@ -84,8 +84,9 @@
             </div>
             <div class="modal-body">
                 <form id="form-authorization">
+                    <input type="hidden" name="action" id="action">
                     <div class="form-row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="position-relative form-group">
                                 <label for="User" class="">User :</label>
                                 <select id="user" class="form-control-sm form-control" name="user" required
@@ -93,16 +94,29 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-2">
                             <div class="position-relative form-group">
-                                <input type="hidden" name="action" id="action">
                                 <button type="button" onclick="attach_authorized()" class="btn btn-sm btn-success mt-4">Add</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="position-relative form-group">
+                                <label for="Day" class="">Day :</label>
+                                <select id="day" class="form-control-sm form-control" name="day" required
+                                    placeholder="placeholder">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="position-relative form-group">
+                                <button type="button" onclick="edit_day()" class="btn btn-sm btn-success mt-4">update</button>
                             </div>
                         </div>
                     </div>
                 </form>
+                <div id="reload" class=""></div>
                 <ul id="ul-sser-authorization">
-                    <div id="reload" class=""></div>
+                    
                 </ul>
             </div>
             <div class="modal-footer">

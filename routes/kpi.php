@@ -66,6 +66,7 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
         Route::get('user/actions/{id}', 'EddyMenu\DeadLineController@setting_action_user');
         Route::post('attach/action/{action}', 'EddyMenu\DeadLineController@attach_authorization');
         Route::post('detach/action/{action}', 'EddyMenu\DeadLineController@detach_authorization');
+        Route::post('update/action/{action}', 'EddyMenu\DeadLineController@update_endday');
 
         Route::get('user/evaluates', 'EddyMenu\AllEvaluationController@user_evaluates')->name('user_evaluates');
     });

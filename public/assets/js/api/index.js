@@ -247,6 +247,8 @@ const postAttachAction = (form,id) => axios.post(`/kpi/for-eddy/attach/action/${
 
 const postDetachAction = (form,id) => axios.post(`/kpi/for-eddy/detach/action/${id}`,form)
 
+const putEndDeadLine = (form,id) => axios.post(`/kpi/for-eddy/update/action/${id}`,form)
+
 const getUserEvaluate = (filter) => axios.get(`/kpi/for-eddy/user/evaluates`,filter)
 
 // Operation

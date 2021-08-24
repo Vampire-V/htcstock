@@ -50,24 +50,25 @@ const render_dead_line = (table) => {
                     remark.textContent = element.remark
 
                     let action = row.insertCell()
-                    action.innerHTML = `<button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modal-dead-line" data-setting="${element.id}">click</button>`
+                    action.innerHTML = `<button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modal-dead-line" data-setting="${element.id}" data-day="${element.end}">click</button>`
                 }
             }
         })
 }
 
 // modal method
-$('#modal-dead-line').on('show.bs.modal', function (event) {
+$('#modal-dead-line').on('show.bs.modal',function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     let id = button.data('setting') // Extract info from data-* attributes
+    let day = button.data('day') // Extract info from data-* attributes
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
     var modal = $(this)
     modal.find('.modal-body #action').val(id)
-    // modal.find('.modal-body #reload').addClass('reload')
-    console.log(id);
+    // 
     render_modal_action(id)
-
+    render_modal_day(modal,day)
+    
     // fetch rules filter
 })
 
@@ -75,6 +76,9 @@ $('#modal-dead-line').on('hide.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var modal = $(this)
     document.getElementById('form-authorization').reset()
+    removeAllChildNodes(document.getElementById('ul-sser-authorization'))
+    removeAllChildNodes(document.getElementById('day'))
+    modal.find('.modal-body #reload').addClass('reload')
     // var group = button.data('group') // Extract info from data-* attributes
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
@@ -83,6 +87,7 @@ $('#modal-dead-line').on('hide.bs.modal', function (event) {
 const render_modal_action = (id) => {
     let data = [],
         users = []
+    $('.modal-body #reload').addClass('reload')    
     getUserSettingAction(id)
         .then(res => {
             if (res.status === 200) {
@@ -102,7 +107,7 @@ const render_modal_action = (id) => {
                     console.log(error, error.response.data.message);
                 })
                 .finally(() => {
-                    $('.modal-body #reload').removeClass('reload')
+                    
                     let ul = $('.modal-body ul')
                     removeAllChildNodes(ul[0])
                     for (let index = 0; index < data.length; index++) {
@@ -120,8 +125,17 @@ const render_modal_action = (id) => {
                         let model = user.translations.find(item => item.locale === locale) ?? user.translations[0]
                         $('.modal-body #user').append(new Option(model.name, user.id))
                     }
+                    $('.modal-body #reload').removeClass('reload')
                 })
         })
+}
+
+const render_modal_day = (modal,defualt = 01) => {
+    let select = modal.find('.modal-body #day')
+    for (let index = 1; index < 32; index++) {
+        const day = index < 10 ? `0${index}` : index
+        select.append(new Option(day,day,true,day === defualt ? true : false))
+    }
 }
 
 //ลบ user ออก
@@ -157,6 +171,31 @@ const attach_authorized = () => {
             })
             .finally(() => {
                 render_modal_action(action)
+            })
+    }
+}
+
+const edit_day = () => {
+    let end = $("#day").val()
+    let action = $("#action").val()
+    if (end && action) {
+        putEndDeadLine({
+                end: end
+            }, action)
+            .then(res => {
+                if (res.data.data) {
+                    toast(res.data.message,res.data.status)
+                    let table = document.getElementById('table-steing-action')
+                    render_dead_line(table)
+                }
+            })
+            .catch(error => {
+                console.log(error, error.response.data.message)
+                toast(res.data.message,res.data.status)
+            })
+            .finally(() => {
+                render_modal_action(action)
+                toastClear()
             })
     }
 }

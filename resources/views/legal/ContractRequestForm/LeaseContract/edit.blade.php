@@ -49,7 +49,7 @@
                         <div class="col-md-4 mb-4">
                             <label for="validationSubType"><strong></strong> </label>
                             <select id="validationSubType" class="form-control-sm form-control" name="subtype"
-                                onchange="changeSubType(this)" required>
+                                required>
                                 <option data-id="" value="">Shoose....</option>
                                 @isset($subtypeContract)
                                 @foreach ($subtypeContract as $item)
@@ -211,35 +211,49 @@
                         <table class="table table-bordered" id="table-comercial-lists">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Unit Price</th>
-                                    <th scope="col">Discount</th>
+                                    <th scope="col">S/N</th>
+                                    <th scope="col">Description <span style="color: red;">*</span></th>
+                                    <th scope="col">Quantity <span style="color: red;">*</span></th>
+                                    <th scope="col">Unit Price <span style="color: red;">*</span></th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Discount <span style="color: red;">*</span></th>
                                     <th scope="col">Amount</th>
+                                    <th scope="col">#</th>
                                 </tr>
                                 <tr>
-                                    <td> <button type="button" class="btn btn-warning"
-                                            onclick="createRow()">Create</button>
+                                    <td></td>
+                                    <td>
+                                        <input type="text" class="form-control-sm form-control" id="desc"
+                                            name="description" required>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control-sm form-control"
-                                            id="validationDescription" name="description" min="0" step=0.01>
+                                        <input type="number" class="form-control-sm form-control" id="qty"
+                                            name="quantity" min="0" step=0.01 required>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control-sm form-control"
-                                            id="validationUnitPrice" name="unit_price" min="0" step=0.01>
+                                        <input type="number" class="form-control-sm form-control" id="unit_price"
+                                            name="unit_price" min="0" step=0.01 required>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control-sm form-control"
-                                            id="validationDiscount" name="discount" min="0" step=0.01>
+                                        <input type="number" class="form-control-sm form-control" id="price"
+                                            name="price" min="0" step=0.01 readonly>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control-sm form-control" id="validationAmount"
-                                            name="amount" min="0" step=0.01>
+                                        <input type="number" class="form-control-sm form-control" id="discount"
+                                            name="discount" min="0" step=0.01 required>
                                     </td>
-                                    <input type="hidden" class="form-control-sm form-control"
-                                        id="validationContractDestsId" name="contract_dests_id"
-                                        value="{{$leaseContract->id}}">
+                                    <td>
+                                        <input type="number" class="form-control-sm form-control" id="amount"
+                                            name="amount" min="0" step=0.01 readonly>
+                                    </td>
+                                    <td>
+                                        <a data-toggle="tooltip" title="add contract" data-placement="bottom"
+                                            rel="noopener noreferrer" style="color: white;"
+                                            class="btn btn-sm btn-warning" onclick="createRow()"><i
+                                                class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                                    </td>
+                                    <input type="hidden" class="form-control-sm form-control" id="contract_dests_id"
+                                        name="contract_dests_id" value="{{$leaseContract->id}}">
                                 </tr>
                             </thead>
                             <tbody>
@@ -248,8 +262,8 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="3"></th>
-                                    <th>Total</th>
+                                    <th colspan="5"></th>
+                                    <th class="text-right">Total: </th>
                                     <th id="total"></th>
                                 </tr>
                             </tfoot>

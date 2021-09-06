@@ -1555,9 +1555,7 @@
                                 <label for="validationDetailPaymentTerm"><strong>Monthly</strong><span
                                         style="color: red;">*</span></label>
                                 <textarea class="form-control-sm form-control" name="detail_payment_term"
-                                    id="validationDetailPaymentTerm" rows="4" required>
-                                        {{isset($vendorservice->legalPaymentTerm) ? $vendorservice->legalPaymentTerm->detail_payment_term : ""}}
-                                    </textarea>
+                                    id="validationDetailPaymentTerm" rows="4" required>{{isset($vendorservice->legalPaymentTerm) ? $vendorservice->legalPaymentTerm->detail_payment_term : ""}}</textarea>
                                 <div class="invalid-feedback">
                                     Please provide a valid Detail Payment Term.
                                 </div>

@@ -48,7 +48,7 @@
                         <div class="col-md-4 mb-4">
                             <label for="validationSubType"><strong></strong> </label>
                             <select id="validationSubType" class="form-control-sm form-control" name="subtype"
-                                onchange="changeSubType(this)" required>
+                                required>
                                 <option data-id="" value="">Shoose....</option>
                                 @isset($subtypeContract)
                                 @foreach ($subtypeContract as $item)

@@ -8,13 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class LegalComercialList extends Model
 {
     use LegalComercialListTrait;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'description','unit_price','discount','amount','road','building','toilet',
-        'canteen','washing','water','mowing','general','contract_dests_id'
+
+    protected $casts = [
+        'qty' => 'float',
+        'unit_price' => 'float',
+        'price' => 'float',
+        'discount' => 'float',
+        'amount' => 'float',
+        "road" => 'int',
+        "building" => 'int',
+        "toilet" => 'int',
+        "canteen" => 'int',
+        "washing" => 'int',
+        "water" => 'int',
+        "mowing" => 'int',
+        "general" => 'int',
     ];
+
+    protected $guarded = [];
 }

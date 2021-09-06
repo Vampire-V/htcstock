@@ -303,3 +303,9 @@ var round = (num) => {
 var findNameUser = (user) => {
     return user.translations.find(item => item.locale === locale) ?? user.translations[0]
 }
+
+var removeAllChildNodes = (parent) => {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}

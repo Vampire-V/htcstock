@@ -1,3 +1,34 @@
+class Purchase {
+    id = null
+    desc = String()
+    qty = 0
+    unit_price = 0
+    price = 0
+    discount = 0
+    amount = 0
+    contract_dests_id = null
+
+    constructor(id = null,
+        desc = String(),
+        qty = 0,
+        unit_price = 0,
+        price = 0,
+        discount = 0,
+        amount = 0,
+        contract_dests_id = null) {
+        this.id = id
+        this.desc = desc
+        this.qty = qty
+        this.unit_price = unit_price
+        this.price = price
+        this.discount = discount
+        this.amount = amount
+        this.contract_dests_id = contract_dests_id
+    }
+}
+
+
+
 var acc = document.getElementsByClassName("accordion");
 var i;
 
@@ -14,60 +45,46 @@ for (i = 0; i < acc.length; i++) {
 }
 
 var createRow = () => {
-    let description = null,
-        unit_price = 0,
-        discount = 0,
-        amount = 0,
-        id = null
-    let div = document.getElementById('table-comercial-lists')
-    let selectElemen = div.querySelectorAll('input')
-    // validation input
-    selectElemen.forEach(element => {
+    const obj = new Purchase()
+    obj.desc = document.getElementById('desc').value
+    obj.qty = parseFloat(document.getElementById('qty').value)
+    obj.unit_price = parseFloat(document.getElementById('unit_price').value)
+    obj.discount = parseFloat(document.getElementById('discount').value)
+    obj.contract_dests_id = parseInt(document.getElementById('contract_dests_id').value)
 
-        if (element.name === 'description') {
-            description = element.value
-        }
-        if (element.name === 'unit_price') {
-            unit_price = parseFloat(element.value)
-        }
-        if (element.name === 'discount') {
-            discount = parseFloat(element.value)
-        }
-        if (element.name === 'amount') {
-            amount = parseFloat(element.value)
-        }
-        if (element.name === 'contract_dests_id') {
-            id = element.value
-        }
-    })
 
-    let formData = formDataComercialLists(description, unit_price, discount, amount, id)
-    postComercialLists(formData).then(result => {
-        comercialLists(result.data.id)
+    postComercialLists(obj).then(result => {
+        if (result.status === 201) {
+            document.getElementById('desc').required = false
+            document.getElementById('qty').required = false
+            document.getElementById('unit_price').required = false
+            document.getElementById('discount').required = false
+            document.getElementById('desc').value = ''
+            document.getElementById('qty').value = ''
+            document.getElementById('unit_price').value = ''
+            document.getElementById('discount').value = ''
+        }
     }).catch(err => {
-        let errors = err.response.data.errors
-        console.log(errors);
-        for (const key in errors) {
-            if (errors.hasOwnProperty(key)) {
-                const element = errors[key];
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
-                    title: `${element}`,
-                    showConfirmButton: false,
-                    timer: 5000
+        for (const key in err.response.data.data) {
+            if (Object.hasOwnProperty.call(err.response.data.data, key)) {
+                const element = err.response.data.data[key]
+                document.getElementById(key).focus()
+                element.forEach(message => {
+                    toast(message, err.response.data.status)
                 })
             }
         }
-    }).finally(() => {
 
+    }).finally(() => {
+        toastClear()
+        comercialLists(document.getElementById('contract_dests_id').value)
     })
 }
 
 var deleteRow = (id) => {
     deleteComercialLists(id).then(result => {
         if (result.data.status) {
-            comercialLists(document.getElementById('validationContractDestsId').value)
+            comercialLists(document.getElementById('contract_dests_id').value)
         }
     }).catch(err => {
         Swal.fire({
@@ -78,16 +95,6 @@ var deleteRow = (id) => {
             timer: 2000
         })
     })
-}
-
-var formDataComercialLists = (description, unitPrice, discount, amount, id) => {
-    var formData = new FormData()
-    formData.append('description', description);
-    formData.append('unit_price', unitPrice);
-    formData.append('discount', discount);
-    formData.append('amount', amount);
-    formData.append('contract_dests_id', id)
-    return formData
 }
 
 var postComercialLists = formData => {
@@ -125,30 +132,78 @@ var generateRowFromComercial = (data) => {
 
 var comercialLists = (id) => {
     if (id) {
+        let PurchaseList = []
         getComercialLists(id).then(result => {
-            document.getElementById('table-comercial-lists').tBodies[0].innerHTML = ""
-            result.data.forEach(element => {
-                generateRowFromComercial(element)
-            });
-
-            document.getElementById('total').textContent = result.data.reduce((previousValue, currentValue) => previousValue + currentValue.amount, 0)
-
-        }).catch(err => {
-            let errors = err.response.data.errors
-            console.log(errors);
-            for (const key in errors) {
-                if (errors.hasOwnProperty(key)) {
-                    const element = errors[key];
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'error',
-                        title: `${element}`,
-                        showConfirmButton: false,
-                        timer: 5000
-                    })
+                if (result.data.length > 0) {
+                    result.data.forEach(item => {
+                        const model = new Purchase()
+                        model.id = item.id
+                        model.desc = item.description
+                        model.qty = item.qty
+                        model.unit_price = item.unit_price
+                        model.price = item.price
+                        model.discount = item.discount
+                        model.amount = item.amount
+                        model.contract_dests_id = item.contract_dests_id
+                        // console.log(model);
+                        PurchaseList.push(model)
+                    });
                 }
-            }
-        })
+            }).catch(err => {
+                let errors = err.response.data.errors
+                for (const key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        const element = errors[key];
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: `${element}`,
+                            showConfirmButton: false,
+                            timer: 5000
+                        })
+                    }
+                }
+            })
+            .finally(() => {
+                let table = document.getElementById('table-comercial-lists')
+                removeAllChildNodes(table.tBodies[0])
+                console.log(PurchaseList);
+                if (PurchaseList.length < 1) {
+                    document.getElementById('desc').required = true
+                    document.getElementById('qty').required = true
+                    document.getElementById('unit_price').required = true
+                    document.getElementById('discount').required = true
+                }
+                PurchaseList.forEach((element, index) => {
+                    let newRow = table.tBodies[0].insertRow()
+                    let newCell0 = newRow.insertCell(0),
+                        newCell1 = newRow.insertCell(1),
+                        newCell2 = newRow.insertCell(2),
+                        newCell3 = newRow.insertCell(3),
+                        newCell4 = newRow.insertCell(4),
+                        newCell5 = newRow.insertCell(5),
+                        newCell6 = newRow.insertCell(6),
+                        newCell7 = newRow.insertCell(7)
+
+                    newCell0.innerHTML = index + 1
+                    newCell1.innerHTML = element.desc
+                    newCell2.innerHTML = element.qty
+                    newCell3.innerHTML = element.unit_price
+                    newCell4.innerHTML = element.price
+                    newCell5.innerHTML = element.discount
+                    newCell6.innerHTML = element.amount
+                    // let btn = document.createElement('button')
+                    // btn.innerHTML = "delete"
+                    // btn.type = 'button'
+                    // btn.className = 'btn btn-danger btn-sm'
+                    // btn.setAttribute('onclick', `deleteRow(${element.id})`)
+                    // newCell7.appendChild(btn)
+                    newCell7.innerHTML = `<a data-toggle="tooltip" title="delete contract" data-placement="bottom"
+                    rel="noopener noreferrer" style="color: white;"
+                    class="btn btn-danger btn-sm" onclick="deleteRow(${element.id})"><i
+                        class="pe-7s-trash"> </i></a>`
+                })
+            })
     }
 }
 

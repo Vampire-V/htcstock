@@ -7,7 +7,7 @@
 @stop
 @section('content')
 
-<div class="app-page-title">
+{{-- <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
@@ -21,14 +21,14 @@
             </div>
         </div>
         <div class="page-title-actions">
-            {{-- <a style="color: white" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
-                class="btn-shadow mr-3 btn btn-dark" href="{{route('legal.pdf',$legalContract->id)}}">
-            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-            </a> --}}
             <div class="d-inline-block">
             </div>
         </div>
     </div>
+</div> --}}
+
+<div class="row">
+    <x-head-status-legal :legalContract="$legalContract" />
 </div>
 
 <div class="row">

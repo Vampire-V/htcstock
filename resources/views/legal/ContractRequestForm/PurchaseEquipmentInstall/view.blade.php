@@ -7,7 +7,7 @@
 @stop
 @section('content')
 
-<div class="app-page-title">
+{{-- <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 <div class="row">
     <x-head-status-legal :legalContract="$legalContract" />

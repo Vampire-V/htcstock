@@ -52,3 +52,7 @@
     content: "\2796";
     /* Unicode character for "minus" sign (-) */
 }
+
+input:focus {
+    border-color: red;
+  }

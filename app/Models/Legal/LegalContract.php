@@ -11,17 +11,10 @@ use Illuminate\Database\Eloquent\Model;
 class LegalContract extends Model
 {
     use LegalContractTrait;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'status', 'comment', 'action_id', 'agreement_id', 'company_name', 'company_cer', 'representative', 'representative_cer', 'address',
-        'contract_dest_id', 'requestor_by', 'checked_by', 'created_by', 'trash'
-    ];
 
-    protected $with = ['legalContractDest','approvalDetail','createdBy','LegalAction','legalAgreement'];
+    protected $guarded = [];
+
+    protected $with = ['legalContractDest', 'approvalDetail', 'createdBy', 'LegalAction', 'legalAgreement'];
 
     protected static function boot()
     {

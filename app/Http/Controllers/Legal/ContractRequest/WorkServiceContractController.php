@@ -107,7 +107,7 @@ class WorkServiceContractController extends Controller
         $data = $request->except(['_token', '_method']);
         $attributes = [];
         $comercialAttr = [];
-
+        dd($request->all());
         $attributes['quotation'] = $data['quotation'];
         $attributes['coparation_sheet'] = $data['coparation_sheet'];
         $attributes['work_plan'] = $data['work_plan'];
@@ -128,13 +128,17 @@ class WorkServiceContractController extends Controller
 
         DB::beginTransaction();
         try {
+            $workServiceContract = $this->contractDescService->search($id);
+            if ($workServiceContract->legalComercialList->count() < 1) {
+                return \redirect()->back()->with('error', "Error : ");
+            }
+
             if ($data['comercial_term_id']) {
                 $this->comercialTermService->update($comercialAttr, $data['comercial_term_id']);
                 $attributes['comercial_term_id'] = $data['comercial_term_id'];
             } else {
                 $attributes['comercial_term_id'] = $this->comercialTermService->create($comercialAttr)->id;
             }
-            $workServiceContract = $this->contractDescService->find($id);
             $this->contractDescService->update($attributes, $id);
             if ($workServiceContract->quotation !== $request->quotation) {
                 Storage::delete($workServiceContract->quotation);

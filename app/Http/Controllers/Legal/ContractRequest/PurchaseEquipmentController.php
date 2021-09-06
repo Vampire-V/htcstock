@@ -127,13 +127,18 @@ class PurchaseEquipmentController extends Controller
 
         DB::beginTransaction();
         try {
+            $purchaseEquipment = $this->contractDescService->search($id);
+            if ($purchaseEquipment->legalComercialList->count() < 1) {
+                return \redirect()->back()->with('error', "Error : ");
+            }
+            
             if ($data['comercial_term_id']) {
                 $this->comercialTermService->update($comercialAttr, $data['comercial_term_id']);
                 $attributes['comercial_term_id'] = $data['comercial_term_id'];
             } else {
                 $attributes['comercial_term_id'] = $this->comercialTermService->create($comercialAttr)->id;
             }
-            $purchaseEquipment = $this->contractDescService->find($id);
+            
             $this->contractDescService->update($attributes, $id);
             
             if ($purchaseEquipment->quotation !== $request->quotation) {

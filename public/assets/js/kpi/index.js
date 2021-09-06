@@ -145,11 +145,11 @@ var setDetail = (rule_temp) => {
     return evaluateForm
 }
 
-var removeAllChildNodes = (parent) => {
-    while (parent.firstChild) {
-        parent.removeChild(parent.firstChild);
-    }
-}
+// var removeAllChildNodes = (parent) => {
+//     while (parent.firstChild) {
+//         parent.removeChild(parent.firstChild);
+//     }
+// }
 
 const validityForm = () => {
     let forms = document.getElementsByClassName('app-main__inner')[0].querySelectorAll('form'),

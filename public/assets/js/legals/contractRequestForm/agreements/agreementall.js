@@ -65,6 +65,7 @@ var createRow = () => {
             document.getElementById('discount').value = ''
         }
     }).catch(err => {
+        console.error(err.response.data);
         for (const key in err.response.data.data) {
             if (Object.hasOwnProperty.call(err.response.data.data, key)) {
                 const element = err.response.data.data[key]

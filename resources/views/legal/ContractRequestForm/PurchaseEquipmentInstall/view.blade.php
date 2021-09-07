@@ -217,31 +217,37 @@
                         <table class="table table-bordered" id="table-comercial-lists">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Unit Price</th>
-                                    <th scope="col">Discount</th>
+                                    <th scope="col">S/N</th>
+                                    <th scope="col">Description <span style="color: red;">*</span></th>
+                                    <th scope="col">Quantity <span style="color: red;">*</span></th>
+                                    <th scope="col">Unit Price <span style="color: red;">*</span></th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Discount <span style="color: red;">*</span></th>
                                     <th scope="col">Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
+
                                 @foreach ($legalContract->legalContractDest->legalComercialList as $key => $item)
                                 <tr>
                                     <td>{{$key+1}}</td>
                                     <td>{{$item->description}}</td>
+                                    <td>{{$item->qty}}</td>
                                     <td>{{$item->unit_price}}</td>
+                                    <td>{{$item->price}}</td>
                                     <td>{{$item->discount}}</td>
                                     <td>{{$item->amount}}</td>
                                 </tr>
                                 @endforeach
+
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="3"></th>
-                                    <th>Total</th>
+                                    <th colspan="5"></th>
+                                    <th class="text-right">Total: </th>
                                     <th id="total">{{$legalContract->legalContractDest->legalComercialList->reduce(function ($ac,$item) {
-                                    return $ac+=$item->amount;
-                                },0)}}</th>
+                                return $ac+=$item->amount;
+                            },0)}}</th>
                                 </tr>
                             </tfoot>
                         </table>

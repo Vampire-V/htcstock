@@ -15,23 +15,23 @@
                 </i>
             </div>
             <div>Hire of Work/Service Contract <span class="badge badge-primary">{{$legalContract->status}}</span>
-                <div class="page-title-subheading">This is an example dashboard created using
-                    build-in elements and components.
-                </div>
-            </div>
-        </div>
-        <div class="page-title-actions">
-            <div class="d-inline-block">
-            </div>
-        </div>
+<div class="page-title-subheading">This is an example dashboard created using
+    build-in elements and components.
+</div>
+</div>
+</div>
+<div class="page-title-actions">
+    <div class="d-inline-block">
     </div>
+</div>
+</div>
 </div> --}}
 
 <div class="row">
     <x-head-status-legal :legalContract="$legalContract" />
 </div>
 
-<div class="row">
+<div class="row" style="margin-top: 10%;">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-body">
@@ -231,10 +231,12 @@
                         <table class="table table-bordered" id="table-comercial-lists">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Unit Price</th>
-                                    <th scope="col">Discount</th>
+                                    <th scope="col">S/N</th>
+                                    <th scope="col">Description <span style="color: red;">*</span></th>
+                                    <th scope="col">Quantity <span style="color: red;">*</span></th>
+                                    <th scope="col">Unit Price <span style="color: red;">*</span></th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Discount <span style="color: red;">*</span></th>
                                     <th scope="col">Amount</th>
                                 </tr>
                             </thead>
@@ -244,7 +246,9 @@
                                 <tr>
                                     <td>{{$key+1}}</td>
                                     <td>{{$item->description}}</td>
+                                    <td>{{$item->qty}}</td>
                                     <td>{{$item->unit_price}}</td>
+                                    <td>{{$item->price}}</td>
                                     <td>{{$item->discount}}</td>
                                     <td>{{$item->amount}}</td>
                                 </tr>
@@ -253,8 +257,8 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="3"></th>
-                                    <th>Total</th>
+                                    <th colspan="5"></th>
+                                    <th class="text-right">Total: </th>
                                     <th id="total">{{$legalContract->legalContractDest->legalComercialList->reduce(function ($ac,$item) {
                                 return $ac+=$item->amount;
                             },0)}}</th>

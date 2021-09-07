@@ -66,6 +66,7 @@ async function logSubmit(event) {
 }
 
 var changeType = (e) => {
+    console.log(e);
     let secondContract = document.getElementById("contractType2")
     switch (e.value) {
         case '8':

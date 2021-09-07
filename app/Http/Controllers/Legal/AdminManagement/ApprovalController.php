@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Legal\AdminManagement;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Legal\StoreApproval;
+use App\Models\Department;
+use App\Models\Legal\LegalApproval;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\Legal\Interfaces\ApprovalServiceInterface;
@@ -100,15 +102,15 @@ class ApprovalController extends Controller
      */
     public function edit($id)
     {
-
         try {
             $department = $this->departmentService->find($id);
             $users = $this->userService->dropdown();
+            $depts = Department::where('id','<>',$id)->get();
             $approvals = $this->approvalService->approvalByDepartment($department);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('legal.AdminManagement.Approval.edit')->with(['approvals' => $approvals, 'department' => $department, 'users' => $users]);
+        return \view('legal.AdminManagement.Approval.edit')->with(['approvals' => $approvals, 'department' => $department, 'users' => $users, 'depts' => $depts]);
     }
 
     /**
@@ -200,5 +202,45 @@ class ApprovalController extends Controller
         }
         DB::commit();
         return \redirect()->back();
+    }
+
+    /**
+     * approval levelUp the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function copyto(Request $request, $dept)
+    {
+        DB::beginTransaction();
+        try {
+            $depts = Department::find($dept);
+            $new_clone = [];
+            foreach ($depts->legalApprove as $approve) {
+                $clone = [];
+                foreach ($request->dept as $key => $item) {
+                    $temp = $approve->toArray();
+                    unset($temp['id']);
+                    $temp['department_id'] = \intval($item);
+                    \array_push($clone,$temp);
+                }
+                \array_push($new_clone,$clone);
+            }
+            
+            $rr = \array_merge(...$new_clone);
+            LegalApproval::whereIn('department_id',[$request->dept])->delete();
+            \collect($rr)->sortBy('department_id')->each(function($item) {
+                $newModels = LegalApproval::firstOrNew($item,$item);
+                $newModels->save();
+            });
+            // $newModels = LegalApproval::create();
+            // dd($newModels);
+            // $newModels->save();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
+        DB::commit();
+        return \redirect()->back()->with('success', "Copy data success...");
     }
 }

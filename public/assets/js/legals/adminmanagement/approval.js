@@ -2,7 +2,12 @@
     'use strict';
 
     document.addEventListener('DOMContentLoaded', function () {
-
+        // dept
+        $("#dept").select2({
+            placeholder: 'Select Department',
+            // allowClear: true,
+            dropdownParent: $('#copydata')
+        });
     })
 
     window.addEventListener('load', function () {
@@ -18,8 +23,17 @@
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
         // modal.find('.modal-title').text('New message to ' + recipient)
-        console.log(recipient);
+        // console.log(recipient);
         modal.find('#department_id').val(recipient)
     })
+
+    $("#checkbox").click(function(){
+        if($("#checkbox").is(':checked') ){
+            $("#dept > option").prop("selected","selected");
+            $("#dept").trigger("change");
+        }else{
+            $('#dept').val(null).trigger('change');
+         }
+    });
 
 })();

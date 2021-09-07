@@ -13,13 +13,29 @@ class Department extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'name'
-    ];
+    protected $guarded = [];
+
     /**
      * The primary key associated with the table.
      *
      * @var string
      */
     protected $primaryKey = 'id';
+
+    /**
+     * Get the comments for the blog post.
+     */
+    public function cloneLegalApprove($depts)
+    {
+        $clone = $this->replicate();
+        $clone->push();
+        foreach ($this->legalApprove as $approve) {
+            foreach ($depts as $key => $item) {
+                $temp = $approve->toArray();
+                $temp['department_id'] = \intval($item);
+                $clone->legalApprove()->create($temp);
+                $clone->save();
+            }
+        }
+    }
 }

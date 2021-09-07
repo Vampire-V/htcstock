@@ -8,12 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class LegalApproval extends Model
 {
     use LegalApprovalTrait;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'levels', 'user_id', 'department_id'
-    ];
+    protected $guarded = [];
 }

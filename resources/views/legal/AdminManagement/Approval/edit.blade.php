@@ -3,7 +3,6 @@
 @include('includes.sidebar.legal')
 @stop
 @section('content')
-@include('legal.AdminManagement.Approval.create')
 <div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
@@ -109,6 +108,8 @@
                         {{-- <button class="btn btn-focus">Last Week</button> --}}
                         <button class="btn btn-focus" data-toggle="modal" data-target="#staticBackdrop"
                             data-dept="{{$department->id}}">Add</button>
+                        <button class="btn btn-focus" data-toggle="modal" data-target="#copydata"
+                            data-dept="{{$department->id}}">Copy</button>
                     </div>
                 </div>
             </div>
@@ -177,7 +178,9 @@
     </div>
 </div>
 @endsection
-
+@section('modal')
+@include('legal.AdminManagement.Approval.create')
+@endsection
 @section('second-script')
 <script src="{{asset('assets\js\legals\adminmanagement\approval.js')}}" defer></script>
 {{-- <script src="{{asset('assets\js\legals\contractRequestForm\agreements\agreementall.js')}}"></script> --}}

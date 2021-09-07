@@ -30,5 +30,6 @@ Route::namespace('Legal')->prefix('legal')->name('legal.')->middleware(['auth', 
         Route::resource('approval', 'ApprovalController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
         Route::put('approval/{id}/level/up', 'ApprovalController@levelUp')->name('approval.levelup');
         Route::put('approval/{id}/level/down', 'ApprovalController@levelDown')->name('approval.leveldown');
+        Route::post('approval/copyto/{dept}', 'ApprovalController@copyto')->name('approval.copyto');
     });
 });

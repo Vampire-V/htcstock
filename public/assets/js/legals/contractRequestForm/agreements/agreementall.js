@@ -58,7 +58,7 @@ var createRow = () => {
             document.getElementById('desc').required = false
             document.getElementById('qty').required = false
             document.getElementById('unit_price').required = false
-            document.getElementById('discount').required = false
+            // document.getElementById('discount').required = false
             document.getElementById('desc').value = ''
             document.getElementById('qty').value = ''
             document.getElementById('unit_price').value = ''
@@ -173,7 +173,7 @@ var comercialLists = (id) => {
                     document.getElementById('desc').required = true
                     document.getElementById('qty').required = true
                     document.getElementById('unit_price').required = true
-                    document.getElementById('discount').required = true
+                    // document.getElementById('discount').required = true
                 }
                 PurchaseList.forEach((element, index) => {
                     let newRow = table.tBodies[0].insertRow()

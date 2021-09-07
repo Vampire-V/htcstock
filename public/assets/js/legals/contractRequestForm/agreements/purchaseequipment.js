@@ -46,14 +46,18 @@ async function logSubmit(event) {
                 document.getElementById('desc').required = true
                 document.getElementById('qty').required = true
                 document.getElementById('unit_price').required = true
-                document.getElementById('discount').required = true
+                // document.getElementById('discount').required = true
                 toast('Can’t find purchase', 'error')
             } else {
-                document.getElementById('desc').required = false
-                document.getElementById('qty').required = false
-                document.getElementById('unit_price').required = false
-                document.getElementById('discount').required = false
-                onSubmit = true
+                if (!document.getElementById('form-purchaseequipment').checkValidity()) {
+                    // toast('Can’t find purchase', 'error')
+                }else{
+                    document.getElementById('desc').required = false
+                    document.getElementById('qty').required = false
+                    document.getElementById('unit_price').required = false
+                    // document.getElementById('discount').required = false
+                    onSubmit = true
+                }
             }
         })
 

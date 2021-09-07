@@ -216,7 +216,7 @@
                                     <th scope="col">Quantity <span style="color: red;">*</span></th>
                                     <th scope="col">Unit Price <span style="color: red;">*</span></th>
                                     <th scope="col">Price</th>
-                                    <th scope="col">Discount <span style="color: red;">*</span></th>
+                                    <th scope="col">Discount</th>
                                     <th scope="col">Amount</th>
                                     <th scope="col">#</th>
                                 </tr>
@@ -240,7 +240,7 @@
                                     </td>
                                     <td>
                                         <input type="number" class="form-control-sm form-control" id="discount"
-                                            name="discount" min="0" step=0.01 required>
+                                            name="discount" min="0" step=0.01 >
                                     </td>
                                     <td>
                                         <input type="number" class="form-control-sm form-control" id="amount"

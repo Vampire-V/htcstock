@@ -51,14 +51,14 @@ class ComercialListsController extends Controller
             'desc' => 'required|max:255',
             'qty' => 'required|numeric|min:0.01',
             'unit_price' => 'required|numeric|min:0.01',
-            'discount' => 'required|numeric|min:0.00',
+            // 'discount' => 'numeric|min:0.00',
             'contract_dests_id' => 'required'
         ],[
             'desc.required' => 'The description field is required.',
             'desc.max' => 'The description field is max length 255',
             'qty.required' => 'The quantity field is number.',
             'unit_price.required' => 'The unit price field is number.',
-            'discount.required' => 'The discount field is number.',
+            // 'discount.numeric' => 'The discount field is number.',
             'contract_dests_id.required' => 'The description field is required.',
         ]);
 
@@ -78,7 +78,7 @@ class ComercialListsController extends Controller
             $model->qty = $data['qty'];
             $model->unit_price = $data['unit_price'];
             $model->price = $model->unit_price * $model->qty;
-            $model->discount = $data['discount'];
+            $model->discount = $data['discount'] ?? 0.00;
             $model->amount = $model->price - $model->discount;
             $model->contract_dests_id = $data['contract_dests_id'];
             $model->save();

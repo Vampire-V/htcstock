@@ -7,40 +7,39 @@
 @stop
 @section('content')
 
-{{-- <div class="app-page-title">
+<div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
-                <i class="pe-7s-car icon-gradient bg-mean-fruit">
-                </i>
+                <i class="fa fa-balance-scale icon-gradient bg-happy-fisher" aria-hidden="true"></i>
             </div>
             <div>Hire of Work/Service Contract
-                <div class="page-title-subheading">This is an example dashboard created using
-                    build-in elements and components.
-                </div>
+                {{-- <div class="page-title-subheading">THREE WEEKS PRIOR to commencement of the Contract Period.
+                </div> --}}
+                <div id="imagePreview"></div>
             </div>
         </div>
         <div class="page-title-actions">
-            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
+            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
                 class="btn-shadow mr-3 btn btn-dark">
                 <i class="fa fa-star"></i>
-            </button>
+            </button> --}}
             <div class="d-inline-block">
             </div>
         </div>
     </div>
-</div> --}}
-
-<div class="row">
-    <x-head-status-legal :legalContract="$workservicecontract->legalContract" />
 </div>
 
-<div class="row" style="margin-top: 10%;">
+{{-- <div class="row">
+    <x-head-status-legal :legalContract="$contract->legalContractDest->legalContract" />
+</div> --}}
+
+<div class="row" >
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <form class="needs-validation" novalidate
-                    action="{{route('legal.contract-request.workservicecontract.update',$workservicecontract->id)}}"
+                    action="{{route('legal.contract-request.workservicecontract.update',$contract->legalContractDest->id)}}"
                     method="POST" enctype="multipart/form-data" id="form-workservicecontract">
                     @csrf
                     @method('PUT')
@@ -48,36 +47,36 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-6">
                             <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> <a
-                                    href="{{url('storage/'.$workservicecontract->purchase_order)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$workservicecontract->purchase_order ? 'view file' : ""}}</a></label>
+                                    href="{{url('storage/'.$contract->legalContractDest->purchase_order)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$contract->legalContractDest->purchase_order ? 'view file' : ""}}</a></label>
                             <input type="file" class="form-control-sm form-control" id="validationPurchaseOrderFile"
                                 data-name="purchase_order"
-                                data-cache="{{substr($workservicecontract->purchase_order,9)}}"
+                                data-cache="{{substr($contract->legalContractDest->purchase_order,9)}}"
                                 onchange="uploadFileContract(this)">
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                             </div>
                             <input type="hidden" type="text" name="purchase_order"
-                                value="{{$workservicecontract->purchase_order}}">
+                                value="{{$contract->legalContractDest->purchase_order}}">
                             <div class="invalid-feedback">
                                 Please provide a valid PO No.
                             </div>
                         </div>
                         <div class="col-md-6 mb-6">
-                            <label for="validationQuotationFile"><strong>Quotation</strong> <span
+                            <label for="validationQuotationFile"><strong>Quotation</strong><span
                                     style="color: red;">*</span> <a
-                                    href="{{url('storage/'.$workservicecontract->quotation)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$workservicecontract->quotation ? 'view file' : ""}}</a></label>
+                                    href="{{url('storage/'.$contract->legalContractDest->quotation)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$contract->legalContractDest->quotation ? 'view file' : ""}}</a></label>
                             <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
-                                data-cache="{{substr($workservicecontract->quotation,9)}}" data-name="quotation"
+                                data-cache="{{substr($contract->legalContractDest->quotation,9)}}" data-name="quotation"
                                 onchange="uploadFileContract(this)" required>
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                             </div>
                             <input type="hidden" type="text" name="quotation"
-                                value="{{$workservicecontract->quotation}}">
+                                value="{{$contract->legalContractDest->quotation}}">
                             <div class="invalid-feedback">
                                 Please provide a valid Ivoice No.
                             </div>
@@ -87,18 +86,18 @@
                         <div class="col-md-6 mb-6">
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                     style="color: red;">*</span> <a
-                                    href="{{url('storage/'.$workservicecontract->coparation_sheet)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$workservicecontract->coparation_sheet ? 'view file' : ""}}</a></label>
+                                    href="{{url('storage/'.$contract->legalContractDest->coparation_sheet)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$contract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a></label>
                             <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
                                 data-name="coparation_sheet"
-                                data-cache="{{substr($workservicecontract->coparation_sheet,9)}}"
+                                data-cache="{{substr($contract->legalContractDest->coparation_sheet,9)}}"
                                 onchange="uploadFileContract(this)" required>
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                             </div>
                             <input type="hidden" type="text" name="coparation_sheet"
-                                value="{{$workservicecontract->coparation_sheet}}">
+                                value="{{$contract->legalContractDest->coparation_sheet}}">
                             <div class="invalid-feedback">
                                 Please provide a valid PO No.
                             </div>
@@ -106,17 +105,17 @@
                         <div class="col-md-6 mb-6">
                             <label for="validationWorkPlan"><strong>Work Plan</strong> <span
                                     style="color: red;">*</span> <a
-                                    href="{{url('storage/'.$workservicecontract->work_plan)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$workservicecontract->work_plan ? 'view file' : ""}}</a></label>
+                                    href="{{url('storage/'.$contract->legalContractDest->work_plan)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$contract->legalContractDest->work_plan ? 'view file' : ""}}</a></label>
                             <input type="file" class="form-control-sm form-control" id="validationWorkPlan"
-                                data-name="work_plan" data-cache="{{substr($workservicecontract->work_plan,9)}}"
+                                data-name="work_plan" data-cache="{{substr($contract->legalContractDest->work_plan,9)}}"
                                 onchange="uploadFileContract(this)" required>
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                             </div>
                             <input type="hidden" type="text" name="work_plan"
-                                value="{{$workservicecontract->work_plan}}">
+                                value="{{$contract->legalContractDest->work_plan}}">
                             <div class="invalid-feedback">
                                 Please provide a valid Ivoice No.
                             </div>
@@ -126,14 +125,15 @@
                     <hr>
 
                     <span class="badge badge-primary">Comercial Terms</span>
-                    <input type="hidden" name="comercial_term_id" value="{{$workservicecontract->comercial_term_id}}">
+                    <input type="hidden" name="comercial_term_id" value="{{$contract->legalContractDest->comercial_term_id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope"
                                 name="scope_of_work"
-                                value="{{isset($workservicecontract->legalComercialTerm) ? $workservicecontract->legalComercialTerm->scope_of_work : ""}}"
+                                placeholder="e.g. warehouse construction, factory painting"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Ivoice No.
@@ -144,7 +144,8 @@
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationLocation"
                                 name="location"
-                                value="{{isset($workservicecontract->legalComercialTerm) ? $workservicecontract->legalComercialTerm->location : ""}}"
+                                placeholder="e.g. RF Factory, AC Factory"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->location : ""}}"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Ivoice No.
@@ -154,7 +155,7 @@
                             <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong> </label>
                             <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo"
                                 name="purchase_order_no"
-                                value="{{isset($workservicecontract->legalComercialTerm) ? $workservicecontract->legalComercialTerm->purchase_order_no : ""}}">
+                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->purchase_order_no : ""}}">
                             <div class="invalid-feedback">
                                 Please provide a valid Ivoice No.
                             </div>
@@ -166,7 +167,7 @@
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo"
                                 name="quotation_no"
-                                value="{{isset($workservicecontract->legalComercialTerm) ? $workservicecontract->legalComercialTerm->quotation_no : ""}}"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Ivoice No.
@@ -176,7 +177,7 @@
                             <label for="validationDated"><strong>Dated</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                                value="{{isset($workservicecontract->legalComercialTerm->dated) ? $workservicecontract->legalComercialTerm->dated->format('Y-m-d') : ""}}"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm->dated) ? $contract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Ivoice No.
@@ -185,25 +186,37 @@
                     </div>
                     <div class="form-row">
                         <div class="col-md-6 mb-6">
+                            {{-- hide --}}
                             <label for="validationContractPeriod"><strong>Contract period</strong> <span
                                     style="color: red;">*</span></label>
-                            <input type="date" class="form-control-sm form-control" id="validationContractPeriod"
+                            <input type="text" class="form-control-sm form-control" id="validationContractPeriod"
                                 name="contract_period"
-                                value="{{isset($workservicecontract->legalComercialTerm->contract_period) ? $workservicecontract->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
+                                placeholder="e.g. 30 days from contract date, 1-30 September 2021"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->contract_period : ""}}"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Ivoice No.
                             </div>
                         </div>
                         <div class="col-md-6 mb-6">
-                            <label for="validationUntill"><strong>Untill</strong> <span
-                                    style="color: red;">*</span></label>
-                            <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
-                                value="{{isset($workservicecontract->legalComercialTerm->untill) ? $workservicecontract->legalComercialTerm->untill->format('Y-m-d') : ""}}"
+                            {{-- hide --}}
+                            {{-- <label for="validationContractPeriod"><strong>Contract period</strong> <span
+                                style="color: red;">*</span></label>
+                            <input type="text" class="form-control-sm form-control" id="validationContractPeriod"
+                                name="contract_period"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm->contract_period) ? $contract->legalContractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Ivoice No.
-                            </div>
+                            </div> --}}
+                            {{-- <label for="validationUntill"><strong>Untill</strong> <span
+                                    style="color: red;">*</span></label>
+                            <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm->untill) ? $contract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
+                                required>
+                            <div class="invalid-feedback">
+                                Please provide a valid Ivoice No.
+                            </div> --}}
                         </div>
                     </div>
                     <hr>
@@ -253,8 +266,8 @@
                                             class="btn btn-sm btn-warning" onclick="createRow()"><i
                                                 class="fa fa-plus-circle" aria-hidden="true"></i></a>
                                     </td>
-                                    <input type="hidden" class="form-control-sm form-control" id="contract_dests_id"
-                                        name="contract_dests_id" value="{{$workservicecontract->id}}">
+                                    <input type="hidden" class="form-control-sm form-control" id="contract_id"
+                                        name="contract_id" value="{{$contract->id}}">
 
                                 </tr>
                             </thead>
@@ -279,11 +292,11 @@
                                     style="color: red;">*</span></label>
                             <select name="payment_type_id" id="validationContractType"
                                 class="form-control-sm form-control" onchange="changeType(this)" required>
-                                <option value="">Shoose....</option>
+                                <option value="">Choose....</option>
                                 @isset($paymentType)
                                 @foreach ($paymentType as $item)
                                 <option value="{{$item->id}}"
-                                    {{$workservicecontract->payment_type_id == $item->id ? "selected" : "" }}>
+                                    {{$contract->legalContractDest->payment_type_id == $item->id ? "selected" : "" }}>
                                     {{$item->name}}
                                 </option>
                                 @endforeach
@@ -296,7 +309,7 @@
                         <div class="col-md-8 mb-8 hide-contract" id="contractType1">
                             <ul>
                                 <li class="li-none-type"><input type="number"
-                                        value="{{isset($workservicecontract->value_of_contract)?$workservicecontract->value_of_contract[0]:30}}"
+                                        value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[0]:30}}"
                                         class="type-contract-input" min="0" max="100"
                                         onchange="changeContractValue(this)">
                                     <span>% of
@@ -304,14 +317,14 @@
                                         contract</span>
                                 </li>
                                 <li class="li-none-type"><input type="number"
-                                        value="{{isset($workservicecontract->value_of_contract)?$workservicecontract->value_of_contract[1]:40}}"
+                                        value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[1]:40}}"
                                         class="type-contract-input" min="0" max="100"
                                         onchange="changeContractValue(this)">
                                     <span>% of
                                         the total value of a contract within 30 days from the date of accomplishment and
                                         approval by HTC </span></li>
                                 <li class="li-none-type"><input type="number"
-                                        value="{{isset($workservicecontract->value_of_contract)?$workservicecontract->value_of_contract[2]:30}}"
+                                        value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[2]:30}}"
                                         class="type-contract-input" min="0" max="100" readonly> <span>% of
                                         the total value of a contract within 30 days from the date of inspection and
                                         approval by HTC
@@ -322,7 +335,7 @@
                         <div class="col-md-8 mb-8 hide-contract" id="contractType2">
                             <ul>
                                 <li class="li-none-type"><input type="number"
-                                        value="{{isset($workservicecontract->value_of_contract)?$workservicecontract->value_of_contract[0]:30}}"
+                                        value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[0]:30}}"
                                         class="type-contract-input" min="0" max="100"
                                         onchange="changeContractValue(this)">
                                     <span>% of
@@ -330,14 +343,14 @@
                                         contract</span>
                                 </li>
                                 <li class="li-none-type"><input type="number"
-                                        value="{{isset($workservicecontract->value_of_contract)?$workservicecontract->value_of_contract[1]:60}}"
+                                        value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[1]:60}}"
                                         class="type-contract-input" min="0" max="100"
                                         onchange="changeContractValue(this)">
                                     <span>% of
                                         the total value of a contract within 30 days from the date of accomplishment and
                                         approval by HTC </span></li>
                                 <li class="li-none-type"><input type="number"
-                                        value="{{isset($workservicecontract->value_of_contract)?$workservicecontract->value_of_contract[2]:10}}"
+                                        value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[2]:10}}"
                                         class="type-contract-input" min="0" max="100" readonly> <span>% of
                                         the total value of a contract within 30 days from the date of inspection and
                                         approval by HTC
@@ -353,7 +366,7 @@
                             <label for="validationWarranty"><strong>Month</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="number" class="form-control-sm form-control" id="validationWarranty"
-                                name="warranty" min="0" step="1" value="{{$workservicecontract->warranty}}"
+                                name="warranty" min="0" step="1" value="{{$contract->legalContractDest->warranty}}"
                                 onchange="calMonthToYear(this)" required>
                             <div class="invalid-feedback">
                                 Please provide a valid Ivoice No.
@@ -368,7 +381,7 @@
                     <hr>
                     <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
                         type="button"
-                        href="{{route('legal.contract-request.edit',$workservicecontract->legalcontract->id)}}">Back</a>
+                        href="{{route('legal.contract-request.edit',$contract->id)}}">Back</a>
                     <button class="btn btn-primary" type="submit" style="margin-top: 5px">Next</button>
                 </form>
             </div>

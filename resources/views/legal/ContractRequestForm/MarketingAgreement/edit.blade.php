@@ -49,7 +49,7 @@
                             <label for="validationSubType"><strong></strong> </label>
                             <select id="validationSubType" class="form-control-sm form-control" name="subtype"
                                 required>
-                                <option data-id="" value="">Shoose....</option>
+                                <option data-id="" value="">Choose....</option>
                                 @isset($subtypeContract)
                                 @foreach ($subtypeContract as $item)
                                 <option value="{{$item->id}}"

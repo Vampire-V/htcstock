@@ -12,7 +12,7 @@
             allowClear: true
         });
         $(".js-select-agreements-multiple").select2({
-            placeholder: 'Select agreements',
+            placeholder: 'Select type',
             allowClear: true
         });
     })

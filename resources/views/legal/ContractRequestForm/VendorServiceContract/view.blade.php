@@ -100,7 +100,7 @@
                         <label for="validationSubType"><strong></strong> </label>
                         <select id="validationSubType" class="form-control-sm form-control" name="subtype"
                             onchange="changeSubType(this)" readonly disabled>
-                            <option data-id="">Shoose....</option>
+                            <option data-id="">Choose....</option>
                             @isset($subtypeContract)
                             @foreach ($subtypeContract as $item)
                             <option value="{{$item->id}}"

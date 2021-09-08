@@ -2,12 +2,12 @@
 
 namespace App\Relations;
 
-use App\Models\Legal\LegalContractDest;
+use App\Models\Legal\LegalContract;
 
 trait LegalComercialListTrait
 {
-    public function legalContractDest()
+    public function legalContract()
     {
-        return $this->belongsTo(LegalContractDest::class, 'contract_dests_id')->withDefault();
+        return $this->belongsTo(LegalContract::class)->withDefault();
     }
 }

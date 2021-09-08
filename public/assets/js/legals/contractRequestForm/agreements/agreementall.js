@@ -6,7 +6,7 @@ class Purchase {
     price = 0
     discount = 0
     amount = 0
-    contract_dests_id = null
+    contract_id = null
 
     constructor(id = null,
         desc = String(),
@@ -15,7 +15,7 @@ class Purchase {
         price = 0,
         discount = 0,
         amount = 0,
-        contract_dests_id = null) {
+        contract_id = null) {
         this.id = id
         this.desc = desc
         this.qty = qty
@@ -23,7 +23,7 @@ class Purchase {
         this.price = price
         this.discount = discount
         this.amount = amount
-        this.contract_dests_id = contract_dests_id
+        this.contract_id = contract_id
     }
 }
 
@@ -50,7 +50,7 @@ var createRow = () => {
     obj.qty = parseFloat(document.getElementById('qty').value)
     obj.unit_price = parseFloat(document.getElementById('unit_price').value)
     obj.discount = parseFloat(document.getElementById('discount').value)
-    obj.contract_dests_id = parseInt(document.getElementById('contract_dests_id').value)
+    obj.contract_id = parseInt(document.getElementById('contract_id').value)
 
 
     postComercialLists(obj).then(result => {
@@ -78,14 +78,14 @@ var createRow = () => {
 
     }).finally(() => {
         toastClear()
-        comercialLists(document.getElementById('contract_dests_id').value)
+        comercialLists(document.getElementById('contract_id').value)
     })
 }
 
 var deleteRow = (id) => {
     deleteComercialLists(id).then(result => {
         if (result.data.status) {
-            comercialLists(document.getElementById('contract_dests_id').value)
+            comercialLists(document.getElementById('contract_id').value)
         }
     }).catch(err => {
         Swal.fire({
@@ -145,7 +145,7 @@ var comercialLists = (id) => {
                         model.price = item.price
                         model.discount = item.discount
                         model.amount = item.amount
-                        model.contract_dests_id = item.contract_dests_id
+                        model.contract_id = item.contract_id
                         // console.log(model);
                         PurchaseList.push(model)
                     });
@@ -168,7 +168,6 @@ var comercialLists = (id) => {
             .finally(() => {
                 let table = document.getElementById('table-comercial-lists')
                 removeAllChildNodes(table.tBodies[0])
-                console.log(PurchaseList);
                 if (PurchaseList.length < 1) {
                     document.getElementById('desc').required = true
                     document.getElementById('qty').required = true
@@ -193,17 +192,13 @@ var comercialLists = (id) => {
                     newCell4.innerHTML = element.price
                     newCell5.innerHTML = element.discount
                     newCell6.innerHTML = element.amount
-                    // let btn = document.createElement('button')
-                    // btn.innerHTML = "delete"
-                    // btn.type = 'button'
-                    // btn.className = 'btn btn-danger btn-sm'
-                    // btn.setAttribute('onclick', `deleteRow(${element.id})`)
-                    // newCell7.appendChild(btn)
                     newCell7.innerHTML = `<a data-toggle="tooltip" title="delete contract" data-placement="bottom"
                     rel="noopener noreferrer" style="color: white;"
                     class="btn btn-danger btn-sm" onclick="deleteRow(${element.id})"><i
                         class="pe-7s-trash"> </i></a>`
                 })
+
+                document.getElementById('total').textContent = PurchaseList.reduce((accumulator, item) => accumulator + item.amount,0)
             })
     }
 }

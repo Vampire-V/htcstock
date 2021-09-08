@@ -96,6 +96,7 @@ var uploadFileContract = async e => {
 
     axios.post(uri, data, configUploadProgress)
         .then(res => {
+            console.log(res);
             e.offsetParent.getElementsByTagName('a')[0].href = `${window.location.href.split('/').slice(0, 3).join('/')}/storage/${res.data.path}`
             e.offsetParent.getElementsByTagName('a')[0].textContent = `view file`
             e.offsetParent.querySelector(`input[name='${e.dataset.name}']`).value = res.data.path
@@ -105,6 +106,7 @@ var uploadFileContract = async e => {
             e.offsetParent.getElementsByClassName('progress-bar')[0].textContent = `Success !`
         })
         .catch(err => {
+            console.error(err.response);
             e.offsetParent.getElementsByClassName('progress-bar')[0].classList.remove('bg-success')
             e.offsetParent.getElementsByClassName('progress-bar')[0].classList.add('bg-danger')
             if (Array.isArray(err.response.data.file)) {

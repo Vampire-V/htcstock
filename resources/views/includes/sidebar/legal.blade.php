@@ -44,7 +44,7 @@
                 <li class="{{Helper::isActive('legal/contract-request*')}}">
                     <a href="#" class="{{Helper::isActive('legal/contract-request*')}}">
                         <i class="metismenu-icon pe-7s-hammer"></i>
-                        Contract-Request
+                        E-filing
                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                     </a>
                     <ul>
@@ -52,7 +52,7 @@
                             <a href="{{route('legal.contract-request.index')}}"
                                 class="{{Helper::isActive('legal/contract-request')}}">
                                 <i class="metismenu-icon"></i>
-                                Contract Request Form
+                                Contract Request
                             </a>
                         </li>
                     </ul>

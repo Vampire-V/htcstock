@@ -34,7 +34,7 @@ class StoreWorkServiceContract extends FormRequest
             'quotation_no' => 'required',
             'dated' => 'required',
             'contract_period' => 'required',
-            'untill' => 'required',
+            // 'untill' => 'required',
 
             'payment_type_id' => 'required',
             'value_of_contract' => 'required',
@@ -60,7 +60,7 @@ class StoreWorkServiceContract extends FormRequest
             'quotation_no.required' => 'Please enter quotation_no',
             'dated.required' => 'Please enter dated',
             'contract_period.required' => 'Please enter contract_period',
-            'untill.required' => 'Please enter untill',
+            // 'untill.required' => 'Please enter untill',
 
             'payment_type_id.required' => 'Please enter payment_term',
             'value_of_contract.required' => 'Please enter value_of_contract',

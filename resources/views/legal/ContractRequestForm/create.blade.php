@@ -19,21 +19,19 @@
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
-                <i class="pe-7s-car icon-gradient bg-mean-fruit">
-                </i>
+                <i class="fa fa-balance-scale icon-gradient bg-happy-fisher" aria-hidden="true"></i>
             </div>
             <div>CONTRACT REQUEST FORM
-                <div class="page-title-subheading">This is an example dashboard created using
-                    build-in elements and components.
+                <div class="page-title-subheading">THREE WEEKS PRIOR to commencement of the Contract Period.
                 </div>
                 <div id="imagePreview"></div>
             </div>
         </div>
         <div class="page-title-actions">
-            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
+            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
                 class="btn-shadow mr-3 btn btn-dark">
                 <i class="fa fa-star"></i>
-            </button>
+            </button> --}}
             <div class="d-inline-block">
             </div>
         </div>
@@ -52,7 +50,7 @@
                         <label for="validationAcction"><strong>Action</strong> <span
                                 style="color: red;">*</span></label>
                         <select name="action_id" id="validationAcction" class="form-control-sm form-control" required>
-                            <option value="">Shoose....</option>
+                            <option value="">Choose....</option>
                             @isset($actions)
                             @foreach ($actions as $action)
                             <option value="{{$action->id}}">{{$action->name}}</option>
@@ -64,11 +62,11 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-6">
-                        <label for="validationAgreements"><strong>General Agreements</strong> <span
+                        <label for="validationAgreements"><strong>Type</strong> <span
                                 style="color: red;">*</span></label>
                         <select name="agreement_id" id="validationAgreements" class="form-control-sm form-control"
                             required>
-                            <option value="">Shoose....</option>
+                            <option value="">Choose....</option>
                             @isset($agreements)
                             @foreach ($agreements as $agreement)
                             <option value="{{$agreement->id}}">{{$agreement->name}}</option>
@@ -83,7 +81,7 @@
 
                 <div class="form-row">
                     <div class="col-md-6 mb-6">
-                        <label for="validationCompanyName"><strong>Full name (Company’s, Person’s)</strong> <span
+                        <label for="validationCompanyName"><strong>Contracting Party</strong> <span
                                 style="color: red;">*</span></label>
                         <input type="text" class="form-control-sm form-control" id="validationCompanyName"
                             name="company_name" required>
@@ -118,7 +116,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-6">
-                        <label for="validationRepresen"><strong>Representative Certificate</strong> <span
+                        <label for="validationRepresen"><strong> ID Card/Passport{{--Representative Certificate--}}</strong> <span
                                 style="color: red;">*</span> <a href="" target="_blank"
                                 rel="noopener noreferrer"></a></label>
                         <input type="file" class="form-control-sm form-control" id="validationRepresen"
@@ -145,8 +143,8 @@
                     </div>
                 </div>
                 <div class="float-rigth">
-                    <a class="btn btn-primary" style="color: white !important; margin-top: 5px"
-                        type="button" href="{{url()->previous()}}">Back</a>
+                    <a class="btn btn-primary" style="color: white !important; margin-top: 5px" type="button"
+                        href="{{url()->previous()}}">Back</a>
                     <button class="btn btn-primary" type="submit" style="margin-top: 5px">Next</button>
                 </div>
 

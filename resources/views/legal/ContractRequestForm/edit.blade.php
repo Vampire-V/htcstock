@@ -14,33 +14,31 @@
 @include('includes.sidebar.legal');
 @stop
 @section('content')
-
-{{-- <div class="app-page-title">
+<div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
-                <i class="pe-7s-car icon-gradient bg-mean-fruit">
-                </i>
+                <i class="fa fa-balance-scale icon-gradient bg-happy-fisher" aria-hidden="true"></i>
             </div>
             <div>CONTRACT REQUEST FORM
-                <div class="page-title-subheading">This is an example dashboard created using
-                    build-in elements and components.
+                <div class="page-title-subheading">THREE WEEKS PRIOR to commencement of the Contract Period.
                 </div>
+                <div id="imagePreview"></div>
             </div>
         </div>
         <div class="page-title-actions">
-            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
+            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
                 class="btn-shadow mr-3 btn btn-dark">
                 <i class="fa fa-star"></i>
-            </button>
+            </button> --}}
             <div class="d-inline-block">
             </div>
         </div>
     </div>
-</div> --}}
-<div class="row" style="margin-top: 10%;">
-    <x-head-status-legal :legalContract="$contract" />
 </div>
+{{-- <div class="row" style="margin-top: 10%;">
+    <x-head-status-legal :legalContract="$contract" />
+</div> --}}
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
@@ -55,7 +53,7 @@
                         <label for="validationAcction"><strong>Action</strong> <span
                                 style="color: red;">*</span></label>
                         <select name="action_id" id="validationAcction" class="form-control-sm form-control" required>
-                            <option value="">Shoose....</option>
+                            <option value="">Choose....</option>
                             @isset($actions)
                             @foreach ($actions as $action)
                             <option value="{{$action->id}}" {{$contract->action_id == $action->id ? "selected" : ""}}>
@@ -72,7 +70,7 @@
                                 style="color: red;">*</span></label>
                         <select name="agreement_id" id="validationAgreements" class="form-control-sm form-control"
                             required>
-                            <option value="">Shoose....</option>
+                            <option value="">Choose....</option>
                             @isset($agreements)
                             @foreach ($agreements as $agreement)
                             <option value="{{$agreement->id}}"

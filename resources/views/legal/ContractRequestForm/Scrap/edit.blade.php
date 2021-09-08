@@ -7,40 +7,39 @@
 @stop
 @section('content')
 
-{{-- <div class="app-page-title">
+<div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
-                <i class="pe-7s-car icon-gradient bg-mean-fruit">
-                </i>
+                <i class="fa fa-balance-scale icon-gradient bg-happy-fisher" aria-hidden="true"></i>
             </div>
             <div>Scrap
-                <div class="page-title-subheading">This is an example dashboard created using
-                    build-in elements and components.
-                </div>
+                {{-- <div class="page-title-subheading">THREE WEEKS PRIOR to commencement of the Contract Period.
+                </div> --}}
+                <div id="imagePreview"></div>
             </div>
         </div>
         <div class="page-title-actions">
-            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
+            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
                 class="btn-shadow mr-3 btn btn-dark">
                 <i class="fa fa-star"></i>
-            </button>
+            </button> --}}
             <div class="d-inline-block">
             </div>
         </div>
     </div>
+</div>
+
+{{-- <div class="row">
+    <x-head-status-legal :legalContract="$contract->legalContractDest->legalContract" />
 </div> --}}
 
 <div class="row">
-    <x-head-status-legal :legalContract="$scrap->legalContract" />
-</div>
-
-<div class="row" style="margin-top: 10%;">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <form class="needs-validation" novalidate
-                    action="{{route('legal.contract-request.scrap.update',$scrap->id)}}" method="POST"
+                    action="{{route('legal.contract-request.scrap.update',$contract->legalContractDest->id)}}" method="POST"
                     enctype="multipart/form-data" id="form-scrap">
                     @csrf
                     @method('PUT')
@@ -49,37 +48,37 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-6">
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
-                                    style="color: red;">*</span> <a href="{{url('storage/'.$scrap->quotation)}}"
+                                    style="color: red;">*</span> <a href="{{url('storage/'.$contract->legalContractDest->quotation)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$scrap->quotation ? 'view file' : ""}}</a></label>
+                                    rel="noopener noreferrer">{{$contract->legalContractDest->quotation ? 'view file' : ""}}</a></label>
 
                             <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
-                                data-name="quotation" data-cache="{{substr($scrap->quotation,9)}}"
+                                data-name="quotation" data-cache="{{substr($contract->legalContractDest->quotation,9)}}"
                                 onchange="uploadFileContract(this)" required>
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                             </div>
-                            <input type="hidden" type="text" name="quotation" value="{{$scrap->quotation}}">
+                            <input type="hidden" type="text" name="quotation" value="{{$contract->legalContractDest->quotation}}">
                             <div class="invalid-feedback">
                                 Please provide a valid quotation.
                             </div>
                         </div>
                         <div class="col-md-6 mb-6">
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
-                                    style="color: red;">*</span> <a href="{{url('storage/'.$scrap->coparation_sheet)}}"
+                                    style="color: red;">*</span> <a href="{{url('storage/'.$contract->legalContractDest->coparation_sheet)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$scrap->coparation_sheet ? 'view file' : ""}}</a></label>
+                                    rel="noopener noreferrer">{{$contract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a></label>
 
                             <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
-                                data-name="coparation_sheet" data-cache="{{substr($scrap->coparation_sheet,9)}}"
+                                data-name="coparation_sheet" data-cache="{{substr($contract->legalContractDest->coparation_sheet,9)}}"
                                 onchange="uploadFileContract(this)" required>
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                             </div>
                             <input type="hidden" type="text" name="coparation_sheet"
-                                value="{{$scrap->coparation_sheet}}">
+                                value="{{$contract->legalContractDest->coparation_sheet}}">
                             <div class="invalid-feedback">
                                 Please provide a valid Coparation Sheet.
                             </div>
@@ -89,37 +88,37 @@
                         <div class="col-md-6 mb-6">
                             <label for="validationFactoryPermission"><strong>Factory Permission</strong> <span
                                     style="color: red;">*</span> <a
-                                    href="{{url('storage/'.$scrap->factory_permission)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$scrap->factory_permission ? 'view file' : ""}}</a></label>
+                                    href="{{url('storage/'.$contract->legalContractDest->factory_permission)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$contract->legalContractDest->factory_permission ? 'view file' : ""}}</a></label>
 
                             <input type="file" class="form-control-sm form-control" id="validationFactoryPermission"
-                                data-name="factory_permission" data-cache="{{substr($scrap->factory_permission,9)}}"
+                                data-name="factory_permission" data-cache="{{substr($contract->legalContractDest->factory_permission,9)}}"
                                 onchange="uploadFileContract(this)" required>
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                             </div>
                             <input type="hidden" type="text" name="factory_permission"
-                                value="{{$scrap->factory_permission}}">
+                                value="{{$contract->legalContractDest->factory_permission}}">
                             <div class="invalid-feedback">
                                 Please provide a valid Factory Permission.
                             </div>
                         </div>
                         <div class="col-md-6 mb-6">
                             <label for="validationWastePermission"><strong>Waste Permission</strong> <span
-                                    style="color: red;">*</span> <a href="{{url('storage/'.$scrap->waste_permission)}}"
+                                    style="color: red;">*</span> <a href="{{url('storage/'.$contract->legalContractDest->waste_permission)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$scrap->waste_permission ? 'view file' : ""}}</a></label>
+                                    rel="noopener noreferrer">{{$contract->legalContractDest->waste_permission ? 'view file' : ""}}</a></label>
 
                             <input type="file" class="form-control-sm form-control" id="validationWastePermission"
-                                data-name="waste_permission" data-cache="{{substr($scrap->waste_permission,9)}}"
+                                data-name="waste_permission" data-cache="{{substr($contract->legalContractDest->waste_permission,9)}}"
                                 onchange="uploadFileContract(this)" required>
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                             </div>
                             <input type="hidden" type="text" name="waste_permission"
-                                value="{{$scrap->waste_permission}}">
+                                value="{{$contract->legalContractDest->waste_permission}}">
                             <div class="invalid-feedback">
                                 Please provide a valid Waste Permission.
                             </div>
@@ -129,14 +128,14 @@
                     <hr>
 
                     <span class="badge badge-primary">Comercial Terms</span>
-                    <input type="hidden" name="comercial_term_id" value="{{$scrap->comercial_term_id}}">
+                    <input type="hidden" name="comercial_term_id" value="{{$contract->legalContractDest->comercial_term_id}}">
                     <div class="form-row">
                         <div class="col-md-6 mb-6">
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope"
                                 name="scope_of_work"
-                                value="{{isset($scrap->legalComercialTerm) ? $scrap->legalComercialTerm->scope_of_work : ""}}"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 required>
 
                             <div class="invalid-feedback">
@@ -148,7 +147,7 @@
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationLocation"
                                 name="location"
-                                value="{{isset($scrap->legalComercialTerm) ? $scrap->legalComercialTerm->location : ""}}"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->location : ""}}"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Location.
@@ -161,7 +160,7 @@
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo"
                                 name="quotation_no"
-                                value="{{isset($scrap->legalComercialTerm) ? $scrap->legalComercialTerm->quotation_no : ""}}"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Quotation No.
@@ -171,7 +170,7 @@
                             <label for="validationDated"><strong>Dated</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                                value="{{isset($scrap->legalComercialTerm->dated) ? $scrap->legalComercialTerm->dated->format('Y-m-d') : ""}}"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm->dated) ? $contract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Dated.
@@ -182,7 +181,7 @@
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationDeliveryDate"
                                 name="delivery_date"
-                                value="{{isset($scrap->legalComercialTerm->delivery_date) ? $scrap->legalComercialTerm->delivery_date->format('Y-m-d') : ""}}"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm->delivery_date) ? $contract->legalContractDest->legalComercialTerm->delivery_date->format('Y-m-d') : ""}}"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Delivery Date.
@@ -237,8 +236,8 @@
                                             class="btn btn-sm btn-warning" onclick="createRow()"><i
                                                 class="fa fa-plus-circle" aria-hidden="true"></i></a>
                                     </td>
-                                    <input type="hidden" class="form-control-sm form-control" id="contract_dests_id"
-                                        name="contract_dests_id" value="{{$scrap->id}}">
+                                    <input type="hidden" class="form-control-sm form-control" id="contract_id"
+                                        name="contract_id" value="{{$contract->id}}">
                                 </tr>
                             </thead>
                             <tbody>
@@ -262,11 +261,11 @@
                                     style="color: red;">*</span></label>
                             <select name="payment_type_id" id="validationContractType"
                                 class="form-control-sm form-control" onchange="changeType(this)" required>
-                                <option value="">Shoose....</option>
+                                <option value="">Choose....</option>
                                 @isset($paymentType)
                                 @foreach ($paymentType as $item)
                                 <option value="{{$item->id}}"
-                                    {{$scrap->payment_type_id == $item->id ? "selected" : "" }}>
+                                    {{$contract->legalContractDest->payment_type_id == $item->id ? "selected" : "" }}>
                                     {{$item->name}}
                                 </option>
                                 @endforeach
@@ -280,7 +279,7 @@
                             <ul>
                                 <li class="li-none-type">
                                     <input type="number"
-                                        value="{{isset($scrap->value_of_contract)?$scrap->value_of_contract[0]:100}}"
+                                        value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[0]:100}}"
                                         class="type-contract-input" min="0" max="100"
                                         onchange="changeContractValue(this)">
                                     <span>% of the total value of a contract from the date of delivered the
@@ -291,7 +290,7 @@
                     </div>
                     <hr>
                     <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
-                        type="button" href="{{route('legal.contract-request.edit',$scrap->legalcontract->id)}}">Back</a>
+                        type="button" href="{{route('legal.contract-request.edit',$contract->id)}}">Back</a>
                     <button class="btn btn-primary" type="submit" style="margin-top: 5px">Next</button>
                 </form>
             </div>

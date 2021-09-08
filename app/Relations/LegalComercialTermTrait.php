@@ -8,6 +8,6 @@ trait LegalComercialTermTrait
 {
     public function legalContractDest()
     {
-        return $this->hasOne(LegalContractDest::class, 'comercial_term_id');
+        return $this->belongsTo(LegalContractDest::class, 'contract_dest_id');
     }
 }

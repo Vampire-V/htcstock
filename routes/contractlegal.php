@@ -13,11 +13,11 @@ Route::namespace('Legal')->prefix('legal')->name('legal.')->middleware(['auth', 
     Route::get('contract/{id}/pdf', 'ContractRequestController@generatePDF')->name('pdf');
     Route::post('contract-request/{id}/approval', 'ContractRequestController@approvalContract')->name('contract.approval');
     Route::namespace('ContractRequest')->prefix('contract-request')->name('contract-request.')->group(function () {
-        Route::resource('workservicecontract', 'WorkServiceContractController', ['only' => ['index', 'create', 'edit', 'show', 'update']]);
-        Route::resource('purchaseequipment', 'PurchaseEquipmentController', ['only' => ['index', 'create', 'edit', 'update']]);
-        Route::resource('purchaseequipmentinstall', 'PurchaseEquipmentInstallController', ['only' => ['index', 'create', 'edit', 'show', 'update']]);
-        Route::resource('mould', 'MouldController', ['only' => ['index', 'create', 'edit', 'show', 'update']]);
-        Route::resource('scrap', 'ScrapController', ['only' => ['index', 'create', 'edit', 'show', 'update']]);
+        Route::resource('workservicecontract', 'WorkServiceContractController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store']]);
+        Route::resource('purchaseequipment', 'PurchaseEquipmentController', ['only' => ['index', 'create', 'edit', 'update', 'store']]);
+        Route::resource('purchaseequipmentinstall', 'PurchaseEquipmentInstallController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store']]);
+        Route::resource('mould', 'MouldController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store']]);
+        Route::resource('scrap', 'ScrapController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store']]);
         Route::resource('vendorservicecontract', 'VendorServiceContractController', ['only' => ['index', 'create', 'edit', 'show', 'update']]);
         Route::resource('leasecontract', 'LeaseContractController', ['only' => ['index', 'create', 'edit', 'show', 'update']]);
         Route::resource('projectbasedagreement', 'ProjectBasedAgreementController', ['only' => ['index', 'create', 'edit', 'show', 'update']]);

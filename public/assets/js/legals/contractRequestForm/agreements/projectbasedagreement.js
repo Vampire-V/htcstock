@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     document.addEventListener('DOMContentLoaded', function () {
-        let contract = document.getElementById('contract_dests_id')
+        let contract = document.getElementById('contract_id')
         let poFile = document.getElementById('validationPurchaseOrderFile')
         let quotationFile = document.getElementById('validationQuotationFile')
         let coparationFile = document.getElementById('validationCoparationFile')
@@ -37,7 +37,7 @@ form.addEventListener('submit', logSubmit);
 async function logSubmit(event) {
     let onSubmit = false
     try {
-        await getComercialLists(document.getElementById('contract_dests_id').value).then(result => {
+        await getComercialLists(document.getElementById('contract_id').value).then(result => {
             if (result.data.length < 1) {
                 document.getElementById('desc').required = true
                 document.getElementById('qty').required = true

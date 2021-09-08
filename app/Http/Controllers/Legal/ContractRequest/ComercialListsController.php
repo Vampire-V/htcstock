@@ -46,20 +46,20 @@ class ComercialListsController extends Controller
     public function store(Request $request)
     {
         //Validate data
-        $data = $request->only('id', 'desc', 'qty', 'unit_price', 'price', 'discount', 'amount', 'contract_dests_id');
+        $data = $request->only('id', 'desc', 'qty', 'unit_price', 'price', 'discount', 'amount', 'contract_id');
         $validator = Validator::make($data, [
             'desc' => 'required|max:255',
             'qty' => 'required|numeric|min:0.01',
             'unit_price' => 'required|numeric|min:0.01',
             // 'discount' => 'numeric|min:0.00',
-            'contract_dests_id' => 'required'
+            'contract_id' => 'required'
         ],[
             'desc.required' => 'The description field is required.',
             'desc.max' => 'The description field is max length 255',
             'qty.required' => 'The quantity field is number.',
             'unit_price.required' => 'The unit price field is number.',
             // 'discount.numeric' => 'The discount field is number.',
-            'contract_dests_id.required' => 'The description field is required.',
+            'contract_id.required' => 'The description field is required.',
         ]);
 
         //Send failed response if request is not valid
@@ -80,7 +80,7 @@ class ComercialListsController extends Controller
             $model->price = $model->unit_price * $model->qty;
             $model->discount = $data['discount'] ?? 0.00;
             $model->amount = $model->price - $model->discount;
-            $model->contract_dests_id = $data['contract_dests_id'];
+            $model->contract_id = $data['contract_id'];
             $model->save();
         } catch (\Exception $e) {
             DB::rollBack();

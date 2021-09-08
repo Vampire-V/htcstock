@@ -281,7 +281,7 @@
                                     style="color: red;">*</span></label>
                             <select name="payment_type_id" id="validationContractType"
                                 class="form-control-sm form-control" onchange="changeType(this)" readonly disabled>
-                                <option value="">Shoose....</option>
+                                <option value="">Choose....</option>
                                 @isset($paymentType)
                                 @foreach ($paymentType as $item)
                                 <option value="{{$item->id}}"

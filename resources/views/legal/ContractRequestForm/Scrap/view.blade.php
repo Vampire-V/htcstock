@@ -6,33 +6,34 @@
 @include('includes.sidebar.legal');
 @stop
 @section('content')
-
-{{-- <div class="app-page-title">
+<div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
-                <i class="pe-7s-car icon-gradient bg-mean-fruit">
-                </i>
+                <i class="fa fa-balance-scale icon-gradient bg-happy-fisher" aria-hidden="true"></i>
             </div>
-            <div>Scrap <span class="badge badge-primary">{{$legalContract->status}}</span>
-<div class="page-title-subheading">This is an example dashboard created using
-    build-in elements and components.
-</div>
-</div>
-</div>
-<div class="page-title-actions">
-    <div class="d-inline-block">
-
+            <div>Scrap
+                {{-- <div class="page-title-subheading">THREE WEEKS PRIOR to commencement of the Contract Period.
+                </div> --}}
+                <div id="imagePreview"></div>
+            </div>
+        </div>
+        <div class="page-title-actions">
+            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
+                class="btn-shadow mr-3 btn btn-dark">
+                <i class="fa fa-star"></i>
+            </button> --}}
+            <div class="d-inline-block">
+            </div>
+        </div>
     </div>
 </div>
-</div>
+
+{{-- <div class="row">
+    <x-head-status-legal :legalContract="$legalContract" />
 </div> --}}
 
-<div class="row">
-    <x-head-status-legal :legalContract="$legalContract" />
-</div>
-
-<div class="row" style="margin-top: 10%;">
+<div class="row" >
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-body">
@@ -98,6 +99,7 @@
                     </div>
                     {{-- end head --}}
                     <hr>
+                    @isset($legalContract->legalContractDest)
                     <span class="badge badge-primary">Supporting Documents</span>
                     <div class="form-row">
                         <div class="col-md-6 mb-6">
@@ -151,7 +153,7 @@
                                 name="scope_of_work"
                                 value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 readonly>
-                            <div>
+                            <div class="invalid-feedback">
                                 Please provide a valid Scope of Work.
                             </div>
                         </div>
@@ -162,7 +164,7 @@
                                 name="location"
                                 value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->location : ""}}"
                                 readonly>
-                            <div>
+                            <div class="invalid-feedback">
                                 Please provide a valid Location.
                             </div>
                         </div>
@@ -175,7 +177,7 @@
                                 name="quotation_no"
                                 value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
                                 readonly>
-                            <div>
+                            <div class="invalid-feedback">
                                 Please provide a valid Quotation No.
                             </div>
                         </div>
@@ -185,7 +187,7 @@
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
                                 value="{{isset($legalContract->legalContractDest->legalComercialTerm->dated) ? $legalContract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                                 readonly>
-                            <div>
+                            <div class="invalid-feedback">
                                 Please provide a valid Dated.
                             </div>
                         </div>
@@ -196,7 +198,7 @@
                                 name="delivery_date"
                                 value="{{isset($legalContract->legalContractDest->legalComercialTerm->delivery_date) ? $legalContract->legalContractDest->legalComercialTerm->delivery_date->format('Y-m-d') : ""}}"
                                 readonly>
-                            <div>
+                            <div class="invalid-feedback">
                                 Please provide a valid Delivery Date.
                             </div>
                         </div>
@@ -204,7 +206,7 @@
                     <hr>
 
                     <span class="badge badge-primary">Scrap list</span>
-                    @isset($legalContract->legalContractDest->legalComercialList)
+                    @isset($legalContract->legalComercialList)
                     <div class="form-row">
                         <table class="table table-bordered" id="table-comercial-lists">
                             <thead>
@@ -220,7 +222,7 @@
                             </thead>
                             <tbody>
 
-                                @foreach ($legalContract->legalContractDest->legalComercialList as $key => $item)
+                                @foreach ($legalContract->legalComercialList as $key => $item)
                                 <tr>
                                     <td>{{$key+1}}</td>
                                     <td>{{$item->description}}</td>
@@ -237,7 +239,7 @@
                                 <tr>
                                     <th colspan="5"></th>
                                     <th class="text-right">Total: </th>
-                                    <th id="total">{{$legalContract->legalContractDest->legalComercialList->reduce(function ($ac,$item) {
+                                    <th id="total">{{$legalContract->legalComercialList->reduce(function ($ac,$item) {
                                 return $ac+=$item->amount;
                             },0)}}</th>
                                 </tr>
@@ -255,7 +257,7 @@
                                     style="color: red;">*</span></label>
                             <select name="payment_type_id" id="validationContractType"
                                 class="form-control-sm form-control" onchange="changeType(this)" readonly disabled>
-                                <option value="">Shoose....</option>
+                                <option value="">Choose....</option>
                                 @isset($paymentType)
                                 @foreach ($paymentType as $item)
                                 <option value="{{$item->id}}"
@@ -283,6 +285,7 @@
                         </div>
                     </div>
                     <hr>
+                    @endisset
                 </form>
             </div>
         </div>

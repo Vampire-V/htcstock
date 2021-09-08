@@ -2,7 +2,6 @@
 
 namespace App\Relations;
 
-use App\Models\Legal\LegalComercialList;
 use App\Models\Legal\LegalComercialTerm;
 use App\Models\Legal\LegalContract;
 use App\Models\Legal\LegalPaymentTerm;
@@ -13,17 +12,12 @@ trait LegalContractDestTrait
 {
     public function legalcontract()
     {
-        return $this->hasOne(LegalContract::class, 'contract_dest_id');
+        return $this->belongsTo(LegalContract::class, 'contract_id');
     }
 
     public function legalComercialTerm()
     {
-        return $this->belongsTo(LegalComercialTerm::class, 'comercial_term_id')->withDefault();
-    }
-
-    public function legalComercialList()
-    {
-        return $this->hasMany(LegalComercialList::class, 'contract_dests_id');
+        return $this->hasOne(LegalComercialTerm::class,'contract_dest_id');
     }
 
     public function legalPaymentTerm()

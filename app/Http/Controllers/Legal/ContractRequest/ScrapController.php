@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Legal\ContractRequest;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Legal\StoreScrap;
+use App\Models\Legal\LegalComercialTerm;
+use App\Models\Legal\LegalContractDest;
 use App\Services\Legal\Interfaces\ComercialListsServiceInterface;
 use App\Services\Legal\Interfaces\ComercialTermServiceInterface;
 use App\Services\Legal\Interfaces\ContractDescServiceInterface;
+use App\Services\Legal\Interfaces\ContractRequestServiceInterface;
 use App\Services\Legal\Interfaces\PaymentTypeServiceInterface;
 use App\Services\Utils\FileService;
 use Illuminate\Http\Request;
@@ -19,19 +22,21 @@ class ScrapController extends Controller
     protected $paymentTypeService;
     protected $fileService;
     protected $comercialListsService;
-    protected $comercialTermService;
+    protected $comercialTermService, $contractRequestService;
     public function __construct(
         ContractDescServiceInterface $contractDescServiceInterface,
         PaymentTypeServiceInterface $paymentTypeServiceInterface,
         FileService $fileService,
         ComercialListsServiceInterface $comercialListsServiceInterface,
-        ComercialTermServiceInterface $comercialTermServiceInterface
+        ComercialTermServiceInterface $comercialTermServiceInterface,
+        ContractRequestServiceInterface $contractRequestService
     ) {
         $this->contractDescService = $contractDescServiceInterface;
         $this->paymentTypeService = $paymentTypeServiceInterface;
         $this->fileService = $fileService;
         $this->comercialListsService = $comercialListsServiceInterface;
         $this->comercialTermService = $comercialTermServiceInterface;
+        $this->contractRequestService = $contractRequestService;
     }
     /**
      * Display a listing of the resource.
@@ -59,9 +64,25 @@ class ScrapController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreScrap $request)
     {
-        return \redirect()->route('legal.contract-request.scrap.index');
+        $dest = $request->only('quotation', 'coparation_sheet', 'factory_permission', 'waste_permission', 'contract_id', 'value_of_contract', 'payment_type_id');
+        // comercialTerm data
+        $term = $request->only('scope_of_work', 'location', 'quotation_no', 'dated', 'delivery_date');
+
+        DB::beginTransaction();
+        try {
+            $contract_desc = new LegalContractDest($dest);
+            $contract_desc->save();
+            $term['contract_dest_id'] = $contract_desc->id;
+            $contract_term = new LegalComercialTerm($term);
+            $contract_term->save();
+            DB::commit();
+            return \redirect()->route('legal.contract-request.show', $contract_desc->contract_id);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
     }
 
     /**
@@ -84,16 +105,24 @@ class ScrapController extends Controller
     public function edit($id)
     {
         try {
-            $scrap = $this->contractDescService->search($id);
+            // $scrap = $this->contractDescService->search($id);
 
-            if ($scrap->value_of_contract) {
-                $scrap->value_of_contract = explode(",", $scrap->value_of_contract);
+            // if ($scrap->value_of_contract) {
+            //     $scrap->value_of_contract = explode(",", $scrap->value_of_contract);
+            // }
+            // $paymentType = $this->paymentTypeService->dropdown($scrap->legalcontract->agreement_id);
+
+            $contract = $this->contractRequestService->find($id);
+            $paymentType = $this->paymentTypeService->dropdown($contract->agreement_id);
+            if ($contract->legalContractDest) {
+                $contract->legalContractDest->value_of_contract = explode(",", $contract->legalContractDest->value_of_contract);
+                return \view('legal.ContractRequestForm.Scrap.edit')->with(['contract' => $contract, 'paymentType' => $paymentType]);
+            } else {
+                return \view('legal.ContractRequestForm.Scrap.create', \compact('contract', 'paymentType'));
             }
-            $paymentType = $this->paymentTypeService->dropdown($scrap->legalcontract->agreement_id);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('legal.ContractRequestForm.Scrap.edit')->with(['scrap' => $scrap, 'paymentType' => $paymentType]);
     }
 
     /**
@@ -105,35 +134,22 @@ class ScrapController extends Controller
      */
     public function update(StoreScrap $request, $id)
     {
-        $data = $request->except(['_token', '_method']);
-        $attributes = [];
-        $comercialAttr = [];
-
-        $attributes['quotation'] = $data['quotation'];
-        $attributes['coparation_sheet'] = $data['coparation_sheet'];
-        $attributes['factory_permission'] = $data['factory_permission'];
-        $attributes['waste_permission'] = $data['waste_permission'];
-
-        $attributes['payment_type_id'] = (int) $data['payment_type_id'];
-        $attributes['value_of_contract'] = $data['value_of_contract'];
-
+        $dest = $request->only('quotation', 'coparation_sheet', 'factory_permission', 'waste_permission', 'contract_id', 'value_of_contract', 'payment_type_id');
         // comercialTerm data
-        $comercialAttr['scope_of_work'] = $data['scope_of_work'];
-        $comercialAttr['location'] = $data['location'];
-        $comercialAttr['quotation_no'] = $data['quotation_no'];
-        $comercialAttr['dated'] = $data['dated'];
-        $comercialAttr['delivery_date'] = $data['delivery_date'];
+        $term = $request->only('scope_of_work', 'location', 'quotation_no', 'dated', 'delivery_date');
 
         DB::beginTransaction();
         try {
-            if ($data['comercial_term_id']) {
-                $this->comercialTermService->update($comercialAttr, $data['comercial_term_id']);
-                $attributes['comercial_term_id'] = $data['comercial_term_id'];
-            } else {
-                $attributes['comercial_term_id'] = $this->comercialTermService->create($comercialAttr)->id;
-            }
             $scrap = $this->contractDescService->find($id);
-            $this->contractDescService->update($attributes, $id);
+            if ($scrap->legalContract->legalComercialList->count() < 1) {
+                return \redirect()->back()->with('error', "Error : ");
+            }
+            if ($scrap->legalComercialTerm) {
+                $this->comercialTermService->update($term, $scrap->legalComercialTerm->id);
+            }
+
+            $this->contractDescService->update($dest, $scrap->id);
+
             
             if ($scrap->quotation !== $request->quotation) {
                 Storage::delete($scrap->quotation);
@@ -153,7 +169,7 @@ class ScrapController extends Controller
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
-        return \redirect()->route('legal.contract-request.index');
+        return \redirect()->route('legal.contract-request.show', $scrap->contract_id);
     }
 
     /**

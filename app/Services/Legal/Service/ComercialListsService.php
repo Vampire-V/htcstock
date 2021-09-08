@@ -22,7 +22,7 @@ class ComercialListsService extends BaseService implements ComercialListsService
     public function comercialByContractID(int $id): Collection
     {
         try {
-            return LegalComercialList::whereIn('contract_dests_id',[$id])->get();
+            return LegalComercialList::whereIn('contract_id',[$id])->get();
         } catch (\Throwable $th) {
             throw $th;
         }

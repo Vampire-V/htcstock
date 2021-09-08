@@ -111,10 +111,10 @@ class ContractRequestController extends Controller
         $attributes = $request->except(['_token']);
         DB::beginTransaction();
         try {
-            $body = $this->contractDescService->create([]);
-            if ($body) {
-                $attributes['contract_dest_id'] = $body->id;
-            }
+            // $body = $this->contractDescService->create([]);
+            // if ($body) {
+            //     $attributes['contract_dest_id'] = $body->id;
+            // }
             $contractRequest = $this->contractRequestService->create($attributes);
 
             if (!$contractRequest) {
@@ -142,8 +142,7 @@ class ContractRequestController extends Controller
             $agreements = $this->agreementService->dropdown();
             $legalContract = $this->contractRequestService->find($id);
             $paymentType = $this->paymentTypeService->dropdown($legalContract->agreement_id);
-
-            if ($legalContract->legalContractDest->value_of_contract) {
+            if ($legalContract->legalContractDest) {
                 $legalContract->legalContractDest->value_of_contract = explode(",", $legalContract->legalContractDest->value_of_contract);
             }
 
@@ -372,6 +371,7 @@ class ContractRequestController extends Controller
         }
         $approvalDetail->save();
         $contract->save();
+
         return $userApproval;
     }
 
@@ -406,31 +406,31 @@ class ContractRequestController extends Controller
 
         switch ($contractRequest->agreement_id) {
             case $agreements[0]->id:
-                return \redirect()->route('legal.contract-request.workservicecontract.edit', $contractRequest->contract_dest_id);
+                return \redirect()->route('legal.contract-request.workservicecontract.edit', $contractRequest->id);
                 break;
             case $agreements[1]->id:
-                return \redirect()->route('legal.contract-request.purchaseequipment.edit', $contractRequest->contract_dest_id);
+                return \redirect()->route('legal.contract-request.purchaseequipment.edit', $contractRequest->id);
                 break;
             case $agreements[2]->id:
-                return \redirect()->route('legal.contract-request.purchaseequipmentinstall.edit', $contractRequest->contract_dest_id);
+                return \redirect()->route('legal.contract-request.purchaseequipmentinstall.edit', $contractRequest->id);
                 break;
             case $agreements[3]->id:
-                return \redirect()->route('legal.contract-request.mould.edit', $contractRequest->contract_dest_id);
+                return \redirect()->route('legal.contract-request.mould.edit', $contractRequest->id);
                 break;
             case $agreements[4]->id:
-                return \redirect()->route('legal.contract-request.scrap.edit', $contractRequest->contract_dest_id);
+                return \redirect()->route('legal.contract-request.scrap.edit', $contractRequest->id);
                 break;
             case $agreements[5]->id:
-                return \redirect()->route('legal.contract-request.vendorservicecontract.edit', $contractRequest->contract_dest_id);
+                return \redirect()->route('legal.contract-request.vendorservicecontract.edit', $contractRequest->id);
                 break;
             case $agreements[6]->id:
-                return \redirect()->route('legal.contract-request.leasecontract.edit', $contractRequest->contract_dest_id);
+                return \redirect()->route('legal.contract-request.leasecontract.edit', $contractRequest->id);
                 break;
             case $agreements[7]->id:
-                return \redirect()->route('legal.contract-request.projectbasedagreement.edit', $contractRequest->contract_dest_id);
+                return \redirect()->route('legal.contract-request.projectbasedagreement.edit', $contractRequest->id);
                 break;
             case $agreements[8]->id:
-                return \redirect()->route('legal.contract-request.marketingagreement.edit', $contractRequest->contract_dest_id);
+                return \redirect()->route('legal.contract-request.marketingagreement.edit', $contractRequest->id);
                 break;
             default:
                 return \abort(404);
@@ -544,7 +544,6 @@ class ContractRequestController extends Controller
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:pdf|max:30500',
         ]);
-
         if ($validator->fails()) {
             return \response()->json($validator->errors(), 500);
         }

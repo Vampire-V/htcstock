@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Legal\ContractRequest;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Legal\StoreWorkServiceContract;
+use App\Models\Legal\LegalComercialTerm;
+use App\Models\Legal\LegalContractDest;
 use App\Services\Legal\Interfaces\ComercialListsServiceInterface;
 use App\Services\Legal\Interfaces\ComercialTermServiceInterface;
 use App\Services\Legal\Interfaces\ContractDescServiceInterface;
+use App\Services\Legal\Interfaces\ContractRequestServiceInterface;
 use App\Services\Legal\Interfaces\PaymentTypeServiceInterface;
 use App\Services\Utils\FileService;
 use Illuminate\Http\Request;
@@ -19,19 +22,21 @@ class WorkServiceContractController extends Controller
     protected $paymentTypeService;
     protected $fileService;
     protected $comercialListsService;
-    protected $comercialTermService;
+    protected $comercialTermService, $contractRequestService;
     public function __construct(
         ContractDescServiceInterface $contractDescServiceInterface,
         PaymentTypeServiceInterface $paymentTypeServiceInterface,
         FileService $fileService,
         ComercialListsServiceInterface $comercialListsServiceInterface,
-        ComercialTermServiceInterface $comercialTermServiceInterface
+        ComercialTermServiceInterface $comercialTermServiceInterface,
+        ContractRequestServiceInterface $contractRequestService
     ) {
         $this->contractDescService = $contractDescServiceInterface;
         $this->paymentTypeService = $paymentTypeServiceInterface;
         $this->fileService = $fileService;
         $this->comercialListsService = $comercialListsServiceInterface;
         $this->comercialTermService = $comercialTermServiceInterface;
+        $this->contractRequestService = $contractRequestService;
     }
     /**
      * Display a listing of the resource.
@@ -59,9 +64,24 @@ class WorkServiceContractController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreWorkServiceContract $request)
     {
-        return \redirect()->route('legal.contract-request.workservicecontract.index');
+        // comercialTerm data
+        $dest = $request->except(['_token', 'scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period', 'description', 'quantity', 'unit_price', 'price', 'discount', 'amount']);
+        $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
+        DB::beginTransaction();
+        try {
+            $contract_desc = new LegalContractDest($dest);
+            $contract_desc->save();
+            $term['contract_dest_id'] = $contract_desc->id;
+            $contract_term = new LegalComercialTerm($term);
+            $contract_term->save();
+            DB::commit();
+            return \redirect()->route('legal.contract-request.show', $contract_desc->contract_id);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
     }
 
     /**
@@ -84,15 +104,18 @@ class WorkServiceContractController extends Controller
     public function edit($id)
     {
         try {
-            $workservicecontract = $this->contractDescService->search($id);
-            if ($workservicecontract->value_of_contract) {
-                $workservicecontract->value_of_contract = explode(",", $workservicecontract->value_of_contract);
+            // $workservicecontract = $this->contractDescService->search($id);
+            $contract = $this->contractRequestService->find($id);
+            $paymentType = $this->paymentTypeService->dropdown($contract->agreement_id);
+            if ($contract->legalContractDest) {
+                $contract->legalContractDest->value_of_contract = explode(",", $contract->legalContractDest->value_of_contract);
+                return \view('legal.ContractRequestForm.WorkServiceContract.edit')->with(['contract' => $contract, 'paymentType' => $paymentType]);
+            } else {
+                return \view('legal.ContractRequestForm.WorkServiceContract.create', \compact('contract', 'paymentType'));
             }
-            $paymentType = $this->paymentTypeService->dropdown($workservicecontract->legalcontract->agreement_id);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('legal.ContractRequestForm.WorkServiceContract.edit')->with(['workservicecontract' => $workservicecontract, 'paymentType' => $paymentType]);
     }
 
     /**
@@ -104,42 +127,22 @@ class WorkServiceContractController extends Controller
      */
     public function update(StoreWorkServiceContract $request, $id)
     {
-        $data = $request->except(['_token', '_method']);
-        $attributes = [];
-        $comercialAttr = [];
-        dd($request->all());
-        $attributes['quotation'] = $data['quotation'];
-        $attributes['coparation_sheet'] = $data['coparation_sheet'];
-        $attributes['work_plan'] = $data['work_plan'];
-        if (!empty($request->purchase_order)) {
-            $attributes['purchase_order'] = $data['purchase_order'];
-        }
-        $attributes['payment_type_id'] = (int) $data['payment_type_id'];
-        $attributes['value_of_contract'] = $data['value_of_contract'];
-        $attributes['warranty'] = (int) $data['warranty'];
-        // comercialTerm data
-        $comercialAttr['scope_of_work'] = $data['scope_of_work'];
-        $comercialAttr['location'] = $data['location'];
-        $comercialAttr['purchase_order_no'] = $data['purchase_order_no'];
-        $comercialAttr['quotation_no'] = $data['quotation_no'];
-        $comercialAttr['dated'] = $data['dated'];
-        $comercialAttr['contract_period'] = $data['contract_period'];
-        $comercialAttr['untill'] = $data['untill'];
+        // $comercialAttr['untill'] = $data['untill'];
+        $dest = $request->except(['_token', '_method', 'scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period', 'description', 'quantity', 'unit_price', 'price', 'discount', 'amount','comercial_term_id']);
+        $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
 
         DB::beginTransaction();
         try {
-            $workServiceContract = $this->contractDescService->search($id);
-            if ($workServiceContract->legalComercialList->count() < 1) {
+            $workServiceContract = $this->contractDescService->find($id);
+            if ($workServiceContract->legalContract->legalComercialList->count() < 1) {
                 return \redirect()->back()->with('error', "Error : ");
             }
-
-            if ($data['comercial_term_id']) {
-                $this->comercialTermService->update($comercialAttr, $data['comercial_term_id']);
-                $attributes['comercial_term_id'] = $data['comercial_term_id'];
-            } else {
-                $attributes['comercial_term_id'] = $this->comercialTermService->create($comercialAttr)->id;
+            if ($workServiceContract->legalComercialTerm) {
+                $this->comercialTermService->update($term, $workServiceContract->legalComercialTerm->id);
             }
-            $this->contractDescService->update($attributes, $id);
+
+            $this->contractDescService->update($dest, $workServiceContract->id);
+
             if ($workServiceContract->quotation !== $request->quotation) {
                 Storage::delete($workServiceContract->quotation);
             }
@@ -158,7 +161,7 @@ class WorkServiceContractController extends Controller
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
-        return \redirect()->route('legal.contract-request.show', $workServiceContract->legalContract->id);
+        return \redirect()->route('legal.contract-request.show', $workServiceContract->contract_id);
         // return \redirect()->route('legal.contract-request.index');
     }
 

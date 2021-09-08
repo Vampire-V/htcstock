@@ -5,6 +5,7 @@ namespace App\Relations;
 use App\Models\Legal\LegalAction;
 use App\Models\Legal\LegalAgreement;
 use App\Models\Legal\LegalApprovalDetail;
+use App\Models\Legal\LegalComercialList;
 use App\Models\Legal\LegalContractDest;
 use App\Models\User;
 
@@ -22,7 +23,7 @@ trait LegalContractTrait
 
    public function legalContractDest()
    {
-      return $this->belongsTo(LegalContractDest::class, 'contract_dest_id')->withDefault();
+      return $this->hasOne(LegalContractDest::class, 'contract_id');
    }
 
    public function requestorBy()
@@ -44,4 +45,10 @@ trait LegalContractTrait
    {
       return $this->hasMany(LegalApprovalDetail::class,'contract_id');
    }
+
+   public function legalComercialList()
+    {
+        return $this->hasMany(LegalComercialList::class, 'contract_id');
+    }
+
 }

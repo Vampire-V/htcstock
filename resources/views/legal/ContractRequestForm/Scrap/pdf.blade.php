@@ -328,24 +328,36 @@
                 </tr>
             </tbody>
         </table>
-        @if ($contract->legalContractDest->legalComercialList->count() > 0)
+        @if ($contract->legalComercialList->count() > 0)
         <table style="width: 95%; margin: 1 auto;">
             <thead>
                 <tr>
+                    <th class="border-cell">S/N</th>
                     <th class="border-cell">Description</th>
-                    <th class="border-cell">Unit Price</th>
+                    <th class="border-cell">Quantity</th>
+                    <th class="border-cell">Unit Price </th>
+                    <th class="border-cell">Price</th>
                     <th class="border-cell">Discount</th>
                     <th class="border-cell">Amount</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($contract->legalContractDest->legalComercialList as $item)
+                @foreach ($contract->legalComercialList as $key => $item)
                 <tr>
+                    <td class="text-center border-cell">
+                        {{$key+1}}
+                    </td>
                     <td class="text-center border-cell">
                         {{$item->description}}
                     </td>
                     <td class="text-center border-cell">
+                        {{$item->qty}}
+                    </td>
+                    <td class="text-center border-cell">
                         {{$item->unit_price}}
+                    </td>
+                    <td class="text-center border-cell">
+                        {{$item->price}}
                     </td>
                     <td class="text-center border-cell">
                         {{$item->discount}}
@@ -358,9 +370,9 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="2"></th>
-                    <th>Total</th>
-                    <th class="text-center border-cell">{{$contract->legalContractDest->legalComercialList->reduce(function ($a, $b) {
+                    <th colspan="5"></th>
+                    <th>Total: </th>
+                    <th class="text-center border-cell">{{$contract->legalComercialList->reduce(function ($a, $b) {
                     return $a + $b->amount;
                 },0)}}</th>
                 </tr>

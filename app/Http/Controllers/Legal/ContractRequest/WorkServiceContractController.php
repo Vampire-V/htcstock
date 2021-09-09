@@ -66,7 +66,6 @@ class WorkServiceContractController extends Controller
      */
     public function store(StoreWorkServiceContract $request)
     {
-
         $dest = $request->only(
             'purchase_order',
             'quotation',
@@ -77,7 +76,7 @@ class WorkServiceContractController extends Controller
             'warranty'
         );
         // comercialTerm data
-        $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period', 'contract_id');
+        $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
         DB::beginTransaction();
         try {
             $contract_desc = new LegalContractDest($dest);

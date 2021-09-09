@@ -77,7 +77,7 @@ class WorkServiceContractController extends Controller
             'warranty'
         );
         // comercialTerm data
-        $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
+        $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period', 'contract_id');
         DB::beginTransaction();
         try {
             $contract_desc = new LegalContractDest($dest);
@@ -144,7 +144,8 @@ class WorkServiceContractController extends Controller
             'work_plan',
             'payment_type_id',
             'value_of_contract',
-            'warranty'
+            'warranty',
+            'contract_id'
         );
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
 

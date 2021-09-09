@@ -66,8 +66,17 @@ class WorkServiceContractController extends Controller
      */
     public function store(StoreWorkServiceContract $request)
     {
+
+        $dest = $request->only(
+            'purchase_order',
+            'quotation',
+            'coparation_sheet',
+            'work_plan',
+            'payment_type_id',
+            'value_of_contract',
+            'warranty'
+        );
         // comercialTerm data
-        $dest = $request->except(['_token', 'scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period', 'description', 'quantity', 'unit_price', 'price', 'discount', 'amount']);
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
         DB::beginTransaction();
         try {
@@ -128,7 +137,15 @@ class WorkServiceContractController extends Controller
     public function update(StoreWorkServiceContract $request, $id)
     {
         // $comercialAttr['untill'] = $data['untill'];
-        $dest = $request->except(['_token', '_method', 'scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period', 'description', 'quantity', 'unit_price', 'price', 'discount', 'amount','comercial_term_id']);
+        $dest = $request->only(
+            'purchase_order',
+            'quotation',
+            'coparation_sheet',
+            'work_plan',
+            'payment_type_id',
+            'value_of_contract',
+            'warranty'
+        );
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
 
         DB::beginTransaction();

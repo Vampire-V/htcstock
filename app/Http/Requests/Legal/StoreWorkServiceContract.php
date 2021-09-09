@@ -28,17 +28,13 @@ class StoreWorkServiceContract extends FormRequest
             'quotation' => 'required',
             'coparation_sheet' => 'required',
             'work_plan' => 'required',
-
             'scope_of_work' => 'required',
             'location' => 'required',
             'quotation_no' => 'required',
             'dated' => 'required',
             'contract_period' => 'required',
-            // 'untill' => 'required',
-
             'payment_type_id' => 'required',
             'value_of_contract' => 'required',
-
             'warranty' => 'required',
         ];
     }
@@ -51,21 +47,21 @@ class StoreWorkServiceContract extends FormRequest
     public function messages()
     {
         return [
-            'quotation.required' => 'Please enter quotation',
-            'coparation_sheet.required' => 'Please enter coparation_sheet',
-            'work_plan.required' => 'Please enter work_plan',
+            'quotation.required' => 'Please enter Quotation',
+            'coparation_sheet.required' => 'Please enter AEC/Coparation Sheet',
+            'work_plan.required' => 'Please enter Work Plan',
 
-            'scope_of_work.required' => 'Please enter scope_of_work',
-            'location.required' => 'Please enter location',
-            'quotation_no.required' => 'Please enter quotation_no',
-            'dated.required' => 'Please enter dated',
-            'contract_period.required' => 'Please enter contract_period',
+            'scope_of_work.required' => 'Please enter Scope of Work',
+            'location.required' => 'Please enter Location',
+            'quotation_no.required' => 'Please enter Quotation No',
+            'dated.required' => 'Please enter Dated',
+            'contract_period.required' => 'Please enter  Contract period',
             // 'untill.required' => 'Please enter untill',
 
-            'payment_type_id.required' => 'Please enter payment_term',
+            'payment_type_id.required' => 'Please enter Payment Terms',
             'value_of_contract.required' => 'Please enter value_of_contract',
 
-            'warranty.required' => 'Please enter warranty',
+            'warranty.required' => 'Please enter Warranty',
         ];
     }
 }

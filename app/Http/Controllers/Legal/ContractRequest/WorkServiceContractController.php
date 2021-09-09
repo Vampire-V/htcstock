@@ -73,7 +73,8 @@ class WorkServiceContractController extends Controller
             'work_plan',
             'payment_type_id',
             'value_of_contract',
-            'warranty'
+            'warranty',
+            'contract_id'
         );
         // comercialTerm data
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');

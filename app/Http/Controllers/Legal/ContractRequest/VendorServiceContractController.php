@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Legal\ContractRequest;
 
 use App\Http\Controllers\Controller;
+use App\Models\Legal\LegalComercialTerm;
+use App\Models\Legal\LegalContractDest;
+use App\Models\Legal\LegalPaymentTerm;
 use App\Services\Legal\Interfaces\ComercialListsServiceInterface;
 use App\Services\Legal\Interfaces\ComercialTermServiceInterface;
 use App\Services\Legal\Interfaces\ContractDescServiceInterface;
+use App\Services\Legal\Interfaces\ContractRequestServiceInterface;
 use App\Services\Legal\Interfaces\PaymentTermServiceInterface;
 use App\Services\Legal\Interfaces\PaymentTypeServiceInterface;
 use App\Services\Legal\Interfaces\SubtypeContractServiceInterface;
@@ -13,6 +17,7 @@ use App\Services\Utils\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class VendorServiceContractController extends Controller
 {
@@ -22,7 +27,7 @@ class VendorServiceContractController extends Controller
     protected $comercialListsService;
     protected $comercialTermService;
     protected $subtypeContractService;
-    protected $paymentTermService;
+    protected $paymentTermService, $contractRequestService;
     public function __construct(
         ContractDescServiceInterface $contractDescServiceInterface,
         PaymentTypeServiceInterface $paymentTypeServiceInterface,
@@ -30,7 +35,8 @@ class VendorServiceContractController extends Controller
         ComercialListsServiceInterface $comercialListsServiceInterface,
         ComercialTermServiceInterface $comercialTermServiceInterface,
         SubtypeContractServiceInterface $subtypeContractServiceInterface,
-        PaymentTermServiceInterface $paymentTermServiceInterface
+        PaymentTermServiceInterface $paymentTermServiceInterface,
+        ContractRequestServiceInterface $contractRequestService
     ) {
         $this->contractDescService = $contractDescServiceInterface;
         $this->paymentTypeService = $paymentTypeServiceInterface;
@@ -39,6 +45,7 @@ class VendorServiceContractController extends Controller
         $this->comercialTermService = $comercialTermServiceInterface;
         $this->subtypeContractService = $subtypeContractServiceInterface;
         $this->paymentTermService = $paymentTermServiceInterface;
+        $this->contractRequestService = $contractRequestService;
     }
     /**
      * Display a listing of the resource.
@@ -68,7 +75,24 @@ class VendorServiceContractController extends Controller
      */
     public function store(Request $request)
     {
-        return \redirect()->route('legal.contract-request.vendorservicecontract.index');
+        $attributes = $this->validationAndSetAttr($request);
+        DB::beginTransaction();
+        try {
+            $contract_desc = new LegalContractDest($attributes['contract_dest']);
+            $contract_desc->save();
+            $attributes['comercial_terms']['contract_dest_id'] = $contract_desc->id;
+            $contract_term = new LegalComercialTerm($attributes['comercial_terms']);
+            $contract_term->save();
+            $payment_term = new LegalPaymentTerm($attributes['payment_terms']);
+            $payment_term->save();
+            $contract_desc->payment_term_id = $payment_term->id;
+            $contract_desc->save();
+            DB::commit();
+            return \redirect()->route('legal.contract-request.show', $contract_desc->contract_id);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
     }
 
     /**
@@ -91,16 +115,22 @@ class VendorServiceContractController extends Controller
     public function edit($id)
     {
         try {
-            $vendorservice = $this->contractDescService->search($id);
-            $subtypeContract = $this->subtypeContractService->dropdown($vendorservice->legalcontract->agreement_id);
-            $paymentType = $this->paymentTypeService->dropdown($vendorservice->legalcontract->agreement_id);
+            // $vendorservice = $this->contractDescService->search($id);
+            // $subtypeContract = $this->subtypeContractService->dropdown($vendorservice->legalcontract->agreement_id);
+            // $paymentType = $this->paymentTypeService->dropdown($vendorservice->legalcontract->agreement_id);
+
+            $contract = $this->contractRequestService->find($id);
+            $paymentType = $this->paymentTypeService->dropdown($contract->agreement_id);
+            $subtypeContract = $this->subtypeContractService->dropdown($contract->agreement_id);
+            if ($contract->legalContractDest) {
+                $contract->legalContractDest->value_of_contract = explode(",", $contract->legalContractDest->value_of_contract);
+                return \view('legal.ContractRequestForm.VendorServiceContract.edit')->with(['contract' => $contract, 'paymentType' => $paymentType, 'subtypeContract' => $subtypeContract]);
+            } else {
+                return \view('legal.ContractRequestForm.VendorServiceContract.create', \compact('contract', 'paymentType', 'subtypeContract'));
+            }
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('legal.ContractRequestForm.VendorServiceContract.edit')->with([
-            'vendorservice' => $vendorservice,
-            'paymentType' => $paymentType, 'subtypeContract' => $subtypeContract
-        ]);
     }
 
     /**
@@ -115,60 +145,55 @@ class VendorServiceContractController extends Controller
         $attributes = $this->validationAndSetAttr($request);
         DB::beginTransaction();
         try {
-            if ($request->comercial_term_id) {
-                $this->comercialTermService->update($attributes['comercialAttr'], $request->comercial_term_id);
-                $attributes['attributes']['comercial_term_id'] = $request->comercial_term_id;
-            } else {
-                $attributes['attributes']['comercial_term_id'] = $this->comercialTermService->create($attributes['comercialAttr'])->id;
-            }
-            if ($request->payment_term_id) {
-                $this->paymentTermService->update($attributes['paymentAttr'], $request->payment_term_id);
-                $attributes['attributes']['payment_term_id'] = $request->payment_term_id;
-            } else {
-                $attributes['attributes']['payment_term_id'] = $this->paymentTermService->create($attributes['paymentAttr'])->id;
-            }
-            $vendorServiceContract = $this->contractDescService->find($id);
-            $this->contractDescService->update($attributes['attributes'], $id);
+            $contract_desc = $this->contractDescService->find($id);
+            $contract_desc->fill($attributes['contract_dest']);
+            $contract_desc->save();
 
-            if ($vendorServiceContract->quotation !== $request->quotation) {
-                Storage::delete($vendorServiceContract->quotation);
+            $contract_desc->legalComercialTerm->fill($attributes['comercial_terms']);
+            $contract_desc->legalComercialTerm->save();
+
+            $contract_desc->legalPaymentTerm->fill($attributes['payment_terms']);
+            $contract_desc->legalPaymentTerm->save();
+
+            if ($contract_desc->quotation !== $request->quotation) {
+                Storage::delete($contract_desc->quotation);
             }
-            if ($vendorServiceContract->coparation_sheet !== $request->coparation_sheet) {
-                Storage::delete($vendorServiceContract->coparation_sheet);
+            if ($contract_desc->coparation_sheet !== $request->coparation_sheet) {
+                Storage::delete($contract_desc->coparation_sheet);
             }
-            if ($vendorServiceContract->transportation_permission !== $request->transportation_permission) {
-                Storage::delete($vendorServiceContract->transportation_permission);
+            if ($contract_desc->transportation_permission !== $request->transportation_permission) {
+                Storage::delete($contract_desc->transportation_permission);
             }
-            if ($vendorServiceContract->vehicle_registration_certificate !== $request->vehicle_registration_certificate) {
-                Storage::delete($vendorServiceContract->vehicle_registration_certificate);
+            if ($contract_desc->vehicle_registration_certificate !== $request->vehicle_registration_certificate) {
+                Storage::delete($contract_desc->vehicle_registration_certificate);
             }
-            if ($vendorServiceContract->route !== $request->route) {
-                Storage::delete($vendorServiceContract->route);
+            if ($contract_desc->route !== $request->route) {
+                Storage::delete($contract_desc->route);
             }
-            if ($vendorServiceContract->insurance !== $request->insurance) {
-                Storage::delete($vendorServiceContract->insurance);
+            if ($contract_desc->insurance !== $request->insurance) {
+                Storage::delete($contract_desc->insurance);
             }
-            if ($vendorServiceContract->driver_license !== $request->driver_license) {
-                Storage::delete($vendorServiceContract->driver_license);
+            if ($contract_desc->driver_license !== $request->driver_license) {
+                Storage::delete($contract_desc->driver_license);
             }
-            if ($vendorServiceContract->doctor_license !== $request->doctor_license) {
-                Storage::delete($vendorServiceContract->doctor_license);
+            if ($contract_desc->doctor_license !== $request->doctor_license) {
+                Storage::delete($contract_desc->doctor_license);
             }
-            if ($vendorServiceContract->nurse_license !== $request->nurse_license) {
-                Storage::delete($vendorServiceContract->nurse_license);
+            if ($contract_desc->nurse_license !== $request->nurse_license) {
+                Storage::delete($contract_desc->nurse_license);
             }
-            if ($vendorServiceContract->security_service_certification !== $request->security_service_certification) {
-                Storage::delete($vendorServiceContract->security_service_certification);
+            if ($contract_desc->security_service_certification !== $request->security_service_certification) {
+                Storage::delete($contract_desc->security_service_certification);
             }
-            if ($vendorServiceContract->security_guard_license !== $request->security_guard_license) {
-                Storage::delete($vendorServiceContract->security_guard_license);
+            if ($contract_desc->security_guard_license !== $request->security_guard_license) {
+                Storage::delete($contract_desc->security_guard_license);
             }
             $request->session()->flash('success',  ' has been create');
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
-        return \redirect()->route('legal.contract-request.index');
+        return \redirect()->route('legal.contract-request.show', $contract_desc->contract_id);
     }
 
     /**
@@ -187,6 +212,7 @@ class VendorServiceContractController extends Controller
         $attr = [];
         try {
             $subtypeContract = $this->subtypeContractService->find($request->sub_type_contract_id);
+
             if ($subtypeContract->slug === 'bus-contract') {
                 $this->validationBus($request);
                 $attr = $this->setAttributesBus($request);
@@ -222,6 +248,7 @@ class VendorServiceContractController extends Controller
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
+
         return $attr;
     }
 
@@ -242,7 +269,7 @@ class VendorServiceContractController extends Controller
             'quotation_no' => 'required',
             'dated' => 'required',
             'contract_period' => 'required',
-            'untill' => 'required',
+            // 'untill' => 'required',
 
             'monthly' => 'required',
             'route_change' => 'required',
@@ -262,7 +289,7 @@ class VendorServiceContractController extends Controller
             'quotation_no' => 'required',
             'dated' => 'required',
             'contract_period' => 'required',
-            'untill' => 'required',
+            // 'untill' => 'required',
             'working_day' => 'required',
             'working_time' => 'required',
 
@@ -273,7 +300,7 @@ class VendorServiceContractController extends Controller
     }
     private function validationCook(Request $request)
     {
-        $request->validate([
+        return $request->validate([
             'sub_type_contract_id' => 'required',
             'quotation' => 'required',
             'coparation_sheet' => 'required',
@@ -282,7 +309,7 @@ class VendorServiceContractController extends Controller
             'quotation_no' => 'required',
             'dated' => 'required',
             'contract_period' => 'required',
-            'untill' => 'required',
+            // 'untill' => 'required',
             'number_of_cook' => 'required',
             'working_day' => 'required',
             'working_time' => 'required',
@@ -304,7 +331,7 @@ class VendorServiceContractController extends Controller
             'quotation_no' => 'required',
             'dated' => 'required',
             'contract_period' => 'required',
-            'untill' => 'required',
+            // 'untill' => 'required',
             'number_of_doctor' => 'required',
             'working_day' => 'required',
             'working_time' => 'required',
@@ -324,7 +351,7 @@ class VendorServiceContractController extends Controller
             'quotation_no' => 'required',
             'dated' => 'required',
             'contract_period' => 'required',
-            'untill' => 'required',
+            // 'untill' => 'required',
             'number_of_doctor' => 'required',
             'working_day' => 'required',
             'working_time' => 'required',
@@ -345,7 +372,7 @@ class VendorServiceContractController extends Controller
             'quotation_no' => 'required',
             'dated' => 'required',
             'contract_period' => 'required',
-            'untill' => 'required',
+            // 'untill' => 'required',
             'number_of_sercurity_guard' => 'required',
             'working_day' => 'required',
             'working_time' => 'required',
@@ -364,7 +391,7 @@ class VendorServiceContractController extends Controller
             'quotation_no' => 'required',
             'dated' => 'required',
             'contract_period' => 'required',
-            'untill' => 'required',
+            // 'untill' => 'required',
             'number_of_subcontractor' => 'required',
             'number_of_agent' => 'required',
             'working_day' => 'required',
@@ -384,7 +411,7 @@ class VendorServiceContractController extends Controller
             'quotation_no' => 'required',
             'dated' => 'required',
             'contract_period' => 'required',
-            'untill' => 'required',
+            // 'untill' => 'required',
             'route' => 'required',
             'to' => 'required',
             'dry_container_size' => 'required',
@@ -398,198 +425,207 @@ class VendorServiceContractController extends Controller
 
     private function setAttributesBus(Request $request)
     {
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'transportation_permission', 'vehicle_registration_certificate', 'route', 'insurance', 'driver_license', 'contract_id');
+        // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
+        // $attributes['quotation'] = $request->quotation;
+        // $attributes['coparation_sheet'] = $request->coparation_sheet;
+        // $attributes['transportation_permission'] = $request->transportation_permission;
+        // $attributes['vehicle_registration_certificate'] = $request->vehicle_registration_certificate;
+        // $attributes['route'] = $request->route;
+        // $attributes['insurance'] = $request->insurance;
+        // $attributes['driver_license'] = $request->driver_license;
+        // $attributes['payment_term_id'] = null;
 
-        $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
-        $attributes['quotation'] = $request->quotation;
-        $attributes['coparation_sheet'] = $request->coparation_sheet;
-        $attributes['transportation_permission'] = $request->transportation_permission;
-        $attributes['vehicle_registration_certificate'] = $request->vehicle_registration_certificate;
-        $attributes['route'] = $request->route;
-        $attributes['insurance'] = $request->insurance;
-        $attributes['driver_license'] = $request->driver_license;
-        $attributes['comercial_term_id'] = null;
-        $attributes['payment_term_id'] = null;
+        $comercial_terms = $request->only('scope_of_work', 'location', 'quotation_no', 'dated', 'contract_period');
+        // $comercialAttr['scope_of_work'] = $request->scope_of_work;
+        // $comercialAttr['location'] = $request->location;
+        // $comercialAttr['quotation_no'] = $request->quotation_no;
+        // $comercialAttr['dated'] = $request->dated;
+        // $comercialAttr['contract_period'] = $request->contract_period;
+        // $comercialAttr['untill'] = $request->untill;
 
-        $comercialAttr['scope_of_work'] = $request->scope_of_work;
-        $comercialAttr['location'] = $request->location;
-        $comercialAttr['quotation_no'] = $request->quotation_no;
-        $comercialAttr['dated'] = $request->dated;
-        $comercialAttr['contract_period'] = $request->contract_period;
-        $comercialAttr['untill'] = $request->untill;
+        $payment_terms = $request->only('monthly', 'route_change', 'payment_ot', 'holiday_pay', 'ot_driver');
+        // $paymentAttr['monthly'] = $request->monthly;
+        // $paymentAttr['route_change'] = $request->route_change;
+        // $paymentAttr['payment_ot'] = $request->payment_ot;
+        // $paymentAttr['holiday_pay'] = $request->holiday_pay;
+        // $paymentAttr['ot_driver'] = $request->ot_driver;
 
-        $paymentAttr['monthly'] = $request->monthly;
-        $paymentAttr['route_change'] = $request->route_change;
-        $paymentAttr['payment_ot'] = $request->payment_ot;
-        $paymentAttr['holiday_pay'] = $request->holiday_pay;
-        $paymentAttr['ot_driver'] = $request->ot_driver;
-
-        return ['attributes' => $attributes, 'comercialAttr' => $comercialAttr, 'paymentAttr' => $paymentAttr];
+        return \compact('contract_dest', 'comercial_terms', 'payment_terms');
     }
     private function setAttributesCleaning(Request $request)
     {
-        $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
-        $attributes['quotation'] = $request->quotation;
-        $attributes['coparation_sheet'] = $request->coparation_sheet;
-        $attributes['comercial_term_id'] = null;
-        $attributes['payment_term_id'] = null;
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'contract_id');
+        // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
+        // $attributes['quotation'] = $request->quotation;
+        // $attributes['coparation_sheet'] = $request->coparation_sheet;
+        // $attributes['payment_term_id'] = null;
 
-        $comercialAttr['scope_of_work'] = $request->scope_of_work;
-        $comercialAttr['quotation_no'] = $request->quotation_no;
-        $comercialAttr['dated'] = $request->dated;
-        $comercialAttr['contract_period'] = $request->contract_period;
-        $comercialAttr['untill'] = $request->untill;
-        $comercialAttr['working_day'] = $request->working_day;
-        $comercialAttr['working_time'] = $request->working_time;
+        $comercial_terms = $request->only('scope_of_work', 'quotation_no', 'dated', 'contract_period', 'working_day', 'working_time', 'road', 'building', 'toilet', 'canteen', 'washing', 'water', 'mowing', 'general');
+        // $comercialAttr['scope_of_work'] = $request->scope_of_work;
+        // $comercialAttr['quotation_no'] = $request->quotation_no;
+        // $comercialAttr['dated'] = $request->dated;
+        // $comercialAttr['contract_period'] = $request->contract_period;
+        // $comercialAttr['working_day'] = $request->working_day;
+        // $comercialAttr['working_time'] = $request->working_time;
+        // $comercialAttr['road'] = $request->road;
+        // $comercialAttr['building'] = $request->building;
+        // $comercialAttr['toilet'] = $request->toilet;
+        // $comercialAttr['canteen'] = $request->canteen;
+        // $comercialAttr['washing'] = $request->washing;
+        // $comercialAttr['water'] = $request->water;
+        // $comercialAttr['mowing'] = $request->mowing;
+        // $comercialAttr['general'] = $request->general;
 
-        $comercialAttr['road'] = $request->road;
-        $comercialAttr['building'] = $request->building;
-        $comercialAttr['toilet'] = $request->toilet;
-        $comercialAttr['canteen'] = $request->canteen;
-        $comercialAttr['washing'] = $request->washing;
-        $comercialAttr['water'] = $request->water;
-        $comercialAttr['mowing'] = $request->mowing;
-        $comercialAttr['general'] = $request->general;
+        $payment_terms = $request->only('monthly', 'payment_ot', 'holiday_pay');
+        // $paymentAttr['monthly'] = $request->monthly;
+        // $paymentAttr['payment_ot'] = $request->payment_ot;
+        // $paymentAttr['holiday_pay'] = $request->holiday_pay;
 
-        $paymentAttr['monthly'] = $request->monthly;
-        $paymentAttr['payment_ot'] = $request->payment_ot;
-        $paymentAttr['holiday_pay'] = $request->holiday_pay;
-
-        return ['attributes' => $attributes, 'comercialAttr' => $comercialAttr, 'paymentAttr' => $paymentAttr];
+        return \compact('contract_dest', 'comercial_terms', 'payment_terms');
     }
     private function setAttributesCook(Request $request)
     {
-        $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
-        $attributes['quotation'] = $request->quotation; 
-        $attributes['coparation_sheet'] = $request->coparation_sheet;
-        $attributes['comercial_term_id'] = null;
-        $attributes['payment_term_id'] = null;
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'contract_id');
 
-        $comercialAttr['scope_of_work'] = $request->scope_of_work;
-        $comercialAttr['quotation_no'] = $request->quotation_no;
-        $comercialAttr['dated'] = $request->dated;
-        $comercialAttr['contract_period'] = $request->contract_period;
-        $comercialAttr['untill'] = $request->untill;
-        $comercialAttr['number_of_cook'] = $request->number_of_cook;
-        $comercialAttr['working_day'] = $request->working_day;
-        $comercialAttr['working_time'] = $request->working_time;
-        $comercialAttr['comercial_ot'] = $request->comercial_ot;
+        // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
+        // $attributes['quotation'] = $request->quotation;
+        // $attributes['coparation_sheet'] = $request->coparation_sheet;
+        // $attributes['comercial_term_id'] = null;
+        // $attributes['payment_term_id'] = null;
+        $comercial_terms = $request->only('scope_of_work', 'quotation_no', 'dated', 'contract_period', 'number_of_cook', 'working_day', 'working_time', 'comercial_ot');
+        // $comercialAttr['scope_of_work'] = $request->scope_of_work;
+        // $comercialAttr['quotation_no'] = $request->quotation_no;
+        // $comercialAttr['dated'] = $request->dated;
+        // $comercialAttr['contract_period'] = $request->contract_period;
+        // $comercialAttr['number_of_cook'] = $request->number_of_cook;
+        // $comercialAttr['working_day'] = $request->working_day;
+        // $comercialAttr['working_time'] = $request->working_time;
+        // $comercialAttr['comercial_ot'] = $request->comercial_ot;
 
-        $paymentAttr['monthly'] = $request->monthly;
-        $paymentAttr['other_expense'] = $request->other_expense;
+        $payment_terms = $request->only('monthly', 'other_expense');
+        // $paymentAttr['monthly'] = $request->monthly;
+        // $paymentAttr['other_expense'] = $request->other_expense;
 
-        return ['attributes' => $attributes, 'comercialAttr' => $comercialAttr, 'paymentAttr' => $paymentAttr];
+        return \compact('contract_dest', 'comercial_terms', 'payment_terms');
     }
     private function setAttributesDortor(Request $request)
     {
-        $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
-        $attributes['quotation'] = $request->quotation; 
-        $attributes['coparation_sheet'] = $request->coparation_sheet;
-        $attributes['doctor_license'] = $request->doctor_license;
-        $attributes['comercial_term_id'] = null;
-        $attributes['payment_term_id'] = null;
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'doctor_license', 'contract_id');
 
-        $comercialAttr['scope_of_work'] = $request->scope_of_work;
-        $comercialAttr['quotation_no'] = $request->quotation_no;
-        $comercialAttr['dated'] = $request->dated;
-        $comercialAttr['contract_period'] = $request->contract_period;
-        $comercialAttr['untill'] = $request->untill;
-        $comercialAttr['number_of_doctor'] = $request->number_of_doctor;
-        $comercialAttr['working_day'] = $request->working_day;
-        $comercialAttr['working_time'] = $request->working_time;
+        // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
+        // $attributes['quotation'] = $request->quotation;
+        // $attributes['coparation_sheet'] = $request->coparation_sheet;
+        // $attributes['doctor_license'] = $request->doctor_license;
 
-        $paymentAttr['monthly'] = $request->monthly;
+        $comercial_terms = $request->only('scope_of_work', 'quotation_no', 'dated', 'contract_period', 'number_of_doctor', 'working_day', 'working_time');
+        // $comercialAttr['scope_of_work'] = $request->scope_of_work;
+        // $comercialAttr['quotation_no'] = $request->quotation_no;
+        // $comercialAttr['dated'] = $request->dated;
+        // $comercialAttr['contract_period'] = $request->contract_period;
+        // $comercialAttr['number_of_doctor'] = $request->number_of_doctor;
+        // $comercialAttr['working_day'] = $request->working_day;
+        // $comercialAttr['working_time'] = $request->working_time;
 
-        return ['attributes' => $attributes, 'comercialAttr' => $comercialAttr, 'paymentAttr' => $paymentAttr];
+        $payment_terms = $request->only('monthly');
+        // $paymentAttr['monthly'] = $request->monthly;
+
+        return \compact('contract_dest', 'comercial_terms', 'payment_terms');
     }
     private function setAttributesNurse(Request $request)
     {
-        $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
-        $attributes['quotation'] = $request->quotation;
-        $attributes['coparation_sheet'] = $request->coparation_sheet;
-        $attributes['nurse_license'] = $request->coparation_sheet;
-        $attributes['comercial_term_id'] = null;
-        $attributes['payment_term_id'] = null;
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'nurse_license', 'contract_id');
 
-        $comercialAttr['scope_of_work'] = $request->scope_of_work;
-        $comercialAttr['quotation_no'] = $request->quotation_no;
-        $comercialAttr['dated'] = $request->dated;
-        $comercialAttr['contract_period'] = $request->contract_period;
-        $comercialAttr['untill'] = $request->untill;
-        $comercialAttr['number_of_doctor'] = $request->number_of_doctor;
-        $comercialAttr['working_day'] = $request->working_day;
-        $comercialAttr['working_time'] = $request->working_time;
+        // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
+        // $attributes['quotation'] = $request->quotation;
+        // $attributes['coparation_sheet'] = $request->coparation_sheet;
+        // $attributes['nurse_license'] = $request->coparation_sheet;
 
-        $paymentAttr['monthly'] = $request->monthly;
+        $comercial_terms = $request->only('scope_of_work', 'quotation_no', 'dated', 'contract_period', 'number_of_doctor', 'working_day', 'working_time');
 
-        return ['attributes' => $attributes, 'comercialAttr' => $comercialAttr, 'paymentAttr' => $paymentAttr];
+        // $comercialAttr['scope_of_work'] = $request->scope_of_work;
+        // $comercialAttr['quotation_no'] = $request->quotation_no;
+        // $comercialAttr['dated'] = $request->dated;
+        // $comercialAttr['contract_period'] = $request->contract_period;
+        // $comercialAttr['number_of_doctor'] = $request->number_of_doctor;
+        // $comercialAttr['working_day'] = $request->working_day;
+        // $comercialAttr['working_time'] = $request->working_time;
+
+        $payment_terms = $request->only('monthly');
+        // $paymentAttr['monthly'] = $request->monthly;
+
+        return \compact('contract_dest', 'comercial_terms', 'payment_terms');
     }
     private function setAttributesSecurity(Request $request)
     {
-        $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
-        $attributes['quotation'] = $request->quotation;
-        $attributes['coparation_sheet'] = $request->coparation_sheet;
-        $attributes['security_service_certification'] = $request->security_service_certification;
-        $attributes['security_guard_license'] = $request->security_guard_license;
-        $attributes['comercial_term_id'] = null;
-        $attributes['payment_term_id'] = null;
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'security_service_certification', 'security_guard_license', 'contract_id');
 
-        $comercialAttr['scope_of_work'] = $request->scope_of_work;
-        $comercialAttr['quotation_no'] = $request->quotation_no;
-        $comercialAttr['dated'] = $request->dated;
-        $comercialAttr['contract_period'] = $request->contract_period;
-        $comercialAttr['untill'] = $request->untill;
-        $comercialAttr['number_of_sercurity_guard'] = $request->number_of_sercurity_guard;
-        $comercialAttr['working_day'] = $request->working_day;
-        $comercialAttr['working_time'] = $request->working_time;
+        // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
+        // $attributes['quotation'] = $request->quotation;
+        // $attributes['coparation_sheet'] = $request->coparation_sheet;
+        // $attributes['security_service_certification'] = $request->security_service_certification;
+        // $attributes['security_guard_license'] = $request->security_guard_license;
+        // $attributes['comercial_term_id'] = null;
+        // $attributes['payment_term_id'] = null;
 
-        $paymentAttr['monthly'] = $request->monthly;
+        $comercial_terms = $request->only('scope_of_work', 'quotation_no', 'dated', 'contract_period', 'number_of_sercurity_guard', 'working_day', 'working_time');
+        // $comercialAttr['scope_of_work'] = $request->scope_of_work;
+        // $comercialAttr['quotation_no'] = $request->quotation_no;
+        // $comercialAttr['dated'] = $request->dated;
+        // $comercialAttr['contract_period'] = $request->contract_period;
+        // $comercialAttr['number_of_sercurity_guard'] = $request->number_of_sercurity_guard;
+        // $comercialAttr['working_day'] = $request->working_day;
+        // $comercialAttr['working_time'] = $request->working_time;
 
-        return ['attributes' => $attributes, 'comercialAttr' => $comercialAttr, 'paymentAttr' => $paymentAttr];
+        $payment_terms = $request->only('monthly');
+        // $paymentAttr['monthly'] = $request->monthly;
+
+        return \compact('contract_dest', 'comercial_terms', 'payment_terms');
     }
     private function setAttributesSubContractor(Request $request)
     {
-        $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
-        $attributes['quotation'] = $request->quotation;
-        $attributes['coparation_sheet'] = $request->coparation_sheet;
-        $attributes['comercial_term_id'] = null;
-        $attributes['payment_term_id'] = null;
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'contract_id');
+        // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
+        // $attributes['quotation'] = $request->quotation;
+        // $attributes['coparation_sheet'] = $request->coparation_sheet;
 
-        $comercialAttr['scope_of_work'] = $request->scope_of_work;
-        $comercialAttr['quotation_no'] = $request->quotation_no;
-        $comercialAttr['dated'] = $request->dated;
-        $comercialAttr['contract_period'] = $request->contract_period;
-        $comercialAttr['untill'] = $request->untill;
-        $comercialAttr['number_of_subcontractor'] = $request->number_of_subcontractor;
-        $comercialAttr['number_of_agent'] = $request->number_of_agent;
-        $comercialAttr['working_day'] = $request->working_day;
-        $comercialAttr['working_time'] = $request->working_time;
+        $comercial_terms = $request->only('scope_of_work', 'quotation_no', 'dated', 'contract_period', 'number_of_subcontractor', 'number_of_agent', 'working_day', 'working_time');
+        // $comercialAttr['scope_of_work'] = $request->scope_of_work;
+        // $comercialAttr['quotation_no'] = $request->quotation_no;
+        // $comercialAttr['dated'] = $request->dated;
+        // $comercialAttr['contract_period'] = $request->contract_period;
+        // $comercialAttr['number_of_subcontractor'] = $request->number_of_subcontractor;
+        // $comercialAttr['number_of_agent'] = $request->number_of_agent;
+        // $comercialAttr['working_day'] = $request->working_day;
+        // $comercialAttr['working_time'] = $request->working_time;
 
-        $paymentAttr['detail_payment_term'] = $request->detail_payment_term;
+        $payment_terms = $request->only('detail_payment_term');
+        // $paymentAttr['detail_payment_term'] = $request->detail_payment_term;
 
-        return ['attributes' => $attributes, 'comercialAttr' => $comercialAttr, 'paymentAttr' => $paymentAttr];
+        return \compact('contract_dest', 'comercial_terms', 'payment_terms');
     }
     private function setAttributesTransportation(Request $request)
     {
-        $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
-        $attributes['quotation'] = $request->quotation;
-        $attributes['coparation_sheet'] = $request->coparation_sheet;
-        $attributes['comercial_term_id'] = null;
-        $attributes['payment_term_id'] = null;
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'contract_id');
+        // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
+        // $attributes['quotation'] = $request->quotation;
+        // $attributes['coparation_sheet'] = $request->coparation_sheet;
 
-        $comercialAttr['scope_of_work'] = $request->scope_of_work;
-        $comercialAttr['quotation_no'] = $request->quotation_no;
-        $comercialAttr['dated'] = $request->dated;
-        $comercialAttr['contract_period'] = $request->contract_period;
-        $comercialAttr['untill'] = $request->untill;
-        $comercialAttr['route'] = $request->route;
-        $comercialAttr['to'] = $request->to;
-        $comercialAttr['dry_container_size'] = $request->dry_container_size;
-        $comercialAttr['the_number_of_truck'] = $request->the_number_of_truck;
-        $comercialAttr['working_day'] = $request->working_day;
-        $comercialAttr['working_time'] = $request->working_time;
+        $comercial_terms = $request->only('scope_of_work', 'quotation_no', 'dated', 'contract_period', 'route', 'to', 'dry_container_size', 'the_number_of_truck', 'working_day', 'working_time');
+        // $comercialAttr['scope_of_work'] = $request->scope_of_work;
+        // $comercialAttr['quotation_no'] = $request->quotation_no;
+        // $comercialAttr['dated'] = $request->dated;
+        // $comercialAttr['contract_period'] = $request->contract_period;
+        // $comercialAttr['route'] = $request->route;
+        // $comercialAttr['to'] = $request->to;
+        // $comercialAttr['dry_container_size'] = $request->dry_container_size;
+        // $comercialAttr['the_number_of_truck'] = $request->the_number_of_truck;
+        // $comercialAttr['working_day'] = $request->working_day;
+        // $comercialAttr['working_time'] = $request->working_time;
 
-        $paymentAttr['price_of_service'] = $request->price_of_service;
+        $payment_terms = $request->only('price_of_service');
+        // $paymentAttr['price_of_service'] = $request->price_of_service;
 
-        return ['attributes' => $attributes, 'comercialAttr' => $comercialAttr, 'paymentAttr' => $paymentAttr];
+        return \compact('contract_dest', 'comercial_terms', 'payment_terms');
     }
 }

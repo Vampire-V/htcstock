@@ -306,17 +306,17 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="text-rigth">Contract period :</td>
-                    <td colspan="2" style="padding-left: 1%;">
+                    <td colspan="6" style="padding-left: 1%;">
                         <font class="underline">
-                            {{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}
+                            {{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->contract_period : ""}}
                         </font>
                     </td>
-                    <td class="text-rigth">Untill:</td>
+                    {{-- <td class="text-rigth">Untill:</td>
                     <td colspan="4" style="padding-left: 1%;">
                         <font class="underline">
                             {{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}
                         </font>
-                    </td>
+                    </td> --}}
                 </tr>
                 <tr>
                     <td colspan="2" class="text-rigth">Number of cook :</td>

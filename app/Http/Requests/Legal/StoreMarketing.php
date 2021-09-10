@@ -25,7 +25,7 @@ class StoreMarketing extends FormRequest
     public function rules()
     {
         return [
-            'subtype' => 'required',
+            'sub_type_contract_id' => 'required',
             
             'purpose' => 'required',
             'promote_a_product' => 'required',
@@ -33,7 +33,6 @@ class StoreMarketing extends FormRequest
             'quotation_no' => 'required',
             'dated' => 'required',
             'contract_period' => 'required',
-            'untill' => 'required',
 
             'detail_payment_term' => 'required',
 
@@ -48,7 +47,7 @@ class StoreMarketing extends FormRequest
     public function messages()
     {
         return [
-            'subtype.required' => 'Please enter subtype',
+            'sub_type_contract_id.required' => 'Please enter subtype',
 
             'purpose.required' => 'Please enter purpose',
             'promote_a_product.required' => 'Please enter promote_a_product',
@@ -56,7 +55,6 @@ class StoreMarketing extends FormRequest
             'quotation_no.required' => 'Please enter quotation_no',
             'dated.required' => 'Please enter dated',
             'contract_period.required' => 'Please enter contract_period',
-            'untill.required' => 'Please enter untill',
             
             'detail_payment_term.required' => 'Please enter payment_term',
 

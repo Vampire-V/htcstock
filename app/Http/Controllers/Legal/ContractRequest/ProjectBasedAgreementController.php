@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Legal\ContractRequest;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Legal\StoreProjectBased;
+use App\Models\Legal\LegalComercialTerm;
+use App\Models\Legal\LegalContractDest;
+use App\Models\Legal\LegalPaymentTerm;
 use App\Services\Legal\Interfaces\ComercialListsServiceInterface;
 use App\Services\Legal\Interfaces\ComercialTermServiceInterface;
 use App\Services\Legal\Interfaces\ContractDescServiceInterface;
+use App\Services\Legal\Interfaces\ContractRequestServiceInterface;
 use App\Services\Legal\Interfaces\PaymentTermServiceInterface;
 use App\Services\Legal\Interfaces\PaymentTypeServiceInterface;
 use App\Services\Legal\Interfaces\SubtypeContractServiceInterface;
@@ -23,7 +27,7 @@ class ProjectBasedAgreementController extends Controller
     protected $comercialListsService;
     protected $comercialTermService;
     protected $subtypeContractService;
-    protected $paymentTermService;
+    protected $paymentTermService, $contractRequestService;
     public function __construct(
         ContractDescServiceInterface $contractDescServiceInterface,
         PaymentTypeServiceInterface $paymentTypeServiceInterface,
@@ -31,7 +35,8 @@ class ProjectBasedAgreementController extends Controller
         ComercialListsServiceInterface $comercialListsServiceInterface,
         ComercialTermServiceInterface $comercialTermServiceInterface,
         SubtypeContractServiceInterface $subtypeContractServiceInterface,
-        PaymentTermServiceInterface $paymentTermServiceInterface
+        PaymentTermServiceInterface $paymentTermServiceInterface,
+        ContractRequestServiceInterface $contractRequestService
     ) {
         $this->contractDescService = $contractDescServiceInterface;
         $this->paymentTypeService = $paymentTypeServiceInterface;
@@ -40,6 +45,7 @@ class ProjectBasedAgreementController extends Controller
         $this->comercialTermService = $comercialTermServiceInterface;
         $this->subtypeContractService = $subtypeContractServiceInterface;
         $this->paymentTermService = $paymentTermServiceInterface;
+        $this->contractRequestService = $contractRequestService;
     }
     /**
      * Display a listing of the resource.
@@ -67,9 +73,35 @@ class ProjectBasedAgreementController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProjectBased $request)
     {
-        return \redirect()->route('legal.contract-request.projectbasedagreement.index');
+        $dest = $request->only(
+            'sub_type_contract_id',
+            'quotation',
+            'coparation_sheet',
+            'work_plan',
+            'warranty',
+            'contract_id'
+        );
+        // comercialTerm data
+        $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
+        $payment = $request->only('detail_payment_term');
+        DB::beginTransaction();
+        try {
+            $payment_term = new LegalPaymentTerm($payment);
+            $payment_term->save();
+            $dest['payment_term_id'] = $payment_term->id;
+            $contract_desc = new LegalContractDest($dest);
+            $contract_desc->save();
+            $term['contract_dest_id'] = $contract_desc->id;
+            $contract_term = new LegalComercialTerm($term);
+            $contract_term->save();
+            DB::commit();
+            return \redirect()->route('legal.contract-request.show', $contract_desc->contract_id);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
     }
 
     /**
@@ -92,13 +124,21 @@ class ProjectBasedAgreementController extends Controller
     public function edit($id)
     {
         try {
-            $projectBased = $this->contractDescService->search($id);
-            $subtypeContract = $this->subtypeContractService->dropdown($projectBased->legalcontract->agreement_id);
-            $paymentType = $this->paymentTypeService->dropdown($projectBased->legalcontract->agreement_id);
+            // $projectBased = $this->contractDescService->search($id);
+            // $subtypeContract = $this->subtypeContractService->dropdown($projectBased->legalcontract->agreement_id);
+            // $paymentType = $this->paymentTypeService->dropdown($projectBased->legalcontract->agreement_id);
+
+            $contract = $this->contractRequestService->find($id);
+            $subtypeContract = $this->subtypeContractService->dropdown($contract->agreement_id);
+            $paymentType = $this->paymentTypeService->dropdown($contract->agreement_id);
+            if ($contract->legalContractDest) {
+                return \view('legal.ContractRequestForm.ProjectBasedAgreement.edit')->with(['contract' => $contract, 'paymentType' => $paymentType, 'subtypeContract' => $subtypeContract]);
+            } else {
+                return \view('legal.ContractRequestForm.ProjectBasedAgreement.create', \compact('contract', 'paymentType', 'subtypeContract'));
+            }
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('legal.ContractRequestForm.ProjectBasedAgreement.edit')->with(['projectBased' => $projectBased, 'paymentType' => $paymentType, 'subtypeContract' => $subtypeContract]);
     }
 
     /**
@@ -110,48 +150,31 @@ class ProjectBasedAgreementController extends Controller
      */
     public function update(StoreProjectBased $request, $id)
     {
-        $data = $request->except(['_token', '_method']);
-        $attributes = [];
-        $comercialAttr = [];
-        $paymentAttr = [];
-
-        $attributes['sub_type_contract_id'] = $data['subtype'];
-        if (!empty($request->purchase_order)) {
-            $attributes['purchase_order'] = $data['purchase_order'];
-        }
-        $attributes['quotation'] = $data['quotation'];
-        $attributes['coparation_sheet'] = $data['coparation_sheet'];
-        if (!empty($request->work_plan)) {
-            $attributes['work_plan'] = $data['work_plan'];
-        }
-        $attributes['warranty'] = $data['warranty'];
-
+        $dest = $request->only(
+            'sub_type_contract_id',
+            'quotation',
+            'coparation_sheet',
+            'work_plan',
+            'warranty',
+            'contract_id'
+        );
         // comercialTerm data
-        $comercialAttr['scope_of_work'] = $data['scope_of_work'];
-        $comercialAttr['location'] = $data['location'];
-        $comercialAttr['purchase_order_no'] = $data['purchase_order_no'];
-        $comercialAttr['quotation_no'] = $data['quotation_no'];
-        $comercialAttr['dated'] = $data['dated'];
-        $comercialAttr['contract_period'] = $data['contract_period'];
-        $comercialAttr['untill'] = $data['untill'];
-
-        $paymentAttr['detail_payment_term'] = $data['detail_payment_term'];
+        $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
+        $payment = $request->only('detail_payment_term');
         DB::beginTransaction();
         try {
-            if ($data['comercial_term_id']) {
-                $this->comercialTermService->update($comercialAttr, $data['comercial_term_id']);
-                $attributes['comercial_term_id'] = (int) $data['comercial_term_id'];
-            } else {
-                $attributes['comercial_term_id'] = $this->comercialTermService->create($comercialAttr)->id;
-            }
-            if ($data['payment_term_id']) {
-                $this->paymentTermService->update($paymentAttr, $request->payment_term_id);
-                $attributes['payment_term_id'] = (int) $data['payment_term_id'];
-            } else {
-                $attributes['payment_term_id'] = $this->paymentTermService->create($paymentAttr)->id;
-            }
             $projectBased = $this->contractDescService->find($id);
-            $this->contractDescService->update($attributes, $id);
+            if ($projectBased->legalContract->legalComercialList->count() < 1) {
+                return \redirect()->back()->with('error', "Error : ");
+            }
+            if ($projectBased->legalComercialTerm) {
+                $this->comercialTermService->update($term, $projectBased->legalComercialTerm->id);
+            }
+            if ($projectBased->legalPaymentTerm) {
+                $this->paymentTermService->update($payment, $projectBased->payment_term_id);
+            }
+           
+            $this->contractDescService->update($dest, $projectBased->id);
 
             if ($projectBased->purchase_order !== $request->purchase_order) {
                 Storage::delete($projectBased->purchase_order);

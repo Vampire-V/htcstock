@@ -7,31 +7,34 @@
 @stop
 @section('content')
 
-{{-- <div class="app-page-title">
+<div class="app-page-title">
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
-                <i class="pe-7s-car icon-gradient bg-mean-fruit">
-                </i>
+                <i class="fa fa-balance-scale icon-gradient bg-happy-fisher" aria-hidden="true"></i>
             </div>
-            <div>Project Based Agreement <span class="badge badge-primary">{{$legalContract->status}}</span>
-<div class="page-title-subheading">This is an example dashboard created using
-    build-in elements and components.
-</div>
-</div>
-</div>
-<div class="page-title-actions">
-    <div class="d-inline-block">
+            <div>Project Based Agreement
+                {{-- <div class="page-title-subheading">THREE WEEKS PRIOR to commencement of the Contract Period.
+                </div> --}}
+                <div id="imagePreview"></div>
+            </div>
+        </div>
+        <div class="page-title-actions">
+            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
+                class="btn-shadow mr-3 btn btn-dark">
+                <i class="fa fa-star"></i>
+            </button> --}}
+            <div class="d-inline-block">
+            </div>
+        </div>
     </div>
 </div>
-</div>
+
+{{-- <div class="row">
+    <x-head-status-legal :legalContract="$legalContract" />
 </div> --}}
 
 <div class="row">
-    <x-head-status-legal :legalContract="$legalContract" />
-</div>
-
-<div class="row" style="margin-top: 10%;">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-body">
@@ -210,31 +213,28 @@
                                 {{-- Please provide a valid Dated --}}
                             </div>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="validationContractPeriod"><strong>Contract period</strong> <span
+                        <div class="col-md-4 mb-4">
+                            <label for="validationContractPeriod"><strong>Contract Period</strong> <span
                                     style="color: red;">*</span></label>
-                            <input type="date" class="form-control-sm form-control" id="validationContractPeriod"
+                            <input type="text" class="form-control-sm form-control" id="validationContractPeriod"
                                 name="contract_period"
-                                value="{{isset($legalContract->legalContractDest->legalComercialTerm->contract_period) ? $legalContract->legalContractDest->legalComercialTerm->contract_period->format('Y-m-d') : ""}}"
+                                value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->contract_period : ""}}"
                                 readonly>
-                            <div>
-                                {{-- Please provide a valid Contract period. --}}
-                            </div>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="validationUntill"><strong>Untill</strong> <span
+                            {{-- <label for="validationUntill"><strong>Untill</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
                                 value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
                                 readonly>
                             <div>
-                                {{-- Please provide a valid Untill. --}}
-                            </div>
+                                Please provide a valid Untill.
+                            </div> --}}
                         </div>
                     </div>
                     <hr>
                     <span class="badge badge-primary">Purchase list</span>
-                    @isset($legalContract->legalContractDest->legalComercialList)
+                    @isset($legalContract->legalComercialList)
                     <div class="form-row">
                         <table class="table table-bordered" id="table-comercial-lists">
                             <thead>
@@ -250,7 +250,7 @@
                             </thead>
                             <tbody>
 
-                                @foreach ($legalContract->legalContractDest->legalComercialList as $key => $item)
+                                @foreach ($legalContract->legalComercialList as $key => $item)
                                 <tr>
                                     <td>{{$key+1}}</td>
                                     <td>{{$item->description}}</td>
@@ -267,7 +267,7 @@
                                 <tr>
                                     <th colspan="5"></th>
                                     <th class="text-right">Total: </th>
-                                    <th id="total">{{$legalContract->legalContractDest->legalComercialList->reduce(function ($ac,$item) {
+                                    <th id="total">{{$legalContract->legalComercialList->reduce(function ($ac,$item) {
                                 return $ac+=$item->amount;
                             },0)}}</th>
                                 </tr>

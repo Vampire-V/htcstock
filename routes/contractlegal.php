@@ -19,9 +19,9 @@ Route::namespace('Legal')->prefix('legal')->name('legal.')->middleware(['auth', 
         Route::resource('mould', 'MouldController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store']]);
         Route::resource('scrap', 'ScrapController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store']]);
         Route::resource('vendorservicecontract', 'VendorServiceContractController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store']]);
-        Route::resource('leasecontract', 'LeaseContractController', ['only' => ['index', 'create', 'edit', 'show', 'update']]);
-        Route::resource('projectbasedagreement', 'ProjectBasedAgreementController', ['only' => ['index', 'create', 'edit', 'show', 'update']]);
-        Route::resource('marketingagreement', 'MarketingAgreementController', ['only' => ['index', 'create', 'edit', 'show', 'update']]);
+        Route::resource('leasecontract', 'LeaseContractController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store']]);
+        Route::resource('projectbasedagreement', 'ProjectBasedAgreementController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store']]);
+        Route::resource('marketingagreement', 'MarketingAgreementController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store']]);
 
         Route::resource('comerciallists', 'ComercialListsController', ['only' => ['store', 'edit', 'destroy']]);
     });

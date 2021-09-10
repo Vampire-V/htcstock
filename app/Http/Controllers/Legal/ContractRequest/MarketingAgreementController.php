@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Legal\ContractRequest;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Legal\StoreMarketing;
+use App\Models\Legal\LegalComercialTerm;
+use App\Models\Legal\LegalContractDest;
+use App\Models\Legal\LegalPaymentTerm;
 use App\Services\Legal\Interfaces\ComercialListsServiceInterface;
 use App\Services\Legal\Interfaces\ComercialTermServiceInterface;
 use App\Services\Legal\Interfaces\ContractDescServiceInterface;
+use App\Services\Legal\Interfaces\ContractRequestServiceInterface;
 use App\Services\Legal\Interfaces\PaymentTermServiceInterface;
 use App\Services\Legal\Interfaces\PaymentTypeServiceInterface;
 use App\Services\Legal\Interfaces\SubtypeContractServiceInterface;
@@ -21,14 +25,15 @@ class MarketingAgreementController extends Controller
     protected $comercialListsService;
     protected $comercialTermService;
     protected $subtypeContractService;
-    protected $paymentTermService;
+    protected $paymentTermService, $contractRequestService;
     public function __construct(
         ContractDescServiceInterface $contractDescServiceInterface,
         PaymentTypeServiceInterface $paymentTypeServiceInterface,
         ComercialListsServiceInterface $comercialListsServiceInterface,
         ComercialTermServiceInterface $comercialTermServiceInterface,
         SubtypeContractServiceInterface $subtypeContractServiceInterface,
-        PaymentTermServiceInterface $paymentTermServiceInterface
+        PaymentTermServiceInterface $paymentTermServiceInterface,
+        ContractRequestServiceInterface $contractRequestService
     ) {
         $this->contractDescService = $contractDescServiceInterface;
         $this->paymentTypeService = $paymentTypeServiceInterface;
@@ -36,6 +41,7 @@ class MarketingAgreementController extends Controller
         $this->comercialTermService = $comercialTermServiceInterface;
         $this->subtypeContractService = $subtypeContractServiceInterface;
         $this->paymentTermService = $paymentTermServiceInterface;
+        $this->contractRequestService = $contractRequestService;
     }
     /**
      * Display a listing of the resource.
@@ -63,9 +69,28 @@ class MarketingAgreementController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMarketing $request)
     {
-        return \redirect()->route('legal.contract-request.marketingagreement.index');
+        $dest = $request->only('sub_type_contract_id', 'purchase_order', 'quotation', 'payment_term_id', 'contract_id');
+        // comercialTerm data
+        $term = $request->only('purpose', 'promote_a_product', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
+        $payment = $request->only('detail_payment_term');
+        DB::beginTransaction();
+        try {
+            $payment_term = new LegalPaymentTerm($payment);
+            $payment_term->save();
+            $dest['payment_term_id'] = $payment_term->id;
+            $contract_desc = new LegalContractDest($dest);
+            $contract_desc->save();
+            $term['contract_dest_id'] = $contract_desc->id;
+            $contract_term = new LegalComercialTerm($term);
+            $contract_term->save();
+            DB::commit();
+            return \redirect()->route('legal.contract-request.show', $contract_desc->contract_id);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
     }
 
     /**
@@ -88,13 +113,19 @@ class MarketingAgreementController extends Controller
     public function edit($id)
     {
         try {
-            $marketing = $this->contractDescService->search($id);
-            $subtypeContract = $this->subtypeContractService->dropdown($marketing->legalcontract->agreement_id);
-            $paymentType = $this->paymentTypeService->dropdown($marketing->legalcontract->agreement_id);
+            $contract = $this->contractRequestService->find($id);
+            $subtypeContract = $this->subtypeContractService->dropdown($contract->agreement_id);
+            $paymentType = $this->paymentTypeService->dropdown($contract->agreement_id);
+            if ($contract->legalContractDest) {
+                $contract->legalContractDest->value_of_contract = explode(",", $contract->legalContractDest->value_of_contract);
+                return \view('legal.ContractRequestForm.MarketingAgreement.edit')->with(['contract' => $contract, 'paymentType' => $paymentType, 'subtypeContract' => $subtypeContract]);
+            } else {
+                return \view('legal.ContractRequestForm.MarketingAgreement.create', \compact('contract', 'paymentType', 'subtypeContract'));
+            }
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('legal.ContractRequestForm.MarketingAgreement.edit')->with(['marketing' => $marketing, 'paymentType' => $paymentType, 'subtypeContract' => $subtypeContract]);
+        // return \view('legal.ContractRequestForm.MarketingAgreement.edit')->with(['marketing' => $marketing, 'paymentType' => $paymentType, 'subtypeContract' => $subtypeContract]);
     }
 
     /**

@@ -25,7 +25,7 @@ class StoreLeaseContract extends FormRequest
     public function rules()
     {
         return [
-            'subtype' => 'required',
+            'sub_type_contract_id' => 'required',
             'quotation' => 'required',
             'coparation_sheet' => 'required',
 
@@ -35,7 +35,6 @@ class StoreLeaseContract extends FormRequest
             'quotation_no' => 'required',
             'dated' => 'required',
             'contract_period' => 'required',
-            'untill' => 'required',
 
             'payment_type_id' => 'required',
 
@@ -50,7 +49,7 @@ class StoreLeaseContract extends FormRequest
     public function messages()
     {
         return [
-            'subtype.required' => 'Please enter subtype',
+            'sub_type_contract_id.required' => 'Please enter subtype',
             'quotation.required' => 'Please enter quotation',
             'coparation_sheet.required' => 'Please enter coparation_sheet',
 
@@ -60,7 +59,6 @@ class StoreLeaseContract extends FormRequest
             'quotation_no.required' => 'Please enter quotation_no',
             'dated.required' => 'Please enter dated',
             'contract_period.required' => 'Please enter contract_period',
-            'untill.required' => 'Please enter untill',
             
             'payment_type_id.required' => 'Please enter payment_term',
 

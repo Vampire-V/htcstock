@@ -45,15 +45,15 @@ async function logSubmit(event) {
                 // document.getElementById('discount').required = true
                 toast('Can’t find purchase', 'error')
             } else {
-                if (!document.getElementById('form-projectbasedagreement').checkValidity()) {
+                // if (!document.getElementById('form-projectbasedagreement').checkValidity()) {
                     // toast('Can’t find purchase', 'error')
-                }else{
+                // }else{
                     document.getElementById('desc').required = false
                     document.getElementById('qty').required = false
                     document.getElementById('unit_price').required = false
                     // document.getElementById('discount').required = false
                     onSubmit = true
-                }
+                // }
             }
         })
 

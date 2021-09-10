@@ -29,21 +29,21 @@
         </div>
     </div>
 </div>
+
 {{-- <div class="row">
-    <x-head-status-legal :legalContract="$contract->legalContractDest->legalContract" />
+    <x-head-status-legal :legalContract="$marketing->legalContract" />
 </div> --}}
 
-<div class="row">
+<div class="row" style="margin-top: 10%;">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <span class="badge badge-primary">Sub-type of Contract</span>
                 <form class="needs-validation" novalidate
-                    action="{{route('legal.contract-request.marketingagreement.update',$contract->legalContractDest->id)}}"
-                    method="POST" enctype="multipart/form-data">
+                    action="{{route('legal.contract-request.marketingagreement.store')}}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
-                    @method('PUT')
-                    <input type="hidden" name="contract_id" value="{{$contract->id}}">
+                    <input type="hidden" id="contract_id" name="contract_id" value="{{$contract->id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationSubType"><strong></strong> </label>
@@ -52,9 +52,7 @@
                                 <option data-id="" value="">Choose....</option>
                                 @isset($subtypeContract)
                                 @foreach ($subtypeContract as $item)
-                                <option value="{{$item->id}}"
-                                    {{$item->id === $contract->legalContractDest->sub_type_contract_id ? "selected" : ""}}
-                                    data-id="{{$item->slug}}">
+                                <option value="{{$item->id}}" data-id="{{$item->slug}}">
                                     {{$item->name}}</option>
                                 @endforeach
                                 @endisset
@@ -68,37 +66,29 @@
                     <span class="badge badge-primary">Supporting Documents</span>
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
-                            <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> <a
-                                    href="{{url('storage/'.$contract->legalContractDest->purchase_order)}}"
-                                    target="_blank"
-                                    rel="noopener noreferrer">{{$contract->legalContractDest->purchase_order ? 'view file' : ""}}</a></label>
+                            <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> <a href="#"
+                                    target="_blank" rel="noopener noreferrer">view file</a></label>
                             <input type="file" class="form-control-sm form-control" id="validationPurchaseOrderFile"
-                                onchange="uploadFileContract(this)" data-name="purchase_order"
-                                data-cache="{{substr($contract->legalContractDest->purchase_order,9)}}">
+                                onchange="uploadFileContract(this)" data-name="purchase_order">
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                             </div>
-                            <input type="hidden" type="text" name="purchase_order"
-                                value="{{$contract->legalContractDest->purchase_order}}">
+                            <input type="hidden" type="text" name="purchase_order" value="">
                             <div class="invalid-feedback">
                                 Please provide a valid PO No.
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="validationQuotationFile"><strong>Quotation</strong> <a
-                                    href="{{url('storage/'.$contract->legalContractDest->quotation)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$contract->legalContractDest->quotation ? 'view file' : ""}}</a></label>
+                            <label for="validationQuotationFile"><strong>Quotation</strong> <a href="#" target="_blank"
+                                    rel="noopener noreferrer">view file</a></label>
                             <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
-                                onchange="uploadFileContract(this)"
-                                data-cache="{{substr($contract->legalContractDest->quotation,9)}}"
-                                data-name="quotation">
+                                onchange="uploadFileContract(this)" data-name="quotation">
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                             </div>
-                            <input type="hidden" type="text" name="quotation"
-                                value="{{$contract->legalContractDest->quotation}}">
+                            <input type="hidden" type="text" name="quotation" value="">
                             <div class="invalid-feedback">
                                 Please provide a valid Ivoice No.
                             </div>
@@ -107,16 +97,13 @@
                     <hr>
 
                     <span class="badge badge-primary">Comercial Terms</span>
-                    <input type="hidden" name="comercial_term_id"
-                        value="{{$contract->legalContractDest->comercial_term_id}}">
+                    <input type="hidden" name="comercial_term_id" value="">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationPurpose"><strong>Purpose</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationPurpose"
-                                name="purpose"
-                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->purpose : ""}}"
-                                required>
+                                name="purpose" value="" required>
                             <div class="invalid-feedback">
                                 Please provide a valid Purpose.
                             </div>
@@ -125,9 +112,7 @@
                             <label for="validationPromoteProduct"><strong>Promote a product</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationPromoteProduct"
-                                name="promote_a_product"
-                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->promote_a_product : ""}}"
-                                required>
+                                name="promote_a_product" value="" required>
                             <div class="invalid-feedback">
                                 Please provide a valid Promote a product.
                             </div>
@@ -136,9 +121,7 @@
                             <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo"
-                                name="purchase_order_no"
-                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->purchase_order_no : ""}}"
-                                required>
+                                name="purchase_order_no" value="" required>
                             <div class="invalid-feedback">
                                 Please provide a valid Purchase Order No.
                             </div>
@@ -149,9 +132,7 @@
                             <label for="validationQuotationNo"><strong>Quotation No</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo"
-                                name="quotation_no"
-                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
-                                required>
+                                name="quotation_no" value="" required>
                             <div class="invalid-feedback">
                                 Please provide a valid Quotation No.
                             </div>
@@ -160,8 +141,7 @@
                             <label for="validationDated"><strong>Dated</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                                value="{{isset($contract->legalContractDest->legalComercialTerm->dated) ? $contract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
-                                required>
+                                value="" required>
                             <div class="invalid-feedback">
                                 Please provide a valid Dated
                             </div>
@@ -170,9 +150,7 @@
                             <label for="validationContractPeriod"><strong>Contract period</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationContractPeriod"
-                                name="contract_period"
-                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->contract_period: ""}}"
-                                required>
+                                name="contract_period" value="" required>
                             <div class="invalid-feedback">
                                 Please provide a valid Contract period.
                             </div>
@@ -181,7 +159,7 @@
                             {{-- <label for="validationUntill"><strong>Untill</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
-                                value="{{isset($contract->legalContractDest->legalComercialTerm->untill) ? $contract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
+                                value="{{isset($marketing->legalComercialTerm->untill) ? $marketing->legalComercialTerm->untill->format('Y-m-d') : ""}}"
                             required>
                             <div class="invalid-feedback">
                                 Please provide a valid Untill.
@@ -190,14 +168,12 @@
                     </div>
                     <hr>
                     <span class="badge badge-primary">Payment Terms</span>
-                    <input type="hidden" name="payment_term_id"
-                        value="{{$contract->legalContractDest->payment_term_id}}">
+                    <input type="hidden" name="payment_term_id" value="">
                     <div class="form-row">
                         <div class="col-md-12 mb-12">
                             <label for="validationWarranty"></label>
                             <textarea class="form-control-sm form-control" name="detail_payment_term"
-                                id="validationPaymentDescription" rows="3"
-                                required>{{isset($contract->legalContractDest->legalPaymentTerm) ? $contract->legalContractDest->legalPaymentTerm->detail_payment_term : ""}}</textarea>
+                                id="validationPaymentDescription" rows="3" required></textarea>
                             <div class="invalid-feedback">
                                 Please provide a valid Payment Terms.
                             </div>

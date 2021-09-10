@@ -3,7 +3,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
 
-        let contract = document.getElementById('contract_dests_id')
+        let contract = document.getElementById('contract_id')
         let poFile = document.getElementById('validationPurchaseOrderFile')
         let quotationFile = document.getElementById('validationQuotationFile')
         let coparationFile = document.getElementById('validationCoparationFile')
@@ -39,7 +39,7 @@ form.addEventListener('submit', logSubmit);
 async function logSubmit(event) {
     let onSubmit = false
     try {
-        await getComercialLists(document.getElementById('contract_dests_id').value).then(result => {
+        await getComercialLists(document.getElementById('contract_id').value).then(result => {
             if (result.data.length < 1) {
                 document.getElementById('desc').required = true
                 document.getElementById('qty').required = true
@@ -47,15 +47,15 @@ async function logSubmit(event) {
                 // document.getElementById('discount').required = true
                 toast('Can’t find purchase', 'error')
             } else {
-                if (!document.getElementById('form-leasecontract').checkValidity()) {
+                // if (!document.getElementById('form-leasecontract').checkValidity()) {
                     // toast('Can’t find purchase', 'error')
-                }else{
+                // }else{
                     document.getElementById('desc').required = false
                     document.getElementById('qty').required = false
                     document.getElementById('unit_price').required = false
                     // document.getElementById('discount').required = false
                     onSubmit = true
-                }
+                // }
             }
         })
 

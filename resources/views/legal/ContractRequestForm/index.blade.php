@@ -190,12 +190,12 @@
                         @isset($contracts)
                         @foreach ($contracts as $key => $item)
                         <tr>
-                            <td>Request Date</td>
+                            <td>{{$item->created_at}}</td>
                             <td>Approval Date (เก่ง Providing)</td>
                             <td>{{$item->createdBy->name}}</td>
                             <td>{{$item->company_name}}</td>
                             
-                            <td>{{$item->legalAgreement->name}}</td>
+                            <td class="truncate">{{$item->legalAgreement->name}}</td>
                             @can('isRequest', $item)
                             <td><span class="badge badge-pill badge-primary">{{$item->status}}</span></td>
                             @elsecan('isChecking', $item)

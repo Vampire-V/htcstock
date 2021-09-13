@@ -118,13 +118,13 @@
                                                 onchange="search_score()" style="display: none;">
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mb-3">
+                                        <div class="col-md-1 mb-1">
                                             <label for="Year">Year</label>
                                             <select name="year" id="year" class="form-control-sm form-control"
                                                 onchange="search_score()">
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mb-3">
+                                        <div class="col-md-1 mb-1">
                                             <label for="Degree">EMC Group</label>
                                             <select name="degree" id="degree" class="form-control-sm form-control"
                                                 onchange="search_score()">
@@ -132,6 +132,11 @@
                                                 <option value="N-2">N-2</option>
                                                 <option value="N-3">N-3</option>
                                             </select>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="Division">Division</label>
+                                            <select name="division_id" id="division_id"
+                                                class="form-control-sm form-control" onchange="search_score()" ></select>
                                         </div>
                                     </div>
                                 </form>

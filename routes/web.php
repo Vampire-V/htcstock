@@ -70,6 +70,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth', 
 });
 Route::get('/operations','Admin\UsersController@operations');
 Route::get('users/dropdown','Admin\UsersController@dropdown')->name('users.dropdown');
+Route::get('divisions/dropdown','DivisionController@dropdown')->name('divisions.dropdown');
 Route::post('upload', 'UploadController@store');
 Route::delete('upload', 'UploadController@destroy');
 require __DIR__ . '/itstock.php';

@@ -52,17 +52,17 @@ $cal_result = [];
             <td></td>
             <td></td>
             @php
-                $reduce = 0;
-                if ($rules->first()->rule->category->name === 'kpi') {
-                    $reduce = $evaluate->kpi_reduce;
-                }
-                if ($rules->first()->rule->category->name === 'key-task') {
-                    $reduce = $evaluate->key_task_reduce;
-                }
-                if ($rules->first()->rule->category->name === 'omg') {
-                    $reduce = $evaluate->omg_reduce;
-                }
-                $total = round($rules->sum('cal'),2) - $reduce;
+            $reduce = 0;
+            if ($rules->first()->rule->category->name === 'kpi') {
+            $reduce = $evaluate->kpi_reduce;
+            }
+            if ($rules->first()->rule->category->name === 'key-task') {
+            $reduce = $evaluate->key_task_reduce;
+            }
+            if ($rules->first()->rule->category->name === 'omg') {
+            $reduce = $evaluate->omg_reduce;
+            }
+            $total = round($rules->sum('cal'),2) - $reduce;
             @endphp
             <td>{{$total}} %</td>
         </tr>
@@ -73,13 +73,18 @@ $cal_result[] = $total;
 @endphp
 @endforeach
 @endisset
+@php
+if (count($cal_result) < 3 ) {
+    array_push($cal_result,0);
+}
+@endphp
 
 
 
 
 {{-- Calculation Summary --}}
 @php
-    $total = [];
+$total = [];
 @endphp
 <table>
     <thead>
@@ -95,17 +100,14 @@ $cal_result[] = $total;
         <tr>
             <th>{{$item->name}}</th>
             <td>{{$weight_group[$key] ?? 0.00}} %</td>
-            
+
             @isset($cal_result[$key])
             @php
-            $cal = ($cal_result[$key] * $weight_group[$key]) / 100;
+            $cal = ($cal_result[$key] * $weight_group[$key]) / 100 ;
             $total[] = $cal;
             @endphp
             @endisset
-            
             <td>{{round($cal,2)}} %</td>
-           
-            
         </tr>
         @endforeach
         @endisset

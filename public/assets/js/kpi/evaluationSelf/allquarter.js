@@ -54,10 +54,10 @@
             let month_now = 12
             let quarter = 4
             if (d.getFullYear() === parseInt(evaluate.targetperiod.year)) {
-                month_now = d.getDate() > 12 ? (d.getMonth() + 1) - 1: (d.getMonth() + 1) - 2
+                month_now = d.getDate() > 12 ? (d.getMonth() + 1) - 1 : (d.getMonth() + 1) - 2
                 quarter = getQuarterForHaier(d)
             }
-            
+
             // console.log(getQuarterForHaier(d));
             for (let index = 0; index < temp.length; index++) {
                 const element = temp[index]
@@ -88,7 +88,6 @@ var render_html = () => {
         const table = tables[i]
         let reduce = 0
         let temp_rules = evaluate.evaluate_detail.filter(item => item.rule.category.name === table.id.substring(6))
-        
         if (table.tBodies[0].rows.length > 0) {
             removeAllChildNodes(table.tBodies[0])
         }
@@ -177,17 +176,19 @@ var render_html = () => {
                 console.log(error)
             }
         }
-
-        if (temp_rules[0].rule.category.name === category.KPI) {
-            reduce = evaluate.kpi_reduce
-        }
-        if (temp_rules[0].rule.category.name === category.KEYTASK) {
-            reduce = evaluate.key_task_reduce
-        }
-        if (temp_rules[0].rule.category.name === category.OMG) {
-            reduce = evaluate.omg_reduce
-        }
         
+        if (temp_rules.length > 0) {
+            if (temp_rules[0].rule.category.name === category.KPI) {
+                reduce = evaluate.kpi_reduce
+            }
+            if (temp_rules[0].rule.category.name === category.KEYTASK) {
+                reduce = evaluate.key_task_reduce
+            }
+            if (temp_rules[0].rule.category.name === category.OMG) {
+                reduce = evaluate.omg_reduce
+            }
+        }
+
         let sum_weight = temp_rules.reduce((total, cur) => total + cur.weight, 0.00)
         let sum_cal = temp_rules.reduce((total, cur) => total + cur.cal, 0.00) - reduce
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`

@@ -136,7 +136,7 @@ class SelfEvaluationController extends Controller
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category', 'weight_group', 'current'));
+        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category', 'weight_group', 'current', 'canOperation'));
     }
 
     /**

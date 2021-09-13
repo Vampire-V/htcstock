@@ -2,6 +2,11 @@ document.addEventListener("DOMContentLoaded", function () {
     //The first argument are the elements to which the plugin shall be initialized
     //The second argument has to be at least a empty object or a object with your desired options
 
+    // $("#division_id").select2({
+    //     placeholder: 'Select Division',
+    //     allowClear: true
+    // })
+
     OverlayScrollbars(document.getElementsByClassName('table-responsive'), {
         className: "os-theme-dark",
         resize: "both",
@@ -125,12 +130,16 @@ const search_score = async () => {
             degree: [$("#degree").val()]
         }
     }
+    if ($("#division_id").val()) {
+        // param.division_id = [$("#division_id").val()]
+    }
     let table = document.getElementById('table-report-score')
     table.previousElementSibling.classList.add('reload')
     try {
         let fetch_data = await getOperationReportScore({
             params: param
         })
+        // console.log(fetch_data);
         score = await combine_information(fetch_data.data.data).sort((a, b) => b.score - a.score)
     } catch (error) {
         console.error(error)
@@ -159,28 +168,41 @@ let combine_information = (fetch_data) => {
             if ($("#quarter").val() === '') {
                 average_omg = getQuarterForHaier(new Date())
             }
-            let item_unique,
-                kpi_reduce_point,
-                keytask_reduce_point,
-                omg_reduce_point
+            let item_unique
+            // kpi_reduce_point,
+            // keytask_reduce_point,
+            // omg_reduce_point
 
             item_unique = []
-            kpi_reduce_point = 0
-            keytask_reduce_point = 0
-            omg_reduce_point = 0
+            // kpi_reduce_point = 0
+            // keytask_reduce_point = 0
+            // omg_reduce_point = 0
+            // console.log(fetch_data);
+            // console.log(fetch_data.reduce((a, c) => c.user_id === 494 ? a + c.key_task_reduce : a + 0, 0));
             for (let index = 0; index < fetch_data.length; index++) {
                 const evaluate = fetch_data[index]
-
-                kpi_reduce_point += evaluate.kpi_reduce
-                keytask_reduce_point += evaluate.key_task_reduce
-                omg_reduce_point += evaluate.omg_reduce
+                // kpi_reduce_point += evaluate.kpi_reduce
+                // keytask_reduce_point += evaluate.key_task_reduce
+                // omg_reduce_point += evaluate.omg_reduce
+                evaluate.kpi_reduce_point = []
+                evaluate.keytask_reduce_point = []
+                evaluate.omg_reduce_point = []
                 if (item_unique.length < 1) {
+                    evaluate.kpi_reduce_point.push(evaluate.kpi_reduce)
+                    evaluate.keytask_reduce_point.push(evaluate.key_task_reduce)
+                    evaluate.omg_reduce_point.push(evaluate.omg_reduce)
                     item_unique.push(evaluate)
                 } else {
                     let i = item_unique.findIndex(t => t.user_id === evaluate.user_id)
                     if (i < 0) {
+                        evaluate.kpi_reduce_point.push(evaluate.kpi_reduce)
+                        evaluate.keytask_reduce_point.push(evaluate.key_task_reduce)
+                        evaluate.omg_reduce_point.push(evaluate.omg_reduce)
                         item_unique.push(evaluate)
                     } else {
+                        item_unique[i].kpi_reduce_point.push(evaluate.kpi_reduce)
+                        item_unique[i].keytask_reduce_point.push(evaluate.key_task_reduce)
+                        item_unique[i].omg_reduce_point.push(evaluate.omg_reduce)
                         item_unique[i].evaluate_detail = item_unique[i].evaluate_detail.concat(evaluate.evaluate_detail)
                     }
                 }
@@ -188,6 +210,7 @@ let combine_information = (fetch_data) => {
 
             for (let index = 0; index < item_unique.length; index++) {
                 const element = item_unique[index]
+                console.log(element);
                 let kpi = element.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
                 let key_task = element.evaluate_detail.filter(item => item.rule.category.name === `key-task`)
                 let omg = element.evaluate_detail.filter(item => item.rule.category.name === `omg`)
@@ -199,10 +222,10 @@ let combine_information = (fetch_data) => {
                 sum_total = 0
 
 
-                total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0) - kpi_reduce_point
-                total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0) - keytask_reduce_point
-
-                let cal_o = total_quarter(omg).reduce((a, c) => a + c.cal, 0) - omg_reduce_point
+                total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0) - element.kpi_reduce_point.reduce((a, c) => a + c, 0)
+                total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0) - element.keytask_reduce_point.reduce((a, c) => a + c, 0)
+                // console.log(keytask_reduce_point, total_key);
+                let cal_o = total_quarter(omg).reduce((a, c) => a + c.cal, 0) - element.omg_reduce_point.reduce((a, c) => a + c, 0)
                 total_omg = average_omg ? cal_o / average_omg : cal_o
 
                 sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
@@ -249,9 +272,6 @@ let total_quarter = (objArr) => {
     try {
         for (var i = 0; i < objArr.length; i++) {
             let item = objArr[i]
-            if ((item.rule_id === 271) || (item.rule_id === 272) || item.rule_id === 273 || item.rule_id === 274) {
-                // console.log(item.evaluate_id);
-            }
             item.average_max = []
             item.average_weight = []
             item.average_actual = []
@@ -366,10 +386,11 @@ const render_score = (score) => {
     table.previousElementSibling.classList.remove('reload')
 }
 
-const make_options = () => {
+const make_options = async () => {
     let selectMonth = document.getElementById('period'),
         selectYearh = document.getElementById('year'),
         selectQuarter = document.getElementById('quarter'),
+        selectDivision = document.getElementById('division_id'),
         max = 5,
         date = new Date(),
         year = new Date().getFullYear()
@@ -377,6 +398,8 @@ const make_options = () => {
     removeAllChildNodes(selectYearh)
     removeAllChildNodes(selectMonth)
     removeAllChildNodes(selectQuarter)
+    removeAllChildNodes(selectDivision)
+
     // year
     do {
         let text_year = year--
@@ -396,6 +419,22 @@ const make_options = () => {
     selectQuarter.add(new Option(`All`, '', true, false))
     for (let q = 1; q <= 4; q++) {
         selectQuarter.add(new Option(`Quarter ${q}`, q, true, false))
+    }
+    let divisions = []
+    try {
+        let result = await getdivisions()
+        if (result.status === 200) {
+            divisions = result.data.data
+        }
+    } catch (error) {
+        console.error(error)
+    } finally {
+        if (divisions.length > 0) {
+            selectDivision.add(new Option(`All`, '', true, false))
+            divisions.forEach(item => {
+                selectDivision.add(new Option(item.name, item.id, true, false))
+            })
+        }
     }
 }
 
@@ -663,7 +702,7 @@ const render_staff_evaluate = async () => {
 }
 
 const staff_data_to_table = (data) => {
-    console.log(data);
+    // console.log(data);
     let table = document.getElementById('table-staff-evaluation'),
         head = table.tHead,
         body = table.tBodies[0]

@@ -47,14 +47,16 @@
                         Evaluation Self
                     </a>
                 </li>
+                @canany(['admin-kpi'])
                 <li>
                     <a href="{{route('kpi.set-actual.index')}}" class="{{Helper::isActive('kpi/set-actual*')}}">
                         <i class="metismenu-icon pe-7s-ticket"></i>
                         Set Actual
                     </a>
                 </li>
+                @endcanany
                 {{-- admin --}}
-                @can('admin-kpi')
+                @canany(['admin-kpi'])
                 <li class="app-sidebar__heading">Operation</li>
                 <li>
                     <a href="{{route('kpi.set-period.index')}}" class="{{Helper::isActive('kpi/set-period*')}}">
@@ -80,7 +82,7 @@
                         Evaluation Form
                     </a>
                 </li>
-                @endcan
+                @endcanany
                 {{-- end admin --}}
                 
                 {{-- admin manager --}}

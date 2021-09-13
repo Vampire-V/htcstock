@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\KPI\SelfEvaluation;
 
 use App\Enum\KPIEnum;
+use App\Enum\UserEnum;
 use App\Exports\KPI\EvaluateExport;
 use App\Exports\KPI\EvaluateQuarterExport;
 use App\Exports\KPI\EvaluateYearExport;
@@ -26,6 +27,7 @@ use App\Services\KPI\Service\UserApproveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
@@ -130,6 +132,7 @@ class SelfEvaluationController extends Controller
             $weight_group = config('kpi.weight')['month'];
             $current = $this->userApproveService->findCurrentLevel($f_evaluate);
             $evaluate  = new EvaluateResource($f_evaluate);
+            $canOperation = Gate::allows(UserEnum::OPERATIONKPI);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }

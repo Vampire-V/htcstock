@@ -132,10 +132,12 @@ class EvaluateReviewController extends Controller
             // $f_evaluate->evaluateDetail->each(fn ($item) => $this->evaluateDetailService->formulaKeyTask($item));
             $current = $this->userApproveService->findCurrentLevel($f_evaluate);
             $evaluate  = new EvaluateResource($f_evaluate);
+            $canInput = Gate::any([UserEnum::ADMINKPI,UserEnum::OPERATIONKPI]);
+            $canAdmin = Gate::allows(UserEnum::ADMINKPI);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'category', 'current'));
+        return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'category', 'current','canInput','canAdmin'));
     }
 
     /**
@@ -195,7 +197,7 @@ class EvaluateReviewController extends Controller
                     $evaluate->status = KPIEnum::approved;
                     Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
                     Log::notice("User : " . \auth()->user()->name . " = Update evaluate review End process : id = " . $evaluate->id);
-                    $message = "Approved";
+                    $message = KPIEnum::approved;
                     $evaluate->current_level = $last_level->level;
                     $evaluate->next_level = $last_level->level;
                 } else {
@@ -204,6 +206,7 @@ class EvaluateReviewController extends Controller
                     Log::notice("User : " . \auth()->user()->name . " = Update evaluate review next step : id = " . $evaluate->id);
                     $message = "Next step send to " . $user_approve->approveBy->name;
                     $evaluate->status = KPIEnum::on_process;
+                    
                     $evaluate->current_level = $user_approve->level;
                     $evaluate->next_level = $evaluate->next_level + 1;
                     $next = $this->userApproveService->findNextLevel($evaluate);

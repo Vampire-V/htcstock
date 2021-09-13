@@ -30,14 +30,12 @@
                     if (current.user_approve === auth.id && evaluateForm.status === status.ONPROCESS) {
                         pageEnable()
                     }else{
-                        is_disable = auth.roles.findIndex(item => item.slug === 'super-admin') >= 0 ? false : true
-                        if (!is_disable && current.user_approve === auth.id) {
+                        if (can_input) {
                             pageEnable()
                         }else{
                             pageDisable()
                         }
                     }
-                    console.log(evaluateForm);
                 })
         }
     }, false);
@@ -47,7 +45,6 @@ var template
 var rule = []
 var summary = []
 var disable_for = ['kpi','omg']
-let is_disable = false
 
 var render_html = () => {
     // create tr in table
@@ -65,7 +62,6 @@ var render_html = () => {
             const element = temp_rules[index]
             // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
             
-            let readonly = disable_for.includes(element.rules.categorys.name) && is_disable
             try {
                 let newRow = table.tBodies[0].insertRow()
                 if (element.weight <= 0.00) {
@@ -102,14 +98,14 @@ var render_html = () => {
                 cellWeight.appendChild(newInput('number', className, 'weight', element.weight.toFixed(2), '', `changeValue(this)`, true))
 
                 let cellTarget = newRow.insertCell()
-                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`, readonly))
+                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`, !can_input))
 
                 let cellTargetPC = newRow.insertCell()
                 cellTargetPC.textContent = findTargetPercent(element,temp_rules).toFixed(2) + '%'
 
 
                 let cellActual = newRow.insertCell()
-                cellActual.appendChild(newInput('number', className, 'actual', element.actual.toFixed(2), '', `changeValue(this)`, readonly))
+                cellActual.appendChild(newInput('number', className, 'actual', element.actual.toFixed(2), '', `changeValue(this)`, !can_input))
 
                 let cellActualPC = newRow.insertCell()
                 cellActualPC.textContent = findActualPercent(element,temp_rules).toFixed(2) + '%'
@@ -127,7 +123,7 @@ var render_html = () => {
                 cellCal.textContent = element.cal.toFixed(2) + '%'
 
                 let remark = newRow.insertCell()
-                remark.appendChild(newInput('text', className, 'remark', element.remark ?? '', `remark_${element.rules.id}`, `remark(this)`, readonly))
+                remark.appendChild(newInput('text', className, 'remark', element.remark ?? '', `remark_${element.rules.id}`, `remark(this)`, !can_input))
             } catch (error) {
                 console.error(error)
                 toast(error.response.data.message,'error')
@@ -324,12 +320,13 @@ const approve = (e) => {
             evaluateForm.next = !evaluateForm.next
             setVisible(false)
             toastClear()
-            window.location.reload()
+            // debugger
+            // window.location.reload()
         })
 }
 
 const save = async () => {
-    console.log(evaluateForm);
+    // console.log(evaluateForm);
     try {
         let result = await putEvaluateReviewEdit(evaluate.id, evaluateForm)
         console.log(result.data);

@@ -31,7 +31,6 @@
     </div>
 </div>
 
-
 {{-- Display user detail --}}
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
@@ -89,9 +88,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-row">
-
-                    </div>
                 </form>
             </div>
         </div>
@@ -111,15 +107,14 @@
                             id="weight-{{$group->name}}" name="weight_{{str_replace("-","_",$group->name)}}" readonly> %
                     </div>
                 </div>
-                
+
                 <div class="btn-actions-pane-right">
                     <label for="Reduce" class="mb-2 mr-2">(ตัดคะแนน) :</label>
                     <div role="group" class="btn-group-sm btn-group">
                         <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
                             value="0" id="{{str_replace("-","_",$group->name)}}_reduce"
-                            name="{{str_replace("-","_",$group->name)}}_reduce" @cannot('super-admin') readonly
-                            @endcannot
-                            onchange="set_reduce(this)"> %
+                            name="{{str_replace("-","_",$group->name)}}_reduce" @cannot('parent-admin-kpi') readonly
+                            @endcannot onchange="set_reduce(this)"> %
                     </div>
                 </div>
             </div>
@@ -222,11 +217,10 @@
     </div>
 </div>
 <div class="page-title-actions fiexd-btn-botton">
-
     @if ($evaluate->status === 'Approved')
-    @can('super-admin')
+    @if ($canAdmin)
     <button class="mb-2 mr-2 btn btn-success" onclick="save(this)">Save</button>
-    @endcan
+    @endif
     @else
     <button class="mb-2 mr-2 btn btn-primary" onclick="approve(this)">Approve</button>
     <button class="mb-2 mr-2 btn btn-warning" onclick="reject(this)">Reject</button>
@@ -243,6 +237,7 @@
     const auth = {!!json_encode(Auth::user())!!}
     const evaluate = {!!json_encode($evaluate)!!}
     const current = {!!json_encode($current)!!}
+    const can_input = {!!json_encode($canInput)!!}
 </script>
 <script src="{{asset('assets\js\kpi\evaluationReview\evaluate.js')}}" defer></script>
 @endsection

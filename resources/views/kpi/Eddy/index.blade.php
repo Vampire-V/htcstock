@@ -145,8 +145,8 @@
                                 <th>Department</th>
                                 <th>Position</th>
                                 <th>Step 1 (1-4)</th>
-                                <th>Step 2 (1-10)</th>
-                                <th>Step 3 (1-12)</th>
+                                <th>Step 2 (1-11)</th>
+                                <th>Step 3 (1-16)</th>
                             </tr>
                         </thead>
                         <tbody>

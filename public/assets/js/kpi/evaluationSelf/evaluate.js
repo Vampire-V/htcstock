@@ -99,7 +99,7 @@ var render_html = () => {
                 })
                 cellDesc.classList.add('truncate')
                 // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
-                let readonly = auth.id === element.user_id || auth.roles.find(item => item.slug === `admin-kpi`) ? false : true
+                let readonly = auth.roles.find(item => item.slug === `admin-kpi`) ? false : true
                 // console.log(readonly);
                 let cellBaseLine = newRow.insertCell()
                 cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`, readonly))
@@ -117,7 +117,7 @@ var render_html = () => {
                 cellTargetPC.textContent = findTargetPercent(element, temp_rules).toFixed(2) + `%`
 
                 let cellActual = newRow.insertCell()
-                cellActual.appendChild(newInput('number', className, 'actual', element.actual.toFixed(2), '', `changeValue(this)`))
+                cellActual.appendChild(newInput('number', className, 'actual', element.actual.toFixed(2), '', `changeValue(this)`,readonly))
 
                 let cellActualPC = newRow.insertCell()
                 cellActualPC.textContent = findActualPercent(element, temp_rules).toFixed(2) + `%`

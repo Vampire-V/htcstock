@@ -3,6 +3,7 @@
 namespace App\Http\Requests\KPI;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRulePost extends FormRequest
 {
@@ -32,7 +33,7 @@ class StoreRulePost extends FormRequest
             'quarter_cal' => 'required'
         ];
         if ($this->route('rule_list')) {
-            $rule['name'] = 'required|max:255';
+            $rule['name'] = ['required', Rule::unique('kpi_rules')];
         }
         return $rule;
     }

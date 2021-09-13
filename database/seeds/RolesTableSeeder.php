@@ -36,7 +36,7 @@ class RoleTableSeeder extends Seeder
             ],
             [
                 'name' => 'Admin KPI',
-                'slug' => UserEnum::ADMINKPI,
+                'slug' => UserEnum::OPERATIONKPI,
             ],
             [
                 'name' => 'User KPI',

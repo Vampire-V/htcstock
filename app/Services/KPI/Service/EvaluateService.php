@@ -3,6 +3,7 @@
 namespace App\Services\KPI\Service;
 
 use App\Enum\KPIEnum;
+use App\Enum\UserEnum;
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\UserApprove;
 use App\Services\BaseService;
@@ -82,12 +83,12 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function reviewFilter(Request $request)
     {
         try {
-            if (Gate::any(['admin-kpi','super-admin'])) {
+            if (Gate::any([UserEnum::ADMINKPI])) {
                 $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod', 'userApprove'])
                     // ->whereHas('nextlevel', fn ($query) => $query->where('user_approve', \auth()->user()->id))
                     ->whereIn('status', [KPIEnum::on_process, KPIEnum::approved])
                     ->filter($request)->orderBy('period_id', 'desc')
-                    ->get();
+                    ->paginate(20);
             } else {
                 $keys = UserApprove::where('user_approve', \auth()->id())->get();
                 $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod', 'userApprove'])
@@ -95,7 +96,7 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
                     ->whereIn('user_id', $keys->pluck('user_id'))
                     ->whereIn('status', [KPIEnum::on_process, KPIEnum::approved])
                     ->filter($request)->orderBy('period_id', 'desc')
-                    ->get();
+                    ->paginate(20);
             }
             return $result;
         } catch (\Throwable $th) {
@@ -106,7 +107,7 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function selfFilter(Request $request)
     {
         try {
-            if (Gate::allows('admin-manager-kpi')) {
+            if (Gate::any([UserEnum::OPERATIONKPI, UserEnum::ADMINKPI])) {
                 $result = Evaluate::with(['user', 'targetperiod' => fn ($query) => $query->orderBy('id', 'asc')])
                     ->where('user_id', $request->user)
                     ->whereNotIn('status', [KPIEnum::new])

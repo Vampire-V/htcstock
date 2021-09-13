@@ -53,15 +53,26 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasRole(UserEnum::USERLEGAL);
         });
         
-        Gate::define('admin-manager-kpi', function ($user) {
-            return $user->hasInRole([UserEnum::ADMINKPI,UserEnum::MANAGERKPI]);
-        });
+        // Gate::define('operation-manager-kpi', function ($user) {
+        //     return $user->hasInRole([UserEnum::OPERATIONKPI,UserEnum::MANAGERKPI]);
+        // });
+        // Gate::define('manager-kpi', function ($user) {
+        //     return $user->hasInRole([UserEnum::MANAGERKPI]);
+        // });
+        // Gate::define('operation-kpi', function ($user) {
+        //     return $user->hasInRole([UserEnum::OPERATIONKPI]);
+        // });
+        // Gate::define('admin-kpi', function ($user) {
+        //     return $user->hasInRole([UserEnum::ADMINKPI]);
+        // });
         try {
             Role::get()->map(function ($role) {
+                // \dump($role->slug);
                 Gate::define($role->slug, function ($user) use ($role) {
                     return $user->hasRole($role->slug);
                 });
             });
+            // exit;
             Permission::get()->map(function ($permission) {
                 Gate::define($permission->slug, function ($user) use ($permission) {
                     return $user->permissionsInRole($permission);

@@ -3,6 +3,14 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         // Supporting Documents
+        $('#division_id').select2({
+            placeholder: 'Select Division',
+            allowClear: true
+        })
+        $('#department_id').select2({
+            placeholder: 'Select Division',
+            allowClear: true
+        })
         $("#user").select2({
             placeholder: 'Select User',
             allowClear: true

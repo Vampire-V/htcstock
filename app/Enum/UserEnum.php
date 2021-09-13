@@ -9,9 +9,10 @@ abstract class UserEnum extends BasicEnum
     const USERIT = 'user-it';
     const ADMINLEGAL = 'admin-legal';
     const USERLEGAL = 'user-legal';
-    const ADMINKPI = 'admin-kpi';
+    const OPERATIONKPI = 'admin-kpi';
     const USERKPI = 'user-kpi';
     const MANAGERKPI = 'manager-kpi';
+    const ADMINKPI = 'parent-admin-kpi';
 
     // url profile
     const path = "/images/avatars/unknown.jpg";

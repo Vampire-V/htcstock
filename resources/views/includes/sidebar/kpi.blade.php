@@ -99,7 +99,7 @@
                 {{-- end admin manager --}}
 
                 {{-- for eddy --}}
-                @canany(['for-superadmin-admin'])
+                @can('parent-admin-kpi')
                 <li class="app-sidebar__heading">Menu For Eddy</li>
                 <li class="{{Helper::isActive('kpi/for-eddy*')}}">
                     <a href="#" class="{{Helper::isActive('kpi/for-eddy*')}}">
@@ -122,7 +122,7 @@
                         </li>
                     </ul>
                 </li>
-                @endcanany
+                @endcan
                 {{-- end for eddy --}}
             </ul>
         </div>

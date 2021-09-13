@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\UserEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
@@ -98,7 +99,7 @@ class VendorController extends Controller
     {
         DB::beginTransaction();
         try {
-            if (Gate::denies('for-superadmin-admin')) {
+            if (Gate::none([UserEnum::SUPERADMIN])) {
                 $request->session()->flash('error', 'has been update vendor no auth');
                 return back();
             }

@@ -23,10 +23,10 @@ return [
      * Admin
     */
 
-    'manage users' => 'Manage Users',
+    'manage users' => 'Manage employee',
     'budgets manage' => 'Budgets Management',
-    'update user' => 'Update user information',
-    'update vendor' => 'Update vendor information',
+    'update user' => 'Update employee',
+    'update vendor' => 'Update vendor',
     'optimize-system' => 'Optimize-system'
 
 ];

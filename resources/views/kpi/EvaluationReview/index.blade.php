@@ -38,6 +38,31 @@
         <div class="card-body">
             <div class="position-relative form-group">
                 <form class="needs-validation" novalidate>
+                    @can('parent-admin-kpi')
+                    <div class="form-row">
+                        <div class="col-md-3 mb-3">
+                            <label for="department">Division :</label>
+                            <select class="form-control form-control-sm" name="division_id[]" id="division_id" multiple>
+                                <option value=""></option>
+                                @foreach ($divisions as $division)
+                                <option value="{{$division->id}}" @if($selectedDivision->contains($division->id))
+                                    selected @endif>{{$division->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="department">Department :</label>
+                            <select class="form-control form-control-sm" name="department_id[]" id="department_id" multiple>
+                                <option value=""></option>
+                                @foreach ($departments as $department)
+                                <option value="{{$department->id}}" @if($selectedDepartment->contains($department->id))
+                                    selected @endif>{{$department->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    @endcan
+                    
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
                             <label for="department">User :</label>
@@ -48,48 +73,48 @@
                                     selected @endif>{{$item->name}}</option>
                                 @endforeach
                             </select>
-                    </div>
-                    <div class="col-md-2 mb-3">
-                        <label for="status">Status :</label>
-                        <select name="status[]" id="validationStatus" class="form-control-sm form-control" multiple>
-                            @isset($status_list)
-                            @foreach ($status_list as $status)
-                            <option value="{{$status}}" @if($selectedStatus->contains($status))
-                                selected @endif>{{$status}}</option>
-                            @endforeach
-                            @endisset
-                        </select>
-                    </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="status">Status :</label>
+                            <select name="status[]" id="validationStatus" class="form-control-sm form-control" multiple>
+                                @isset($status_list)
+                                @foreach ($status_list as $status)
+                                <option value="{{$status}}" @if($selectedStatus->contains($status))
+                                    selected @endif>{{$status}}</option>
+                                @endforeach
+                                @endisset
+                            </select>
+                        </div>
 
-                    <div class="col-md-2 mb-3">
-                        <label for="year">Year :</label>
-                        <select name="year[]" id="validationYear" class="form-control-sm form-control" multiple>
-                            @foreach (range(date('Y'),$start_year) as $year)
-                            <option value="{{$year}}" @if($selectedYear->contains($year))
-                                selected @endif>{{$year}}</option>
-                            @endforeach
-                        </select>
+                        <div class="col-md-2 mb-3">
+                            <label for="year">Year :</label>
+                            <select name="year[]" id="validationYear" class="form-control-sm form-control" multiple>
+                                @foreach (range(date('Y'),$start_year) as $year)
+                                <option value="{{$year}}" @if($selectedYear->contains($year))
+                                    selected @endif>{{$year}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="period">Period :</label>
+                            <select name="period[]" id="validationPeriod" class="form-control-sm form-control" multiple>
+                                @isset($months)
+                                @foreach ($months as $month)
+                                <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if($selectedPeriod->
+                                    contains(date('m', strtotime($month->name." 1 2021")))) selected
+                                    @endif>{{$month->name}}</option>
+                                @endforeach
+                                @endisset
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <button class="mb-2 mr-2 btn btn-primary mt-4 ml-3" type="submit">Search</button>
+                        </div>
                     </div>
-                    <div class="col-md-2 mb-3">
-                        <label for="period">Period :</label>
-                        <select name="period[]" id="validationPeriod" class="form-control-sm form-control" multiple>
-                            @isset($months)
-                            @foreach ($months as $month)
-                            <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if($selectedPeriod->
-                                contains($month->name))
-                                selected @endif>{{$month->name}}</option>
-                            @endforeach
-                            @endisset
-                        </select>
-                    </div>
-                    <div class="col-md-2 mb-3">
-                        <button class="mb-2 mr-2 btn btn-primary mt-4 ml-3" type="submit">Search</button>
-                    </div>
+                </form>
             </div>
-            </form>
         </div>
     </div>
-</div>
 </div>
 
 <div class="col-lg-12">
@@ -118,7 +143,8 @@
                         $is_eddy = $evaluate->userApprove->firstWhere('level',$evaluate->current_level);
 
                         @endphp
-                        <tr @if ($is_eddy && $is_eddy->approveBy->username === "70037455" && $evaluate->status === "On Process")
+                        <tr @if ($is_eddy && $is_eddy->approveBy->username === "70037455" && $evaluate->status === "On
+                            Process")
                             style="background-color: greenyellow"
                             @endif >
                             <th scope="row">{{$key+1}}</th>
@@ -138,6 +164,7 @@
                         @endisset
                     </tbody>
                 </table>
+                {{ $evaluates->appends($query)->links() }}
             </div>
         </div>
     </div>

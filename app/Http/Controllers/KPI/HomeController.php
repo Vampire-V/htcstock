@@ -44,7 +44,7 @@ class HomeController extends Controller
     {
         $departments = $this->departmentService->dropdown();
         $degree = \collect([KPIEnum::one, KPIEnum::two, KPIEnum::tree]);
-        $show_rules = Gate::allows(UserEnum::SUPERADMIN) || (\auth()->user()->degree === KPIEnum::one) ? true : false;
+        $show_rules = Gate::allows(UserEnum::ADMINKPI) || (\auth()->user()->degree === KPIEnum::one) ? true : false;
 
         return \view('kpi.home', \compact('departments', 'degree', 'show_rules'));
     }

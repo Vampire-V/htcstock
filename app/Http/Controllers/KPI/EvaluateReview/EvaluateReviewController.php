@@ -9,6 +9,9 @@ use App\Http\Resources\KPI\EvaluateResource;
 use App\Mail\KPI\EvaluationReviewMail;
 use App\Mail\KPI\EvaluationSelfMail;
 use App\Models\KPI\Evaluate;
+use App\Models\KPI\UserApprove;
+use App\Services\IT\Interfaces\DepartmentServiceInterface;
+use App\Services\IT\Interfaces\DivisionServiceInterface;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
@@ -26,7 +29,7 @@ use Illuminate\Support\Facades\Mail;
 class EvaluateReviewController extends Controller
 {
     protected $userService, $targetPeriodService, $evaluateService, $evaluateDetailService,
-        $categoryService, $setting_action_service, $userApproveService;
+        $categoryService, $setting_action_service, $userApproveService, $divisionService, $departmentService;
     public function __construct(
         UserServiceInterface $userServiceInterface,
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
@@ -34,7 +37,9 @@ class EvaluateReviewController extends Controller
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
         RuleCategoryServiceInterface $ruleCategoryServiceInterface,
         SettingActionService $settingActionService,
-        UserApproveService $userApproveService
+        UserApproveService $userApproveService,
+        DivisionServiceInterface $divisionService,
+        DepartmentServiceInterface $departmentService
     ) {
         $this->userService = $userServiceInterface;
         $this->targetPeriodService = $targetPeriodServiceInterface;
@@ -43,6 +48,8 @@ class EvaluateReviewController extends Controller
         $this->categoryService = $ruleCategoryServiceInterface;
         $this->setting_action_service = $settingActionService;
         $this->userApproveService = $userApproveService;
+        $this->divisionService = $divisionService;
+        $this->departmentService = $departmentService;
     }
     /**
      * Display a listing of the resource.
@@ -56,22 +63,26 @@ class EvaluateReviewController extends Controller
         $selectedUser = collect($request->user);
         $selectedYear = collect($request->year);
         $selectedPeriod = collect($request->period);
-        $start_year = date('Y', strtotime('-10 years'));
+        $selectedDivision = \collect($request->division_id);
+        $selectedDepartment = \collect($request->department_id);
+        $start_year = date('Y', strtotime('-5 years'));
         $status_list = [KPIEnum::on_process, KPIEnum::approved];
         try {
+            $keys = UserApprove::where('user_approve', \auth()->id())->get();
+            
             $user = Auth::user();
-            $users = $this->userService->dropdown();
+            $users = Gate::any([UserEnum::ADMINKPI]) ? $this->userService->dropdown() : $this->userService->dropdownApprovalKPI($keys->pluck('user_id'));
+            $divisions = $this->divisionService->dropdown();
+            $departments = $this->departmentService->dropdown();
             $months = $this->targetPeriodService->dropdown()->unique('name');
             $years = $months->unique('year');
             $evaluates = $this->evaluateService->reviewfilter($request);
-            // fn($item, )
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
-        return \view(
-            'kpi.EvaluationReview.index',
-            \compact('start_year', 'user', 'status_list', 'months', 'evaluates', 'query', 'users', 'selectedStatus', 'selectedYear', 'selectedPeriod', 'selectedUser')
+        return \view('kpi.EvaluationReview.index', 
+        \compact('start_year', 'user', 'status_list', 'months', 'evaluates', 'query', 'users','divisions','departments', 'selectedStatus', 'selectedYear', 'selectedPeriod', 'selectedUser','selectedDivision','selectedDepartment')
         );
     }
 
@@ -249,7 +260,7 @@ class EvaluateReviewController extends Controller
     {
         $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft, KPIEnum::on_process]);
         // dd($request->all());
-        if (Gate::denies(UserEnum::SUPERADMIN)) {
+        if (Gate::none([UserEnum::SUPERADMIN,UserEnum::ADMINKPI])) {
             return $this->errorResponse("ไม่มีสิทธิ์", 500);
         }
         DB::beginTransaction();

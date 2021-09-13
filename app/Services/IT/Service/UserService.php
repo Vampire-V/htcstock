@@ -146,4 +146,13 @@ class UserService extends BaseService implements UserServiceInterface
             throw $th;
         }
     }
+
+    public function dropdownApprovalKPI($id): Collection
+    {
+        try {
+            return User::notResigned()->whereIn('id',[...$id])->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

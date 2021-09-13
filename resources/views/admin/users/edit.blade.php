@@ -219,7 +219,7 @@
         </div>
     </div>
     @endcanany
-    @can('super-admin')
+    @canany(['super-admin','parent-admin-kpi','admin-kpi'])
     <div class="col-md-3">
         <div class="main-card mb-3 card">
             <div class="card-header">Role for users
@@ -297,7 +297,7 @@
             </div>
         </div>
     </div>
-    @endcan
+    @endcanany
 
 </div>
 @stop

@@ -15,7 +15,7 @@ class StorePeriod extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->roles->search(fn ($obj) => $obj->slug === UserEnum::ADMINKPI, $strict = true) !== \false;
+        return $this->user()->roles->search(fn ($obj) => $obj->slug === UserEnum::OPERATIONKPI, $strict = true) !== \false;
     }
 
     /**

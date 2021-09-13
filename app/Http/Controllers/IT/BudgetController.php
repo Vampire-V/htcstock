@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\IT;
 
 use App\Enum\TransactionTypeEnum;
+use App\Enum\UserEnum;
 use Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\FormSearches\BudgetFormSearch;
@@ -113,7 +114,7 @@ class BudgetController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            if (Gate::denies('for-superadmin-admin')) {
+            if (Gate::none([UserEnum::SUPERADMIN])) {
                 return \redirect()->route('logout');
             }
             $budget = $this->budgetService->find($id);

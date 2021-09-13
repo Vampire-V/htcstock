@@ -5,6 +5,7 @@ namespace App\Http\Filters\KPI;
 use App\Http\Filters\AbstractFilter;
 use App\Http\Filters\KPI\Query\DegreeWhereHas;
 use App\Http\Filters\KPI\Query\DepartmentWhereHas;
+use App\Http\Filters\KPI\Query\DivisionWhereHas;
 use App\Http\Filters\KPI\Query\PositionWhereHas;
 use App\Http\Filters\KPI\Query\EvaluationPeriodIn;
 use App\Http\Filters\KPI\Query\MonthPeriodWhereHas;
@@ -18,6 +19,7 @@ class EvaluationFilter extends AbstractFilter
     protected $filters = [
         'position_id' => PositionWhereHas::class,
         'department_id' => DepartmentWhereHas::class,
+        'division_id' => DivisionWhereHas::class,
         'status' => StatusEvaluateIn::class,
         'year' => YearPeriodWhereHas::class,
         'month' => MonthPeriodWhereHas::class,

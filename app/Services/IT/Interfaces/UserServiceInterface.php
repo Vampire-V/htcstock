@@ -35,4 +35,6 @@ interface UserServiceInterface
     public function getManager(User $user): User;
 
     public function reportStaffEvaluate(Request $request);
+
+    public function dropdownApprovalKPI($id): Collection;
 }

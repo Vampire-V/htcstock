@@ -23,9 +23,9 @@ return [
      * Admin
     */
 
-    'manage users' => 'จัดการผู้ใช้',
+    'manage users' => 'จัดการข้อมูลพนักงาน',
     'budgets manage' => 'การจัดการงบประมาณ',
-    'update user' => 'อัปเดตข้อมูลผู้ใช้',
+    'update user' => 'อัปเดตข้อมูลพนักงาน',
     'update vendor' => 'อัปเดตข้อมูลผู้ขาย',
     'optimize-system' => 'ระบบเพิ่มประสิทธิภาพ'
 

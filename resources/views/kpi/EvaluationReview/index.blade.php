@@ -139,14 +139,8 @@
                         @isset($evaluates)
                         @foreach ($evaluates as $key => $evaluate)
                         @isset($evaluate->user)
-                        @php
-                        $is_eddy = $evaluate->userApprove->firstWhere('level',$evaluate->current_level);
-
-                        @endphp
-                        <tr @if ($is_eddy && $is_eddy->approveBy->username === "70037455" && $evaluate->status === "On
-                            Process")
-                            style="background-color: greenyellow"
-                            @endif >
+                       
+                        <tr style="background-color: {{$evaluate->background}}" >
                             <th scope="row">{{$key+1}}</th>
                             <td>{{$evaluate->user->name }}</td>
                             <td>{{$evaluate->user->department->name}}</td>

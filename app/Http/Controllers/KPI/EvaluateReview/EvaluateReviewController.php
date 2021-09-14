@@ -77,6 +77,12 @@ class EvaluateReviewController extends Controller
             $months = $this->targetPeriodService->dropdown()->unique('name');
             $years = $months->unique('year');
             $evaluates = $this->evaluateService->reviewfilter($request);
+            $evaluates->each(function($item) {
+                $item->background = "";
+                if ($item->userApprove->sortBy('level')->last()->level === $item->current_level && $item->status === KPIEnum::on_process) {
+                    $item->background = "greenyellow";
+                }
+            });
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }

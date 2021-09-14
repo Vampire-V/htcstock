@@ -102,7 +102,7 @@
 
                 {{-- for eddy --}}
                 @can('parent-admin-kpi')
-                <li class="app-sidebar__heading">Menu For Eddy</li>
+                <li class="app-sidebar__heading">Menu For Admin</li>
                 <li class="{{Helper::isActive('kpi/for-eddy*')}}">
                     <a href="#" class="{{Helper::isActive('kpi/for-eddy*')}}">
                         <i class="metismenu-icon pe-7s-diamond"></i>

@@ -68,7 +68,6 @@
                 element.actual = quarter_cal_amount(element)
 
             }
-            console.log(evaluate);
             evaluate.evaluate_detail = temp
             render_html()
             pageDisable()

@@ -131,7 +131,7 @@ const search_score = async () => {
         }
     }
     if ($("#division_id").val()) {
-        // param.division_id = [$("#division_id").val()]
+        param.division_id = [$("#division_id").val()]
     }
     let table = document.getElementById('table-report-score')
     table.previousElementSibling.classList.add('reload')
@@ -210,7 +210,6 @@ let combine_information = (fetch_data) => {
 
             for (let index = 0; index < item_unique.length; index++) {
                 const element = item_unique[index]
-                console.log(element);
                 let kpi = element.evaluate_detail.filter(item => item.rule.category.name === `kpi`)
                 let key_task = element.evaluate_detail.filter(item => item.rule.category.name === `key-task`)
                 let omg = element.evaluate_detail.filter(item => item.rule.category.name === `omg`)
@@ -220,8 +219,10 @@ let combine_information = (fetch_data) => {
                 total_key = 0
                 total_omg = 0
                 sum_total = 0
-
-
+                // if (element.user.id === 51) {
+                //     console.log(total_quarter(key_task).reduce((a, c) => a + c.cal, 0))
+                //     console.log(element.keytask_reduce_point.reduce((a, c) => a + c, 0))
+                // }
                 total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0) - element.kpi_reduce_point.reduce((a, c) => a + c, 0)
                 total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0) - element.keytask_reduce_point.reduce((a, c) => a + c, 0)
                 // console.log(keytask_reduce_point, total_key);

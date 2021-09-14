@@ -151,7 +151,7 @@ const division_change = async (e) => {
     if (result.status === 200) {
         // make users dropdown
         removeAllChildNodes($('.modal-body #user')[0])
-        let new_users = result.data.data.filter(item => !users_setting.includes(item.id))
+        let new_users = result.data.data.filter(item => !users_setting.find(value => value.id === item.id))
         for (let index = 0; index < new_users.length; index++) {
             const user = new_users[index]
             let model = user.translations.find(item => item.locale === locale) ?? user.translations[0]

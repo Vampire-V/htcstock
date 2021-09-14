@@ -216,8 +216,12 @@ class SelfEvaluationController extends Controller
                 Mail::to($user_cur->approveBy->email)->send(new EvaluationSelfMail($evaluate));
                 $message = "send mail to " . $user_cur->approveBy->name;
             } else {
-                $evaluate->status = KPIEnum::draft;
-                $message = "Draft evaluate of " . $evaluate->user->name;
+                if (\auth()->id() !== $evaluate->user_id) {
+                    $message = "Change by Operation... ";
+                } else {
+                    $evaluate->status = KPIEnum::draft;
+                    $message = "Draft evaluate of " . $evaluate->user->name;
+                }
             }
             $evaluate->save();
             DB::commit();
@@ -519,7 +523,7 @@ class SelfEvaluationController extends Controller
 
             $this->calculation_detail($detail);
             $user = $this->userService->find($user);
-            return Excel::download(new EvaluateQuarterExport($user,$evaluate, $detail), "Evaluate-quarter-" . $user->name . ".xlsx");
+            return Excel::download(new EvaluateQuarterExport($user, $evaluate, $detail), "Evaluate-quarter-" . $user->name . ".xlsx");
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
@@ -572,7 +576,7 @@ class SelfEvaluationController extends Controller
             $evaluate->key_task_reduce = $key_task_reduce;
             $evaluate->omg_reduce = $omg_reduce;
             $user = $this->userService->find($user);
-            return Excel::download(new EvaluateYearExport($user,$evaluate, $detail), "Evaluate-year-" . $user->name . ".xlsx");
+            return Excel::download(new EvaluateYearExport($user, $evaluate, $detail), "Evaluate-year-" . $user->name . ".xlsx");
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }

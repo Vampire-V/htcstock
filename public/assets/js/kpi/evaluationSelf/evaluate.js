@@ -24,7 +24,10 @@
             if (evaluate.status !== status.READY && evaluate.status !== status.DRAFT) {
                 pageDisable()
             }
-            getTemplate(evaluateForm.template)
+            if (auth.id !== evaluate.user_id) {
+                pageDisable()
+            }
+            await getTemplate(evaluateForm.template)
                 .then(res => {
                     if (res.status === 200) {
                         template = res.data.data
@@ -40,8 +43,11 @@
                 .finally(() => {
                     render_html()
                 })
+            
+            if (operation) {
+                document.getElementById('submit').disabled = false
+            }
         }
-        // console.log(evaluateForm);
     }, false);
 })();
 
@@ -98,26 +104,25 @@ var render_html = () => {
                     "data-placement": "top"
                 })
                 cellDesc.classList.add('truncate')
-                // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
-                let readonly = auth.roles.find(item => item.slug === `admin-kpi`) ? false : true
+                
                 // console.log(readonly);
                 let cellBaseLine = newRow.insertCell()
-                cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`, readonly))
+                cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`, true))
 
                 let cellMax = newRow.insertCell()
-                cellMax.appendChild(newInput('number', className, 'max', element.max.toFixed(2), '', `changeValue(this)`, readonly))
+                cellMax.appendChild(newInput('number', className, 'max', element.max.toFixed(2), '', `changeValue(this)`, true))
 
                 let cellWeight = newRow.insertCell()
-                cellWeight.appendChild(newInput('number', className, 'weight', element.weight.toFixed(2), '', `changeValue(this)`, readonly))
+                cellWeight.appendChild(newInput('number', className, 'weight', element.weight.toFixed(2), '', `changeValue(this)`, true))
 
                 let cellTarget = newRow.insertCell()
-                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`, readonly))
+                cellTarget.appendChild(newInput('number', className, 'target', element.target.toFixed(2), '', `changeValue(this)`, !operation))
 
                 let cellTargetPC = newRow.insertCell()
                 cellTargetPC.textContent = findTargetPercent(element, temp_rules).toFixed(2) + `%`
 
                 let cellActual = newRow.insertCell()
-                cellActual.appendChild(newInput('number', className, 'actual', element.actual.toFixed(2), '', `changeValue(this)`,readonly))
+                cellActual.appendChild(newInput('number', className, 'actual', element.actual.toFixed(2), '', `changeValue(this)`, !operation))
 
                 let cellActualPC = newRow.insertCell()
                 cellActualPC.textContent = findActualPercent(element, temp_rules).toFixed(2) + `%`
@@ -407,8 +412,7 @@ $('#comment-modal').on('show.bs.modal', async function (event) {
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
     var modal = $(this)
     // fetch rules filter
-    try {
-    } catch (error) {
+    try {} catch (error) {
         console.error(error);
     } finally {
         modal.find('.modal-body #reload').removeClass('reload')

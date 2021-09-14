@@ -194,6 +194,9 @@ class SelfEvaluationController extends Controller
                     );
             }
 
+            if ($request->next && (\auth()->id() !== $evaluate->user_id)) {
+                return $this->errorResponse("ไม่มีสิทธิ์", 500);
+            }
             if ($request->next) {
                 # send mail to Manger
                 if (!$evaluate->next_level) {

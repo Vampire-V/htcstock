@@ -216,7 +216,7 @@ class SelfEvaluationController extends Controller
                 Mail::to($user_cur->approveBy->email)->send(new EvaluationSelfMail($evaluate));
                 $message = "send mail to " . $user_cur->approveBy->name;
             } else {
-                if (\auth()->id() !== $evaluate->user_id) {
+                if (\auth()->id() !== $evaluate->user_id && Gate::allows(UserEnum::OPERATIONKPI)) {
                     $message = "Change by Operation... ";
                 } else {
                     $evaluate->status = KPIEnum::draft;

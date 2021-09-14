@@ -545,7 +545,7 @@ const render_rule = async () => {
             let result = await getReportRuleOfYear(d.getFullYear(), {
                 params: filter
             })
-            // console.log(result.data.data);
+            
             await rules_data_to_table(result.data.data)
 
         } catch (error) {

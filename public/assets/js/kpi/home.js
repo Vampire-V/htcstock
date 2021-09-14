@@ -555,7 +555,7 @@ const render_rule = async () => {
             $('[data-toggle="tooltip"]').tooltip()
             // table.previousElementSibling.classList.add('reload')
             table.previousElementSibling.classList.remove('reload')
-            hideSpinner()
+            // hideSpinner()
             toastClear()
         }
 

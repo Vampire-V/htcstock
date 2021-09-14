@@ -68,10 +68,6 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth', 
     Route::delete('delete/user/{id}/approve', 'UsersController@delete_approve')->name('users.delete_approve');
     Route::post('copy/user/{id}/approve', 'UsersController@copy_approve')->name('users.copy_approve');
 });
-Route::get('/operations','Admin\UsersController@operations');
-Route::get('users/dropdown','Admin\UsersController@dropdown')->name('users.dropdown');
-Route::get('config/users/dropdown','Admin\UsersController@dropdown_config');
-Route::get('divisions/dropdown','DivisionController@dropdown')->name('divisions.dropdown');
 Route::post('upload', 'UploadController@store');
 Route::delete('upload', 'UploadController@destroy');
 require __DIR__ . '/itstock.php';

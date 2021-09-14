@@ -71,13 +71,16 @@ class RuleService extends BaseService implements RuleServiceInterface
     }
 
     // Service ที่เรียก
-    public function rulesInEvaluationReport($year)
+    public function rulesInEvaluationReport($year, Request $request)
     {
         try {
-            return Rule::select('id', 'name','quarter_cal')->with(['evaluatesDetail.evaluate.targetperiod' => function ($query) use ($year) {
+            return Rule::select('id', 'name','quarter_cal','category_id')->with(['evaluatesDetail.evaluate.targetperiod' => function ($query) use ($year) {
                 return $query->select('id', 'name', 'year', 'quarter')->where('year', $year);
-            },'evaluatesDetail.evaluate:id,period_id,status,user_id','evaluatesDetail.evaluate.user','evaluatesDetail:id,evaluate_id,rule_id,target,actual'])
-            ->where('remove','<>','Y')->get();
+            },'category','evaluatesDetail.evaluate:id,period_id,status,user_id','evaluatesDetail.evaluate.user','evaluatesDetail:id,evaluate_id,rule_id,target,actual'])
+            ->where('remove','<>','Y')
+            ->filter($request)
+            ->orderBy('category_id')
+            ->get();
         } catch (\Throwable $th) {
             throw $th;
         }

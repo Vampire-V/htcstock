@@ -61,10 +61,12 @@ class HomeController extends Controller
     }
 
     // Controller ที่ใช้ url test http://127.0.0.1:8000/kpi/dashboard/rule-of-year/2021/report
-    public function report_rule_of_year($year)
+    public function report_rule_of_year(Request $request, $year)
     {
         try {
-            $rules = $this->ruleService->rulesInEvaluationReport($year);
+            $rules = $this->ruleService->rulesInEvaluationReport($year,$request);
+            // return $this->successResponse($rules,200);
+            // dd($rules);
             $periods = $this->targetPeriodService->query()->where('year', $year)->get();
             foreach ($rules as $rule) {
                 $total = \collect();

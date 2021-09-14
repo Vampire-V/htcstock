@@ -186,8 +186,13 @@
                         <div class="card-header-title">
                             <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
                             Rule Evaluation Report
-                            &nbsp;&nbsp;&nbsp;<input type="text" onkeyup="search_rule_table(this)"
+                            &nbsp;&nbsp;&nbsp;<input type="text" name="ruleName" id="ruleName" onkeyup="render_rule()"
                                 class="form-control-sm form-control" placeholder="Search for names..">
+
+                            &nbsp;&nbsp;&nbsp;
+                            Category &nbsp;
+                            <select class="form-control-sm form-control" name="category" id="category" onchange="render_rule()">
+                            </select>
                         </div>
                     </div>
                     <div class="card-body">

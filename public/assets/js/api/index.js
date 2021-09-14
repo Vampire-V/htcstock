@@ -233,7 +233,7 @@ const evaluate_excel = (filter) => axios.get('/kpi/evaluate-report', filter)
 
 const getReportStaffEvaluate = (year) => axios.get(`/kpi/dashboard/staff-evaluate-of-year/${year}/report`)
 
-const getReportRuleOfYear = (year) => axios.get(`/kpi/dashboard/rule-of-year/${year}/report`)
+const getReportRuleOfYear = (year,filter) => axios.get(`/kpi/dashboard/rule-of-year/${year}/report`,filter)
 // 
 
 // for eddy page 
@@ -317,3 +317,5 @@ const getusers = () => axios.get(`/users/dropdown`)
 const usersFilter = (filter) => axios.get(`/config/users/dropdown`,filter)
 
 const getdivisions = () => axios.get(`/divisions/dropdown`)
+
+const getcategory = () => axios.get(`/category/dropdown`)

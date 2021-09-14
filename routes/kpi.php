@@ -4,6 +4,13 @@ use Illuminate\Support\Facades\Route;
 
 // KPI
 Route::get('kpi/evaluation/{id}/verify', 'Auth\LoginController@authKpiEvaluation')->name('kpi.evaluation.verify');
+
+Route::get('/operations','Admin\UsersController@operations');
+Route::get('users/dropdown','Admin\UsersController@dropdown')->name('users.dropdown');
+Route::get('config/users/dropdown','Admin\UsersController@dropdown_config');
+Route::get('divisions/dropdown','DivisionController@dropdown')->name('divisions.dropdown');
+Route::get('category/dropdown','KPI\CategoryController@dropdown');
+
 Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', 'HomeController@index')->name('dashboard');
     Route::get('operation/reportscore', 'HomeController@reportscore');

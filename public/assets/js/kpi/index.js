@@ -796,3 +796,8 @@ var getQuarterForHaier = (date) => {
     }
     return 0
 }
+
+var hideSpinner = () => {
+    console.log(document.getElementsByClassName('show-spinner'));
+    document.getElementsByClassName('show-spinner')[0].style.display = 'none !important;';
+}

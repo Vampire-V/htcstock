@@ -86,13 +86,14 @@ document.addEventListener("DOMContentLoaded", function () {
         make_options()
         search_score()
     } else {
+        make_category()
         render_rule()
         render_staff_evaluate()
     }
 });
 
 let weigth_template = []
-
+let categories = []
 const tabActive = (e) => {
     window.localStorage.setItem('tab-dashboard', e.id)
     let active_tab = localStorage.getItem('tab-dashboard')
@@ -497,27 +498,6 @@ let calculator_score = (number) => {
 
 //## tab-c-1 method
 
-const search_rule_table = (e) => {
-    // Declare variables
-    var input, filter, table, tr, td, i, txtValue;
-    input = e
-    filter = input.value.toUpperCase()
-    table = input.offsetParent.querySelector('table')
-    tr = table.tBodies[0].rows
-    // Loop through all table rows, and hide those who don't match the search query
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0]
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = ""
-            } else {
-                tr[i].style.display = "none"
-            }
-        }
-    }
-}
-
 const search_staff_table = (e) => {
     // Declare variables
     var input, filter, table, tr, td, i, txtValue, col;
@@ -548,13 +528,23 @@ const search_staff_table = (e) => {
     }
 }
 
-
 const render_rule = async () => {
     if (show_rules) {
         let table = document.getElementById('table-rule-evaluation')
         try {
             let d = new Date()
-            let result = await getReportRuleOfYear(d.getFullYear())
+            let filter = {
+                category_id: []
+            }
+            if ($('#category').val()) {
+                filter.category_id = [$('#category').val()]
+            }
+            if ($('#ruleName').val()) {
+                filter.ruleName = $('#ruleName').val()
+            }
+            let result = await getReportRuleOfYear(d.getFullYear(), {
+                params: filter
+            })
             // console.log(result.data.data);
             await rules_data_to_table(result.data.data)
 
@@ -565,6 +555,7 @@ const render_rule = async () => {
             $('[data-toggle="tooltip"]').tooltip()
             // table.previousElementSibling.classList.add('reload')
             table.previousElementSibling.classList.remove('reload')
+            hideSpinner()
             toastClear()
         }
 
@@ -572,104 +563,122 @@ const render_rule = async () => {
 
 }
 
-const rules_data_to_table = (data) => {
+const rules_data_to_table = async (data) => {
     let table = document.getElementById('table-rule-evaluation'),
         head = table.tHead,
         body = table.tBodies[0]
+    table.previousElementSibling.classList.add('reload')
     removeAllChildNodes(head)
     removeAllChildNodes(body)
+    try {
+        let Hfirst = head.insertRow(),
+            Hsecond = head.insertRow(),
+            h_category = Hfirst.insertCell(),
+            full_name = Hfirst.insertCell()
 
-    let Hfirst = head.insertRow(),
-        Hsecond = head.insertRow(),
-        full_name = Hfirst.insertCell()
-    full_name.setAttribute('rowspan', 2)
-    full_name.style = `background-color: black; color:#fff;`
-    full_name.textContent = `Rule Name`
-    for (let i = 0; i < data.periods.length; i++) {
-        const period = data.periods[i]
-        let month = Hfirst.insertCell()
-        month.style = `background-color: black; color:#fff;`
-        month.setAttribute('colspan', 2)
-        month.textContent = period.name
+        h_category.setAttribute('rowspan', 2)
+        h_category.style = `background-color: black; color:#fff;`
+        h_category.textContent = `Category`
 
-        let target = Hsecond.insertCell(),
-            actual = Hsecond.insertCell()
-        target.style = `background-color: black; color:#fff;`
-        actual.style = `background-color: black; color:#fff;`
-        target.textContent = `Target`
-        actual.textContent = `Actual`
+        full_name.setAttribute('rowspan', 2)
+        full_name.style = `background-color: black; color:#fff;`
+        full_name.textContent = `Rule Name`
+        // set Header
+        for (let i = 0; i < data.periods.length; i++) {
+            const period = data.periods[i]
+            let month = Hfirst.insertCell()
+            month.style = `background-color: black; color:#fff;`
+            month.setAttribute('colspan', 2)
+            month.textContent = period.name
+
+            let target = Hsecond.insertCell(),
+                actual = Hsecond.insertCell()
+            target.style = `background-color: black; color:#fff;`
+            actual.style = `background-color: black; color:#fff;`
+            target.textContent = `Target`
+            actual.textContent = `Actual`
+        }
+        // set body
+        for (let i = 0; i < data.rules.length; i++) {
+            const rule = data.rules[i]
+            let row = body.insertRow(),
+                group = row.insertCell(),
+                name = row.insertCell(),
+                jan_target = row.insertCell(),
+                jan_actual = row.insertCell(),
+                feb_target = row.insertCell(),
+                feb_actual = row.insertCell(),
+                mar_target = row.insertCell(),
+                mar_actual = row.insertCell(),
+                apr_target = row.insertCell(),
+                apr_actual = row.insertCell(),
+                may_target = row.insertCell(),
+                may_actual = row.insertCell(),
+                jun_target = row.insertCell(),
+                jun_actual = row.insertCell(),
+                jul_target = row.insertCell(),
+                jul_actual = row.insertCell(),
+                aug_target = row.insertCell(),
+                aug_actual = row.insertCell(),
+                sep_target = row.insertCell(),
+                sep_actual = row.insertCell(),
+                oct_target = row.insertCell(),
+                oct_actual = row.insertCell(),
+                nov_target = row.insertCell(),
+                nov_actual = row.insertCell(),
+                dec_target = row.insertCell(),
+                dec_actual = row.insertCell()
+
+            group.classList.add('truncate')
+            group.textContent = rule.category.name
+
+            name.classList.add('truncate')
+            name.setAttribute('data-toggle', 'tooltip')
+            name.setAttribute('title', rule.name)
+            name.textContent = rule.name
+
+            jan_target.innerHTML = findLastValue(rule, rule.total[0], 'target')
+            jan_actual.innerHTML = findLastValue(rule, rule.total[0], 'actual')
+
+            feb_target.innerHTML = findLastValue(rule, rule.total[1], 'target')
+            feb_actual.innerHTML = findLastValue(rule, rule.total[1], 'actual')
+
+            mar_target.innerHTML = findLastValue(rule, rule.total[2], 'target')
+            mar_actual.innerHTML = findLastValue(rule, rule.total[2], 'actual')
+
+            apr_target.innerHTML = findLastValue(rule, rule.total[3], 'target')
+            apr_actual.innerHTML = findLastValue(rule, rule.total[3], 'actual')
+
+            may_target.innerHTML = findLastValue(rule, rule.total[4], 'target')
+            may_actual.innerHTML = findLastValue(rule, rule.total[4], 'actual')
+
+            jun_target.innerHTML = findLastValue(rule, rule.total[5], 'target')
+            jun_actual.innerHTML = findLastValue(rule, rule.total[5], 'actual')
+
+            jul_target.innerHTML = findLastValue(rule, rule.total[6], 'target')
+            jul_actual.innerHTML = findLastValue(rule, rule.total[6], 'actual')
+
+            aug_target.innerHTML = findLastValue(rule, rule.total[7], 'target')
+            aug_actual.innerHTML = findLastValue(rule, rule.total[7], 'actual')
+
+            sep_target.innerHTML = findLastValue(rule, rule.total[8], 'target')
+            sep_actual.innerHTML = findLastValue(rule, rule.total[8], 'actual')
+
+            oct_target.innerHTML = findLastValue(rule, rule.total[9], 'target')
+            oct_actual.innerHTML = findLastValue(rule, rule.total[9], 'actual')
+
+            nov_target.innerHTML = findLastValue(rule, rule.total[10], 'target')
+            nov_actual.innerHTML = findLastValue(rule, rule.total[10], 'actual')
+
+            dec_target.innerHTML = findLastValue(rule, rule.total[11], 'target')
+            dec_actual.innerHTML = findLastValue(rule, rule.total[11], 'actual')
+        }
+    } catch (error) {
+        console.error(error);
+    } finally {
+        table.previousElementSibling.classList.remove('reload')
     }
-
-    for (let i = 0; i < data.rules.length; i++) {
-        const rule = data.rules[i]
-        let row = body.insertRow(),
-            name = row.insertCell(),
-            jan_target = row.insertCell(),
-            jan_actual = row.insertCell(),
-            feb_target = row.insertCell(),
-            feb_actual = row.insertCell(),
-            mar_target = row.insertCell(),
-            mar_actual = row.insertCell(),
-            apr_target = row.insertCell(),
-            apr_actual = row.insertCell(),
-            may_target = row.insertCell(),
-            may_actual = row.insertCell(),
-            jun_target = row.insertCell(),
-            jun_actual = row.insertCell(),
-            jul_target = row.insertCell(),
-            jul_actual = row.insertCell(),
-            aug_target = row.insertCell(),
-            aug_actual = row.insertCell(),
-            sep_target = row.insertCell(),
-            sep_actual = row.insertCell(),
-            oct_target = row.insertCell(),
-            oct_actual = row.insertCell(),
-            nov_target = row.insertCell(),
-            nov_actual = row.insertCell(),
-            dec_target = row.insertCell(),
-            dec_actual = row.insertCell()
-
-        name.classList.add('truncate')
-        name.setAttribute('data-toggle', 'tooltip')
-        name.setAttribute('title', rule.name)
-        name.textContent = rule.name
-
-        jan_target.innerHTML = findLastValue(rule, rule.total[0], 'target')
-        jan_actual.innerHTML = findLastValue(rule, rule.total[0], 'actual')
-
-        feb_target.innerHTML = findLastValue(rule, rule.total[1], 'target')
-        feb_actual.innerHTML = findLastValue(rule, rule.total[1], 'actual')
-
-        mar_target.innerHTML = findLastValue(rule, rule.total[2], 'target')
-        mar_actual.innerHTML = findLastValue(rule, rule.total[2], 'actual')
-
-        apr_target.innerHTML = findLastValue(rule, rule.total[3], 'target')
-        apr_actual.innerHTML = findLastValue(rule, rule.total[3], 'actual')
-
-        may_target.innerHTML = findLastValue(rule, rule.total[4], 'target')
-        may_actual.innerHTML = findLastValue(rule, rule.total[4], 'actual')
-
-        jun_target.innerHTML = findLastValue(rule, rule.total[5], 'target')
-        jun_actual.innerHTML = findLastValue(rule, rule.total[5], 'actual')
-
-        jul_target.innerHTML = findLastValue(rule, rule.total[6], 'target')
-        jul_actual.innerHTML = findLastValue(rule, rule.total[6], 'actual')
-
-        aug_target.innerHTML = findLastValue(rule, rule.total[7], 'target')
-        aug_actual.innerHTML = findLastValue(rule, rule.total[7], 'actual')
-
-        sep_target.innerHTML = findLastValue(rule, rule.total[8], 'target')
-        sep_actual.innerHTML = findLastValue(rule, rule.total[8], 'actual')
-
-        oct_target.innerHTML = findLastValue(rule, rule.total[9], 'target')
-        oct_actual.innerHTML = findLastValue(rule, rule.total[9], 'actual')
-
-        nov_target.innerHTML = findLastValue(rule, rule.total[10], 'target')
-        nov_actual.innerHTML = findLastValue(rule, rule.total[10], 'actual')
-
-        dec_target.innerHTML = findLastValue(rule, rule.total[11], 'target')
-        dec_actual.innerHTML = findLastValue(rule, rule.total[11], 'actual')
-    }
+    // table.previousElementSibling.classList.remove('reload')
 }
 
 const findLastValue = (rule, array, key) => {
@@ -831,6 +840,20 @@ const fetch_evaluate_modal = async (rule, datas, el) => {
                 // link += `<li><a href="${window.location.origin}/kpi/evaluation-review/${element.id}/edit" target="_blank" rel="noopener">${element.user_id}</a></li>`
             }
             // console.log(link);
+        }
+    }
+}
+
+const make_category = async () => {
+    let result_category = await getcategory()
+    if (result_category.status === 200) {
+        categories = result_category.data.data
+
+        removeAllChildNodes($('#category')[0])
+        $('#category').append(new Option(`All`, ''))
+        for (let index = 0; index < categories.length; index++) {
+            const group = categories[index]
+            $('#category').append(new Option(group.name, group.id))
         }
     }
 }

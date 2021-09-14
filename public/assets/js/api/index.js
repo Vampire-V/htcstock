@@ -314,4 +314,6 @@ const postUserCopyApproveKPI = (form,id) => axios({
 // dropdows
 const getusers = () => axios.get(`/users/dropdown`)
 
+const usersFilter = (filter) => axios.get(`/config/users/dropdown`,filter)
+
 const getdivisions = () => axios.get(`/divisions/dropdown`)

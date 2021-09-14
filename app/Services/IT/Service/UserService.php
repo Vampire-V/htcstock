@@ -61,6 +61,15 @@ class UserService extends BaseService implements UserServiceInterface
         }
     }
 
+    public function dropdown_config(Request $request): Collection
+    {
+        try {
+            return User::filter($request)->notResigned()->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     public function dropdownEvaluationForm(): Collection
     {
         try {

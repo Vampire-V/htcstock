@@ -21,6 +21,7 @@ interface UserServiceInterface
     public function create(array $attributes): Model;
     public function dropdownNotIn(array $username): Collection;
     public function dropdown(): Collection;
+    public function dropdown_config(Request $request): Collection;
     public function dropdownEvaluationForm(): Collection;
     public function filter(Request $request);
     public function filterForEvaluateForm(Request $request);

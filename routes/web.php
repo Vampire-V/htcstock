@@ -42,9 +42,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 Route::get('testdb',function(){
-    DB::connection('sqlsrv')->enableQueryLog(); // Enable query log
-    $dd = DB::connection('sqlsrv')->select('exec spCheckOT ?,?,?,?,?', ["2021", "20210813", "%", "%", "%"]);
-    dd($dd,DB::connection('sqlsrv')->getQueryLog());
+    // DB::connection('sqlsrv')->enableQueryLog(); // Enable query log
+    // $dd = DB::connection('sqlsrv')->select('exec spCheckOT ?,?,?,?,?', ["2021", "20210813", "%", "%", "%"]);
+    // dd($dd,DB::connection('sqlsrv')->getQueryLog());
 });
 
 // Directory Admin   middleware('can:for-superadmin-admin') เรียกมาจาก AuthServiceProvider for-superadmin-admin 'can:for-superadmin-admin',
@@ -70,6 +70,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth', 
 });
 Route::get('/operations','Admin\UsersController@operations');
 Route::get('users/dropdown','Admin\UsersController@dropdown')->name('users.dropdown');
+Route::get('config/users/dropdown','Admin\UsersController@dropdown_config');
 Route::get('divisions/dropdown','DivisionController@dropdown')->name('divisions.dropdown');
 Route::post('upload', 'UploadController@store');
 Route::delete('upload', 'UploadController@destroy');

@@ -21,6 +21,9 @@
 
 })();
 
+let users_setting = [],
+users = [],
+divisions = []
 
 const render_dead_line = (table) => {
     let data = []
@@ -57,7 +60,7 @@ const render_dead_line = (table) => {
 }
 
 // modal method
-$('#modal-dead-line').on('show.bs.modal',function (event) {
+$('#modal-dead-line').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     let id = button.data('setting') // Extract info from data-* attributes
     let day = button.data('day') // Extract info from data-* attributes
@@ -67,8 +70,8 @@ $('#modal-dead-line').on('show.bs.modal',function (event) {
     modal.find('.modal-body #action').val(id)
     // 
     render_modal_action(id)
-    render_modal_day(modal,day)
-    
+    render_modal_day(modal, day)
+
     // fetch rules filter
 })
 
@@ -84,57 +87,84 @@ $('#modal-dead-line').on('hide.bs.modal', function (event) {
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
 })
 
-const render_modal_action = (id) => {
-    let data = [],
-        users = []
-    $('.modal-body #reload').addClass('reload')    
-    getUserSettingAction(id)
-        .then(res => {
-            if (res.status === 200) {
-                data = res.data.data
-            }
-        })
-        .catch(error => {
-            console.log(error, error.response.data.message)
-        })
-        .finally(() => {
-            getusers()
-                .then(res => {
-                    if (res.status === 200) {
-                        users = res.data.data
-                    }
-                }).catch(error => {
-                    console.log(error, error.response.data.message);
-                })
-                .finally(() => {
-                    
-                    let ul = $('.modal-body ul')
-                    removeAllChildNodes(ul[0])
-                    for (let index = 0; index < data.length; index++) {
-                        const element = data[index]
-                        let rm_index = users.findIndex(i => i.id === element.id)
-                        if (rm_index > -1) {
-                            users.splice(rm_index, 1)
-                        }
-                        let user = element.translations.find(item => item.locale === locale) ?? element.translations[0]
-                        ul.append(`<li class="mb-1"><span class="badge badge-danger" style="cursor: pointer;" onclick="detach_authorized(${element.id})"><i class="pe-7s-trash"></i></span> ${user.name}</li>`)
-                    }
-                    removeAllChildNodes($('.modal-body #user')[0])
-                    for (let index = 0; index < users.length; index++) {
-                        const user = users[index]
-                        let model = user.translations.find(item => item.locale === locale) ?? user.translations[0]
-                        $('.modal-body #user').append(new Option(model.name, user.id))
-                    }
-                    $('.modal-body #reload').removeClass('reload')
-                })
-        })
+const render_modal_action = async (id) => {
+
+    $('.modal-body #reload').addClass('reload')
+    let result_divisions = await getdivisions()
+    let result_setting = await getUserSettingAction(id)
+    if ($('.modal-body #division_id').val()) {
+        filter = {
+            division: [$('.modal-body #division_id').val()]
+        }
+    }else{
+        filter = {}
+    }
+    let result_users = await usersFilter({
+        params: filter
+    })
+
+    if (result_divisions.status === 200) {
+        divisions = result_divisions.data.data
+    }
+    if (result_setting.status === 200) {
+        users_setting = result_setting.data.data
+    }
+    if (result_setting.status === 200) {
+        users = result_users.data.data
+    }
+
+    // make division dropdown
+    removeAllChildNodes($('.modal-body #division_id')[0])
+    $('.modal-body #division_id').append(new Option('Select...', ''))
+    for (let index = 0; index < divisions.length; index++) {
+        const division = divisions[index]
+        $('.modal-body #division_id').append(new Option(division.name, division.id))
+    }
+
+    // make users setting list
+    let ul = $('.modal-body ul')
+    removeAllChildNodes(ul[0])
+    for (let index = 0; index < users_setting.length; index++) {
+        const element = users_setting[index]
+        let rm_index = users.findIndex(i => i.id === element.id)
+        if (rm_index > -1) {
+            users.splice(rm_index, 1)
+        }
+        let user = element.translations.find(item => item.locale === locale) ?? element.translations[0]
+        ul.append(`<li class="mb-1"><span class="badge badge-danger" style="cursor: pointer;" onclick="detach_authorized(${element.id})"><i class="pe-7s-trash"></i></span> ${user.name}</li>`)
+    }
+
+    // make users dropdown
+    removeAllChildNodes($('.modal-body #user')[0])
+    for (let index = 0; index < users.length; index++) {
+        const user = users[index]
+        let model = user.translations.find(item => item.locale === locale) ?? user.translations[0]
+        $('.modal-body #user').append(new Option(model.name, user.id))
+    }
+    $('.modal-body #reload').removeClass('reload')
 }
 
-const render_modal_day = (modal,defualt = 01) => {
+const division_change = async (e) => {
+    let result = await usersFilter({
+        params: {division:[e.value]}
+    })
+    if (result.status === 200) {
+        // make users dropdown
+        removeAllChildNodes($('.modal-body #user')[0])
+        let new_users = result.data.data.filter(item => !users_setting.includes(item.id))
+        for (let index = 0; index < new_users.length; index++) {
+            const user = new_users[index]
+            let model = user.translations.find(item => item.locale === locale) ?? user.translations[0]
+            $('.modal-body #user').append(new Option(model.name, user.id))
+        }
+    }
+}
+
+const render_modal_day = (modal, defualt = 01) => {
     let select = modal.find('.modal-body #day')
     for (let index = 1; index < 32; index++) {
         const day = index < 10 ? `0${index}` : index
-        select.append(new Option(day,day,true,day === defualt ? true : false))
+        select.append(new Option(day, day, true, day === defualt ? true : false))
     }
 }
 
@@ -184,14 +214,14 @@ const edit_day = () => {
             }, action)
             .then(res => {
                 if (res.data.data) {
-                    toast(res.data.message,res.data.status)
+                    toast(res.data.message, res.data.status)
                     let table = document.getElementById('table-steing-action')
                     render_dead_line(table)
                 }
             })
             .catch(error => {
                 console.log(error, error.response.data.message)
-                toast(res.data.message,res.data.status)
+                toast(res.data.message, res.data.status)
             })
             .finally(() => {
                 render_modal_action(action)

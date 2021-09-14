@@ -319,6 +319,16 @@ class UsersController extends Controller
         }
     }
 
+    public function dropdown_config(Request $request)
+    {
+        try {
+            $users = $this->userService->dropdown_config($request);
+            return $this->successResponse($users, 'get user dropdown', 200);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+    
     public function store_approve(Request $request, $id)
     {
         DB::beginTransaction();

@@ -74,7 +74,7 @@
 {{-- Modal --}}
 <div class="modal fade" id="modal-dead-line" tabindex="-1" role="dialog" aria-labelledby="ModalLabelDeadLine"
     aria-hidden="true">
-    <div class="modal-dialog modal-md" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="ModalLabelDeadLine">User Authorization</h5>
@@ -88,9 +88,18 @@
                     <div class="form-row">
                         <div class="col-md-4">
                             <div class="position-relative form-group">
+                                <label for="User" class="">Division :</label>
+                                <select id="division_id" class="form-control-sm form-control" name="division_id" required
+                                onchange="division_change(this)">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4">
+                            <div class="position-relative form-group">
                                 <label for="User" class="">User :</label>
-                                <select id="user" class="form-control-sm form-control" name="user" required
-                                    placeholder="placeholder">
+                                <select id="user" class="form-control-sm form-control" name="user" required>
                                 </select>
                             </div>
                         </div>
@@ -102,8 +111,7 @@
                         <div class="col-md-4">
                             <div class="position-relative form-group">
                                 <label for="Day" class="">Day :</label>
-                                <select id="day" class="form-control-sm form-control" name="day" required
-                                    placeholder="placeholder">
+                                <select id="day" class="form-control-sm form-control" name="day" required>
                                 </select>
                             </div>
                         </div>

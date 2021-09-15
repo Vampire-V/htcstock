@@ -46,7 +46,7 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-6">
                             <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> <a href="#"
-                                    target="_blank" rel="noopener noreferrer">view file</a></label>
+                                    target="_blank" rel="noopener noreferrer"></a></label>
                             <input type="file" class="form-control-sm form-control" id="validationPurchaseOrderFile"
                                 data-name="purchase_order" onchange="uploadFileContract(this)">
                             <div class="mb-3 progress hide-contract">
@@ -61,7 +61,7 @@
                         <div class="col-md-6 mb-6">
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span> <a href="#" target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"></a></label>
                             <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
                                 data-name="quotation" onchange="uploadFileContract(this)" required>
                             <div class="mb-3 progress hide-contract">
@@ -78,7 +78,7 @@
                         <div class="col-md-6 mb-6">
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                     style="color: red;">*</span> <a href="#" target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"> </a></label>
                             <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
                                 data-name="coparation_sheet" onchange="uploadFileContract(this)" required>
                             <div class="mb-3 progress hide-contract">
@@ -91,11 +91,11 @@
                             </div>
                         </div>
                         <div class="col-md-6 mb-6">
-                            <label for="validationBOQFile"><strong>BOQ</strong> <span style="color: red;">*</span> <a
-                                    href="#" target="_blank" rel="noopener noreferrer">view file</a></label>
+                            <label for="validationBOQFile"><strong>BOQ</strong>  <a
+                                    href="#" target="_blank" rel="noopener noreferrer"></a></label>
 
                             <input type="file" class="form-control-sm form-control" id="validationBOQFile"
-                                data-name="boq" onchange="uploadFileContract(this)" required>
+                                data-name="boq" onchange="uploadFileContract(this)" >
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
@@ -116,7 +116,7 @@
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope"
-                                name="scope_of_work" value="" required>
+                                name="scope_of_work" value="" placeholder="e.g. purchase the products to support RF" required>
                             <div class="invalid-feedback">
                                 Please provide a valid Ivoice No.
                             </div>

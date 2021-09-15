@@ -27,7 +27,7 @@ class StorePurchaseEquipmentInstall extends FormRequest
         return [
             'quotation' => 'required',
             'coparation_sheet' => 'required',
-            'boq' => 'required',
+            // 'boq' => 'required',
 
             'scope_of_work' => 'required',
             'location' => 'required',
@@ -52,7 +52,7 @@ class StorePurchaseEquipmentInstall extends FormRequest
         return [
             'quotation.required' => 'Please enter quotation',
             'coparation_sheet.required' => 'Please enter coparation_sheet',
-            'boq.required' => 'Please enter boq',
+            // 'boq.required' => 'Please enter boq',
 
             'scope_of_work.required' => 'Please enter scope_of_work',
             'location.required' => 'Please enter location',

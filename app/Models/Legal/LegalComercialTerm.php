@@ -9,5 +9,5 @@ class LegalComercialTerm extends Model
 {
     use LegalComercialTermTrait;
     protected $guarded = [];
-    protected $dates = ['dated', 'delivery_date'];
+    protected $dates = ['dated'];
 }

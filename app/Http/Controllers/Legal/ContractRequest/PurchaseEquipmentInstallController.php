@@ -64,7 +64,7 @@ class PurchaseEquipmentInstallController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePurchaseEquipmentInstall $request)
     {
         $dest = $request->only('quotation', 'coparation_sheet', 'purchase_order', 'boq', 'contract_id', 'value_of_contract', 'payment_type_id', 'warranty');
         // comercialTerm data

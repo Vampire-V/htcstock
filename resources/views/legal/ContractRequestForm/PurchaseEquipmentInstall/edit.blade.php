@@ -105,13 +105,13 @@
                             </div>
                         </div>
                         <div class="col-md-6 mb-6">
-                            <label for="validationBOQFile"><strong>BOQ</strong> <span style="color: red;">*</span> <a
+                            <label for="validationBOQFile"><strong>BOQ</strong><a
                                     href="{{url('storage/'.$contract->legalContractDest->boq)}}" target="_blank"
                                     rel="noopener noreferrer">{{$contract->legalContractDest->boq ? 'view file' : ""}}</a></label>
 
                             <input type="file" class="form-control-sm form-control" id="validationBOQFile"
                                 data-name="boq" data-cache="{{substr($contract->legalContractDest->boq,9)}}"
-                                onchange="uploadFileContract(this)" required>
+                                onchange="uploadFileContract(this)" >
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
@@ -133,7 +133,7 @@
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope"
-                                name="scope_of_work"
+                                name="scope_of_work" placeholder="e.g. purchase the products to support RF"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 required>
                             <div class="invalid-feedback">

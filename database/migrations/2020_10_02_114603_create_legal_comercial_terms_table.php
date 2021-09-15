@@ -20,9 +20,9 @@ class CreateLegalComercialTermsTable extends Migration
             $table->string('purchase_order_no')->nullable();
             $table->string('quotation_no')->nullable();
             $table->dateTime('dated')->nullable();
-            $table->dateTime('contract_period')->nullable();
+            $table->string('contract_period',191)->nullable();
             $table->dateTime('untill')->nullable();
-            $table->dateTime('delivery_date')->nullable();
+            $table->string('delivery_date',191)->nullable();
             $table->string('to_manufacture')->nullable();
             $table->string('of')->nullable();
             $table->string('working_day')->nullable();

@@ -319,7 +319,7 @@
                     <td colspan="2" class="text-rigth">Delivery Date :</td>
                     <td colspan="2" style="padding-left: 1%;">
                         <font class="underline">
-                            {{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->delivery_date->format('Y-m-d') : ""}}
+                            {{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->delivery_date : ""}}
                         </font>
                     </td>
                 </tr>

@@ -108,7 +108,7 @@
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope"
-                                name="scope_of_work"
+                                name="scope_of_work" placeholder="e.g. purchase the products to support WAC"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 required>
                             <div class="invalid-feedback">
@@ -119,7 +119,7 @@
                             <label for="validationLocation"><strong>Location</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationLocation"
-                                name="location"
+                                name="location" placeholder="e.g. WAC line"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->location : ""}}"
                                 required>
                             <div class="invalid-feedback">
@@ -161,9 +161,9 @@
                         <div class="col-md-4 mb-4">
                             <label for="validationDeliveryDate"><strong>Delivery Date</strong> <span
                                     style="color: red;">*</span></label>
-                            <input type="date" class="form-control-sm form-control" id="validationDeliveryDate"
+                            <input type="text" class="form-control-sm form-control" id="validationDeliveryDate"
                                 name="delivery_date"
-                                value="{{isset($contract->legalContractDest->legalComercialTerm->delivery_date) ? $contract->legalContractDest->legalComercialTerm->delivery_date->format('Y-m-d') : ""}}"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->delivery_date : ""}}"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Ivoice No.

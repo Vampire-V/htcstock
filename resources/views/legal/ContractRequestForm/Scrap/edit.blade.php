@@ -179,9 +179,9 @@
                         <div class="col-md-4 mb-4">
                             <label for="validationDeliveryDate"><strong>Delivery Date</strong> <span
                                     style="color: red;">*</span></label>
-                            <input type="date" class="form-control-sm form-control" id="validationDeliveryDate"
+                            <input type="text" class="form-control-sm form-control" id="validationDeliveryDate"
                                 name="delivery_date"
-                                value="{{isset($contract->legalContractDest->legalComercialTerm->delivery_date) ? $contract->legalContractDest->legalComercialTerm->delivery_date->format('Y-m-d') : ""}}"
+                                value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->delivery_date : ""}}"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Delivery Date.

@@ -69,7 +69,7 @@
                         <div class="col-md-3 mb-3">
                             <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> <a
                                     href="#" target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"></a></label>
                             <input type="file" class="form-control-sm form-control" id="validationPurchaseOrderFile"
                                 onchange="uploadFileContract(this)" data-name="purchase_order">
                             <div class="mb-3 progress hide-contract">
@@ -86,7 +86,7 @@
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span> <a href="#"
                                     target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"></a></label>
                             <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
                                 onchange="uploadFileContract(this)"
                                 data-name="quotation" required>
@@ -103,7 +103,7 @@
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                     style="color: red;">*</span> <a
                                     href="#" target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"></a></label>
                             <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
                                 onchange="uploadFileContract(this)" data-name="coparation_sheet" required>
                             <div class="mb-3 progress hide-contract">
@@ -119,7 +119,7 @@
                         <div class="col-md-3 mb-3">
                             <label for="validationWorkPlan"><strong>Work Plan</strong> <a
                                     href="#" target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"></a></label>
                             <input type="file" class="form-control-sm form-control" id="validationWorkPlan"
                                 data-name="work_plan"
                                 onchange="uploadFileContract(this)">

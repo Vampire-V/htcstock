@@ -46,7 +46,7 @@
                         <div class="col-md-6 mb-6">
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span> <a href="#" target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"></a></label>
 
                             <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
                                 data-name="quotation" onchange="uploadFileContract(this)" required>
@@ -62,7 +62,7 @@
                         <div class="col-md-6 mb-6">
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                     style="color: red;">*</span> <a href="#" target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"></a></label>
 
                             <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
                                 data-name="coparation_sheet" onchange="uploadFileContract(this)" required>
@@ -80,7 +80,7 @@
                         <div class="col-md-6 mb-6">
                             <label for="validationFactoryPermission"><strong>Factory Permission</strong> <span
                                     style="color: red;">*</span> <a href="#" target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"></a></label>
 
                             <input type="file" class="form-control-sm form-control" id="validationFactoryPermission"
                                 data-name="factory_permission" onchange="uploadFileContract(this)" required>
@@ -96,7 +96,7 @@
                         <div class="col-md-6 mb-6">
                             <label for="validationWastePermission"><strong>Waste Permission</strong> <span
                                     style="color: red;">*</span> <a href="#" target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"></a></label>
 
                             <input type="file" class="form-control-sm form-control" id="validationWastePermission"
                                 data-name="waste_permission" onchange="uploadFileContract(this)" required>

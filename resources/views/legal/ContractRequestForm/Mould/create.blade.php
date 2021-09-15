@@ -43,13 +43,12 @@
                     <span class="badge badge-primary">Supporting Documents</span>
                     <div class="form-row">
                         <div class="col-md-6 mb-6">
-                            <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> <span
-                                    style="color: red;">*</span> <a href="#"
+                            <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> <a href="#"
                                     target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"></a></label>
                             <input type="file" class="form-control-sm form-control" id="validationPurchaseOrderFile"
                                 data-name="purchase_order"
-                                onchange="uploadFileContract(this)" required>
+                                onchange="uploadFileContract(this)" >
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
@@ -63,7 +62,7 @@
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span> <a href="#"
                                     target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"></a></label>
 
                             <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
                                 data-name="quotation"
@@ -83,7 +82,7 @@
                             <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                     style="color: red;">*</span> <a href="#"
                                     target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"></a></label>
 
                             <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
                                 data-name="coparation_sheet"
@@ -102,7 +101,7 @@
                             <label for="validationDrawingFile"><strong>Drawing</strong> <span
                                     style="color: red;">*</span>
                                 <a href="{{url('storage/'.$contract->drawing)}}" target="_blank"
-                                    rel="noopener noreferrer">view file</a></label>
+                                    rel="noopener noreferrer"></a></label>
 
                             <input type="file" class="form-control-sm form-control" id="validationDrawingFile"
                                 data-name="drawing" data-cache="{{substr($contract->drawing,9)}}"
@@ -127,7 +126,7 @@
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope"
-                                name="scope_of_work"
+                                name="scope_of_work" placeholder="e.g. produce the mould"
                                 value=""
                                 required>
                             <div class="invalid-feedback">
@@ -138,7 +137,7 @@
                             <label for="validationToManufacture"><strong>To Manufacture</strong> </label>
                             <input type="text" class="form-control-sm form-control" id="validationToManufacture"
                                 name="to_manufacture"
-                                value="">
+                                value="" placeholder="e.g. UPPER HINGE FIXING PLATE">
                             <div class="invalid-feedback">
                                 Please provide a valid To Manufacture.
                             </div>
@@ -146,7 +145,7 @@
                         <div class="col-md-3 mb-3">
                             <label for="validationOf"><strong>Of</strong></label>
                             <input type="text" class="form-control-sm form-control" id="validationOf" name="of"
-                                value="">
+                                value="" placeholder="e.g. T-Door 456">
                             <div class="invalid-feedback">
                                 Please provide a valid Of.
                             </div>

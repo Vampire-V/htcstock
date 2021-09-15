@@ -25,7 +25,7 @@ class StoreMould extends FormRequest
     public function rules()
     {
         return [
-            'purchase_order' => 'required',
+            // 'purchase_order' => 'required',
             'quotation' => 'required',
             'coparation_sheet' => 'required',
             'drawing' => 'required',
@@ -50,7 +50,7 @@ class StoreMould extends FormRequest
     public function messages()
     {
         return [
-            'purchase_order.required' => 'Please enter purchase_order',
+            // 'purchase_order.required' => 'Please enter purchase_order',
             'coparation_sheet.required' => 'Please enter coparation_sheet',
             'quotation.required' => 'Please enter quotation',
             'drawing.required' => 'Please enter drawing',

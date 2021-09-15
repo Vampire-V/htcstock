@@ -70,7 +70,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
                                     onchange="uploadFileContract(this)" data-name="quotation" required>
                                 <div class="mb-3 progress hide-contract">
@@ -85,7 +85,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
                                     onchange="uploadFileContract(this)" data-name="coparation_sheet" required>
                                 <div class="mb-3 progress hide-contract">
@@ -101,7 +101,7 @@
                                 <label for="validationTransportationPermission"><strong>Transportation
                                         Permission</strong>
                                     <span style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control"
                                     id="validationTransportationPermission" data-name="transportation_permission"
                                     onchange="uploadFileContract(this)" required>
@@ -119,7 +119,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationVehicleRegistration"><strong>Vehicle Registration</strong>
                                     <span style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control"
                                     id="validationVehicleRegistration" data-name="vehicle_registration_certificate"
                                     onchange="uploadFileContract(this)" required>
@@ -134,7 +134,7 @@
                             </div>
                             <div class="col-md-4 mb-4">
                                 <label for="validationRoute"><strong>Route</strong> <span style="color: red;">*</span>
-                                    <a href="#" target="_blank" rel="noopener noreferrer">view file</a></label>
+                                    <a href="#" target="_blank" rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationRoute"
                                     onchange="uploadFileContract(this)" data-name="route" required>
                                 <div class="mb-3 progress hide-contract">
@@ -149,7 +149,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationInsurance"><strong>Insurance</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationInsurance"
                                     onchange="uploadFileContract(this)" data-name="insurance" required>
                                 <div class="mb-3 progress hide-contract">
@@ -166,7 +166,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationDriverLicense"><strong>Driver License</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationDriverLicense"
                                     onchange="uploadFileContract(this)" data-name="driver_license" required>
                                 <div class="mb-3 progress hide-contract">
@@ -312,7 +312,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
 
                                 <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
                                     data-name="quotation" onchange="uploadFileContract(this)" required>
@@ -328,7 +328,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
                                     onchange="uploadFileContract(this)" data-name="coparation_sheet" required>
                                 <div class="mb-3 progress hide-contract">
@@ -542,7 +542,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
                                     data-name="quotation" onchange="uploadFileContract(this)" required>
                                 <div class="mb-3 progress hide-contract">
@@ -557,7 +557,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
                                     onchange="uploadFileContract(this)" data-name="coparation_sheet" required>
                                 <div class="mb-3 progress hide-contract">
@@ -704,7 +704,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
                                     data-name="quotation" onchange="uploadFileContract(this)" required>
                                 <div class="mb-3 progress hide-contract">
@@ -719,7 +719,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
                                     onchange="uploadFileContract(this)" data-name="coparation_sheet" required>
                                 <div class="mb-3 progress hide-contract">
@@ -734,7 +734,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationDoctorLicense"><strong>Doctor License</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
 
                                 <input type="file" class="form-control-sm form-control" id="validationDoctorLicense"
                                     onchange="uploadFileContract(this)" data-name="doctor_license" required>
@@ -865,7 +865,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
                                     data-name="quotation" onchange="uploadFileContract(this)" required>
                                 <div class="mb-3 progress hide-contract">
@@ -880,7 +880,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
                                     onchange="uploadFileContract(this)" data-name="coparation_sheet" required>
                                 <div class="mb-3 progress hide-contract">
@@ -895,7 +895,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationNurseLicense"><strong>Nurse License</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
 
                                 <input type="file" class="form-control-sm form-control" id="validationNurseLicense"
                                     onchange="uploadFileContract(this)" data-name="nurse_license" required>
@@ -1027,7 +1027,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
                                     data-name="quotation" onchange="uploadFileContract(this)" required>
                                 <div class="mb-3 progress hide-contract">
@@ -1042,7 +1042,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
                                     onchange="uploadFileContract(this)" data-name="coparation_sheet" required>
                                 <div class="mb-3 progress hide-contract">
@@ -1057,7 +1057,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="validationSecurityService"><strong>Security Service
                                         Certification</strong> <span style="color: red;">*</span> <a href="#"
-                                        target="_blank" rel="noopener noreferrer">view file</a></label>
+                                        target="_blank" rel="noopener noreferrer"></a></label>
 
                                 <input type="file" class="form-control-sm form-control" id="validationSecurityService"
                                     onchange="uploadFileContract(this)" data-name="security_service_certification"
@@ -1074,7 +1074,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="validationSecurityGuardLicense"><strong>Security Guard License</strong>
                                     <span style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
 
                                 <input type="file" class="form-control-sm form-control"
                                     id="validationSecurityGuardLicense" onchange="uploadFileContract(this)"
@@ -1208,7 +1208,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
                                     data-name="quotation" onchange="uploadFileContract(this)" required>
                                 <div class="mb-3 progress hide-contract">
@@ -1223,7 +1223,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
                                     onchange="uploadFileContract(this)" data-name="coparation_sheet" required>
                                 <div class="mb-3 progress hide-contract">
@@ -1365,7 +1365,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
                                     data-name="quotation" onchange="uploadFileContract(this)" required>
                                 <div class="mb-3 progress hide-contract">
@@ -1380,7 +1380,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
-                                        rel="noopener noreferrer">view file</a></label>
+                                        rel="noopener noreferrer"></a></label>
                                 <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
                                     onchange="uploadFileContract(this)" data-name="coparation_sheet" required>
                                 <div class="mb-3 progress hide-contract">

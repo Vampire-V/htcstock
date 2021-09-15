@@ -103,8 +103,7 @@
                     <span class="badge badge-primary">Supporting Documents</span>
                     <div class="form-row">
                         <div class="col-md-6 mb-6">
-                            <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> <span
-                                    style="color: red;">*</span> </label>
+                            <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong></label>
                             <div>
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->purchase_order)}}"
                                     target="_blank"
@@ -162,7 +161,7 @@
                         <div class="col-md-3 mb-3">
                             <label for="validationToManufacture"><strong>To Manufacture</strong> </label>
                             <input type="text" class="form-control-sm form-control" id="validationToManufacture"
-                                name="to_manufacture"
+                                name="to_manufacture" readonly
                                 value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->to_manufacture : ""}}">
                             <div class="invalid-feedback">
                                 Please provide a valid To Manufacture.
@@ -170,7 +169,7 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="validationOf"><strong>Of</strong></label>
-                            <input type="text" class="form-control-sm form-control" id="validationOf" name="of"
+                            <input type="text" class="form-control-sm form-control" id="validationOf" name="of" readonly
                                 value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->of : ""}}">
                             <div class="invalid-feedback">
                                 Please provide a valid Of.
@@ -179,7 +178,7 @@
                         <div class="col-md-3 mb-3">
                             <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong></label>
                             <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo"
-                                name="purchase_order_no"
+                                name="purchase_order_no" readonly
                                 value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->purchase_order_no : ""}}">
                             <div class="invalid-feedback">
                                 Please provide a valid Purchase Order No.

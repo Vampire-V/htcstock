@@ -44,13 +44,13 @@
                     <span class="badge badge-primary">Supporting Documents</span>
                     <div class="form-row">
                         <div class="col-md-6 mb-6">
-                            <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> <span
-                                    style="color: red;">*</span> <a href="{{url('storage/'.$contract->legalContractDest->purchase_order)}}"
+                            <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> 
+                                <a href="{{url('storage/'.$contract->legalContractDest->purchase_order)}}"
                                     target="_blank"
                                     rel="noopener noreferrer">{{$contract->legalContractDest->purchase_order ? 'view file' : ""}}</a></label>
                             <input type="file" class="form-control-sm form-control" id="validationPurchaseOrderFile"
                                 data-name="purchase_order" data-cache="{{substr($contract->legalContractDest->purchase_order,9)}}"
-                                onchange="uploadFileContract(this)" required>
+                                onchange="uploadFileContract(this)" >
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
@@ -128,7 +128,7 @@
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope"
-                                name="scope_of_work"
+                                name="scope_of_work" placeholder="e.g. produce the mould"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 required>
                             <div class="invalid-feedback">
@@ -138,7 +138,7 @@
                         <div class="col-md-3 mb-3">
                             <label for="validationToManufacture"><strong>To Manufacture</strong> </label>
                             <input type="text" class="form-control-sm form-control" id="validationToManufacture"
-                                name="to_manufacture"
+                                name="to_manufacture" placeholder="e.g. UPPER HINGE FIXING PLATE"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->to_manufacture : ""}}">
                             <div class="invalid-feedback">
                                 Please provide a valid To Manufacture.
@@ -146,7 +146,7 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="validationOf"><strong>Of</strong></label>
-                            <input type="text" class="form-control-sm form-control" id="validationOf" name="of"
+                            <input type="text" class="form-control-sm form-control" id="validationOf" name="of" placeholder="e.g. T-Door 456"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->of : ""}}">
                             <div class="invalid-feedback">
                                 Please provide a valid Of.

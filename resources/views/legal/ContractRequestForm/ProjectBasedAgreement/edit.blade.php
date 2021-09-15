@@ -147,7 +147,7 @@
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope"
-                                name="scope_of_work"
+                                name="scope_of_work" placeholder="e.g. WAC commercial line project"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 required>
                             <div class="invalid-feedback">
@@ -158,7 +158,7 @@
                             <label for="validationLocation"><strong>Location</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationLocation"
-                                name="location"
+                                name="location" placeholder="e.g. WAC"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->location : ""}}"
                                 required>
                             <div class="invalid-feedback">
@@ -166,12 +166,11 @@
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong> <span
-                                    style="color: red;">*</span></label>
+                            <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong></label>
                             <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo"
                                 name="purchase_order_no"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->purchase_order_no : ""}}"
-                                required>
+                                >
                             <div class="invalid-feedback">
                                 Please provide a valid Purchase Order No.
                             </div>

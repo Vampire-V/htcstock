@@ -180,8 +180,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong> <span
-                                    style="color: red;">*</span></label>
+                            <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong></label>
                             <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo"
                                 name="purchase_order_no"
                                 value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->purchase_order_no : ""}}"

@@ -144,7 +144,7 @@
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope"
                                 name="scope_of_work"
-                                value=""
+                                value="" placeholder="e.g. WAC commercial line project"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Scope of Work.
@@ -155,19 +155,18 @@
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationLocation"
                                 name="location"
-                                value=""
+                                value="" placeholder="e.g. WAC"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Location No.
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong> <span
-                                    style="color: red;">*</span></label>
+                            <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong></label>
                             <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo"
                                 name="purchase_order_no"
                                 value=""
-                                required>
+                                >
                             <div class="invalid-feedback">
                                 Please provide a valid Purchase Order No.
                             </div>

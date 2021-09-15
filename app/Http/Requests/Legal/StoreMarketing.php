@@ -29,9 +29,9 @@ class StoreMarketing extends FormRequest
             
             'purpose' => 'required',
             'promote_a_product' => 'required',
-            'purchase_order_no' => 'required',
-            'quotation_no' => 'required',
-            'dated' => 'required',
+            // 'purchase_order_no' => 'required',
+            // 'quotation_no' => 'required',
+            // 'dated' => 'required',
             'contract_period' => 'required',
 
             'detail_payment_term' => 'required',
@@ -51,9 +51,9 @@ class StoreMarketing extends FormRequest
 
             'purpose.required' => 'Please enter purpose',
             'promote_a_product.required' => 'Please enter promote_a_product',
-            'purchase_order_no.required' => 'Please enter purchase_order_no',
-            'quotation_no.required' => 'Please enter quotation_no',
-            'dated.required' => 'Please enter dated',
+            // 'purchase_order_no.required' => 'Please enter purchase_order_no',
+            // 'quotation_no.required' => 'Please enter quotation_no',
+            // 'dated.required' => 'Please enter dated',
             'contract_period.required' => 'Please enter contract_period',
             
             'detail_payment_term.required' => 'Please enter payment_term',

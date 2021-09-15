@@ -114,7 +114,7 @@
                             <label for="validationPurpose"><strong>Purpose</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationPurpose"
-                                name="purpose"
+                                name="purpose" placeholder="e.g. increase the production capacity of WAC"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->purpose : ""}}"
                                 required>
                             <div class="invalid-feedback">
@@ -125,7 +125,7 @@
                             <label for="validationPromoteProduct"><strong>Promote a product</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationPromoteProduct"
-                                name="promote_a_product"
+                                name="promote_a_product" placeholder="e.g. WAC 5K"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->promote_a_product : ""}}"
                                 required>
                             <div class="invalid-feedback">
@@ -133,8 +133,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong> <span
-                                    style="color: red;">*</span></label>
+                            <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong></label>
                             <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo"
                                 name="purchase_order_no"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->purchase_order_no : ""}}"
@@ -146,8 +145,7 @@
                     </div>
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
-                            <label for="validationQuotationNo"><strong>Quotation No</strong> <span
-                                    style="color: red;">*</span></label>
+                            <label for="validationQuotationNo"><strong>Quotation No</strong></label>
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo"
                                 name="quotation_no"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
@@ -157,8 +155,7 @@
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="validationDated"><strong>Dated</strong> <span
-                                    style="color: red;">*</span></label>
+                            <label for="validationDated"><strong>Dated</strong></label>
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm->dated) ? $contract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
                                 required>

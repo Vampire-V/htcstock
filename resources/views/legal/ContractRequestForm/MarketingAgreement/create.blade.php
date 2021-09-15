@@ -38,7 +38,7 @@
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-body">
-                <span class="badge badge-primary">Sub-type of Contract</span>
+                <span class="badge badge-primary">Sub-type</span>
                 <form class="needs-validation" novalidate
                     action="{{route('legal.contract-request.marketingagreement.store')}}" method="POST"
                     enctype="multipart/form-data">
@@ -46,7 +46,8 @@
                     <input type="hidden" id="contract_id" name="contract_id" value="{{$contract->id}}">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
-                            <label for="validationSubType"><strong></strong> </label>
+                            <label for="validationSubType"><strong>Sub-type of Contract</strong><span
+                                style="color: red;">*</span> </label>
                             <select id="validationSubType" class="form-control-sm form-control"
                                 name="sub_type_contract_id" required>
                                 <option data-id="" value="">Choose....</option>
@@ -103,7 +104,8 @@
                             <label for="validationPurpose"><strong>Purpose</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationPurpose"
-                                name="purpose" value="" required>
+                                name="purpose" value="" placeholder="e.g. increase the production capacity of WAC"
+                                required>
                             <div class="invalid-feedback">
                                 Please provide a valid Purpose.
                             </div>
@@ -112,16 +114,15 @@
                             <label for="validationPromoteProduct"><strong>Promote a product</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationPromoteProduct"
-                                name="promote_a_product" value="" required>
+                                name="promote_a_product" value="" placeholder="e.g. WAC 5K" required>
                             <div class="invalid-feedback">
                                 Please provide a valid Promote a product.
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong> <span
-                                    style="color: red;">*</span></label>
+                            <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong></label>
                             <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo"
-                                name="purchase_order_no" value="" required>
+                                name="purchase_order_no" value="">
                             <div class="invalid-feedback">
                                 Please provide a valid Purchase Order No.
                             </div>
@@ -129,19 +130,17 @@
                     </div>
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
-                            <label for="validationQuotationNo"><strong>Quotation No</strong> <span
-                                    style="color: red;">*</span></label>
+                            <label for="validationQuotationNo"><strong>Quotation No</strong></label>
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo"
-                                name="quotation_no" value="" required>
+                                name="quotation_no" value="">
                             <div class="invalid-feedback">
                                 Please provide a valid Quotation No.
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="validationDated"><strong>Dated</strong> <span
-                                    style="color: red;">*</span></label>
+                            <label for="validationDated"><strong>Dated</strong></label>
                             <input type="date" class="form-control-sm form-control" id="validationDated" name="dated"
-                                value="" required>
+                                value="">
                             <div class="invalid-feedback">
                                 Please provide a valid Dated
                             </div>
@@ -171,7 +170,7 @@
                     <input type="hidden" name="payment_term_id" value="">
                     <div class="form-row">
                         <div class="col-md-12 mb-12">
-                            <label for="validationWarranty"></label>
+                            <label for="validationWarranty"><strong>Detail</strong> <span style="color: red;">*</span></label>
                             <textarea class="form-control-sm form-control" name="detail_payment_term"
                                 id="validationPaymentDescription" rows="3" required></textarea>
                             <div class="invalid-feedback">

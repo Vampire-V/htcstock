@@ -120,8 +120,7 @@
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope"
-                                name="scope_of_work" value="" required>
-
+                                name="scope_of_work" value="" placeholder="e.g. sell the scrap during Oct 1, 2564 - Mar 31, 2565" required>
                             <div class="invalid-feedback">
                                 Please provide a valid Scope of Work.
                             </div>
@@ -130,7 +129,7 @@
                             <label for="validationLocation"><strong>Location</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationLocation"
-                                name="location" value="" required>
+                                name="location" value="" placeholder="e.g. RF" required>
                             <div class="invalid-feedback">
                                 Please provide a valid Location.
                             </div>

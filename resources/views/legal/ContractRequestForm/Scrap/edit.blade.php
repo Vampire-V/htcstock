@@ -134,7 +134,7 @@
                             <label for="validationScope"><strong>Scope of Work</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope"
-                                name="scope_of_work"
+                                name="scope_of_work" placeholder="e.g. sell the scrap during Oct 1, 2564 - Mar 31, 2565"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
                                 required>
 
@@ -146,7 +146,7 @@
                             <label for="validationLocation"><strong>Location</strong> <span
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationLocation"
-                                name="location"
+                                name="location" placeholder="e.g. RF"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->location : ""}}"
                                 required>
                             <div class="invalid-feedback">

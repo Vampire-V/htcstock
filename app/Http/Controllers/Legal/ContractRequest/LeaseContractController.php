@@ -8,6 +8,7 @@ use App\Models\Legal\LegalComercialTerm;
 use App\Models\Legal\LegalContract;
 use App\Models\Legal\LegalContractDest;
 use App\Models\Legal\LegalPaymentTerm;
+use App\Models\Legal\LegalSubtypeContract;
 use App\Services\Legal\Interfaces\ComercialListsServiceInterface;
 use App\Services\Legal\Interfaces\ComercialTermServiceInterface;
 use App\Services\Legal\Interfaces\ContractDescServiceInterface;
@@ -91,7 +92,7 @@ class LeaseContractController extends Controller
         // comercialTerm data
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
 
-        $payterm_detail = $request->only('payment_type_id','detail_payment_term');
+        $payterm_detail = $request->only('payment_type_id', 'detail_payment_term');
         DB::beginTransaction();
         try {
             $contract = LegalContract::find($request->contract_id);
@@ -106,7 +107,7 @@ class LeaseContractController extends Controller
             $term['contract_dest_id'] = $contract_desc->id;
             $contract_term = new LegalComercialTerm($term);
             $contract_term->save();
-            
+
             DB::commit();
             return \redirect()->route('legal.contract-request.show', $contract_desc->contract_id);
         } catch (\Exception $e) {
@@ -184,13 +185,22 @@ class LeaseContractController extends Controller
         // comercialTerm data
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
 
-        $payterm_detail = $request->only('payment_type_id','detail_payment_term');
+        $payterm_detail = $request->only('payment_type_id', 'detail_payment_term');
         DB::beginTransaction();
         try {
             $leaseContract = LegalContractDest::find($id);
             if ($leaseContract->legalContract->legalComercialList->count() < 1) {
                 return \redirect()->back()->with('error', "Error : Purchase list not found.");
             }
+
+            $subtype = LegalSubtypeContract::find($leaseContract->sub_type_contract_id);
+            if (!\collect(['wh-contract', 'st-contract'])->contains($subtype->slug)) {
+                Storage::delete($leaseContract->insurance_policy);
+                Storage::delete($leaseContract->cer_of_ownership);
+                $dest['insurance_policy'] = null;
+                $dest['cer_of_ownership'] = null;
+            }
+
             if ($leaseContract->legalComercialTerm) {
                 // $this->comercialTermService->update($term, $leaseContract->legalComercialTerm->id);
                 $leaseContract->legalComercialTerm->fill($term);
@@ -200,7 +210,7 @@ class LeaseContractController extends Controller
                 $leaseContract->legalPaymentTerm->fill($payterm_detail);
                 $leaseContract->legalPaymentTerm->save();
             }
-
+            
             $leaseContract->fill($dest);
             $leaseContract->save();
 

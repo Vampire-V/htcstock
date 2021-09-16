@@ -247,6 +247,21 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="text-center" style="width: 20%;">
+                        <h5 class="underline"></h5>
+                    </td>
+                    <td class="text-rigth" style="width: 13.5%;">Insurance Policy :</td>
+                    <td>
+                        <font><input type="checkbox" {{$contract->legalContractDest->insurance_policy ? "checked" : ""}}>
+                        </font>
+                    </td>
+                    <td class="text-rigth" style="width: 20%;">Certificate Of Ownership :</td>
+                    <td>
+                        <font><input type="checkbox"
+                                {{$contract->legalContractDest->cer_of_ownership ? "checked" : ""}}></font>
+                    </td>
+                </tr>
+                <tr>
                     <td class="text-center">
                         <h5 class="underline">Comercial Terms</h5>
                     </td>

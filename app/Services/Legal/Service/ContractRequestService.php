@@ -41,7 +41,7 @@ class ContractRequestService extends BaseService implements ContractRequestServi
 
     public function filter(Request $request)
     {
-        return LegalContract::with(['legalContractDest','legalAgreement','createdBy'])->filter($request)->where('trash', false)->orderBy('created_at', 'desc')
+        return LegalContract::with(['legalContractDest','legalAgreement','createdBy'])->filter($request)->where('trash', false)->orderBy('status', 'ASC')->orderBy('created_at', 'desc')
         // ->get();
         ->paginate(10);
     }

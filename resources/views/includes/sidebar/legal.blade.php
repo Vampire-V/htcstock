@@ -49,12 +49,24 @@
                     </a>
                     <ul>
                         <li>
+                            <a href="#" class="">
+                                <i class="metismenu-icon"></i>
+                                Contract Template Libary
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{route('legal.contract-request.index')}}"
                                 class="{{Helper::isActive('legal/contract-request')}}">
                                 <i class="metismenu-icon"></i>
                                 Contract Request
                             </a>
                         </li>
+                        {{-- <li>
+                            <a href="#" class="">
+                                <i class="metismenu-icon"></i>
+                                Contract Archive
+                            </a>
+                        </li> --}}
                     </ul>
                 </li>
                 {{-- <li>

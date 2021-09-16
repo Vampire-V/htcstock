@@ -156,60 +156,42 @@ class ContractRequestController extends Controller
         switch ($legalContract->agreement_id) {
             case $agreements[0]->id:
                 return \view('legal.ContractRequestForm.WorkServiceContract.view')
-                    ->with(\compact('legalContract'))
-                    ->with(\compact('paymentType'))
-                    ->with(\compact('permission'));
+                    ->with(\compact('legalContract', 'paymentType', 'permission'));
                 break;
             case $agreements[1]->id:
                 return \view('legal.ContractRequestForm.PurchaseEquipment.view')
-                    ->with(\compact('legalContract'))
-                    ->with(\compact('paymentType'))
-                    ->with(\compact('permission'));
+                    ->with(\compact('legalContract', 'paymentType', 'permission'));
                 break;
             case $agreements[2]->id:
                 return \view('legal.ContractRequestForm.PurchaseEquipmentInstall.view')
-                    ->with(\compact('legalContract'))
-                    ->with(\compact('paymentType'))
-                    ->with(\compact('permission'));
+                    ->with(\compact('legalContract', 'paymentType', 'permission'));
                 break;
             case $agreements[3]->id:
                 return \view('legal.ContractRequestForm.Mould.view')
-                    ->with(\compact('legalContract'))
-                    ->with(\compact('paymentType'))
-                    ->with(\compact('permission'));
+                    ->with(\compact('legalContract', 'paymentType', 'permission'));
                 break;
             case $agreements[4]->id:
                 return \view('legal.ContractRequestForm.Scrap.view')
-                    ->with(\compact('legalContract'))
-                    ->with(\compact('paymentType'))
-                    ->with(\compact('permission'));
+                    ->with(\compact('legalContract', 'paymentType', 'permission'));
                 break;
             case $agreements[5]->id:
                 $subtypeContract = $this->subtypeContractService->dropdown($legalContract->agreement_id);
                 return \view('legal.ContractRequestForm.VendorServiceContract.view')
-                    ->with(\compact('legalContract'))
-                    ->with(\compact('paymentType'))
-                    ->with(\compact('subtypeContract'))
-                    ->with(\compact('permission'));
+                    ->with(\compact('legalContract', 'subtypeContract', 'paymentType', 'permission'));
                 break;
             case $agreements[6]->id:
                 return \view('legal.ContractRequestForm.LeaseContract.view')
-                    ->with(\compact('legalContract','subtypeContract','paymentType','permission'));
+                    ->with(\compact('legalContract', 'subtypeContract', 'paymentType', 'permission'));
                 break;
             case $agreements[7]->id:
                 return \view('legal.ContractRequestForm.ProjectBasedAgreement.view')
-                    ->with(\compact('legalContract'))
-                    ->with(\compact('paymentType'))
-                    ->with(\compact('permission'));
-                break;
+                    ->with(\compact('legalContract', 'paymentType', 'permission'));
             case $agreements[8]->id:
                 return \view('legal.ContractRequestForm.MarketingAgreement.view')
-                    ->with(\compact('legalContract'))
-                    ->with(\compact('paymentType'))
-                    ->with(\compact('permission'));
+                    ->with(\compact('legalContract', 'paymentType', 'permission'));
                 break;
             default:
-                \abort(404);
+                return \redirect()->back()->with('error', "Error : type not folud." );
                 break;
         }
     }
@@ -550,7 +532,7 @@ class ContractRequestController extends Controller
         $segments = explode('/', \substr(url()->previous(), strlen($request->root())));
         try {
             $path = Storage::disk('public')->putFileAs(
-                $segments[1] . '/' . $segments[2] . '/' . $date->isoFormat('OYMMDD'),
+                $segments[1] . '/' . $segments[2] . '/' . $date->isoFormat('OYMMDD'). '/',
                 new File($request->file('file')),
                 $request->file('file')->getClientOriginalName(),
             );
@@ -558,8 +540,6 @@ class ContractRequestController extends Controller
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-
-        
     }
 
     /**

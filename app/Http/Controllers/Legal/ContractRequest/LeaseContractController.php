@@ -193,14 +193,6 @@ class LeaseContractController extends Controller
                 return \redirect()->back()->with('error', "Error : Purchase list not found.");
             }
 
-            $subtype = LegalSubtypeContract::find($leaseContract->sub_type_contract_id);
-            if (!\collect(['wh-contract', 'st-contract'])->contains($subtype->slug)) {
-                Storage::delete($leaseContract->insurance_policy);
-                Storage::delete($leaseContract->cer_of_ownership);
-                $dest['insurance_policy'] = null;
-                $dest['cer_of_ownership'] = null;
-            }
-
             if ($leaseContract->legalComercialTerm) {
                 // $this->comercialTermService->update($term, $leaseContract->legalComercialTerm->id);
                 $leaseContract->legalComercialTerm->fill($term);
@@ -210,9 +202,6 @@ class LeaseContractController extends Controller
                 $leaseContract->legalPaymentTerm->fill($payterm_detail);
                 $leaseContract->legalPaymentTerm->save();
             }
-            
-            $leaseContract->fill($dest);
-            $leaseContract->save();
 
             if ($leaseContract->purchase_order !== $request->purchase_order) {
                 Storage::delete($leaseContract->purchase_order);
@@ -229,6 +218,17 @@ class LeaseContractController extends Controller
             if ($leaseContract->cer_of_ownership !== $request->cer_of_ownership) {
                 Storage::delete($leaseContract->cer_of_ownership);
             }
+
+            $subtype = LegalSubtypeContract::find($leaseContract->sub_type_contract_id);
+            if (!\collect(['wh-contract', 'st-contract'])->contains($subtype->slug)) {
+                Storage::delete($leaseContract->insurance_policy);
+                Storage::delete($leaseContract->cer_of_ownership);
+                $dest['insurance_policy'] = null;
+                $dest['cer_of_ownership'] = null;
+            }
+            
+            $leaseContract->fill($dest);
+            $leaseContract->save();
             $request->session()->flash('success',  ' has been update');
         } catch (\Exception $e) {
             DB::rollBack();

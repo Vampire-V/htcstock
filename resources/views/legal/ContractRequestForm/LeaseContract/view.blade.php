@@ -102,6 +102,8 @@
                     </div>
                     {{-- end head --}}
                     <hr>
+                    @isset($legalContract->legalContractDest)
+
                     <span class="badge badge-primary">Sub-type of Contract</span>
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
@@ -383,8 +385,9 @@
                             class="form-control form-control-sm" rows="3"
                             readonly>{{$legalContract->legalContractDest->legalPaymentTerm->detail_payment_term}}</textarea>
                     </div>
-            </div>
+                </div>
             <hr>
+            @endisset
             </form>
         </div>
     </div>

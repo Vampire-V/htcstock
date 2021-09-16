@@ -147,7 +147,7 @@ class ContractRequestController extends Controller
                 $legalContract->legalContractDest->value_of_contract = explode(",", $legalContract->legalContractDest->value_of_contract);
             }
 
-            $permission = $legalContract->createdBy->department->legalApprove->search(function ($item, $key) {
+            $permission = $legalContract->createdBy->department->legalApprove->search(function ($item) {
                 return $item->user_id === \auth()->id();
             }, \true) === false ? 'Read' : 'Write';
         } catch (\Exception $e) {

@@ -273,6 +273,11 @@
                         <font><input type="checkbox"
                                 {{$contract->legalContractDest->coparation_sheet ? "checked" : ""}}></font>
                     </td>
+                    <td class="text-rigth">Insurance :</td>
+                    <td>
+                        <font><input type="checkbox" {{$contract->legalContractDest->insurance ? "checked" : ""}}>
+                        </font>
+                    </td>
                 </tr>
             </tbody>
         </table>

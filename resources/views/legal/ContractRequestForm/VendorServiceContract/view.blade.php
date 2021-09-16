@@ -264,7 +264,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                    readonly>
+                                readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
@@ -418,7 +418,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                    readonly>
+                                readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
@@ -668,7 +668,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                    readonly>
+                                readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
@@ -844,7 +844,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                    readonly>
+                                readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
@@ -1001,17 +1001,17 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                    readonly>
+                                readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
                             </div>
                             <div class="col-md-4 mb-4">
-                                <label for="validationNumberOfDoctor"><strong>Number of doctor</strong> <span
+                                <label for="validationNumberOfDoctor"><strong>Number of Nurse</strong> <span
                                         style="color: red;">*</span></label>
                                 <input type="number" class="form-control-sm form-control" id="validationNumberOfDoctor"
                                     name="number_of_doctor" min="0"
-                                    value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->number_of_doctor : ""}}"
+                                    value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->number_of_nurse : ""}}"
                                     readonly>
                                 <div>
                                     {{-- Please provide a valid Number of doctor. --}}
@@ -1164,7 +1164,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                    readonly>
+                                readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
@@ -1310,14 +1310,14 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                    readonly>
+                                readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
                             </div>
                             <div class="col-md-4 mb-4">
                                 <label for="validationNumberOfSubcontractor"><strong>Number of subcontractor</strong>
-                                    <span style="color: red;">*</span></label>
+                                </label>
                                 <input type="number" class="form-control-sm form-control"
                                     id="validationNumberOfSubcontractor" name="number_of_subcontractor" min="0"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->number_of_subcontractor : ""}}"
@@ -1411,6 +1411,15 @@
                                         rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
                                 </div>
                             </div>
+                            <div class="col-md-4 mb-4">
+                                <label for="validationInsurance"><strong>Insurance</strong> <span
+                                        style="color: red;">*</span> </label>
+                                <div>
+                                    <a href="{{url('storage/'.$legalContract->legalContractDest->insurance)}}"
+                                        target="_blank"
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->insurance ? 'view file' : ""}}</a>
+                                </div>
+                            </div>
                         </div>
                         <hr>
 
@@ -1467,7 +1476,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                    readonly>
+                                readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}

@@ -92,6 +92,7 @@ var displayFileBySubType = e => {
     if (e.id === 'form-transportation') {
         displayFileName(e.querySelector("input[id='validationQuotationFile']"))
         displayFileName(e.querySelector("input[id='validationCoparationFile']"))
+        displayFileName(e.querySelector("input[id='validationInsurance']"))
     }
     if (e.id === 'form-it') {
         

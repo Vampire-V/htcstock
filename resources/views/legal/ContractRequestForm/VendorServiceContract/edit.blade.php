@@ -1164,11 +1164,11 @@
                                 </div> --}}
                             </div>
                             <div class="col-md-4 mb-4">
-                                <label for="validationNumberOfDoctor"><strong>Number of doctor</strong> <span
+                                <label for="validationNumberOfNurse"><strong>Number of Nurse</strong> <span
                                         style="color: red;">*</span></label>
-                                <input type="number" class="form-control-sm form-control" id="validationNumberOfDoctor"
-                                    name="number_of_doctor" min="0"
-                                    value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->number_of_doctor : ""}}"
+                                <input type="number" class="form-control-sm form-control" id="validationNumberOfNurse"
+                                    name="number_of_nurse" min="0"
+                                    value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->number_of_nurse : ""}}"
                                     required>
                                 <div class="invalid-feedback">
                                     Please provide a valid Number of doctor.
@@ -1558,7 +1558,7 @@
                             </div>
                             <div class="col-md-4 mb-4">
                                 <label for="validationNumberOfSubcontractor"><strong>Number of subcontractor</strong>
-                                    <span style="color: red;">*</span></label>
+                                </label>
                                 <input type="number" class="form-control-sm form-control"
                                     id="validationNumberOfSubcontractor" name="number_of_subcontractor" min="0"
                                     value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->number_of_subcontractor : ""}}"
@@ -1676,6 +1676,25 @@
                                     value="{{$contract->legalContractDest->coparation_sheet}}">
                                 <div class="invalid-feedback">
                                     Please provide a valid Coparation Sheet.
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <label for="validationInsurance"><strong>Insurance</strong> <span
+                                        style="color: red;">*</span> <a
+                                        href="{{url('storage/'.$contract->legalContractDest->insurance)}}"
+                                        target="_blank"
+                                        rel="noopener noreferrer">{{$contract->legalContractDest->insurance ? 'view file' : ""}}</a></label>
+                                <input type="file" class="form-control-sm form-control" id="validationInsurance"
+                                    onchange="uploadFileContract(this)" data-name="insurance"
+                                    data-cache="{{substr($contract->legalContractDest->insurance,9)}}" required>
+                                <div class="mb-3 progress hide-contract">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
+                                        aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                                </div>
+                                <input type="hidden" type="text" name="insurance"
+                                    value="{{$contract->legalContractDest->insurance}}">
+                                <div class="invalid-feedback">
+                                    Please provide a valid Insurance.
                                 </div>
                             </div>
                         </div>

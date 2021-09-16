@@ -352,7 +352,7 @@ class VendorServiceContractController extends Controller
             'dated' => 'required',
             'contract_period' => 'required',
             // 'untill' => 'required',
-            'number_of_doctor' => 'required',
+            'number_of_nurse' => 'required',
             'working_day' => 'required',
             'working_time' => 'required',
 
@@ -392,7 +392,7 @@ class VendorServiceContractController extends Controller
             'dated' => 'required',
             'contract_period' => 'required',
             // 'untill' => 'required',
-            'number_of_subcontractor' => 'required',
+            // 'number_of_subcontractor' => 'required',
             'number_of_agent' => 'required',
             'working_day' => 'required',
             'working_time' => 'required',
@@ -406,6 +406,7 @@ class VendorServiceContractController extends Controller
             'sub_type_contract_id' => 'required',
             'quotation' => 'required',
             'coparation_sheet' => 'required',
+            'insurance' => 'required',
 
             'scope_of_work' => 'required',
             'quotation_no' => 'required',
@@ -541,7 +542,7 @@ class VendorServiceContractController extends Controller
         // $attributes['coparation_sheet'] = $request->coparation_sheet;
         // $attributes['nurse_license'] = $request->coparation_sheet;
 
-        $comercial_terms = $request->only('scope_of_work', 'quotation_no', 'dated', 'contract_period', 'number_of_doctor', 'working_day', 'working_time');
+        $comercial_terms = $request->only('scope_of_work', 'quotation_no', 'dated', 'contract_period', 'number_of_nurse', 'working_day', 'working_time');
 
         // $comercialAttr['scope_of_work'] = $request->scope_of_work;
         // $comercialAttr['quotation_no'] = $request->quotation_no;
@@ -606,7 +607,7 @@ class VendorServiceContractController extends Controller
     }
     private function setAttributesTransportation(Request $request)
     {
-        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'contract_id');
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet','insurance', 'contract_id');
         // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
         // $attributes['quotation'] = $request->quotation;
         // $attributes['coparation_sheet'] = $request->coparation_sheet;

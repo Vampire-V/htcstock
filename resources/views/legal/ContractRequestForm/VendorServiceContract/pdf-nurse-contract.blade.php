@@ -325,10 +325,10 @@
                     </td> --}}
                 </tr>
                 <tr>
-                    <td colspan="2" class="text-rigth">Number of doctor :</td>
+                    <td colspan="2" class="text-rigth">Number of Nurse :</td>
                     <td colspan="7" style="padding-left: 1%;">
                         <font class="underline">
-                            {{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->number_of_doctor : ""}}
+                            {{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->number_of_nurse : ""}}
                         </font>
                     </td>
                 </tr>

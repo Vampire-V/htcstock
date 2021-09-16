@@ -9,9 +9,8 @@
             <div class="page-title-icon">
                 <i class="fa fa-balance-scale icon-gradient bg-happy-fisher" aria-hidden="true"></i>
             </div>
-            <div>CONTRACT MANAGEMENT
-                <div class="page-title-subheading">This is an example dashboard created using
-                    build-in elements and components.
+            <div>CONTRACT LIFECYCLE MANAGEMENT
+                <div class="page-title-subheading">Please read "Contract Management SOP" carefully before requesting!
                 </div>
             </div>
         </div>

@@ -7,9 +7,9 @@
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
-                <i class="pe-7s-monitor icon-gradient bg-mean-fruit"> </i>
+                <i class="fa fa-balance-scale icon-gradient bg-happy-fisher" aria-hidden="true"></i>
             </div>
-            <div>Analytics Dashboard
+            <div>CONTRACT MANAGEMENT
                 <div class="page-title-subheading">This is an example dashboard created using
                     build-in elements and components.
                 </div>

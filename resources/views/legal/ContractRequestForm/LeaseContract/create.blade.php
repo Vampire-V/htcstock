@@ -368,6 +368,9 @@
                         <div class="col-md-9 mb-9 hide-contract" id="contractType5" data-id="LE.">
                             <textarea name="detail_payment_term" id="detail_payment_term" class="form-control form-control-sm" rows="3"></textarea>
                         </div>
+                        <div class="col-md-9 mb-9 hide-contract" id="contractType6" data-id="Orther">
+                            <textarea name="detail_payment_term" id="detail_payment_term" class="form-control form-control-sm" rows="3"></textarea>
+                        </div>
                     </div>
 
                     <hr>

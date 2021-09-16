@@ -78,7 +78,7 @@ var render_html = () => {
                     newRow.classList.add(bg_color)
                 }
                 let cellIndex = newRow.insertCell()
-                if (auth.roles.find(item => item.slug === `admin-kpi`)) {
+                if (admin) {
                     cellIndex.setAttribute('data-toggle', 'modal')
                     cellIndex.setAttribute('data-target', '#switch-rule-modal')
                     cellIndex.setAttribute('data-group', element.rules.category_id)

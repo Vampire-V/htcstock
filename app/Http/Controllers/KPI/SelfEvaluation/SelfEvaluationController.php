@@ -133,10 +133,11 @@ class SelfEvaluationController extends Controller
             $current = $this->userApproveService->findCurrentLevel($f_evaluate);
             $evaluate  = new EvaluateResource($f_evaluate);
             $canOperation = Gate::allows(UserEnum::OPERATIONKPI);
+            $isAdmin = Gate::allows(UserEnum::ADMINKPI);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category', 'weight_group', 'current', 'canOperation'));
+        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category', 'weight_group', 'current', 'canOperation','isAdmin'));
     }
 
     /**

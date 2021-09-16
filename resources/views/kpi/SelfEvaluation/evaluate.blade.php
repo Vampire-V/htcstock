@@ -344,6 +344,7 @@
     const evaluate = {!!json_encode($evaluate)!!}
     const weight_group = {!!json_encode($weight_group)!!}
     const operation = {!!json_encode($canOperation)!!}
+    const admin = {!!json_encode($isAdmin)!!}
 </script>
 <script src="{{asset('assets\js\kpi\evaluationSelf\evaluate.js')}}" defer></script>
 @endsection

@@ -69,7 +69,7 @@
                             <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> <a
                                     href="#" target="_blank"
                                     rel="noopener noreferrer"></a></label>
-                            <input type="file" class="form-control-sm form-control" id="validationPurchaseOrderFile"
+                            <input type="file" accept="application/pdf" class="form-control-sm form-control" id="validationPurchaseOrderFile"
                                 onchange="uploadFileContract(this)" data-name="purchase_order">
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
@@ -86,7 +86,7 @@
                                     style="color: red;">*</span> <a href="#"
                                     target="_blank"
                                     rel="noopener noreferrer"></a></label>
-                            <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
+                            <input type="file" accept="application/pdf" class="form-control-sm form-control" id="validationQuotationFile"
                                 onchange="uploadFileContract(this)"
                                 data-name="quotation" required>
                             <div class="mb-3 progress hide-contract">
@@ -103,7 +103,7 @@
                                     style="color: red;">*</span> <a
                                     href="#" target="_blank"
                                     rel="noopener noreferrer"></a></label>
-                            <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
+                            <input type="file" accept="application/pdf" class="form-control-sm form-control" id="validationCoparationFile"
                                 onchange="uploadFileContract(this)" data-name="coparation_sheet" required>
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
@@ -113,6 +113,41 @@
                                 value="">
                             <div class="invalid-feedback">
                                 Please provide a valid PO No.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-4 hide-contract">
+                            <label for="InsurancePolicyFile"><strong>Insurance Policy</strong> <span style="color: red;">*</span><a
+                                    href="#" target="_blank"
+                                    rel="noopener noreferrer"></a></label>
+                            <input type="file" accept="application/pdf" class="form-control-sm form-control" id="InsurancePolicyFile"
+                                onchange="uploadFileContract(this)" data-name="insurance_policy" required>
+                            <div class="mb-3 progress hide-contract">
+                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
+                                    aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                            </div>
+                            <input type="hidden" type="text" name="insurance_policy"
+                                value="">
+                            <div class="invalid-feedback">
+                                Please provide a valid Insurance Policy.
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-4 hide-contract">
+                            <label for="CerOfOwnershipFile"><strong>Certificate Of Ownership</strong> <span style="color: red;">*</span><a
+                                    href="#" target="_blank"
+                                    rel="noopener noreferrer"></a></label>
+                            <input type="file" accept="application/pdf" class="form-control-sm form-control" id="CerOfOwnershipFile"
+                                onchange="uploadFileContract(this)" data-name="cer_of_ownership" required>
+                            <div class="mb-3 progress hide-contract">
+                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
+                                    aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                            </div>
+                            <input type="hidden" type="text" name="cer_of_ownership"
+                                value="">
+                            <div class="invalid-feedback">
+                                Please provide a valid Certificate Of Ownership.
                             </div>
                         </div>
                     </div>
@@ -127,7 +162,7 @@
                                     style="color: red;">*</span></label>
                             <input type="text" class="form-control-sm form-control" id="validationScope"
                                 name="scope_of_work"
-                                value=""
+                                value="" placeholder="test"
                                 required>
                             <div class="invalid-feedback">
                                 Please provide a valid Scope of Work.
@@ -270,27 +305,27 @@
                     <span class="badge badge-primary">Payment Terms</span>
                     <input type="hidden" name="value_of_contract" value="">
                     <input type="hidden" name="payment_term_id" value="">
-                    <div class="form-row">
+                    <div class="form-row" id="contract-render">
                         <div class="col-md-3 mb-3">
                             <label for="validationContractType"><strong>Contract Type</strong> <span
                                     style="color: red;">*</span></label>
                             <select name="payment_type_id" id="validationContractType"
                                 class="form-control-sm form-control" onchange="changeType(this)" required>
                                 <option value="">Choose....</option>
-                                @isset($paymentType)
+                                {{-- @isset($paymentType)
                                 @foreach ($paymentType as $item)
                                 <option value="{{$item->id}}">
                                     {{$item->name}}
                                 </option>
                                 @endforeach
-                                @endisset
+                                @endisset --}}
                             </select>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
-                        <div class="col-md-9 mb-9 hide-contract" id="contractType1">
-                            <div class="col-md-3 mb-3">
+                        <div class="col-md-9 mb-9 hide-contract" id="contractType1" >
+                            {{-- <div class="col-md-3 mb-3">
                                 <label for="validationMonthly"><strong>Monthly</strong> <span
                                         style="color: red;">*</span></label>
                                 <input type="number" class="form-control-sm form-control" id="validationMonthly"
@@ -299,10 +334,10 @@
                                 <div class="invalid-feedback">
                                     Please provide a valid Monthly.
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="col-md-9 mb-9 hide-contract" id="contractType2">
-                            <ul>
+                            {{-- <ul>
                                 <li class="li-none-type"><input type="number"
                                         value="30"
                                         class="type-contract-input" min="0" max="100"
@@ -323,7 +358,16 @@
                                     <span>of the total value of a contract within 15 days from the date of
                                         contract lapse
                                     </span></li>
-                            </ul>
+                            </ul> --}}
+                        </div>
+                        <div class="col-md-9 mb-9 hide-contract" id="contractType3" data-id="LW.,LS.">
+                            <span>100 % of contract price as per monthly lease basis within 30 days of receipt of invoice.</span>
+                        </div>
+                        <div class="col-md-9 mb-9 hide-contract" id="contractType4" data-id="LIT.,LF.">
+                            <span>Payment shall be made every third Friday of every month for bills placed to HTC every second Tuesday of the previous month.</span>
+                        </div>
+                        <div class="col-md-9 mb-9 hide-contract" id="contractType5" data-id="LE.">
+                            <textarea name="detail_payment_term" id="detail_payment_term" class="form-control form-control-sm" rows="3"></textarea>
                         </div>
                     </div>
 
@@ -340,6 +384,10 @@
 @stop
 
 @section('second-script')
+<script>
+    const payment_type = {!!json_encode($paymentType)!!}
+    const contract_attr = {!!json_encode($contract)!!}
+</script>
 <script src="{{asset('assets\js\legals\contractRequestForm\agreements\leasecontract.js')}}" defer></script>
 <script src="{{asset('assets\js\legals\contractRequestForm\agreements\agreementall.js')}}" defer></script>
 @endsection

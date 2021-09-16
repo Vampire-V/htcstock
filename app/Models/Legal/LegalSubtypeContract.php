@@ -16,4 +16,6 @@ class LegalSubtypeContract extends Model
     protected $fillable = [
         'name', 'slug', 'agreement_id'
     ];
+
+    protected $with = ['payment_types'];
 }

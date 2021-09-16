@@ -52,8 +52,12 @@
                                 <option data-id="" value="">Choose....</option>
                                 @isset($subtypeContract)
                                 @foreach ($subtypeContract as $item)
+                                
                                 <option value="{{$item->id}}"
-                                    {{$item->id === $contract->legalContractDest->sub_type_contract_id ? "selected" : ""}}
+                                    @if ($item->id === $contract->legalContractDest->sub_type_contract_id)
+                                    selected
+                                    @endif
+                                    
                                     data-id="{{$item->slug}}">
                                     {{$item->name}}</option>
                                 @endforeach
@@ -71,7 +75,7 @@
                             <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> <a
                                     href="{{url('storage/'.$contract->legalContractDest->purchase_order)}}" target="_blank"
                                     rel="noopener noreferrer">{{$contract->legalContractDest->purchase_order ? 'view file' : ""}}</a></label>
-                            <input type="file" class="form-control-sm form-control" id="validationPurchaseOrderFile"
+                            <input type="file" accept="application/pdf" class="form-control-sm form-control" id="validationPurchaseOrderFile"
                                 onchange="uploadFileContract(this)" data-name="purchase_order"
                                 data-cache="{{substr($contract->legalContractDest->purchase_order,9)}}">
                             <div class="mb-3 progress hide-contract">
@@ -89,7 +93,7 @@
                                     style="color: red;">*</span> <a href="{{url('storage/'.$contract->legalContractDest->quotation)}}"
                                     target="_blank"
                                     rel="noopener noreferrer">{{$contract->legalContractDest->quotation ? 'view file' : ""}}</a></label>
-                            <input type="file" class="form-control-sm form-control" id="validationQuotationFile"
+                            <input type="file" accept="application/pdf" class="form-control-sm form-control" id="validationQuotationFile"
                                 onchange="uploadFileContract(this)" data-cache="{{substr($contract->legalContractDest->quotation,9)}}"
                                 data-name="quotation" required>
                             <div class="mb-3 progress hide-contract">
@@ -106,7 +110,7 @@
                                     style="color: red;">*</span> <a
                                     href="{{url('storage/'.$contract->legalContractDest->coparation_sheet)}}" target="_blank"
                                     rel="noopener noreferrer">{{$contract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a></label>
-                            <input type="file" class="form-control-sm form-control" id="validationCoparationFile"
+                            <input type="file" accept="application/pdf" class="form-control-sm form-control" id="validationCoparationFile"
                                 onchange="uploadFileContract(this)" data-name="coparation_sheet"
                                 data-cache="{{substr($contract->legalContractDest->coparation_sheet,9)}}" required>
                             <div class="mb-3 progress hide-contract">
@@ -117,6 +121,44 @@
                                 value="{{$contract->legalContractDest->coparation_sheet}}">
                             <div class="invalid-feedback">
                                 Please provide a valid PO No.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-4 mb-4 hide-contract">
+                            <label for="InsurancePolicyFile"><strong>Insurance Policy</strong> <span style="color: red;">*</span><a
+                                    href="#" target="_blank"
+                                    rel="noopener noreferrer">{{$contract->legalContractDest->insurance_policy ? 'view file' : ""}}</a></label>
+                            <input type="file" accept="application/pdf" class="form-control-sm form-control" id="InsurancePolicyFile"
+                                onchange="uploadFileContract(this)" data-name="insurance_policy" 
+                                data-cache="{{substr($contract->legalContractDest->insurance_policy,9)}}" required>
+                            <div class="mb-3 progress hide-contract">
+                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
+                                    aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                            </div>
+                            <input type="hidden" type="text" name="insurance_policy"
+                                value="{{$contract->legalContractDest->insurance_policy}}">
+                            <div class="invalid-feedback">
+                                Please provide a valid Insurance Policy.
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-4 hide-contract">
+                            <label for="CerOfOwnershipFile"><strong>Certificate Of Ownership</strong> <span style="color: red;">*</span><a
+                                    href="#" target="_blank"
+                                    rel="noopener noreferrer">{{$contract->legalContractDest->cer_of_ownership ? 'view file' : ""}}</a></label>
+                            <input type="file" accept="application/pdf" class="form-control-sm form-control" id="CerOfOwnershipFile"
+                                onchange="uploadFileContract(this)" data-name="cer_of_ownership"
+                                data-cache="{{substr($contract->legalContractDest->cer_of_ownership,9)}}" required>
+                            <div class="mb-3 progress hide-contract">
+                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
+                                    aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                            </div>
+                            <input type="hidden" type="text" name="cer_of_ownership"
+                                value="{{$contract->legalContractDest->cer_of_ownership}}">
+                            <div class="invalid-feedback">
+                                Please provide a valid Certificate Of Ownership.
                             </div>
                         </div>
                     </div>
@@ -273,28 +315,28 @@
                     <span class="badge badge-primary">Payment Terms</span>
                     <input type="hidden" name="value_of_contract" value="">
                     <input type="hidden" name="payment_term_id" value="{{$contract->legalContractDest->payment_term_id}}">
-                    <div class="form-row">
+                    <div class="form-row" id="contract-render">
                         <div class="col-md-3 mb-3">
                             <label for="validationContractType"><strong>Contract Type</strong> <span
                                     style="color: red;">*</span></label>
                             <select name="payment_type_id" id="validationContractType"
                                 class="form-control-sm form-control" onchange="changeType(this)" required>
                                 <option value="">Choose....</option>
-                                @isset($paymentType)
+                                {{-- @isset($paymentType)
                                 @foreach ($paymentType as $item)
                                 <option value="{{$item->id}}"
                                     {{$contract->legalContractDest->payment_type_id == $item->id ? "selected" : "" }}>
                                     {{$item->name}}
                                 </option>
                                 @endforeach
-                                @endisset
+                                @endisset --}}
                             </select>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
                         <div class="col-md-9 mb-9 hide-contract" id="contractType1">
-                            <div class="col-md-3 mb-3">
+                            {{-- <div class="col-md-3 mb-3">
                                 <label for="validationMonthly"><strong>Monthly</strong> <span
                                         style="color: red;">*</span></label>
                                 <input type="number" class="form-control-sm form-control" id="validationMonthly"
@@ -303,10 +345,10 @@
                                 <div class="invalid-feedback">
                                     Please provide a valid Monthly.
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="col-md-9 mb-9 hide-contract" id="contractType2">
-                            <ul>
+                            {{-- <ul>
                                 <li class="li-none-type"><input type="number"
                                         value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[0]:30}}"
                                         class="type-contract-input" min="0" max="100"
@@ -327,7 +369,16 @@
                                     <span>of the total value of a contract within 15 days from the date of
                                         contract lapse
                                     </span></li>
-                            </ul>
+                            </ul> --}}
+                        </div>
+                        <div class="col-md-9 mb-9 hide-contract" id="contractType3" data-id="LW.,LS.">
+                            <span>100 % of contract price as per monthly lease basis within 30 days of receipt of invoice.</span>
+                        </div>
+                        <div class="col-md-9 mb-9 hide-contract" id="contractType4" data-id="LIT.,LF.">
+                            <span>Payment shall be made every third Friday of every month for bills placed to HTC every second Tuesday of the previous month.</span>
+                        </div>
+                        <div class="col-md-9 mb-9 hide-contract" id="contractType5" data-id="LE.">
+                            <textarea name="detail_payment_term" id="detail_payment_term" class="form-control form-control-sm" rows="3">{{$contract->legalContractDest->legalPaymentTerm->detail_payment_term}}</textarea>
                         </div>
                     </div>
 
@@ -344,6 +395,10 @@
 @stop
 
 @section('second-script')
+<script>
+    const payment_type = {!!json_encode($paymentType)!!}
+    const contract_attr = {!!json_encode($contract)!!}
+</script>
 <script src="{{asset('assets\js\legals\contractRequestForm\agreements\leasecontract.js')}}" defer></script>
 <script src="{{asset('assets\js\legals\contractRequestForm\agreements\agreementall.js')}}" defer></script>
 @endsection

@@ -14,6 +14,6 @@ class LegalPaymentType extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'agreement_id'
+        'name', 'agreement_id', 'subtype_id'
     ];
 }

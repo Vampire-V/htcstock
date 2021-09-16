@@ -105,8 +105,24 @@
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationSubType"><strong></strong> </label>
-                            <input type="text" class="form-control-sm form-control"
+                            {{-- <input type="text" class="form-control-sm form-control" id="validationSubType"
                                 value="{{$legalContract->legalContractDest->legalSubTypeContract->name}}" readonly>
+                            --}}
+                            <select id="validationSubType" class="form-control-sm form-control"
+                                name="sub_type_contract_id" disabled>
+                                <option data-id="" value="">Choose....</option>
+                                @isset($subtypeContract)
+                                @foreach ($subtypeContract as $item)
+                                <option value="{{$item->id}}" @if ($item->id ===
+                                    $legalContract->legalContractDest->sub_type_contract_id)
+                                    selected
+                                    @endif
+
+                                    data-id="{{$item->slug}}">
+                                    {{$item->name}}</option>
+                                @endforeach
+                                @endisset
+                            </select>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
@@ -139,6 +155,27 @@
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
                                     target="_blank"
                                     rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-4 hide-contract">
+                            <label for="validationCoparationFile"><strong>Insurance Policy</strong> <span
+                                    style="color: red;">*</span> </label>
+                            <div id="InsurancePolicyFile">
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->insurance_policy)}}"
+                                    target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->insurance_policy ? 'view file' : ""}}</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-4 hide-contract">
+                            <label for="CerOfOwnershipFile"><strong>Certificate Of Ownership</strong> <span
+                                    style="color: red;">*</span> </label>
+                            <div id="CerOfOwnershipFile">
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->cer_of_ownership)}}"
+                                    target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->cer_of_ownership ? 'view file' : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -219,7 +256,7 @@
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
                                 value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                readonly>
+                            readonly>
                             <div class="invalid-feedback">
                                 Please provide a valid Untill.
                             </div> --}}
@@ -275,7 +312,7 @@
                     <input type="hidden" name="value_of_contract" value="">
                     <input type="hidden" name="payment_term_id"
                         value="{{$legalContract->legalContractDest->payment_term_id}}">
-                    <div class="form-row">
+                    <div class="form-row" id="contract-render">
                         <div class="col-md-3 mb-3">
                             <label for="validationContractType"><strong>Contract Type</strong> <span
                                     style="color: red;">*</span></label>
@@ -296,113 +333,125 @@
                             </div>
                         </div>
                         <div class="col-md-9 mb-9 hide-contract" id="contractType1">
-                            <div class="col-md-3 mb-3">
+                            {{-- <div class="col-md-3 mb-3">
                                 <label for="validationMonthly"><strong>Monthly</strong> <span
                                         style="color: red;">*</span></label>
                                 <input type="number" class="form-control-sm form-control" id="validationMonthly"
                                     name="monthly" min="0"
                                     value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->monthly : 0}}"
-                                    readonly>
-                                <div class="invalid-feedback">
-                                    Please provide a valid Monthly.
-                                </div>
+                            readonly>
+                            <div class="invalid-feedback">
+                                Please provide a valid Monthly.
                             </div>
-                        </div>
-                        <div class="col-md-9 mb-9 hide-contract" id="contractType2">
-                            <ul>
+                        </div> --}}
+                    </div>
+                    <div class="col-md-9 mb-9 hide-contract" id="contractType2">
+                        {{-- <ul>
                                 <li class="li-none-type"><input type="number"
                                         value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[0]:30}}"
-                                        class="type-contract-input" min="0" max="100"
-                                        onchange="changeContractValue(this)" readonly>
-                                    <span>of the total value of a contract within 15 days from the date of
-                                        signing of the contract</span>
-                                </li>
-                                <li class="li-none-type"><input type="number"
-                                        value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[1]:30}}"
-                                        class="type-contract-input" min="0" max="100"
-                                        onchange="changeContractValue(this)" readonly>
-                                    <span>of the total value of a contract within 30 days from the date of
-                                        delivered by Lessor and inspected by HTC </span></li>
-                                <li class="li-none-type"><input type="number"
-                                        value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[2]:40}}"
-                                        class="type-contract-input" min="0" max="100" readonly
-                                        onchange="changeContractValue(this)">
-                                    <span>of the total value of a contract within 15 days from the date of
-                                        contract lapse
-                                    </span></li>
-                            </ul>
-                        </div>
+                        class="type-contract-input" min="0" max="100"
+                        onchange="changeContractValue(this)" readonly>
+                        <span>of the total value of a contract within 15 days from the date of
+                            signing of the contract</span>
+                        </li>
+                        <li class="li-none-type"><input type="number"
+                                value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[1]:30}}"
+                                class="type-contract-input" min="0" max="100" onchange="changeContractValue(this)"
+                                readonly>
+                            <span>of the total value of a contract within 30 days from the date of
+                                delivered by Lessor and inspected by HTC </span></li>
+                        <li class="li-none-type"><input type="number"
+                                value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[2]:40}}"
+                                class="type-contract-input" min="0" max="100" readonly
+                                onchange="changeContractValue(this)">
+                            <span>of the total value of a contract within 15 days from the date of
+                                contract lapse
+                            </span></li>
+                        </ul> --}}
                     </div>
-                    <hr>
-                </form>
+                    <div class="col-md-9 mb-9 hide-contract" id="contractType3" data-id="LW.,LS.">
+                        <span>100 % of contract price as per monthly lease basis within 30 days of receipt of
+                            invoice.</span>
+                    </div>
+                    <div class="col-md-9 mb-9 hide-contract" id="contractType4" data-id="LIT.,LF.">
+                        <span>Payment shall be made every third Friday of every month for bills placed to HTC every
+                            second Tuesday of the previous month.</span>
+                    </div>
+                    <div class="col-md-9 mb-9 hide-contract" id="contractType5" data-id="LE.">
+                        <textarea name="detail_payment_term" id="detail_payment_term"
+                            class="form-control form-control-sm" rows="3"
+                            readonly>{{$legalContract->legalContractDest->legalPaymentTerm->detail_payment_term}}</textarea>
+                    </div>
             </div>
-        </div>
-
-        <div class="main-card mb-3 card">
-            <div class="card-body">
-                <h5 class="card-title">step approval</h5>
-                <button class="accordion active">Approval Info</button>
-                <div class="panel" style="max-height: 100%">
-                    <div class="table-responsive">
-                        <table class="mb-0 table table-hover table-sm">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>User</th>
-                                    <th>Status</th>
-                                    <th>Comment</th>
-                                    <th>Status change</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @isset($legalContract->approvalDetail)
-                                @foreach ($legalContract->approvalDetail as $key => $item)
-                                <tr>
-                                    <th scope="row">{{$key+1}}</th>
-                                    <td>{{$item->user->name }} {{$item->user->email}}</td>
-                                    <td>{{$item->status}}</td>
-                                    <td>{{$item->comment}}</td>
-                                    <td>{{$item->created_at}}</td>
-                                </tr>
-                                @endforeach
-                                @endisset
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <form id="approval-contract-form" action="{{route('legal.contract.approval',$legalContract->id)}}"
-                    method="POST">
-                    @csrf
-                    @if ($permission === 'Write')
-                    <div class="form-row">
-                        <div class="col-md-3 mb-3">
-                            <label for="validationStatus"><strong>Status</strong></label>
-                            <select name="status" id="status" class="form-control-sm form-control"
-                                style="cursor: pointer">
-                                <option value="">Choouse...</option>
-                                <option value="reject">Reject</option>
-                                <option value="approval">Approval</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-12 mb-12">
-                            <label for="validationComment"><strong>Comment</strong></label>
-                            <textarea class="form-control-sm form-control" name="comment" rows="5"></textarea>
-                        </div>
-                    </div>
-                    @endif
-                </form>
-                <hr>
-
-
-                {{-- <a class="btn-shadow mr-3 btn btn-dark" type="button" href="{{url()->previous()}}">Back</a>
-                <button class="mr-3 btn btn-success" type="submit" onclick="event.preventDefault();
-            document.getElementById('approval-contract-form').submit();">Submit</button> --}}
-            </div>
+            <hr>
+            </form>
         </div>
     </div>
+
+    <div class="main-card mb-3 card">
+        <div class="card-body">
+            <h5 class="card-title">step approval</h5>
+            <button class="accordion active">Approval Info</button>
+            <div class="panel" style="max-height: 100%">
+                <div class="table-responsive">
+                    <table class="mb-0 table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>User</th>
+                                <th>Status</th>
+                                <th>Comment</th>
+                                <th>Status change</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @isset($legalContract->approvalDetail)
+                            @foreach ($legalContract->approvalDetail as $key => $item)
+                            <tr>
+                                <th scope="row">{{$key+1}}</th>
+                                <td>{{$item->user->name }} {{$item->user->email}}</td>
+                                <td>{{$item->status}}</td>
+                                <td>{{$item->comment}}</td>
+                                <td>{{$item->created_at}}</td>
+                            </tr>
+                            @endforeach
+                            @endisset
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <form id="approval-contract-form" action="{{route('legal.contract.approval',$legalContract->id)}}"
+                method="POST">
+                @csrf
+                @if ($permission === 'Write')
+                <div class="form-row">
+                    <div class="col-md-3 mb-3">
+                        <label for="validationStatus"><strong>Status</strong></label>
+                        <select name="status" id="status" class="form-control-sm form-control" style="cursor: pointer">
+                            <option value="">Choouse...</option>
+                            <option value="reject">Reject</option>
+                            <option value="approval">Approval</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 mb-12">
+                        <label for="validationComment"><strong>Comment</strong></label>
+                        <textarea class="form-control-sm form-control" name="comment" rows="5"></textarea>
+                    </div>
+                </div>
+                @endif
+            </form>
+            <hr>
+
+
+            {{-- <a class="btn-shadow mr-3 btn btn-dark" type="button" href="{{url()->previous()}}">Back</a>
+            <button class="mr-3 btn btn-success" type="submit" onclick="event.preventDefault();
+            document.getElementById('approval-contract-form').submit();">Submit</button> --}}
+        </div>
+    </div>
+</div>
 </div>
 
 {{-- Button --}}
@@ -427,6 +476,10 @@
 @stop
 
 @section('second-script')
+<script>
+    const payment_type = {!!json_encode($paymentType)!!}
+    const contract_attr = {!!json_encode($legalContract)!!}
+</script>
 <script src="{{asset('assets\js\legals\contractRequestForm\agreements\leasecontract.js')}}" defer></script>
 <script src="{{asset('assets\js\legals\contractRequestForm\agreements\agreementall.js')}}" defer></script>
 @endsection

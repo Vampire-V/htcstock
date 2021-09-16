@@ -141,6 +141,7 @@ class ContractRequestController extends Controller
         try {
             $agreements = $this->agreementService->dropdown();
             $legalContract = $this->contractRequestService->find($id);
+            $subtypeContract = $this->subtypeContractService->dropdown($legalContract->agreement_id);
             $paymentType = $this->paymentTypeService->dropdown($legalContract->agreement_id);
             if ($legalContract->legalContractDest) {
                 $legalContract->legalContractDest->value_of_contract = explode(",", $legalContract->legalContractDest->value_of_contract);
@@ -193,9 +194,7 @@ class ContractRequestController extends Controller
                 break;
             case $agreements[6]->id:
                 return \view('legal.ContractRequestForm.LeaseContract.view')
-                    ->with(\compact('legalContract'))
-                    ->with(\compact('paymentType'))
-                    ->with(\compact('permission'));
+                    ->with(\compact('legalContract','subtypeContract','paymentType','permission'));
                 break;
             case $agreements[7]->id:
                 return \view('legal.ContractRequestForm.ProjectBasedAgreement.view')

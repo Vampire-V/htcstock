@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Legal\ContractRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Legal\StoreLeaseContract;
 use App\Models\Legal\LegalComercialTerm;
+use App\Models\Legal\LegalContract;
 use App\Models\Legal\LegalContractDest;
+use App\Models\Legal\LegalPaymentTerm;
 use App\Services\Legal\Interfaces\ComercialListsServiceInterface;
 use App\Services\Legal\Interfaces\ComercialTermServiceInterface;
 use App\Services\Legal\Interfaces\ContractDescServiceInterface;
@@ -74,24 +76,37 @@ class LeaseContractController extends Controller
      */
     public function store(StoreLeaseContract $request)
     {
+        // dd($request->all());
         $dest = $request->only(
             'sub_type_contract_id',
             'purchase_order',
             'quotation',
             'coparation_sheet',
+            'insurance_policy',
+            'cer_of_ownership',
+
             'payment_type_id',
-            'value_of_contract',
             'contract_id'
         );
         // comercialTerm data
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
+
+        $payterm_detail = $request->only('payment_type_id','detail_payment_term');
         DB::beginTransaction();
         try {
+            $contract = LegalContract::find($request->contract_id);
+            if ($contract->legalComercialList->count() < 1) {
+                return \redirect()->back()->with('error', "Error : Purchase list not found.");
+            }
+            $pay_term = new LegalPaymentTerm($payterm_detail);
+            $pay_term->save();
+            $dest['payment_term_id'] = $pay_term->id;
             $contract_desc = new LegalContractDest($dest);
             $contract_desc->save();
             $term['contract_dest_id'] = $contract_desc->id;
             $contract_term = new LegalComercialTerm($term);
             $contract_term->save();
+            
             DB::commit();
             return \redirect()->route('legal.contract-request.show', $contract_desc->contract_id);
         } catch (\Exception $e) {
@@ -132,6 +147,8 @@ class LeaseContractController extends Controller
             $contract = $this->contractRequestService->find($id);
             $subtypeContract = $this->subtypeContractService->dropdown($contract->agreement_id);
             $paymentType = $this->paymentTypeService->dropdown($contract->agreement_id);
+
+            // dd($subtypeContract);
             if ($contract->legalContractDest) {
                 $contract->legalContractDest->value_of_contract = explode(",", $contract->legalContractDest->value_of_contract);
                 return \view('legal.ContractRequestForm.LeaseContract.edit')->with(['contract' => $contract, 'paymentType' => $paymentType, 'subtypeContract' => $subtypeContract]);
@@ -158,23 +175,34 @@ class LeaseContractController extends Controller
             'purchase_order',
             'quotation',
             'coparation_sheet',
+            'insurance_policy',
+            'cer_of_ownership',
+
             'payment_type_id',
-            'value_of_contract',
             'contract_id'
         );
         // comercialTerm data
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
+
+        $payterm_detail = $request->only('payment_type_id','detail_payment_term');
         DB::beginTransaction();
         try {
-            $leaseContract = $this->contractDescService->find($id);
+            $leaseContract = LegalContractDest::find($id);
             if ($leaseContract->legalContract->legalComercialList->count() < 1) {
-                return \redirect()->back()->with('error', "Error : ");
+                return \redirect()->back()->with('error', "Error : Purchase list not found.");
             }
             if ($leaseContract->legalComercialTerm) {
-                $this->comercialTermService->update($term, $leaseContract->legalComercialTerm->id);
+                // $this->comercialTermService->update($term, $leaseContract->legalComercialTerm->id);
+                $leaseContract->legalComercialTerm->fill($term);
+                $leaseContract->legalComercialTerm->save();
+            }
+            if ($leaseContract->legalPaymentTerm) {
+                $leaseContract->legalPaymentTerm->fill($payterm_detail);
+                $leaseContract->legalPaymentTerm->save();
             }
 
-            $this->contractDescService->update($dest, $leaseContract->id);
+            $leaseContract->fill($dest);
+            $leaseContract->save();
 
             if ($leaseContract->purchase_order !== $request->purchase_order) {
                 Storage::delete($leaseContract->purchase_order);
@@ -185,7 +213,13 @@ class LeaseContractController extends Controller
             if ($leaseContract->coparation_sheet !== $request->coparation_sheet) {
                 Storage::delete($leaseContract->coparation_sheet);
             }
-            $request->session()->flash('success',  ' has been create');
+            if ($leaseContract->insurance_policy !== $request->insurance_policy) {
+                Storage::delete($leaseContract->insurance_policy);
+            }
+            if ($leaseContract->cer_of_ownership !== $request->cer_of_ownership) {
+                Storage::delete($leaseContract->cer_of_ownership);
+            }
+            $request->session()->flash('success',  ' has been update');
         } catch (\Exception $e) {
             DB::rollBack();
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());

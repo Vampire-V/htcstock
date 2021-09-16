@@ -97,6 +97,11 @@
                 </div>
                 {{-- end head --}}
                 <hr>
+                @dump($legalContract->legalContractDest);
+                            @php
+                            dd($legalContract->legalContractDest);
+                                exit;
+                            @endphp
                 <span class="badge badge-primary">Sub-type Contract</span>
                 <div class="form-row">
                     <div class="col-md-3 mb-3">

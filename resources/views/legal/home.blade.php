@@ -213,7 +213,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="main-card mb-3 card">
-            <div class="card-header">Active Contract
+            <div class="card-header">Contract Status
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
                         {{-- <button class="active btn btn-focus">Last Week</button>
@@ -288,7 +288,7 @@
 @endisset
 @endcan
 
-<div class="row">
+{{-- <div class="row">
     <div class="col-md-6 col-lg-3">
         <div class="card-shadow-primary mb-3 widget-chart widget-chart2 text-left card">
             <div class="widget-content">
@@ -377,5 +377,5 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 @endsection

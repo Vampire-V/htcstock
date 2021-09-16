@@ -191,12 +191,11 @@
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong> <span
-                                    style="color: red;">*</span></label>
+                            <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong> </label>
                             <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo"
                                 name="purchase_order_no"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->purchase_order_no : ""}}"
-                                required>
+                                >
                             <div class="invalid-feedback">
                                 Please provide a valid Purchase Order No.
                             </div>

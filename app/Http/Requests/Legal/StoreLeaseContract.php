@@ -34,7 +34,7 @@ class StoreLeaseContract extends FormRequest
 
             'scope_of_work' => 'required',
             'location' => 'required',
-            'purchase_order_no' => 'required',
+            // 'purchase_order_no' => 'required',
             'quotation_no' => 'required',
             'dated' => 'required',
             'contract_period' => 'required',
@@ -67,7 +67,7 @@ class StoreLeaseContract extends FormRequest
 
             'scope_of_work.required' => 'Please enter Scope of Work',
             'location.required' => 'Please enter location',
-            'purchase_order_no.required' => 'Please enter Purchase Order No.',
+            // 'purchase_order_no.required' => 'Please enter Purchase Order No.',
             'quotation_no.required' => 'Please enter Quotation no',
             'dated.required' => 'Please enter dated',
             'contract_period.required' => 'Please enter Contract period',

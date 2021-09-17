@@ -15,9 +15,9 @@
             </div>
         </div>
         <div class="page-title-actions">
-            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
+            <button type="button" data-toggle="tooltip" title="Dowload SOP" data-placement="bottom"
                 class="btn-shadow mr-3 btn btn-dark">
-                <i class="fa fa-star"></i>
+                <i class="fa fa-download " aria-hidden="true"></i>
             </button>
             {{-- <div class="d-inline-block dropdown">
                 <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
@@ -141,6 +141,62 @@
         </div>
     </div>
 </div>
+<div class="divider mt-0" style="margin-bottom: 30px;"></div>
+<div class="row">
+    <div class="col-lg-6 col-xl-4">
+        <div class="card mb-3 widget-content bg-night-fade">
+            <div class="widget-content-wrapper text-white">
+                <div class="widget-content-left">
+                    <div class="widget-heading">Request</div>
+                    <div class="widget-subheading">Last year expenses</div>
+                </div>
+                <div class="widget-content-right">
+                    <div class="widget-numbers text-white"><span>{{$requestSum}}</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-xl-4">
+        <div class="card mb-3 widget-content bg-arielle-smile">
+            <div class="widget-content-wrapper text-white">
+                <div class="widget-content-left">
+                    <div class="widget-heading">Checking</div>
+                    <div class="widget-subheading">Total Clients Profit</div>
+                </div>
+                <div class="widget-content-right">
+                    <div class="widget-numbers text-white"><span>{{$checking}}</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-xl-4">
+        <div class="card mb-3 widget-content bg-premium-dark">
+            <div class="widget-content-wrapper text-white">
+                <div class="widget-content-left">
+                    <div class="widget-heading">Providing</div>
+                    <div class="widget-subheading">Total revenue streams</div>
+                </div>
+                <div class="widget-content-right">
+                    <div class="widget-numbers text-warning"><span>{{$providing}}</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-xl-4">
+        <div class="card mb-3 widget-content bg-happy-green">
+            <div class="widget-content-wrapper text-white">
+                <div class="widget-content-left">
+                    <div class="widget-heading">Complete</div>
+                    <div class="widget-subheading">People Interested</div>
+                </div>
+                <div class="widget-content-right">
+                    <div class="widget-numbers text-dark"><span>{{$complete}}</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="divider mt-0" style="margin-bottom: 30px;"></div>
 @can('for-adminlegal')
 <div class="row">
     <div class="col-lg-12">
@@ -149,7 +205,8 @@
                 <form action="#" method="GET">
                     <div class="form-row">
                         <div class="col-md-2 mb-2">
-                            <select class="form-control-sm form-control js-select-status-multiple" name="status[]" multiple>
+                            <select class="form-control-sm form-control js-select-status-multiple" name="status[]"
+                                multiple>
                                 @isset($status)
                                 @foreach ($status as $item)
                                 <option value="{{$item}}" @if($selectedStatus->contains($item)) selected
@@ -160,7 +217,8 @@
                             </select>
                         </div>
                         <div class="col-md-2 mb-2">
-                            <select class="form-control-sm form-control js-select-agreements-multiple" name="agreement[]" multiple>
+                            <select class="form-control-sm form-control js-select-agreements-multiple"
+                                name="agreement[]" multiple>
                                 @isset($agreements)
                                 @foreach ($agreements as $item)
                                 <option value="{{$item->id}}" @if($selectedAgree->contains($item->id)) selected
@@ -223,7 +281,7 @@
             </div>
             <div class="table-responsive">
                 <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr>
                             <th>#</th>
                             <th>Full name (Company’s, Person’s) </th>
@@ -296,86 +354,86 @@
                     <div class="widget-content-wrapper">
                         <div class="widget-content-left pr-2 fsize-1">
                             <div class="widget-numbers mt-0 fsize-3 text-primary">{{$requestCal}}%</div>
-                        </div>
-                        <div class="widget-content-right w-100">
-                            <div class="progress-bar-xs progress">
-                                <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="{{$requestCal}}"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: {{$requestCal}}%;"></div>
-                            </div>
+</div>
+<div class="widget-content-right w-100">
+    <div class="progress-bar-xs progress">
+        <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="{{$requestCal}}" aria-valuemin="0"
+            aria-valuemax="100" style="width: {{$requestCal}}%;"></div>
+    </div>
+</div>
+</div>
+<div class="widget-content-left fsize-1">
+    <div class="text-muted opacity-6">Request</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-lg-3">
+    <div class="card-shadow-info mb-3 widget-chart widget-chart2 text-left card">
+        <div class="widget-content">
+            <div class="widget-content-outer">
+                <div class="widget-content-wrapper">
+                    <div class="widget-content-left pr-2 fsize-1">
+                        <div class="widget-numbers mt-0 fsize-3 text-info">{{$checking}}%</div>
+                    </div>
+                    <div class="widget-content-right w-100">
+                        <div class="progress-bar-xs progress">
+                            <div class="progress-bar bg-info" role="progressbar" aria-valuenow="{{$checking}}"
+                                aria-valuemin="0" aria-valuemax="100" style="width: {{$checking}}%;"></div>
                         </div>
                     </div>
-                    <div class="widget-content-left fsize-1">
-                        <div class="text-muted opacity-6">Request</div>
-                    </div>
+                </div>
+                <div class="widget-content-left fsize-1">
+                    <div class="text-muted opacity-6">Checking</div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card-shadow-info mb-3 widget-chart widget-chart2 text-left card">
-            <div class="widget-content">
-                <div class="widget-content-outer">
-                    <div class="widget-content-wrapper">
-                        <div class="widget-content-left pr-2 fsize-1">
-                            <div class="widget-numbers mt-0 fsize-3 text-info">{{$checking}}%</div>
-                        </div>
-                        <div class="widget-content-right w-100">
-                            <div class="progress-bar-xs progress">
-                                <div class="progress-bar bg-info" role="progressbar" aria-valuenow="{{$checking}}"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: {{$checking}}%;"></div>
-                            </div>
+</div>
+<div class="col-md-6 col-lg-3">
+    <div class="card-shadow-warning mb-3 widget-chart widget-chart2 text-left card">
+        <div class="widget-content">
+            <div class="widget-content-outer">
+                <div class="widget-content-wrapper">
+                    <div class="widget-content-left pr-2 fsize-1">
+                        <div class="widget-numbers mt-0 fsize-3 text-warning">{{$providing}}%</div>
+                    </div>
+                    <div class="widget-content-right w-100">
+                        <div class="progress-bar-xs progress">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="{{$providing}}"
+                                aria-valuemin="0" aria-valuemax="100" style="width: {{$providing}}%;"></div>
                         </div>
                     </div>
-                    <div class="widget-content-left fsize-1">
-                        <div class="text-muted opacity-6">Checking</div>
-                    </div>
+                </div>
+                <div class="widget-content-left fsize-1">
+                    <div class="text-muted opacity-6">Providing</div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card-shadow-warning mb-3 widget-chart widget-chart2 text-left card">
-            <div class="widget-content">
-                <div class="widget-content-outer">
-                    <div class="widget-content-wrapper">
-                        <div class="widget-content-left pr-2 fsize-1">
-                            <div class="widget-numbers mt-0 fsize-3 text-warning">{{$providing}}%</div>
-                        </div>
-                        <div class="widget-content-right w-100">
-                            <div class="progress-bar-xs progress">
-                                <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="{{$providing}}"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: {{$providing}}%;"></div>
-                            </div>
+</div>
+<div class="col-md-6 col-lg-3">
+    <div class="card-shadow-success mb-3 widget-chart widget-chart2 text-left card">
+        <div class="widget-content">
+            <div class="widget-content-outer">
+                <div class="widget-content-wrapper">
+                    <div class="widget-content-left pr-2 fsize-1">
+                        <div class="widget-numbers mt-0 fsize-3 text-success">{{$complete}}%</div>
+                    </div>
+                    <div class="widget-content-right w-100">
+                        <div class="progress-bar-xs progress">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="{{$complete}}"
+                                aria-valuemin="0" aria-valuemax="100" style="width: {{$complete}}%;"></div>
                         </div>
                     </div>
-                    <div class="widget-content-left fsize-1">
-                        <div class="text-muted opacity-6">Providing</div>
-                    </div>
+                </div>
+                <div class="widget-content-left fsize-1">
+                    <div class="text-muted opacity-6">Complete</div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card-shadow-success mb-3 widget-chart widget-chart2 text-left card">
-            <div class="widget-content">
-                <div class="widget-content-outer">
-                    <div class="widget-content-wrapper">
-                        <div class="widget-content-left pr-2 fsize-1">
-                            <div class="widget-numbers mt-0 fsize-3 text-success">{{$complete}}%</div>
-                        </div>
-                        <div class="widget-content-right w-100">
-                            <div class="progress-bar-xs progress">
-                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="{{$complete}}"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: {{$complete}}%;"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="widget-content-left fsize-1">
-                        <div class="text-muted opacity-6">Complete</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
 </div> --}}
 @endsection

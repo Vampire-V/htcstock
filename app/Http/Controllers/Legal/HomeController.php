@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Legal;
 
 use App\Enum\ContractEnum;
+use App\Enum\UserEnum;
 use App\Http\Controllers\Controller;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\Legal\Interfaces\AgreementServiceInterface;
@@ -37,10 +38,10 @@ class HomeController extends Controller
         $complete = 0;
         $selectedStatus = collect($request->status);
         $selectedAgree = collect($request->agreement);
-        $status = [ContractEnum::CK, ContractEnum::P, ContractEnum::CP];
+        $status = [ContractEnum::R,ContractEnum::CK, ContractEnum::P, ContractEnum::CP];
         // $query = $request->all();
         try {
-            if (Gate::allows('for-adminlegal') || Gate::allows('for-superadmin')) {
+            if (Gate::allows(UserEnum::ADMINLEGAL) || Gate::allows(UserEnum::SUPERADMIN)) {
                 $contracts = $this->contractRequestService->filterForAdmin($request);
             } else {
                 $contracts = null;
@@ -56,17 +57,17 @@ class HomeController extends Controller
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
-        if ($allPromised > 0) {
-            $requestCal = round(($requestSum / $allPromised) * 100, 1);
-            $checking = round(($checking / $allPromised) * 100, 1);
-            $providing = round(($providing / $allPromised) * 100, 1);
-            $complete = round(($complete / $allPromised) * 100, 1);
-        }
+        // if ($allPromised > 0) {
+        //     $requestCal = round(($requestSum / $allPromised) * 100, 1);
+        //     $checking = round(($checking / $allPromised) * 100, 1);
+        //     $providing = round(($providing / $allPromised) * 100, 1);
+        //     $complete = round(($complete / $allPromised) * 100, 1);
+        // }
 
         return \view('legal.home', \compact(
             'allPromised',
             'ownPromise',
-            'requestCal',
+            'requestSum',
             'checking',
             'providing',
             'complete',

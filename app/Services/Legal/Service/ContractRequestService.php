@@ -2,6 +2,7 @@
 
 namespace App\Services\Legal\Service;
 
+use App\Enum\ContractEnum;
 use App\Models\Legal\LegalContract;
 use App\Services\BaseService;
 use App\Services\Legal\Interfaces\ContractRequestServiceInterface;
@@ -41,9 +42,52 @@ class ContractRequestService extends BaseService implements ContractRequestServi
 
     public function filter(Request $request)
     {
-        return LegalContract::with(['legalContractDest','legalAgreement','createdBy'])->filter($request)->where('trash', false)->orderBy('status', 'ASC')->orderBy('created_at', 'desc')
-        // ->get();
+        return LegalContract::with(['legalContractDest','legalAgreement','createdBy'])
+        ->filter($request)
+        ->where('trash', false)
+        ->orderBy('status', 'ASC')
+        ->orderBy('created_at', 'desc')
         ->paginate(10);
+    }
+
+    public function filterRequest(Request $request)
+    {
+        return LegalContract::with(['legalContractDest','legalAgreement','createdBy'])
+        ->filter($request)
+        ->where(['trash'=> false,'status' => ContractEnum::R])
+        ->orderBy('status', 'ASC')
+        ->orderBy('created_at', 'desc')
+        ->get();
+    }
+
+    public function filterChecking(Request $request)
+    {
+        return LegalContract::with(['legalContractDest','legalAgreement','createdBy'])
+        ->filter($request)
+        ->where(['trash'=> false,'status' => ContractEnum::CK])
+        ->orderBy('status', 'ASC')
+        ->orderBy('created_at', 'desc')
+        ->get();
+    }
+
+    public function filterProviding(Request $request)
+    {
+        return LegalContract::with(['legalContractDest','legalAgreement','createdBy'])
+        ->filter($request)
+        ->where(['trash'=> false,'status' => ContractEnum::P])
+        ->orderBy('status', 'ASC')
+        ->orderBy('created_at', 'desc')
+        ->get();
+    }
+
+    public function filterComplete(Request $request)
+    {
+        return LegalContract::with(['legalContractDest','legalAgreement','createdBy'])
+        ->filter($request)
+        ->where(['trash'=> false,'status' => ContractEnum::CP])
+        ->orderBy('status', 'ASC')
+        ->orderBy('created_at', 'desc')
+        ->get();
     }
 
     public function filterForAdmin(Request $request)

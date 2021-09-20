@@ -2,6 +2,7 @@
 
 namespace App\Models\Legal;
 
+use App\Enum\ContractEnum;
 use App\Http\Filters\Legal\ContractRequestFilter;
 use App\Models\User;
 use App\Relations\LegalContractTrait;
@@ -23,6 +24,14 @@ class LegalContract extends Model
         static::creating(function ($query) {
             $query->created_by = auth()->id();
             $query->checked_by = User::where('email', 'pratchaya.g@haier.co.th')->first()->id;
+        });
+
+        static::updating(function ($query) {
+            if ($query->status === ContractEnum::P) {
+                $query->providing_at = \now();
+            }
+            // $query->created_by = auth()->id();
+            // $query->checked_by = User::where('email', 'pratchaya.g@haier.co.th')->first()->id;
         });
     }
 

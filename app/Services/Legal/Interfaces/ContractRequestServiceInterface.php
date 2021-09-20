@@ -21,5 +21,9 @@ interface ContractRequestServiceInterface
     public function countStatus(string $status): int;
     public function notRequest(string $request);
     public function filterForAdmin(Request $request);
+    public function filterRequest(Request $request);
+    public function filterChecking(Request $request);
+    public function filterProviding(Request $request);
+    public function filterComplete(Request $request);
 
 }

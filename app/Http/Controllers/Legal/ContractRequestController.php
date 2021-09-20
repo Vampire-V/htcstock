@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -71,14 +72,17 @@ class ContractRequestController extends Controller
     {
         $query = $request->all();
         $status = [ContractEnum::R, ContractEnum::CK, ContractEnum::P, ContractEnum::CP];
-        $selectedStatus = collect($request->status);
+        // $selectedStatus = collect($request->status);
         $selectedAgree = collect($request->agreement);
         try {
-
             $agreements = $this->agreementService->dropdown();
-            $contracts = $this->contractRequestService->filter($request);
+            $contractsRQ = $this->contractRequestService->filterRequest($request);
+            $contractsCK = $this->contractRequestService->filterChecking($request);
+            $contractsP = $this->contractRequestService->filterProviding($request);
+            $contractsCP = $this->contractRequestService->filterComplete($request);
+            // dd($contractsRQ);
 
-            return \view('legal.ContractRequestForm.index', \compact('contracts', 'status', 'agreements', 'selectedStatus', 'selectedAgree', 'query'));
+            return \view('legal.ContractRequestForm.index', \compact('contractsRQ', 'contractsCK', 'contractsP', 'contractsCP', 'agreements', 'selectedAgree', 'query'));
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
@@ -175,7 +179,6 @@ class ContractRequestController extends Controller
                     ->with(\compact('legalContract', 'paymentType', 'permission'));
                 break;
             case $agreements[5]->id:
-                $subtypeContract = $this->subtypeContractService->dropdown($legalContract->agreement_id);
                 return \view('legal.ContractRequestForm.VendorServiceContract.view')
                     ->with(\compact('legalContract', 'subtypeContract', 'paymentType', 'permission'));
                 break;
@@ -191,7 +194,7 @@ class ContractRequestController extends Controller
                     ->with(\compact('legalContract', 'paymentType', 'permission'));
                 break;
             default:
-                return \redirect()->back()->with('error', "Error : type not folud." );
+                return \redirect()->back()->with('error', "Error : type not folud.");
                 break;
         }
     }
@@ -532,7 +535,7 @@ class ContractRequestController extends Controller
         $segments = explode('/', \substr(url()->previous(), strlen($request->root())));
         try {
             $path = Storage::disk('public')->putFileAs(
-                $segments[1] . '/' . $segments[2] . '/' . $date->isoFormat('OYMMDD'). '/',
+                $segments[1] . '/' . $segments[2] . '/' . Auth::user()->username . '/' . $date->isoFormat('OYMMDD') . '/',
                 new File($request->file('file')),
                 $request->file('file')->getClientOriginalName(),
             );

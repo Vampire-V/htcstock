@@ -132,4 +132,13 @@ class ContractRequestService extends BaseService implements ContractRequestServi
             throw $th;
         }
     }
+
+    public function requestorInSystem()
+    {
+        try {
+            return LegalContract::select('created_by')->where('trash',false)->groupBy('created_by')->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

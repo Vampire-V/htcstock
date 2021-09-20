@@ -25,5 +25,6 @@ interface ContractRequestServiceInterface
     public function filterChecking(Request $request);
     public function filterProviding(Request $request);
     public function filterComplete(Request $request);
+    public function requestorInSystem();
 
 }

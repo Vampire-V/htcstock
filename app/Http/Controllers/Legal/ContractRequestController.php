@@ -146,6 +146,7 @@ class ContractRequestController extends Controller
             $agreements = $this->agreementService->dropdown();
             $legalContract = $this->contractRequestService->find($id);
             $subtypeContract = $this->subtypeContractService->dropdown($legalContract->agreement_id);
+            
             $paymentType = $this->paymentTypeService->dropdown($legalContract->agreement_id);
             if ($legalContract->legalContractDest) {
                 $legalContract->legalContractDest->value_of_contract = explode(",", $legalContract->legalContractDest->value_of_contract);
@@ -535,7 +536,7 @@ class ContractRequestController extends Controller
         $segments = explode('/', \substr(url()->previous(), strlen($request->root())));
         try {
             $path = Storage::disk('public')->putFileAs(
-                $segments[1] . '/' . $segments[2] . '/' . Auth::user()->username . '/' . $date->isoFormat('OYMMDD') . '/',
+                $segments[1] . '/' . $segments[2] . '/' . Auth::user()->username . '/' . $date->isoFormat('OYMMDD') ,
                 new File($request->file('file')),
                 $request->file('file')->getClientOriginalName(),
             );

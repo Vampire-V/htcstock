@@ -197,8 +197,7 @@ var comercialLists = (id) => {
                     class="btn btn-danger btn-sm" onclick="deleteRow(${element.id})"><i
                         class="pe-7s-trash"> </i></a>`
                 })
-
-                document.getElementById('total').textContent = PurchaseList.reduce((accumulator, item) => accumulator + item.amount,0)
+                table.querySelector('#total').textContent = PurchaseList.reduce((accumulator, item) => accumulator + item.amount,0)
             })
     }
 }

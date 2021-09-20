@@ -3,14 +3,22 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         let subtype = document.getElementById('validationSubType')
+        let payment_type = document.getElementById('validationContractType')
+        let contract = document.getElementById('contract_id')
         if (subtype) {
             changeSubType(subtype)
+        }
+        if (contract) {
+            comercialLists(contract.value)
+        }
+        if (payment_type) {
+            changeType(payment_type)
         }
     })
 
     window.addEventListener('load', function () {
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.getElementsByClassName('needs-validation');
+        var forms = document.getElementsByClassName('needs-validation')
         // Loop over them and prevent submission
         validationForm(forms)
 
@@ -95,6 +103,75 @@ var displayFileBySubType = e => {
         displayFileName(e.querySelector("input[id='validationInsurance']"))
     }
     if (e.id === 'form-it') {
-        
+        displayFileName(e.querySelector("input[id='validationPurchaseOrderFile']"))
+        displayFileName(e.querySelector("input[id='validationQuotationFile']"))
+        displayFileName(e.querySelector("input[id='validationCoparationFile']"))
+
+        changeType(e.querySelector("input[id='validationContractType']"))
+        calMonthToYear(e.querySelector("input[id='validationWarranty']"))
+    }
+}
+
+var changeType = (e) => {
+    
+    if (e) {
+        let firstContract = document.getElementById("contractType1")
+        switch (e.options[e.selectedIndex].text) {
+            case 'PC':
+                firstContract.classList.remove('hide-contract');
+                setValueOfContract(firstContract)
+                break;
+            default:
+                firstContract.classList.add('hide-contract');
+                document.getElementsByName('value_of_contract')[0].value = ""
+                break;
+        }
+    }
+}
+var changeContractValue = (e) => {
+    let el = document.getElementById(e.offsetParent.id)
+    setValueOfContract(el)
+    enterNoSubmit(e)
+}
+var setValueOfContract = (e) => {
+    let el = e.children[0].children
+    let total = 100 - parseInt(el[0].children[0].value) - parseInt(el[1].children[0].value)
+    el[2].children[0].value = total
+
+    document.getElementsByName('value_of_contract')[0].value = `${el[0].children[0].value},${el[1].children[0].value},${el[2].children[0].value}`
+}
+
+const form = document.getElementById('form-it');
+form.addEventListener('submit', logSubmit);
+async function logSubmit(event) {
+    let onSubmit = false
+    try {
+        await getComercialLists(document.getElementById('contract_id').value).then(result => {
+            if (result.data.length < 1) {
+                document.getElementById('desc').required = true
+                document.getElementById('qty').required = true
+                document.getElementById('unit_price').required = true
+                // document.getElementById('discount').required = true
+                toast('Can’t find purchase', 'error')
+            } else {
+                // if (!document.getElementById('form-workservicecontract').checkValidity()) {
+                //     // toast('Can’t find purchase', 'error')
+                // }else{
+                    document.getElementById('desc').required = false
+                    document.getElementById('qty').required = false
+                    document.getElementById('unit_price').required = false
+                    // document.getElementById('discount').required = false
+                    onSubmit = true
+                // }
+            }
+        })
+
+    } catch (error) {
+        console.error(error)
+    } finally {
+        if (onSubmit) {
+            document.getElementById('form-it').submit()
+        }
+        toastClear()
     }
 }

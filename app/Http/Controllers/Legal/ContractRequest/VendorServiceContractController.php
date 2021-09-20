@@ -83,10 +83,13 @@ class VendorServiceContractController extends Controller
             $attributes['comercial_terms']['contract_dest_id'] = $contract_desc->id;
             $contract_term = new LegalComercialTerm($attributes['comercial_terms']);
             $contract_term->save();
-            $payment_term = new LegalPaymentTerm($attributes['payment_terms']);
-            $payment_term->save();
-            $contract_desc->payment_term_id = $payment_term->id;
-            $contract_desc->save();
+            if (!$contract_desc->legalSubtypeContract->slug = 'it-contract') {
+                $payment_term = new LegalPaymentTerm($attributes['payment_terms']);
+                $payment_term->save();
+                $contract_desc->payment_term_id = $payment_term->id;
+                $contract_desc->save();
+            }
+            
             DB::commit();
             return \redirect()->route('legal.contract-request.show', $contract_desc->contract_id);
         } catch (\Exception $e) {
@@ -152,8 +155,11 @@ class VendorServiceContractController extends Controller
             $contract_desc->legalComercialTerm->fill($attributes['comercial_terms']);
             $contract_desc->legalComercialTerm->save();
 
-            $contract_desc->legalPaymentTerm->fill($attributes['payment_terms']);
-            $contract_desc->legalPaymentTerm->save();
+            if (!$contract_desc->legalSubtypeContract->slug = 'it-contract') {
+                $contract_desc->legalPaymentTerm->fill($attributes['payment_terms']);
+                $contract_desc->legalPaymentTerm->save();
+            }
+
 
             if ($contract_desc->quotation !== $request->quotation) {
                 Storage::delete($contract_desc->quotation);
@@ -212,7 +218,6 @@ class VendorServiceContractController extends Controller
         $attr = [];
         try {
             $subtypeContract = $this->subtypeContractService->find($request->sub_type_contract_id);
-
             if ($subtypeContract->slug === 'bus-contract') {
                 $this->validationBus($request);
                 $attr = $this->setAttributesBus($request);
@@ -244,6 +249,10 @@ class VendorServiceContractController extends Controller
             if ($subtypeContract->slug === 'transportation-contract') {
                 $this->validationTransportation($request);
                 $attr = $this->setAttributesTransportation($request);
+            }
+            if ($subtypeContract->slug === 'it-contract') {
+                $this->validationIT($request);
+                $attr = $this->setAttributesIT($request);
             }
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
@@ -421,6 +430,25 @@ class VendorServiceContractController extends Controller
             'working_time' => 'required',
 
             'price_of_service' => 'required',
+        ]);
+    }
+    private function validationIT(Request $request)
+    {
+        $request->validate([
+            'sub_type_contract_id' => 'required',
+            'quotation' => 'required',
+            'coparation_sheet' => 'required',
+
+            'scope_of_work' => 'required',
+            'location' => 'required',
+            'quotation_no' => 'required',
+            'dated' => 'required',
+            'delivery_date' => 'required',
+
+            'payment_type_id' => 'required',
+            'value_of_contract' => 'required',
+
+            'warranty' => 'required',
         ]);
     }
 
@@ -607,7 +635,7 @@ class VendorServiceContractController extends Controller
     }
     private function setAttributesTransportation(Request $request)
     {
-        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet','insurance', 'contract_id');
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'insurance', 'contract_id');
         // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
         // $attributes['quotation'] = $request->quotation;
         // $attributes['coparation_sheet'] = $request->coparation_sheet;
@@ -628,5 +656,19 @@ class VendorServiceContractController extends Controller
         // $paymentAttr['price_of_service'] = $request->price_of_service;
 
         return \compact('contract_dest', 'comercial_terms', 'payment_terms');
+    }
+    private function setAttributesIT(Request $request)
+    {
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'payment_type_id', 'value_of_contract', 'warranty', 'contract_id');
+
+        $comercial_terms = $request->only(
+            'scope_of_work',
+            'location',
+            'quotation_no',
+            'dated',
+            'delivery_date'
+        );
+
+        return \compact('contract_dest', 'comercial_terms');
     }
 }

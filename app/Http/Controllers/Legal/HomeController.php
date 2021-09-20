@@ -36,11 +36,12 @@ class HomeController extends Controller
         $checking = 0;
         $providing = 0;
         $complete = 0;
-        $selectedStatus = collect($request->status);
+        $selectedCreated = collect($request->created_by);
         $selectedAgree = collect($request->agreement);
-        $status = [ContractEnum::R,ContractEnum::CK, ContractEnum::P, ContractEnum::CP];
+        $status = [ContractEnum::R, ContractEnum::CK, ContractEnum::P, ContractEnum::CP];
         // $query = $request->all();
         try {
+            $requestor = $this->contractRequestService->requestorInSystem();
             if (Gate::allows(UserEnum::ADMINLEGAL) || Gate::allows(UserEnum::SUPERADMIN)) {
                 $contracts = $this->contractRequestService->filterForAdmin($request);
             } else {
@@ -73,9 +74,10 @@ class HomeController extends Controller
             'complete',
             'contracts',
             'status',
-            'selectedStatus',
+            'selectedCreated',
             'selectedAgree',
-            'agreements'
+            'agreements',
+            'requestor'
         ));
     }
 

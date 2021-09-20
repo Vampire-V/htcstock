@@ -205,12 +205,13 @@
                 <form action="#" method="GET">
                     <div class="form-row">
                         <div class="col-md-2 mb-2">
-                            <select class="form-control-sm form-control js-select-status-multiple" name="status[]"
+                            <select class="form-control-sm form-control js-select-created-multiple" name="created_by[]"
                                 multiple>
-                                @isset($status)
-                                @foreach ($status as $item)
-                                <option value="{{$item}}" @if($selectedStatus->contains($item)) selected
-                                    @endif>{{$item}}
+                                @isset($requestor)
+                                @foreach ($requestor as $item)
+                                <option value="{{$item->created_by}}" @if($selectedCreated->contains($item->created_by))
+                                    selected
+                                    @endif>{{$item->createdBy->name}}
                                 </option>
                                 @endforeach
                                 @endisset
@@ -242,14 +243,14 @@
                         'use strict';
 
                         document.addEventListener('DOMContentLoaded', function () {
-                            $(".js-select-status-multiple").select2({
-                                placeholder: 'Select status',
+                            $(".js-select-created-multiple").select2({
+                                placeholder: 'Select Requestor',
                                 allowClear: true
                             });
                             // $(".js-select-status-multiple").val('request')
                             // $('.js-select-status-multiple').trigger('change');
                             $(".js-select-agreements-multiple").select2({
-                                placeholder: 'Select agreements',
+                                placeholder: 'Select type',
                                 allowClear: true
                             });
                         })

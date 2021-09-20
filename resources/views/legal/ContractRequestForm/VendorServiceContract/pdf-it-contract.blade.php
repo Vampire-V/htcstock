@@ -261,7 +261,12 @@
             <tbody>
                 <tr>
                     <td class="text-center" style="width: 20%;">
-                        <h5 class="underline">Supporting Documents</h5>
+                        <h5 class="underline">Information Technology</h5>
+                    </td>
+                    <td class="text-rigth" style="width: 19%;">Purchase Order :</td>
+                    <td>
+                        <font><input type="checkbox" {{$contract->legalContractDest->purchase_order ? "checked" : ""}}>
+                        </font>
                     </td>
                     <td class="text-rigth" style="width: 9%;">Quotation :</td>
                     <td>
@@ -272,37 +277,6 @@
                     <td>
                         <font><input type="checkbox"
                                 {{$contract->legalContractDest->coparation_sheet ? "checked" : ""}}></font>
-                    </td>
-                    <td class="text-rigth" style="width: 25%;">Transportation Permission :</td>
-                    <td>
-                        <font><input type="checkbox"
-                                {{$contract->legalContractDest->transportation_permission ? "checked" : ""}}>
-                        </font>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="text-rigth" colspan="2">Vehicle Registration :</td>
-                    <td>
-                        <font><input type="checkbox"
-                                {{$contract->legalContractDest->vehicle_registration_certificate ? "checked" : ""}}>
-                        </font>
-                    </td>
-                    <td class="text-rigth">Route :</td>
-                    <td>
-                        <font><input type="checkbox" {{$contract->legalContractDest->route ? "checked" : ""}}></font>
-                    </td>
-                    <td class="text-rigth">Insurance :</td>
-                    <td>
-                        <font><input type="checkbox" {{$contract->legalContractDest->insurance ? "checked" : ""}}>
-                        </font>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-rigth" colspan="2">Driver License :</td>
-                    <td colspan="5">
-                        <font><input type="checkbox" {{$contract->legalContractDest->driver_license ? "checked" : ""}}>
-                        </font>
                     </td>
                 </tr>
             </tbody>
@@ -330,6 +304,14 @@
                     </td>
                 </tr>
                 <tr>
+                    <td colspan="2" class="text-rigth">Purchase Order No. :</td>
+                    <td colspan="7" style="padding-left: 1%;">
+                        <font class="underline">
+                            {{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->purchase_order_no : ""}}
+                        </font>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="2" class="text-rigth">Quotation No. :</td>
                     <td colspan="2" style="padding-left: 1%;">
                         <font class="underline">
@@ -344,86 +326,180 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="text-rigth">Contract period :</td>
+                    <td colspan="2" class="text-rigth">Delivery Date :</td>
                     <td colspan="6" style="padding-left: 1%;">
                         <font class="underline">
-                            {{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->contract_period: ""}}
+                            {{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->delivery_date: ""}}
                         </font>
                     </td>
                     {{-- <td class="text-rigth">Untill:</td>
                     <td colspan="4" style="padding-left: 1%;">
                         <font class="underline">
                             {{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}
-                        </font>
+                    </font>
                     </td> --}}
                 </tr>
             </tbody>
         </table>
 
-        <table style="width: 95%; margin: 0 auto;">
+        @if ($contract->legalComercialList->count() > 0)
+        <table style="width: 95%; margin: 1 auto;">
+            <thead>
+                <tr>
+                    <th class="border-cell">S/N</th>
+                    <th class="border-cell">Description</th>
+                    <th class="border-cell">Quantity</th>
+                    <th class="border-cell">Unit Price </th>
+                    <th class="border-cell">Price</th>
+                    <th class="border-cell">Discount</th>
+                    <th class="border-cell">Amount</th>
+                </tr>
+            </thead>
             <tbody>
+                @foreach ($contract->legalComercialList as $key => $item)
                 <tr>
-                    <td class="text-center" style="width: 20%;">
-                        <h5 class="underline">Payment Terms</h5>
+                    <td class="text-center border-cell">
+                        {{$key+1}}
                     </td>
-                    <td style="width: 15%;" class="text-rigth">
-                        Monthly :
+                    <td class="text-center border-cell">
+                        {{$item->description}}
                     </td>
-                    <td>
-                        <font class="underline">
-                            {{$contract->legalContractDest->legalPaymentTerm->monthly}}
-                        </font>
+                    <td class="text-center border-cell">
+                        {{$item->qty}}
+                    </td>
+                    <td class="text-center border-cell">
+                        {{$item->unit_price}}
+                    </td>
+                    <td class="text-center border-cell">
+                        {{$item->price}}
+                    </td>
+                    <td class="text-center border-cell">
+                        {{$item->discount}}
+                    </td>
+                    <td class="text-center border-cell">
+                        {{$item->amount}}
                     </td>
                 </tr>
-                <tr>
-                    <td style="width: 20%;">
-                    </td>
-                    <td style="width: 15%;" class="text-rigth">
-                        Route Change :
-                    </td>
-                    <td>
-                        <font class="underline">
-                            {{$contract->legalContractDest->legalPaymentTerm->route_change}}
-                        </font>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width: 20%;">
-                    </td>
-                    <td style="width: 15%;" class="text-rigth">
-                        OT :
-                    </td>
-                    <td>
-                        <font class="underline">
-                            {{$contract->legalContractDest->legalPaymentTerm->payment_ot}}
-                        </font>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width: 20%;">
-                    </td>
-                    <td style="width: 15%;" class="text-rigth">
-                        Holiday Pay :
-                    </td>
-                    <td>
-                        <font class="underline">
-                            {{$contract->legalContractDest->legalPaymentTerm->holiday_pay}}
-                        </font>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width: 20%;">
-                    </td>
-                    <td style="width: 15%;" class="text-rigth">
-                        OT driver :
-                    </td>
-                    <td>
-                        <font class="underline">
-                            {{$contract->legalContractDest->legalPaymentTerm->ot_driver}}
-                        </font>
-                    </td>
-                </tr>
+                @endforeach
             </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="5"></th>
+                    <th>Total: </th>
+                    <th class="text-center border-cell">{{$contract->legalComercialList->reduce(function ($a, $b) {
+                    return $a + $b->amount;
+                },0)}}</th>
+                </tr>
+            </tfoot>
+        </table>
+        @endif
+
+        <table style="width: 95%; margin: 0 auto;">
+            @if (isset($contract->legalContractDest->payment_type_id))
+            <tr>
+                <td style="width: 13%;" class="text-center">
+                    <h5 class="underline">Payment Terms</h5>
+                </td>
+                <td style="width: 5%;" class="text-center">
+                    <font class="underline">
+                        {{isset($contract->legalContractDest->legalPaymentType) ? $contract->legalContractDest->legalPaymentType->name : ""}}
+                    </font>
+                </td>
+                <td style="width: 7%;" class="text-center">
+                    <font class="underline">
+                        {{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[0]:30}}%
+                    </font>
+                </td>
+                <td>
+                    <span>of the total value of a contract within 15 days from the date of signing of the contract
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+
+                </td>
+                <td style="width: 7%;" class="text-center">
+                    <font class="underline">
+                        {{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[1]:60}}%
+                    </font>
+                </td>
+                <td>
+                    <span>of the total value of a contract within 30 days from the date of derivered by Seller
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td class="text-center">
+                    <font class="underline">
+                        {{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[2]:10}}%
+                    </font>
+                </td>
+                <td>
+                    <span>of the total value of a contract within 30 days from the date of inspection and approval by
+                        HTC
+                    </span>
+                </td>
+            </tr>
+            @else
+            <tr>
+                <td style="width: 13%;" class="text-center">
+                    <h5 class="underline">Payment Terms</h5>
+                </td>
+                <td style="width: 5%;" class="text-center">
+                    <font class="underline">
+
+                    </font>
+                </td>
+                <td style="width: 7%;" class="text-center">
+                    <font class="underline">
+                        %
+                    </font>
+                </td>
+                <td>
+                    <span>of the total value of a contract within 15 days from the date of signing of the
+                        contract</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+
+                </td>
+                <td style="width: 7%;" class="text-center">
+                    <font class="underline">
+                        %
+                    </font>
+                </td>
+                <td>
+                    <span>of the total value of a contract within 30 days from the date of derivered by Seller</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td class="text-center">
+                    <font class="underline">
+                        %
+                    </font>
+                </td>
+                <td>
+                    <span>of the total value of a contract within 30 days from the date of inspection and approval by
+                        HTC
+
+                    </span>
+                </td>
+            </tr>
+            @endif
+
+
+            <tr>
+                <td class="text-center">
+                    <h5 class="underline">Warranty</h5>
+                </td>
+                <td colspan="3">
+                    <font class="underline">{{$contract->legalContractDest->warranty}} Month</font>
+                </td>
+            </tr>
         </table>
 
         <div class="location">

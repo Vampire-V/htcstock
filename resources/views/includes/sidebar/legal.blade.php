@@ -41,22 +41,23 @@
                     </a>
                 </li>
                 <li class="app-sidebar__heading">Contract</li>
-                <li class="{{Helper::isActive('legal/contract-request*')}}">
-                    <a href="#" class="{{Helper::isActive('legal/contract-request*')}}">
+                <li class="{{Helper::isActive('legal/*')}}">
+                    <a href="#" class="{{Helper::isActive('legal/*')}}">
                         <i class="metismenu-icon pe-7s-hammer"></i>
                         E-filing
                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                     </a>
                     <ul>
                         <li>
-                            <a href="#" class="">
+                            <a href="{{route('legal.template-libary.index')}}"
+                                class="{{Helper::isActive('legal/template-libary*')}}">
                                 <i class="metismenu-icon"></i>
                                 Contract Template Libary
                             </a>
                         </li>
                         <li>
                             <a href="{{route('legal.contract-request.index')}}"
-                                class="{{Helper::isActive('legal/contract-request')}}">
+                                class="{{Helper::isActive('legal/contract-request*')}}">
                                 <i class="metismenu-icon"></i>
                                 Contract Request
                             </a>

@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 // Legal
 Route::get('legal/approval/verify/{id}/{contract}', 'Auth\LoginController@authenticatedLegalById')->name('legal.approval.verify');
+// Route::prefix('dashboard')->name('dashboard.')->middleware(['auth', 'verified'])->group(function () {
+    // Route::get('index', 'HomeController@index')->name('index');
+// });
 Route::namespace('Legal')->prefix('legal')->name('legal.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', 'HomeController@index')->name('dashboard');
 
@@ -24,6 +27,10 @@ Route::namespace('Legal')->prefix('legal')->name('legal.')->middleware(['auth', 
         Route::resource('marketingagreement', 'MarketingAgreementController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store']]);
 
         Route::resource('comerciallists', 'ComercialListsController', ['only' => ['store', 'edit', 'destroy']]);
+    });
+
+    Route::prefix('template-libary')->name('template-libary.')->group(function () {
+        Route::get('index', 'TemplateLibaryController@index')->name('index');
     });
 
     Route::namespace('AdminManagement')->prefix('adminmanagement')->name('adminmanagement.')->group(function () {

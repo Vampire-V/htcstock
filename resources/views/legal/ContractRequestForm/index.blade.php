@@ -88,7 +88,6 @@
                 }
                 </script>
                 <hr>
-
                 <div class="table-responsive">
                     <table class="mb-0 table table-hover table-sm table-bordered">
                         <thead class="thead-dark">
@@ -151,9 +150,6 @@
                         </tbody>
                     </table>
                 </div>
-                {{-- @isset($contractsRQ)
-                {{ $contractsRQ->appends($query)->links() }}
-                @endisset --}}
             </div>
         </div>
     </div>
@@ -171,60 +167,11 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        {{-- <a href="{{route('legal.contract-request.create')}}" class="btn-shadow btn btn-danger"
-                            data-toggle="tooltip" title="create contract" data-placement="bottom">
-                            <span class="btn-icon-wrapper pr-2 opacity-7">
-                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                            </span>
-                            Create</a> --}}
                     </div>
                 </div>
             </div>
             <div class="card-body">
-                {{-- <form action="{{route('legal.contract-request.index')}}" method="GET">
-                    <div class="form-row">
-                        <div class="col-md-2 mb-2">
-                            <select class="form-control-sm form-control js-select-agreements-multiple"
-                                name="agreement[]" multiple>
-                                @isset($agreements)
-                                @foreach ($agreements as $item)
-                                <option value="{{$item->id}}" @if($selectedAgree->contains($item->id)) selected
-                                    @endif>{{$item->name}}</option>
-                                @endforeach
-                                @endisset
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <button class="btn-shadow btn btn-info" type="submit" data-toggle="tooltip"
-                                title="search contract" data-placement="bottom">
-                                <span class="btn-icon-wrapper pr-2 opacity-7">
-                                    <i class="fa fa-search-plus" aria-hidden="true"></i>
-                                </span>
-                                Search</button>
-                        </div>
-                    </div>
-                </form>
-                <script src="{{asset('assets\js\legals\contractRequestForm\create.js')}}"></script>
-                <script>
-                    function destroy(id) {
-                    event.preventDefault();
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById('destroy-form'+id).submit();
-                        }
-                    })
-                }
-                </script> --}}
                 <hr>
-
                 <div class="table-responsive">
                     <table class="mb-0 table table-hover table-sm table-bordered">
                         <thead class="thead-dark">
@@ -287,9 +234,6 @@
                         </tbody>
                     </table>
                 </div>
-                {{-- @isset($contractsCK)
-                {{ $contractsCK->appends($query)->links() }}
-                @endisset --}}
             </div>
         </div>
     </div>
@@ -307,60 +251,11 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        {{-- <a href="{{route('legal.contract-request.create')}}" class="btn-shadow btn btn-danger"
-                            data-toggle="tooltip" title="create contract" data-placement="bottom">
-                            <span class="btn-icon-wrapper pr-2 opacity-7">
-                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                            </span>
-                            Create</a> --}}
                     </div>
                 </div>
             </div>
             <div class="card-body">
-                {{-- <form action="{{route('legal.contract-request.index')}}" method="GET">
-                    <div class="form-row">
-                        <div class="col-md-2 mb-2">
-                            <select class="form-control-sm form-control js-select-agreements-multiple"
-                                name="agreement[]" multiple>
-                                @isset($agreements)
-                                @foreach ($agreements as $item)
-                                <option value="{{$item->id}}" @if($selectedAgree->contains($item->id)) selected
-                                    @endif>{{$item->name}}</option>
-                                @endforeach
-                                @endisset
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <button class="btn-shadow btn btn-info" type="submit" data-toggle="tooltip"
-                                title="search contract" data-placement="bottom">
-                                <span class="btn-icon-wrapper pr-2 opacity-7">
-                                    <i class="fa fa-search-plus" aria-hidden="true"></i>
-                                </span>
-                                Search</button>
-                        </div>
-                    </div>
-                </form>
-                <script src="{{asset('assets\js\legals\contractRequestForm\create.js')}}"></script>
-                <script>
-                    function destroy(id) {
-                    event.preventDefault();
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById('destroy-form'+id).submit();
-                        }
-                    })
-                }
-                </script> --}}
                 <hr>
-
                 <div class="table-responsive">
                     <table class="mb-0 table table-hover table-sm table-bordered">
                         <thead class="thead-dark">
@@ -423,9 +318,6 @@
                         </tbody>
                     </table>
                 </div>
-                {{-- @isset($contractsP)
-                {{ $contractsP->appends($query)->links() }}
-                @endisset --}}
             </div>
         </div>
     </div>
@@ -443,60 +335,11 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        {{-- <a href="{{route('legal.contract-request.create')}}" class="btn-shadow btn btn-danger"
-                            data-toggle="tooltip" title="create contract" data-placement="bottom">
-                            <span class="btn-icon-wrapper pr-2 opacity-7">
-                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                            </span>
-                            Create</a> --}}
                     </div>
                 </div>
             </div>
             <div class="card-body">
-                {{-- <form action="{{route('legal.contract-request.index')}}" method="GET">
-                    <div class="form-row">
-                        <div class="col-md-2 mb-2">
-                            <select class="form-control-sm form-control js-select-agreements-multiple"
-                                name="agreement[]" multiple>
-                                @isset($agreements)
-                                @foreach ($agreements as $item)
-                                <option value="{{$item->id}}" @if($selectedAgree->contains($item->id)) selected
-                                    @endif>{{$item->name}}</option>
-                                @endforeach
-                                @endisset
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <button class="btn-shadow btn btn-info" type="submit" data-toggle="tooltip"
-                                title="search contract" data-placement="bottom">
-                                <span class="btn-icon-wrapper pr-2 opacity-7">
-                                    <i class="fa fa-search-plus" aria-hidden="true"></i>
-                                </span>
-                                Search</button>
-                        </div>
-                    </div>
-                </form>
-                <script src="{{asset('assets\js\legals\contractRequestForm\create.js')}}"></script>
-                <script>
-                    function destroy(id) {
-                    event.preventDefault();
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById('destroy-form'+id).submit();
-                        }
-                    })
-                }
-                </script> --}}
                 <hr>
-
                 <div class="table-responsive">
                     <table class="mb-0 table table-hover table-sm table-bordered">
                         <thead class="thead-dark">

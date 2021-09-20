@@ -70,7 +70,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6 col-xl-4">
+    <div class="col-md-6 col-xl-6">
         <div class="card mb-3 widget-content">
             <div class="widget-content-outer">
                 <div class="widget-content-wrapper">
@@ -85,7 +85,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-xl-4">
+    <div class="col-md-6 col-xl-6">
         <div class="card mb-3 widget-content">
             <div class="widget-content-outer">
                 <div class="widget-content-wrapper">
@@ -100,7 +100,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-xl-4">
+    {{-- <div class="col-md-6 col-xl-4">
         <div class="card mb-3 widget-content">
             <div class="widget-content-outer">
                 <div class="widget-content-wrapper">
@@ -114,8 +114,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="d-xl-none d-lg-block col-md-6 col-xl-4">
+    </div> --}}
+    {{-- <div class="d-xl-none d-lg-block col-md-6 col-xl-4">
         <div class="card mb-3 widget-content">
             <div class="widget-content-outer">
                 <div class="widget-content-wrapper">
@@ -139,11 +139,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 <div class="divider mt-0" style="margin-bottom: 30px;"></div>
 <div class="row">
-    <div class="col-lg-6 col-xl-4">
+    <div class="col-lg-6 col-xl-3">
         <div class="card mb-3 widget-content bg-night-fade">
             <div class="widget-content-wrapper text-white">
                 <div class="widget-content-left">
@@ -156,7 +156,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-6 col-xl-4">
+    <div class="col-lg-6 col-xl-3">
         <div class="card mb-3 widget-content bg-arielle-smile">
             <div class="widget-content-wrapper text-white">
                 <div class="widget-content-left">
@@ -169,7 +169,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-6 col-xl-4">
+    <div class="col-lg-6 col-xl-3">
         <div class="card mb-3 widget-content bg-premium-dark">
             <div class="widget-content-wrapper text-white">
                 <div class="widget-content-left">
@@ -182,7 +182,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-6 col-xl-4">
+    <div class="col-lg-6 col-xl-3">
         <div class="card mb-3 widget-content bg-happy-green">
             <div class="widget-content-wrapper text-white">
                 <div class="widget-content-left">
@@ -284,9 +284,10 @@
                     <thead class="thead-dark">
                         <tr>
                             <th>#</th>
-                            <th>Full name (Company’s, Person’s) </th>
-                            <th>Legal Representative </th>
-                            <th>Legal Agreement </th>
+                            <th>Requestor</th>
+                            <th>Contracting Party</th>
+                            <th>Legal Representative</th>
+                            <th>Type</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -317,6 +318,7 @@
                                 </form>
                                 @endif
                             </td>
+                            <td>{{$item->createdBy->name}}</td>
                             <td>{{$item->company_name}}</td>
                             <td>{{$item->representative}}</td>
                             <td>{{$item->legalAgreement->name}}</td>

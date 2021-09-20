@@ -1723,7 +1723,7 @@
                                 <label for="validationContractType"><strong>Contract Type</strong> <span
                                         style="color: red;">*</span></label>
                                 <select name="payment_type_id" id="validationContractType"
-                                    class="form-control-sm form-control" onchange="changeType(this)" required>
+                                    class="form-control-sm form-control" onchange="changeType(this)" disabled>
                                     <option value="">Choose....</option>
                                     @isset($paymentType)
                                     @foreach ($paymentType as $item)
@@ -1742,14 +1742,14 @@
                             <div class="col-md-8 mb-8 hide-contract" id="contractType1">
                                 <ul>
                                     <li class="li-none-type"><input type="number" value="30" class="type-contract-input"
-                                            min="0" max="100" onchange="changeContractValue(this)">
+                                            min="0" max="100" onchange="changeContractValue(this)" readonly>
                                         <span>% of
                                             the total
                                             value of a contract within 15 days from the date of signing of the
                                             contract</span>
                                     </li>
                                     <li class="li-none-type"><input type="number" value="60" class="type-contract-input"
-                                            min="0" max="100" onchange="changeContractValue(this)">
+                                            min="0" max="100" onchange="changeContractValue(this)" readonly>
                                         <span>% of
                                             the total
                                             value of a contract within 30 days from the date of derivered by

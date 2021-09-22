@@ -4,6 +4,7 @@ namespace App\Services\KPI\Service;
 
 use App\Enum\KPIEnum;
 use App\Models\KPI\Rule;
+use App\Models\KPI\RuleCategory;
 use App\Services\BaseService;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
@@ -55,7 +56,7 @@ class RuleService extends BaseService implements RuleServiceInterface
             ->filter($request)
             ->where('remove','<>','Y')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
     }
 
     public function isName(string $var): bool
@@ -81,6 +82,23 @@ class RuleService extends BaseService implements RuleServiceInterface
             ->filter($request)
             ->orderBy('category_id')
             ->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function rule_excel(): array
+    {
+        try {
+            $arra = [];
+            $category = RuleCategory::where('name','kpi')->first();
+            $result = $this->dropdown($category->id);
+            foreach ($result as $key => $item) {
+                $arra[] = [
+                    'name' => $item->name
+                ];
+            }
+            return $arra;
         } catch (\Throwable $th) {
             throw $th;
         }

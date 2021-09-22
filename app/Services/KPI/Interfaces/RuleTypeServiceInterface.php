@@ -16,4 +16,5 @@ interface RuleTypeServiceInterface
     public function destroy($id);
 
     public function dropdown(): Collection;
+    public function type_excel(): array;
 }

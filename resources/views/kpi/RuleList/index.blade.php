@@ -147,11 +147,11 @@
                                 <td>{{$item->ruletype->name}}</td>
                                 <td>
                                     <a href="{{route('kpi.rule-list.edit',$item->id)}}"
-                                        class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Edit
+                                        class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info btn-sm">Edit
                                     </a>
                                     <a href="{{route('kpi.rule-list.destroy',$item->id)}}"
-                                        class="mb-2 mr-2 border-0 btn-danger btn btn-outline-info" onclick="event.preventDefault();
-    document.getElementById('delete-form-{{ $item->id }}').submit();">Remove
+                                        class="mb-2 mr-2 border-0 btn-danger btn btn-outline-info btn-sm" onclick="event.preventDefault();
+                                        document.getElementById('delete-form-{{ $item->id }}').submit();">Remove
                                     </a>
                                     <form id="delete-form-{{ $item->id }}"
                                         action="{{ route('kpi.rule-list.destroy', $item->id) }}" method="POST"
@@ -166,6 +166,9 @@
                         </tbody>
                     </table>
                 </div>
+                @isset($rules)
+                {{ $rules->appends($query)->links() }}
+                @endisset
             </div>
         </div>
     </div>
@@ -187,28 +190,37 @@
                 <form id="form-import-rule">
                     <div class="form-row">
                         <div class="col-md-6">
-                            <div class="position-relative form-group">
-                                <label for="rule-name">Template file :</label>&nbsp;
-                                <a href="{{asset($template)}}" target="_blank" rel="noopener noreferrer"><i
-                                        class="pe-7s-cloud-download"> </i></a>
+                            <div class="mb-3 widget-content ">
+                                <div class="widget-content-wrapper">
+                                    <div class="widget-content-left">
+                                        <div class="widget-heading">Template file: </div>
+                                        <div class="widget-subheading"></div>
+                                    </div>
+                                    <div class="widget-numbers ">
+                                        <a href="{{route('kpi.rules.download-template')}}" class="widget-heading"
+                                            target="_blank" rel="noopener noreferrer"><i class="pe-7s-download">
+                                            </i></a>
+                                    </div>
+                                    {{-- <div class="widget-content-right"></div> --}}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="position-relative form-group dropzone"><label for="rules">Import data to system
-                                    :</label>
-                                <input type="file" name="file_template" id="file_template" onchange="onFile(this)" />
-                                <input type="hidden" name="path_file">
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="position-relative form-group dropzone"><label for="rules">Import data to system
+                                :</label>
+                            <input type="file" name="file_template" id="file_template" onchange="onFile(this)" />
+                            <input type="hidden" name="path_file">
                         </div>
                     </div>
-                </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="submitFile(this)">Add</button>
-            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="submitFile(this)">Add</button>
         </div>
     </div>
+</div>
 </div>
 @endsection
 @section('second-script')

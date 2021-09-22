@@ -38,4 +38,6 @@ interface UserServiceInterface
     public function reportStaffEvaluate(Request $request);
 
     public function dropdownApprovalKPI($id): Collection;
+
+    public function employee_excel(): array;
 }

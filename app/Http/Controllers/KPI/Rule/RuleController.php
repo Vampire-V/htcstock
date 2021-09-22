@@ -4,6 +4,7 @@ namespace App\Http\Controllers\KPI\Rule;
 
 use App\Enum\KPIEnum;
 use App\Exports\KPI\RulesExport;
+use App\Exports\KPI\TemplateRulesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\KPI\StoreRulePost;
 use App\Http\Requests\KPI\StoreRulePut;
@@ -375,5 +376,15 @@ class RuleController extends Controller
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), 500);
         }
+    }
+
+    public function template_rule(Request $request)
+    {
+        $employee = $this->userService->employee_excel();
+        $category = $this->ruleCategoryService->category_excel();
+        $type = $this->ruleTypeService->type_excel();
+        $dept = $this->departmentService->dropdown_excel();
+        $rules = $this->ruleService->rule_excel();
+        return Excel::download(new TemplateRulesExport($employee,$category,$type,$dept,$rules), "Rules_Template" . now() . ".xlsx");
     }
 }

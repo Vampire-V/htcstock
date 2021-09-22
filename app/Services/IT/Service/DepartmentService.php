@@ -48,4 +48,20 @@ class DepartmentService extends BaseService implements DepartmentServiceInterfac
             throw $th;
         }
     }
+
+    public function dropdown_excel(): array
+    {
+        try {
+            $arra = [];
+            $result = $this->dropdown();
+            foreach ($result as $key => $item) {
+                $arra[] = [
+                    'name' => $item->name
+                ];
+            }
+            return $arra;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

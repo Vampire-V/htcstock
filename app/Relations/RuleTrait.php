@@ -2,6 +2,7 @@
 
 namespace App\Relations;
 
+use App\Models\Department;
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\EvaluateDetail;
 use App\Models\KPI\KpiRuleType;
@@ -56,7 +57,7 @@ trait RuleTrait
 
     public function department()
     {
-        return $this->belongsTo(KpiRuleType::class, 'department_id')->withDefault();
+        return $this->belongsTo(Department::class, 'department_id')->withDefault();
     }
 
     public function parent_to()

@@ -23,4 +23,5 @@ interface RuleServiceInterface
 
     public function isName(string $var): bool;
     public function rulesInEvaluationReport($year ,Request $request);
+    public function rule_excel(): array;
 }

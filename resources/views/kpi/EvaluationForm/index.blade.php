@@ -139,7 +139,7 @@
                             <td>{{$user->positions->name}}</td>
                             <td>{{$user->degree }}</td>
                             <td><a href="{{route('kpi.staff.edit',$user->id)}}"
-                                    class="mb-2 mr-2 btn btn-outline-info">Detail
+                                    class="mb-2 mr-2 btn btn-sm btn-outline-info">Detail
                                 </a></td>
                         </tr>
                         @endforeach

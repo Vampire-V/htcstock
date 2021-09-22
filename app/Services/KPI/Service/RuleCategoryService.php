@@ -37,4 +37,20 @@ class RuleCategoryService extends BaseService implements RuleCategoryServiceInte
             throw $th;
         }
     }
+    public function category_excel(): array
+    {
+        try {
+            $arra = [];
+            $result = $this->dropdown();
+            foreach ($result as $key => $item) {
+                $arra[] = [
+                    'slug' => $item->name, 
+                    'name' => $item->description
+                ];
+            }
+            return $arra;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

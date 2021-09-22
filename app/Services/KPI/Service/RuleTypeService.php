@@ -37,4 +37,20 @@ class RuleTypeService extends BaseService implements RuleTypeServiceInterface
             throw $th;
         }
     }
+
+    public function type_excel(): array
+    {
+        try {
+            $arra = [];
+            $result = $this->dropdown();
+            foreach ($result as $key => $item) {
+                $arra[] = [
+                    'name' => $item->name
+                ];
+            }
+            return $arra;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

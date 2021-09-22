@@ -16,4 +16,5 @@ interface RuleCategoryServiceInterface
     public function destroy($id);
 
     public function dropdown(): Collection;
+    public function category_excel(): array;
 }

@@ -26,4 +26,5 @@ interface EvaluateServiceInterface
     public function scoreFilter(Request $request): Collection;
     public function forQuarterYear($user, $quarter, $year): Collection;
     public function forYear($user, $year): Collection;
+    public function history(Evaluate $evaluate): Collection;
 }

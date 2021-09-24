@@ -5,6 +5,7 @@ namespace App\Services\KPI\Service;
 use App\Enum\KPIEnum;
 use App\Enum\UserEnum;
 use App\Models\KPI\Evaluate;
+use App\Models\KPI\EvaluatesHistory;
 use App\Models\KPI\UserApprove;
 use App\Services\BaseService;
 use App\Services\KPI\Interfaces\EvaluateServiceInterface;
@@ -182,6 +183,15 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
                 ->where(['user_id' => $user, 'status' => KPIEnum::approved])
                 ->get();
             return $result->sortBy(fn ($item) => $item->targetperiod->id);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function history(Evaluate $evaluate): Collection
+    {
+        try {
+            return EvaluatesHistory::where('evaluate_id',$evaluate->id)->orderBy('created_at','desc')->get();
         } catch (\Throwable $th) {
             throw $th;
         }

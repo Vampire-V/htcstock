@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\HttpFoundation\Response;
 
 class EvaluateReviewController extends Controller
 {
@@ -140,10 +141,11 @@ class EvaluateReviewController extends Controller
             $evaluate  = new EvaluateResource($f_evaluate);
             $canInput = Gate::any([UserEnum::ADMINKPI,UserEnum::OPERATIONKPI]);
             $canAdmin = Gate::allows(UserEnum::ADMINKPI);
+            $history = $this->evaluateService->history($f_evaluate);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'category', 'current','canInput','canAdmin'));
+        return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'category', 'current','canInput','canAdmin','history'));
     }
 
     /**
@@ -155,16 +157,19 @@ class EvaluateReviewController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
         $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft, KPIEnum::on_process]);
         DB::beginTransaction();
         try {
             $evaluate = $this->evaluateService->find($id);
-
+            
             $check = $this->setting_action_service->isNextStep(KPIEnum::approve);
             if ($status_list->contains($evaluate->status) && !$check) {
                 return $this->errorResponse("เลยเวลาที่กำหนด", 500);
             }
-
+            if (auth()->id() !== $evaluate->userApprove()->where('level',$evaluate->next_level)->first()->user_approve) {
+                return $this->errorResponse("ไม่มีสิทธิ์", Response::HTTP_SERVICE_UNAVAILABLE);
+            }
             $detail = collect($request->detail);
             $g = $detail->groupBy(fn ($item) => $item['rules']['category_id']);
             $total = [];

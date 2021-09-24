@@ -23,10 +23,16 @@
             </div>
         </div>
         <div class="page-title-actions">
-            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
+            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
                 class="btn-shadow mr-3 btn btn-dark">
                 <i class="fa fa-star"></i>
+            </button> --}}
+            @if ($canAdmin)
+            <button type="button" data-toggle="modal" title="Click" data-placement="top"
+                class="btn-shadow mr-3 btn btn-dark no-disable" data-target="#history-modal" id="show-history">
+                <span class="fa fa-history">&nbsp;History</span>
             </button>
+            @endif
         </div>
     </div>
 </div>
@@ -227,6 +233,59 @@
     @endif
 </div>
 
+@endsection
+
+@section('modal')
+<div class="modal fade" id="history-modal" tabindex="-1" role="dialog" aria-labelledby="history-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="history-modal-label">History evaluate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @isset($history)
+                <div class="table-responsive">
+                    <table class="mb-0 table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Status</th>
+                                <th>Comment</th>
+                                <th>By</th>
+                                <th>IP Address</th>
+                                <th>MAC Address</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($history as $item)
+                            <tr>
+                                <th scope="row">{{$loop->iteration}}</th>
+                                <td>{{$item->status}}</td>
+                                <td>{{$item->comment}}</td>
+                                <td>{{$item->createdBy->name}}</td>
+                                <td>{{$item->ip}}</td>
+                                <td>{{$item->device}}</td>
+                                <td>{{$item->created_at->diffForHumans()}}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @endisset
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                {{-- <button type="button" class="btn btn-primary" >Add</button> --}}
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('second-script')

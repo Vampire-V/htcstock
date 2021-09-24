@@ -37,4 +37,37 @@ class Evaluate extends Model
     {
         return (new EvaluationFilter($request))->filter($builder);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            // $model->created_by = \auth()->id();
+            $history = new EvaluatesHistory();
+            $history->evaluate_id = $model->id;
+            $history->status = $model->status;
+            $history->comment = $model->comment;
+            $history->current_level = $model->current_level;
+            $history->next_level = $model->next_level;
+            $history->created_by = \auth()->id();
+            $history->ip = \request()->ip();
+            $history->device = substr(exec('getmac'),0,17);
+            $history->save();
+        });
+
+        static::updating(function ($model) {
+            // $model->updated_by = \auth()->id();
+            $history = new EvaluatesHistory();
+            $history->evaluate_id = $model->id;
+            $history->status = $model->status;
+            $history->comment = $model->comment;
+            $history->current_level = $model->current_level;
+            $history->next_level = $model->next_level;
+            $history->created_by = \auth()->id();
+            $history->ip = \request()->ip();
+            $history->device = substr(exec('getmac'),0,17);
+            $history->save();
+        });
+    }
 }

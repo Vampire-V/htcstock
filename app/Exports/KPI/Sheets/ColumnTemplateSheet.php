@@ -21,10 +21,10 @@ class ColumnTemplateSheet implements FromArray, WithTitle, WithEvents, ShouldAut
     public function array(): array
     {
         return [
-            ['name', 'category_id', 'kpi_rule_types_id', 'user_actual', 'calculate_type', 'quarter_cal', 'department_id', 'base_line', 'max', 'parent', 'description', 'desc_m'],
-            ['Rule Name', 'Rule Category', 'Rule Type', 'User set actual', 'Calculate Type', 'Quarter Calculate', 'Data Sources', 'Base Line', 'Max', 'Rule KPI', 'Detinition', 'Calculation Machianism'],
             ['required', 'required', 'required', 'required', 'required', 'required', 'required', 'required', 'required', \null, \null, \null],
-            ['ตัวอย่าง ชื่อ', 'kpi', 'Financial', '70037959', 'Positive', 'Sum', 'Operation', '70', '100', 'Revenue', 'sdfsdgfdsfdsf', 'asdsdsdasdghgdf']
+            ['ตัวอย่าง ชื่อ', 'kpi', 'Financial', '70037959', 'Positive', 'Sum', 'Operation', '70', '100', 'Revenue', 'sdfsdgfdsfdsf', 'asdsdsdasdghgdf'],
+            ['Rule Name', 'Rule Category', 'Rule Type', 'User set actual', 'Calculate Type', 'Quarter Calculate', 'Data Sources', 'Base Line', 'Max', 'Rule KPI', 'Detinition', 'Calculation Machianism'],
+            ['name', 'category_id', 'kpi_rule_types_id', 'user_actual', 'calculate_type', 'quarter_cal', 'department_id', 'base_line', 'max', 'parent', 'description', 'desc_m'],
         ];
     }
 
@@ -46,11 +46,26 @@ class ColumnTemplateSheet implements FromArray, WithTitle, WithEvents, ShouldAut
             AfterSheet::class => function (AfterSheet $event) {
                 $activeSheet = $event->sheet->getDelegate();
                 // set background color
-                $activeSheet->getStyle('A3:I3')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FA8072');
-                $activeSheet->getStyle('J3:L3')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ADFF2F');
-                $activeSheet->getStyle('A4:L4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFDEAD');
-                
-                $activeSheet->getStyle('A2:L3')->applyFromArray(
+                $activeSheet->getStyle('A1:I1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FA8072');
+                $activeSheet->getStyle('J1:L1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ADFF2F');
+                $activeSheet->getStyle('A2:L2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFDEAD');
+                $activeSheet->getStyle('A4:L4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FA8072');
+                $activeSheet->getStyle('A3:L3')->applyFromArray(
+                    [
+                        'font' => [
+                            // 'name' => 'Arial',
+                            'bold' => true,
+                            'italic' => false,
+                            'size'      =>  14,
+                            // 'underline' => Font::UNDERLINE_DOUBLE,
+                            // 'strikethrough' => false,
+                            // 'color' => [
+                            //     'rgb' => '808080'
+                            // ]
+                        ]
+                    ]
+                 );
+                $activeSheet->getStyle('A1:L4')->applyFromArray(
                        [
                         //    'font' => [
                         //        'name' => 'Arial',
@@ -79,7 +94,7 @@ class ColumnTemplateSheet implements FromArray, WithTitle, WithEvents, ShouldAut
                        ]
                     );
                 // hide row
-                $activeSheet->getRowDimension('1')->setVisible(false);
+                $activeSheet->getRowDimension('4')->setVisible(false);
 
             },
         ];

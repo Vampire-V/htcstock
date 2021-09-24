@@ -177,6 +177,13 @@ const postRuleUpload = (form) => axios({
     data: form
 })
 
+const postRuleImport = (form) => axios({
+    method: 'POST',
+    responseType: 'json',
+    url: `/kpi/rule-list/import`,
+    data: form
+})
+
 const postTemplate = (from) => axios({
     method: 'POST',
     responseType: 'json',

@@ -204,23 +204,26 @@
                                     {{-- <div class="widget-content-right"></div> --}}
                                 </div>
                             </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="position-relative form-group dropzone"><label for="rules">Import data to system
-                                :</label>
-                            <input type="file" name="file_template" id="file_template" onchange="onFile(this)" />
-                            <input type="hidden" name="path_file">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group dropzone"><label for="rules">Import data to system
+                                    :</label>
+                                <input type="file" name="file_template" id="file_template" onchange="onFile(this)" />
+                                <input type="hidden" name="path_file">
+                            </div>
                         </div>
                     </div>
+                </form>
+                <ul>
+                    {{--  --}}
+                </ul>
             </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="submitFile(this)">Add</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitFile(this)">Add</button>
+            </div>
         </div>
     </div>
-</div>
 </div>
 @endsection
 @section('second-script')
@@ -230,25 +233,29 @@
     var submitFile = (e) => {
         // e.offsetParent.offsetParent.offsetParent.getElementsByClassName("close")[0].click()
         let path = document.getElementsByName('path_file')[0].value
+        let failure = []
+        let message = ""
         if (path) {
             setVisible(true)
-            postRuleUpload({file:path})
+            postRuleImport({file:path})
             .then(res => {
-                if (res.status === 200) {
-                    if (res.data.data.errors.length > 0) {
-                        res.data.data.errors.forEach(element => {
-                            toast(`Row :${element.row} Col :${element.col} Message :${element.message}`,'error')
-                        })
-                    }
+                if (res.status === 201) {
+                    console.log(res.data);
+                    failure = res.data.data
+                    message = res.data.message
                     toast(res.data.message,res.data.status)
                 }
             })
             .catch(error => {
                 console.log(error.response.data);
-                toast(error.response.data.message,error.response.data.status)
+                toast(error.response.data.message,"error")
             })
             .finally(() => {
-                document.getElementById('modal-import').getElementsByClassName("close")[0].click()
+                // document.getElementById('modal-import').getElementsByClassName("close")[0].click()
+                let ul = $('#modal-import .modal-body ul')
+                failure.forEach(item => {
+                    ul.append(`<li>row: ${item.row} , column: ${item.column} , <span style="color:red;">message: ${item.message}</span></li>`)
+                });
                 setVisible(false)
                 toastClear()
             })
@@ -294,6 +301,7 @@
         // removeAllChildNodes(modal.find('.modal-body #rule-name')[0])
         modal.find('form')[0].reset();
         modal.find('input[type="hidden"]').val('');
+        modal.find('li').remove();
     })
 
 </script>

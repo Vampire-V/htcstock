@@ -10,21 +10,29 @@ use App\Http\Requests\KPI\StoreRulePost;
 use App\Http\Requests\KPI\StoreRulePut;
 use App\Http\Resources\KPI\RuleResource;
 use App\Imports\KPI\RulesImport;
+use App\Imports\KPI\RulesNImport;
+use App\Models\Department;
 use App\Models\KPI\EvaluateDetail;
+use App\Models\KPI\KpiRuleType;
 use App\Models\KPI\Rule;
+use App\Models\KPI\RuleCategory;
 use App\Models\TemporaryFile;
+use App\Models\User;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\IT\Service\DepartmentService;
 use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\RuleTypeServiceInterface;
 use App\Services\KPI\Interfaces\TargetUnitServiceInterface;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Files\LocalTemporaryFile;
+use Maatwebsite\Excel\Validators\Failure;
 use stdClass;
+use Symfony\Component\HttpFoundation\Response;
 
 class RuleController extends Controller
 {
@@ -227,7 +235,7 @@ class RuleController extends Controller
         DB::beginTransaction();
         try {
             $file = Storage::path('kpi/' . $temporaryFile->folder . '/' . $temporaryFile->filename);
-            $read_data = Excel::toCollection(new RulesImport(), $file, null, \Maatwebsite\Excel\Excel::XLSX);
+            $read_data = Excel::toCollection(new RulesNImport(), $file, null, \Maatwebsite\Excel\Excel::XLSX);
             $datas = $read_data[0]->filter(fn ($value) => $value[1] !== null);
             $category = $this->ruleCategoryService->dropdown();
             $rule_type = $this->ruleTypeService->dropdown();
@@ -346,6 +354,71 @@ class RuleController extends Controller
         return $this->successResponse(['errors' => $this->excel_errors, 'status' => $status], $message, 200);
     }
 
+    public function import_rule(Request $request)
+    {
+        $temporaryFile = TemporaryFile::where('folder', $request->file)->first();
+        if (!$temporaryFile) {
+            return \response()->json(["message" => "file not found!"], 422);
+        }
+
+        if (!Storage::exists('kpi/' . $temporaryFile->folder . '/' . $temporaryFile->filename)) {
+            return \response()->json(["message" => "file not found!"], Response::HTTP_FORBIDDEN);
+        }
+        $file = Storage::path('kpi/' . $temporaryFile->folder . '/' . $temporaryFile->filename);
+
+        $caltype = \collect([KPIEnum::positive,KPIEnum::negative,KPIEnum::zero_oriented_kpi]);
+        $quarter_cal = \collect([KPIEnum::sum,KPIEnum::average,KPIEnum::last_month]);
+        DB::beginTransaction();
+        try {
+            $import = Excel::toCollection(new RulesImport(), $file);
+            $rules = [];
+            $errors = [];
+            foreach ($import->first() as $key => $row) {
+                if (!is_null($row[0])) {
+                    if ($key > 3) {
+                        $rule = Rule::where('name', $row[0])->exists() ? null : $row[0];
+                        $category = RuleCategory::where('name', $row[1])->first();
+                        $type = KpiRuleType::where('name', $row[2])->first();
+                        $employee = User::where('username', $row[3])->first();
+                        $calcu = $caltype->contains($row[4]) ? $row[4] : null;
+                        $quarter = $quarter_cal->contains($row[5]) ? $row[5] : null;
+                        $department = Department::where('name', $row[6])->first();
+                        $parent = Rule::where('name', $row[9])->first();
+                        $arr = [$rule,$category,$type,$employee,$calcu,$quarter,$department,$row[7],$row[8]];
+                        if (!in_array(null,$arr)) {
+                            $rules[] = [
+                                'name' => trim($row[0]),
+                                'category_id' => $category->id,
+                                'kpi_rule_types_id' => $type->id,
+                                'user_actual' => $employee->id,
+                                'calculate_type' => trim($row[4]),
+                                'quarter_cal' => trim($row[5]),
+                                'department_id' => $department->id,
+                                'base_line' => trim($row[7]),
+                                'max' => trim($row[8]),
+                                'parent' => $row[9] ? $parent->id : $row[9],
+                                'description' => trim($row[10]),
+                                'desc_m' => trim($row[11]),
+                                'created_by' => \auth()->id(),
+                                'created_at' => \now()
+                            ];
+                        }else{
+                            $head = $import->first()[2][array_search(null, $arr)];
+                            $failure = ['row' => $key+1,'column' => $head, 'message' => "'".$row[array_search(null, $arr)]."'" . " not available"]; //new Failure($key+1,$head,["not available"]);
+                            $errors[] = $failure;
+                        }
+                    }
+                }
+            }
+            Rule::insert($rules);
+            DB::commit();
+            return $this->successResponse($errors,"Import rule success...", Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     public function rulesdowload()
     {
@@ -355,8 +428,8 @@ class RuleController extends Controller
     public function rulesnotin(Request $request)
     {
         try {
-            $rules = Rule::whereNotIn('id',[...$request->rules])->where('category_id',$request->group)->get();
-            return $this->successResponse($rules,"Success rules...", 200);
+            $rules = Rule::whereNotIn('id', [...$request->rules])->where('category_id', $request->group)->get();
+            return $this->successResponse($rules, "Success rules...", 200);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
@@ -371,7 +444,7 @@ class RuleController extends Controller
             $row->rule_id = $new_rule->id;
             $row->save();
             DB::commit();
-            return $this->successResponse($new_rule,"Success update...", 200);
+            return $this->successResponse($new_rule, "Success update...", 200);
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), 500);
@@ -385,6 +458,6 @@ class RuleController extends Controller
         $type = $this->ruleTypeService->type_excel();
         $dept = $this->departmentService->dropdown_excel();
         $rules = $this->ruleService->rule_excel();
-        return Excel::download(new TemplateRulesExport($employee,$category,$type,$dept,$rules), "Rules_Template" . now() . ".xlsx");
+        return Excel::download(new TemplateRulesExport($employee, $category, $type, $dept, $rules), "Rules_Template.xlsx");
     }
 }

@@ -47,7 +47,7 @@
                 {{ __('Form user') }}
             </div>
             <div class="card-body">
-                <form class="" action="{{route('me.user.update',$user->id)}}" method="post">
+                <form class="" action="{{route('admin.users.update',$user->id)}}" method="post" id="form-employee">
                     @csrf
                     @method('PUT')
                     <div class="form-row">
@@ -58,7 +58,7 @@
                             <div class="position-absolute form-group fixed-bottom mr-2">
                                 <label for="name" class="">{{ __('profile.name') }} (TH)</label>
                                 <input name="name:th" id="name_th" placeholder="Name placeholder" type="text"
-                                    class="form-control form-control-sm @error('name') is-invalid @enderror" readonly
+                                    class="form-control form-control-sm @error('name') is-invalid @enderror" @if(!$adminKpi) readonly @endif
                                     value="{{ $user->translate('th') ? $user->translate('th')->name : null }}" required
                                     autocomplete="name" autofocus>
                                 @error('name')
@@ -72,7 +72,7 @@
                             <div class="position-absolute form-group fixed-bottom">
                                 <label for="name" class="">{{ __('profile.name') }} (EN)</label>
                                 <input name="name:en" id="name_en" placeholder="Name placeholder" type="text"
-                                    class="form-control form-control-sm @error('name') is-invalid @enderror" readonly
+                                    class="form-control form-control-sm @error('name') is-invalid @enderror" @if(!$adminKpi) readonly @endif
                                     value="{{ $user->translate('en') ? $user->translate('en')->name : null }}" required
                                     autocomplete="name" autofocus>
 
@@ -117,11 +117,11 @@
                             <div class="position-relative form-group">
                                 <label for="EMC-Group" class="">{{ __('profile.degree') }}</label>
                                 <select class="form-control form-control-sm @error('degree') is-invalid @enderror"
-                                    name="degree" id="degree" disabled>
+                                    name="degree" id="degree" @if (!$adminKpi) disabled @endif>
                                     @isset($degree)
                                     <option value="">......</option>
                                     @foreach ($degree as $item)
-                                    <option value="{{$item}}" @if ($item === $user->degree) selected @endif>{{$item}}
+                                    <option value="{{$item}}" @if ($item===$user->degree) selected @endif>{{$item}}
                                     </option>
                                     @endforeach
                                     @endisset
@@ -141,9 +141,20 @@
                         <div class="col-md-4">
                             <div class="position-relative form-group">
                                 <label for="Division" class="">{{ __('profile.division') }}</label>
-                                <input name="division" id="division" placeholder="with a placeholder" type="division"
+                                <select class="form-control form-control-sm @error('division') is-invalid @enderror"
+                                    name="division" id="division" @if (!$adminKpi) disabled @endif>
+                                    @isset($divisions)
+                                    <option value="">......</option>
+                                    @foreach ($divisions as $item)
+                                    <option value="{{$item->id}}" @if ($item->id === $user->divisions_id) selected
+                                        @endif>{{$item->name}}
+                                    </option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                                {{-- <input name="division" id="division" placeholder="with a placeholder" type="division"
                                     value="{{ $user->divisions->name }}" required autocomplete="division" readonly
-                                    class="form-control form-control-sm">
+                                class="form-control form-control-sm"> --}}
                                 @error('division')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -154,11 +165,22 @@
                         <div class="col-md-4">
                             <div class="position-relative form-group">
                                 <label for="Department" class="">{{ __('profile.department') }}</label>
-                                <input name="department" id="department" placeholder="Department placeholder"
+                                <select class="form-control form-control-sm @error('department') is-invalid @enderror"
+                                    name="department" id="department" @if (!$adminKpi) disabled @endif>
+                                    @isset($departments)
+                                    <option value="">......</option>
+                                    @foreach ($departments as $item)
+                                    <option value="{{$item->id}}" @if ($item->id === $user->department_id) selected
+                                        @endif>{{$item->name}}
+                                    </option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+                                {{-- <input name="department" id="department" placeholder="Department placeholder"
                                     type="text"
                                     class="form-control form-control-sm @error('department') is-invalid @enderror"
                                     value="{{ $user->department->name }}" required autocomplete="department" readonly
-                                    autofocus>
+                                autofocus> --}}
                                 @error('department')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -169,9 +191,21 @@
                         <div class="col-md-4">
                             <div class="position-relative form-group">
                                 <label for="Position" class="">{{ __('profile.position') }}</label>
-                                <input name="position" id="position" placeholder="with a placeholder" type="position"
+                                <select class="form-control form-control-sm @error('position') is-invalid @enderror"
+                                    name="position" id="position" @if (!$adminKpi) disabled @endif>
+                                    @isset($positions)
+                                    <option value="">......</option>
+                                    @foreach ($positions as $item)
+                                    <option value="{{$item->id}}" @if ($item->id === $user->positions_id) selected
+                                        @endif>{{$item->name}}
+                                    </option>
+                                    @endforeach
+                                    @endisset
+                                </select>
+
+                                {{-- <input name="position" id="position" placeholder="with a placeholder" type="position"
                                     value="{{ $user->positions->name }}" required autocomplete="position" readonly
-                                    class="form-control form-control-sm">
+                                class="form-control form-control-sm"> --}}
                                 @error('position')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -180,7 +214,11 @@
                             </div>
                         </div>
                     </div>
+                    
                 </form>
+                <div class="text-center">
+                    <button type="button" class="mt-1 btn btn-sm btn-success" onclick="save()">Edit</button>
+                </div>
             </div>
         </div>
     </div>

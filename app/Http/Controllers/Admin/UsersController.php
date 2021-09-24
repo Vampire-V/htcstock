@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
@@ -81,20 +82,24 @@ class UsersController extends Controller
     public function edit($id)
     {
         try {
-            if (Gate::none([UserEnum::SUPERADMIN,UserEnum::OPERATIONKPI, UserEnum::ADMINKPI])) {
+            if (Gate::none([UserEnum::SUPERADMIN, UserEnum::OPERATIONKPI, UserEnum::ADMINKPI])) {
                 return \redirect()->back()->with('error', "No authorization...");
             }
-            $user = User::with(['user_approves','department', 'divisions', 'positions'])->where('id',$id)->first();
-            $degree = \collect([KPIEnum::one,KPIEnum::two,KPIEnum::tree]);
+            $user = User::with(['user_approves', 'department', 'divisions', 'positions'])->where('id', $id)->first();
+            $divisions = $this->divisionService->dropdown();
+            $departments = $this->departmentService->dropdown();
+            $positions = $this->positionService->dropdown();
+            $degree = \collect([KPIEnum::one, KPIEnum::two, KPIEnum::tree]);
             $userRoles = $user->roles()->get();
             $userSystems = $user->systems()->get();
 
             $roles = $this->rolesService->dropdown($user->roles->pluck('slug')->toArray());
             $systems = $this->systemService->dropdown($user->systems()->pluck('slug')->toArray());
+            $adminKpi = Gate::allows(UserEnum::ADMINKPI);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('admin.users.edit', \compact('user', 'roles', 'systems', 'userRoles', 'userSystems', 'degree'));
+        return \view('admin.users.edit', \compact('user', 'roles', 'systems', 'userRoles', 'userSystems', 'degree', 'adminKpi', 'divisions', 'departments', 'positions'));
     }
 
     /**
@@ -106,25 +111,37 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required',
-            'roles' => 'required|nullable',
+        $validator = Validator::make($request->all(), [
+            'name:th' => 'required|max:255',
+            'name:en' => 'required|max:255',
+            // 'email' => 'required|email:rfc,dns',
+            // 'phone' => 'required',
+            'division' => 'required',
+            'department' => 'required',
+            'position' => 'required',
+            'degree' => 'required'
         ]);
+        if ($validator->fails()) {
+            return \redirect()->back()->withErrors($validator);
+        }
+        
         DB::beginTransaction();
         try {
             $user = $this->userService->find($id);
-            if ($this->userService->update(['name' => $request->name], $id)) {
-                $user->roles()->sync($request->roles);
-                $request->session()->flash('success', $user->name . ' user has been update');
-            } else {
-                $request->session()->flash('error', 'error flash message!');
-            }
+            $user->translateOrNew('th')->name = $request['name:th'];
+            $user->translateOrNew('en')->name = $request['name:en'];
+            $user->divisions_id = $request->division;
+            $user->department_id = $request->department;
+            $user->positions_id = $request->position;
+            $user->degree = $request->degree;
+            $user->save();
+            $request->session()->flash('success', $user->name . ' user has been update');
+            DB::commit();
+            return \redirect()->back();
         } catch (\Exception $e) {
             DB::rollBack();
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        DB::commit();
-        return \redirect()->back();
     }
 
     /**
@@ -204,7 +221,7 @@ class UsersController extends Controller
                 }
                 User::whereNotIn('username', [...$list_users])->update(['resigned' => 1]); //update user ที่ออกไปแล้ว
                 $all_user = User::NotResigned()->get();
-                $system = System::where('slug','kpi')->first();
+                $system = System::where('slug', 'kpi')->first();
                 $roles = Role::whereNotIn('slug', [UserEnum::SUPERADMIN, UserEnum::ADMINIT, UserEnum::ADMINLEGAL, UserEnum::USERLEGAL, UserEnum::OPERATIONKPI])->get();
 
                 foreach ($all_user as $staff) {
@@ -328,13 +345,13 @@ class UsersController extends Controller
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
-    
+
     public function store_approve(Request $request, $id)
     {
         DB::beginTransaction();
         try {
             $users = [];
-            $user = User::with('user_approves')->where('id',$id)->first();
+            $user = User::with('user_approves')->where('id', $id)->first();
             $level_start = $user->user_approves->count() + 1;
             for ($i = 0; $i < count($request->users); $i++) {
                 $item = $request->users[$i];
@@ -343,7 +360,7 @@ class UsersController extends Controller
 
             $user->user_approves()->createMany($users);
             DB::commit();
-            $new = User::with('user_approves')->where('id',$id)->first();
+            $new = User::with('user_approves')->where('id', $id)->first();
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), 500);

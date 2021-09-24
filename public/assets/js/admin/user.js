@@ -177,6 +177,11 @@ var render_approve_table = (table) => {
     })
 }
 
+var save = () => {
+    let form 
+    form = document.getElementById('form-employee')
+    form.submit()
+}
 // modal method
 
 $('#lv-approve-modal').on('show.bs.modal', function (event) {

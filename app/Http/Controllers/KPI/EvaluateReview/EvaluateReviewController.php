@@ -167,9 +167,9 @@ class EvaluateReviewController extends Controller
             if ($status_list->contains($evaluate->status) && !$check) {
                 return $this->errorResponse("เลยเวลาที่กำหนด", 500);
             }
-            if (auth()->id() !== $evaluate->userApprove()->where('level',$evaluate->next_level)->first()->user_approve) {
-                return $this->errorResponse("ไม่มีสิทธิ์", Response::HTTP_SERVICE_UNAVAILABLE);
-            }
+            // if (auth()->id() !== $evaluate->userApprove()->where('level',$evaluate->next_level)->first()->user_approve) {
+            //     return $this->errorResponse("ไม่มีสิทธิ์", Response::HTTP_SERVICE_UNAVAILABLE);
+            // }
             $detail = collect($request->detail);
             $g = $detail->groupBy(fn ($item) => $item['rules']['category_id']);
             $total = [];

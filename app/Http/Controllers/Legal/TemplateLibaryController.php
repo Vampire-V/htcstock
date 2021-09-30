@@ -33,7 +33,7 @@ class TemplateLibaryController extends Controller
     {
         $validator = Validator::make($request->only('agreement_id', 'file_template'), [
             'agreement_id' => 'required|exists:App\Models\Legal\LegalAgreement,id',
-            'file_template' => 'required|file|max:25|mimes:pdf',
+            'file_template' => 'required|file|max:25600|mimes:pdf',
         ]);
 
         if ($validator->fails()) {

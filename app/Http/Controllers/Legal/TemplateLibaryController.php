@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Legal;
 
+use App\Enum\UserEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Legal\TemplateLibary;
 use App\Services\Legal\Interfaces\AgreementServiceInterface;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
@@ -23,7 +25,8 @@ class TemplateLibaryController extends Controller
     public function index()
     {
         $agreements = $this->agreementService->with_template_libary();
-        return \view('Legal.TemplateLibary.index', \compact('agreements'));
+        $isAdmin = Gate::allows(UserEnum::ADMINLEGAL);
+        return \view('Legal.TemplateLibary.index', \compact('agreements','isAdmin'));
     }
 
     public function store(Request $request)
@@ -74,7 +77,7 @@ class TemplateLibaryController extends Controller
             if (!Storage::disk('public')->exists($template->uri)) {
                 return \back()->withErrors(['msg' => 'file not fount.']);
             }
-            
+
             Storage::disk('public')->delete($template->uri);
             $template->delete();
             return \back();

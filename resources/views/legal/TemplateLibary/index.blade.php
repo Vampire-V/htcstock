@@ -38,16 +38,13 @@
                 </div>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        {{-- <a href="{{route('legal.contract-request.create')}}" class="btn-shadow btn btn-danger"
-                        data-toggle="tooltip" title="create contract" data-placement="bottom">
-                        <span class="btn-icon-wrapper pr-2 opacity-7">
-                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                        </span>
-                        Create</a> --}}
+                        @if ($isAdmin)
                         <button class="btn-shadow btn btn-danger" data-toggle="modal"
                             data-target="#modal-template-libary"><span class="btn-icon-wrapper pr-2 opacity-7">
                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
                             </span>Import File </button>
+                        @endif
+
                     </div>
                 </div>
             </div>
@@ -82,6 +79,7 @@
                                 <td></td>
                                 <td>Download <a
                                         href="{{route('legal.template-libary.show',$template->id)}}">{{$template->version}}</a>
+                                    @if ($isAdmin)
                                     &nbsp;&nbsp;<i type="submit" class="pe-7s-trash"
                                         style="cursor: pointer; font-size: 1.4em; color: red;"
                                         onclick="template_remove(this)"></i>
@@ -90,6 +88,7 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
+                                    @endif
                                 </td>
                                 <td>
                                     {{$template->created_at}}

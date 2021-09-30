@@ -16,4 +16,5 @@ interface AgreementServiceInterface
     public function destroy(int $id);
 
     public function dropdown(): Collection;
+    public function with_template_libary(): Collection;
 }

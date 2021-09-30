@@ -31,6 +31,9 @@ Route::namespace('Legal')->prefix('legal')->name('legal.')->middleware(['auth', 
 
     Route::prefix('template-libary')->name('template-libary.')->group(function () {
         Route::get('index', 'TemplateLibaryController@index')->name('index');
+        Route::post('import', 'TemplateLibaryController@store')->name('store');
+        Route::get('file/{id}', 'TemplateLibaryController@show')->name('show');
+        Route::delete('remove/{id}', 'TemplateLibaryController@delete')->name('delete');
     });
 
     Route::namespace('AdminManagement')->prefix('adminmanagement')->name('adminmanagement.')->group(function () {

@@ -37,4 +37,13 @@ class AgreementService extends BaseService implements AgreementServiceInterface
             throw $th;
         }
     }
+
+    public function with_template_libary(): Collection
+    {
+        try {
+            return LegalAgreement::with('template_libarys')->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

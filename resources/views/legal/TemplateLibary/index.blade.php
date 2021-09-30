@@ -185,7 +185,7 @@
 
 document.getElementById('file_template').addEventListener('change', (e) => {
     let original_size = e.target.files[0].size //type bytes
-    if ((original_size/1024) > 25) alert('The file is too large.')
+    if ((original_size/1024/1024) > 25) alert('The file is too large.')
 })
 
 function templatetoggle(e) {

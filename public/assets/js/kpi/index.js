@@ -292,15 +292,20 @@ var findActualPercent = (element, array) => {
 }
 
 var findAchValue = (obj) => {
+    console.log(obj.rules.calculate_type);
     if (typeof obj === `object`) {
         if (!obj.rules.parent) {
             // ใช้ amount หา
             if (obj.rules.calculate_type === calculate.POSITIVE) {
+                
                 if (obj.target === 0.00 && obj.actual > obj.target) {
                     ach = obj.max
                 } else if (obj.actual === 0.00) {
                     ach = 0.00
+                } else if(obj.actual === obj.target) {
+                    ach = obj.max ?? obj.max_result
                 } else {
+                    console.log(obj.rules.calculate_type,obj.actual , obj.target);
                     ach = parseFloat((obj.actual / obj.target) * 100.00)
                 }
                 // ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)
@@ -326,7 +331,7 @@ var findAchValue = (obj) => {
                 // ach = obj.actual > obj.target ?  parseFloat((2 - (obj.actual / obj.target)) * 100.00) : obj.max #version 1
             }
             if (obj.rules.calculate_type === calculate.ZERO) {
-                ach = obj.actual <= obj.target ? 100.00 : 0.00
+                ach = obj.actual <= obj.target ? obj.max : 0.00
             }
         } else {
             // ใช้ % หา

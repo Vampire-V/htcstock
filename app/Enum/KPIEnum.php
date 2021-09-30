@@ -36,4 +36,7 @@ abstract class KPIEnum extends BasicEnum
     const KPI = 'kpi';
     const KEY = 'key-task';
     const OMG = 'omg';
+
+    public static $status = [self::new, self::ready, self::draft, self::submit, self::on_process, self::approved];
+    public static $category = [self::KPI, self::KEY, self::OMG];
 }

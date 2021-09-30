@@ -69,6 +69,8 @@ trait CalculatorEvaluateTrait
                     $item->ach = $item->max_result ?? $item->max;
                 } else if ($ac === 0.00) {
                     $item->ach = 0.00;
+                } else if ($ac === $tar) {
+                    $item->ach = $item->max_result ?? $item->max;
                 } else {
                     $item->ach = ($ac / $this->isZeroNew($tar)) * 100.00;
                 }

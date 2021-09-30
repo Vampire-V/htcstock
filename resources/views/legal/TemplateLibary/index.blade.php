@@ -55,7 +55,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Agreement</th>
-                                <th>Download Version</th>
+                                <th>Download file</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
@@ -74,11 +74,11 @@
                                 </td>
                             </tr>
                             @foreach ($item->template_libarys as $template)
-                            <tr hidden>
+                            <tr hidden class="table-secondary">
                                 <th scope="row"></th>
                                 <td></td>
-                                <td>Download <a
-                                        href="{{route('legal.template-libary.show',$template->id)}}">{{$template->version}}</a>
+                                <td> <a
+                                        href="{{route('legal.template-libary.show',$template->id)}}">{{$template->name}}</a>
                                     @if ($isAdmin)
                                     &nbsp;&nbsp;<i type="submit" class="pe-7s-trash"
                                         style="cursor: pointer; font-size: 1.4em; color: red;"

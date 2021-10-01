@@ -31,12 +31,12 @@
                 class="btn-shadow mr-3 btn btn-dark no-disable" data-target="#comment-modal" id="show-comment">
                 <span class="fa fa-commenting">&nbsp;Comment</span>
             </button>
-            @if ($isAdmin)
+            {{-- @if ($isAdmin) --}}
             <button type="button" data-toggle="modal" title="Click" data-placement="top"
                 class="btn-shadow mr-3 btn btn-dark no-disable" data-target="#history-modal" id="show-history">
                 <span class="fa fa-history">&nbsp;History</span>
             </button>
-            @endif
+            {{-- @endif --}}
 
         </div>
     </div>

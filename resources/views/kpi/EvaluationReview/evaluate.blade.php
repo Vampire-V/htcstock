@@ -27,12 +27,12 @@
                 class="btn-shadow mr-3 btn btn-dark">
                 <i class="fa fa-star"></i>
             </button> --}}
-            @if ($canAdmin)
+            {{-- @if ($canAdmin) --}}
             <button type="button" data-toggle="modal" title="Click" data-placement="top"
                 class="btn-shadow mr-3 btn btn-dark no-disable" data-target="#history-modal" id="show-history">
                 <span class="fa fa-history">&nbsp;History</span>
             </button>
-            @endif
+            {{-- @endif --}}
         </div>
     </div>
 </div>

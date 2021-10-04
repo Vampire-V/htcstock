@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 class ContractRequestController extends Controller
 {
@@ -535,13 +536,13 @@ class ContractRequestController extends Controller
         $date =  new Carbon();
         $segments = explode('/', \substr(url()->previous(), strlen($request->root())));
         try {
-            $path = Storage::disk('public')->putFileAs(
+            $path = Storage::disk('public')->put(
                 $segments[1] . '/' . $segments[2] . '/' . Auth::user()->username . '/' . $date->isoFormat('OYMMDD') ,
-                new File($request->file('file')),
-                $request->file('file')->getClientOriginalName(),
+                new File($request->file('file'))
             );
             return \response()->json(['path' => $path]);
         } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }

@@ -397,6 +397,7 @@
         rel="noopener">
         <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
     </a>
+    {{-- form อยู่ใน component step-approval --}}
     <button class="mb-3 mr-3 btn btn-success" type="submit" onclick="event.preventDefault();
             document.getElementById('approval-contract-form').submit();">Send Contract</button>
 </div>

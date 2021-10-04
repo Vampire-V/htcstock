@@ -222,7 +222,7 @@ class UsersController extends Controller
                 User::whereNotIn('username', [...$list_users])->update(['resigned' => 1]); //update user ที่ออกไปแล้ว
                 $all_user = User::NotResigned()->get();
                 $system = System::where('slug', 'kpi')->first();
-                $roles = Role::whereNotIn('slug', [UserEnum::SUPERADMIN, UserEnum::ADMINIT, UserEnum::ADMINLEGAL, UserEnum::USERLEGAL, UserEnum::OPERATIONKPI])->get();
+                $roles = Role::whereNotIn('slug', [UserEnum::SUPERADMIN, UserEnum::ADMINIT, UserEnum::ADMINLEGAL, UserEnum::USERLEGAL, UserEnum::OPERATIONKPI, UserEnum::ADMINKPI])->get();
 
                 foreach ($all_user as $staff) {
                     // $staff->roles()->detach($roles->filter(fn($q) => $q->slug === UserEnum::MANAGERKPI)->first());

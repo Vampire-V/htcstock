@@ -33,7 +33,7 @@ class TargetPeriodController extends Controller
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.SetPeriod.index', \compact('periods', 'selectedPeriod', 'selectedYear','years','months'));
+        return \view('kpi.SetPeriod.index', \compact('periods', 'selectedPeriod', 'selectedYear', 'years', 'months'));
     }
 
     /**
@@ -67,12 +67,12 @@ class TargetPeriodController extends Controller
             $period->name = $request->name;
             $period->year = $request->year;
             $period->save();
+            DB::commit();
+            return \redirect()->route('kpi.set-period.index');
         } catch (\Exception $e) {
             DB::rollBack();
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        DB::commit();
-        return \redirect()->route('kpi.set-period.edit', $period->id);
     }
 
     /**

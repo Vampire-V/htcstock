@@ -58,12 +58,7 @@
                 {{-- admin --}}
                 @canany(['admin-kpi'])
                 <li class="app-sidebar__heading">Operation</li>
-                <li>
-                    <a href="{{route('kpi.set-period.index')}}" class="{{Helper::isActive('kpi/set-period*')}}">
-                        <i class="metismenu-icon pe-7s-date"></i>
-                        Set Periods
-                    </a>
-                </li>
+                
                 <li>
                     <a href="{{route('kpi.rule-list.index')}}" class="{{Helper::isActive('kpi/rule-list*')}}">
                         <i class="metismenu-icon pe-7s-upload"></i>
@@ -123,6 +118,12 @@
                             </a>
                         </li>
                     </ul>
+                </li>
+                <li>
+                    <a href="{{route('kpi.set-period.index')}}" class="{{Helper::isActive('kpi/set-period*')}}">
+                        <i class="metismenu-icon pe-7s-date"></i>
+                        Set Periods
+                    </a>
                 </li>
                 @endcan
                 {{-- end for eddy --}}

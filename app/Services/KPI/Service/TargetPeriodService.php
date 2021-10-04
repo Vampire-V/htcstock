@@ -94,7 +94,7 @@ class TargetPeriodService extends BaseService implements TargetPeriodServiceInte
     public function filterIndex(Request $request)
     {
         try {
-            return TargetPeriod::filter($request)->orderBy('year', 'desc')->orderBy('name', 'asc')->get();
+            return TargetPeriod::filter($request)->orderBy('year', 'desc')->orderBy('name', 'asc')->paginate(12);
         } catch (\Throwable $th) {
             throw $th;
         }

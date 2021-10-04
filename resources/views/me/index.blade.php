@@ -138,7 +138,7 @@
                     <div class="col-md-4">
                         <div class="position-relative form-group">
                             <label for="Manager" class="">{{ __('profile.manager') }}</label>
-                            <select name="head_id" id="head_id" class="form-control form-control-sm" disabled>
+                            <select name="head_id" id="head_id" class="form-control form-control-sm" >
                                 <option value="">Choose...</option>
                                 @isset($users)
                                 @foreach ($users as $item)

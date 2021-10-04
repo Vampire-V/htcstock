@@ -103,7 +103,7 @@ class UsersController extends Controller
             $profile->translateOrNew('th')->name = $request['name:th'];
             $profile->translateOrNew('en')->name = $request['name:en'];
             $profile->phone = $request->phone;
-            // $profile->head_id = $request->head_id;
+            $profile->head_id = $request->head_id;
             $profile->divisions_id = $request->division;
             $profile->department_id = $request->department;
             $profile->positions_id = $request->position;

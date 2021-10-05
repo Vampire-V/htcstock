@@ -229,11 +229,11 @@ class EvaluateReviewController extends Controller
 
                 # send mail to approved
             } else {
-                if (!$evaluate->next_level) {
-                    DB::rollBack();
-                    Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
-                    return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
-                }
+                // if (!$evaluate->next_level) {
+                //     DB::rollBack();
+                //     Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
+                //     return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
+                // }
                 $user_approve = $this->userApproveService->findFirstLevel($evaluate->user_id);
                 $evaluate->status = KPIEnum::draft;
                 $evaluate->comment = $request->comment;

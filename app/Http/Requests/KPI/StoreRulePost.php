@@ -24,17 +24,26 @@ class StoreRulePost extends FormRequest
      */
     public function rules()
     {
-        $rule = [
-            'category_id' => 'required',
-            'name' => 'required|unique:kpi_rules|max:255',
-            'user_actual' => 'required',
-            'calculate_type' => 'required',
-            'kpi_rule_types_id' => 'required',
-            'quarter_cal' => 'required'
-        ];
-        if ($this->route('rule_list')) {
-            $rule['name'] = ['required', Rule::unique('kpi_rules')];
+        if ($this->method() === 'POST') {
+            $rule = [
+                'category_id' => 'required',
+                'name' => 'required|unique:kpi_rules|max:255',
+                'user_actual' => 'required',
+                'calculate_type' => 'required',
+                'kpi_rule_types_id' => 'required',
+                'quarter_cal' => 'required'
+            ];
+        } else {
+            $rule = [
+                'category_id' => 'required',
+                'name' => 'required',
+                'user_actual' => 'required',
+                'calculate_type' => 'required',
+                'kpi_rule_types_id' => 'required',
+                'quarter_cal' => 'required'
+            ];
         }
+        
         return $rule;
     }
 }

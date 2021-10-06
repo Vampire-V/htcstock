@@ -43,7 +43,7 @@
                 .finally(() => {
                     render_html()
                 })
-            
+
             if (operation) {
                 document.getElementById('submit').disabled = false
             }
@@ -104,7 +104,7 @@ var render_html = () => {
                     "data-placement": "top"
                 })
                 cellDesc.classList.add('truncate')
-                
+
                 // console.log(readonly);
                 let cellBaseLine = newRow.insertCell()
                 cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`, !operation))
@@ -203,7 +203,7 @@ const changeValue = (e) => {
     // console.log(evaluateForm.detail)
     evaluateForm.detail.forEach((element, key) => {
         if (e.offsetParent.parentNode.cells[1].textContent === element.rules.name) {
-            // create new method formula 
+            // create new method formula
             element[e.name] = parseFloat(e.value)
             let rule = evaluateForm.detail[key],
                 column = e.offsetParent.cellIndex,
@@ -285,7 +285,7 @@ const submit = () => {
 const submitToManager = () => {
     evaluateForm.next = !evaluateForm.next
     setVisible(true)
-    // Save & send to manager 
+    // Save & send to manager
     putEvaluateSelf(evaluate.id, evaluateForm).then(res => {
             let label_status = document.getElementsByClassName('card-header')[0].querySelector('span')
             if (res.status === 201) {
@@ -325,7 +325,7 @@ const changerule = async () => {
             toast(result.data.message, result.data.status)
             document.getElementById('switch-rule-modal').querySelector('.close').click()
         }
-        console.log(result)
+        // console.log(result)
     } catch (error) {
         console.error(error)
     } finally {
@@ -367,7 +367,7 @@ $('#switch-rule-modal').on('show.bs.modal', async function (event) {
     }
     // console.log(evaluateForm.detail.values());
     // setDropdowToModal(group, modal)
-    // 
+    //
 })
 
 $('#switch-rule-modal').on('hide.bs.modal', function (event) {
@@ -419,7 +419,7 @@ $('#comment-modal').on('show.bs.modal', async function (event) {
     }
     // console.log(evaluateForm.detail.values());
     // setDropdowToModal(group, modal)
-    // 
+    //
 })
 
 $('#comment-modal').on('hide.bs.modal', function (event) {

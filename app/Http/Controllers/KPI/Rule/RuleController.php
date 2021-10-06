@@ -428,7 +428,7 @@ class RuleController extends Controller
     public function rulesnotin(Request $request)
     {
         try {
-            $rules = Rule::whereNotIn('id', [...$request->rules])->where('category_id', $request->group)->get();
+            $rules = Rule::whereNotIn('id', [...$request->rules])->where('category_id', $request->group)->where('remove','<>','Y')->get();
             return $this->successResponse($rules, "Success rules...", 200);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);

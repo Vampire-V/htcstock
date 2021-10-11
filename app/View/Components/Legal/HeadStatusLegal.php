@@ -17,7 +17,7 @@ class HeadStatusLegal extends Component
     public function __construct($legalContract)
     {
         $this->legalContract = $legalContract;
-        $this->status = \collect([ContractEnum::R,ContractEnum::CK,ContractEnum::P,ContractEnum::CP]);
+        $this->status = \collect([ContractEnum::RQ,ContractEnum::CK,ContractEnum::P,ContractEnum::CP]);
     }
 
     /**

@@ -72,7 +72,7 @@ class ContractRequestController extends Controller
     public function index(Request $request)
     {
         $query = $request->all();
-        $status = [ContractEnum::R, ContractEnum::CK, ContractEnum::P, ContractEnum::CP];
+        $status = [ContractEnum::RQ, ContractEnum::CK, ContractEnum::P, ContractEnum::CP];
         // $selectedStatus = collect($request->status);
         $selectedAgree = collect($request->agreement);
         try {
@@ -147,7 +147,7 @@ class ContractRequestController extends Controller
             $agreements = $this->agreementService->dropdown();
             $legalContract = $this->contractRequestService->find($id);
             $subtypeContract = $this->subtypeContractService->dropdown($legalContract->agreement_id);
-            
+
             $paymentType = $this->paymentTypeService->dropdown($legalContract->agreement_id);
             if ($legalContract->legalContractDest) {
                 $legalContract->legalContractDest->value_of_contract = explode(",", $legalContract->legalContractDest->value_of_contract);
@@ -258,7 +258,7 @@ class ContractRequestController extends Controller
     {
         try {
             $contract = $this->contractRequestService->find($id);
-            if (!\hash_equals($contract->status, ContractEnum::R)) {
+            if (!\hash_equals($contract->status, ContractEnum::RQ)) {
                 Session::flash('error',  ' Not in a state of deletion.');
                 return \redirect()->back();
             }
@@ -301,7 +301,7 @@ class ContractRequestController extends Controller
             $contractRequest = $this->contractRequestService->find($id);
             $levelApproval = $this->approvalService->approvalByDepartment($contractRequest->createdBy->department);
 
-            if (\hash_equals($contractRequest->status, ContractEnum::R)) {
+            if (\hash_equals($contractRequest->status, ContractEnum::RQ)) {
                 $userApproval = $this->processRequest($contractRequest, $levelApproval);
             } else if (\hash_equals($contractRequest->status, ContractEnum::CK)) {
                 $request->validate([
@@ -344,7 +344,7 @@ class ContractRequestController extends Controller
         if (\hash_equals($attributes['status'], ApprovalEnum::R)) {
             $approvalDetail->status = ApprovalEnum::R;
             $approvalDetail->comment = $attributes['comment'];
-            $contract->status = ContractEnum::R;
+            $contract->status = ContractEnum::RQ;
             $userApproval = $contract->createdBy;
 
             // ส่งแจ้ง Eddy แจ้งเฉยๆไม่ต้องกดเข้ามาดู

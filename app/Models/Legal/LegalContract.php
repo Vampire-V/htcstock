@@ -23,7 +23,7 @@ class LegalContract extends Model
 
         static::creating(function ($query) {
             $query->created_by = auth()->id();
-            $query->checked_by = User::where('email', 'pratchaya.g@haier.co.th')->first()->id;
+            $query->checked_by = User::where('email', 'thanyasiri.s@haier.co.th')->first()->id;
         });
 
         static::updating(function ($query) {

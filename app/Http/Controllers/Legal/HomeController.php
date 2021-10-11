@@ -38,7 +38,7 @@ class HomeController extends Controller
         $complete = 0;
         $selectedCreated = collect($request->created_by);
         $selectedAgree = collect($request->agreement);
-        $status = [ContractEnum::R, ContractEnum::CK, ContractEnum::P, ContractEnum::CP];
+        $status = [ContractEnum::RQ, ContractEnum::CK, ContractEnum::P, ContractEnum::CP];
         // $query = $request->all();
         try {
             $requestor = $this->contractRequestService->requestorInSystem();
@@ -50,7 +50,7 @@ class HomeController extends Controller
             $agreements = $this->agreementService->dropdown();
             $allPromised = $this->contractRequestService->totalpromised();
             $ownPromise = $this->contractRequestService->ownpromised(\auth()->user());
-            $requestSum = $this->contractRequestService->countStatus(ContractEnum::R);
+            $requestSum = $this->contractRequestService->countStatus(ContractEnum::RQ);
             $checking = $this->contractRequestService->countStatus(ContractEnum::CK);
             $providing = $this->contractRequestService->countStatus(ContractEnum::P);
             $complete = $this->contractRequestService->countStatus(ContractEnum::CP);

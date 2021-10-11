@@ -56,7 +56,7 @@ class LegalContractPolicy
      */
     public function update(User $user, LegalContract $legalContract)
     {
-        return $user->id === $legalContract->created_by && $legalContract->status === ContractEnum::R;
+        return $user->id === $legalContract->created_by && $legalContract->status === ContractEnum::RQ;
     }
 
     /**
@@ -68,7 +68,7 @@ class LegalContractPolicy
      */
     public function delete(User $user, LegalContract $legalContract)
     {
-        return $user->id === $legalContract->created_by && $legalContract->status === ContractEnum::R;
+        return $user->id === $legalContract->created_by && $legalContract->status === ContractEnum::RQ;
     }
 
     /**
@@ -104,7 +104,7 @@ class LegalContractPolicy
      */
     public function deleteOrEdit(User $user, LegalContract $legalContract)
     {
-        return ($legalContract->status === ContractEnum::R) && ($user->id === $legalContract->created_by);
+        return ($legalContract->status === ContractEnum::RQ) && ($user->id === $legalContract->created_by);
     }
 
     /**
@@ -115,7 +115,7 @@ class LegalContractPolicy
      */
     public function isRequest(?User $user,LegalContract $legalContract)
     {
-        return $legalContract->status === ContractEnum::R;
+        return $legalContract->status === ContractEnum::RQ;
     }
 
     /**

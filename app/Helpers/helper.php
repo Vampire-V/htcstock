@@ -105,7 +105,7 @@ class Helper
     public static function legalStatusStep(LegalContract $model, $iteration = null)
     {
         try {
-            if (ContractEnum::R === $model->status && $iteration < 2) {
+            if (ContractEnum::RQ === $model->status && $iteration < 2) {
                 return "done";
             }
             if (ContractEnum::CK === $model->status && $iteration < 3) {

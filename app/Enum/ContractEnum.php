@@ -4,7 +4,7 @@ namespace App\Enum;
 
 abstract class ContractEnum extends BasicEnum
 {
-    const R = 'request';
+    const RQ = 'request';
     const RJ = 'reject';
     const CK = 'checking';
     const P = 'providing';

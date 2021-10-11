@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\KPI\Rule;
 
 use App\Enum\KPIEnum;
+use App\Enum\UserEnum;
 use App\Exports\KPI\RulesExport;
 use App\Exports\KPI\TemplateRulesExport;
 use App\Http\Controllers\Controller;
@@ -27,6 +28,7 @@ use App\Services\KPI\Interfaces\TargetUnitServiceInterface;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Files\LocalTemporaryFile;
@@ -102,6 +104,10 @@ class RuleController extends Controller
      */
     public function store(StoreRulePost $request)
     {
+        if (!Gate::allows(UserEnum::OPERATIONKPI)) {
+            return \redirect()->back()->with('error', "Error : no authorize.." );
+        }
+
         DB::beginTransaction();
         $fromValue = $request->except(['_token']);
         try {
@@ -143,6 +149,10 @@ class RuleController extends Controller
      */
     public function edit($id)
     {
+        if (!Gate::allows(UserEnum::OPERATIONKPI)) {
+            return \redirect()->back()->with('error', "Error : no authorize.." );
+        }
+
         $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
         $quarter_cals = \collect([KPIEnum::average, KPIEnum::sum, KPIEnum::last_month]);
         try {
@@ -168,6 +178,10 @@ class RuleController extends Controller
      */
     public function update(StoreRulePost $request, $id)
     {
+        if (!Gate::allows(UserEnum::OPERATIONKPI)) {
+            return \redirect()->back()->with('error', "Error : no authorize.." );
+        }
+
         DB::beginTransaction();
         $fromValue = $request->except(['_token', '_method']);
         try {
@@ -190,6 +204,10 @@ class RuleController extends Controller
      */
     public function destroy($id)
     {
+        if (!Gate::allows(UserEnum::OPERATIONKPI)) {
+            return \redirect()->back()->with('error', "Error : no authorize.." );
+        }
+
         DB::beginTransaction();
         try {
             $rule = $this->ruleService->find($id);
@@ -356,6 +374,10 @@ class RuleController extends Controller
 
     public function import_rule(Request $request)
     {
+        if (!Gate::allows(UserEnum::OPERATIONKPI)) {
+            return \redirect()->back()->with('error', "Error : no authorize.." );
+        }
+
         $temporaryFile = TemporaryFile::where('folder', $request->file)->first();
         if (!$temporaryFile) {
             return \response()->json(["message" => "file not found!"], 422);
@@ -422,6 +444,9 @@ class RuleController extends Controller
 
     public function rulesdowload()
     {
+        if (!Gate::allows(UserEnum::OPERATIONKPI)) {
+            return \redirect()->back()->with('error', "Error : no authorize.." );
+        }
         return Excel::download(new RulesExport(), "Rules_" . now() . ".xlsx");
     }
 
@@ -453,11 +478,16 @@ class RuleController extends Controller
 
     public function template_rule(Request $request)
     {
+        if (!Gate::allows(UserEnum::OPERATIONKPI)) {
+            return \redirect()->back()->with('error', "Error : no authorize.." );
+        }
+
         $employee = $this->userService->employee_excel();
         $category = $this->ruleCategoryService->category_excel();
         $type = $this->ruleTypeService->type_excel();
         $dept = $this->departmentService->dropdown_excel();
         $rules = $this->ruleService->rule_excel();
+
         return Excel::download(new TemplateRulesExport($employee, $category, $type, $dept, $rules), "Rules_Template.xlsx");
     }
 }

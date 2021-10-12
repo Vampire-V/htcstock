@@ -11,5 +11,5 @@ abstract class TransactionTypeEnum extends BasicEnum
     const R = 'Requisition';
     const CR = 'CancelRequisition';
 
-    
+    public static $type = [self::B, self::CB, self::L, self::CL, self::R, self::CR];
 }

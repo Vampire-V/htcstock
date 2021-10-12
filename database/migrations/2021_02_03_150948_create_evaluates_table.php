@@ -19,19 +19,13 @@ class CreateEvaluatesTable extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->comment('Id ของ users');
             $table->foreignId('period_id')->nullable()->constrained('kpi_target_periods')->comment('Id ของ kpi_target_periods');
             $table->foreignId('head_id')->nullable()->constrained('users')->comment('Id ของ users head');
-            $table->enum('status',[
-                KPIEnum::new,
-                KPIEnum::ready,
-                KPIEnum::draft,
-                KPIEnum::submit,
-                KPIEnum::approved,
-            ])->nullable()->comment('สถานะ การประเมิน 
+            $table->enum('status',KPIEnum::$status)->nullable()->comment('สถานะ การประเมิน
             New:	admin create form
             Ready:	user เข้ามาใส่ actual เมื่อกด save สถานะจะเปลี่ยนเป็น  Draft
             Draft:	user ยังเข้ามาแก้ไข  Actual ได้ จนกว่าจะกด submit to manager เมื่อกดแล้วจะเป็น  Submitted
-            Submitted:	Manager , Admin เข้ามา review or edit ของ User ที่อยู่ภายใต้การดูแลของตนเอง และกด Approve จะเปลี่ยนเป็น  Approved 
+            Submitted:	Manager , Admin เข้ามา review or edit ของ User ที่อยู่ภายใต้การดูแลของตนเอง และกด Approve จะเปลี่ยนเป็น  Approved
             Approved:	สามารถดูได้อย่างเดียว แก้ไขไม่ได้');
-            
+
             $table->foreignId('template_id')->nullable()->constrained('kpi_templates')->comment('Id ของ kpi_templates');
 
             $table->integer('main_rule_id')->nullable()->comment('Id ของ Main Rule');

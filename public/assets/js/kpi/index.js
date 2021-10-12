@@ -254,7 +254,7 @@ var findTargetPercent = (element, array) => {
         toast(`${element.rules.name} parent not found`,'error')
         return `parent not found..`
     }
-    
+
 }
 
 /**
@@ -292,12 +292,12 @@ var findActualPercent = (element, array) => {
 }
 
 var findAchValue = (obj) => {
-    console.log(obj.rules.calculate_type);
+    // console.log(obj.rules.calculate_type);
     if (typeof obj === `object`) {
         if (!obj.rules.parent) {
             // ใช้ amount หา
             if (obj.rules.calculate_type === calculate.POSITIVE) {
-                
+
                 if (obj.target === 0.00 && obj.actual > obj.target) {
                     ach = obj.max
                 } else if (obj.actual === 0.00) {

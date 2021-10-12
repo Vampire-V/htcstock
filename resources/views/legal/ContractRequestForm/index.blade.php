@@ -28,7 +28,7 @@
         <div class="main-card mb-3 card">
             <div class="card-header">
                 <div class="btn-actions-pane">
-                    Contract Request
+                    Contract
                     <div role="group" class="btn-group-sm btn-group">
 
                     </div>
@@ -87,6 +87,123 @@
                     })
                 }
                 </script>
+                <hr>
+                {{-- <div class="table-responsive"> --}}
+                <table class="mb-0 table table-hover table-sm table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Request Date</th>
+                            <th>Approval Date</th>
+                            <th>Requestor</th>
+                            <th>Contracting Party</th>
+
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>#</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @isset($contractsD)
+                        @foreach ($contractsD as $key => $item)
+                        <tr>
+                            <td>{{$item->created_at}}</td>
+                            <td>{{$item->providing_at}}</td>
+                            <td>{{$item->createdBy->name}}</td>
+                            <td>{{$item->company_name}}</td>
+
+                            <td class="truncate">{{$item->legalAgreement->name}}</td>
+                            <td><span class="badge badge-pill badge-primary">{{$item->status}}</span></td>
+                            {{-- @can('isRequest', $item)
+                                <td><span class="badge badge-pill badge-primary">{{$item->status}}</span></td>
+                            @elsecan('isChecking', $item)
+                            <td><span class="badge badge-pill badge-info">{{$item->status}}</span></td>
+                            @elsecan('isProviding', $item)
+                            <td><span class="badge badge-pill badge-warning">{{$item->status}}</span></td>
+                            @elsecan('isComplete', $item)
+                            <td><span class="badge badge-pill badge-success">{{$item->status}}</span></td>
+                            @endcan --}}
+                            <td>
+                                <!-- Small button groups (default and split) -->
+                                <div class="btn-group dropleft">
+                                    <i class="pe-7s-more " data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" style="cursor: pointer;"> </i>
+                                    {{-- <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Small button
+                                        </button> --}}
+                                    <div tabindex="-1" role="menu" aria-hidden="true"
+                                        class="dropdown-menu dropdown-menu-resize">
+                                        <a class="dropdown-item"
+                                            href="{{route('legal.contract-request.show',$item->id)}}"
+                                            data-toggle="tooltip" title="show contract" data-placement="bottom"><i
+                                                class="fa fa-eye"></i></a>
+                                        @if (Auth::user()->can('delete', $item) && Auth::user()->can('update',$item))
+                                        <a class="dropdown-item"
+                                            href="{{route('legal.contract-request.edit',$item->id)}}"
+                                            data-toggle="tooltip" title="edit contract" data-placement="bottom"><i
+                                                class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                        <a class="dropdown-item" data-toggle="tooltip" title="delete contract"
+                                            data-placement="bottom" onclick="destroy({{$item->id}})"><i
+                                                class="pe-7s-trash" style="color: red;"> </i></a>
+                                        <form id="destroy-form{{$item->id}}"
+                                            action="{{route('legal.contract-request.destroy',$item->id)}}" method="POST"
+                                            style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                {{-- <a href="{{route('legal.contract-request.show',$item->id)}}" data-toggle="tooltip"
+                                title="view contract" data-placement="bottom"
+                                class="btn btn-success btn-sm float-center ml-1"><i class="fa fa-eye"
+                                    aria-hidden="true"></i></a>
+
+                                @if (Auth::user()->can('delete', $item) && Auth::user()->can('update', $item))
+                                <a href="{{route('legal.contract-request.edit',$item->id)}}" data-toggle="tooltip"
+                                    title="edit contract" data-placement="bottom"
+                                    class="btn btn-primary btn-sm float-center ml-1"><i class="fa fa-pencil-square-o"
+                                        aria-hidden="true"></i></a>
+                                <a data-toggle="tooltip" title="delete contract" data-placement="bottom"
+                                    rel="noopener noreferrer" style="color: white;"
+                                    class="btn btn-danger btn-sm float-center ml-1" onclick="destroy({{$item->id}})"><i
+                                        class="pe-7s-trash"> </i></a>
+                                <form id="destroy-form{{$item->id}}"
+                                    action="{{route('legal.contract-request.destroy',$item->id)}}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                                @endif --}}
+                            </td>
+                        </tr>
+                        @endforeach
+                        @endisset
+                    </tbody>
+                </table>
+                {{-- </div> --}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-card mb-3 card">
+            <div class="card-header">
+                <div class="btn-actions-pane">
+                    Contract Request
+                    <div role="group" class="btn-group-sm btn-group">
+
+                    </div>
+                </div>
+                <div class="btn-actions-pane-right">
+                    <div role="group" class="btn-group-sm btn-group">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
                 <hr>
                 <div class="table-responsive">
                     <table class="mb-0 table table-hover table-sm table-bordered">

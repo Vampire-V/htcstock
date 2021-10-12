@@ -16,7 +16,7 @@ class CreateKpiSettingActionsTable extends Migration
     {
         Schema::create('kpi_setting_actions', function (Blueprint $table) {
             $table->id();
-            $table->enum('slug',[KPIEnum::assign,KPIEnum::set_value,KPIEnum::approve])->unique()->comment('status action');
+            $table->enum('slug',KPIEnum::$steps)->unique()->comment('status action');
             $table->string('end',2)->comment('วันที่ dead line');
             $table->text('remark')->nullable()->comment('อยากเขียนไรก็เขียนไป');
             $table->timestamps();

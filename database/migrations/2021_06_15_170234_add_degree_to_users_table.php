@@ -15,7 +15,7 @@ class AddDegreeToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('degree',[KPIEnum::one,KPIEnum::two,KPIEnum::tree])->default(KPIEnum::tree)->after('divisions_id')->comment('ระดับผู้ประเมิณ ระบบ KPI');
+            $table->enum('degree',KPIEnum::$degree)->default(KPIEnum::tree)->after('divisions_id')->comment('ระดับผู้ประเมิณ ระบบ KPI');
         });
     }
 

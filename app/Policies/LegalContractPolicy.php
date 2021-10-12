@@ -56,7 +56,7 @@ class LegalContractPolicy
      */
     public function update(User $user, LegalContract $legalContract)
     {
-        return $user->id === $legalContract->created_by && $legalContract->status === ContractEnum::RQ;
+        return $user->id === $legalContract->created_by && $legalContract->status === ContractEnum::D;
     }
 
     /**
@@ -68,7 +68,7 @@ class LegalContractPolicy
      */
     public function delete(User $user, LegalContract $legalContract)
     {
-        return $user->id === $legalContract->created_by && $legalContract->status === ContractEnum::RQ;
+        return $user->id === $legalContract->created_by && $legalContract->status === ContractEnum::D;
     }
 
     /**

@@ -15,7 +15,7 @@ class AddQuarterCalToKpiRulesTable extends Migration
     public function up()
     {
         Schema::table('kpi_rules', function (Blueprint $table) {
-            $table->enum('quarter_cal',[KPIEnum::average,KPIEnum::last_month,KPIEnum::sum])->default(KPIEnum::average)->after('calculate_type')->comment('ประเภทการคำนวณ หน้า quarter');
+            $table->enum('quarter_cal',KPIEnum::$calculates)->default(KPIEnum::average)->after('calculate_type')->comment('ประเภทการคำนวณ หน้า quarter');
         });
     }
 

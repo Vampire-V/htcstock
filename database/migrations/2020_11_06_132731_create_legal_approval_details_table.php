@@ -19,7 +19,7 @@ class CreateLegalApprovalDetailsTable extends Migration
             $table->foreignId('contract_id')->nullable()->constrained('legal_contracts')->comment('Id ของ legal_contracts');
             $table->foreignId('user_id')->nullable()->constrained('users')->comment('Id ของ users');
             $table->integer('levels');
-            $table->enum('status', [ApprovalEnum::A, ApprovalEnum::R])->nullable();
+            $table->enum('status', ApprovalEnum::$types)->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();
         });

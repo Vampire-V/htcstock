@@ -399,7 +399,7 @@
     </a>
     {{-- form อยู่ใน component step-approval --}}
     <button class="mb-3 mr-3 btn btn-success" type="submit" onclick="event.preventDefault();
-            document.getElementById('approval-contract-form').submit();">Send Contract</button>
+            document.getElementById('approval-contract-form').submit();">Request Contract</button>
 </div>
 @stop
 

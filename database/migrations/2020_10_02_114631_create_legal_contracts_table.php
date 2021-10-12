@@ -17,7 +17,7 @@ class CreateLegalContractsTable extends Migration
         Schema::create('legal_contracts', function (Blueprint $table) {
             // header
             $table->id();
-            $table->enum('status', [ContractEnum::RJ,ContractEnum::RQ, ContractEnum::CK, ContractEnum::P, ContractEnum::CP])->default(ContractEnum::RQ);
+            $table->enum('status', ContractEnum::$types)->default(ContractEnum::D);
             $table->foreignId('action_id')->nullable()->constrained('legal_actions')->comment('Id ของ legal_actions');
             $table->foreignId('agreement_id')->nullable()->constrained('legal_agreements')->comment('Id ของ legal_agreements');
             $table->string('company_name')->nullable();

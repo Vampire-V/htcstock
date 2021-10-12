@@ -18,14 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->integer('access_id');
             $table->integer('qty');
-            $table->enum('trans_type', [
-                TransactionTypeEnum::B, 
-                TransactionTypeEnum::CB, 
-                TransactionTypeEnum::L, 
-                TransactionTypeEnum::CL, 
-                TransactionTypeEnum::R, 
-                TransactionTypeEnum::CR
-                ]);
+            $table->enum('trans_type', TransactionTypeEnum::$type);
             $table->integer('trans_by');
             $table->string('trans_desc')->nullable();
             $table->string('ir_no')->nullable();

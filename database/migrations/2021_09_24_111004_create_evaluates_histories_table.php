@@ -17,19 +17,12 @@ class CreateEvaluatesHistoriesTable extends Migration
         Schema::create('kpi_evaluates_history', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('evaluate_id')->nullable()->comment('id kpi_evaluates');
-            $table->enum('status',[
-                KPIEnum::new,
-                KPIEnum::ready,
-                KPIEnum::draft,
-                KPIEnum::on_process,
-                KPIEnum::submit,
-                KPIEnum::approved,
-            ])->nullable()->comment('สถานะ การประเมิน 
+            $table->enum('status',KPIEnum::$status)->nullable()->comment('สถานะ การประเมิน
             New:	admin create form
             Ready:	user เข้ามาใส่ actual เมื่อกด save สถานะจะเปลี่ยนเป็น  Draft
             Draft:	user ยังเข้ามาแก้ไข  Actual ได้ จนกว่าจะกด submit to manager เมื่อกดแล้วจะเป็น  On Process
             On Process: อยู่ในขั้นตอน Approve
-            Submitted:	Manager , Admin เข้ามา review or edit ของ User ที่อยู่ภายใต้การดูแลของตนเอง และกด Approve จะเปลี่ยนเป็น  Approved 
+            Submitted:	Manager , Admin เข้ามา review or edit ของ User ที่อยู่ภายใต้การดูแลของตนเอง และกด Approve จะเปลี่ยนเป็น  Approved
             Approved:	สามารถดูได้อย่างเดียว แก้ไขไม่ได้');
             $table->text('comment')->nullable();
             $table->integer('current_level')->nullable()->comment('id of kpi_users_approve แสดงระดับปัจจุบัน');

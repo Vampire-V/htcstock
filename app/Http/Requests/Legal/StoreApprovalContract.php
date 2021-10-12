@@ -29,10 +29,10 @@ class StoreApprovalContract extends FormRequest
         $contract = $this->contractRequestService->find($request->route()->parameters['id']);
         $levelApproval = $this->approvalService->approvalByDepartment($contract->createdBy->department);
 
-        if ($contract->status === ContractEnum::RQ && $contract->created_by === \auth()->id()) {
+        if ($contract->status === ContractEnum::D && $contract->created_by === \auth()->id()) {
             return true;
         }
-        if ($contract->status === ContractEnum::CK) {
+        if ($contract->status === ContractEnum::RQ || $contract->status === ContractEnum::CK) {
             $userApproval = $levelApproval->where('levels', 1)->first()->user;
             if ($userApproval->id === \auth()->id()) {
                 return true;

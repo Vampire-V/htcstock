@@ -72,18 +72,19 @@ class ContractRequestController extends Controller
     public function index(Request $request)
     {
         $query = $request->all();
-        $status = [ContractEnum::RQ, ContractEnum::CK, ContractEnum::P, ContractEnum::CP];
+        $status = ContractEnum::$types;
         // $selectedStatus = collect($request->status);
         $selectedAgree = collect($request->agreement);
         try {
             $agreements = $this->agreementService->dropdown();
+            $contractsD = $this->contractRequestService->filterDraft($request);
             $contractsRQ = $this->contractRequestService->filterRequest($request);
             $contractsCK = $this->contractRequestService->filterChecking($request);
             $contractsP = $this->contractRequestService->filterProviding($request);
             $contractsCP = $this->contractRequestService->filterComplete($request);
             // dd($contractsRQ);
 
-            return \view('legal.ContractRequestForm.index', \compact('contractsRQ', 'contractsCK', 'contractsP', 'contractsCP', 'agreements', 'selectedAgree', 'query'));
+            return \view('legal.ContractRequestForm.index', \compact('contractsD','contractsRQ', 'contractsCK', 'contractsP', 'contractsCP', 'agreements', 'selectedAgree', 'query'));
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
@@ -116,10 +117,6 @@ class ContractRequestController extends Controller
         $attributes = $request->except(['_token']);
         DB::beginTransaction();
         try {
-            // $body = $this->contractDescService->create([]);
-            // if ($body) {
-            //     $attributes['contract_dest_id'] = $body->id;
-            // }
             $contractRequest = $this->contractRequestService->create($attributes);
 
             if (!$contractRequest) {
@@ -300,8 +297,9 @@ class ContractRequestController extends Controller
         try {
             $contractRequest = $this->contractRequestService->find($id);
             $levelApproval = $this->approvalService->approvalByDepartment($contractRequest->createdBy->department);
-
-            if (\hash_equals($contractRequest->status, ContractEnum::RQ)) {
+            if (\hash_equals($contractRequest->status, ContractEnum::D)) {
+                $userApproval = $this->processDraft($contractRequest, $levelApproval);
+            } else if (\hash_equals($contractRequest->status, ContractEnum::RQ)) {
                 $userApproval = $this->processRequest($contractRequest, $levelApproval);
             } else if (\hash_equals($contractRequest->status, ContractEnum::CK)) {
                 $request->validate([
@@ -327,6 +325,15 @@ class ContractRequestController extends Controller
         DB::commit();
         Session::flash('success',  'Send email approval');
         return \redirect()->back();
+    }
+
+    private  function processDraft(LegalContract $contract, Collection $levelApproval)
+    {
+        $approvalDetail = $this->approvalDetailService->create(['user_id' => \auth()->id(), 'contract_id' => $contract->id, 'levels' => 0]);
+        $contract->status = ContractEnum::RQ;
+        $approvalDetail->save();
+        $contract->save();
+        return $levelApproval->where('levels', 1)->first()->user;
     }
 
     private  function processRequest(LegalContract $contract, Collection $levelApproval)

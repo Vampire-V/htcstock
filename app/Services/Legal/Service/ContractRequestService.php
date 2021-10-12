@@ -50,6 +50,16 @@ class ContractRequestService extends BaseService implements ContractRequestServi
         ->paginate(10);
     }
 
+    public function filterDraft(Request $request)
+    {
+        return LegalContract::with(['legalContractDest','legalAgreement','createdBy'])
+        ->filter($request)
+        ->where(['trash'=> false,'status' => ContractEnum::D])
+        ->orderBy('status', 'ASC')
+        ->orderBy('created_at', 'desc')
+        ->get();
+    }
+
     public function filterRequest(Request $request)
     {
         return LegalContract::with(['legalContractDest','legalAgreement','createdBy'])

@@ -39,4 +39,8 @@ abstract class KPIEnum extends BasicEnum
 
     public static $status = [self::new, self::ready, self::draft, self::submit, self::on_process, self::approved];
     public static $category = [self::KPI, self::KEY, self::OMG];
+    public static $calculates = [self::average, self::last_month, self::sum];
+    public static $calculate_types = [self::positive, self::negative, self::zero_oriented_kpi];
+    public static $steps = [self::assign, self::set_value, self::approve];
+    public static $degree = [self::one, self::two, self::tree];
 }

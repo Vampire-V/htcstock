@@ -3754,6 +3754,26 @@ input[type="button"].btn-block {
     margin-left: 0
 }
 
+.dropdown-menu-legal {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 4rem;
+    padding: .65rem 0;
+    margin: .125rem 0 0;
+    font-size: .7rem;
+    color: #495057;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: .25rem
+}
+
 .dropdown-menu {
     position: absolute;
     top: 100%;
@@ -3772,6 +3792,10 @@ input[type="button"].btn-block {
     background-clip: padding-box;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: .25rem
+}
+
+.dropdown-menu-resize {
+    min-width: 4rem !important;
 }
 
 .dropdown-menu-right {
@@ -25867,12 +25891,12 @@ input[type=number] {
     width: 5px;
     scrollbar-width: thin;
 }
- 
+
 ::-webkit-scrollbar-track {
-    /* -webkit-box-shadow: inset 0 0 6px rgba(117, 117, 117, 0.849); 
+    /* -webkit-box-shadow: inset 0 0 6px rgba(117, 117, 117, 0.849);
     border-radius: 10px; */
 }
- 
+
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background-color: #20201fbd;

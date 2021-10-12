@@ -21,11 +21,10 @@ class CreateRulesTable extends Migration
             $table->longText('description')->nullable()->comment('คำอธิบาย');
             $table->longText('measurement')->nullable()->comment('การวัดผล <= หรือ >=');
             $table->foreignId('target_unit_id')->nullable()->constrained('kpi_target_units')->comment('Code ของ target_units');
-            $table->enum('calculate_type', [
-                KPIEnum::positive,
-                KPIEnum::negative,
-                KPIEnum::zero_oriented_kpi
-            ])->nullable();
+            $table->enum(
+                'calculate_type',
+                KPIEnum::$calculate_types
+            )->nullable();
             $table->timestamps();
         });
     }

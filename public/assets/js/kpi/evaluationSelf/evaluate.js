@@ -42,6 +42,11 @@
                 })
                 .finally(() => {
                     render_html()
+                    document.getElementById('kpi_reduce').disabled = true
+                    document.getElementById('key_task_reduce').disabled = true
+                    document.getElementById('omg_reduce').disabled = true
+                    // key_task_reduce
+                    // omg_reduce
                 })
 
             if (operation) {

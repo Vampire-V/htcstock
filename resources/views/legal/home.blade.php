@@ -440,3 +440,40 @@
 </div>
 </div> --}}
 @endsection
+
+@section('modal')
+
+<div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="alert-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alert-modal-label">Contract request</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>ยังไม่เปิดให้ใช้งาน.....</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                {{-- <button type="button" class="btn btn-primary" >Add</button> --}}
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('second-script')
+<script type="text/javascript" defer>
+    $(window).on('load', function() {
+        let isShow = getCookie("alert_modal_shown");
+        if (!isShow) {
+            setCookie("alert_modal_shown", 'yes', 1, '/legal/dashboard')
+            $('#alert-modal').modal('show');
+        }
+    });
+</script>
+
+@endsection

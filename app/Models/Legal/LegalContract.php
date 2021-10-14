@@ -23,7 +23,9 @@ class LegalContract extends Model
 
         static::creating(function ($query) {
             $query->created_by = auth()->id();
-            $query->checked_by = User::where('email', 'thanyasiri.s@haier.co.th')->first()->id;
+            $query->level = 0;
+            $created = User::find(auth()->id());
+            $query->checked_by = $created->department->legalApprove->where('levels',1)->first()->user_id;
         });
 
         static::updating(function ($query) {

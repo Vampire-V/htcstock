@@ -336,7 +336,8 @@
         <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
     </a>
     <button class="mb-3 mr-3 btn btn-success" type="submit" onclick="event.preventDefault();
-            document.getElementById('approval-contract-form').submit();">{{$text_btn}}</button>
+            document.getElementById('approval-contract-form').submit();" @if (!$permission) disabled
+        @endif>{{$text_btn}}</button>
 </div>
 @stop
 

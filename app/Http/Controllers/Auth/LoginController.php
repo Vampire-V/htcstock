@@ -92,7 +92,7 @@ class LoginController extends Controller
             return \redirect()->route('welcome')->with('alert-success', 'You are now logged in.');
         }
 
-        $errors = new MessageBag(['password' => ['Password invalid. (ไม่มีในระบบ)']]);
+        $errors = new MessageBag(['password' => ['Password invalid. (รหัสผ่านไม่ถูกต้อง)']]);
         return \redirect()->back()->withErrors($errors)->withInput($input);
     }
 

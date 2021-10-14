@@ -249,7 +249,7 @@
         rel="noopener">
         <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
     </a>
-    <button class="mb-3 mr-3 btn btn-success" type="submit" onclick="event.preventDefault();
+    <button class="mb-3 mr-3 btn btn-success" type="submit" onclick="event.preventDefault(); setVisible(true); disableScroll();
             document.getElementById('approval-contract-form').submit();" @if (!$permission) disabled
         @endif>{{$text_btn}}</button>
 </div>

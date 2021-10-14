@@ -59,8 +59,9 @@
                 {{-- @include('includes.footer') --}}
             </div>
         </div>
-        <div id="loading"></div>
+
     </div>
+    <div id="loading"></div>
     @yield('modal')
     <!-- JS, Popper.js, and jQuery -->
     {{-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

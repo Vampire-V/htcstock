@@ -26,7 +26,7 @@ class CreateLegalContractsTable extends Migration
             $table->longText('representative_cer')->nullable();
             $table->text('address')->nullable();
             // body
-            $table->foreignId('contract_dest_id')->nullable()->constrained('legal_contract_dests')->comment('Id ของ legal_contract_dests');
+            // $table->foreignId('contract_dest_id')->nullable()->constrained('legal_contract_dests')->comment('Id ของ legal_contract_dests');
             // footer
             $table->foreignId('requestor_by')->nullable()->constrained('users')->comment('Id ของ users');
             $table->foreignId('checked_by')->nullable()->constrained('users')->comment('Id ของ users');

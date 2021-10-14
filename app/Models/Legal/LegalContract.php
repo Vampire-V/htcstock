@@ -30,8 +30,6 @@ class LegalContract extends Model
             if ($query->status === ContractEnum::P) {
                 $query->providing_at = \now();
             }
-            // $query->created_by = auth()->id();
-            // $query->checked_by = User::where('email', 'pratchaya.g@haier.co.th')->first()->id;
         });
     }
 

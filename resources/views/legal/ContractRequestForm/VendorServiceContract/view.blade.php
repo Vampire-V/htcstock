@@ -1791,7 +1791,7 @@
                 @endisset
             </div>
         </div>
-        <x-legal.step-approval :contract="$legalContract" :permission="$permission" />
+        <x-legal.step-approval :contract="$legalContract" :permission="$permission" :formapprove="$form_approve"/>
     </div>
 </div>
 
@@ -1812,7 +1812,7 @@
         <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
     </a>
     <button class="mb-3 mr-3 btn btn-success" type="submit" onclick="event.preventDefault();
-            document.getElementById('approval-contract-form').submit();">Send Contract</button>
+            document.getElementById('approval-contract-form').submit();">{{$text_btn}}</button>
 </div>
 @stop
 

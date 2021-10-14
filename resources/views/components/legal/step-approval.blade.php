@@ -35,7 +35,7 @@
         <form id="approval-contract-form" action="{{route('legal.contract.approval',$contract->id)}}"
             method="POST">
             @csrf
-            @if ($permission === 'Write')
+            @if ($formapprove)
             <div class="form-row">
                 <div class="col-md-3 mb-3">
                     <label for="validationStatus"><strong>Status</strong></label>

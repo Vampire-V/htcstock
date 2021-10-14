@@ -9,15 +9,17 @@ class StepApproval extends Component
 {
     public $contract;
     public $permission;
+    public $formapprove;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(LegalContract $contract,$permission)
+    public function __construct(LegalContract $contract, $permission, $formapprove)
     {
         $this->contract = $contract;
         $this->permission = $permission;
+        $this->formapprove = $formapprove;
     }
 
     /**

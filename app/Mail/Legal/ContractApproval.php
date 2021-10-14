@@ -19,15 +19,17 @@ class ContractApproval extends Mailable
      */
     protected $contract;
     protected $user;
+    protected $message;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(LegalContract $contract,User $user)
+    public function __construct(LegalContract $contract, User $user, string $message)
     {
         $this->contract = $contract;
         $this->user = $user;
+        $this->message = $message;
     }
 
     /**
@@ -39,7 +41,8 @@ class ContractApproval extends Mailable
     {
         return $this->markdown('emails.legal.contract.approval')->with([
             'contract' => $this->contract,
-            'user' => $this->user
+            'user' => $this->user,
+            'message' => $this->message
         ]);
     }
 }

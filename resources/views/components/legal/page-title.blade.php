@@ -11,10 +11,10 @@
             </div>
         </div>
         <div class="page-title-actions">
-            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom"
+            <button type="button" data-toggle="tooltip" title="Status : {{$contract->status}}" data-placement="bottom"
                 class="btn-shadow mr-3 btn btn-dark">
-                <i class="fa fa-star"></i>
-            </button> --}}
+                <i class="fa fa-star"></i>  {{$contract->status}}
+            </button>
             <div class="d-inline-block">
             </div>
         </div>

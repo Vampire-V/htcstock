@@ -1,8 +1,7 @@
 @component('mail::message')
 # Legal Reauest Contract
 
-Step approval contract request.
-{{$user->email}}
+{{$message}}
 
 @component('mail::button', ['url' => route('legal.approval.verify',[$user->id,$contract->id])])
 Go to Contract

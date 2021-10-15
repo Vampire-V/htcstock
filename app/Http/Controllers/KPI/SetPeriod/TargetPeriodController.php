@@ -9,6 +9,8 @@ use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class TargetPeriodController extends Controller
 {
@@ -131,5 +133,44 @@ class TargetPeriodController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function generateMonth(Request $request)
+    {
+        $start = 1;
+        $end = 12;
+        $month = strtotime('2021-01-01');
+        DB::beginTransaction();
+        try {
+            while ($start <= $end) {
+                $m = date('m', $month);
+                $y = date('Y');
+                $validator = Validator::make(['name' => $m, 'year' => $y], [
+                    'name' => Rule::unique('kpi_target_periods')->where(fn ($query) => $query->where('name', $m)->where('year', $y))
+                ]);
+
+                if ($validator->fails()) {
+                    // dump($validator->errors()->messages());
+                }else{
+                    $period = new TargetPeriod();
+                    $period->name = $m;
+                    $period->year = $y;
+                    $period->save();
+                }
+
+
+                $month = strtotime("+1 month", $month);
+                $start++;
+            }
+            $request->session()->flash('success', 'The system has created the month to be used for this year.');
+            DB::commit();
+            // \dd('End');
+            return \redirect()->back();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // dd($e->getMessage());
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
+
     }
 }

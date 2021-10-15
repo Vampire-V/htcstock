@@ -18,13 +18,13 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::get('dashboard/you-self/{year}/report', 'HomeController@report_your_self');
     Route::get('dashboard/rule-of-year/{year}/report', 'HomeController@report_rule_of_year');
     Route::get('dashboard/staff-evaluate-of-year/{year}/report', 'HomeController@report_staff_evaluate_year');
-    
+
 
     Route::resource('self-evaluation', 'SelfEvaluation\SelfEvaluationController', ['only' => ['index', 'create', 'edit', 'update', 'store', 'destroy']]);
     Route::get('evaluation/{id}/excel','SelfEvaluation\SelfEvaluationController@evaluateExcel')->name('self.download');
     Route::get('evaluation/user/{user}/quarter/{quarter}/year/{year}/excel','SelfEvaluation\SelfEvaluationController@evaluateQuarterExcel')->name('selfquarter.download');
     Route::get('evaluation/user/{user}/year/{year}/excel','SelfEvaluation\SelfEvaluationController@evaluateYearExcel')->name('selfyear.download');
-        // new 
+        // new
         // Route::get('self-evaluation/evaluate', 'SelfEvaluation\SelfEvaluationController@create_new')->name('evaluate.create_new');
         // Route::post('self-evaluation/evaluate', 'SelfEvaluation\SelfEvaluationController@store_new')->name('evaluate.store_new');
     Route::get('self-evaluation/user/{user}/quarter/{quarter}/year/{year}', 'SelfEvaluation\SelfEvaluationController@display_quarter')->name('quarter');
@@ -45,7 +45,7 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::put('rule/put/evaluate','Rule\RuleController@switchrule');
 
     Route::get('rules/template/download', 'Rule\RuleController@template_rule')->name('rules.download-template');
-    
+
 
     Route::resource('template', 'Template\TemplateController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
     Route::post('template/dynamic', 'Template\TemplateController@store_dynamic');
@@ -82,6 +82,6 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     });
 
     Route::resource('set-period', 'SetPeriod\TargetPeriodController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
-
+    Route::get('generate-month', 'SetPeriod\TargetPeriodController@generateMonth')->name('generate-month.auto');
 
 });

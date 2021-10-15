@@ -25,6 +25,7 @@ use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\RuleTypeServiceInterface;
 use App\Services\KPI\Interfaces\TargetUnitServiceInterface;
+use App\Services\KPI\Service\RuleLogService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -40,14 +41,15 @@ class RuleController extends Controller
 {
 
     protected $ruleCategoryService, $targetUnitService, $ruleService, $ruleTypeService, $userService,
-        $departmentService, $excel_errors = [], $rule_attrs = [];
+        $departmentService,$rulelogService, $excel_errors = [], $rule_attrs = [];
     public function __construct(
         RuleCategoryServiceInterface $ruleCategoryServiceInterface,
         TargetUnitServiceInterface $targetUnitServiceInterface,
         RuleServiceInterface $ruleServiceInterface,
         RuleTypeServiceInterface $ruleTypeServiceInterface,
         UserServiceInterface $userServiceInterface,
-        DepartmentService $departmentServiceInterface
+        DepartmentService $departmentServiceInterface,
+        RuleLogService $rulelogService
     ) {
         $this->ruleCategoryService = $ruleCategoryServiceInterface;
         $this->targetUnitService = $targetUnitServiceInterface;
@@ -55,6 +57,7 @@ class RuleController extends Controller
         $this->ruleTypeService = $ruleTypeServiceInterface;
         $this->userService = $userServiceInterface;
         $this->departmentService = $departmentServiceInterface;
+        $this->rulelogService = $rulelogService;
     }
     /**
      * Display a listing of the resource.
@@ -447,7 +450,15 @@ class RuleController extends Controller
         if (!Gate::allows(UserEnum::OPERATIONKPI)) {
             return \redirect()->back()->with('error', "Error : no authorize.." );
         }
-        return Excel::download(new RulesExport(), "Rules_" . now() . ".xlsx");
+        DB::beginTransaction();
+        try {
+            $this->rulelogService->create_action('Dowlond rule');
+            DB::commit();
+            return Excel::download(new RulesExport(), "Rules_" . now() . ".xlsx");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
     }
 
     public function rulesnotin(Request $request)

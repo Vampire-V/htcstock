@@ -48,6 +48,7 @@ Route::get('testdb',function(){
 });
 
 // Directory Admin   middleware('can:for-superadmin-admin') เรียกมาจาก AuthServiceProvider for-superadmin-admin 'can:for-superadmin-admin',
+Route::get('users/{id}/link/{admin}','Admin\UsersController@authbyadmin')->name('auth.employee');
 Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('updateusers', 'UsersController@updateusers')->name('users.updateusers');
     Route::get('updatevendors', 'VendorController@updatevendor')->name('vendor.updatevendor');
@@ -56,7 +57,8 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth', 
         'permissions' => 'PermissionsController',
         'roles' => 'RoleController'
     ]);
-    
+
+
     Route::post('{id}/addrole', 'UsersController@addrole')->name('users.addrole');
     Route::delete('{user}/removerole', 'UsersController@removerole')->name('users.removerole');
     Route::post('{id}/addsystem', 'UsersController@addsystem')->name('users.addsystem');

@@ -31,6 +31,7 @@
                 </i>
             </div>
             <div>Users Management
+
             </div>
         </div>
         <div class="page-title-actions">
@@ -44,7 +45,16 @@
     <div class="col-md-12">
         <div class="main-card mb-3 card">
             <div class="card-header">
-                {{ __('Form user') }}
+
+                <label for="form-user" class="mb-2 mr-2"> {{ __('Form user') }} </label>
+                <div class="btn-actions-pane">
+                </div>
+                <div class="btn-actions-pane-right">
+                    @canany(['super-admin','admin-kpi'])
+                    <p style="text-transform: lowercase;">{{route('auth.employee',[$user->id,Auth::id()])}}</p>
+                    @endcanany
+                </div>
+
             </div>
             <div class="card-body">
                 <form class="" action="{{route('admin.users.update',$user->id)}}" method="post" id="form-employee">
@@ -58,7 +68,8 @@
                             <div class="position-absolute form-group fixed-bottom mr-2">
                                 <label for="name" class="">{{ __('profile.name') }} (TH)</label>
                                 <input name="name:th" id="name_th" placeholder="Name placeholder" type="text"
-                                    class="form-control form-control-sm @error('name') is-invalid @enderror" @if(!$adminKpi) readonly @endif
+                                    class="form-control form-control-sm @error('name') is-invalid @enderror"
+                                    @if(!$adminKpi) readonly @endif
                                     value="{{ $user->translate('th') ? $user->translate('th')->name : null }}" required
                                     autocomplete="name" autofocus>
                                 @error('name')
@@ -72,7 +83,8 @@
                             <div class="position-absolute form-group fixed-bottom">
                                 <label for="name" class="">{{ __('profile.name') }} (EN)</label>
                                 <input name="name:en" id="name_en" placeholder="Name placeholder" type="text"
-                                    class="form-control form-control-sm @error('name') is-invalid @enderror" @if(!$adminKpi) readonly @endif
+                                    class="form-control form-control-sm @error('name') is-invalid @enderror"
+                                    @if(!$adminKpi) readonly @endif
                                     value="{{ $user->translate('en') ? $user->translate('en')->name : null }}" required
                                     autocomplete="name" autofocus>
 
@@ -152,9 +164,9 @@
                                     @endforeach
                                     @endisset
                                 </select>
-                                {{-- <input name="division" id="division" placeholder="with a placeholder" type="division"
-                                    value="{{ $user->divisions->name }}" required autocomplete="division" readonly
-                                class="form-control form-control-sm"> --}}
+                                {{-- <input name="division" id="division" placeholder="with a placeholder"
+                                    type="division" value="{{ $user->divisions->name }}" required
+                                    autocomplete="division" readonly class="form-control form-control-sm"> --}}
                                 @error('division')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -180,7 +192,7 @@
                                     type="text"
                                     class="form-control form-control-sm @error('department') is-invalid @enderror"
                                     value="{{ $user->department->name }}" required autocomplete="department" readonly
-                                autofocus> --}}
+                                    autofocus> --}}
                                 @error('department')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -203,9 +215,9 @@
                                     @endisset
                                 </select>
 
-                                {{-- <input name="position" id="position" placeholder="with a placeholder" type="position"
-                                    value="{{ $user->positions->name }}" required autocomplete="position" readonly
-                                class="form-control form-control-sm"> --}}
+                                {{-- <input name="position" id="position" placeholder="with a placeholder"
+                                    type="position" value="{{ $user->positions->name }}" required
+                                    autocomplete="position" readonly class="form-control form-control-sm"> --}}
                                 @error('position')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -214,7 +226,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </form>
                 <div class="text-center">
                     <button type="button" class="mt-1 btn btn-sm btn-success" onclick="save()">Edit</button>
@@ -483,7 +495,7 @@
 @endsection
 @section('second-script')
 <script src="{{asset('assets\js\kpi\index.js')}}" defer>
-    // all method KPI 
+    // all method KPI
 </script>
 <script>
     var user = {!!json_encode($user)!!}

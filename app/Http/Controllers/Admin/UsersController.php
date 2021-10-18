@@ -21,11 +21,13 @@ use App\Services\IT\Interfaces\PositionServiceInterface;
 use App\Services\IT\Interfaces\SystemServiceInterface;
 use App\Services\KPI\Service\UserApproveService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
 {
@@ -124,7 +126,7 @@ class UsersController extends Controller
         if ($validator->fails()) {
             return \redirect()->back()->withErrors($validator);
         }
-        
+
         DB::beginTransaction();
         try {
             $user = $this->userService->find($id);
@@ -156,7 +158,7 @@ class UsersController extends Controller
         try {
             // denies คือ !=
             // allows คือ ==
-            // ตรวจสอบ Role Gate::denies(UserEnum::SUPERADMIN) จาก AuthServiceProvider ถ้าไม่ใช้ Admin 
+            // ตรวจสอบ Role Gate::denies(UserEnum::SUPERADMIN) จาก AuthServiceProvider ถ้าไม่ใช้ Admin
             if (Gate::none([UserEnum::SUPERADMIN, UserEnum::ADMINKPI])) {
                 return \redirect()->route('admin.users.index');
             }
@@ -193,11 +195,11 @@ class UsersController extends Controller
             UserInfo.[EMail],
             Process.[IDLeader]
             FROM [HRPortal].[dbo].[tbStaff] AS Staff
-            LEFT JOIN [NitgenAccessManager].[dbo].[NGAC_USERINFO] AS UserInfo ON Staff.[ID] = UserInfo.[ID] 
-            LEFT JOIN [HRPortal].[dbo].[tbProcess] AS Process ON Staff.[ProcessID] = Process.[ProcessID] 
-            LEFT JOIN [HRPortal].[dbo].[tbDivision] AS Division ON Process.[DivisionID] = Division.[DivisionID] 
-            LEFT JOIN [HRPortal].[dbo].[tbGroupDivision] AS GroupDivision ON Division.[GDivisionID] = GroupDivision.[GDivisionID] 
-            WHERE UserInfo.[expDate] >= GETDATE() 
+            LEFT JOIN [NitgenAccessManager].[dbo].[NGAC_USERINFO] AS UserInfo ON Staff.[ID] = UserInfo.[ID]
+            LEFT JOIN [HRPortal].[dbo].[tbProcess] AS Process ON Staff.[ProcessID] = Process.[ProcessID]
+            LEFT JOIN [HRPortal].[dbo].[tbDivision] AS Division ON Process.[DivisionID] = Division.[DivisionID]
+            LEFT JOIN [HRPortal].[dbo].[tbGroupDivision] AS GroupDivision ON Division.[GDivisionID] = GroupDivision.[GDivisionID]
+            WHERE UserInfo.[expDate] >= GETDATE()
             AND UserInfo.[EMail] <> ''
             ORDER BY [DivisionID],[ProcessID]");
             // dd(DB::connection('sqlsrv')->getQueryLog());
@@ -439,6 +441,22 @@ class UsersController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    public function authbyadmin($id , $admin)
+    {
+        try {
+            Auth::logout();
+            $admin = $this->userService->find($admin);
+            if ($admin->hasRole(UserEnum::ADMINKPI,UserEnum::SUPERADMIN)) {
+                $user = $this->userService->find($id);
+                Auth::login($user);
+                return redirect()->route('welcome');
+            }
+            return \abort(Response::HTTP_UNAUTHORIZED,'ไม่มีสิทธิ์');
+        } catch (\Exception $e) {
+            throw $e;
         }
     }
 }

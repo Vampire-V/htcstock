@@ -70,7 +70,7 @@ class EvaluateReviewController extends Controller
         $status_list = [KPIEnum::on_process, KPIEnum::approved];
         try {
             $keys = UserApprove::where('user_approve', \auth()->id())->get();
-            
+
             $user = Auth::user();
             $users = Gate::any([UserEnum::ADMINKPI]) ? $this->userService->dropdown() : $this->userService->dropdownApprovalKPI($keys->pluck('user_id'));
             $divisions = $this->divisionService->dropdown();
@@ -88,7 +88,7 @@ class EvaluateReviewController extends Controller
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
-        return \view('kpi.EvaluationReview.index', 
+        return \view('kpi.EvaluationReview.index',
         \compact('start_year', 'user', 'status_list', 'months', 'evaluates', 'query', 'users','divisions','departments', 'selectedStatus', 'selectedYear', 'selectedPeriod', 'selectedUser','selectedDivision','selectedDepartment')
         );
     }
@@ -157,7 +157,7 @@ class EvaluateReviewController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft, KPIEnum::on_process]);
         DB::beginTransaction();
         try {
@@ -168,7 +168,7 @@ class EvaluateReviewController extends Controller
             if ($status_list->contains($evaluate->status) && !$check) {
                 return $this->errorResponse("เลยเวลาที่กำหนด", 500);
             }
-            
+
             if (auth()->id() !== $current_approve->user_approve) {
                 return $this->errorResponse("คุณไม่ใช่ : " . $current_approve->approveBy->name, Response::HTTP_SERVICE_UNAVAILABLE);
             }
@@ -181,9 +181,9 @@ class EvaluateReviewController extends Controller
                     return $b['cal'] + $a;
                 }, 0);
             }
-            $evaluate->kpi_reduce = $request->kpi_reduce;
-            $evaluate->key_task_reduce = $request->key_task_reduce;
-            $evaluate->omg_reduce = $request->omg_reduce;
+            // $evaluate->kpi_reduce = $request->kpi_reduce;
+            // $evaluate->key_task_reduce = $request->key_task_reduce;
+            // $evaluate->omg_reduce = $request->omg_reduce;
 
             $evaluate->cal_kpi = $total[0] ?? 0.00;
             $evaluate->cal_key_task = $total[1] ?? 0.00;
@@ -220,7 +220,7 @@ class EvaluateReviewController extends Controller
                     Log::notice("User : " . \auth()->user()->name . " = Update evaluate review next step : id = " . $evaluate->id);
                     $message = "Next step send to " . $user_approve->approveBy->name;
                     $evaluate->status = KPIEnum::on_process;
-                    
+
                     $evaluate->current_level = $user_approve->level;
                     $evaluate->next_level = $evaluate->next_level + 1;
                     $next = $this->userApproveService->findNextLevel($evaluate);

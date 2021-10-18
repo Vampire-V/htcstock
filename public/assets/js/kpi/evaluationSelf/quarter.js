@@ -57,13 +57,13 @@
                 element.weight = element.rule.category.name === `omg` ? element.weight : element.weight / 3
                 element.target = quarter_cal_target(element)
                 element.actual = quarter_cal_amount(element)
-                
+
             }
             evaluate.evaluate_detail = temp
             render_html()
             pageDisable()
         }
-        
+
     }, false);
 })();
 
@@ -79,7 +79,7 @@ var render_html = () => {
         const table = tables[i]
         let reduce = 0
         let temp_rules = evaluate.evaluate_detail.filter(item => item.rule.category.name === table.id.substring(6))
-
+        console.log(temp_rules,table.id.substring(6));
         if (table.tBodies[0].rows.length > 0) {
             removeAllChildNodes(table.tBodies[0])
         }
@@ -169,14 +169,16 @@ var render_html = () => {
             }
         }
 
-        if (temp_rules[0].rule.category.name === category.KPI) {
-            reduce = evaluate.kpi_reduce
-        }
-        if (temp_rules[0].rule.category.name === category.KEYTASK) {
-            reduce = evaluate.key_task_reduce
-        }
-        if (temp_rules[0].rule.category.name === category.OMG) {
-            reduce = evaluate.omg_reduce
+        if (temp_rules.length > 0) {
+            if (temp_rules[0].rule.category.name === category.KPI) {
+                reduce = evaluate.kpi_reduce
+            }
+            if (temp_rules[0].rule.category.name === category.KEYTASK) {
+                reduce = evaluate.key_task_reduce
+            }
+            if (temp_rules[0].rule.category.name === category.OMG) {
+                reduce = evaluate.omg_reduce
+            }
         }
 
         let sum_weight = temp_rules.reduce((total, cur) => total += cur.weight, 0.00)

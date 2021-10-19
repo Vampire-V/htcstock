@@ -22,9 +22,7 @@
             let temp = []
             for (var i = 0; i < evaluate.evaluateDetail.length; i++) {
                 let item = evaluate.evaluateDetail[i]
-                if (item.rule_id === 588) {
-                    console.log(item.id,item.max_result);
-                }
+
                 item.average_max = []
                 item.average_actual = []
                 item.average_target = []
@@ -182,7 +180,7 @@ var render_html = () => {
         }
 
         let sum_weight = temp_rules.reduce((total, cur) => total += cur.weight, 0.00)
-        let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00) - reduce
+        let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00) - (reduce / 3)
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
         table.tFoot.lastElementChild.cells[11].textContent = `${sum_cal.toFixed(2)}%`
         summary.push({

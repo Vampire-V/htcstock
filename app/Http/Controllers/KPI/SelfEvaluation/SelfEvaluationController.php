@@ -519,9 +519,9 @@ class SelfEvaluationController extends Controller
             });
 
             $evaluate = $evaluate_quarter->first();
-            $evaluate->kpi_reduce = $kpi_reduce;
-            $evaluate->key_task_reduce = $key_task_reduce;
-            $evaluate->omg_reduce = $omg_reduce;
+            $evaluate->kpi_reduce = ($kpi_reduce / 3);
+            $evaluate->key_task_reduce = ($key_task_reduce / 3);
+            $evaluate->omg_reduce = ($omg_reduce / 3);
 
             $this->calculation_detail($detail);
             $user = $this->userService->find($user);
@@ -574,9 +574,9 @@ class SelfEvaluationController extends Controller
 
             $this->calculation_detail($detail);
             $evaluate = $evaluate_quarter->first();
-            $evaluate->kpi_reduce = $kpi_reduce;
-            $evaluate->key_task_reduce = $key_task_reduce;
-            $evaluate->omg_reduce = $omg_reduce;
+            $evaluate->kpi_reduce = ($kpi_reduce / 3);
+            $evaluate->key_task_reduce = ($key_task_reduce / 3);
+            $evaluate->omg_reduce = ($omg_reduce / 3);
             $user = $this->userService->find($user);
             return Excel::download(new EvaluateYearExport($user, $evaluate, $detail), "Evaluate-year-" . $user->name . ".xlsx");
         } catch (\Exception $e) {

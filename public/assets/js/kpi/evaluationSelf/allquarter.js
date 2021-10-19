@@ -175,7 +175,7 @@ var render_html = () => {
                 console.log(error)
             }
         }
-        
+
         if (temp_rules.length > 0) {
             if (temp_rules[0].rule.category.name === category.KPI) {
                 reduce = evaluate.kpi_reduce
@@ -189,7 +189,7 @@ var render_html = () => {
         }
 
         let sum_weight = temp_rules.reduce((total, cur) => total + cur.weight, 0.00)
-        let sum_cal = temp_rules.reduce((total, cur) => total + cur.cal, 0.00) - reduce
+        let sum_cal = temp_rules.reduce((total, cur) => total + cur.cal, 0.00) - (reduce / 12)
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
         table.tFoot.lastElementChild.cells[11].textContent = `${sum_cal.toFixed(2)}%`
         summary.push({

@@ -153,8 +153,10 @@ const search_score = async () => {
 
 let combine_information = (fetch_data) => {
     let data = [],
-        average_omg
+        average_omg,
+        reduce_averrage
 
+    reduce_averrage = 0
     fetch_data.sort(function (a, b) {
         var keyA = a.period_id,
             keyB = b.period_id;
@@ -167,7 +169,10 @@ let combine_information = (fetch_data) => {
     try {
         if (document.getElementById('customSwitch1').checked) {
             if ($("#quarter").val() === '') {
+                reduce_averrage = 12
                 average_omg = getQuarterForHaier(new Date())
+            }else{
+                reduce_averrage = 3
             }
             let item_unique
             // kpi_reduce_point,
@@ -220,14 +225,11 @@ let combine_information = (fetch_data) => {
                 total_key = 0
                 total_omg = 0
                 sum_total = 0
-                // if (element.user.id === 51) {
-                //     console.log(total_quarter(key_task).reduce((a, c) => a + c.cal, 0))
-                //     console.log(element.keytask_reduce_point.reduce((a, c) => a + c, 0))
-                // }
-                total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0) - element.kpi_reduce_point.reduce((a, c) => a + c, 0)
-                total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0) - element.keytask_reduce_point.reduce((a, c) => a + c, 0)
-                // console.log(keytask_reduce_point, total_key);
-                let cal_o = total_quarter(omg).reduce((a, c) => a + c.cal, 0) - element.omg_reduce_point.reduce((a, c) => a + c, 0)
+
+                total_kpi = total_quarter(kpi).reduce((a, c) => a + c.cal, 0) - (element.kpi_reduce_point.reduce((a, c) => a + c, 0)/reduce_averrage)
+                total_key = total_quarter(key_task).reduce((a, c) => a + c.cal, 0) - (element.keytask_reduce_point.reduce((a, c) => a + c, 0)/reduce_averrage)
+
+                let cal_o = total_quarter(omg).reduce((a, c) => a + c.cal, 0) - (element.omg_reduce_point.reduce((a, c) => a + c, 0)/reduce_averrage)
                 total_omg = average_omg ? cal_o / average_omg : cal_o
 
                 sum_total = (total_kpi * weigth_template[0]) + (total_key * weigth_template[1]) + (total_omg * weigth_template[2])
@@ -545,7 +547,7 @@ const render_rule = async () => {
             let result = await getReportRuleOfYear(d.getFullYear(), {
                 params: filter
             })
-            
+
             await rules_data_to_table(result.data.data)
 
         } catch (error) {

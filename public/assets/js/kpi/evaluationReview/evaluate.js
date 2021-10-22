@@ -29,6 +29,7 @@
                     render_html()
                     if (current.user_approve === auth.id && evaluateForm.status === status.ONPROCESS) {
                         pageEnable()
+                        console.log('enable')
                     }else{
                         if (can_input) {
                             pageEnable()
@@ -53,7 +54,7 @@ var render_html = () => {
         const table = tables[i]
         let reduce = 0
         let temp_rules = evaluateForm.detail.filter(value => value.rules.categorys.name === table.id.substring(6))
-        
+
         if (table.tBodies[0].rows.length > 0) {
             removeAllChildNodes(table.tBodies[0])
         }
@@ -61,7 +62,7 @@ var render_html = () => {
         for (let index = 0; index < temp_rules.length; index++) {
             const element = temp_rules[index]
             // ถ้าเป็นเจ้าของ rule หรือเป็นหน้า evaluation-review ไม่ต้อง readonly
-            
+
             try {
                 let newRow = table.tBodies[0].insertRow()
                 if (element.weight <= 0.00) {
@@ -87,7 +88,7 @@ var render_html = () => {
                     "data-placement": "top"
                 })
                 cellDesc.classList.add('truncate')
-                
+
                 let cellBaseLine = newRow.insertCell()
                 cellBaseLine.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`, true))
 
@@ -187,7 +188,7 @@ const changeValue = (e) => {
     // console.log(e.parentNode.nextElementSibling)
     evaluateForm.detail.forEach((element, key) => {
         if (e.offsetParent.parentNode.cells[1].textContent === element.rules.name) {
-            // create new method formula 
+            // create new method formula
             element[e.name] = parseFloat(e.value)
             let rule = evaluateForm.detail[key],
                 column = e.offsetParent.cellIndex,
@@ -243,12 +244,12 @@ const changeValue = (e) => {
 const set_reduce = e => {
     if (e.name in evaluateForm) {
         evaluateForm[e.name] = parseFloat(e.value)
-    } 
+    }
 }
 const remark = (e) => {
     evaluateForm.detail.forEach((element, key) => {
         if (e.offsetParent.parentNode.cells[1].textContent === element.rules.name) {
-            // create new method formula 
+            // create new method formula
             element[e.name] = e.value
         }
     })

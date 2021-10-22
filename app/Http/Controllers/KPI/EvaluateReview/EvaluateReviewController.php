@@ -139,7 +139,7 @@ class EvaluateReviewController extends Controller
             // $f_evaluate->evaluateDetail->each(fn ($item) => $this->evaluateDetailService->formulaKeyTask($item));
             $current = $this->userApproveService->findCurrentLevel($f_evaluate);
             $evaluate  = new EvaluateResource($f_evaluate);
-            $canInput = Gate::any([UserEnum::ADMINKPI,UserEnum::OPERATIONKPI]);
+            $canInput = Gate::any([UserEnum::ADMINKPI,UserEnum::OPERATIONKPI,UserEnum::MANAGERKPI]);
             $canAdmin = Gate::allows(UserEnum::ADMINKPI);
             $history = $this->evaluateService->history($f_evaluate);
         } catch (\Exception $e) {

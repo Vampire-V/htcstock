@@ -56,6 +56,8 @@
                         <h5>status : <span class="{{Helper::kpiStatusBadge($evaluate->status)}}"> {{$evaluate->status}}
                             </span></h5>
                         {{$current ? $current->approveBy->name : null}}
+                        <br>
+                        ({{$evaluate->updated_at}})
                     </div>
                 </div>
             </div>
@@ -372,7 +374,7 @@
                                 <td>{{$item->createdBy->name}}</td>
                                 <td>{{$item->ip}}</td>
                                 <td>{{$item->device}}</td>
-                                <td>{{$item->created_at->diffForHumans()}}</td>
+                                <td>{{$item->created_at}}</td>
                             </tr>
                             @endforeach
                         </tbody>

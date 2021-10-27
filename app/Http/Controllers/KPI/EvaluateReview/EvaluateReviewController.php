@@ -19,6 +19,7 @@ use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Service\SettingActionService;
 use App\Services\KPI\Service\UserApproveService;
+use Facade\FlareClient\Http\Response as HttpResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -271,6 +272,7 @@ class EvaluateReviewController extends Controller
             //         return $b['cal'] + $a;
             //     }, 0);
             // }
+            // dd($request->all());
             $evaluate->kpi_reduce = $request->kpi_reduce;
             $evaluate->key_task_reduce = $request->key_task_reduce;
             $evaluate->omg_reduce = $request->omg_reduce;
@@ -294,7 +296,7 @@ class EvaluateReviewController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -346,6 +346,6 @@ const save = async () => {
         toast(error.response.data.message,'error')
     } finally {
         toastClear()
-        window.location.reload()
+        // window.location.reload()
     }
 }

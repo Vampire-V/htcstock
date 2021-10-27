@@ -23,15 +23,15 @@
             <td>{{$loop->iteration}}</td>
             <td>{{$rule->rule->name}}</td>
             <td>{{$rule->rule->description}}</td>
-            <td>{{$rule->base_line}}</td>
-            <td>{{round($rule->max_result,2)}}</td>
-            <td>{{round($rule->weight,2)}}</td>
-            <td>{{round($rule->target,2)}}</td>
-            <td>{{round($rule->target_pc,2)}}</td>
-            <td>{{round($rule->actual,2)}}</td>
-            <td>{{round($rule->actual_pc,2)}}</td>
-            <td>{{round($rule->ach, 2)}}</td>
-            <td>{{round($rule->cal, 2)}}</td>
+            <td>{{Helper::decimal($rule->base_line)}}</td>
+            <td>{{Helper::decimal($rule->max_result)}}</td>
+            <td>{{Helper::decimal($rule->weight)}}</td>
+            <td>{{Helper::decimal($rule->target)}}</td>
+            <td>{{Helper::decimal($rule->target_pc)}}</td>
+            <td>{{Helper::decimal($rule->actual)}}</td>
+            <td>{{Helper::decimal($rule->actual_pc)}}</td>
+            <td>{{Helper::decimal($rule->ach)}}</td>
+            <td>{{Helper::decimal($rule->cal)}}</td>
         </tr>
         @endforeach
     </tbody>
@@ -42,7 +42,7 @@
             <td></td>
             <td></td>
             <td>Weight</td>
-            <td>{{round($group->sum('weight'),2)}} %</td>
+            <td>{{Helper::decimal($group->sum('weight'))}} %</td>
             <td></td>
             <td></td>
             <td></td>
@@ -63,9 +63,9 @@
             $reduce = $evaluate->omg_reduce;
             $reduce_hod = $evaluate->omg_reduce_hod;
             }
-            $sum = round($group->sum('cal'),2) - ($reduce + ($reduce_hod / 12));
+            $sum = $group->sum('cal') - ($reduce + ($reduce_hod / 12));
             @endphp
-            <td>{{$sum}} %</td>
+            <td>{{Helper::decimal($sum)}} %</td>
         </tr>
     </tfoot>
 </table>
@@ -93,21 +93,21 @@ $total = [];
         @php
         $result = $item->sum('cal');
         if ($i === 'kpi') {
-        $result = $result - $evaluate->kpi_reduce;
+        $result = $result - ($evaluate->kpi_reduce + ($evaluate->kpi_reduce_hod / 12));
         }
         if ($i === 'key-task') {
-        $result = $result - $evaluate->key_task_reduce;
+        $result = $result - ($evaluate->key_task_reduce + ($evaluate->key_task_reduce_hod / 12));
         }
         if ($i === 'omg') {
-        $result = $result - $evaluate->omg_reduce;
+        $result = $result - ($evaluate->omg_reduce + ($evaluate->omg_reduce_hod / 12));
         }
         $cal = ($result * $quarter_weight[$loop->index]) / 100;
         $total[] = $cal;
         @endphp
         <tr>
             <th>{{$i}}</th>
-            <td>{{$quarter_weight[$loop->index]}} %</td>
-            <td>{{round($cal,2)}} %</td>
+            <td>{{Helper::decimal($quarter_weight[$loop->index])}} %</td>
+            <td>{{Helper::decimal($cal)}} %</td>
         </tr>
         @endforeach
         @endisset
@@ -115,8 +115,8 @@ $total = [];
     <tfoot>
         <tr>
             <th>Total</th>
-            <td> {{round(array_reduce($quarter_weight,fn($a,$b) => $b+$a,0),2)}} %</td>
-            <td> {{round(array_reduce($total,fn($a,$b) => $b+$a,0),2)}} %</td>
+            <td> {{Helper::decimal(array_reduce($quarter_weight,fn($a,$b) => $b+$a,0))}} %</td>
+            <td> {{Helper::decimal(array_reduce($total,fn($a,$b) => $b+$a,0))}} %</td>
         </tr>
     </tfoot>
 </table>

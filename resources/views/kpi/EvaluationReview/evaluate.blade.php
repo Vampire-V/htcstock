@@ -277,7 +277,7 @@
                                 <td>{{$item->createdBy->name}}</td>
                                 <td>{{$item->ip}}</td>
                                 <td>{{$item->device}}</td>
-                                <td>{{$item->created_at->diffForHumans()}}</td>
+                                <td>{{$item->created_at}}</td>
                             </tr>
                             @endforeach
                         </tbody>

@@ -23,6 +23,11 @@ class Helper
         return number_format($amount, 2) . " ฿ ";
     }
 
+    public static function decimal(float $amount)
+    {
+        return number_format(round($amount,2,PHP_ROUND_HALF_UP),2,'.','');
+    }
+
     public static function isActive(string $route)
     {
         return Request::is($route) ? 'mm-active' : '';

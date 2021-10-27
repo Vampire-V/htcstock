@@ -138,7 +138,7 @@ class SelfEvaluationController extends Controller
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category', 'weight_group', 'current', 'canOperation','isAdmin','history'));
+        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category', 'weight_group', 'current', 'canOperation', 'isAdmin', 'history'));
     }
 
     /**
@@ -381,6 +381,9 @@ class SelfEvaluationController extends Controller
         $kpi_reduce = 0.0;
         $key_task_reduce = 0.0;
         $omg_reduce = 0.0;
+        $kpi_reduce_hod = 0.0;
+        $key_task_reduce_hod = 0.0;
+        $omg_reduce_hod = 0.0;
         try {
             $category = $this->categoryService->dropdown();
             $detail = new Collection();
@@ -390,6 +393,9 @@ class SelfEvaluationController extends Controller
                 $kpi_reduce += $item->kpi_reduce;
                 $key_task_reduce += $item->key_task_reduce;
                 $omg_reduce += $item->omg_reduce;
+                $kpi_reduce_hod += $item->kpi_reduce_hod;
+                $key_task_reduce_hod += $item->key_task_reduce_hod;
+                $omg_reduce_hod += $item->omg_reduce_hod;
                 foreach ($item->evaluateDetail as $key => $value) {
                     $detail->push($value);
                 }
@@ -399,6 +405,9 @@ class SelfEvaluationController extends Controller
             $evaluate->kpi_reduce = $kpi_reduce;
             $evaluate->key_task_reduce = $key_task_reduce;
             $evaluate->omg_reduce = $omg_reduce;
+            $evaluate->kpi_reduce_hod = $kpi_reduce_hod;
+            $evaluate->key_task_reduce_hod = $key_task_reduce_hod;
+            $evaluate->omg_reduce_hod = $omg_reduce_hod;
             $evaluate->evaluateDetail = $detail;
             $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
             // $evaluate  = new EvaluateResource($evaluate);
@@ -420,6 +429,9 @@ class SelfEvaluationController extends Controller
         $kpi_reduce = 0.0;
         $key_task_reduce = 0.0;
         $omg_reduce = 0.0;
+        $kpi_reduce_hod = 0.0;
+        $key_task_reduce_hod = 0.0;
+        $omg_reduce_hod = 0.0;
         try {
             $category = $this->categoryService->dropdown();
             $detail = new Collection();
@@ -429,6 +441,9 @@ class SelfEvaluationController extends Controller
                 $kpi_reduce += $item->kpi_reduce;
                 $key_task_reduce += $item->key_task_reduce;
                 $omg_reduce += $item->omg_reduce;
+                $kpi_reduce_hod += $item->kpi_reduce_hod;
+                $key_task_reduce_hod += $item->key_task_reduce_hod;
+                $omg_reduce_hod += $item->omg_reduce_hod;
                 foreach ($item->evaluateDetail as $key => $value) {
                     $detail->push($value);
                 }
@@ -437,6 +452,9 @@ class SelfEvaluationController extends Controller
             $evaluate->kpi_reduce = $kpi_reduce;
             $evaluate->key_task_reduce = $key_task_reduce;
             $evaluate->omg_reduce = $omg_reduce;
+            $evaluate->kpi_reduce_hod = $kpi_reduce_hod;
+            $evaluate->key_task_reduce_hod = $key_task_reduce_hod;
+            $evaluate->omg_reduce_hod = $omg_reduce_hod;
 
             $evaluate->evaluateDetail = $detail;
             $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
@@ -490,6 +508,9 @@ class SelfEvaluationController extends Controller
         $kpi_reduce = 0;
         $key_task_reduce = 0;
         $omg_reduce = 0;
+        $kpi_reduce_hod = 0.0;
+        $key_task_reduce_hod = 0.0;
+        $omg_reduce_hod = 0.0;
         try {
             $detail = \collect();
             $evaluate_quarter = $this->evaluateService->forQuarterYear($user, $quarter, $year);
@@ -498,12 +519,15 @@ class SelfEvaluationController extends Controller
                 $kpi_reduce += $item->kpi_reduce;
                 $key_task_reduce += $item->key_task_reduce;
                 $omg_reduce += $item->omg_reduce;
+                $kpi_reduce_hod += $item->kpi_reduce_hod;
+                $key_task_reduce_hod += $item->key_task_reduce_hod;
+                $omg_reduce_hod += $item->omg_reduce_hod;
                 $item->evaluateDetail->each(fn ($value) => $detail->add($value));
             }
 
             $new = $detail->groupBy('rule_id')->each(function ($item) {
                 $max = $item->last()->max_result;
-                $weight = $item->last()->rule->category->name === 'omg' ? $item->sum('weight') : $item->sum('weight') / 3;
+                $weight = $item->last()->rule->category->name === KPIEnum::OMG ? $item->sum('weight') : $item->sum('weight') / 3;
                 $target = $this->quarter_cal_target($item);
                 $actual = $this->quarter_cal_actual($item);
                 $item->each(function ($value) use ($max, $weight, $target, $actual) {
@@ -519,9 +543,12 @@ class SelfEvaluationController extends Controller
             });
 
             $evaluate = $evaluate_quarter->first();
-            $evaluate->kpi_reduce = ($kpi_reduce / 3);
-            $evaluate->key_task_reduce = ($key_task_reduce / 3);
-            $evaluate->omg_reduce = ($omg_reduce / 3);
+            $evaluate->kpi_reduce = $kpi_reduce;
+            $evaluate->key_task_reduce = $key_task_reduce;
+            $evaluate->omg_reduce = $omg_reduce;
+            $evaluate->kpi_reduce_hod = $kpi_reduce_hod;
+            $evaluate->key_task_reduce_hod = $key_task_reduce_hod;
+            $evaluate->omg_reduce_hod = $omg_reduce_hod;
 
             $this->calculation_detail($detail);
             $user = $this->userService->find($user);
@@ -536,6 +563,9 @@ class SelfEvaluationController extends Controller
         $kpi_reduce = 0;
         $key_task_reduce = 0;
         $omg_reduce = 0;
+        $kpi_reduce_hod = 0.0;
+        $key_task_reduce_hod = 0.0;
+        $omg_reduce_hod = 0.0;
         try {
             $detail = \collect();
             $evaluate_quarter = $this->evaluateService->forYear($user, $year);
@@ -547,6 +577,9 @@ class SelfEvaluationController extends Controller
                 $kpi_reduce += $item->kpi_reduce;
                 $key_task_reduce += $item->key_task_reduce;
                 $omg_reduce += $item->omg_reduce;
+                $kpi_reduce_hod += $item->kpi_reduce_hod;
+                $key_task_reduce_hod += $item->key_task_reduce_hod;
+                $omg_reduce_hod += $item->omg_reduce_hod;
                 $item->evaluateDetail->each(fn ($value) => $detail->add($value));
             }
             $new = $detail->groupBy('rule_id')->each(function ($item) use ($year) {
@@ -557,7 +590,7 @@ class SelfEvaluationController extends Controller
                     $month = $this->get_month_haier();
                 }
                 $max = $item->last()->max_result;
-                $weight = $item->last()->rule->category->name === 'omg' ? $item->sum('weight') / $quarter : $item->sum('weight') / $month;
+                $weight = $item->last()->rule->category->name === KPIEnum::OMG ? $item->sum('weight') / $quarter : $item->sum('weight') / $month;
                 $target = $this->quarter_cal_target($item);
                 $actual = $this->quarter_cal_actual($item);
                 $item->each(function ($value) use ($max, $weight, $target, $actual) {
@@ -574,9 +607,13 @@ class SelfEvaluationController extends Controller
 
             $this->calculation_detail($detail);
             $evaluate = $evaluate_quarter->first();
-            $evaluate->kpi_reduce = ($kpi_reduce / 3);
-            $evaluate->key_task_reduce = ($key_task_reduce / 3);
-            $evaluate->omg_reduce = ($omg_reduce / 3);
+            $evaluate->kpi_reduce = $kpi_reduce;
+            $evaluate->key_task_reduce = $key_task_reduce;
+            $evaluate->omg_reduce = $omg_reduce;
+            $evaluate->kpi_reduce_hod = $kpi_reduce_hod;
+            $evaluate->key_task_reduce_hod = $key_task_reduce_hod;
+            $evaluate->omg_reduce_hod = $omg_reduce_hod ;
+
             $user = $this->userService->find($user);
             return Excel::download(new EvaluateYearExport($user, $evaluate, $detail), "Evaluate-year-" . $user->name . ".xlsx");
         } catch (\Exception $e) {

@@ -27,10 +27,10 @@
             </div>
         </div>
         <div class="page-title-actions">
-            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="top"
+            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="top"
                 class="btn-shadow mr-3 btn btn-dark">
                 <i class="fa fa-star"></i>
-            </button>
+            </button> --}}
         </div>
     </div>
 </div>

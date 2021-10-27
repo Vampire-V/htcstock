@@ -166,28 +166,12 @@ class EvaluateReviewController extends Controller
 
             $check = $this->setting_action_service->isNextStep(KPIEnum::approve);
             if ($status_list->contains($evaluate->status) && !$check) {
-                return $this->errorResponse("เลยเวลาที่กำหนด", 500);
+                return $this->errorResponse("เลยเวลาที่กำหนด", Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
             if (auth()->id() !== $current_approve->user_approve) {
                 return $this->errorResponse("คุณไม่ใช่ : " . $current_approve->approveBy->name, Response::HTTP_SERVICE_UNAVAILABLE);
             }
-
-            $detail = collect($request->detail);
-            $g = $detail->groupBy(fn ($item) => $item['rules']['category_id']);
-            $total = [];
-            foreach ($g as $value) {
-                $total[] = $value->reduce(function ($a, $b) {
-                    return $b['cal'] + $a;
-                }, 0);
-            }
-            // $evaluate->kpi_reduce = $request->kpi_reduce;
-            // $evaluate->key_task_reduce = $request->key_task_reduce;
-            // $evaluate->omg_reduce = $request->omg_reduce;
-
-            $evaluate->cal_kpi = $total[0] ?? 0.00;
-            $evaluate->cal_key_task = $total[1] ?? 0.00;
-            $evaluate->cal_omg = $total[2] ?? 0.00;
 
             foreach ($request->detail as $value) {
                 $evaluate->evaluateDetail()
@@ -202,7 +186,7 @@ class EvaluateReviewController extends Controller
                     // Error
                     DB::rollBack();
                     Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
-                    return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
+                    return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", Response::HTTP_INTERNAL_SERVER_ERROR);
                 }
 
                 if ($this->userApproveService->isLastLevel($evaluate)) {
@@ -229,11 +213,6 @@ class EvaluateReviewController extends Controller
 
                 # send mail to approved
             } else {
-                // if (!$evaluate->next_level) {
-                //     DB::rollBack();
-                //     Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
-                //     return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
-                // }
                 $user_approve = $this->userApproveService->findFirstLevel($evaluate->user_id);
                 $evaluate->status = KPIEnum::draft;
                 $evaluate->comment = $request->comment;
@@ -247,11 +226,11 @@ class EvaluateReviewController extends Controller
             }
             $evaluate->save();
             DB::commit();
-            return $this->successResponse(new EvaluateResource($evaluate->fresh()), $message, 201);
+            return $this->successResponse(new EvaluateResource($evaluate->fresh()), $message, Response::HTTP_CREATED);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -284,21 +263,24 @@ class EvaluateReviewController extends Controller
         try {
             $evaluate = $this->evaluateService->find($id);
 
-            $detail = collect($request->detail);
-            $g = $detail->groupBy(fn ($item) => $item['rules']['category_id']);
-            $total = [];
-            foreach ($g as $value) {
-                $total[] = $value->reduce(function ($a, $b) {
-                    return $b['cal'] + $a;
-                }, 0);
-            }
+            // $detail = collect($request->detail);
+            // $g = $detail->groupBy(fn ($item) => $item['rules']['category_id']);
+            // $total = [];
+            // foreach ($g as $value) {
+            //     $total[] = $value->reduce(function ($a, $b) {
+            //         return $b['cal'] + $a;
+            //     }, 0);
+            // }
             $evaluate->kpi_reduce = $request->kpi_reduce;
             $evaluate->key_task_reduce = $request->key_task_reduce;
             $evaluate->omg_reduce = $request->omg_reduce;
+            $evaluate->kpi_reduce_hod = $request->kpi_reduce_hod;
+            $evaluate->key_task_reduce_hod = $request->key_task_reduce_hod;
+            $evaluate->omg_reduce_hod = $request->omg_reduce_hod;
 
-            $evaluate->cal_kpi = $total[0] ?? 0.00;
-            $evaluate->cal_key_task = $total[1] ?? 0.00;
-            $evaluate->cal_omg = $total[2] ?? 0.00;
+            // $evaluate->cal_kpi = $total[0] ?? 0.00;
+            // $evaluate->cal_key_task = $total[1] ?? 0.00;
+            // $evaluate->cal_omg = $total[2] ?? 0.00;
 
             foreach ($request->detail as $value) {
                 $evaluate->evaluateDetail()

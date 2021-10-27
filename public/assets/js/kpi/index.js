@@ -42,6 +42,9 @@ class EvaluateForm {
         kpi_reduce = 0.00,
         key_task_reduce = 0.00,
         omg_reduce = 0.00,
+        kpi_reduce_hod = 0.00,
+        key_task_reduce_hod = 0.00,
+        omg_reduce_hod = 0.00,
         comment = null,
         detail = [],
         remove = [],
@@ -56,6 +59,9 @@ class EvaluateForm {
         this.kpi_reduce = kpi_reduce
         this.key_task_reduce = key_task_reduce
         this.omg_reduce = omg_reduce
+        this.kpi_reduce_hod = kpi_reduce_hod
+        this.key_task_reduce_hod = key_task_reduce_hod
+        this.omg_reduce_hod = omg_reduce_hod
         this.comment = comment
         this.detail = detail
         this.remove = remove
@@ -108,12 +114,12 @@ var setEvaluate = (datas) => {
     evaluateForm.total_weight_kpi = datas.total_weight_kpi
     evaluateForm.total_weight_key_task = datas.total_weight_key_task
     evaluateForm.total_weight_omg = datas.total_weight_omg
-    kpi_reduce = datas.kpi_reduce,
-    key_task_reduce = datas.key_task_reduce,
-    omg_reduce = datas.omg_reduce,
-    // evaluateForm.cal_kpi = datas.cal_kpi
-    // evaluateForm.cal_key_task = datas.cal_key_task
-    // evaluateForm.cal_omg = datas.cal_omg
+    evaluateForm.kpi_reduce = datas.kpi_reduce,
+    evaluateForm.key_task_reduce = datas.key_task_reduce,
+    evaluateForm.omg_reduce = datas.omg_reduce,
+    evaluateForm.kpi_reduce_hod = datas.kpi_reduce_hod,
+    evaluateForm.key_task_reduce_hod = datas.key_task_reduce_hod,
+    evaluateForm.omg_reduce_hod = datas.omg_reduce_hod,
 
     evaluateForm.comment = datas.comment
     evaluateForm.status = datas.status
@@ -305,7 +311,7 @@ var findAchValue = (obj) => {
                 } else if(obj.actual === obj.target) {
                     ach = obj.max ?? obj.max_result
                 } else {
-                    console.log(obj.rules.calculate_type,obj.actual , obj.target);
+                    // console.log(obj.rules.calculate_type,obj.actual , obj.target);
                     ach = parseFloat((obj.actual / obj.target) * 100.00)
                 }
                 // ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)

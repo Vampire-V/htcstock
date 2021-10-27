@@ -63,7 +63,7 @@
                 const element = temp[index]
                 // สิ้นปี อาจมีปัญหา
                 element.max_result = element.average_max[element.average_max.length - 1]
-                element.weight = element.rule.category.name === `omg` ? element.weight / quarter : element.weight / month_now
+                element.weight = element.rule.category.name === category.OMG ? element.weight / quarter : element.weight / month_now
                 element.target = quarter_cal_target(element)
                 element.actual = quarter_cal_amount(element)
 
@@ -86,6 +86,7 @@ var render_html = () => {
     for (let i = 0; i < tables.length; i++) {
         const table = tables[i]
         let reduce = 0
+        let reduce_hod = 0
         let temp_rules = evaluate.evaluate_detail.filter(item => item.rule.category.name === table.id.substring(6))
         if (table.tBodies[0].rows.length > 0) {
             removeAllChildNodes(table.tBodies[0])
@@ -179,17 +180,20 @@ var render_html = () => {
         if (temp_rules.length > 0) {
             if (temp_rules[0].rule.category.name === category.KPI) {
                 reduce = evaluate.kpi_reduce
+                reduce_hod = evaluate.kpi_reduce_hod
             }
             if (temp_rules[0].rule.category.name === category.KEYTASK) {
                 reduce = evaluate.key_task_reduce
+                reduce_hod = evaluate.key_task_reduce_hod
             }
             if (temp_rules[0].rule.category.name === category.OMG) {
                 reduce = evaluate.omg_reduce
+                reduce_hod = evaluate.omg_reduce_hod
             }
         }
 
         let sum_weight = temp_rules.reduce((total, cur) => total + cur.weight, 0.00)
-        let sum_cal = temp_rules.reduce((total, cur) => total + cur.cal, 0.00) - (reduce / 12)
+        let sum_cal = temp_rules.reduce((total, cur) => total + cur.cal, 0.00) - (reduce + (reduce_hod / 12))
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
         table.tFoot.lastElementChild.cells[11].textContent = `${sum_cal.toFixed(2)}%`
         summary.push({

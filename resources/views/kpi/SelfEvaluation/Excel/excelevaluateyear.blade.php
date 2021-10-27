@@ -50,16 +50,20 @@
             <td></td>
             @php
             $reduce = 0;
+            $reduce_hod = 0;
             if ($key === 'kpi') {
             $reduce = $evaluate->kpi_reduce;
+            $reduce_hod = $evaluate->kpi_reduce_hod;
             }
             if ($key === 'key-task') {
             $reduce = $evaluate->key_task_reduce;
+            $reduce_hod = $evaluate->key_task_reduce_hod;
             }
             if ($key === 'omg') {
             $reduce = $evaluate->omg_reduce;
+            $reduce_hod = $evaluate->omg_reduce_hod;
             }
-            $sum = round($group->sum('cal'),2) - $reduce;
+            $sum = round($group->sum('cal'),2) - ($reduce + ($reduce_hod / 12));
             @endphp
             <td>{{$sum}} %</td>
         </tr>

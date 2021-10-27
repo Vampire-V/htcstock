@@ -69,6 +69,7 @@ var render_html = () => {
     for (let i = 0; i < tables.length; i++) {
         const table = tables[i]
         let reduce = 0
+        let reduce_hod = 0
         let temp_rules = evaluateForm.detail.filter(value => value.rules.categorys.name === table.id.substring(6))
 
         if (table.tBodies[0].rows.length > 0) {
@@ -153,18 +154,26 @@ var render_html = () => {
         }
 
         if (temp_rules.length > 0) {
-            let reduce_input = table.offsetParent.firstElementChild.lastElementChild.querySelector('input')
+            // let reduce_input = table.offsetParent.firstElementChild.lastElementChild.querySelector('input')
+            let reduce_hod_input = table.offsetParent.firstElementChild.lastElementChild.querySelectorAll('input')[0]
+            let reduce_input = table.offsetParent.firstElementChild.lastElementChild.querySelectorAll('input')[1]
             if (temp_rules[0].rules.categorys.name === category.KPI) {
                 reduce = evaluate.kpi_reduce
                 reduce_input.value = evaluate.kpi_reduce
+                reduce_hod = evaluate.kpi_reduce_hod
+                reduce_hod_input.value = evaluate.kpi_reduce_hod
             }
             if (temp_rules[0].rules.categorys.name === category.KEYTASK) {
                 reduce = evaluate.key_task_reduce
                 reduce_input.value = evaluate.key_task_reduce
+                reduce_hod = evaluate.key_task_reduce_hod
+                reduce_hod_input.value = evaluate.key_task_reduce_hod
             }
             if (temp_rules[0].rules.categorys.name === category.OMG) {
                 reduce = evaluate.omg_reduce
                 reduce_input.value = evaluate.omg_reduce
+                reduce_hod = evaluate.omg_reduce_hod
+                reduce_hod_input.value = evaluate.omg_reduce_hod
             }
         }
 
@@ -174,7 +183,7 @@ var render_html = () => {
         }
 
         let sum_weight = temp_rules.reduce((total, cur) => total + cur.weight, 0.00)
-        let sum_cal = temp_rules.reduce((total, cur) => total + cur.cal, 0.00) - reduce
+        let sum_cal = temp_rules.reduce((total, cur) => total + cur.cal, 0.00) - (reduce + reduce_hod)
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
         table.tFoot.lastElementChild.cells[11].textContent = `${sum_cal.toFixed(2)}%`
         summary.push({

@@ -73,11 +73,12 @@ var summary = []
 var render_html = () => {
     // create tr in table
     let tables = document.getElementById('group-table').getElementsByClassName('table')
+    console.log(evaluate);
     for (let i = 0; i < tables.length; i++) {
         const table = tables[i]
         let reduce = 0
+        let reduce_hod = 0
         let temp_rules = evaluate.evaluate_detail.filter(item => item.rule.category.name === table.id.substring(6))
-        console.log(temp_rules,table.id.substring(6));
         if (table.tBodies[0].rows.length > 0) {
             removeAllChildNodes(table.tBodies[0])
         }
@@ -170,17 +171,20 @@ var render_html = () => {
         if (temp_rules.length > 0) {
             if (temp_rules[0].rule.category.name === category.KPI) {
                 reduce = evaluate.kpi_reduce
+                reduce_hod = evaluate.kpi_reduce_hod
             }
             if (temp_rules[0].rule.category.name === category.KEYTASK) {
                 reduce = evaluate.key_task_reduce
+                reduce_hod = evaluate.key_task_reduce_hod
             }
             if (temp_rules[0].rule.category.name === category.OMG) {
                 reduce = evaluate.omg_reduce
+                reduce_hod = evaluate.omg_reduce_hod
             }
         }
 
         let sum_weight = temp_rules.reduce((total, cur) => total += cur.weight, 0.00)
-        let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00) - (reduce / 3)
+        let sum_cal = temp_rules.reduce((total, cur) => total += cur.cal, 0.00) - (reduce + (reduce_hod / 3))
         table.tFoot.lastElementChild.cells[5].textContent = `${sum_weight.toFixed(2)}%`
         table.tFoot.lastElementChild.cells[11].textContent = `${sum_cal.toFixed(2)}%`
         summary.push({

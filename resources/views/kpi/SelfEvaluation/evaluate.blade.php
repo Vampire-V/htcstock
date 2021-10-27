@@ -122,15 +122,22 @@
                         <div role="group" class="btn-group-sm btn-group">
                             <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
                                 id="weight-{{$group->name}}" name="weight_{{str_replace("-","_",$group->name)}}"
-                                readonly> %
+                            readonly> %
                         </div>
                     </div>
                     <div class="btn-actions-pane-right">
-                        <label for="Reduce" class="mb-2 mr-2">(ตัดคะแนน) :</label>
+                        <label for="Reduce" class="mb-2 mr-2">(ตัดคะแนน HOD):</label>
+                        <div role="group" class="btn-group-sm btn-group">
+                            <input class="mb-1 mr-1 form-control-sm form-control" type="number" min="0" step="0.01"
+                                value="0" id="{{str_replace("-","_",$group->name)}}_reduce_hod"
+                            name="{{str_replace("-","_",$group->name)}}_reduce_hod" disable
+                             onchange="set_reduce(this)">
+                        </div>
+                        <label for="Reduce" class="mb-2 mr-2">(ตัดคะแนนส่งช้า) :</label>
                         <div role="group" class="btn-group-sm btn-group">
                             <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
                                 value="0" id="{{str_replace("-","_",$group->name)}}_reduce"
-                                name="{{str_replace("-","_",$group->name)}}_reduce" disable> %
+                            name="{{str_replace("-","_",$group->name)}}_reduce" disable> %
                         </div>
                     </div>
                 </div>
@@ -266,7 +273,8 @@
                             <div class="position-relative form-group"><label for="rule_name" class="">Rule Name
                                     :</label>
                                 <select id="rule_name" class="form-control form-control-sm" name="rule_name">
-                                </select></div>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -302,7 +310,8 @@
                             <div class="position-relative form-group"><label for="rule-name" class="">Rule Name
                                     :</label>
                                 <select id="rule_name" class="form-control form-control-sm" name="rule_name">
-                                </select></div>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -334,7 +343,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                {{-- <button type="button" class="btn btn-primary" >Add</button> --}}
+                {{-- <button type="button" class="btn btn-primary">Add</button> --}}
             </div>
         </div>
     </div>
@@ -385,7 +394,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                {{-- <button type="button" class="btn btn-primary" >Add</button> --}}
+                {{-- <button type="button" class="btn btn-primary">Add</button> --}}
             </div>
         </div>
     </div>

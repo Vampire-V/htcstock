@@ -16,17 +16,17 @@
             <div class="page-title-icon">
                 <i class="pe-7s-monitor icon-gradient bg-mean-fruit"> </i>
             </div>
-            <div>Self Evaluate 
+            <div>Self Evaluate
                 <div class="page-title-subheading">This is an example self evaluate created using
                     build-in elements and components.
                 </div>
             </div>
         </div>
         <div class="page-title-actions">
-            <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="top"
+            {{-- <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="top"
                 class="btn-shadow mr-3 btn btn-dark">
                 <i class="fa fa-star"></i>
-            </button>
+            </button> --}}
         </div>
     </div>
 </div>

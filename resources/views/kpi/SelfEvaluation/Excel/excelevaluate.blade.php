@@ -53,16 +53,20 @@ $cal_result = [];
             <td></td>
             @php
             $reduce = 0;
+            $reduce_hod = 0;
             if ($rules->first()->rule->category->name === 'kpi') {
             $reduce = $evaluate->kpi_reduce;
+            $reduce_hod = $evaluate->kpi_reduce_hod;
             }
             if ($rules->first()->rule->category->name === 'key-task') {
             $reduce = $evaluate->key_task_reduce;
+            $reduce_hod = $evaluate->key_task_reduce_hod;
             }
             if ($rules->first()->rule->category->name === 'omg') {
             $reduce = $evaluate->omg_reduce;
+            $reduce_hod = $evaluate->omg_reduce_hod;
             }
-            $total = round($rules->sum('cal'),2) - $reduce;
+            $total = round($rules->sum('cal'),2) - ($reduce + $reduce_hod);
             @endphp
             <td>{{$total}} %</td>
         </tr>

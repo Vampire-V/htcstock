@@ -18,6 +18,8 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::get('dashboard/you-self/{year}/report', 'HomeController@report_your_self');
     Route::get('dashboard/rule-of-year/{year}/report', 'HomeController@report_rule_of_year');
     Route::get('dashboard/staff-evaluate-of-year/{year}/report', 'HomeController@report_staff_evaluate_year');
+    Route::put('evaluate/update/target-actual', 'HomeController@changetargetactual');
+    // changetargetactual
 
 
     Route::resource('self-evaluation', 'SelfEvaluation\SelfEvaluationController', ['only' => ['index', 'create', 'edit', 'update', 'store', 'destroy']]);

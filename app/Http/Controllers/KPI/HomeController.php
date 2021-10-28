@@ -2,38 +2,45 @@
 
 namespace App\Http\Controllers\KPI;
 
-use App\Http\Controllers\Controller, 
-    App\Enum\KPIEnum, 
-    App\Enum\UserEnum, 
-    App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait, 
-    App\Services\IT\Interfaces\UserServiceInterface, 
-    App\Services\IT\Service\DepartmentService, 
-    App\Services\KPI\Interfaces\EvaluateServiceInterface, 
-    App\Services\KPI\Interfaces\RuleServiceInterface, 
-    App\Services\KPI\Interfaces\TargetPeriodServiceInterface, 
-    Illuminate\Http\Request, 
-    Illuminate\Support\Facades\Gate;
+use App\Http\Controllers\Controller,
+    App\Enum\KPIEnum,
+    App\Enum\UserEnum,
+    App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait,
+    App\Services\IT\Interfaces\UserServiceInterface,
+    App\Services\IT\Service\DepartmentService,
+    App\Services\KPI\Interfaces\EvaluateServiceInterface,
+    App\Services\KPI\Interfaces\RuleServiceInterface,
+    App\Services\KPI\Interfaces\TargetPeriodServiceInterface,
+    Illuminate\Http\Request,
+    Illuminate\Support\Facades\Gate,
+    App\Services\KPI\Service\EvaluateDetailService,
+    Illuminate\Support\Facades\DB,
+    Symfony\Component\HttpFoundation\Response,
+    Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
     use CalculatorEvaluateTrait;
-    protected $targetPeriodService, 
-        $userService, 
-        $ruleService, 
-        $evaluateService, 
+    protected $targetPeriodService,
+        $userService,
+        $ruleService,
+        $evaluateService,
+        $evaluateDetailService,
         $departmentService;
     public function __construct(
         TargetPeriodServiceInterface $targetPeriodServiceInterface,
         UserServiceInterface $userServiceInterface,
         RuleServiceInterface $ruleServiceInterface,
         EvaluateServiceInterface $evaluateServiceInterface,
-        DepartmentService $departmentService
+        DepartmentService $departmentService,
+        EvaluateDetailService $evaluateDetailService
     ) {
         $this->targetPeriodService = $targetPeriodServiceInterface;
         $this->userService = $userServiceInterface;
         $this->ruleService = $ruleServiceInterface;
         $this->evaluateService = $evaluateServiceInterface;
         $this->departmentService = $departmentService;
+        $this->evaluateDetailService = $evaluateDetailService;
     }
     /**
      * Display a listing of the resource.
@@ -55,16 +62,16 @@ class HomeController extends Controller
             $result = $this->targetPeriodService->selfApprovedEvaluationOfyear($year);
             // dd($result);
         } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return $this->successResponse($result, 'get report your self', 200);
+        return $this->successResponse($result, 'get report your self', Response::HTTP_OK);
     }
 
     // Controller ที่ใช้ url test http://127.0.0.1:8000/kpi/dashboard/rule-of-year/2021/report
     public function report_rule_of_year(Request $request, $year)
     {
         try {
-            $rules = $this->ruleService->rulesInEvaluationReport($year,$request);
+            $rules = $this->ruleService->rulesInEvaluationReport($year, $request);
             // return $this->successResponse($rules,200);
             // dd($rules);
             $periods = $this->targetPeriodService->query()->where('year', $year)->get();
@@ -83,9 +90,9 @@ class HomeController extends Controller
                 $rule->total = $total;
             }
         } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return $this->successResponse(['rules' => $rules, 'periods' => $periods], 'get report rules of year', 200);
+        return $this->successResponse(['rules' => $rules, 'periods' => $periods], 'get report rules of year', Response::HTTP_OK);
     }
 
     // Controller ที่ใช้ url test http://127.0.0.1:8000/kpi/dashboard/rule-of-year/2021/report
@@ -99,9 +106,9 @@ class HomeController extends Controller
                 $this->calculation_summary($user->evaluates);
             }
         } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return $this->successResponse(['users' => $users, 'periods' => $periods], 'get report staff evaluate of year', 200);
+        return $this->successResponse(['users' => $users, 'periods' => $periods], 'get report staff evaluate of year', Response::HTTP_OK);
     }
     /**
      * Show the form for creating a new resource.
@@ -176,14 +183,14 @@ class HomeController extends Controller
             $this->calculation_summary($evaluations, $request);
             $result = $evaluations; //EvaluateResource::collection($evaluations);
         } catch (\Exception $e) {
-            return $this->errorResponse($e, 500);
+            return $this->errorResponse($e, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return $this->successResponse($result, 200);
+        return $this->successResponse($result, Response::HTTP_OK);
     }
 
     public function weigthconfig(Request $request)
     {
-        
+
         try {
             if ($request->is_quarter === "true" && $request->degree === KPIEnum::one) {
                 $config = config('kpi.weight')['quarter'];
@@ -191,8 +198,32 @@ class HomeController extends Controller
                 $config = config('kpi.weight')['month'];
             }
         } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return $this->successResponse($config, 'Get weigth config', 200);
+        return $this->successResponse($config, 'Get weigth config', Response::HTTP_OK);
+    }
+
+    public function changetargetactual(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'target' => 'required|numeric',
+            'actual' => 'required|numeric',
+            'evaluates' => 'required|array',
+            'rule' => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse($validator->errors(),Response::HTTP_BAD_REQUEST);
+        }
+        DB::beginTransaction();
+        try {
+            $rule = $this->ruleService->find($request->rule);
+            $this->evaluateDetailService->updateTargetActual($request->target,$request->actual,$rule,$request->evaluates);
+            DB::commit();
+            return $this->successResponse(null, 'Update target actual success...', Response::HTTP_OK);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

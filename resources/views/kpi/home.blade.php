@@ -288,6 +288,11 @@
             </div>
             <div class="modal-body">
                 <div id="reload" class="reload"></div>
+                <label for="Target">Target</label>
+                <input type="text" name="target">
+                <label for="Actual">Actual</label>
+                <input type="text" name="actual">
+                <button onclick="changeValues(this)">Change values</button>
                 <ul>
                 </ul>
             </div>

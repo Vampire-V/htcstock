@@ -3,6 +3,7 @@
 namespace App\Services\KPI\Interfaces;
 
 use App\Models\KPI\EvaluateDetail;
+use App\Models\KPI\Rule;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -21,4 +22,6 @@ interface EvaluateDetailServiceInterface
 
     public function setActualFilter(Request $request);
     public function findLastRule($rule_id);
+
+    public function updateTargetActual(float $target, float $actual, Rule $rule, array $evaluate);
 }

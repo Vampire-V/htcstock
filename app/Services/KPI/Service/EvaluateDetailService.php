@@ -5,6 +5,7 @@ namespace App\Services\KPI\Service;
 use App\Enum\KPIEnum;
 use App\Enum\UserEnum;
 use App\Models\KPI\EvaluateDetail;
+use App\Models\KPI\Rule;
 use App\Services\BaseService;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -64,5 +65,15 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    public function updateTargetActual(float $target, float $actual, Rule $rule, array $evaluate)
+    {
+        try {
+            return EvaluateDetail::where('rule_id',$rule->id)->whereIn('evaluate_id',$evaluate)->update(['target' => $target,'actual' => $actual]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
     }
 }

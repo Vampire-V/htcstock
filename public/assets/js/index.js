@@ -261,12 +261,16 @@ function toastClear() {
     let success = document.querySelectorAll(".toast-success");
     setTimeout(() => {
         if (error.length >= 1) {
-            document.querySelector(".toast-error").remove();
-            toastClear();
+            if (document.querySelector(".toast-error")) {
+                document.querySelector(".toast-error").remove()
+                toastClear();
+            }
         }
         if (success.length >= 1) {
-            document.querySelector(".toast-success").remove();
-            toastClear();
+            if (document.querySelector(".toast-success")) {
+                document.querySelector(".toast-success").remove();
+                toastClear();
+            }
         }
     }, 5000);
 }

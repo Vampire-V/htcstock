@@ -100,7 +100,7 @@
                                     @canany(['for-superadmin-admin','admin-kpi'])
                                     <a href="{{ route('admin.users.index') }}" tabindex="0"
                                         class="dropdown-item">{{ __('navigation.manage users') }}</a>
-                                    
+
                                     @endcanany
 
                                     @canany(['for-superadmin-admin'])
@@ -144,8 +144,8 @@
         </div>
     </div>
 
-    <div id="toast-container" class="toast-top-right">
-    </div>
+    {{-- <div id="toast-container" class="toast-top-right">
+    </div> --}}
 
     {{-- <div id="toast-container" class="toast-top-right">
         <div class="toast toast-error" aria-live="assertive" style="opacity: 0.3141;"><button type="button"

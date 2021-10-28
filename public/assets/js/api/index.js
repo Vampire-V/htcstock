@@ -241,9 +241,11 @@ const evaluate_excel = (filter) => axios.get('/kpi/evaluate-report', filter)
 const getReportStaffEvaluate = (year) => axios.get(`/kpi/dashboard/staff-evaluate-of-year/${year}/report`)
 
 const getReportRuleOfYear = (year,filter) => axios.get(`/kpi/dashboard/rule-of-year/${year}/report`,filter)
-// 
 
-// for eddy page 
+const putChangeTargetActual = (form) => axios.put('/kpi/evaluate/update/target-actual',form)
+//
+
+// for eddy page
 const getDeadLine = () => axios.get(`/kpi/for-eddy/config/deadline/dropdown`)
 
 const getUserSettingAction = (id) => axios.get(`/kpi/for-eddy/user/actions/${id}`)

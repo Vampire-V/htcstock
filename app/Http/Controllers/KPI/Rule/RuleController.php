@@ -41,7 +41,7 @@ class RuleController extends Controller
 {
 
     protected $ruleCategoryService, $targetUnitService, $ruleService, $ruleTypeService, $userService,
-        $departmentService,$rulelogService, $excel_errors = [], $rule_attrs = [];
+        $departmentService, $rulelogService, $excel_errors = [], $rule_attrs = [];
     public function __construct(
         RuleCategoryServiceInterface $ruleCategoryServiceInterface,
         TargetUnitServiceInterface $targetUnitServiceInterface,
@@ -108,7 +108,7 @@ class RuleController extends Controller
     public function store(StoreRulePost $request)
     {
         if (!Gate::allows(UserEnum::OPERATIONKPI)) {
-            return \redirect()->back()->with('error', "Error : no authorize.." );
+            return \redirect()->back()->with('error', "Error : no authorize..");
         }
 
         DB::beginTransaction();
@@ -153,7 +153,7 @@ class RuleController extends Controller
     public function edit($id)
     {
         if (!Gate::allows(UserEnum::OPERATIONKPI)) {
-            return \redirect()->back()->with('error', "Error : no authorize.." );
+            return \redirect()->back()->with('error', "Error : no authorize..");
         }
 
         $calcuTypes = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
@@ -182,7 +182,7 @@ class RuleController extends Controller
     public function update(StoreRulePost $request, $id)
     {
         if (!Gate::allows(UserEnum::OPERATIONKPI)) {
-            return \redirect()->back()->with('error', "Error : no authorize.." );
+            return \redirect()->back()->with('error', "Error : no authorize..");
         }
 
         DB::beginTransaction();
@@ -208,7 +208,7 @@ class RuleController extends Controller
     public function destroy($id)
     {
         if (!Gate::allows(UserEnum::OPERATIONKPI)) {
-            return \redirect()->back()->with('error', "Error : no authorize.." );
+            return \redirect()->back()->with('error', "Error : no authorize..");
         }
 
         DB::beginTransaction();
@@ -375,10 +375,24 @@ class RuleController extends Controller
         return $this->successResponse(['errors' => $this->excel_errors, 'status' => $status], $message, 200);
     }
 
+    private function value_in_array($array, $find)
+    {
+        $exists = FALSE;
+        if (!is_array($array)) {
+            return;
+        }
+        foreach ($array as $key => $value) {
+            if ($find === $value) {
+                $exists = TRUE;
+            }
+        }
+        return $exists;
+    }
+
     public function import_rule(Request $request)
     {
         if (!Gate::allows(UserEnum::OPERATIONKPI)) {
-            return \redirect()->back()->with('error', "Error : no authorize.." );
+            return \redirect()->back()->with('error', "Error : no authorize..");
         }
 
         $temporaryFile = TemporaryFile::where('folder', $request->file)->first();
@@ -391,8 +405,8 @@ class RuleController extends Controller
         }
         $file = Storage::path('kpi/' . $temporaryFile->folder . '/' . $temporaryFile->filename);
 
-        $caltype = \collect([KPIEnum::positive,KPIEnum::negative,KPIEnum::zero_oriented_kpi]);
-        $quarter_cal = \collect([KPIEnum::sum,KPIEnum::average,KPIEnum::last_month]);
+        $caltype = \collect([KPIEnum::positive, KPIEnum::negative, KPIEnum::zero_oriented_kpi]);
+        $quarter_cal = \collect([KPIEnum::sum, KPIEnum::average, KPIEnum::last_month]);
         DB::beginTransaction();
         try {
             $import = Excel::toCollection(new RulesImport(), $file);
@@ -409,8 +423,10 @@ class RuleController extends Controller
                         $quarter = $quarter_cal->contains($row[5]) ? $row[5] : null;
                         $department = Department::where('name', $row[6])->first();
                         $parent = Rule::where('name', $row[9])->first();
-                        $arr = [$rule,$category,$type,$employee,$calcu,$quarter,$department,$row[7],$row[8]];
-                        if (!in_array(null,$arr)) {
+
+                        $arr = [$rule, $category->name, $type->name, $employee->username, $calcu, $quarter, $department->name, $row[7], $row[8]];
+
+                        if (!$this->value_in_array($arr,null)) {
                             $rules[] = [
                                 'name' => trim($row[0]),
                                 'category_id' => $category->id,
@@ -427,9 +443,9 @@ class RuleController extends Controller
                                 'created_by' => \auth()->id(),
                                 'created_at' => \now()
                             ];
-                        }else{
+                        } else {
                             $head = $import->first()[2][array_search(null, $arr)];
-                            $failure = ['row' => $key+1,'column' => $head, 'message' => "'".$row[array_search(null, $arr)]."'" . " not available"]; //new Failure($key+1,$head,["not available"]);
+                            $failure = ['row' => $key + 1, 'column' => $head, 'message' => "'" . $row[array_search(null, $arr)] . "'" . " not available"]; //new Failure($key+1,$head,["not available"]);
                             $errors[] = $failure;
                         }
                     }
@@ -437,7 +453,7 @@ class RuleController extends Controller
             }
             Rule::insert($rules);
             DB::commit();
-            return $this->successResponse($errors,"Import rule success...", Response::HTTP_CREATED);
+            return $this->successResponse($errors, "Import rule success...", Response::HTTP_CREATED);
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -448,7 +464,7 @@ class RuleController extends Controller
     public function rulesdowload()
     {
         if (!Gate::allows(UserEnum::OPERATIONKPI)) {
-            return \redirect()->back()->with('error', "Error : no authorize.." );
+            return \redirect()->back()->with('error', "Error : no authorize..");
         }
         DB::beginTransaction();
         try {
@@ -464,7 +480,7 @@ class RuleController extends Controller
     public function rulesnotin(Request $request)
     {
         try {
-            $rules = Rule::whereNotIn('id', [...$request->rules])->where('category_id', $request->group)->where('remove','<>','Y')->get();
+            $rules = Rule::whereNotIn('id', [...$request->rules])->where('category_id', $request->group)->where('remove', '<>', 'Y')->get();
             return $this->successResponse($rules, "Success rules...", 200);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
@@ -490,7 +506,7 @@ class RuleController extends Controller
     public function template_rule(Request $request)
     {
         if (!Gate::allows(UserEnum::OPERATIONKPI)) {
-            return \redirect()->back()->with('error', "Error : no authorize.." );
+            return \redirect()->back()->with('error', "Error : no authorize..");
         }
 
         $employee = $this->userService->employee_excel();

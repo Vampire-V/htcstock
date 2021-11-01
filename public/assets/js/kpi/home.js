@@ -1047,6 +1047,7 @@ const changeValues = async (e) => {
             }
         } finally {
             e.parentElement.offsetParent.getElementsByClassName('close')[0].click()
+            toastClear()
         }
     }
 };

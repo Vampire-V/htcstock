@@ -103,7 +103,7 @@
 
                                     @endcanany
 
-                                    @canany(['for-superadmin-admin'])
+                                    @canany(['for-superadmin-admin','admin-kpi'])
                                     <a href="{{ route('admin.users.updateusers') }}" tabindex="0"
                                         class="dropdown-item">{{ __('navigation.update user') }}</a>
                                     <a href="{{ route('admin.vendor.updatevendor') }}" tabindex="0"

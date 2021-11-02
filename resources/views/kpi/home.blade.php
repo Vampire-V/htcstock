@@ -11,11 +11,16 @@
         font-weight: bold;
     }
 
-    table thead tr td {
-        position: -webkit-sticky;
-        /* Safari */
+    thead tr th {
         position: sticky;
+    }
+
+    thead tr:nth-of-type(1) th {
         top: 0;
+    }
+
+    thead tr:nth-of-type(2) th {
+        top: 20px;
     }
 </style>
 @endsection
@@ -72,9 +77,9 @@
                                         onchange="search()">
                                         @foreach (range(date('Y')-5,date('Y')+5) as $year)
                                         <option value="{{$year}}" @if (intVal($selectedYear)===$year) selected @endif>
-                                {{$year}}</option>
-                                @endforeach
-                                </select>
+                                            {{$year}}</option>
+                                        @endforeach
+                                    </select>
                                 </form> --}}
                             </li>
                         </ul>
@@ -87,7 +92,7 @@
 
 <div class="tab-content">
     <div class="tab-pane " id="tab-operation" role="tabpanel">
-        {{--  --}}
+        {{-- --}}
         <div class="row">
             <div class="col-xl-12">
                 <div class="mb-3 card">
@@ -136,7 +141,7 @@
                                         <div class="col-md-3 mb-3">
                                             <label for="Division">Division</label>
                                             <select name="division_id" id="division_id"
-                                                class="form-control-sm form-control" onchange="search_score()" ></select>
+                                                class="form-control-sm form-control" onchange="search_score()"></select>
                                         </div>
                                     </div>
                                 </form>
@@ -268,7 +273,7 @@
                 </div>
             </div>
         </div>
-        {{--  --}}
+        {{-- --}}
     </div>
 </div>
 

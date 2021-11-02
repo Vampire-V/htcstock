@@ -634,31 +634,51 @@ const rules_data_to_table = async (data) => {
     removeAllChildNodes(body);
     try {
         let Hfirst = head.insertRow(),
-            Hsecond = head.insertRow(),
-            h_category = Hfirst.insertCell(),
-            full_name = Hfirst.insertCell();
+            Hsecond = head.insertRow();
+        // h_category = Hfirst.insertCell(),
+        // full_name = Hfirst.insertCell();
 
-        h_category.setAttribute("rowspan", 2);
-        h_category.style = `background-color: black; color:#fff;`;
-        h_category.textContent = `Category`;
+        let cell_cat = document.createElement("th");
+        cell_cat.setAttribute("rowspan", 2);
+        cell_cat.style = `background-color: black; color:#fff;`;
 
-        full_name.setAttribute("rowspan", 2);
-        full_name.style = `background-color: black; color:#fff;`;
-        full_name.textContent = `Rule Name`;
+        // h_category.setAttribute("rowspan", 2);
+        // h_category.style = `background-color: black; color:#fff;`;
+        // h_category.textContent = `Category`;
+
+        let cell_rule = document.createElement("th");
+        cell_rule.setAttribute("rowspan", 2);
+        cell_rule.style = `background-color: black; color:#fff;`;
+        cell_rule.appendChild(document.createTextNode("Rule Name"));
+        cell_cat.appendChild(document.createTextNode("Category"));
+        Hfirst.appendChild(cell_cat);
+        Hfirst.appendChild(cell_rule);
+
+        // full_name.setAttribute("rowspan", 2);
+        // full_name.style = `background-color: black; color:#fff;`;
+        // full_name.textContent = `Rule Name`;
         // set Header
         for (let i = 0; i < data.periods.length; i++) {
             const period = data.periods[i];
-            let month = Hfirst.insertCell();
-            month.style = `background-color: black; color:#fff;`;
-            month.setAttribute("colspan", 2);
-            month.textContent = period.name;
+            // let month = Hfirst.insertCell();
+            // month.style = `background-color: black; color:#fff;`;
+            // month.setAttribute("colspan", 2);
+            // month.textContent = period.name;
 
-            let target = Hsecond.insertCell(),
-                actual = Hsecond.insertCell();
+            let month = document.createElement("th");
+            month.setAttribute("colspan", 2);
+            month.style = `background-color: black; color:#fff;`;
+            month.appendChild(document.createTextNode(period.name));
+            Hfirst.appendChild(month)
+
+            let target = document.createElement("th"); // Hsecond.insertCell(),
+                actual = document.createElement("th"); // Hsecond.insertCell();
             target.style = `background-color: black; color:#fff;`;
             actual.style = `background-color: black; color:#fff;`;
-            target.textContent = `Target`;
-            actual.textContent = `Actual`;
+            target.appendChild(document.createTextNode("Target"))
+            actual.appendChild(document.createTextNode("Actual"))
+            Hsecond.appendChild(target)
+            Hsecond.appendChild(actual)
         }
         // set body
         for (let i = 0; i < data.rules.length; i++) {
@@ -802,23 +822,31 @@ const staff_data_to_table = (data) => {
     removeAllChildNodes(body);
 
     let Hfirst = head.insertRow(),
-        degree = Hfirst.insertCell(),
-        department = Hfirst.insertCell(),
-        full_name = Hfirst.insertCell();
+        degree = document.createElement("th") // Hfirst.insertCell(),
+        department = document.createElement("th") // Hfirst.insertCell(),
+        full_name = document.createElement("th"); // Hfirst.insertCell(),
+        // let cell_rule = document.createElement("th");
+        // cell_rule.setAttribute("rowspan", 2);
+        // cell_rule.style = `background-color: black; color:#fff;`;
+        // cell_rule.appendChild(document.createTextNode("Rule Name"));
+
     degree.style = `background-color: black; color:#fff;`;
-    degree.textContent = `EMC Group`;
+    degree.appendChild(document.createTextNode("EMC Group"));
+    Hfirst.appendChild(degree);
 
     department.style = `background-color: black; color:#fff;`;
-    department.textContent = `Department`;
+    department.appendChild(document.createTextNode("Department"));
+    Hfirst.appendChild(department);
 
     full_name.style = `background-color: black; color:#fff;`;
-    full_name.textContent = `Name`;
+    full_name.appendChild(document.createTextNode("Name"));
+    Hfirst.appendChild(full_name);
     for (let i = 0; i < data.periods.length; i++) {
         const period = data.periods[i];
-        let month = Hfirst.insertCell();
+        let month = document.createElement("th") // Hfirst.insertCell(),
         month.style = `background-color: black; color:#fff;`;
-        // month.setAttribute('colspan', 2)
-        month.textContent = period.name;
+        month.appendChild(document.createTextNode(period.name));
+        Hfirst.appendChild(month);
     }
 
     for (let i = 0; i < data.users.length; i++) {
@@ -1030,24 +1058,31 @@ const changeValues = async (e) => {
         try {
             let result = await putChangeTargetActual(form);
             if (result.status === 200) {
-                toast(`${result.data.message}`,result.data.status)
+                toast(`${result.data.message}`, result.data.status);
             }
         } catch (error) {
             if (error.response.status === 400) {
                 if (typeof error.response.data.message === `object`) {
                     for (const key in error.response.data.message) {
-                        if (Object.hasOwnProperty.call(error.response.data.message, key)) {
+                        if (
+                            Object.hasOwnProperty.call(
+                                error.response.data.message,
+                                key
+                            )
+                        ) {
                             const element = error.response.data.message[key];
                             for (const iterator of element) {
-                                toast(iterator,"error")
+                                toast(iterator, "error");
                             }
                         }
                     }
                 }
             }
         } finally {
-            e.parentElement.offsetParent.getElementsByClassName('close')[0].click()
-            toastClear()
+            e.parentElement.offsetParent
+                .getElementsByClassName("close")[0]
+                .click();
+            toastClear();
         }
     }
 };

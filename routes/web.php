@@ -3,7 +3,9 @@
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,13 +19,24 @@ use Illuminate\Support\Facades\Route;
 */
 
 Auth::routes(['verify' => true, 'register' => false]);
+Route::get('test', function () {
+    $files = Storage::files('Laravel');
+    try {
+        if (count($files) > 0) {
+            $localFile = File::get(Storage::path($files[0]));
+            $result = Storage::disk('ftp')->put(substr($files[0],8), $localFile);
+        }
+    } catch (\Throwable $th) {
+        throw $th;
+    }
+});
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('optimize-clear', function () {
         Artisan::call('optimize:clear');
         return redirect()->back();
     })->name('optimize-clear');
 
-    Route::get('language/{locale}', 'LocalizationController@language')->name('switch.language')->where('locale','[a-zA-Z]{2}');
+    Route::get('language/{locale}', 'LocalizationController@language')->name('switch.language')->where('locale', '[a-zA-Z]{2}');
     Route::get('/', 'HomeController@index')->name('welcome');
     Route::get('/systemset/{name}', 'HomeController@systemset')->name('system-set');
 
@@ -41,14 +54,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 });
-Route::get('testdb',function(){
+Route::get('testdb', function () {
     // DB::connection('sqlsrv')->enableQueryLog(); // Enable query log
     // $dd = DB::connection('sqlsrv')->select('exec spCheckOT ?,?,?,?,?', ["2021", "20210813", "%", "%", "%"]);
     // dd($dd,DB::connection('sqlsrv')->getQueryLog());
 });
 
 // Directory Admin   middleware('can:for-superadmin-admin') เรียกมาจาก AuthServiceProvider for-superadmin-admin 'can:for-superadmin-admin',
-Route::get('users/{id}/link/{admin}','Admin\UsersController@authbyadmin')->name('auth.employee');
+Route::get('users/{id}/link/{admin}', 'Admin\UsersController@authbyadmin')->name('auth.employee');
 Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('updateusers', 'UsersController@updateusers')->name('users.updateusers');
     Route::get('updatevendors', 'VendorController@updatevendor')->name('vendor.updatevendor');

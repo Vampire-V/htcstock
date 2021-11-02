@@ -24,8 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('backup:clean')->sendOutputTo(storage_path("logs/backup_clean_".now().".txt"));
-        $schedule->command('backup:run')->sendOutputTo(storage_path("logs/backup_run_".now().".txt"));
+        $schedule->command('backup:clean')->sendOutputTo(storage_path("logs/backup_clean.txt"));
+        $schedule->command('backup:run')->sendOutputTo(storage_path("logs/backup_run.txt"));
     }
 
     /**

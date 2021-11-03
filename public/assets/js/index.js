@@ -105,7 +105,7 @@ var uploadFileContract = async (e) => {
     axios
         .post(uri, data, configUploadProgress)
         .then((res) => {
-            console.log(res);
+            // console.log(res);
             e.offsetParent.getElementsByTagName(
                 "a"
             )[0].href = `${window.location.href
@@ -199,7 +199,7 @@ var uploadFileEquipment = async (e) => {
             )[0].textContent = `Success !`;
         })
         .catch((err) => {
-            console.log(err);
+            console.error(err);
             e.offsetParent
                 .getElementsByClassName("progress-bar")[0]
                 .classList.remove("bg-success");
@@ -289,7 +289,7 @@ var setVisible = (visible) => {
             window.clearInterval(intervalId);
         }
     }, 0);
-    console.log(document.querySelector("#loading"))
+    // console.log(document.querySelector("#loading"))
     document.querySelector("#loading").style.display = visible ? "block" : "none";
 };
 /**

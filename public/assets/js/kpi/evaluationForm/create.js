@@ -174,11 +174,12 @@ const submitToUser = () => {
     if (evaluateForm.template) {
         setVisible(true)
         evaluateForm.next = true
+        pageDisable()
         postEvaluateForm(staff.id, period.id, evaluateForm).then(res => {
             if (res.status === 201) {
                 toast(res.data.message, res.data.status)
                 setTimeout(function () {
-                    window.location.replace(`${origin}${window.location.pathname.replace("create",res.data.data.id)}/edit`)
+                    window.location.replace(`${origin}${window.location.pathname.replace("edit/period/1/evaluate/create",'edit')}`)
                 }, 3000)
             }
         }).catch(error => {
@@ -195,8 +196,8 @@ const submit = () => {
     validityForm()
     if (evaluateForm.template) {
         setVisible(true)
+        pageDisable()
         postEvaluateForm(staff.id, period.id, evaluateForm).then(async res => {
-            console.log(res);
             if (res.status === 201) {
                 toast(res.data.message, res.data.status)
                 setTimeout(function () {

@@ -22,11 +22,22 @@ class Accessories extends Model
      * @var array
      */
     protected $fillable = [
-        'access_name', 'unit', 'image', 'created_at'
+        'access_name', 'unit', 'image', 'created_at', 'remove'
     ];
-    
+    protected $casts = ['remove' => 'boolean'];
+
     public function scopeFilter(Builder $builder, $request)
     {
         return (new AccessoriesManagementFilter($request))->filter($builder);
+    }
+
+    public function scopeRemove()
+    {
+        return $this->where('remove',true);
+    }
+
+    public function scopeNoRemove()
+    {
+        return $this->where('remove',false);
     }
 }

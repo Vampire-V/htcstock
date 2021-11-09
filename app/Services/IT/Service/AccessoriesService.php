@@ -32,7 +32,7 @@ class AccessoriesService extends BaseService implements AccessoriesServiceInterf
 
     public function filter(Request $request)
     {
-        return Accessories::filter($request)->orderBy('created_at', 'desc')->paginate(10);
+        return Accessories::filter($request)->noRemove()->orderBy('created_at', 'desc')->paginate(10);
     }
 
     public function sumAccessories()
@@ -51,7 +51,19 @@ class AccessoriesService extends BaseService implements AccessoriesServiceInterf
     public function dropdown(): Collection
     {
         try {
-            return Accessories::all();
+            return Accessories::noRemove()->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function remove($id)
+    {
+        try {
+            $item = Accessories::where('access_id',$id)->first();
+            $item->remove = true;
+            $item->save();
+            return true;
         } catch (\Throwable $th) {
             throw $th;
         }

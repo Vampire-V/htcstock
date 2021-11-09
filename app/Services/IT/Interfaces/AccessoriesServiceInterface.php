@@ -16,6 +16,7 @@ interface AccessoriesServiceInterface
 
     public function update(array $attributes, int $id): bool;
     public function destroy(int $id);
+    public function remove($id);
 
     public function sumAccessories();
     public function dropdown(): Collection;

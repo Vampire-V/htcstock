@@ -8,6 +8,7 @@ use App\Models\IT\Accessories;
 use App\Services\IT\Interfaces\AccessoriesServiceInterface;
 use App\Services\IT\Interfaces\TransactionsServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
@@ -133,13 +134,13 @@ class AccessoriesController extends Controller
     {
         try {
             $accessorie = Accessories::find($id);
-            
+
             $keys = array_keys($request->all());
             $keys[array_search('file', $keys)] = 'image';
             $newArr = array_combine($keys, $request->all());
             unset($newArr['_token']);
             unset($newArr['_method']);
-            
+
             $isUpdate = $this->accessoriesService->update($newArr, $id);
             if (!$isUpdate) {
                 $request->session()->flash('error', ' has been update fail');
@@ -163,14 +164,15 @@ class AccessoriesController extends Controller
      */
     public function destroy($id)
     {
+        DB::beginTransaction();
         try {
             $accessorie = $this->accessoriesService->find($id);
-            if (!$this->accessorieInTransaction($accessorie)) {
-                Session::flash('error',  ' has been delete fail');
-                return \back();
-            }
+            // if (!$this->accessorieInTransaction($accessorie)) {
+            //     Session::flash('error',  ' has been delete fail');
+            //     return \back();
+            // }
             // dd($accessorie->image,Storage::disk('public')->exists($accessorie->image));
-            $delete = $this->accessoriesService->destroy($id);
+            $delete = $this->accessoriesService->remove($accessorie->access_id);
             if (!$delete) {
                 Session::flash('error',  ' has been delete fail');
                 return \back();
@@ -179,8 +181,10 @@ class AccessoriesController extends Controller
                 Storage::disk('public')->delete($accessorie->image);
             }
             Session::flash('success',  ' has been delete');
+            DB::commit();
             return \back();
         } catch (\Exception $e) {
+            DB::rollBack();
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
     }

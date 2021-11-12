@@ -29,7 +29,7 @@
                     render_html()
                     if (current.user_approve === auth.id && evaluateForm.status === status.ONPROCESS) {
                         pageEnable()
-                        console.log('enable')
+                        // console.log('enable')
                     }else{
                         if (can_input) {
                             pageEnable()

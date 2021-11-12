@@ -19,17 +19,7 @@ use Illuminate\Support\Facades\Storage;
 */
 
 Auth::routes(['verify' => true, 'register' => false]);
-Route::get('test', function () {
-    $files = Storage::files('Laravel');
-    try {
-        if (count($files) > 0) {
-            $localFile = File::get(Storage::path($files[0]));
-            $result = Storage::disk('ftp')->put(substr($files[0],8), $localFile);
-        }
-    } catch (\Throwable $th) {
-        throw $th;
-    }
-});
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('optimize-clear', function () {
         Artisan::call('optimize:clear');

@@ -158,7 +158,6 @@ class EvaluateReviewController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft, KPIEnum::on_process]);
         DB::beginTransaction();
         try {
@@ -189,7 +188,12 @@ class EvaluateReviewController extends Controller
                     Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
                     return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", Response::HTTP_INTERNAL_SERVER_ERROR);
                 }
-
+                $evaluate->kpi_reduce = $request->kpi_reduce;
+                $evaluate->key_task_reduce = $request->key_task_reduce;
+                $evaluate->omg_reduce = $request->omg_reduce;
+                $evaluate->kpi_reduce_hod = $request->kpi_reduce_hod;
+                $evaluate->key_task_reduce_hod = $request->key_task_reduce_hod;
+                $evaluate->omg_reduce_hod = $request->omg_reduce_hod;
                 if ($this->userApproveService->isLastLevel($evaluate)) {
                     // Level last
                     $last_level = $this->userApproveService->findLastLevel($evaluate);

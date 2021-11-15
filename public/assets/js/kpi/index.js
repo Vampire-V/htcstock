@@ -647,7 +647,7 @@ const score_findAchValue = (obj) => {
                 // ach = obj.actual > obj.target ?  parseFloat((2 - (obj.actual / obj.target)) * 100.00) : obj.max #version 1
             }
             if (obj.rule.calculate_type === calculate.ZERO) {
-                ach = obj.actual <= obj.target ? 100.00 : 0.00
+                ach = obj.actual <= obj.target ? obj.max_result : 0.00
             }
         } else {
             // ใช้ % หา

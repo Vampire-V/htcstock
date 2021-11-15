@@ -298,6 +298,7 @@ let combine_information = (fetch_data, isQuarter) => {
                 $("#period").val(),
                 $("#toperiod")[0].value
             );
+            console.log(average_month);
             data = calculator_evaluates(
                 result_reunite,
                 average_month.length,
@@ -612,6 +613,9 @@ let calculator_evaluates = (evaluates, reduce_averrage, checkQuarter) => {
             total_omg = 0,
             sum_total = 0;
 
+            if (element.user_id === 573) {
+                console.log(total_quarter(kpi_rules,reduce_averrage),total_quarter(kpi_rules,reduce_averrage).reduce((a, c) => a + c.cal, 0) , element.kpi_reduce_point.reduce((a, c) => a + c, 0));
+            }
         total_kpi = (total_quarter(kpi_rules,reduce_averrage).reduce((a, c) => a + c.cal, 0) - element.kpi_reduce_point.reduce((a, c) => a + c, 0));
 
         total_key = (total_quarter(key_task_rules,reduce_averrage).reduce((a, c) => a + c.cal, 0) - element.keytask_reduce_point.reduce((a, c) => a + c, 0));

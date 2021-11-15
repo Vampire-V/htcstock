@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
     if (active_tab === "tab-c-0") {
-        make_options();
+        make_options_report_score();
         search_score();
     } else {
         make_category();
@@ -105,7 +105,7 @@ const tabActive = (e) => {
     window.localStorage.setItem("tab-dashboard", e.id);
     let active_tab = localStorage.getItem("tab-dashboard");
     if (active_tab === `tab-c-0`) {
-        make_options();
+        make_options_report_score();
         search_score();
     }
     if (active_tab === `tab-c-1`) {
@@ -114,17 +114,18 @@ const tabActive = (e) => {
     }
 };
 
-// tab-c-0 method
-document.getElementById("customSwitch1").addEventListener("click", () => {
+// tab-operation method
+document.getElementById("isQuarter").addEventListener("click", () => {
     search_score();
 });
 
 const search_score = async () => {
-    month_quarter();
+    let check = document.getElementById("isQuarter");
+    month_quarter(check);
     let score = [];
-    let checked = document.getElementById("customSwitch1").checked;
+
     let param;
-    if (checked) {
+    if (check.checked) {
         param = {
             quarter:
                 $("#quarter").val() === ""
@@ -134,25 +135,39 @@ const search_score = async () => {
             degree: [$("#degree").val()],
         };
     } else {
+        //ตรวจสอบ ช่วงของเดือน
+        let values = periodOfMonth($("#period").val(), $("#toperiod")[0].value);
+        $("#toperiod > option").each(function (i, e) {
+            this.disabled =
+                parseInt(e.value) >= parseInt($("#period").val())
+                    ? false
+                    : true;
+        });
+        if (values.length < 1) {
+            toast("Wrong time selected.", "error");
+            return;
+        }
         param = {
-            month: [$("#period").val()],
+            month: values,
             year: [$("#year").val()],
             degree: [$("#degree").val()],
         };
     }
+
     if ($("#division_id").val()) {
         param.division_id = [$("#division_id").val()];
     }
+
     let table = document.getElementById("table-report-score");
     table.previousElementSibling.classList.add("reload");
     try {
         let fetch_data = await getOperationReportScore({
             params: param,
         });
-        // console.log(fetch_data);
-        score = await combine_information(fetch_data.data.data).sort(
-            (a, b) => b.score - a.score
-        );
+        score = await combine_information(
+            fetch_data.data.data,
+            check.checked
+        ).sort((a, b) => b.score - a.score);
     } catch (error) {
         console.error(error);
         toast(error, "error");
@@ -162,7 +177,7 @@ const search_score = async () => {
     }
 };
 
-let combine_information = (fetch_data) => {
+let combine_information = (fetch_data, isQuarter) => {
     let data = [],
         average_omg,
         reduce_averrage;
@@ -178,29 +193,18 @@ let combine_information = (fetch_data) => {
     });
 
     try {
-        if (document.getElementById("customSwitch1").checked) {
+        if (isQuarter) {
             if ($("#quarter").val() === "") {
-                reduce_averrage = 12;
+                const d = new Date();
+                reduce_averrage = d.getMonth() + 1 - 1;
                 average_omg = getQuarterForHaier(new Date());
             } else {
                 reduce_averrage = 3;
             }
-            let item_unique;
-            // kpi_reduce_point,
-            // keytask_reduce_point,
-            // omg_reduce_point
-
-            item_unique = [];
-            // kpi_reduce_point = 0
-            // keytask_reduce_point = 0
-            // omg_reduce_point = 0
-            // console.log(fetch_data);
-            // console.log(fetch_data.reduce((a, c) => c.user_id === 494 ? a + c.key_task_reduce : a + 0, 0));
+            /*
+            let item_unique = [];
             for (let index = 0; index < fetch_data.length; index++) {
                 const evaluate = fetch_data[index];
-                // kpi_reduce_point += evaluate.kpi_reduce
-                // keytask_reduce_point += evaluate.key_task_reduce
-                // omg_reduce_point += evaluate.omg_reduce
                 evaluate.kpi_reduce_point = [];
                 evaluate.keytask_reduce_point = [];
                 evaluate.omg_reduce_point = [];
@@ -238,36 +242,38 @@ let combine_information = (fetch_data) => {
                     }
                 }
             }
-
-            for (let index = 0; index < item_unique.length; index++) {
-                const element = item_unique[index];
-                let kpi = element.evaluate_detail.filter(
+            */
+            let result_reunite = reunite_evaluate_user(fetch_data);
+            data = calculator_evaluates(
+                result_reunite,
+                reduce_averrage,
+                isQuarter
+            );
+            /*
+            for (let index = 0; index < result_reunite.length; index++) {
+                const element = result_reunite[index];
+                let kpi_rules = element.evaluate_detail.filter(
                     (item) => item.rule.category.name === category.KPI
                 );
-                let key_task = element.evaluate_detail.filter(
+                let key_task_rules = element.evaluate_detail.filter(
                     (item) => item.rule.category.name === category.KEYTASK
                 );
-                let omg = element.evaluate_detail.filter(
+                let omg_rules = element.evaluate_detail.filter(
                     (item) => item.rule.category.name === category.OMG
                 );
 
-                let total_kpi, total_key, total_omg, sum_total;
-                total_kpi = 0;
-                total_key = 0;
-                total_omg = 0;
-                sum_total = 0;
-
+                let total_kpi = 0, total_key = 0, total_omg = 0, sum_total = 0;
                 total_kpi =
-                    total_quarter(kpi).reduce((a, c) => a + c.cal, 0) -
+                    total_quarter(kpi_rules).reduce((a, c) => a + c.cal, 0) -
                     element.kpi_reduce_point.reduce((a, c) => a + c, 0) /
                         reduce_averrage;
                 total_key =
-                    total_quarter(key_task).reduce((a, c) => a + c.cal, 0) -
+                    total_quarter(key_task_rules).reduce((a, c) => a + c.cal, 0) -
                     element.keytask_reduce_point.reduce((a, c) => a + c, 0) /
                         reduce_averrage;
 
                 let cal_o =
-                    total_quarter(omg).reduce((a, c) => a + c.cal, 0) -
+                    total_quarter(omg_rules).reduce((a, c) => a + c.cal, 0) -
                     element.omg_reduce_point.reduce((a, c) => a + c, 0) /
                         reduce_averrage;
                 total_omg = average_omg ? cal_o / average_omg : cal_o;
@@ -285,7 +291,19 @@ let combine_information = (fetch_data) => {
                     score: sum_total / 100,
                 });
             }
+            */
         } else {
+            let result_reunite = reunite_evaluate_user(fetch_data);
+            let average_month = periodOfMonth(
+                $("#period").val(),
+                $("#toperiod")[0].value
+            );
+            data = calculator_evaluates(
+                result_reunite,
+                average_month.length,
+                isQuarter
+            );
+            /*
             for (let index = 0; index < fetch_data.length; index++) {
                 let total_kpi, total_key, total_omg, sum_total;
                 const evaluate = fetch_data[index];
@@ -318,72 +336,12 @@ let combine_information = (fetch_data) => {
                     score: sum_total / 100,
                 });
             }
+            */
         }
         return data;
     } catch (error) {
         console.error(error);
     }
-};
-
-let total_quarter = (objArr) => {
-    const d = new Date();
-    let temp = [],
-        quarter_all = $("#quarter").val() === "" ? d.getMonth() + 1 - 1 : 3;
-    //(d.getMonth()+1) - 1 จะมีปัญหา สิ้นปี
-    try {
-        for (var i = 0; i < objArr.length; i++) {
-            let item = objArr[i];
-            item.average_max = [];
-            item.average_weight = [];
-            item.average_actual = [];
-            item.average_target = [];
-            if (temp.length < 1) {
-                item.average_max.push(item.max_result);
-                item.average_weight.push(item.weight);
-                item.average_actual.push(item.actual);
-                item.average_target.push(item.target);
-                temp.push(item);
-            } else {
-                let t_index = temp.findIndex((t) => t.rule_id === item.rule_id);
-                if (t_index === -1) {
-                    item.average_max.push(item.max_result);
-                    item.average_weight.push(item.weight);
-                    item.average_actual.push(item.actual);
-                    item.average_target.push(item.target);
-                    temp.push(item);
-                } else {
-                    temp[t_index].average_max.push(item.max_result);
-                    temp[t_index].average_weight.push(item.weight);
-                    temp[t_index].average_actual.push(item.actual);
-                    temp[t_index].average_target.push(item.target);
-                }
-            }
-        }
-    } catch (error) {
-        console.error(error);
-    }
-
-    try {
-        for (let index = 0; index < temp.length; index++) {
-            const element = temp[index];
-            element.max_result =
-                element.average_max[element.average_max.length - 1];
-            element.weight =
-                element.rule.category.name === category.OMG
-                    ? element.average_weight.reduce((a, b) => a + b, 0)
-                    : element.average_weight.reduce((a, b) => a + b, 0) /
-                      quarter_all;
-            element.target = score_quarter_cal_target(element);
-            element.actual = score_quarter_cal_amount(element);
-            element.actual_pc = score_findActualPercent(element, temp);
-            element.target_pc = score_findTargetPercent(element, temp);
-            element.ach = score_findAchValue(element);
-            element.cal = score_findCalValue(element, element.ach);
-        }
-    } catch (error) {
-        console.error(error);
-    }
-    return temp;
 };
 
 const render_score = (score) => {
@@ -402,7 +360,7 @@ const render_score = (score) => {
         for (let index = 0; index < score.length; index++) {
             const element = score[index];
             let uri = "#";
-            if (document.getElementById("customSwitch1").checked) {
+            if (document.getElementById("isQuarter").checked) {
                 if ($("#quarter").val() === "") {
                     uri = `${window.origin}/kpi/self-evaluation/user/${
                         element.evaluate.user_id
@@ -455,8 +413,9 @@ const render_score = (score) => {
     table.previousElementSibling.classList.remove("reload");
 };
 
-const make_options = async () => {
+const make_options_report_score = async () => {
     let selectMonth = document.getElementById("period"),
+        selectToMonth = document.getElementById("toperiod"),
         selectYearh = document.getElementById("year"),
         selectQuarter = document.getElementById("quarter"),
         selectDivision = document.getElementById("division_id"),
@@ -466,6 +425,7 @@ const make_options = async () => {
 
     removeAllChildNodes(selectYearh);
     removeAllChildNodes(selectMonth);
+    removeAllChildNodes(selectToMonth);
     removeAllChildNodes(selectQuarter);
     removeAllChildNodes(selectDivision);
 
@@ -487,6 +447,20 @@ const make_options = async () => {
         let value = m < 10 ? `0${m}` : m;
         selectMonth.add(new Option(monthName, value, false, selected));
     }
+
+    // to month
+    for (tm = 1; tm <= 12; tm++) {
+        let monthName = new Date(date.getFullYear(), tm - 1).toLocaleString(
+            "en-US",
+            {
+                month: "long",
+            }
+        );
+        let selected = date.getMonth() === tm - 1;
+        let value = tm < 10 ? `0${tm}` : tm;
+        selectToMonth.add(new Option(monthName, value, false, selected));
+    }
+
     // quarter
     selectQuarter.add(new Option(`All`, "", true, false));
     for (let q = 1; q <= 4; q++) {
@@ -510,26 +484,31 @@ const make_options = async () => {
     }
 };
 
-const month_quarter = () => {
-    let check = document.getElementById("customSwitch1").checked;
+const month_quarter = (check) => {
+    let checked = check.checked;
     let period = document.getElementById("period");
+    let to_period = document.getElementById("toperiod");
     let quarter = document.getElementById("quarter");
     let degree = document.getElementById("degree");
     let config = {
         params: {
-            is_quarter: check,
+            is_quarter: checked,
             period: period.value,
             degree: degree.value,
         },
     };
-    if (check) {
+    if (checked) {
         period.previousElementSibling.textContent = "Quarter";
+        to_period.previousElementSibling.textContent = "";
         quarter.style.display = "block";
         period.style.display = "none";
+        to_period.style.display = "none";
     } else {
+        to_period.previousElementSibling.textContent = "To Month";
         period.previousElementSibling.textContent = "Month";
         quarter.style.display = "none";
         period.style.display = "block";
+        to_period.style.display = "block";
     }
     getWeigthConfig(config)
         .then((res) => {
@@ -547,6 +526,18 @@ const month_quarter = () => {
         });
 };
 
+let periodOfMonth = (first, second) => {
+    let f = parseInt(first),
+        s = parseInt(second);
+    let result = [];
+    for (let index = f; index <= s; index++) {
+        result.push(
+            index.toString().length < 2 ? `0${index}` : index.toString()
+        );
+    }
+    return result;
+};
+
 let calculator_score = (number) => {
     if (number >= 110.0) {
         return "A";
@@ -561,7 +552,160 @@ let calculator_score = (number) => {
     }
 };
 
-//## tab-c-1 method
+let reunite_evaluate_user = (evaluates) => {
+    let item_unique = [];
+    //
+    for (let index = 0; index < evaluates.length; index++) {
+        const evaluate = evaluates[index];
+        evaluate.kpi_reduce_point = [];
+        evaluate.keytask_reduce_point = [];
+        evaluate.omg_reduce_point = [];
+        if (item_unique.length < 1) {
+            evaluate.kpi_reduce_point.push(evaluate.kpi_reduce);
+            evaluate.keytask_reduce_point.push(evaluate.key_task_reduce);
+            evaluate.omg_reduce_point.push(evaluate.omg_reduce);
+            item_unique.push(evaluate);
+        } else {
+            let i = item_unique.findIndex(
+                (t) => t.user_id === evaluate.user_id
+            );
+            if (i < 0) {
+                evaluate.kpi_reduce_point.push(evaluate.kpi_reduce);
+                evaluate.keytask_reduce_point.push(evaluate.key_task_reduce);
+                evaluate.omg_reduce_point.push(evaluate.omg_reduce);
+                item_unique.push(evaluate);
+            } else {
+                item_unique[i].kpi_reduce_point.push(evaluate.kpi_reduce);
+                item_unique[i].keytask_reduce_point.push(
+                    evaluate.key_task_reduce
+                );
+                item_unique[i].omg_reduce_point.push(evaluate.omg_reduce);
+                item_unique[i].evaluate_detail = item_unique[
+                    i
+                ].evaluate_detail.concat(evaluate.evaluate_detail);
+            }
+        }
+    }
+
+    return item_unique;
+};
+
+let calculator_evaluates = (evaluates, reduce_averrage, checkQuarter) => {
+    console.log(reduce_averrage);
+    let average_omg = getQuarterForHaier(new Date()),
+        data = [];
+    for (let index = 0; index < evaluates.length; index++) {
+        const element = evaluates[index];
+        let kpi_rules = element.evaluate_detail.filter(
+            (item) => item.rule.category.name === category.KPI
+        );
+        let key_task_rules = element.evaluate_detail.filter(
+            (item) => item.rule.category.name === category.KEYTASK
+        );
+        let omg_rules = element.evaluate_detail.filter(
+            (item) => item.rule.category.name === category.OMG
+        );
+
+        // let total_kpi, total_key, total_omg, sum_total;
+        let total_kpi = 0,
+            total_key = 0,
+            total_omg = 0,
+            sum_total = 0;
+
+        total_kpi = (total_quarter(kpi_rules,reduce_averrage).reduce((a, c) => a + c.cal, 0) - element.kpi_reduce_point.reduce((a, c) => a + c, 0));
+
+        total_key = (total_quarter(key_task_rules,reduce_averrage).reduce((a, c) => a + c.cal, 0) - element.keytask_reduce_point.reduce((a, c) => a + c, 0));
+
+        if (checkQuarter) {
+            let cal_o = (total_quarter(omg_rules,reduce_averrage).reduce((a, c) => a + c.cal, 0) - element.omg_reduce_point.reduce((a, c) => a + c, 0));
+            // console.log(average_omg,cal_o);
+            total_omg = average_omg ? cal_o / average_omg : cal_o;
+            // total_omg = cal_o
+
+            sum_total =
+                total_kpi * weigth_template[0] +
+                total_key * weigth_template[1] +
+                total_omg * weigth_template[2];
+        } else {
+            sum_total =
+                total_kpi * weigth_template[0] + total_key * weigth_template[1];
+        }
+        if (element.user_id === 33) {
+            console.log(total_kpi,total_key,total_omg);
+        }
+        data.push({
+            evaluate: element,
+            kpi: total_kpi,
+            key_task: total_key,
+            omg: total_omg,
+            score: sum_total / 100,
+        });
+    }
+    return data;
+};
+
+let total_quarter = (objArr,quarter_all) => {
+    const d = new Date();
+    let temp = []
+        // quarter_all = $("#quarter").val() === "" ? d.getMonth() + 1 - 1 : 3;
+    //(d.getMonth()+1) - 1 จะมีปัญหา สิ้นปี
+    try {
+        for (var i = 0; i < objArr.length; i++) {
+            let item = objArr[i];
+            item.average_max = [];
+            item.average_weight = [];
+            item.average_actual = [];
+            item.average_target = [];
+            if (temp.length < 1) {
+                item.average_max.push(item.max_result);
+                item.average_weight.push(item.weight);
+                item.average_actual.push(item.actual);
+                item.average_target.push(item.target);
+                temp.push(item);
+            } else {
+                let t_index = temp.findIndex((t) => t.rule_id === item.rule_id);
+                if (t_index === -1) {
+                    item.average_max.push(item.max_result);
+                    item.average_weight.push(item.weight);
+                    item.average_actual.push(item.actual);
+                    item.average_target.push(item.target);
+                    temp.push(item);
+                } else {
+                    temp[t_index].average_max.push(item.max_result);
+                    temp[t_index].average_weight.push(item.weight);
+                    temp[t_index].average_actual.push(item.actual);
+                    temp[t_index].average_target.push(item.target);
+                }
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+    try {
+        for (let index = 0; index < temp.length; index++) {
+            const element = temp[index],
+            weight = element.average_weight.reduce((a, b) => a + b, 0);
+
+            element.max_result = element.average_max[element.average_max.length - 1];
+            element.weight = element.rule.category.name === category.OMG ? weight : weight / quarter_all;
+            element.target = score_quarter_cal_target(element);
+            element.actual = score_quarter_cal_amount(element);
+            element.actual_pc = score_findActualPercent(element, temp);
+            element.target_pc = score_findTargetPercent(element, temp);
+            element.ach = score_findAchValue(element);
+            element.cal = score_findCalValue(element, element.ach);
+            // if (evaluate_.user_id === 33) {
+                // console.log(element.weight);
+            // }
+        }
+
+    } catch (error) {
+        console.error(error);
+    }
+    return temp;
+};
+//## tab-all method
 
 const search_staff_table = (e) => {
     // Declare variables
@@ -669,16 +813,16 @@ const rules_data_to_table = async (data) => {
             month.setAttribute("colspan", 2);
             month.style = `background-color: black; color:#fff;`;
             month.appendChild(document.createTextNode(period.name));
-            Hfirst.appendChild(month)
+            Hfirst.appendChild(month);
 
             let target = document.createElement("th"); // Hsecond.insertCell(),
-                actual = document.createElement("th"); // Hsecond.insertCell();
+            actual = document.createElement("th"); // Hsecond.insertCell();
             target.style = `background-color: black; color:#fff;`;
             actual.style = `background-color: black; color:#fff;`;
-            target.appendChild(document.createTextNode("Target"))
-            actual.appendChild(document.createTextNode("Actual"))
-            Hsecond.appendChild(target)
-            Hsecond.appendChild(actual)
+            target.appendChild(document.createTextNode("Target"));
+            actual.appendChild(document.createTextNode("Actual"));
+            Hsecond.appendChild(target);
+            Hsecond.appendChild(actual);
         }
         // set body
         for (let i = 0; i < data.rules.length; i++) {
@@ -822,13 +966,13 @@ const staff_data_to_table = (data) => {
     removeAllChildNodes(body);
 
     let Hfirst = head.insertRow(),
-        degree = document.createElement("th") // Hfirst.insertCell(),
-        department = document.createElement("th") // Hfirst.insertCell(),
-        full_name = document.createElement("th"); // Hfirst.insertCell(),
-        // let cell_rule = document.createElement("th");
-        // cell_rule.setAttribute("rowspan", 2);
-        // cell_rule.style = `background-color: black; color:#fff;`;
-        // cell_rule.appendChild(document.createTextNode("Rule Name"));
+        degree = document.createElement("th"); // Hfirst.insertCell(),
+    department = document.createElement("th"); // Hfirst.insertCell(),
+    full_name = document.createElement("th"); // Hfirst.insertCell(),
+    // let cell_rule = document.createElement("th");
+    // cell_rule.setAttribute("rowspan", 2);
+    // cell_rule.style = `background-color: black; color:#fff;`;
+    // cell_rule.appendChild(document.createTextNode("Rule Name"));
 
     degree.style = `background-color: black; color:#fff;`;
     degree.appendChild(document.createTextNode("EMC Group"));
@@ -843,7 +987,7 @@ const staff_data_to_table = (data) => {
     Hfirst.appendChild(full_name);
     for (let i = 0; i < data.periods.length; i++) {
         const period = data.periods[i];
-        let month = document.createElement("th") // Hfirst.insertCell(),
+        let month = document.createElement("th"); // Hfirst.insertCell(),
         month.style = `background-color: black; color:#fff;`;
         month.appendChild(document.createTextNode(period.name));
         Hfirst.appendChild(month);

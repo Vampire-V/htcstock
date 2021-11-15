@@ -107,20 +107,26 @@
                             <div class="position-relative form-group">
                                 <form class="needs-validation" novalidate>
                                     <div class="form-row">
-                                        <div class="col-md-3 mb-3">
+                                        <div class="col-md-2 mb-2">
                                             <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitch1">
-                                                <label class="custom-control-label" for="customSwitch1">Month or
+                                                <input type="checkbox" class="custom-control-input" id="isQuarter">
+                                                <label class="custom-control-label" for="isQuarter">Month or
                                                     Quarter</label>
                                             </div>
                                         </div>
-                                        <div class="col-md-3 mb-3">
+                                        <div class="col-md-2 mb-2">
                                             <label for="label-custom-switch"></label>
                                             <select name="period" id="period" class="form-control-sm form-control"
                                                 onchange="search_score()">
                                             </select>
                                             <select name="quarter" id="quarter" class="form-control-sm form-control"
                                                 onchange="search_score()" style="display: none;">
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            <label for="label-custom-switch">Month</label>
+                                            <select name="toperiod" id="toperiod" class="form-control-sm form-control"
+                                                onchange="search_score()">
                                             </select>
                                         </div>
                                         <div class="col-md-1 mb-1">

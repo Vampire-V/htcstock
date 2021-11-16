@@ -130,14 +130,14 @@
                         <div role="group" class="btn-group-sm btn-group">
                             <input class="mb-1 mr-1 form-control-sm form-control" type="number" min="0" step="0.01"
                                 value="0" id="{{str_replace("-","_",$group->name)}}_reduce_hod"
-                            name="{{str_replace("-","_",$group->name)}}_reduce_hod" disable
+                            name="{{str_replace("-","_",$group->name)}}_reduce_hod" readonly
                              onchange="set_reduce(this)">
                         </div>
                         <label for="Reduce" class="mb-2 mr-2">(Feedback Delay) :</label>
                         <div role="group" class="btn-group-sm btn-group">
                             <input class="mb-2 mr-2 form-control-sm form-control" type="number" min="0" step="0.01"
                                 value="0" id="{{str_replace("-","_",$group->name)}}_reduce"
-                            name="{{str_replace("-","_",$group->name)}}_reduce" disable> %
+                            name="{{str_replace("-","_",$group->name)}}_reduce" readonly> %
                         </div>
                     </div>
                 </div>

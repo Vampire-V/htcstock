@@ -337,7 +337,7 @@ var findAchValue = (obj) => {
                 // ach = obj.actual > obj.target ?  parseFloat((2 - (obj.actual / obj.target)) * 100.00) : obj.max #version 1
             }
             if (obj.rules.calculate_type === calculate.ZERO) {
-                ach = obj.actual <= obj.target ? obj.max : 0.00
+                ach = obj.actual <= obj.target ? obj.max ?? obj.max_result : 0.00
             }
         } else {
             // ใช้ % หา
@@ -346,7 +346,9 @@ var findAchValue = (obj) => {
                     ach = obj.max
                 } else if (obj.actual_pc === 0.00) {
                     ach = 0.00
-                } else {
+                } else if(obj.actual_pc === obj.target_pc) {
+                    ach = obj.max ?? obj.max_result
+                }else {
                     ach = parseFloat((obj.actual_pc / obj.target_pc) * 100.00)
                 }
                 // ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((obj.actual_pc / obj.target_pc) * 100)
@@ -373,7 +375,7 @@ var findAchValue = (obj) => {
                 // ach = obj.actual_pc > obj.target_pc ? parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100) : obj.max  #version 1
             }
             if (obj.rules.calculate_type === calculate.ZERO) {
-                ach = obj.actual_pc <= obj.target_pc ? 100.00 : 0.00
+                ach = obj.actual_pc <= obj.target_pc ? obj.max ?? obj.max_result : 0.00
             }
         }
     }
@@ -613,6 +615,7 @@ var score_findTargetPercent = (element, array) => {
 
 
 const score_findAchValue = (obj) => {
+    
     if (typeof obj === `object`) {
         if (!obj.rule.parent) {
             // ใช้ amount หา
@@ -621,7 +624,9 @@ const score_findAchValue = (obj) => {
                     ach = obj.max
                 } else if (obj.actual === 0.00) {
                     ach = 0.00
-                } else {
+                } else if(obj.actual === obj.target) {
+                    ach = obj.max ?? obj.max_result
+                }else {
                     ach = parseFloat((obj.actual / obj.target) * 100.00)
                 }
                 // ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)
@@ -647,7 +652,7 @@ const score_findAchValue = (obj) => {
                 // ach = obj.actual > obj.target ?  parseFloat((2 - (obj.actual / obj.target)) * 100.00) : obj.max #version 1
             }
             if (obj.rule.calculate_type === calculate.ZERO) {
-                ach = obj.actual <= obj.target ? obj.max_result : 0.00
+                ach = obj.actual <= obj.target ? obj.max ?? obj.max_result : 0.00
             }
         } else {
             // ใช้ % หา
@@ -656,6 +661,8 @@ const score_findAchValue = (obj) => {
                     ach = obj.max
                 } else if (obj.actual_pc === 0.00) {
                     ach = 0.00
+                } else if(obj.actual === obj.target) {
+                    ach = obj.max ?? obj.max_result
                 } else {
                     ach = parseFloat((obj.actual_pc / obj.target_pc) * 100.00)
                 }
@@ -683,7 +690,7 @@ const score_findAchValue = (obj) => {
                 // ach = obj.actual_pc > obj.target_pc ? parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100) : obj.max  #version 1
             }
             if (obj.rule.calculate_type === calculate.ZERO) {
-                ach = obj.actual_pc <= obj.target_pc ? 100.00 : 0.00
+                ach = obj.actual_pc <= obj.target_pc ? obj.max ?? obj.max_result : 0.00
             }
         }
     }

@@ -28,7 +28,7 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::get('evaluation/user/{user}/year/{year}/excel','SelfEvaluation\SelfEvaluationController@evaluateYearExcel')->name('selfyear.download');
         // new
         // Route::get('self-evaluation/evaluate', 'SelfEvaluation\SelfEvaluationController@create_new')->name('evaluate.create_new');
-        // Route::post('self-evaluation/evaluate', 'SelfEvaluation\SelfEvaluationController@store_new')->name('evaluate.store_new');
+    Route::get('self-evaluation/{user}/score/', 'SelfEvaluation\SelfEvaluationController@score_many_month')->name('evaluate.score_many_month');
     Route::get('self-evaluation/user/{user}/quarter/{quarter}/year/{year}', 'SelfEvaluation\SelfEvaluationController@display_quarter')->name('quarter');
     Route::get('self-evaluation/user/{user}/year/{year}', 'SelfEvaluation\SelfEvaluationController@display_all_quarter')->name('allquarter');
 

@@ -112,6 +112,8 @@ trait CalculatorEvaluateTrait
                     $item->ach = $item->max_result ?? $item->max;
                 } else if ($ac === 0.00) {
                     $item->ach = 0.00;
+                } else if ($ac === $tar) {
+                    $item->ach = $item->max_result ?? $item->max;
                 } else {
                     $item->ach = ($ac / $this->isZeroNew($tar)) * 100.00;
                 }
@@ -143,7 +145,7 @@ trait CalculatorEvaluateTrait
                 // ach = parseFloat((2 - dd ) * 100.00)
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
-                $item->ach = $ac <= $tar ? 100.00 : 0.00;
+                $item->ach = $ac <= $tar ? $item->max_result : 0.00;
             }
         }
     }

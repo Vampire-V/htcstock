@@ -298,7 +298,7 @@ let combine_information = (fetch_data, isQuarter) => {
                 $("#period").val(),
                 $("#toperiod")[0].value
             );
-            console.log(average_month);
+
             data = calculator_evaluates(
                 result_reunite,
                 average_month.length,
@@ -372,7 +372,31 @@ const render_score = (score) => {
                     }/quarter/${$("#quarter").val()}/year/${$("#year").val()}`;
                 }
             } else {
-                uri = `${window.origin}/kpi/self-evaluation/${element.evaluate.id}/edit`;
+                // uri = `${window.origin}/kpi/self-evaluation/${element.evaluate.id}/edit`;
+                let months = periodOfMonth(
+                    $("#period").val(),
+                    $("#toperiod")[0].value
+                );
+                if (months.length < 2) {
+                    uri = `${window.origin}/kpi/self-evaluation/${element.evaluate.id}/edit`;
+                } else {
+                    let data = {
+                        month:months,
+                        year:[$("#year").val()],
+                        degree:[$("#degree").val()]
+                    }
+                    if ($("#division_id").val()) {
+                        data.division_id = [$("#division_id").val()]
+                    }
+                    const ret = []
+                    for (let d in data) {
+                        for (let v in data[d]) {
+                            ret.push(encodeURIComponent(d)+"[]="+encodeURIComponent(data[d][v]))
+                        }
+                    }
+                    uri = `${window.origin}/kpi/self-evaluation/${element.evaluate.user_id}/score?${ret.join('&')}`;
+                }
+
             }
             const rank_rate = calculator_score(element.score);
             let newRow = body.insertRow();
@@ -592,7 +616,6 @@ let reunite_evaluate_user = (evaluates) => {
 };
 
 let calculator_evaluates = (evaluates, reduce_averrage, checkQuarter) => {
-    console.log(reduce_averrage);
     let average_omg = getQuarterForHaier(new Date()),
         data = [];
     for (let index = 0; index < evaluates.length; index++) {
@@ -613,9 +636,6 @@ let calculator_evaluates = (evaluates, reduce_averrage, checkQuarter) => {
             total_omg = 0,
             sum_total = 0;
 
-            if (element.user_id === 573) {
-                console.log(total_quarter(kpi_rules,reduce_averrage),total_quarter(kpi_rules,reduce_averrage).reduce((a, c) => a + c.cal, 0) , element.kpi_reduce_point.reduce((a, c) => a + c, 0));
-            }
         total_kpi = (total_quarter(kpi_rules,reduce_averrage).reduce((a, c) => a + c.cal, 0) - element.kpi_reduce_point.reduce((a, c) => a + c, 0));
 
         total_key = (total_quarter(key_task_rules,reduce_averrage).reduce((a, c) => a + c.cal, 0) - element.keytask_reduce_point.reduce((a, c) => a + c, 0));
@@ -633,9 +653,6 @@ let calculator_evaluates = (evaluates, reduce_averrage, checkQuarter) => {
         } else {
             sum_total =
                 total_kpi * weigth_template[0] + total_key * weigth_template[1];
-        }
-        if (element.user_id === 33) {
-            console.log(total_kpi,total_key,total_omg);
         }
         data.push({
             evaluate: element,
@@ -699,9 +716,6 @@ let total_quarter = (objArr,quarter_all) => {
             element.target_pc = score_findTargetPercent(element, temp);
             element.ach = score_findAchValue(element);
             element.cal = score_findCalValue(element, element.ach);
-            // if (evaluate_.user_id === 33) {
-                // console.log(element.weight);
-            // }
         }
 
     } catch (error) {

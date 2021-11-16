@@ -4,6 +4,7 @@ namespace App\Services\KPI\Service;
 
 use App\Enum\KPIEnum;
 use App\Enum\UserEnum;
+use App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait;
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\EvaluatesHistory;
 use App\Models\KPI\UserApprove;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Gate;
 
 class EvaluateService extends BaseService implements EvaluateServiceInterface
 {
+    use CalculatorEvaluateTrait;
     /**
      * UserService constructor.
      *
@@ -195,5 +197,18 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    public function employee_score_filter(Request $request,$employee)
+    {
+        $evaluates = Evaluate::with([
+            'user:id,username,positions_id,department_id,divisions_id,email,degree,created_at,updated_at',
+            'user.positions:id,name',
+            'user.divisions:id,name',
+            'targetperiod:id,name,year,quarter',
+            'evaluateDetail.rule:id,name,calculate_type,category_id,kpi_rule_types_id,quarter_cal,parent,created_at,updated_at',
+            'evaluateDetail.rule.category:id,name'
+        ])->whereIn('status', [KPIEnum::approved])->where('user_id',$employee->id)->filter($request)->get();
+        return $evaluates;
     }
 }

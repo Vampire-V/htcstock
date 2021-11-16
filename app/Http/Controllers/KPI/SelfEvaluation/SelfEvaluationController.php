@@ -24,6 +24,7 @@ use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Interfaces\TemplateServiceInterface;
 use App\Services\KPI\Service\SettingActionService;
 use App\Services\KPI\Service\UserApproveService;
+use Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -31,6 +32,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use stdClass;
 
 class SelfEvaluationController extends Controller
 {
@@ -612,7 +614,7 @@ class SelfEvaluationController extends Controller
             $evaluate->omg_reduce = $omg_reduce;
             $evaluate->kpi_reduce_hod = $kpi_reduce_hod;
             $evaluate->key_task_reduce_hod = $key_task_reduce_hod;
-            $evaluate->omg_reduce_hod = $omg_reduce_hod ;
+            $evaluate->omg_reduce_hod = $omg_reduce_hod;
 
             $user = $this->userService->find($user);
             return Excel::download(new EvaluateYearExport($user, $evaluate, $detail), "Evaluate-year-" . $user->name . ".xlsx");
@@ -671,5 +673,87 @@ class SelfEvaluationController extends Controller
     {
         return date('d') > 12 ? intval(date('n', strtotime('-1 month'))) : intval(date('n', strtotime('-2 month')));
         //    intval(date('n', strtotime('-1 month')));
+    }
+
+    public function score_many_month(Request $request, $user)
+    {
+        $year = $request->year[0];
+        $month_rang = new Collection();
+        $weight_months = 0;
+        foreach ($request->month as $key => $value) {
+            $time_input = strtotime($year . "/" . $value . "/01");
+            $date_input = getDate($time_input);
+            if ($date_input['mon'] === 3 || $date_input['mon'] === 6 || $date_input['mon'] === 9 || $date_input['mon'] === 12) {
+                $weight_months++;
+            }
+            $month_rang->push($date_input['month']);
+        }
+        if ($weight_months<1) {
+            $weight_months = 1;
+        }
+        try {
+            $employee = $this->userService->find($user);
+
+
+            $evaluates = $this->evaluateService->employee_score_filter($request, $employee);
+            $kpi_reduce = 0;
+            $key_task_reduce = 0;
+            $omg_reduce = 0;
+            $kpi_reduce_hod = 0.0;
+            $key_task_reduce_hod = 0.0;
+            $omg_reduce_hod = 0.0;
+            $detail = new Collection();
+            foreach ($evaluates as $item) {
+                $kpi_reduce += $item->kpi_reduce;
+                $key_task_reduce += $item->key_task_reduce;
+                $omg_reduce += $item->omg_reduce;
+                $kpi_reduce_hod += $item->kpi_reduce_hod;
+                $key_task_reduce_hod += $item->key_task_reduce_hod;
+                $omg_reduce_hod += $item->omg_reduce_hod;
+                $item->evaluateDetail->each(fn ($value) => $detail->add($value));
+            }
+
+            $new = $detail->groupBy('rule_id')->each(function ($item) use ($request,$weight_months) {
+                // dump($item->last()->rule->category->name,$item->sum('weight'));
+                $max = $item->last()->max_result;
+                $weight = $item->last()->rule->category->name === KPIEnum::OMG ? $item->sum('weight') / $weight_months : $item->sum('weight') / count($request->month);
+                $target = $this->quarter_cal_target($item);
+                $actual = $this->quarter_cal_actual($item);
+                $item->each(function ($value) use ($max, $weight, $target, $actual) {
+                    $value->max_result = $max;
+                    $value->weight = $weight;
+                    $value->target = $target;
+                    $value->actual = $actual;
+                });
+            });
+            $detail = new Collection();
+            $new->each(function ($item) use ($detail) {
+                $detail->add($item->unique('rule_id')->first());
+            });
+
+            $evaluate = $evaluates->first();
+            $evaluate->kpi_reduce = $kpi_reduce;
+            $evaluate->key_task_reduce = $key_task_reduce;
+            $evaluate->omg_reduce = $omg_reduce;
+            $evaluate->kpi_reduce_hod = $kpi_reduce_hod;
+            $evaluate->key_task_reduce_hod = $key_task_reduce_hod;
+            $evaluate->omg_reduce_hod = $omg_reduce_hod;
+            $this->calculation_detail($detail);
+            $group_category = $evaluate->evaluateDetail->groupBy(fn ($item) => $item->rule->category->name);
+            $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
+            $category = $this->categoryService->dropdown();
+            $summary = new Collection();
+            foreach ($category as $key => $value) {
+                $model = new stdClass();
+                $model->key = $value->name;
+                $model->weight = $quarter_weight[$key];
+                $model->cal = ($group_category[$model->key]->reduce(fn ($curry, $item) => $curry += $item->cal, 0) * $model->weight) / 100;
+                $summary->push($model);
+            }
+
+            return \view('kpi.SelfEvaluation.monthmany', \compact('evaluate', 'group_category', 'quarter_weight', 'summary', 'month_rang','year'));
+        } catch (\Exception $e) {
+            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
     }
 }

@@ -740,7 +740,8 @@ class SelfEvaluationController extends Controller
             $evaluate->omg_reduce_hod = $omg_reduce_hod;
             $this->calculation_detail($detail);
             $group_category = $evaluate->evaluateDetail->groupBy(fn ($item) => $item->rule->category->name);
-            $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
+            $quarter_weight = config('kpi.weight')['month'];
+            // $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
             $category = $this->categoryService->dropdown();
             $summary = new Collection();
             foreach ($category as $key => $value) {

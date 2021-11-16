@@ -141,7 +141,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+
+
+
                                 @foreach ($items as $item)
+                                @if ($key !== "omg")
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td data-toggle="tooltip" title="" data-placement="top" class="truncate" data-original-title="{{$item->rule->name}}">{{$item->rule->name}}</td>
@@ -157,9 +161,11 @@
                                     <td>{{Helper::decimal($item->cal)}} %</td>
                                     <td></td>
                                 </tr>
+                                @endif
                                 @endforeach
                             </tbody>
                             <tfoot>
+                                @if ($key !== "omg")
                                 <tr>
                                     <th scope="row"></th>
                                     <td></td>
@@ -175,6 +181,7 @@
                                     <td>{{Helper::decimal($items->reduce(fn($carry, $item) => $carry + $item->cal,0))}} %</td>
                                     <td></td>
                                 </tr>
+                                @endif
                             </tfoot>
                         </table>
                     </div>

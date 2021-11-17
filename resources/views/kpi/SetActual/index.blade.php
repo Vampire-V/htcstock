@@ -167,7 +167,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @isset($evaluateDetail)
+                            @if ($evaluateDetail->count() > 0)
                             @foreach ($evaluateDetail as $key => $item)
                             <tr>
                                 <th scope="row" id="{{$item->id}}_{{$item->rule_id}}_{{$item->evaluate->period_id}}">
@@ -194,7 +194,7 @@
                                 <td>{{number_format(floatval($item->cal), 2, '.', '')}}%</td> --}}
                             </tr>
                             @endforeach
-                            @endisset
+                            @endif
                         </tbody>
                         <tfoot>
                             <tr>
@@ -207,10 +207,13 @@
                     </table>
                 </div>
             </div>
-            <div class="card-footer d-flex justify-content-center"><button class="btn btn-success btn-sm"
-                    onclick="submit()">Save</button>
-                    {{-- &nbsp;&nbsp;&nbsp;
-                    <button class="btn btn-primary btn-sm" onclick="sendemail()">Send email to employee</button> --}}
+            <div class="card-footer d-flex justify-content-center">
+                @if ($evaluateDetail->count() > 0)
+                <button class="btn btn-success btn-sm" onclick="submit()">Save</button>
+                {{-- &nbsp;&nbsp;&nbsp;
+                <button class="btn btn-primary btn-sm" onclick="sendemail()">Send email to employee</button> --}}
+                @endif
+
             </div>
         </div>
     </div>

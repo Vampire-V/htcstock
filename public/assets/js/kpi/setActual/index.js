@@ -106,7 +106,7 @@
         // let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         // validationForm(forms)
-
+        check_setvalue()
     }, false);
 
 })();
@@ -146,14 +146,13 @@ var changeTarget = (e) => {
     }
 }
 
-var submit = async (e) => {
+var submit = async () => {
     if (detail.length > 0) {
         if (validationActual()) {
             setVisible(true)
             putSetActual(detail, detail[0].rules.user_actual.id)
                 .then(res => {
                     if (res.status === 201) {
-                        console.log(res.data.data);
                         toast(res.data.message, res.data.status)
                         if (res.data.data.length > 0) {
                             for (let i = 0; i < res.data.data.length; i++) {
@@ -169,12 +168,32 @@ var submit = async (e) => {
                 .finally(() => {
                     setVisible(false)
                     toastClear()
+                    check_setvalue()
+                    console.log(detail);
                 })
         } else {
             toast(`Can’t contain letters`, 'error')
             toastClear()
         }
     }
+}
+
+var sendemail = async () => {
+    if (confirm("Confirm the email sent to the relevant staff. (ยืนยันการส่ง Email ให้พนักงานที่เกี่ยวข้อง)")) {
+        console.log('call api send mail');
+
+        try {
+            let evaluates = await Array.from(new Set(detail.map(obj => obj['evaluate_id'])))
+            let result = await putSendEmailAffterSetActual({evaluates : evaluates})
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        } finally{
+
+        }
+
+    }
+
 }
 
 var validationActual = () => {
@@ -191,4 +210,20 @@ var validationActual = () => {
         }
     }
     return true
+}
+
+var check_setvalue = () => {
+    let tBody = document.getElementById('table-set-actual').tBodies[0]
+    for (let index = 0; index < tBody.rows.length; index++) {
+        const element = tBody.rows[index];
+        if (detail[index].rules.calculate_type !== calculate.ZERO) {
+            if (detail[index].actual > 0.00) {
+                element.classList.add("set-color")
+            }else{
+                element.classList.remove("set-color")
+            }
+        }else{
+            element.classList.add("set-color")
+        }
+    }
 }

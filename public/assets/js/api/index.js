@@ -170,6 +170,13 @@ const putSetActual = (form, id) => axios({
     data: form
 })
 
+const putSendEmailAffterSetActual = (form) => axios({
+    method: 'PUT',
+    responseType: 'json',
+    url: `/kpi/send-mail`,
+    data: form
+})
+
 const postRuleUpload = (form) => axios({
     method: 'POST',
     responseType: 'json',

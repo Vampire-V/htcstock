@@ -6,6 +6,8 @@ use App\Enum\KPIEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\KPI\Traits\CalculatorEvaluateTrait;
 use App\Http\Resources\KPI\EvaluateDetailResource;
+use App\Mail\KPI\EvaluationSelfMail;
+use App\Models\KPI\Evaluate;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\IT\Interfaces\UserServiceInterface;
 use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
@@ -13,14 +15,18 @@ use App\Services\KPI\Interfaces\RuleCategoryServiceInterface;
 use App\Services\KPI\Interfaces\RuleServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use App\Services\KPI\Service\SettingActionService;
+use App\Services\KPI\Service\UserApproveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\HttpFoundation\Response;
 
 class SetActualController extends Controller
 {
     use CalculatorEvaluateTrait;
     protected $evaluateDetailService, $departmentService, $targetPeriodService,
-        $categoryService, $ruleService, $userService, $setting_action_service;
+        $categoryService, $ruleService, $userService, $setting_action_service, $userApproveService;
     public function __construct(
         EvaluateDetailServiceInterface $evaluateDetailServiceInterface,
         DepartmentServiceInterface $departmentServiceInterface,
@@ -28,7 +34,8 @@ class SetActualController extends Controller
         RuleCategoryServiceInterface $ruleCategoryServiceInterface,
         RuleServiceInterface $ruleServiceInterface,
         UserServiceInterface $userServiceInterface,
-        SettingActionService $settingActionService
+        SettingActionService $settingActionService,
+        UserApproveService $userApproveService
     ) {
         $this->evaluateDetailService = $evaluateDetailServiceInterface;
         $this->departmentService = $departmentServiceInterface;
@@ -37,6 +44,7 @@ class SetActualController extends Controller
         $this->ruleService = $ruleServiceInterface;
         $this->userService = $userServiceInterface;
         $this->setting_action_service = $settingActionService;
+        $this->userApproveService = $userApproveService;
     }
     /**
      * Display a listing of the resource.
@@ -150,8 +158,8 @@ class SetActualController extends Controller
                     $detail->actual = floatval($element['actual']);
                     $detail->target = floatval($element['target']);
                     $detail->save();
-                }else{
-                    $errors[] = ["name" => $detail->evaluate->user->name , "rule" => $detail->rules->name];
+                } else {
+                    $errors[] = ["name" => $detail->evaluate->user->name, "rule" => $detail->rules->name];
                 }
             }
             DB::commit();
@@ -171,5 +179,29 @@ class SetActualController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function sendemail(Request $request)
+    {
+        try {
+            $evaluates = Evaluate::find($request->evaluates);
+            foreach ($evaluates as $key => $evaluate) {
+                $user_approve = $this->userApproveService->findNextLevel($evaluate);
+                if (!$user_approve->exists) {
+                    Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
+                    return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+                // $evaluate->next_level = $user_approve->level;
+                // $evaluate->save();
+                // # send mail to staff
+                Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
+                Log::notice("User : " . \auth()->user()->name . " = Send evaluate mail : id = " . $evaluate->id);
+            }
+
+            return $this->successResponse(null, 'Send email success....' , Response::HTTP_OK);
+        } catch (\Exception $e) {
+            Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 }

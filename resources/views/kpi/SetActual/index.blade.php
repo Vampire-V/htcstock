@@ -14,6 +14,10 @@
         position: sticky;
         top: 0;
     }
+
+    .set-color {
+        background-color: rgb(145, 221, 145);
+    }
 </style>
 @endsection
 @section('content')
@@ -35,7 +39,7 @@
 </div>
 
 {{-- <h1>ยังไม่เปิดให้ใช้งาน.....</h1> --}}
-{{-- end title  --}}
+{{-- end title --}}
 <div class="row">
     <div class="col-md-12 col-lg-12">
         <div class="main-card mb-3 card">
@@ -166,7 +170,8 @@
                             @isset($evaluateDetail)
                             @foreach ($evaluateDetail as $key => $item)
                             <tr>
-                                <th scope="row" id="{{$item->id}}_{{$item->rule_id}}_{{$item->evaluate->period_id}}">{{$key+1}}</th>
+                                <th scope="row" id="{{$item->id}}_{{$item->rule_id}}_{{$item->evaluate->period_id}}">
+                                    {{$key+1}}</th>
                                 <td>{{$item->rule->category->name }}</td>
                                 <td>{{$item->evaluate->user->name }}</td>
                                 <td>{{$item->evaluate->targetperiod->name}} {{$item->evaluate->targetperiod->year}}</td>
@@ -203,7 +208,9 @@
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-center"><button class="btn btn-success btn-sm"
-                    onclick="submit(this)">Save</button>
+                    onclick="submit()">Save</button>
+                    {{-- &nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-primary btn-sm" onclick="sendemail()">Send email to employee</button> --}}
             </div>
         </div>
     </div>

@@ -70,7 +70,7 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     });
 
     Route::resource('set-actual', 'SetActual\SetActualController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
-
+    Route::put('send-mail/','SetActual\SetActualController@sendemail');
     Route::resource('for-eddy', 'EddyMenu\AllEvaluationController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
     Route::group(['prefix' => 'for-eddy','as'=>'for-eddy.'], function () {
         Route::get('config/deadline', 'EddyMenu\DeadLineController@index')->name('deadline');

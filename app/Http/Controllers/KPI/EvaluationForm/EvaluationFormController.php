@@ -158,7 +158,7 @@ class EvaluationFormController extends Controller
                     $evaluate->next_level = $user_approve->level;
                     $evaluate->save();
                     # send mail to staff
-                    Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
+                    // Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
                     Log::notice("User : " . \auth()->user()->name . " = Send evaluate mail : id = " . $evaluate->id);
                 }
             }

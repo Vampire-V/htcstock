@@ -125,7 +125,7 @@ class RuleController extends Controller
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
         DB::commit();
-        return \redirect()->route('kpi.rule-list.edit', $rule->id);
+        return \redirect()->route('kpi.rule-list.index');
     }
 
     /**

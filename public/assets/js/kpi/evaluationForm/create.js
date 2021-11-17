@@ -131,17 +131,16 @@ const changeTemplate = (e) => {
                 if (res.status === 200) {
                     evaluateForm.detail = evaluateForm.detail.length > 0 ? [] : evaluateForm.detail
                     try {
-                        console.log(res.data.data);
                         res.data.data.forEach(element => {
                             let detail = new EvaluateDetail()
                             detail.evaluate_id = typeof element.evaluate_id === 'undefined' ? null : element.evaluate_id
                             detail.rule_id = element.rule_id
                             detail.rules = Object.create(element.rules)
-                            detail.target = typeof element.target === 'undefined' ? element.target_config : element.target
+                            detail.target = 0.00 //typeof element.target === 'undefined' ? element.target_config : element.target
                             detail.target_pc = findTargetPercent(element, res.data.data).toFixed(2)
-                            detail.actual = typeof element.actual === 'undefined' ? 0.00 : element.actual
+                            detail.actual = 0.00 //typeof element.actual === 'undefined' ? 0.00 : element.actual
                             detail.max = element.max_result
-                            detail.weight = element.weight
+                            detail.weight = 0.00 //element.weight
                             detail.weight_category = element.weight_category
                             detail.base_line = element.base_line
                             evaluateForm.detail.push(detail)

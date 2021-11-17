@@ -28,7 +28,10 @@
             placeholder: 'Select Period',
             allowClear: true
         });
-
+        $("#degree").select2({
+            placeholder: 'Select EMC Group',
+            allowClear: true
+        });
 
     })
 

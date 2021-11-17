@@ -60,9 +60,19 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="department">EMC Group :</label>
+                            <select class="form-control form-control-sm" name="degree[]" id="degree" multiple>
+                                <option value=""></option>
+                                @foreach ($emc_group as $emc)
+                                <option value="{{$emc}}" @if($selectedEmc->contains($emc))
+                                    selected @endif>{{$emc}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     @endcan
-                    
+
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
                             <label for="department">User :</label>
@@ -139,7 +149,7 @@
                         @isset($evaluates)
                         @foreach ($evaluates as $key => $evaluate)
                         @isset($evaluate->user)
-                       
+
                         <tr style="background-color: {{$evaluate->background}}" >
                             <th scope="row">{{$key+1}}</th>
                             <td>{{$evaluate->user->name }}</td>

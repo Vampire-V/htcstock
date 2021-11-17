@@ -5,6 +5,7 @@ namespace App\Http\Controllers\KPI\EvaluateReview;
 use App\Enum\KPIEnum;
 use App\Enum\UserEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Filters\All\Query\EMCGroupIn;
 use App\Http\Resources\KPI\EvaluateResource;
 use App\Mail\KPI\EvaluationReviewMail;
 use App\Mail\KPI\EvaluationSelfMail;
@@ -67,8 +68,10 @@ class EvaluateReviewController extends Controller
         $selectedPeriod = collect($request->period);
         $selectedDivision = \collect($request->division_id);
         $selectedDepartment = \collect($request->department_id);
+        $selectedEmc = \collect($request->degree);
         $start_year = date('Y', strtotime('-5 years'));
         $status_list = [KPIEnum::on_process, KPIEnum::approved];
+        $emc_group = KPIEnum::$degree;
         try {
             $keys = UserApprove::where('user_approve', \auth()->id())->get();
 
@@ -90,7 +93,7 @@ class EvaluateReviewController extends Controller
         }
 
         return \view('kpi.EvaluationReview.index',
-        \compact('start_year', 'user', 'status_list', 'months', 'evaluates', 'query', 'users','divisions','departments', 'selectedStatus', 'selectedYear', 'selectedPeriod', 'selectedUser','selectedDivision','selectedDepartment')
+        \compact('emc_group','start_year', 'user', 'status_list', 'months', 'evaluates', 'query', 'users','divisions','departments', 'selectedEmc', 'selectedStatus', 'selectedYear', 'selectedPeriod', 'selectedUser','selectedDivision','selectedDepartment')
         );
     }
 

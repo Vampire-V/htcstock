@@ -703,6 +703,7 @@ class SelfEvaluationController extends Controller
             $key_task_reduce_hod = 0.0;
             $omg_reduce_hod = 0.0;
             $detail = new Collection();
+
             foreach ($evaluates as $item) {
                 $kpi_reduce += $item->kpi_reduce;
                 $key_task_reduce += $item->key_task_reduce;
@@ -748,10 +749,9 @@ class SelfEvaluationController extends Controller
                 $model = new stdClass();
                 $model->key = $value->name;
                 $model->weight = $quarter_weight[$key];
-                $model->cal = ($group_category[$model->key]->reduce(fn ($curry, $item) => $curry += $item->cal, 0) * $model->weight) / 100;
+                $model->cal = isset($group_category[$model->key]) ? ($group_category[$model->key]->reduce(fn ($curry, $item) => $curry += $item->cal, 0) * $model->weight) / 100 : 0;
                 $summary->push($model);
             }
-
             return \view('kpi.SelfEvaluation.monthmany', \compact('evaluate', 'group_category', 'quarter_weight', 'summary', 'month_rang','year'));
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());

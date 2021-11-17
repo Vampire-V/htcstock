@@ -141,9 +141,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-
-
-
                                 @foreach ($items as $item)
                                 @if ($key !== "omg")
                                 <tr>

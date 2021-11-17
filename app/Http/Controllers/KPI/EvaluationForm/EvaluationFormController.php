@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\KPI\EvaluationForm;
 
 use App\Enum\KPIEnum;
+use App\Enum\UserEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\KPI\EvaluateResource;
 use App\Mail\KPI\EvaluationSelfMail;
@@ -20,7 +21,9 @@ use App\Services\KPI\Service\SettingActionService;
 use App\Services\KPI\Service\UserApproveService;
 // use Arcanedev\LogViewer\Entities\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -92,13 +95,14 @@ class EvaluationFormController extends Controller
             $period = $this->targetPeriodService->find($period);
             $category = $this->categoryService->all();
             $templates = $this->templateService->forCreated(\auth()->id());
+            $isAdmin = Gate::allows(UserEnum::ADMINKPI);
             $rules = $this->ruleService->dropdown($category->first(function ($value, $key) {
                 return $value->name === "key-task";
             })->id);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.EvaluationForm.create', \compact('user', 'period', 'templates', 'category', 'rules'));
+        return \view('kpi.EvaluationForm.create', \compact('user', 'period', 'templates', 'category', 'rules','isAdmin'));
     }
 
     /**
@@ -200,13 +204,13 @@ class EvaluationFormController extends Controller
             $period = $this->targetPeriodService->find($period);
             $category = $this->categoryService->all();
             $templates = $this->templateService->dropdown();
-
+            $isAdmin = Gate::allows(UserEnum::ADMINKPI);
             $evaluate = $this->evaluateService->find($evaluate);
             // $isView = $evaluate->status === KPIEnum::ready ? true : false;
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.EvaluationForm.edit', \compact('user', 'period', 'templates', 'category', 'evaluate'));
+        return \view('kpi.EvaluationForm.edit', \compact('user', 'period', 'templates', 'category', 'evaluate','isAdmin'));
     }
 
     /**

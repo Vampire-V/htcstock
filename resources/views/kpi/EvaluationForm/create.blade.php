@@ -245,11 +245,11 @@
 
 @section('second-script')
 <script src="{{asset('assets\js\kpi\index.js')}}" defer>
-    // all method KPI 
+    // all method KPI
 </script>
 <script defer>
     // variable
-    const  staff = {!!json_encode($user)!!}, period = {!!json_encode($period)!!}
+    const staff = {!!json_encode($user)!!}, period = {!!json_encode($period)!!}, isAdmin = {!!json_encode($isAdmin)!!}
 </script>
 <script src="{{asset('assets\js\kpi\evaluationForm\create.js')}}" defer>
     // new form object evaluateForm

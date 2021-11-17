@@ -27,6 +27,8 @@
 var evaluateForm = new EvaluateForm()
 
 const display_template = () => {
+
+    let read = isAdmin ? false : true;
     let tables = document.getElementById('all-table').querySelectorAll('table')
     for (let i = 0; i < tables.length; i++) {
         const table = tables[i]
@@ -60,10 +62,11 @@ const display_template = () => {
 
 
                 let cellBase_line = newRow.insertCell()
-                cellBase_line.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`))
+                console.log(read);
+                cellBase_line.appendChild(newInput('number', className, 'base_line', element.base_line.toFixed(2), '', `changeValue(this)`,read))
 
                 let cellMax = newRow.insertCell()
-                cellMax.appendChild(newInput('number', className, 'max', element.max.toFixed(2), '', `changeValue(this)`))
+                cellMax.appendChild(newInput('number', className, 'max', element.max.toFixed(2), '', `changeValue(this)`,read))
 
                 let cellWeight = newRow.insertCell()
                 cellWeight.appendChild(newInput('number', className, 'weight', element.weight.toFixed(2), '', `changeValue(this)`))

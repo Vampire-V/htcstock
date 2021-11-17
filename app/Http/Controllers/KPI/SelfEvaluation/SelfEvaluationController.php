@@ -729,9 +729,11 @@ class SelfEvaluationController extends Controller
             });
             $detail = new Collection();
             $new->each(function ($item) use ($detail) {
+
                 $detail->add($item->unique('rule_id')->first());
             });
-
+            // dd($detail->pluck('rule_id'));
+            // exit;
             $evaluate = $evaluates->first();
             $evaluate->kpi_reduce = $kpi_reduce;
             $evaluate->key_task_reduce = $key_task_reduce;
@@ -740,6 +742,7 @@ class SelfEvaluationController extends Controller
             $evaluate->key_task_reduce_hod = $key_task_reduce_hod;
             $evaluate->omg_reduce_hod = $omg_reduce_hod;
             $this->calculation_detail($detail);
+            $evaluate->evaluateDetail = $detail;
             $group_category = $evaluate->evaluateDetail->groupBy(fn ($item) => $item->rule->category->name);
             $quarter_weight = config('kpi.weight')['month'];
             // $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];

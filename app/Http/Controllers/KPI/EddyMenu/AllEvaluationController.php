@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ALL\UserEvaluateResource;
 use App\Http\Resources\KPI\EvaluateDetailResource;
 use App\Http\Resources\KPI\EvaluateResource;
+use App\Models\KPI\EvaluateDetail;
 use App\Models\User;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use App\Services\IT\Interfaces\UserServiceInterface;
@@ -15,6 +16,7 @@ use App\Services\KPI\Interfaces\EvaluateServiceInterface;
 use App\Services\KPI\Interfaces\TargetPeriodServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response;
 
 class AllEvaluationController extends Controller
 {
@@ -39,7 +41,7 @@ class AllEvaluationController extends Controller
      */
     public function index(Request $request)
     {
-        
+
         $firsts = \collect([KPIEnum::ready, KPIEnum::draft]);
         $second = \collect([KPIEnum::on_process]);
         $third = \collect([KPIEnum::approved]);
@@ -164,9 +166,24 @@ class AllEvaluationController extends Controller
     {
         try {
             $data = User::with(['evaluate.evaluateDetail'])->notResigned()->get();
-            return $this->successResponse(UserEvaluateResource::collection($data), "user evaluates all", 200);
+            return $this->successResponse(UserEvaluateResource::collection($data), "user evaluates all", Response::HTTP_OK);
         } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function rules_ready(Request $request)
+    {
+        try {
+            $sel_month = $request->month ?? date('m');
+            $sel_year = $request->year ?? date('Y');
+            $items = EvaluateDetail::select('id','evaluate_id','rule_id','target','actual')->with(['evaluate.user', 'evaluate.targetperiod', 'rule.category'])
+            // ->whereHas('rule', fn ($query) => $query->where('user_actual', \auth()->id()))
+            ->whereHas('evaluate', fn ($query) => $query->whereIn('status', [KPIEnum::ready, KPIEnum::draft]))->setActualFilter($request)->get();
+            // $this->evaluateDetailService->setActualFilter($request);
+            return \view('kpi.Eddy.rulesready',\compact('items','sel_month','sel_year'));
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

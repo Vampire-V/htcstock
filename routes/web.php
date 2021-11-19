@@ -44,11 +44,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 });
-Route::get('testdb', function () {
-    // DB::connection('sqlsrv')->enableQueryLog(); // Enable query log
-    // $dd = DB::connection('sqlsrv')->select('exec spCheckOT ?,?,?,?,?', ["2021", "20210813", "%", "%", "%"]);
-    // dd($dd,DB::connection('sqlsrv')->getQueryLog());
-});
+// Route::get('testdb', function () {
+//     DB::connection('sqlsrv')->enableQueryLog(); // Enable query log
+//     $dd = DB::connection('sqlsrv')->select('exec spCheckOT ?,?,?,?,?', ["2021", "20210813", "%", "%", "%"]);
+//     dd($dd,DB::connection('sqlsrv')->getQueryLog());
+// });
 
 // Directory Admin   middleware('can:for-superadmin-admin') เรียกมาจาก AuthServiceProvider for-superadmin-admin 'can:for-superadmin-admin',
 Route::get('users/{id}/link/{admin}', 'Admin\UsersController@authbyadmin')->name('auth.employee');

@@ -58,7 +58,7 @@
                 {{-- admin --}}
                 @canany(['admin-kpi'])
                 <li class="app-sidebar__heading">Operation</li>
-                
+
                 <li>
                     <a href="{{route('kpi.rule-list.index')}}" class="{{Helper::isActive('kpi/rule-list*')}}">
                         <i class="metismenu-icon pe-7s-upload"></i>
@@ -79,7 +79,7 @@
                 </li>
                 @endcanany
                 {{-- end admin --}}
-                
+
                 {{-- admin manager --}}
                 @canany(['admin-kpi','manager-kpi'])
                 <li class="app-sidebar__heading">Manager</li>
@@ -109,6 +109,12 @@
                             <a href="{{route('kpi.for-eddy.index')}}" class="{{Helper::isActive('kpi/for-eddy')}}">
                                 <i class="metismenu-icon"></i>
                                 Employee report
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{route('kpi.for-eddy.rulesready')}}" class="{{Helper::isActive('kpi/for-eddy/rules/ready')}}">
+                                <i class="metismenu-icon"></i>
+                                Rules report
                             </a>
                         </li>
                         <li>

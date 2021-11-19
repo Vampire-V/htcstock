@@ -276,7 +276,7 @@
                                 <td>{{$item->comment}}</td>
                                 <td>{{$item->createdBy->name}}</td>
                                 <td>{{$item->ip}}</td>
-                                <td>{{$item->device}}</td>
+                                <td>###############</td>
                                 <td>{{$item->created_at}}</td>
                             </tr>
                             @endforeach

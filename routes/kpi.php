@@ -72,8 +72,11 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::resource('set-actual', 'SetActual\SetActualController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
     Route::put('send-mail/','SetActual\SetActualController@sendemail');
     Route::resource('for-eddy', 'EddyMenu\AllEvaluationController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
+    // Route::get('for-eddy/rulesready', 'EddyMenu\AllEvaluationController@rulesready')->name('rulesready');
     Route::group(['prefix' => 'for-eddy','as'=>'for-eddy.'], function () {
+
         Route::get('config/deadline', 'EddyMenu\DeadLineController@index')->name('deadline');
+        Route::get('rules/ready', 'EddyMenu\AllEvaluationController@rules_ready')->name('rulesready');
         Route::get('config/deadline/dropdown', 'EddyMenu\DeadLineController@deadline');
         Route::get('user/actions/{id}', 'EddyMenu\DeadLineController@setting_action_user');
         Route::post('attach/action/{action}', 'EddyMenu\DeadLineController@attach_authorization');
@@ -81,6 +84,7 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
         Route::post('update/action/{action}', 'EddyMenu\DeadLineController@update_endday');
 
         Route::get('user/evaluates', 'EddyMenu\AllEvaluationController@user_evaluates')->name('user_evaluates');
+
     });
 
     Route::resource('set-period', 'SetPeriod\TargetPeriodController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);

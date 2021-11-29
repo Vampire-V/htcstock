@@ -210,7 +210,7 @@ trait CalculatorEvaluateTrait
                 if ($parent->actual > $object->actual) {
                     $object->actual_pc = ($object->actual / $this->isZeroNew($parent->actual)) * 100.00;
                 } else {
-                    $object->actual_pc = 0.00;
+                    $object->actual_pc = 100.00;
                 }
             }
             if ($object->rule->calculate_type === KPIEnum::zero_oriented_kpi) {

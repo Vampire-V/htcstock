@@ -317,16 +317,24 @@ var findAchValue = (obj) => {
                 // ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)
             }
             if (obj.rules.calculate_type === calculate.NEGATIVE) {
-                let dd = (obj.actual / obj.target)
-                if (dd === -Infinity) {
-                    dd = 0
+                if (obj.actual > obj.target) {
+                    ach = parseFloat((2 - (obj.actual / obj.target)) * 100.00)
+                } else {
+                    ach = 100.00;
                 }
+                // #version 3
+                // let dd = (obj.actual / obj.target)
+                // if (dd === -Infinity) {
+                //     dd = 0
+                // }
+                // ach = parseFloat((2 - dd) * 100.00)
+
                 // console.log(obj.actual);
                 // if (obj.actual !== 0.00) {
                 //     if (obj.actual < obj.target) {
                 //         ach = obj.max_result ?? obj.max
                 //     } else {
-                ach = parseFloat((2 - dd) * 100.00)
+
                 // console.log(obj.rules.name,ach);
                 // }
                 // }else{
@@ -354,17 +362,22 @@ var findAchValue = (obj) => {
                 // ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((obj.actual_pc / obj.target_pc) * 100)
             }
             if (obj.rules.calculate_type === calculate.NEGATIVE) {
-                // console.log(obj.actual_pc , obj.target_pc);
-                let dd = (obj.actual_pc / obj.target_pc)
-                if (dd === -Infinity) {
-                    dd = 0
+                if (obj.actual_pc > obj.target_pc) {
+                    ach = parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100.00)
+                } else {
+                    ach = 100.00;
                 }
-                ach = parseFloat((2 - dd) * 100.00)
+                // #version 3
+                // console.log(obj.actual_pc , obj.target_pc);
+                // let dd = (obj.actual_pc / obj.target_pc)
+                // if (dd === -Infinity) {
+                //     dd = 0
+                // }
+                // ach = parseFloat((2 - dd) * 100.00)
                 // if (obj.actual_pc !== 0.00) {
                 //     if (obj.actual_pc < obj.target_pc) {
                 //         ach = obj.max ?? obj.max_result
                 //     } else {
-                // ach = parseFloat((2 - dd ) * 100.00)
                 // console.log(obj.rules.name,ach);
                 //     }
                 // }else{
@@ -615,7 +628,7 @@ var score_findTargetPercent = (element, array) => {
 
 
 const score_findAchValue = (obj) => {
-    
+
     if (typeof obj === `object`) {
         if (!obj.rule.parent) {
             // ใช้ amount หา
@@ -632,16 +645,22 @@ const score_findAchValue = (obj) => {
                 // ach = obj.actual >= obj.target ? obj.max : obj.actual === 0.00 ? 0.00 : parseFloat((obj.actual / obj.target) * 100.00)
             }
             if (obj.rule.calculate_type === calculate.NEGATIVE) {
-                let dd = (obj.actual / obj.target)
-                if (dd === -Infinity) {
-                    dd = 0
+                if (obj.actual > obj.target) {
+                    ach = parseFloat((2 - (obj.actual / obj.target)) * 100.00)
+                } else {
+                    ach = 100.00;
                 }
+                // #version 3
+                // let dd = (obj.actual / obj.target)
+                // if (dd === -Infinity) {
+                //     dd = 0
+                // }
                 // console.log(obj.actual);
                 // if (obj.actual !== 0.00) {
                 //     if (obj.actual < obj.target) {
                 //         ach = obj.max_result ?? obj.max
                 //     } else {
-                ach = parseFloat((2 - dd) * 100.00)
+                // ach = parseFloat((2 - dd) * 100.00)
                 // console.log(obj.rules.name,ach);
                 // }
                 // }else{
@@ -669,12 +688,18 @@ const score_findAchValue = (obj) => {
                 // ach = obj.actual_pc >= obj.target_pc ? obj.max : parseFloat((obj.actual_pc / obj.target_pc) * 100)
             }
             if (obj.rule.calculate_type === calculate.NEGATIVE) {
-                // console.log(obj.actual_pc , obj.target_pc);
-                let dd = (obj.actual_pc / obj.target_pc)
-                if (dd === -Infinity) {
-                    dd = 0
+                if (obj.actual_pc > obj.target_pc) {
+                    ach = parseFloat((2 - (obj.actual_pc / obj.target_pc)) * 100.00)
+                } else {
+                    ach = 100.00;
                 }
-                ach = parseFloat((2 - dd) * 100.00)
+                // #version 3
+                // console.log(obj.actual_pc , obj.target_pc);
+                // let dd = (obj.actual_pc / obj.target_pc)
+                // if (dd === -Infinity) {
+                //     dd = 0
+                // }
+                // ach = parseFloat((2 - dd) * 100.00)
                 // if (obj.actual_pc !== 0.00) {
                 //     if (obj.actual_pc < obj.target_pc) {
                 //         ach = obj.max ?? obj.max_result

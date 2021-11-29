@@ -312,18 +312,33 @@ class EvaluationFormController extends Controller
     {
         DB::beginTransaction();
         $list = \collect([KPIEnum::ready, KPIEnum::draft]);
+        $list_admin = \collect(KPIEnum::$status);
         try {
             $item = $this->evaluateService->find($evaluate);
-            if ($list->contains($item->status)) {
-                $item->status = KPIEnum::new;
-                $item->current_level = null;
-                $item->next_level = null;
-                $item->save();
-                $request->session()->flash('success',  ' has been Pull Back Evaluate..');
-                DB::commit();
-                return \redirect()->back();
-            } else {
-                return \redirect()->back()->with('error', "Error : This status cannot be pull back.");
+            if (Gate::allows(UserEnum::ADMINKPI)) {
+                if ($list_admin->contains($item->status)) {
+                    $item->status = KPIEnum::new;
+                    $item->current_level = null;
+                    $item->next_level = null;
+                    $item->save();
+                    $request->session()->flash('success',  ' has been Pull Back Evaluate..');
+                    DB::commit();
+                    return \redirect()->back();
+                } else {
+                    return \redirect()->back()->with('error', "Error : This status cannot be pull back.");
+                }
+            }else{
+                if ($list->contains($item->status)) {
+                    $item->status = KPIEnum::new;
+                    $item->current_level = null;
+                    $item->next_level = null;
+                    $item->save();
+                    $request->session()->flash('success',  ' has been Pull Back Evaluate..');
+                    DB::commit();
+                    return \redirect()->back();
+                } else {
+                    return \redirect()->back()->with('error', "Error : This status cannot be pull back.");
+                }
             }
         } catch (\Exception $e) {
             DB::rollBack();

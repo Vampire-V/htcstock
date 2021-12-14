@@ -209,8 +209,10 @@ trait CalculatorEvaluateTrait
                 // }
                 if ($parent->actual > $object->actual) {
                     $object->actual_pc = ($object->actual / $this->isZeroNew($parent->actual)) * 100.00;
-                } else {
+                } else if($parent->actual === 0.00){
                     $object->actual_pc = $object->target;
+                } else{
+                    $object->actual_pc = ($object->actual / $this->isZeroNew($parent->actual)) * 100.00;
                 }
             }
             if ($object->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
@@ -236,8 +238,10 @@ trait CalculatorEvaluateTrait
                 // }
                 if ($object->actual > $object->target) {
                     $object->actual_pc = (($object->actual / $this->isZeroNew($object->target))) * 100.00;
-                } else {
+                } else if($object->actual === 0.00){
                     $object->actual_pc = $object->target;
+                } else{
+                    $object->actual_pc = (($object->actual / $this->isZeroNew($object->target))) * 100.00;
                 }
             }
             if ($object->rule->calculate_type === KPIEnum::zero_oriented_kpi) {

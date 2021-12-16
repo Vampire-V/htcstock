@@ -749,12 +749,25 @@ class SelfEvaluationController extends Controller
             $category = $this->categoryService->dropdown();
             $summary = new Collection();
             foreach ($category as $key => $value) {
+
                 $model = new stdClass();
                 $model->key = $value->name;
                 $model->weight = $quarter_weight[$key];
-                $model->cal = isset($group_category[$model->key]) ? ($group_category[$model->key]->reduce(fn ($curry, $item) => $curry += $item->cal, 0) * $model->weight) / 100 : 0;
+
+                if ($value->name === KPIEnum::KPI) {
+                    $model->cal = isset($group_category[$model->key]) ? (($group_category[$model->key]->reduce(fn ($curry, $item) => $curry += $item->cal, 0) - $kpi_reduce) * $model->weight) / 100 : 0;
+                }
+                if ($value->name === KPIEnum::KEY) {
+                    $model->cal = isset($group_category[$model->key]) ? (($group_category[$model->key]->reduce(fn ($curry, $item) => $curry += $item->cal, 0) - $key_task_reduce) * $model->weight) / 100 : 0;
+                }
+                if ($value->name === KPIEnum::OMG) {
+                    $model->cal = isset($group_category[$model->key]) ? (($group_category[$model->key]->reduce(fn ($curry, $item) => $curry += $item->cal, 0) - $omg_reduce) * $model->weight) / 100 : 0;
+                }
+
+
                 $summary->push($model);
             }
+            // dd($evaluate);
             return \view('kpi.SelfEvaluation.monthmany', \compact('evaluate', 'group_category', 'quarter_weight', 'summary', 'month_rang','year'));
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());

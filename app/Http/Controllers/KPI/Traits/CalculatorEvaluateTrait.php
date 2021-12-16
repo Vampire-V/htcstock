@@ -21,7 +21,7 @@ trait CalculatorEvaluateTrait
                 } else {
                     $value->weigth = config('kpi.weight')['month'];
                 }
-                $this->calculation_detail($value->evaluateDetail);
+                $this->calculation_detail($value->evaluateDetail,$value->user_id);
                 // dd($value,$value->evaluateDetail->groupBy(fn($item) => $item->rule->category_id));
             }
         } else {
@@ -29,7 +29,7 @@ trait CalculatorEvaluateTrait
                 $value = $evaluations[$i];
                 if ($value->user->degree === KPIEnum::one) {
                     $value->weigth = config('kpi.weight')['quarter'];
-                }else{
+                } else {
                     $value->weigth = config('kpi.weight')['month'];
                 }
                 $this->calculation_detail($value->evaluateDetail);
@@ -37,7 +37,7 @@ trait CalculatorEvaluateTrait
         }
     }
 
-    protected function calculation_detail(Collection $evaluate_detail)
+    protected function calculation_detail(Collection $evaluate_detail,$user = null)
     {
         if ($evaluate_detail) {
             for ($i = 0; $i < $evaluate_detail->count(); $i++) {
@@ -76,22 +76,13 @@ trait CalculatorEvaluateTrait
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                // if ($ac > $tar) {
-                //     $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
-                // } else {
-                //     $item->ach = $item->max_result ?? $item->max;
-                // }
-                $dd = ($ac / $this->isZeroNew($tar));
-                // if ($ac !== 0.00) {
-                $item->ach =  (2 - $dd) * 100.00;
-                // } else{
-                //     $item->ach = 0.00;
-                // }
-                // $dd = (obj.actual / obj.target)
-                // if (dd === -Infinity) {
-                //     dd = 0
-                // }
-                // ach = parseFloat((2 - dd ) * 100.00)
+                if ($ac > $tar) {
+                    $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
+                } else if ($tar === 0.00) {
+                    $item->ach = $item->max_result;
+                } else {
+                    $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
+                }
             }
             if ($item->rule->calculate_type === KPIEnum::zero_oriented_kpi) {
                 $item->ach = $ac <= $tar ? $item->max_result : 0.00;
@@ -119,18 +110,12 @@ trait CalculatorEvaluateTrait
                 }
             }
             if ($item->rule->calculate_type === KPIEnum::negative) {
-                // if ($ac > $tar) {
-                //     $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
-                // } else{
-                //     $item->ach = $item->max_result ?? $item->max;
-                // }
-
-                $dd = ($ac / $this->isZeroNew($tar));
-                // if ($ac !== 0.00) {
-                if ($tar === 0.00) {
-                    $item->ach = 0.00;
+                if ($ac > $tar) {
+                    $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
+                } else if ($tar === 0.00) {
+                    $item->ach = $item->max_result;
                 } else {
-                    $item->ach = (2 - $dd) * 100.00;
+                    $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
                 }
 
 
@@ -209,9 +194,9 @@ trait CalculatorEvaluateTrait
                 // }
                 if ($parent->actual > $object->actual) {
                     $object->actual_pc = ($object->actual / $this->isZeroNew($parent->actual)) * 100.00;
-                } else if($parent->actual === 0.00){
+                } else if ($parent->actual === 0.00) {
                     $object->actual_pc = $object->target;
-                } else{
+                } else {
                     $object->actual_pc = ($object->actual / $this->isZeroNew($parent->actual)) * 100.00;
                 }
             }
@@ -238,9 +223,9 @@ trait CalculatorEvaluateTrait
                 // }
                 if ($object->actual > $object->target) {
                     $object->actual_pc = (($object->actual / $this->isZeroNew($object->target))) * 100.00;
-                } else if($object->actual === 0.00){
+                } else if ($object->actual === 0.00) {
                     $object->actual_pc = $object->target;
-                } else{
+                } else {
                     $object->actual_pc = (($object->actual / $this->isZeroNew($object->target))) * 100.00;
                 }
             }

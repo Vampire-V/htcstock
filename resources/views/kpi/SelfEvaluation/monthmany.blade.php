@@ -141,11 +141,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($items as $item)
+                                @foreach ($items->sortBy("rule_id") as $item)
                                 @if ($key !== "omg")
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td data-toggle="tooltip" title="" data-placement="top" class="truncate" data-original-title="{{$item->rule->name}}">{{$item->rule->name}}</td>
+                                    <td data-toggle="tooltip" title="" data-placement="top" class="truncate" data-original-title="{{$item->rule->name}}">{{$item->rule_id}} : {{$item->rule->name}}</td>
                                     <td data-toggle="tooltip" title="" data-placement="top" class="truncate" data-original-title="{{$item->rule->description}}">{{$item->rule->description}}</td>
                                     <td>{{Helper::decimal($item->base_line)}} %</td>
                                     <td>{{Helper::decimal($item->max_result)}} %</td>
@@ -175,7 +175,16 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td>{{Helper::decimal($items->reduce(fn($carry, $item) => $carry + $item->cal,0))}} %</td>
+                                    @php
+                                    $total_detail = 0;
+                                        if ($key === "kpi") {
+                                            $total_detail = $items->reduce(fn($carry, $item) => $carry + $item->cal,0) - $evaluate->kpi_reduce;
+                                        } else if ($key === "key-task") {
+                                            $total_detail = $items->reduce(fn($carry, $item) => $carry + $item->cal,0) - $evaluate->key_task_reduce;
+                                        }
+
+                                    @endphp
+                                    <td>{{Helper::decimal($total_detail)}} %</td>
                                     <td></td>
                                 </tr>
                                 @endif

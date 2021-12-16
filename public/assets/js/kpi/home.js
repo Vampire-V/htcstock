@@ -666,7 +666,6 @@ let calculator_evaluates = (evaluates, reduce_averrage, checkQuarter) => {
 };
 
 let total_quarter = (objArr,quarter_all) => {
-    const d = new Date();
     let temp = []
         // quarter_all = $("#quarter").val() === "" ? d.getMonth() + 1 - 1 : 3;
     //(d.getMonth()+1) - 1 จะมีปัญหา สิ้นปี
@@ -705,9 +704,8 @@ let total_quarter = (objArr,quarter_all) => {
 
     try {
         for (let index = 0; index < temp.length; index++) {
-            const element = temp[index],
-            weight = element.average_weight.reduce((a, b) => a + b, 0);
-
+            const element = temp[index]
+            let weight = element.average_weight.reduce((previousValue, currentValue) => previousValue + currentValue)
             element.max_result = element.average_max[element.average_max.length - 1];
             element.weight = element.rule.category.name === category.OMG ? weight : weight / quarter_all;
             element.target = score_quarter_cal_target(element);
@@ -715,7 +713,7 @@ let total_quarter = (objArr,quarter_all) => {
             element.actual_pc = score_findActualPercent(element, temp);
             element.target_pc = score_findTargetPercent(element, temp);
             element.ach = score_findAchValue(element);
-            element.cal = score_findCalValue(element, element.ach);
+            element.cal = Math.round(score_findCalValue(element, element.ach) * 100) / 100;
         }
 
     } catch (error) {

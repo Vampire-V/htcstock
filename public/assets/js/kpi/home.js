@@ -1188,7 +1188,7 @@ $("#list-invalid-modal").on("hide.bs.modal", function (event) {
 const changeValues = async (e) => {
     let inputs, isSave, regexp, form;
     isSave = true;
-    regexp = /^\d+(\.\d{1,2})?$/;
+    regexp = /^-?\d+(\.\d{1,2})?$/;
     inputs = document
         .getElementById("list-invalid-modal")
         .querySelectorAll("INPUT");
@@ -1200,6 +1200,7 @@ const changeValues = async (e) => {
     };
 
     inputs.forEach((element, key) => {
+        console.log(regexp.test(element.value));
         if (!regexp.test(element.value)) {
             isSave = false;
             toast(`${element.name} value ${element.value} not match.`, "error");

@@ -145,7 +145,7 @@
                                 @if ($key !== "omg")
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td data-toggle="tooltip" title="" data-placement="top" class="truncate" data-original-title="{{$item->rule->name}}">{{$item->rule_id}} : {{$item->rule->name}}</td>
+                                    <td data-toggle="tooltip" title="" data-placement="top" class="truncate" data-original-title="{{$item->rule->name}}">{{$item->rule->name}}</td>
                                     <td data-toggle="tooltip" title="" data-placement="top" class="truncate" data-original-title="{{$item->rule->description}}">{{$item->rule->description}}</td>
                                     <td>{{Helper::decimal($item->base_line)}} %</td>
                                     <td>{{Helper::decimal($item->max_result)}} %</td>

@@ -137,10 +137,15 @@ class SelfEvaluationController extends Controller
             $canOperation = Gate::allows(UserEnum::OPERATIONKPI);
             $isAdmin = Gate::allows(UserEnum::ADMINKPI);
             $history = $this->evaluateService->history($f_evaluate);
+            $onSave = true;
+            if ($evaluate->status === KPIEnum::approved && !$isAdmin) {
+                $onSave = false;
+            }
+
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category', 'weight_group', 'current', 'canOperation', 'isAdmin', 'history'));
+        return \view('kpi.SelfEvaluation.evaluate', \compact('evaluate', 'category', 'weight_group', 'current', 'canOperation', 'isAdmin', 'history','onSave'));
     }
 
     /**

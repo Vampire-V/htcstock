@@ -247,7 +247,7 @@
     <button class="mb-2 mr-2 btn btn-alternate no-disable" onclick="download()">Download</button>
     @endif
 
-    <button class="mb-2 mr-2 btn btn-primary" id="submit" onclick="submit()">Save</button>
+    <button class="mb-2 mr-2 btn btn-primary" id="submit" onclick="submit() @if ($onSave === false) disable @endif">Save</button>
     <button class="mb-2 mr-2 btn btn-success" id="submit-to-user" onclick="submitToManager()">Save & Send to
         manager</button>
 </div>

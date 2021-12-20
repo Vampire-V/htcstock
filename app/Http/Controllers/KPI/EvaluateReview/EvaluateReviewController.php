@@ -201,7 +201,7 @@ class EvaluateReviewController extends Controller
                     // Level last
                     $last_level = $this->userApproveService->findLastLevel($evaluate);
                     $evaluate->status = KPIEnum::approved;
-                    Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
+                    // Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
                     Log::notice("User : " . \auth()->user()->name . " = Update evaluate review End process : id = " . $evaluate->id);
                     $message = KPIEnum::approved;
                     $evaluate->current_level = $last_level->level;

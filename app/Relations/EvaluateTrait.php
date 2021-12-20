@@ -3,6 +3,7 @@
 namespace App\Relations;
 
 use App\Models\KPI\EvaluateDetail;
+use App\Models\KPI\EvaluatesHistory;
 use App\Models\KPI\TargetPeriod;
 use App\Models\KPI\Template;
 use App\Models\KPI\UserApprove;
@@ -48,6 +49,11 @@ trait EvaluateTrait
     public function userApprove()
     {
         return $this->hasMany(UserApprove::class,'user_id','user_id');
+    }
+
+    public function history()
+    {
+        return $this->hasMany(EvaluatesHistory::class);
     }
 
 }

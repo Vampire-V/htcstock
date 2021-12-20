@@ -142,6 +142,7 @@
                             <th>Year</th>
                             <th>Period</th>
                             <th>Status</th>
+                            <th>Next approval</th>
                             <th>#</th>
                         </tr>
                     </thead>
@@ -159,6 +160,7 @@
                             <td>{{$evaluate->targetperiod->name}}</td>
                             <td><span class="{{Helper::kpiStatusBadge($evaluate->status)}}">{{$evaluate->status}}</span>
                             </td>
+                            <td>{{$evaluate->userApprove->where('level',$evaluate->next_level)->first()->approveBy->name}}</td>
                             <td><a href="{{route('kpi.evaluation-review.edit',$evaluate->id)}}"
                                     class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info">Review
                                 </a></td>

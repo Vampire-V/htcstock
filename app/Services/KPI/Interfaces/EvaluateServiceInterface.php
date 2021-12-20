@@ -20,7 +20,7 @@ interface EvaluateServiceInterface
     public function dropdown(): Collection;
     public function isDuplicate(int $user, int $period);
     public function findKeyEvaluate(int $user, int $period, int $evaluate);
-    public function reviewfilter(Request $request);
+    public function reviewFilter(Request $request);
     public function selfFilter(Request $request);
     public function editEvaluateFilter(Request $request): Collection;
     public function scoreFilter(Request $request): Collection;

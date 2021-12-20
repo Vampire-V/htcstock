@@ -290,6 +290,37 @@
 
 @section('modal')
 {{-- Modal --}}
+<div class="modal fade" id="add-rule-modal" tabindex="-1" role="dialog" aria-labelledby="add-rule-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-rule-modal-label">New Rule</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="reload" class="reload"></div>
+                <form id="form-rule">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group"><label for="add-rule-name" class="">Rule Name
+                                    :</label>
+                                <select id="add_rule_name" class="form-control form-control-sm" name="add_rule_name">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="addrule_new()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="switch-rule-modal" tabindex="-1" role="dialog" aria-labelledby="switch-rule-modal-label"
     aria-hidden="true">
@@ -318,7 +349,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="changerule()">Add</button>
+                <button type="button" class="btn btn-primary" onclick="changerule()">Change</button>
             </div>
         </div>
     </div>

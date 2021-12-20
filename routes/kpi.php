@@ -45,6 +45,7 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::get('rules/download', 'Rule\RuleController@rulesdowload')->name('rules.export');
     Route::post('rules/notin', 'Rule\RuleController@rulesnotin');
     Route::put('rule/put/evaluate','Rule\RuleController@switchrule');
+    Route::post('rule/post/evaluate','Rule\RuleController@addrulenew');
 
     Route::get('rules/template/download', 'Rule\RuleController@template_rule')->name('rules.download-template');
 

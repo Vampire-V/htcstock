@@ -503,6 +503,25 @@ class RuleController extends Controller
         }
     }
 
+    public function addrulenew(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $new_rule = $this->ruleService->find($request->new_rule);
+            $model = new EvaluateDetail();
+            $model->evaluate_id = $request->form_id;
+            $model->rule_id = $new_rule->id;
+            // $row = EvaluateDetail::find($request->form_detail_id);
+            // $row->rule_id = $new_rule->id;
+            $model->save();
+            DB::commit();
+            return $this->successResponse($new_rule, "Success add...", 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
     public function template_rule(Request $request)
     {
         if (!Gate::allows(UserEnum::OPERATIONKPI)) {

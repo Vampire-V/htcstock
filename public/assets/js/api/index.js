@@ -68,6 +68,12 @@ const putRuleInEvaluate = (form) => axios({
     url: `/kpi/rule/put/evaluate`,
     data: form
 })
+const postRuleInEvaluate = (form) => axios({
+    method: 'POST',
+    responseType: 'json',
+    url: `/kpi/rule/post/evaluate`,
+    data: form
+})
 const postRulesNotIn = (form) => axios({
     method: 'POST',
     responseType: 'json',

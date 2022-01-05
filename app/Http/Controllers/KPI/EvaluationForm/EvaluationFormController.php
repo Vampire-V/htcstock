@@ -270,8 +270,8 @@ class EvaluationFormController extends Controller
 
                 if ($request->next) {
                     # send mail to staff
-                    Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
-                    Log::notice("User : " . \auth()->user()->name . " = Send mail evaluate form  : id = " . $evaluate->id);
+                    // Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
+                    // Log::notice("User : " . \auth()->user()->name . " = Send mail evaluate form  : id = " . $evaluate->id);
                 }
             }
         } catch (\Exception $e) {

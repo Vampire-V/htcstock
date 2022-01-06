@@ -71,10 +71,8 @@ class HomeController extends Controller
     public function report_rule_of_year(Request $request, $year)
     {
         try {
-            $rules = $this->ruleService->rulesInEvaluationReport($year, $request);
-            // return $this->successResponse($rules,200);
-            // dd($rules);
             $periods = $this->targetPeriodService->query()->where('year', $year)->get();
+            $rules = $this->ruleService->rulesInEvaluationReport($periods, $request);
             foreach ($rules as $rule) {
                 $total = \collect();
                 foreach ($periods as $period) {

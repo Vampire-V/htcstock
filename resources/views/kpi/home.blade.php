@@ -205,6 +205,11 @@
                             <select class="form-control-sm form-control" name="category" id="category">
                             </select>
                             &nbsp;&nbsp;&nbsp;
+
+                            Year &nbsp;
+                            <select class="form-control-sm form-control" name="rule_year" id="rule_year">
+                            </select>
+                            &nbsp;&nbsp;&nbsp;
                             <button type="button" class="btn btn-info btn-sm" onclick="render_rule()">Search</button>
                         </div>
                     </div>
@@ -258,6 +263,11 @@
 
                             &nbsp;&nbsp;&nbsp;<input type="text" onkeyup="search_staff_table(this)" name="full_name"
                                 class="form-control-sm form-control" placeholder="Search for names..">
+
+                                &nbsp; Year &nbsp;
+                            <select class="form-control-sm form-control" name="staff_year" id="staff_year" onchange="render_staff_evaluate()">
+                            </select>
+                            &nbsp;&nbsp;&nbsp;
                         </div>
                     </div>
                     <div class="card-body">

@@ -99,8 +99,8 @@ class HomeController extends Controller
     public function report_staff_evaluate_year($year)
     {
         try {
-            $users = $this->userService->evaluationOfYearReport($year);
             $periods = $this->targetPeriodService->query()->where('year', $year)->get();
+            $users = $this->userService->evaluationOfYearReport($periods);
             for ($i = 0; $i < $users->count(); $i++) {
                 $user = $users[$i];
                 $this->calculation_summary($user->evaluates);

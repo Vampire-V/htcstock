@@ -94,6 +94,8 @@ document.addEventListener("DOMContentLoaded", function () {
         search_score();
     } else {
         make_category();
+        make_rule_year();
+        make_staff_year();
         render_rule();
         render_staff_evaluate();
     }
@@ -114,7 +116,7 @@ const tabActive = (e) => {
     }
 };
 
-// tab-operation method
+//## tab-operation method
 document.getElementById("isQuarter").addEventListener("click", () => {
     search_score();
 });
@@ -454,6 +456,7 @@ const make_options_report_score = async () => {
     removeAllChildNodes(selectQuarter);
     removeAllChildNodes(selectDivision);
 
+
     // year
     do {
         let text_year = year--;
@@ -752,12 +755,41 @@ const search_staff_table = (e) => {
         }
     }
 };
+const make_rule_year = () => {
+    let max = 5
+    let selectYearh = document.getElementById("rule_year")
+    let year = new Date().getFullYear();
 
+    removeAllChildNodes(selectYearh);
+    // year
+    do {
+        let text_year = year--;
+        max--;
+        selectYearh.add(new Option(text_year, text_year), null);
+    } while (max > 0);
+}
+const make_staff_year = () => {
+    let max = 5
+    let selectYearh = document.getElementById("staff_year")
+    let year = new Date().getFullYear();
+
+    removeAllChildNodes(selectYearh);
+    // year
+    do {
+        let text_year = year--;
+        max--;
+        selectYearh.add(new Option(text_year, text_year), null);
+    } while (max > 0);
+}
 const render_rule = async () => {
     if (show_rules) {
         let table = document.getElementById("table-rule-evaluation");
+        if (table.previousElementSibling.classList.length < 1) {
+            table.previousElementSibling.classList.add('reload')
+        }
+        
         try {
-            let d = new Date();
+            let selectedYear = $("#rule_year").val()
             let filter = {
                 category_id: [],
             };
@@ -767,7 +799,7 @@ const render_rule = async () => {
             if ($("#ruleName").val()) {
                 filter.ruleName = $("#ruleName").val();
             }
-            let result = await getReportRuleOfYear(d.getFullYear(), {
+            let result = await getReportRuleOfYear(selectedYear, {
                 params: filter,
             });
 
@@ -960,9 +992,12 @@ const findLastValue = (rule, array, key) => {
 
 const render_staff_evaluate = async () => {
     let table = document.getElementById("table-staff-evaluation");
+    if (table.previousElementSibling.classList.length < 1) {
+        table.previousElementSibling.classList.add('reload')
+    }
     try {
-        let d = new Date();
-        let result = await getReportStaffEvaluate(d.getFullYear());
+        let staffYear = $('#staff_year').val();
+        let result = await getReportStaffEvaluate(staffYear);
         await staff_data_to_table(result.data.data);
         $('[data-toggle="tooltip"]').tooltip();
         table.previousElementSibling.classList.remove("reload");

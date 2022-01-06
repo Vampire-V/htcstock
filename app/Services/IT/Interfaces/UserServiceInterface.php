@@ -31,7 +31,7 @@ interface UserServiceInterface
 
     public function user($id): User;
 
-    public function evaluationOfYearReport(string $year): Collection;
+    public function evaluationOfYearReport(Collection $period): Collection;
 
     public function getManager(User $user): User;
 

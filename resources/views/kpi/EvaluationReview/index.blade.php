@@ -165,7 +165,7 @@
                                     $nextAp = $evaluate->userApprove->where('level',$evaluate->next_level)->first()
                                     
                                 @endphp
-                                {{$nextAp ? $nextAp->approveBy->name : ""}}
+                                {{$nextAp ? $nextAp->approveBy->name : "หาไม่เจอให้ IT ตรวจสอบ"}}
                                 {{-- ->approveBy->name --}}
                             </td>
                             <td><a href="{{route('kpi.evaluation-review.edit',$evaluate->id)}}"

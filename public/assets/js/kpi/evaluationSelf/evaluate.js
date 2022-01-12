@@ -9,6 +9,11 @@
             allowClear: true,
             dropdownParent: $("#switch-rule-modal"),
         });
+        $("#add_rule_name").select2({
+            placeholder: "Select RuleTemplate",
+            allowClear: true,
+            dropdownParent: $("#add-rule-modal"),
+        });
     });
 
     window.addEventListener(

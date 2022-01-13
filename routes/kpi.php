@@ -31,6 +31,7 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::get('self-evaluation/{user}/score/', 'SelfEvaluation\SelfEvaluationController@score_many_month')->name('evaluate.score_many_month');
     Route::get('self-evaluation/user/{user}/quarter/{quarter}/year/{year}', 'SelfEvaluation\SelfEvaluationController@display_quarter')->name('quarter');
     Route::get('self-evaluation/user/{user}/year/{year}', 'SelfEvaluation\SelfEvaluationController@display_all_quarter')->name('allquarter');
+    Route::get('self-evaluation/detailbyids','SelfEvaluation\SelfEvaluationController@detailbyids');
 
     Route::get('evaluate-report', 'SelfEvaluation\SelfEvaluationController@excelevaluate');
 

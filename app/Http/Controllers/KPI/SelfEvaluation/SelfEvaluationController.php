@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use stdClass;
+use Symfony\Component\HttpFoundation\Response;
 
 class SelfEvaluationController extends Controller
 {
@@ -776,6 +777,17 @@ class SelfEvaluationController extends Controller
             return \view('kpi.SelfEvaluation.monthmany', \compact('evaluate', 'group_category', 'quarter_weight', 'summary', 'month_rang','year'));
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+        }
+    }
+
+    public function detailbyids(Request $request)
+    {
+        try {
+            $data = $this->evaluateDetailService->byIds($request->ID);
+            $result = $data->filter(fn($item) => $item['evaluate']['period_id'] === $data->max('evaluate.period_id'));
+            return $this->successResponse($result, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(),Response::HTTP_BAD_REQUEST);
         }
     }
 }

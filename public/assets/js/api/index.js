@@ -147,6 +147,14 @@ const putEvaluateSelf = (self_evaluation, form) => axios({
     data: form
 })
 
+const fetchEvaluateDetailByIds = (ids) => {
+    return axios.get(`/kpi/self-evaluation/detailbyids`, {
+        params: {
+            ID: ids ?? []
+          }
+    })
+}
+
 const getEvaluateSelf = (staff, period, evaluate) => axios({
     method: 'GET',
     responseType: 'json',
@@ -291,7 +299,6 @@ const removeRoleApi = (user, role) => {
 }
 
 const addSystemApi = (user, system) => {
-    console.log(system)
     return axios.post(`/admin/${user}/addsystem`, {
         system: system
     })

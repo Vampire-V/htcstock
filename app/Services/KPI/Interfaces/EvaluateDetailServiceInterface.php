@@ -24,4 +24,6 @@ interface EvaluateDetailServiceInterface
     public function findLastRule($rule_id);
 
     public function updateTargetActual(float $target, float $actual, Rule $rule, array $evaluate);
+
+    public function byIds($ids);
 }

@@ -74,6 +74,14 @@ class EvaluateDetailService extends BaseService implements EvaluateDetailService
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
 
+    public function byIds($var)
+    {
+        try {
+            return EvaluateDetail::with(['evaluate','rule.category'])->whereIn('id',$var)->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

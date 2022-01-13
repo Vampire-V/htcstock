@@ -19,9 +19,20 @@
         let d = new Date()
         if (evaluate) {
             // evaluateForm = await setEvaluate(evaluate)
+            let evaluateNotOmg = await evaluate.evaluateDetail.filter(e => e.rule.category.name == category.KPI || e.rule.category.name == category.KEYTASK)
+            let evaluateOmg = await evaluate.evaluateDetail.filter(e => e.rule.category.name == category.OMG)
+            let lastOmg = await fetchEvaluateDetailByIds(evaluateOmg.map(r => r.id))
+            if (lastOmg.status === 200) {
+                for (const key in lastOmg.data.data) {
+                    if (Object.hasOwnProperty.call(lastOmg.data.data, key)) {
+                        const element = lastOmg.data.data[key];
+                        evaluateNotOmg.push(element)
+                    }
+                }
+            }
             let temp = []
-            for (var i = 0; i < evaluate.evaluateDetail.length; i++) {
-                let item = evaluate.evaluateDetail[i]
+            for (var i = 0; i < evaluateNotOmg.length; i++) {
+                let item = evaluateNotOmg[i]
                 item.weigth_list = []
                 item.average_max = []
                 item.average_actual = []
@@ -51,6 +62,8 @@
                     }
                 }
             }
+            
+            console.log(temp);
             let month_now = 12
             let quarter = 4
             if (d.getFullYear() === parseInt(evaluate.targetperiod.year)) {
@@ -63,9 +76,9 @@
                 const element = temp[index]
                 // สิ้นปี อาจมีปัญหา
                 element.max_result = element.average_max[element.average_max.length - 1]
-                element.weight = element.rule.category.name === category.OMG ? element.weight / quarter : element.weight / month_now
-                element.target = quarter_cal_target(element)
-                element.actual = quarter_cal_amount(element)
+                element.weight = element.rule.category.name === category.OMG ? element.weight : element.weight / month_now
+                element.target = element.rule.category.name === category.OMG ? element.target : quarter_cal_target(element)
+                element.actual = element.rule.category.name === category.OMG ? element.actual : quarter_cal_amount(element)
 
             }
             evaluate.evaluate_detail = temp

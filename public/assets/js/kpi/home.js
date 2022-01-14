@@ -166,22 +166,18 @@ const search_score = async () => {
         let fetch_data = await getOperationReportScore({
             params: param,
         });
-        score = await combine_information(
-            fetch_data.data.data,
-            check.checked
-        ).sort((a, b) => b.score - a.score);
+        score = await combine_information(fetch_data.data.data, check.checked);
     } catch (error) {
         console.error(error);
         toast(error, "error");
     } finally {
-        render_score(score);
+        render_score(score.sort((a, b) => b.score - a.score));
         toastClear();
     }
 };
 
 let combine_information = (fetch_data, isQuarter) => {
     let data = [],
-        average_omg,
         reduce_averrage;
 
     reduce_averrage = 0;
@@ -198,8 +194,11 @@ let combine_information = (fetch_data, isQuarter) => {
         if (isQuarter) {
             if ($("#quarter").val() === "") {
                 const d = new Date();
-                reduce_averrage = d.getMonth() + 1 - 1;
-                average_omg = getQuarterForHaier(new Date());
+                let dateForReport =
+                    d.getFullYear() !== parseInt($("#year").val())
+                        ? new Date(parseInt($("#year").val()), 11, 31)
+                        : new Date();
+                reduce_averrage = dateForReport.getMonth() + 1;
             } else {
                 reduce_averrage = 3;
             }
@@ -246,54 +245,12 @@ let combine_information = (fetch_data, isQuarter) => {
             }
             */
             let result_reunite = reunite_evaluate_user(fetch_data);
+
             data = calculator_evaluates(
                 result_reunite,
                 reduce_averrage,
                 isQuarter
             );
-            /*
-            for (let index = 0; index < result_reunite.length; index++) {
-                const element = result_reunite[index];
-                let kpi_rules = element.evaluate_detail.filter(
-                    (item) => item.rule.category.name === category.KPI
-                );
-                let key_task_rules = element.evaluate_detail.filter(
-                    (item) => item.rule.category.name === category.KEYTASK
-                );
-                let omg_rules = element.evaluate_detail.filter(
-                    (item) => item.rule.category.name === category.OMG
-                );
-
-                let total_kpi = 0, total_key = 0, total_omg = 0, sum_total = 0;
-                total_kpi =
-                    total_quarter(kpi_rules).reduce((a, c) => a + c.cal, 0) -
-                    element.kpi_reduce_point.reduce((a, c) => a + c, 0) /
-                        reduce_averrage;
-                total_key =
-                    total_quarter(key_task_rules).reduce((a, c) => a + c.cal, 0) -
-                    element.keytask_reduce_point.reduce((a, c) => a + c, 0) /
-                        reduce_averrage;
-
-                let cal_o =
-                    total_quarter(omg_rules).reduce((a, c) => a + c.cal, 0) -
-                    element.omg_reduce_point.reduce((a, c) => a + c, 0) /
-                        reduce_averrage;
-                total_omg = average_omg ? cal_o / average_omg : cal_o;
-
-                sum_total =
-                    total_kpi * weigth_template[0] +
-                    total_key * weigth_template[1] +
-                    total_omg * weigth_template[2];
-
-                data.push({
-                    evaluate: element,
-                    kpi: total_kpi,
-                    key_task: total_key,
-                    omg: total_omg,
-                    score: sum_total / 100,
-                });
-            }
-            */
         } else {
             let result_reunite = reunite_evaluate_user(fetch_data);
             let average_month = periodOfMonth(
@@ -306,40 +263,6 @@ let combine_information = (fetch_data, isQuarter) => {
                 average_month.length,
                 isQuarter
             );
-            /*
-            for (let index = 0; index < fetch_data.length; index++) {
-                let total_kpi, total_key, total_omg, sum_total;
-                const evaluate = fetch_data[index];
-                total_kpi =
-                    evaluate.evaluate_detail
-                        .filter(
-                            (item) => item.rule.category.name === category.KPI
-                        )
-                        .reduce((a, c) => a + c.cal, 0) - evaluate.kpi_reduce;
-                total_key =
-                    evaluate.evaluate_detail
-                        .filter(
-                            (item) =>
-                                item.rule.category.name === category.KEYTASK
-                        )
-                        .reduce((a, c) => a + c.cal, 0) -
-                    evaluate.key_task_reduce;
-                total_omg = 0.0;
-                sum_total = 0.0;
-
-                sum_total =
-                    total_kpi * weigth_template[0] +
-                    total_key * weigth_template[1];
-
-                data.push({
-                    evaluate: evaluate,
-                    kpi: total_kpi,
-                    key_task: total_key,
-                    omg: total_omg,
-                    score: sum_total / 100,
-                });
-            }
-            */
         }
         return data;
     } catch (error) {
@@ -383,22 +306,27 @@ const render_score = (score) => {
                     uri = `${window.origin}/kpi/self-evaluation/${element.evaluate.id}/edit`;
                 } else {
                     let data = {
-                        month:months,
-                        year:[$("#year").val()],
-                        degree:[$("#degree").val()]
-                    }
+                        month: months,
+                        year: [$("#year").val()],
+                        degree: [$("#degree").val()],
+                    };
                     if ($("#division_id").val()) {
-                        data.division_id = [$("#division_id").val()]
+                        data.division_id = [$("#division_id").val()];
                     }
-                    const ret = []
+                    const ret = [];
                     for (let d in data) {
                         for (let v in data[d]) {
-                            ret.push(encodeURIComponent(d)+"[]="+encodeURIComponent(data[d][v]))
+                            ret.push(
+                                encodeURIComponent(d) +
+                                    "[]=" +
+                                    encodeURIComponent(data[d][v])
+                            );
                         }
                     }
-                    uri = `${window.origin}/kpi/self-evaluation/${element.evaluate.user_id}/score?${ret.join('&')}`;
+                    uri = `${window.origin}/kpi/self-evaluation/${
+                        element.evaluate.user_id
+                    }/score?${ret.join("&")}`;
                 }
-
             }
             const rank_rate = calculator_score(element.score);
             let newRow = body.insertRow();
@@ -455,7 +383,6 @@ const make_options_report_score = async () => {
     removeAllChildNodes(selectToMonth);
     removeAllChildNodes(selectQuarter);
     removeAllChildNodes(selectDivision);
-
 
     // year
     do {
@@ -614,49 +541,80 @@ let reunite_evaluate_user = (evaluates) => {
             }
         }
     }
-
     return item_unique;
 };
 
-let calculator_evaluates = (evaluates, reduce_averrage, checkQuarter) => {
-    let average_omg = getQuarterForHaier(new Date()),
-        data = [];
+let calculator_evaluates = async (evaluates, reduce_averrage, checkQuarter) => {
+    let data = [];
+    // last month's use omg
     for (let index = 0; index < evaluates.length; index++) {
         const element = evaluates[index];
-        let kpi_rules = element.evaluate_detail.filter(
-            (item) => item.rule.category.name === category.KPI
-        );
-        let key_task_rules = element.evaluate_detail.filter(
-            (item) => item.rule.category.name === category.KEYTASK
-        );
-        let omg_rules = element.evaluate_detail.filter(
-            (item) => item.rule.category.name === category.OMG
-        );
-
         // let total_kpi, total_key, total_omg, sum_total;
         let total_kpi = 0,
             total_key = 0,
             total_omg = 0,
             sum_total = 0;
 
-        total_kpi = (total_quarter(kpi_rules,reduce_averrage).reduce((a, c) => a + c.cal, 0) - element.kpi_reduce_point.reduce((a, c) => a + c, 0));
+            
+        
+        let omg_rules = element.evaluate_detail.filter(
+            (item) => item.rule.category.name === category.OMG
+        );
 
-        total_key = (total_quarter(key_task_rules,reduce_averrage).reduce((a, c) => a + c.cal, 0) - element.keytask_reduce_point.reduce((a, c) => a + c, 0));
-
-        if (checkQuarter) {
-            let cal_o = (total_quarter(omg_rules,reduce_averrage).reduce((a, c) => a + c.cal, 0) - element.omg_reduce_point.reduce((a, c) => a + c, 0));
-            // console.log(average_omg,cal_o);
-            total_omg = average_omg ? cal_o / average_omg : cal_o;
-            // total_omg = cal_o
-
-            sum_total =
-                total_kpi * weigth_template[0] +
-                total_key * weigth_template[1] +
-                total_omg * weigth_template[2];
-        } else {
-            sum_total =
-                total_kpi * weigth_template[0] + total_key * weigth_template[1];
+        if (checkQuarter && omg_rules.length > 0) {
+            let removeValFromIndex = [];
+            await omg_rules.forEach((ruleOmg) => {
+                let s = element.evaluate_detail.indexOf(ruleOmg);
+                removeValFromIndex.push(s);
+            });
+            let ruleKeep = await fetchEvaluateDetailByIds(
+                omg_rules.map((r) => r.id)
+            );
+            if (ruleKeep.status === 200 && removeValFromIndex.length > 0) {
+                let idsForKeep = Object.values(ruleKeep.data.data).map(
+                    (o) => o.id
+                );
+                for (var i = removeValFromIndex.length - 1; i >= 0; i--) {
+                    if (
+                        !idsForKeep.includes(
+                            element.evaluate_detail[removeValFromIndex[i]]
+                                .id
+                        )
+                    ) {
+                        element.evaluate_detail.splice(
+                            removeValFromIndex[i],
+                            1
+                        );
+                    }
+                }
+            }
+            total_omg = element.evaluate_detail.filter(
+                (item) => item.rule.category.name === category.OMG
+            ).reduce((a, c) => a + c.cal, 0) //- omg_rules.omg_reduce_point.reduce((a, c) => a + c, 0);
         }
+
+        let kpi_rules = element.evaluate_detail.filter(
+            (item) => item.rule.category.name === category.KPI
+        );
+        let key_task_rules = element.evaluate_detail.filter(
+            (item) => item.rule.category.name === category.KEYTASK
+        );
+
+        total_kpi =
+            total_quarter(kpi_rules, reduce_averrage).reduce(
+                (a, c) => a + c.cal,
+                0
+            ) - element.kpi_reduce_point.reduce((a, c) => a + c, 0);
+
+        total_key =
+            total_quarter(key_task_rules, reduce_averrage).reduce(
+                (a, c) => a + c.cal,
+                0
+            ) - element.keytask_reduce_point.reduce((a, c) => a + c, 0);
+
+        
+        sum_total = total_kpi * weigth_template[0] + total_key * weigth_template[1] + (total_omg * weigth_template[2]);
+
         data.push({
             evaluate: element,
             kpi: total_kpi,
@@ -668,9 +626,10 @@ let calculator_evaluates = (evaluates, reduce_averrage, checkQuarter) => {
     return data;
 };
 
-let total_quarter = (objArr,quarter_all) => {
-    let temp = []
-        // quarter_all = $("#quarter").val() === "" ? d.getMonth() + 1 - 1 : 3;
+
+let total_quarter = (objArr, quarter_all) => {
+    let temp = [];
+    // quarter_all = $("#quarter").val() === "" ? d.getMonth() + 1 - 1 : 3;
     //(d.getMonth()+1) - 1 จะมีปัญหา สิ้นปี
     try {
         for (var i = 0; i < objArr.length; i++) {
@@ -707,18 +666,25 @@ let total_quarter = (objArr,quarter_all) => {
 
     try {
         for (let index = 0; index < temp.length; index++) {
-            const element = temp[index]
-            let weight = element.average_weight.reduce((previousValue, currentValue) => previousValue + currentValue)
-            element.max_result = element.average_max[element.average_max.length - 1];
-            element.weight = element.rule.category.name === category.OMG ? weight : weight / quarter_all;
-            element.target = score_quarter_cal_target(element);
-            element.actual = score_quarter_cal_amount(element);
-            element.actual_pc = score_findActualPercent(element, temp);
-            element.target_pc = score_findTargetPercent(element, temp);
-            element.ach = score_findAchValue(element);
-            element.cal = Math.round(score_findCalValue(element, element.ach) * 100) / 100;
+            const element = temp[index];
+            if (element.rule.category.name !== category.OMG) {
+                let weight = element.average_weight.reduce(
+                    (previousValue, currentValue) =>
+                        previousValue + currentValue
+                );
+                element.max_result =
+                    element.average_max[element.average_max.length - 1];
+                element.weight = weight / quarter_all;
+                element.target = score_quarter_cal_target(element);
+                element.actual = score_quarter_cal_amount(element);
+                element.actual_pc = score_findActualPercent(element, temp);
+                element.target_pc = score_findTargetPercent(element, temp);
+                element.ach = score_findAchValue(element);
+                element.cal =
+                    Math.round(score_findCalValue(element, element.ach) * 100) /
+                    100;
+            }
         }
-
     } catch (error) {
         console.error(error);
     }
@@ -756,8 +722,8 @@ const search_staff_table = (e) => {
     }
 };
 const make_rule_year = () => {
-    let max = 5
-    let selectYearh = document.getElementById("rule_year")
+    let max = 5;
+    let selectYearh = document.getElementById("rule_year");
     let year = new Date().getFullYear();
 
     removeAllChildNodes(selectYearh);
@@ -767,10 +733,10 @@ const make_rule_year = () => {
         max--;
         selectYearh.add(new Option(text_year, text_year), null);
     } while (max > 0);
-}
+};
 const make_staff_year = () => {
-    let max = 5
-    let selectYearh = document.getElementById("staff_year")
+    let max = 5;
+    let selectYearh = document.getElementById("staff_year");
     let year = new Date().getFullYear();
 
     removeAllChildNodes(selectYearh);
@@ -780,16 +746,16 @@ const make_staff_year = () => {
         max--;
         selectYearh.add(new Option(text_year, text_year), null);
     } while (max > 0);
-}
+};
 const render_rule = async () => {
     if (show_rules) {
         let table = document.getElementById("table-rule-evaluation");
         if (table.previousElementSibling.classList.length < 1) {
-            table.previousElementSibling.classList.add('reload')
+            table.previousElementSibling.classList.add("reload");
         }
-        
+
         try {
-            let selectedYear = $("#rule_year").val()
+            let selectedYear = $("#rule_year").val();
             let filter = {
                 category_id: [],
             };
@@ -993,10 +959,10 @@ const findLastValue = (rule, array, key) => {
 const render_staff_evaluate = async () => {
     let table = document.getElementById("table-staff-evaluation");
     if (table.previousElementSibling.classList.length < 1) {
-        table.previousElementSibling.classList.add('reload')
+        table.previousElementSibling.classList.add("reload");
     }
     try {
-        let staffYear = $('#staff_year').val();
+        let staffYear = $("#staff_year").val();
         let result = await getReportStaffEvaluate(staffYear);
         await staff_data_to_table(result.data.data);
         $('[data-toggle="tooltip"]').tooltip();

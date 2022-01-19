@@ -152,7 +152,7 @@ class ContractRequestController extends Controller
 
             if ($legalContract->status === ContractEnum::D) {
                 $text_btn = "Request Contract";
-                $permission = $legalContract->created_by === \auth()->id() ? true : false;
+                $permission = ($legalContract->created_by === \auth()->id()) && $legalContract->legalContractDest ? true : false;
                 $form_approve = false;
             }
             if ($legalContract->status === ContractEnum::RQ) {

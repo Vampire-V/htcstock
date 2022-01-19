@@ -425,13 +425,20 @@
             <table style="width: 95%; margin: 0 auto;" class="border-cell">
                 <tbody>
                     <tr>
-                        <td colspan="2" class="border-cell"
-                            style="height: 50px; width: 50%; vertical-align: text-top; padding-left: 1%; ">
+                        <td class="border-cell"
+                            style="height: 50px; width: 25%; vertical-align: text-top; padding-left: 1%; ">
                             Requestor by: </td>
+                        <td class="border-cell"
+                            style="height: 50px; width: 25%; vertical-align: text-top; padding-left: 1%; ">
+                            Acknowledged by: </td>
                         <td colspan="2" class="border-cell"
                             style="height: 50px; width: 50%; vertical-align: text-top; padding-left: 1%; ">
                             Checked by: </td>
                     </tr>
+                </tbody>
+            </table>
+            <table style="width: 95%; margin: 0 auto;" class="border-cell">
+                <tbody>
                     <tr>
                         <td style="width: 28%;" class="border-cell text-center">Department</td>
                         <td style="width: 72%;" class="text-center">

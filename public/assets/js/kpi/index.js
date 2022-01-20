@@ -580,19 +580,21 @@ const score_quarter_cal_amount = (rule) => {
  * @params {array} EvaluateDetail list
  * @return percent (element.target / parent.target) * 100
  */
-var score_findActualPercent = (element, array) => {
+var score_findActualPercent = (element, array,userId = 0) => {
     let result = 0.00
     if (element.rule.parent) {
+        
         let parent = array.find(item => item.rule_id === element.rule.parent)
+        let parentActual = score_quarter_cal_amount(parent)
         if (element.rule.calculate_type === calculate.POSITIVE) {
-            result = element.actual > parent.actual ? 0.00 : element.actual === 0.00 ? 0.00 : (element.actual / parent.actual) * 100
+            result = element.actual > parentActual ? 0.00 : element.actual === 0.00 ? 0.00 : (element.actual / parentActual) * 100
         }
         if (element.rule.calculate_type === calculate.NEGATIVE) {
-            result = parent.actual > element.actual ? (element.actual / parent.actual) * 100 : 0.00
+            result = parentActual > element.actual ? (element.actual / parentActual) * 100 : 0.00
         }
         if (element.rule.calculate_type === calculate.ZERO) {
             // ไม่มี
-            result = element.actual <= parent.actual ? 100.00 : 0.00
+            result = element.actual <= parentActual ? 100.00 : 0.00
         }
     } else {
         // result = (element.actual / (element.target === 0) ? 1 : element.target) * 100
@@ -619,7 +621,7 @@ var score_findTargetPercent = (element, array) => {
     if (element.rule.parent) {
         let parent = array.find(item => item.rule_id === element.rule.parent)
         let target = element.target_config ?? element.target
-        let parent_target = parent.target_config ?? parent.target
+        let parent_target = score_quarter_cal_target(parent) //parent.target_config ?? parent.target
         if (parent) {
             let result = target > parent_target ? 0.00 : target === 0.00 && parent_target === 0.00 ? 0.00 : (target / parent_target) * 100
             element.target_pc = result

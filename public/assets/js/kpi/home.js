@@ -197,7 +197,7 @@ let combine_information = (fetch_data, isQuarter) => {
                 let dateForReport =
                     d.getFullYear() !== parseInt($("#year").val())
                         ? new Date(parseInt($("#year").val()), 11, 31)
-                        : new Date();
+                        : d;
                 reduce_averrage = dateForReport.getMonth() + 1;
             } else {
                 reduce_averrage = 3;
@@ -257,7 +257,7 @@ let combine_information = (fetch_data, isQuarter) => {
                 $("#period").val(),
                 $("#toperiod")[0].value
             );
-
+            console.log(average_month);
             data = calculator_evaluates(
                 result_reunite,
                 average_month.length,
@@ -592,16 +592,22 @@ let calculator_evaluates = async (evaluates, reduce_averrage, checkQuarter) => {
                 (item) => item.rule.category.name === category.OMG
             ).reduce((a, c) => a + c.cal, 0) //- omg_rules.omg_reduce_point.reduce((a, c) => a + c, 0);
         }
-
+        
         let kpi_rules = element.evaluate_detail.filter(
             (item) => item.rule.category.name === category.KPI
         );
         let key_task_rules = element.evaluate_detail.filter(
             (item) => item.rule.category.name === category.KEYTASK
         );
-
+        let userId = 0
+        if (element.user_id === 489) {
+            userId = 489
+            // let ss = total_quarter(kpi_rules, reduce_averrage).sort((a,b) => a.rule_id - b.rule_id)
+            // console.log(ss);
+            // console.log(element.kpi_reduce_point.reduce((a, c) => a + c, 0),ss.reduce((p,c) => p+c.cal , 0));
+        }
         total_kpi =
-            total_quarter(kpi_rules, reduce_averrage).reduce(
+            total_quarter(kpi_rules, reduce_averrage,userId).reduce(
                 (a, c) => a + c.cal,
                 0
             ) - element.kpi_reduce_point.reduce((a, c) => a + c, 0);
@@ -627,7 +633,7 @@ let calculator_evaluates = async (evaluates, reduce_averrage, checkQuarter) => {
 };
 
 
-let total_quarter = (objArr, quarter_all) => {
+let total_quarter = (objArr, quarter_all,userId = 0) => {
     let temp = [];
     // quarter_all = $("#quarter").val() === "" ? d.getMonth() + 1 - 1 : 3;
     //(d.getMonth()+1) - 1 จะมีปัญหา สิ้นปี
@@ -672,17 +678,14 @@ let total_quarter = (objArr, quarter_all) => {
                     (previousValue, currentValue) =>
                         previousValue + currentValue
                 );
-                element.max_result =
-                    element.average_max[element.average_max.length - 1];
+                element.max_result = element.average_max[element.average_max.length - 1];
                 element.weight = weight / quarter_all;
                 element.target = score_quarter_cal_target(element);
                 element.actual = score_quarter_cal_amount(element);
                 element.actual_pc = score_findActualPercent(element, temp);
                 element.target_pc = score_findTargetPercent(element, temp);
                 element.ach = score_findAchValue(element);
-                element.cal =
-                    Math.round(score_findCalValue(element, element.ach) * 100) /
-                    100;
+                element.cal = Math.round(score_findCalValue(element, element.ach) * 100) / 100;
             }
         }
     } catch (error) {

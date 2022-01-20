@@ -389,7 +389,7 @@ class ContractRequestController extends Controller
             $approvalDetail->status = ApprovalEnum::R;
             $approvalDetail->comment = $attributes['comment'];
             $contract->status = ContractEnum::D;
-            $contract->level = null;
+            $contract->level = 0;
             $approvalDetail->save();
             $contract->save();
             Mail::to($contract->createdBy->email)->send(new ContractApproval($contract->fresh(), $contract->createdBy, "Your request has been rejected by Legal Department. Please see reason of rejection here -link-"));

@@ -454,7 +454,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>ยังไม่เปิดให้ใช้งาน.....</p>
+                <p>เปิดให้ทดสอบระบบ หากเจอ Bug แจ้งมาที่ Email : pipat.p@haier.co.th</p>
+                <p>อธิบายการทำงาน ในขั้นตอนที่เจอปัญหามาด้วย หากมีรูปด้วยจะดีมาก </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

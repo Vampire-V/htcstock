@@ -86,7 +86,8 @@
                                     style="color: red;">*</span> </label>
                             <div>
                                 <a href="{{url('storage/'.$legalContract->representative_cer)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->representative_cer ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->representative_cer ? 'view file' :
+                                    ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -101,6 +102,7 @@
                     {{-- end head --}}
                     <hr>
                     <span class="badge badge-primary">Sub-type of Contract</span>
+                    @isset($legalContract->legalContractDest)
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="validationSubType"><strong></strong> </label>
@@ -118,19 +120,23 @@
                             <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> <a
                                     href="{{url('storage/'.$legalContract->legalContractDest->purchase_order)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->purchase_order ? 'view file' : ""}}</a></label>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->purchase_order ?
+                                    'view file' : ""}}</a></label>
                             <div>
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->purchase_order)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->purchase_order ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->purchase_order ?
+                                    'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="validationQuotationFile"><strong>Quotation</strong> <span
                                     style="color: red;">*</span></label>
                             <div>
-                                <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}"
+                                    target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view
+                                    file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -139,14 +145,17 @@
                             <div>
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ?
+                                    'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="validationWorkPlan"><strong>Work Plan</strong> </label>
                             <div>
-                                <a href="{{url('storage/'.$legalContract->legalContractDest->work_plan)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->work_plan ? 'view file' : ""}}</a>
+                                <a href="{{url('storage/'.$legalContract->legalContractDest->work_plan)}}"
+                                    target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->work_plan ? 'view
+                                    file' : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -267,8 +276,8 @@
                                     <th colspan="5"></th>
                                     <th class="text-right">Total: </th>
                                     <th id="total">{{$legalContract->legalComercialList->reduce(function ($ac,$item) {
-                                return $ac+=$item->amount;
-                            },0)}}</th>
+                                        return $ac+=$item->amount;
+                                        },0)}}</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -309,13 +318,15 @@
                                 min="0.1" step="0.1" value="" readonly>
                         </div>
                     </div>
-                    {{-- <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px" type="button"
-                    href="{{route('legal.contract-request.edit',$legalContract->legalContractDest->legalcontract->id)}}">Back</a>
+                    @endisset
+                    {{-- <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
+                        type="button"
+                        href="{{route('legal.contract-request.edit',$legalContract->legalContractDest->legalcontract->id)}}">Back</a>
                     <button class="btn btn-primary float-right" type="submit" style="margin-top: 5px">Next</button> --}}
                 </form>
             </div>
         </div>
-        <x-legal.step-approval :contract="$legalContract" :permission="$permission" :formapprove="$form_approve"/>
+        <x-legal.step-approval :contract="$legalContract" :permission="$permission" :formapprove="$form_approve" />
     </div>
 </div>
 

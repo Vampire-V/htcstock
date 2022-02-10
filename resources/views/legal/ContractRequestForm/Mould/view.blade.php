@@ -34,7 +34,7 @@
     <x-head-status-legal :legalContract="$legalContract" />
 </div> --}}
 
-<div class="row" >
+<div class="row">
     <div class="col-lg-12">
         <div class="main-card mb-3 card">
             <div class="card-body">
@@ -86,7 +86,8 @@
                                     style="color: red;">*</span> </label>
                             <div>
                                 <a href="{{url('storage/'.$legalContract->representative_cer)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->representative_cer ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->representative_cer ? 'view file' :
+                                    ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -101,13 +102,15 @@
                     {{-- end head --}}
                     <hr>
                     <span class="badge badge-primary">Supporting Documents</span>
+                    @isset($legalContract->legalContractDest)
                     <div class="form-row">
                         <div class="col-md-6 mb-6">
                             <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong></label>
                             <div>
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->purchase_order)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->purchase_order ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->purchase_order ?
+                                    'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-6 mb-6">
@@ -116,7 +119,8 @@
                             <div>
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view
+                                    file' : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -127,7 +131,8 @@
                             <div>
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ?
+                                    'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-6 mb-6">
@@ -136,7 +141,8 @@
                             </label>
                             <div>
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->drawing)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->drawing ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->drawing ? 'view file'
+                                    : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -254,9 +260,11 @@
                                 <tr>
                                     <th colspan="5"></th>
                                     <th class="text-right">Total: </th>
-                                    <th id="total">{{$legalContract->legalContractDest->legalComercialList->reduce(function ($ac,$item) {
-                                return $ac+=$item->amount;
-                            },0)}}</th>
+                                    <th id="total">
+                                        {{$legalContract->legalContractDest->legalComercialList->reduce(function
+                                        ($ac,$item) {
+                                        return $ac+=$item->amount;
+                                        },0)}}</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -275,8 +283,8 @@
                                 <option value="">Choose....</option>
                                 @isset($paymentType)
                                 @foreach ($paymentType as $item)
-                                <option value="{{$item->id}}"
-                                    {{$legalContract->legalContractDest->payment_type_id == $item->id ? "selected" : "" }}>
+                                <option value="{{$item->id}}" {{$legalContract->legalContractDest->payment_type_id ==
+                                    $item->id ? "selected" : "" }}>
                                     {{$item->name}}
                                 </option>
                                 @endforeach
@@ -302,7 +310,8 @@
                                         onchange="changeContractValue(this)" readonly>
                                     <span>% of the total value of a contract within 30 days from the date to be
                                         delivered of
-                                        sample products.</span></li>
+                                        sample products.</span>
+                                </li>
                                 <li class="li-none-type"><input type="number"
                                         value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[2]:30}}"
                                         class="type-contract-input" min="0" max="100"
@@ -336,7 +345,8 @@
                                         class="type-contract-input" min="0" max="100"
                                         onchange="changeContractValue(this)" readonly>
                                     <span>% of the total value of a contract within 30 days from the date to be
-                                        delivered</span></li>
+                                        delivered</span>
+                                </li>
                                 <li class="li-none-type"><input type="number"
                                         value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[2]:10}}"
                                         class="type-contract-input" min="0" max="100" readonly> <span>% of the total
@@ -365,10 +375,11 @@
                         </div>
                     </div>
                     <hr>
+                    @endisset
                 </form>
             </div>
         </div>
-        <x-legal.step-approval :contract="$legalContract" :permission="$permission" :formapprove="$form_approve"/>
+        <x-legal.step-approval :contract="$legalContract" :permission="$permission" :formapprove="$form_approve" />
     </div>
 </div>
 

@@ -88,7 +88,8 @@
                                     style="color: red;">*</span> </label>
                             <div>
                                 <a href="{{url('storage/'.$legalContract->representative_cer)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->representative_cer ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->representative_cer ? 'view file' :
+                                    ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -139,7 +140,8 @@
                             <div>
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->purchase_order)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->purchase_order ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->purchase_order ?
+                                    'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
@@ -148,7 +150,8 @@
                             <div>
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view
+                                    file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
@@ -157,7 +160,8 @@
                             <div>
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ?
+                                    'view file' : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -168,7 +172,8 @@
                             <div id="InsurancePolicyFile">
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->insurance_policy)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->insurance_policy ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->insurance_policy ?
+                                    'view file' : ""}}</a>
                             </div>
                         </div>
 
@@ -178,7 +183,8 @@
                             <div id="CerOfOwnershipFile">
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->cer_of_ownership)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->cer_of_ownership ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->cer_of_ownership ?
+                                    'view file' : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -259,7 +265,7 @@
                                     style="color: red;">*</span></label>
                             <input type="date" class="form-control-sm form-control" id="validationUntill" name="untill"
                                 value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                            readonly>
+                                readonly>
                             <div class="invalid-feedback">
                                 Please provide a valid Untill.
                             </div> --}}
@@ -301,8 +307,8 @@
                                     <th colspan="5"></th>
                                     <th class="text-right">Total: </th>
                                     <th id="total">{{$legalContract->legalComercialList->reduce(function ($ac,$item) {
-                                return $ac+=$item->amount;
-                            },0)}}</th>
+                                        return $ac+=$item->amount;
+                                        },0)}}</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -324,8 +330,8 @@
                                 <option value="">Choose....</option>
                                 @isset($paymentType)
                                 @foreach ($paymentType as $item)
-                                <option value="{{$item->id}}"
-                                    {{$legalContract->legalContractDest->payment_type_id == $item->id ? "selected" : "" }}>
+                                <option value="{{$item->id}}" {{$legalContract->legalContractDest->payment_type_id ==
+                                    $item->id ? "selected" : "" }}>
                                     {{$item->name}}
                                 </option>
                                 @endforeach
@@ -342,57 +348,59 @@
                                 <input type="number" class="form-control-sm form-control" id="validationMonthly"
                                     name="monthly" min="0"
                                     value="{{isset($legalContract->legalContractDest->legalPaymentTerm) ? $legalContract->legalContractDest->legalPaymentTerm->monthly : 0}}"
-                            readonly>
-                            <div class="invalid-feedback">
-                                Please provide a valid Monthly.
-                            </div>
-                        </div> --}}
-                    </div>
-                    <div class="col-md-9 mb-9 hide-contract" id="contractType2">
-                        {{-- <ul>
+                                    readonly>
+                                <div class="invalid-feedback">
+                                    Please provide a valid Monthly.
+                                </div>
+                            </div> --}}
+                        </div>
+                        <div class="col-md-9 mb-9 hide-contract" id="contractType2">
+                            {{-- <ul>
                                 <li class="li-none-type"><input type="number"
                                         value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[0]:30}}"
-                        class="type-contract-input" min="0" max="100"
-                        onchange="changeContractValue(this)" readonly>
-                        <span>of the total value of a contract within 15 days from the date of
-                            signing of the contract</span>
-                        </li>
-                        <li class="li-none-type"><input type="number"
-                                value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[1]:30}}"
-                                class="type-contract-input" min="0" max="100" onchange="changeContractValue(this)"
-                                readonly>
-                            <span>of the total value of a contract within 30 days from the date of
-                                delivered by Lessor and inspected by HTC </span></li>
-                        <li class="li-none-type"><input type="number"
-                                value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[2]:40}}"
-                                class="type-contract-input" min="0" max="100" readonly
-                                onchange="changeContractValue(this)">
-                            <span>of the total value of a contract within 15 days from the date of
-                                contract lapse
-                            </span></li>
-                        </ul> --}}
+                                        class="type-contract-input" min="0" max="100"
+                                        onchange="changeContractValue(this)" readonly>
+                                    <span>of the total value of a contract within 15 days from the date of
+                                        signing of the contract</span>
+                                </li>
+                                <li class="li-none-type"><input type="number"
+                                        value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[1]:30}}"
+                                        class="type-contract-input" min="0" max="100"
+                                        onchange="changeContractValue(this)" readonly>
+                                    <span>of the total value of a contract within 30 days from the date of
+                                        delivered by Lessor and inspected by HTC </span>
+                                </li>
+                                <li class="li-none-type"><input type="number"
+                                        value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[2]:40}}"
+                                        class="type-contract-input" min="0" max="100" readonly
+                                        onchange="changeContractValue(this)">
+                                    <span>of the total value of a contract within 15 days from the date of
+                                        contract lapse
+                                    </span>
+                                </li>
+                            </ul> --}}
+                        </div>
+                        <div class="col-md-9 mb-9 hide-contract" id="contractType3" data-id="LW.,LS.">
+                            <span>100 % of contract price as per monthly lease basis within 30 days of receipt of
+                                invoice.</span>
+                        </div>
+                        <div class="col-md-9 mb-9 hide-contract" id="contractType4" data-id="LIT.,LF.">
+                            <span>Payment shall be made every third Friday of every month for bills placed to HTC every
+                                second Tuesday of the previous month.</span>
+                        </div>
+                        <div class="col-md-9 mb-9 hide-contract" id="contractType5" data-id="LE.">
+                            <textarea name="detail_payment_term" id="detail_payment_term"
+                                class="form-control form-control-sm" rows="3"
+                                readonly>{{$legalContract->legalContractDest->legalPaymentTerm->detail_payment_term}}</textarea>
+                        </div>
                     </div>
-                    <div class="col-md-9 mb-9 hide-contract" id="contractType3" data-id="LW.,LS.">
-                        <span>100 % of contract price as per monthly lease basis within 30 days of receipt of
-                            invoice.</span>
-                    </div>
-                    <div class="col-md-9 mb-9 hide-contract" id="contractType4" data-id="LIT.,LF.">
-                        <span>Payment shall be made every third Friday of every month for bills placed to HTC every
-                            second Tuesday of the previous month.</span>
-                    </div>
-                    <div class="col-md-9 mb-9 hide-contract" id="contractType5" data-id="LE.">
-                        <textarea name="detail_payment_term" id="detail_payment_term"
-                            class="form-control form-control-sm" rows="3"
-                            readonly>{{$legalContract->legalContractDest->legalPaymentTerm->detail_payment_term}}</textarea>
-                    </div>
-                </div>
-            <hr>
-            @endisset
-            </form>
+                    <hr>
+                    @endisset
+                </form>
+            </div>
         </div>
+        <x-legal.step-approval :contract="$legalContract" :permission="$permission" :formapprove="$form_approve" />
     </div>
-    <x-legal.step-approval :contract="$legalContract" :permission="$permission" :formapprove="$form_approve"/>
-</div>
 </div>
 
 {{-- Button --}}

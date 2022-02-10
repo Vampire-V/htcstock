@@ -93,9 +93,8 @@ document.addEventListener("DOMContentLoaded", function () {
         make_options_report_score();
         search_score();
     } else {
-        make_category();
-        make_rule_year();
-        make_staff_year();
+        // make_category();
+        // make_rule_year();
         render_rule();
         render_staff_evaluate();
     }
@@ -555,8 +554,8 @@ let calculator_evaluates = async (evaluates, reduce_averrage, checkQuarter) => {
             total_omg = 0,
             sum_total = 0;
 
-            
-        
+
+
         let omg_rules = element.evaluate_detail.filter(
             (item) => item.rule.category.name === category.OMG
         );
@@ -592,7 +591,7 @@ let calculator_evaluates = async (evaluates, reduce_averrage, checkQuarter) => {
                 (item) => item.rule.category.name === category.OMG
             ).reduce((a, c) => a + c.cal, 0) //- omg_rules.omg_reduce_point.reduce((a, c) => a + c, 0);
         }
-        
+
         let kpi_rules = element.evaluate_detail.filter(
             (item) => item.rule.category.name === category.KPI
         );
@@ -618,7 +617,7 @@ let calculator_evaluates = async (evaluates, reduce_averrage, checkQuarter) => {
                 0
             ) - element.keytask_reduce_point.reduce((a, c) => a + c, 0);
 
-        
+
         sum_total = total_kpi * weigth_template[0] + total_key * weigth_template[1] + (total_omg * weigth_template[2]);
 
         data.push({
@@ -724,32 +723,7 @@ const search_staff_table = (e) => {
         }
     }
 };
-const make_rule_year = () => {
-    let max = 5;
-    let selectYearh = document.getElementById("rule_year");
-    let year = new Date().getFullYear();
 
-    removeAllChildNodes(selectYearh);
-    // year
-    do {
-        let text_year = year--;
-        max--;
-        selectYearh.add(new Option(text_year, text_year), null);
-    } while (max > 0);
-};
-const make_staff_year = () => {
-    let max = 5;
-    let selectYearh = document.getElementById("staff_year");
-    let year = new Date().getFullYear();
-
-    removeAllChildNodes(selectYearh);
-    // year
-    do {
-        let text_year = year--;
-        max--;
-        selectYearh.add(new Option(text_year, text_year), null);
-    } while (max > 0);
-};
 const render_rule = async () => {
     if (show_rules) {
         let table = document.getElementById("table-rule-evaluation");
@@ -775,7 +749,7 @@ const render_rule = async () => {
             await rules_data_to_table(result.data.data);
         } catch (error) {
             console.error(error);
-            // toast(error)
+            toast(error)
         } finally {
             $('[data-toggle="tooltip"]').tooltip();
             // table.previousElementSibling.classList.add('reload')
@@ -794,144 +768,149 @@ const rules_data_to_table = async (data) => {
     removeAllChildNodes(head);
     removeAllChildNodes(body);
     try {
-        let Hfirst = head.insertRow(),
+        if (data.rules.length > 0 && data.periods.length > 0 ) {
+            let Hfirst = head.insertRow(),
             Hsecond = head.insertRow();
-        // h_category = Hfirst.insertCell(),
-        // full_name = Hfirst.insertCell();
+            // h_category = Hfirst.insertCell(),
+            // full_name = Hfirst.insertCell();
 
-        let cell_cat = document.createElement("th");
-        cell_cat.setAttribute("rowspan", 2);
-        cell_cat.style = `background-color: black; color:#fff;`;
+            let cell_cat = document.createElement("th");
+            cell_cat.setAttribute("rowspan", 2);
+            cell_cat.style = `background-color: black; color:#fff;`;
 
-        // h_category.setAttribute("rowspan", 2);
-        // h_category.style = `background-color: black; color:#fff;`;
-        // h_category.textContent = `Category`;
+            // h_category.setAttribute("rowspan", 2);
+            // h_category.style = `background-color: black; color:#fff;`;
+            // h_category.textContent = `Category`;
 
-        let cell_rule = document.createElement("th");
-        cell_rule.setAttribute("rowspan", 2);
-        cell_rule.style = `background-color: black; color:#fff;`;
-        cell_rule.appendChild(document.createTextNode("Rule Name"));
-        cell_cat.appendChild(document.createTextNode("Category"));
-        Hfirst.appendChild(cell_cat);
-        Hfirst.appendChild(cell_rule);
+            let cell_rule = document.createElement("th");
+            cell_rule.setAttribute("rowspan", 2);
+            cell_rule.style = `background-color: black; color:#fff;`;
+            cell_rule.appendChild(document.createTextNode("Rule Name"));
+            cell_cat.appendChild(document.createTextNode("Category"));
+            Hfirst.appendChild(cell_cat);
+            Hfirst.appendChild(cell_rule);
 
-        // full_name.setAttribute("rowspan", 2);
-        // full_name.style = `background-color: black; color:#fff;`;
-        // full_name.textContent = `Rule Name`;
-        // set Header
-        for (let i = 0; i < data.periods.length; i++) {
-            const period = data.periods[i];
-            // let month = Hfirst.insertCell();
-            // month.style = `background-color: black; color:#fff;`;
-            // month.setAttribute("colspan", 2);
-            // month.textContent = period.name;
+            // full_name.setAttribute("rowspan", 2);
+            // full_name.style = `background-color: black; color:#fff;`;
+            // full_name.textContent = `Rule Name`;
+            // set Header
+            for (let i = 0; i < data.periods.length; i++) {
+                const period = data.periods[i];
+                // let month = Hfirst.insertCell();
+                // month.style = `background-color: black; color:#fff;`;
+                // month.setAttribute("colspan", 2);
+                // month.textContent = period.name;
 
-            let month = document.createElement("th");
-            month.setAttribute("colspan", 2);
-            month.style = `background-color: black; color:#fff;`;
-            month.appendChild(document.createTextNode(period.name));
-            Hfirst.appendChild(month);
+                let month = document.createElement("th");
+                month.setAttribute("colspan", 2);
+                month.style = `background-color: black; color:#fff;`;
+                month.appendChild(document.createTextNode(period.name));
+                Hfirst.appendChild(month);
 
-            let target = document.createElement("th"); // Hsecond.insertCell(),
-            actual = document.createElement("th"); // Hsecond.insertCell();
-            target.style = `background-color: black; color:#fff;`;
-            actual.style = `background-color: black; color:#fff;`;
-            target.appendChild(document.createTextNode("Target"));
-            actual.appendChild(document.createTextNode("Actual"));
-            Hsecond.appendChild(target);
-            Hsecond.appendChild(actual);
+                let target = document.createElement("th"); // Hsecond.insertCell(),
+                actual = document.createElement("th"); // Hsecond.insertCell();
+                target.style = `background-color: black; color:#fff;`;
+                actual.style = `background-color: black; color:#fff;`;
+                target.appendChild(document.createTextNode("Target"));
+                actual.appendChild(document.createTextNode("Actual"));
+                Hsecond.appendChild(target);
+                Hsecond.appendChild(actual);
+            }
+            // set body
+            for (let i = 0; i < data.rules.length; i++) {
+                const rule = data.rules[i];
+                let row = body.insertRow(),
+                    group = row.insertCell(),
+                    name = row.insertCell(),
+                    jan_target = row.insertCell(),
+                    jan_actual = row.insertCell(),
+                    feb_target = row.insertCell(),
+                    feb_actual = row.insertCell(),
+                    mar_target = row.insertCell(),
+                    mar_actual = row.insertCell(),
+                    apr_target = row.insertCell(),
+                    apr_actual = row.insertCell(),
+                    may_target = row.insertCell(),
+                    may_actual = row.insertCell(),
+                    jun_target = row.insertCell(),
+                    jun_actual = row.insertCell(),
+                    jul_target = row.insertCell(),
+                    jul_actual = row.insertCell(),
+                    aug_target = row.insertCell(),
+                    aug_actual = row.insertCell(),
+                    sep_target = row.insertCell(),
+                    sep_actual = row.insertCell(),
+                    oct_target = row.insertCell(),
+                    oct_actual = row.insertCell(),
+                    nov_target = row.insertCell(),
+                    nov_actual = row.insertCell(),
+                    dec_target = row.insertCell(),
+                    dec_actual = row.insertCell();
+
+                group.classList.add("truncate");
+                group.textContent = rule.category.name;
+
+                name.classList.add("truncate");
+                name.setAttribute("data-toggle", "tooltip");
+                name.setAttribute("title", rule.name);
+                name.textContent = rule.name;
+
+                jan_target.innerHTML = findLastValue(rule, rule.total[0], "target");
+                jan_actual.innerHTML = findLastValue(rule, rule.total[0], "actual");
+
+                feb_target.innerHTML = findLastValue(rule, rule.total[1], "target");
+                feb_actual.innerHTML = findLastValue(rule, rule.total[1], "actual");
+
+                mar_target.innerHTML = findLastValue(rule, rule.total[2], "target");
+                mar_actual.innerHTML = findLastValue(rule, rule.total[2], "actual");
+
+                apr_target.innerHTML = findLastValue(rule, rule.total[3], "target");
+                apr_actual.innerHTML = findLastValue(rule, rule.total[3], "actual");
+
+                may_target.innerHTML = findLastValue(rule, rule.total[4], "target");
+                may_actual.innerHTML = findLastValue(rule, rule.total[4], "actual");
+
+                jun_target.innerHTML = findLastValue(rule, rule.total[5], "target");
+                jun_actual.innerHTML = findLastValue(rule, rule.total[5], "actual");
+
+                jul_target.innerHTML = findLastValue(rule, rule.total[6], "target");
+                jul_actual.innerHTML = findLastValue(rule, rule.total[6], "actual");
+
+                aug_target.innerHTML = findLastValue(rule, rule.total[7], "target");
+                aug_actual.innerHTML = findLastValue(rule, rule.total[7], "actual");
+
+                sep_target.innerHTML = findLastValue(rule, rule.total[8], "target");
+                sep_actual.innerHTML = findLastValue(rule, rule.total[8], "actual");
+
+                oct_target.innerHTML = findLastValue(rule, rule.total[9], "target");
+                oct_actual.innerHTML = findLastValue(rule, rule.total[9], "actual");
+
+                nov_target.innerHTML = findLastValue(
+                    rule,
+                    rule.total[10],
+                    "target"
+                );
+                nov_actual.innerHTML = findLastValue(
+                    rule,
+                    rule.total[10],
+                    "actual"
+                );
+
+                dec_target.innerHTML = findLastValue(
+                    rule,
+                    rule.total[11],
+                    "target"
+                );
+                dec_actual.innerHTML = findLastValue(
+                    rule,
+                    rule.total[11],
+                    "actual"
+                );
+            }
+        }else{
+            body.appendChild(document.createElement("H1").appendChild(document.createTextNode("No data....")))
         }
-        // set body
-        for (let i = 0; i < data.rules.length; i++) {
-            const rule = data.rules[i];
-            let row = body.insertRow(),
-                group = row.insertCell(),
-                name = row.insertCell(),
-                jan_target = row.insertCell(),
-                jan_actual = row.insertCell(),
-                feb_target = row.insertCell(),
-                feb_actual = row.insertCell(),
-                mar_target = row.insertCell(),
-                mar_actual = row.insertCell(),
-                apr_target = row.insertCell(),
-                apr_actual = row.insertCell(),
-                may_target = row.insertCell(),
-                may_actual = row.insertCell(),
-                jun_target = row.insertCell(),
-                jun_actual = row.insertCell(),
-                jul_target = row.insertCell(),
-                jul_actual = row.insertCell(),
-                aug_target = row.insertCell(),
-                aug_actual = row.insertCell(),
-                sep_target = row.insertCell(),
-                sep_actual = row.insertCell(),
-                oct_target = row.insertCell(),
-                oct_actual = row.insertCell(),
-                nov_target = row.insertCell(),
-                nov_actual = row.insertCell(),
-                dec_target = row.insertCell(),
-                dec_actual = row.insertCell();
 
-            group.classList.add("truncate");
-            group.textContent = rule.category.name;
-
-            name.classList.add("truncate");
-            name.setAttribute("data-toggle", "tooltip");
-            name.setAttribute("title", rule.name);
-            name.textContent = rule.name;
-
-            jan_target.innerHTML = findLastValue(rule, rule.total[0], "target");
-            jan_actual.innerHTML = findLastValue(rule, rule.total[0], "actual");
-
-            feb_target.innerHTML = findLastValue(rule, rule.total[1], "target");
-            feb_actual.innerHTML = findLastValue(rule, rule.total[1], "actual");
-
-            mar_target.innerHTML = findLastValue(rule, rule.total[2], "target");
-            mar_actual.innerHTML = findLastValue(rule, rule.total[2], "actual");
-
-            apr_target.innerHTML = findLastValue(rule, rule.total[3], "target");
-            apr_actual.innerHTML = findLastValue(rule, rule.total[3], "actual");
-
-            may_target.innerHTML = findLastValue(rule, rule.total[4], "target");
-            may_actual.innerHTML = findLastValue(rule, rule.total[4], "actual");
-
-            jun_target.innerHTML = findLastValue(rule, rule.total[5], "target");
-            jun_actual.innerHTML = findLastValue(rule, rule.total[5], "actual");
-
-            jul_target.innerHTML = findLastValue(rule, rule.total[6], "target");
-            jul_actual.innerHTML = findLastValue(rule, rule.total[6], "actual");
-
-            aug_target.innerHTML = findLastValue(rule, rule.total[7], "target");
-            aug_actual.innerHTML = findLastValue(rule, rule.total[7], "actual");
-
-            sep_target.innerHTML = findLastValue(rule, rule.total[8], "target");
-            sep_actual.innerHTML = findLastValue(rule, rule.total[8], "actual");
-
-            oct_target.innerHTML = findLastValue(rule, rule.total[9], "target");
-            oct_actual.innerHTML = findLastValue(rule, rule.total[9], "actual");
-
-            nov_target.innerHTML = findLastValue(
-                rule,
-                rule.total[10],
-                "target"
-            );
-            nov_actual.innerHTML = findLastValue(
-                rule,
-                rule.total[10],
-                "actual"
-            );
-
-            dec_target.innerHTML = findLastValue(
-                rule,
-                rule.total[11],
-                "target"
-            );
-            dec_actual.innerHTML = findLastValue(
-                rule,
-                rule.total[11],
-                "actual"
-            );
-        }
     } catch (error) {
         console.error(error);
     } finally {

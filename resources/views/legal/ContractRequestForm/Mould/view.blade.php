@@ -101,6 +101,7 @@
                     {{-- end head --}}
                     <hr>
                     <span class="badge badge-primary">Supporting Documents</span>
+                    @isset($legalContract->legalContractDest)
                     <div class="form-row">
                         <div class="col-md-6 mb-6">
                             <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong></label>
@@ -365,6 +366,7 @@
                         </div>
                     </div>
                     <hr>
+                    @endisset
                 </form>
             </div>
         </div>

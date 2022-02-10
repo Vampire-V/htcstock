@@ -57,7 +57,6 @@
                                 value="{{$legalContract->legalAgreement->name}}" readonly>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="col-md-6 mb-6">
                             <label for="validationCompanyName"><strong>Full name (Company’s, Person’s)</strong> <span
@@ -141,9 +140,7 @@
                             </div>
                         </div>
                     </div>
-
                     <hr>
-
                     <span class="badge badge-primary">Comercial Terms</span>
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
@@ -257,7 +254,6 @@
                     </div>
                     @endisset
                     <hr>
-
                     <span class="badge badge-primary">Payment Terms</span>
                     <input type="hidden" name="value_of_contract" value="">
                     <div class="form-row">
@@ -328,6 +324,7 @@
                         </div>
                     </div>
                     <hr>
+                    @endisset
                 </form>
             </div>
         </div>

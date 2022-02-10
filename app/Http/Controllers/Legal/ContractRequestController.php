@@ -175,7 +175,7 @@ class ContractRequestController extends Controller
                 $permission = false;
                 $form_approve = false;
             }
-
+            // dd(\compact('legalContract', 'paymentType', 'permission', 'text_btn', 'form_approve'));
             switch ($legalContract->agreement_id) {
                 case $agreements[0]->id:
                     return \view('legal.ContractRequestForm.WorkServiceContract.view')

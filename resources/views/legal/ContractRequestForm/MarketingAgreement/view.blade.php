@@ -84,7 +84,8 @@
                                     style="color: red;">*</span> </label>
                             <div>
                                 <a href="{{url('storage/'.$legalContract->representative_cer)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->representative_cer ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->representative_cer ? 'view file' :
+                                    ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -118,7 +119,8 @@
                             <div>
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->purchase_order)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->purchase_order ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->purchase_order ?
+                                    'view file' : ""}}</a>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -126,7 +128,8 @@
                             <div>
                                 <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}"
                                     target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
+                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view
+                                    file' : ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -229,7 +232,7 @@
                 </form>
             </div>
         </div>
-        <x-legal.step-approval :contract="$legalContract" :permission="$permission" :formapprove="$form_approve"/>
+        <x-legal.step-approval :contract="$legalContract" :permission="$permission" :formapprove="$form_approve" />
     </div>
 </div>
 

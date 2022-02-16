@@ -107,8 +107,8 @@
                             <option data-id="">Choose....</option>
                             @isset($subtypeContract)
                             @foreach ($subtypeContract as $item)
-                            <option value="{{$item->id}}"
-                                {{$item->id === $legalContract->legalContractDest->sub_type_contract_id ? "selected" : ""}}
+                            <option value="{{$item->id}}" {{$item->id ===
+                                $legalContract->legalContractDest->sub_type_contract_id ? "selected" : ""}}
                                 data-id="{{$item->slug}}">
                                 {{$item->name}}</option>
                             @endforeach
@@ -135,7 +135,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view
+                                        file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-4">
@@ -144,7 +145,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet
+                                        ? 'view file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-4">
@@ -154,7 +156,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->transportation_permission)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->transportation_permission ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->transportation_permission
+                                        ? 'view file' : ""}}</a>
                                 </div>
                             </div>
                         </div>
@@ -165,7 +168,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->vehicle_registration_certificate)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->vehicle_registration_certificate ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->vehicle_registration_certificate
+                                        ? 'view file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-4">
@@ -174,7 +178,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->route)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->route ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->route ? 'view
+                                        file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-4">
@@ -183,7 +188,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->insurance)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->insurance ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->insurance ? 'view
+                                        file' : ""}}</a>
                                 </div>
                             </div>
                         </div>
@@ -194,7 +200,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->driver_license)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->driver_license ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->driver_license ?
+                                        'view file' : ""}}</a>
                                 </div>
                             </div>
                         </div>
@@ -265,7 +272,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                readonly>
+                                    readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
@@ -350,7 +357,8 @@
                                 <div>
                                     <a href="{{asset('storage/'.$legalContract->legalContractDest->quotation)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view
+                                        file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-4">
@@ -359,7 +367,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet
+                                        ? 'view file' : ""}}</a>
                                 </div>
                             </div>
                         </div>
@@ -419,7 +428,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                readonly>
+                                    readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
@@ -598,7 +607,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view
+                                        file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-4">
@@ -607,7 +617,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet
+                                        ? 'view file' : ""}}</a>
                                 </div>
                             </div>
                         </div>
@@ -669,7 +680,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                readonly>
+                                    readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
@@ -767,7 +778,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view
+                                        file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-4">
@@ -776,7 +788,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet
+                                        ? 'view file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-4">
@@ -785,7 +798,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->doctor_license)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->doctor_license ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->doctor_license ?
+                                        'view file' : ""}}</a>
                                 </div>
                             </div>
                         </div>
@@ -845,7 +859,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                readonly>
+                                    readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
@@ -922,7 +936,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view
+                                        file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-4">
@@ -931,7 +946,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet
+                                        ? 'view file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-4">
@@ -940,7 +956,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->nurse_license)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->nurse_license ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->nurse_license ?
+                                        'view file' : ""}}</a>
                                 </div>
                             </div>
                         </div>
@@ -1002,7 +1019,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                readonly>
+                                    readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
@@ -1079,7 +1096,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view
+                                        file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -1088,7 +1106,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet
+                                        ? 'view file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -1097,7 +1116,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->security_service_certification)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->security_service_certification ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->security_service_certification
+                                        ? 'view file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -1106,7 +1126,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->security_guard_license)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->security_guard_license ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->security_guard_license
+                                        ? 'view file' : ""}}</a>
                                 </div>
                             </div>
                         </div>
@@ -1165,7 +1186,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                readonly>
+                                    readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
@@ -1242,7 +1263,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view
+                                        file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -1251,7 +1273,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet
+                                        ? 'view file' : ""}}</a>
                                 </div>
                             </div>
                         </div>
@@ -1311,7 +1334,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                readonly>
+                                    readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
@@ -1400,7 +1423,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view
+                                        file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -1409,7 +1433,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet
+                                        ? 'view file' : ""}}</a>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-4">
@@ -1418,7 +1443,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->insurance)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->insurance ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->insurance ? 'view
+                                        file' : ""}}</a>
                                 </div>
                             </div>
                         </div>
@@ -1477,7 +1503,7 @@
                                 <input type="date" class="form-control-sm form-control" id="validationUntill"
                                     name="untill"
                                     value="{{isset($legalContract->legalContractDest->legalComercialTerm->untill) ? $legalContract->legalContractDest->legalComercialTerm->untill->format('Y-m-d') : ""}}"
-                                readonly>
+                                    readonly>
                                 <div>
                                     Please provide a valid Untill.
                                 </div> --}}
@@ -1583,11 +1609,12 @@
                         <div class="form-row">
                             <div class="col-md-6 mb-6">
                                 <label for="validationQuotationFile"><strong>Purchase Order</strong></label>
-                            <div>
-                                <a href="{{url('storage/'.$legalContract->legalContractDest->purchase_order)}}"
-                                    target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->legalContractDest->purchase_order ? 'view file' : ""}}</a>
-                            </div>
+                                <div>
+                                    <a href="{{url('storage/'.$legalContract->legalContractDest->purchase_order)}}"
+                                        target="_blank"
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->purchase_order ?
+                                        'view file' : ""}}</a>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-6">
                                 <label for="validationQuotationFile"><strong>Quotation</strong> <span
@@ -1595,7 +1622,8 @@
                                 <div>
                                     <a href="{{url('storage/'.$legalContract->legalContractDest->quotation)}}"
                                         target="_blank"
-                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view file' : ""}}</a>
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->quotation ? 'view
+                                        file' : ""}}</a>
                                 </div>
                             </div>
                         </div>
@@ -1604,11 +1632,12 @@
                                 <label for="validationCoparationFile"><strong>AEC/Coparation Sheet</strong> <span
                                         style="color: red;">*</span> <a href="#" target="_blank"
                                         rel="noopener noreferrer"></a></label>
-                                        <div>
-                                            <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
-                                                target="_blank"
-                                                rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet ? 'view file' : ""}}</a>
-                                        </div>
+                                <div>
+                                    <a href="{{url('storage/'.$legalContract->legalContractDest->coparation_sheet)}}"
+                                        target="_blank"
+                                        rel="noopener noreferrer">{{$legalContract->legalContractDest->coparation_sheet
+                                        ? 'view file' : ""}}</a>
+                                </div>
                                 {{-- <input type="hidden" type="text" name="coparation_sheet" value=""> --}}
                             </div>
                         </div>
@@ -1620,7 +1649,9 @@
                                 <label for="validationScope"><strong>Scope of Work</strong> <span
                                         style="color: red;">*</span></label>
                                 <input type="text" class="form-control-sm form-control" id="validationScope"
-                                    name="scope_of_work" value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->scope_of_work : ""}}" readonly>
+                                    name="scope_of_work"
+                                    value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->scope_of_work : ""}}"
+                                    readonly>
                                 <div class="invalid-feedback">
                                     Please provide a valid Ivoice No.
                                 </div>
@@ -1629,7 +1660,9 @@
                                 <label for="validationLocation"><strong>Location</strong> <span
                                         style="color: red;">*</span></label>
                                 <input type="text" class="form-control-sm form-control" id="validationLocation"
-                                    name="location" value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->location : ""}}" readonly>
+                                    name="location"
+                                    value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->location : ""}}"
+                                    readonly>
                                 <div class="invalid-feedback">
                                     Please provide a valid Ivoice No.
                                 </div>
@@ -1637,7 +1670,9 @@
                             <div class="col-md-4 mb-4">
                                 <label for="validationPurchaseOrderNo"><strong>Purchase Order No.</strong></label>
                                 <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo"
-                                    name="purchase_order_no" value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->purchase_order_no : ""}}" readonly>
+                                    name="purchase_order_no"
+                                    value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->purchase_order_no : ""}}"
+                                    readonly>
                                 <div class="invalid-feedback">
                                     Please provide a valid Ivoice No.
                                 </div>
@@ -1648,7 +1683,9 @@
                                 <label for="validationQuotationNo"><strong>Quotation No</strong> <span
                                         style="color: red;">*</span></label>
                                 <input type="text" class="form-control-sm form-control" id="validationQuotationNo"
-                                    name="quotation_no" value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->quotation_no : ""}}" readonly>
+                                    name="quotation_no"
+                                    value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
+                                    readonly>
                                 <div class="invalid-feedback">
                                     Please provide a valid Ivoice No.
                                 </div>
@@ -1657,7 +1694,9 @@
                                 <label for="validationDated"><strong>Dated</strong> <span
                                         style="color: red;">*</span></label>
                                 <input type="date" class="form-control-sm form-control" id="validationDated"
-                                    name="dated" value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}" readonly>
+                                    name="dated"
+                                    value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->dated->format('Y-m-d') : ""}}"
+                                    readonly>
                                 <div class="invalid-feedback">
                                     Please provide a valid Ivoice No.
                                 </div>
@@ -1666,7 +1705,9 @@
                                 <label for="validationDeliveryDate"><strong>Delivery Date</strong> <span
                                         style="color: red;">*</span></label>
                                 <input type="text" class="form-control-sm form-control" id="validationDeliveryDate"
-                                    name="delivery_date" value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->delivery_date : ""}}" readonly>
+                                    name="delivery_date"
+                                    value="{{isset($legalContract->legalContractDest->legalComercialTerm) ? $legalContract->legalContractDest->legalComercialTerm->delivery_date : ""}}"
+                                    readonly>
                                 <div class="invalid-feedback">
                                     Please provide a valid Ivoice No.
                                 </div>
@@ -1707,9 +1748,10 @@
                                     <tr>
                                         <th colspan="5"></th>
                                         <th class="text-right">Total: </th>
-                                        <th id="total">{{$legalContract->legalComercialList->reduce(function ($ac,$item) {
-                                return $ac+=$item->amount;
-                            },0)}}</th>
+                                        <th id="total">{{$legalContract->legalComercialList->reduce(function ($ac,$item)
+                                            {
+                                            return $ac+=$item->amount;
+                                            },0)}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -1727,9 +1769,10 @@
                                     <option value="">Choose....</option>
                                     @isset($paymentType)
                                     @foreach ($paymentType as $item)
-                                    <option value="{{$item->id}}" @if ($legalContract->legalContractDest->payment_type_id === $item->id)
+                                    <option value="{{$item->id}}" @if ($legalContract->
+                                        legalContractDest->payment_type_id === $item->id)
                                         selected
-                                    @endif>
+                                        @endif>
                                         {{$item->name}}
                                     </option>
                                     @endforeach
@@ -1791,7 +1834,7 @@
                 @endisset
             </div>
         </div>
-        <x-legal.step-approval :contract="$legalContract" :permission="$permission" :formapprove="$form_approve"/>
+        <x-legal.step-approval :contract="$legalContract" :permission="$permission" :formapprove="$form_approve" />
     </div>
 </div>
 

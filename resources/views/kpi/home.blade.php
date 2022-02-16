@@ -205,11 +205,18 @@
                             &nbsp;&nbsp;&nbsp;
                             Category &nbsp;
                             <select class="form-control-sm form-control" name="category" id="category">
+                                <option value="">All</option>
+                                <option value="1">kpi</option>
+                                <option value="2">key-task</option>
+                                <option value="3">omg</option>
                             </select>
                             &nbsp;&nbsp;&nbsp;
 
                             Year &nbsp;
                             <select class="form-control-sm form-control" name="rule_year" id="rule_year">
+                                @foreach ( range(date('Y') - 4, date('Y')) as $year_r )
+                                <option value="{{$year_r}}">{{$year_r}}</option>
+                                @endforeach
                             </select>
                             &nbsp;&nbsp;&nbsp;
                             <button type="button" class="btn btn-info btn-sm" onclick="render_rule()">Search</button>
@@ -268,6 +275,9 @@
 
                                 &nbsp; Year &nbsp;
                             <select class="form-control-sm form-control" name="staff_year" id="staff_year" onchange="render_staff_evaluate()">
+                                @foreach ( range(date('Y') - 5, date('Y')) as $year_r )
+                                <option value="{{$year_r}}">{{$year_r}}</option>
+                                @endforeach
                             </select>
                             &nbsp;&nbsp;&nbsp;
                         </div>

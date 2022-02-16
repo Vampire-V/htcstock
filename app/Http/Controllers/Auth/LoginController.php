@@ -106,34 +106,35 @@ class LoginController extends Controller
     {
         try {
             $evaluate = $this->evaluateService->find($id);
+            return \redirect()->route('kpi.dashboard');
         } catch (\Exception $e) {
             throw $e;
         }
 
-        switch ($evaluate->status) {
-            case KPIEnum::ready:
-                $user = $evaluate->user;
-                Auth::login($user);
-                return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
-                break;
-            case KPIEnum::draft:
-                $user = $evaluate->user;
-                Auth::login($user);
-                return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
-                break;
-            case KPIEnum::on_process:
-                $current_lv = $this->userApproveService->findCurrentLevel($evaluate);
-                Auth::login($current_lv->approveBy);
-                return \redirect()->route('kpi.evaluation-review.edit', $evaluate->id);
-                break;
-            case KPIEnum::approved:
-                $user = $evaluate->user;
-                Auth::login($user);
-                return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
-                break;
-            default:
-                return abort(404, 'ไม่พบข้อมูล ติดต่อ Operation');
-                break;
-        }
+        // switch ($evaluate->status) {
+        //     case KPIEnum::ready:
+        //         $user = $evaluate->user;
+        //         Auth::login($user);
+        //         return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
+        //         break;
+        //     case KPIEnum::draft:
+        //         $user = $evaluate->user;
+        //         Auth::login($user);
+        //         return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
+        //         break;
+        //     case KPIEnum::on_process:
+        //         $current_lv = $this->userApproveService->findCurrentLevel($evaluate);
+        //         Auth::login($current_lv->approveBy);
+        //         return \redirect()->route('kpi.evaluation-review.edit', $evaluate->id);
+        //         break;
+        //     case KPIEnum::approved:
+        //         $user = $evaluate->user;
+        //         Auth::login($user);
+        //         return \redirect()->route('kpi.self-evaluation.edit', $evaluate->id);
+        //         break;
+        //     default:
+        //         return abort(404, 'ไม่พบข้อมูล ติดต่อ Operation');
+        //         break;
+        // }
     }
 }

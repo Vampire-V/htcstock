@@ -417,7 +417,7 @@ class SelfEvaluationController extends Controller
             $evaluate->key_task_reduce_hod = $key_task_reduce_hod;
             $evaluate->omg_reduce_hod = $omg_reduce_hod;
             $evaluate->evaluateDetail = $detail;
-            $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
+            $quarter_weight = $evaluate->user->degree !== KPIEnum::four ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
             // $evaluate  = new EvaluateResource($evaluate);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
@@ -465,7 +465,7 @@ class SelfEvaluationController extends Controller
             $evaluate->omg_reduce_hod = $omg_reduce_hod;
 
             $evaluate->evaluateDetail = $detail;
-            $quarter_weight = $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
+            $quarter_weight = $evaluate->user->degree !== KPIEnum::four ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
             return \view('kpi.SelfEvaluation.allquarter', \compact('evaluate', 'category', 'quarter_weight'));
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
@@ -751,7 +751,6 @@ class SelfEvaluationController extends Controller
             $evaluate->evaluateDetail = $detail;
             $group_category = $evaluate->evaluateDetail->groupBy(fn ($item) => $item->rule->category->name)->sortKeysDesc();
             $quarter_weight = config('kpi.weight')['month'];
-            // $evaluate->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
             $category = $this->categoryService->dropdown();
             $summary = new Collection();
             foreach ($category as $key => $value) {

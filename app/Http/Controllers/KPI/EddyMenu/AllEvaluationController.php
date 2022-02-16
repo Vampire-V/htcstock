@@ -45,7 +45,7 @@ class AllEvaluationController extends Controller
         $firsts = \collect([KPIEnum::ready, KPIEnum::draft]);
         $second = \collect([KPIEnum::on_process]);
         $third = \collect([KPIEnum::approved]);
-        $degree = \collect([KPIEnum::one,KPIEnum::two,KPIEnum::tree]);
+        $degree = \collect(KPIEnum::$degree);
         $sel_month = $request->month ?? date('m');
         $sel_year = $request->year ?? date('Y');
         $sel_user = \collect($request->users_where);

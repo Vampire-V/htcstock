@@ -190,7 +190,7 @@ class HomeController extends Controller
     {
 
         try {
-            if ($request->is_quarter === "true" && $request->degree === KPIEnum::one) {
+            if ($request->is_quarter === "true" && $request->degree !== KPIEnum::four) {
                 $config = config('kpi.weight')['quarter'];
             } else {
                 $config = config('kpi.weight')['month'];

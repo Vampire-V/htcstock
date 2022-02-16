@@ -16,7 +16,7 @@ trait CalculatorEvaluateTrait
             for ($i = 0; $i < $evaluations->count(); $i++) {
                 $value = $evaluations[$i];
 
-                if ($request->has('quarter') && $request->degree === KPIEnum::one) {
+                if ($request->has('quarter') && $request->degree !== KPIEnum::four) {
                     $value->weigth = config('kpi.weight')['quarter'];
                 } else {
                     $value->weigth = config('kpi.weight')['month'];
@@ -27,7 +27,7 @@ trait CalculatorEvaluateTrait
         } else {
             for ($i = 0; $i < $evaluations->count(); $i++) {
                 $value = $evaluations[$i];
-                if ($value->user->degree === KPIEnum::one) {
+                if ($value->user->degree !== KPIEnum::four) {
                     $value->weigth = config('kpi.weight')['quarter'];
                 } else {
                     $value->weigth = config('kpi.weight')['month'];

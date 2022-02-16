@@ -14,7 +14,8 @@ var calculate = {
     degree = {
         ONE: "N-1",
         TWO: "N-2",
-        TREE: "N-3"
+        TREE: "N-3",
+        FOUR: "N-4"
     },
     quarters = {
         AVERAGE: "Average",
@@ -583,7 +584,7 @@ const score_quarter_cal_amount = (rule) => {
 var score_findActualPercent = (element, array,userId = 0) => {
     let result = 0.00
     if (element.rule.parent) {
-        
+
         let parent = array.find(item => item.rule_id === element.rule.parent)
         let parentActual = score_quarter_cal_amount(parent)
         if (element.rule.calculate_type === calculate.POSITIVE) {

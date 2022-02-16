@@ -19,7 +19,7 @@ class EvaluateYearExport implements FromView
     }
     public function view(): View
     {
-        $quarter_weight = $this->user->degree === KPIEnum::one ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
+        $quarter_weight = $this->user->degree !== KPIEnum::four ? config('kpi.weight')['quarter'] : config('kpi.weight')['month'];
         return view('kpi.SelfEvaluation.Excel.excelevaluateyear',['rules' => $this->rules, 'user' => $this->user, 'quarter_weight' => $quarter_weight, 'evaluate' => $this->evaluate]);
     }
 }

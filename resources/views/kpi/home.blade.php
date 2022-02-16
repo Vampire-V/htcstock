@@ -139,9 +139,11 @@
                                             <label for="Degree">EMC Group</label>
                                             <select name="degree" id="degree" class="form-control-sm form-control"
                                                 onchange="search_score()">
-                                                <option value="N-1">N-1</option>
-                                                <option value="N-2">N-2</option>
-                                                <option value="N-3">N-3</option>
+                                                @isset($degree)
+                                                @foreach ($degree as $item)
+                                                <option value="{{$item}}">{{$item}}</option>
+                                                @endforeach
+                                                @endisset
                                             </select>
                                         </div>
                                         <div class="col-md-3 mb-3">

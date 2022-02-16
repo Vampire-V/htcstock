@@ -5,9 +5,7 @@ namespace App\Services\KPI\Service;
 use App\Models\KPI\RuleLog;
 use App\Services\BaseService;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class RuleLogService extends BaseService
 {

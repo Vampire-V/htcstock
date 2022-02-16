@@ -2,7 +2,6 @@
 
 namespace App\Services\KPI\Service;
 
-use App\Models\KPI\Rule;
 use App\Models\KPI\RuleTemplate;
 use App\Models\KPI\Template;
 use App\Services\BaseService;

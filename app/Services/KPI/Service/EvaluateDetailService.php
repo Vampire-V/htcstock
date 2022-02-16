@@ -3,7 +3,6 @@
 namespace App\Services\KPI\Service;
 
 use App\Enum\KPIEnum;
-use App\Enum\UserEnum;
 use App\Models\KPI\EvaluateDetail;
 use App\Models\KPI\Rule;
 use App\Services\BaseService;
@@ -11,7 +10,6 @@ use App\Services\KPI\Interfaces\EvaluateDetailServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class EvaluateDetailService extends BaseService implements EvaluateDetailServiceInterface
 {

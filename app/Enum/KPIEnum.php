@@ -21,6 +21,7 @@ abstract class KPIEnum extends BasicEnum
     const one = 'N-1';
     const two = 'N-2';
     const tree = 'N-3';
+    const four = 'N-4';
 
     // calculate_for quarter
     const average = 'Average';
@@ -42,5 +43,5 @@ abstract class KPIEnum extends BasicEnum
     public static $calculates = [self::average, self::last_month, self::sum];
     public static $calculate_types = [self::positive, self::negative, self::zero_oriented_kpi];
     public static $steps = [self::assign, self::set_value, self::approve];
-    public static $degree = [self::one, self::two, self::tree];
+    public static $degree = [self::one, self::two, self::tree, self::four];
 }

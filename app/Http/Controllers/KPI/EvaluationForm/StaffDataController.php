@@ -51,7 +51,7 @@ class StaffDataController extends Controller
             $divisions = $this->divisionService->dropdown();
             $departments = $this->departmentService->dropdown();
             $positions = $this->positionService->dropdown();
-            $degrees = \collect([KPIEnum::one, KPIEnum::two, KPIEnum::tree]);
+            $degrees = \collect(KPIEnum::$degree);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }

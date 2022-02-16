@@ -91,7 +91,7 @@ class UsersController extends Controller
             $divisions = $this->divisionService->dropdown();
             $departments = $this->departmentService->dropdown();
             $positions = $this->positionService->dropdown();
-            $degree = \collect([KPIEnum::one, KPIEnum::two, KPIEnum::tree]);
+            $degree = \collect(KPIEnum::$degree);
             $userRoles = $user->roles()->get();
             $userSystems = $user->systems()->get();
 

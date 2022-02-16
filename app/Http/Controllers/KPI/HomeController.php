@@ -50,7 +50,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $departments = $this->departmentService->dropdown();
-        $degree = \collect([KPIEnum::one, KPIEnum::two, KPIEnum::tree]);
+        $degree = \collect(KPIEnum::$degree);
         $show_rules = Gate::allows(UserEnum::ADMINKPI) || (\auth()->user()->degree === KPIEnum::one) ? true : false;
 
         return \view('kpi.home', \compact('departments', 'degree', 'show_rules'));

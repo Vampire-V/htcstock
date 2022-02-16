@@ -2,12 +2,9 @@
 
 namespace App\Services\KPI\Service;
 
-use App\Enum\KPIEnum;
 use App\Models\KPI\Evaluate;
 use App\Models\KPI\UserApprove;
 use App\Services\BaseService;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 
 class UserApproveService extends BaseService
 {

@@ -256,7 +256,6 @@ let combine_information = (fetch_data, isQuarter) => {
                 $("#period").val(),
                 $("#toperiod")[0].value
             );
-            console.log(average_month);
             data = calculator_evaluates(
                 result_reunite,
                 average_month.length,
@@ -548,6 +547,8 @@ let calculator_evaluates = async (evaluates, reduce_averrage, checkQuarter) => {
     // last month's use omg
     for (let index = 0; index < evaluates.length; index++) {
         const element = evaluates[index];
+        let kpi_reduce_point = element.kpi_reduce_point.reduce((a, c) => a + c, 0)
+        let keytask_reduce_point = element.keytask_reduce_point.reduce((a, c) => a + c, 0)
         // let total_kpi, total_key, total_omg, sum_total;
         let total_kpi = 0,
             total_key = 0,
@@ -592,30 +593,9 @@ let calculator_evaluates = async (evaluates, reduce_averrage, checkQuarter) => {
             ).reduce((a, c) => a + c.cal, 0) //- omg_rules.omg_reduce_point.reduce((a, c) => a + c, 0);
         }
 
-        let kpi_rules = element.evaluate_detail.filter(
-            (item) => item.rule.category.name === category.KPI
-        );
-        let key_task_rules = element.evaluate_detail.filter(
-            (item) => item.rule.category.name === category.KEYTASK
-        );
-        let userId = 0
-        if (element.user_id === 489) {
-            userId = 489
-            // let ss = total_quarter(kpi_rules, reduce_averrage).sort((a,b) => a.rule_id - b.rule_id)
-            // console.log(ss);
-            // console.log(element.kpi_reduce_point.reduce((a, c) => a + c, 0),ss.reduce((p,c) => p+c.cal , 0));
-        }
-        total_kpi =
-            total_quarter(kpi_rules, reduce_averrage,userId).reduce(
-                (a, c) => a + c.cal,
-                0
-            ) - element.kpi_reduce_point.reduce((a, c) => a + c, 0);
+        total_kpi = total_quarter(element.evaluate_detail.filter( item => item.rule.category.name === category.KPI ), reduce_averrage).reduce((a, c) => a + c.cal, 0) - kpi_reduce_point;
 
-        total_key =
-            total_quarter(key_task_rules, reduce_averrage).reduce(
-                (a, c) => a + c.cal,
-                0
-            ) - element.keytask_reduce_point.reduce((a, c) => a + c, 0);
+        total_key = total_quarter(element.evaluate_detail.filter(item => item.rule.category.name === category.KEYTASK), reduce_averrage).reduce((a, c) => a + c.cal,0) - keytask_reduce_point;
 
 
         sum_total = total_kpi * weigth_template[0] + total_key * weigth_template[1] + (total_omg * weigth_template[2]);
@@ -632,7 +612,7 @@ let calculator_evaluates = async (evaluates, reduce_averrage, checkQuarter) => {
 };
 
 
-let total_quarter = (objArr, quarter_all,userId = 0) => {
+let total_quarter = (objArr, quarter_all) => {
     let temp = [];
     // quarter_all = $("#quarter").val() === "" ? d.getMonth() + 1 - 1 : 3;
     //(d.getMonth()+1) - 1 จะมีปัญหา สิ้นปี

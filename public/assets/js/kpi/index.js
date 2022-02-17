@@ -306,7 +306,7 @@ var findAchValue = (obj) => {
             if (obj.rules.calculate_type === calculate.POSITIVE) {
 
                 if (obj.target === 0.00 && obj.actual > obj.target) {
-                    ach = obj.max
+                    ach = obj.max ?? obj.max_result
                 } else if (obj.actual === 0.00) {
                     ach = 0.00
                 } else if(obj.actual === obj.target) {
@@ -641,7 +641,7 @@ const score_findAchValue = (obj) => {
             // ใช้ amount หา
             if (obj.rule.calculate_type === calculate.POSITIVE) {
                 if (obj.target === 0.00 && obj.actual > obj.target) {
-                    ach = obj.max
+                    ach = obj.max ?? obj.max_result
                 } else if (obj.actual === 0.00) {
                     ach = 0.00
                 } else if(obj.actual === obj.target) {
@@ -689,7 +689,7 @@ const score_findAchValue = (obj) => {
                     ach = obj.max
                 } else if (obj.actual_pc === 0.00) {
                     ach = 0.00
-                } else if(obj.actual === obj.target) {
+                } else if(obj.actual_pc === obj.target_pc) {
                     ach = obj.max ?? obj.max_result
                 } else {
                     ach = parseFloat((obj.actual_pc / obj.target_pc) * 100.00)

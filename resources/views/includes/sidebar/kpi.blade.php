@@ -77,6 +77,12 @@
                         Evaluation Form
                     </a>
                 </li>
+                <li>
+                    <a href="{{route('kpi.for-eddy.index')}}" class="{{Helper::isActive('kpi/for-eddy')}}">
+                        <i class="metismenu-icon pe-7s-news-paper"></i>
+                        Employee report
+                    </a>
+                </li>
                 @endcanany
                 {{-- end admin --}}
 

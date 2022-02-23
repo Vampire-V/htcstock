@@ -21,7 +21,7 @@
             <div class="page-title-icon">
                 <i class="pe-7s-monitor icon-gradient bg-mean-fruit"> </i>
             </div>
-            <div>Eddy page
+            <div>Employee report
                 <div class="page-title-subheading">This is an example set target created using
                     build-in elements and components.
                 </div>
@@ -97,7 +97,7 @@
                                 {{-- <div class="input-group"> --}}
                                 <select name="month" id="month" class="form-control-sm form-control">
                                     @foreach (range(1, 12) as $m)
-                                    <option value="{{Helper::convertToMonthNumber($m)}}" 
+                                    <option value="{{Helper::convertToMonthNumber($m)}}"
                                     @if ($sel_month===Helper::convertToMonthNumber($m)) selected @endif>
                                         {{Helper::convertToMonthName($m)}}</option>
                                     @endforeach

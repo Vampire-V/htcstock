@@ -216,7 +216,11 @@ class SelfEvaluationController extends Controller
                 }
                 $evaluate->next_level = $evaluate->next_level + 1;
                 $user_approve = $this->userApproveService->findNextLevel($evaluate);
-
+                if (!$user_approve->exists) {
+                    DB::rollBack();
+                    Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
+                    return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
+                }
                 $evaluate->status = KPIEnum::on_process;
                 $evaluate->current_level = $evaluate->getOriginal('next_level');
                 $evaluate->next_level = $user_approve->level;

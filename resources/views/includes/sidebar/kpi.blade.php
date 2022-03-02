@@ -137,6 +137,12 @@
                         Set Periods
                     </a>
                 </li>
+                <li>
+                    <a href="{{route('kpi.transfer-rules.index')}}" class="{{Helper::isActive('kpi/transfer-rules*')}}">
+                        <i class="metismenu-icon pe-7s-repeat"></i>
+                        Transfer rules
+                    </a>
+                </li>
                 @endcan
                 {{-- end for eddy --}}
             </ul>

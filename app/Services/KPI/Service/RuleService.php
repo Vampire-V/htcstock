@@ -38,10 +38,10 @@ class RuleService extends BaseService implements RuleServiceInterface
     {
         try {
             if (is_null($group)) {
-                return Rule::where('remove','<>','Y')->get();
+                return Rule::where('remove', '<>', 'Y')->get();
             } else {
                 return Rule::with('category')
-                    ->where('category_id', $group)->where('remove','<>','Y')->get();
+                    ->where('category_id', $group)->where('remove', '<>', 'Y')->get();
             }
         } catch (\Throwable $th) {
             throw $th;
@@ -52,7 +52,7 @@ class RuleService extends BaseService implements RuleServiceInterface
     {
         return Rule::with(['category', 'user', 'ruleType', 'updatedby'])
             ->filter($request)
-            ->where('remove','<>','Y')
+            ->where('remove', '<>', 'Y')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
     }
@@ -73,13 +73,13 @@ class RuleService extends BaseService implements RuleServiceInterface
     public function rulesInEvaluationReport(Collection $periods, Request $request)
     {
         try {
-            return Rule::select('id', 'name','quarter_cal','category_id')->with(['evaluatesDetail.evaluate' => function ($query) use ($periods) {
-                return $query->select('id', 'user_id', 'period_id', 'status')->whereIn('period_id',$periods->pluck('id'));
-            },'category','evaluatesDetail.evaluate.user','evaluatesDetail:id,evaluate_id,rule_id,target,actual'])
-            ->where('remove','<>','Y')
-            ->filter($request)
-            ->orderBy('category_id')
-            ->get();
+            return Rule::select('id', 'name', 'quarter_cal', 'category_id')->with(['evaluatesDetail.evaluate' => function ($query) use ($periods) {
+                return $query->select('id', 'user_id', 'period_id', 'status')->whereIn('period_id', $periods->pluck('id'));
+            }, 'category', 'evaluatesDetail.evaluate.user', 'evaluatesDetail:id,evaluate_id,rule_id,target,actual'])
+                ->where('remove', '<>', 'Y')
+                ->filter($request)
+                ->orderBy('category_id')
+                ->get();
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -89,7 +89,7 @@ class RuleService extends BaseService implements RuleServiceInterface
     {
         try {
             $arra = [];
-            $category = RuleCategory::where('name','kpi')->first();
+            $category = RuleCategory::where('name', 'kpi')->first();
             $result = $this->dropdown($category->id);
             foreach ($result as $key => $item) {
                 $arra[] = [
@@ -97,6 +97,17 @@ class RuleService extends BaseService implements RuleServiceInterface
                 ];
             }
             return $arra;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function transferToUser(array $userForm, int $userTo): bool
+    {
+        try {
+            $rules = Rule::select('id')->where('user_actual', $userForm)->get();
+            Rule::where('id',$rules->pluck('id'))->update(['user_actual' => $userTo]);
+            return true;
         } catch (\Throwable $th) {
             throw $th;
         }

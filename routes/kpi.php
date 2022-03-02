@@ -91,5 +91,7 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
 
     Route::resource('set-period', 'SetPeriod\TargetPeriodController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
     Route::get('generate-month', 'SetPeriod\TargetPeriodController@generateMonth')->name('generate-month.auto');
+    Route::resource('transfer-rules','TransferRules\AdminRuleController', ['only' => ['index']]);
+    Route::put('transfer-rules','TransferRules\AdminRuleController@update')->name('transfer-rules.transfer');
 
 });

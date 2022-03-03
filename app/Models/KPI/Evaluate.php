@@ -55,7 +55,7 @@ class Evaluate extends Model
             $history->next_level = $model->next_level;
             $history->created_by = \auth()->id();
             $history->ip = \request()->ip();
-            $history->device = substr(exec('getmac'),0,17);
+            // $history->device = substr(exec('getmac'),0,17);
             $history->save();
         });
 
@@ -69,7 +69,7 @@ class Evaluate extends Model
             $history->next_level = $model->next_level;
             $history->created_by = \auth()->id();
             $history->ip = \request()->ip();
-            $history->device = substr(exec('getmac'),0,17);
+            // $history->device = substr(exec('getmac'),0,17);
             $history->save();
         });
     }

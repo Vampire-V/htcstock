@@ -162,9 +162,15 @@ class AdminRuleController extends Controller
         DB::beginTransaction();
         $fromValue = $request->except(['_token', '_method']);
         try {
-            $this->ruleService->transferToUser($fromValue['user_form'], $fromValue['user_to']);
-            $request->session()->flash('success', ' has been updated success');
-            DB::commit();
+            $ss = $this->ruleService->transferToUser($fromValue['user_form'], $fromValue['user_to']);
+            if ($ss) {
+                $request->session()->flash('success', ' has been updated success');
+                DB::commit();
+            }else{
+                $request->session()->flash('error', ' has been update fail');
+            }
+
+
             return \back();
         } catch (\Exception $e) {
             DB::rollBack();

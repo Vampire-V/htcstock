@@ -106,8 +106,8 @@ class RuleService extends BaseService implements RuleServiceInterface
     {
         try {
             $rules = Rule::select('id')->where('user_actual', $userForm)->get();
-            Rule::where('id',$rules->pluck('id'))->update(['user_actual' => $userTo]);
-            return true;
+            $result = Rule::wherein("id",$rules->pluck('id')->toArray())->update(['user_actual' => $userTo]);
+            return $result;
         } catch (\Throwable $th) {
             throw $th;
         }

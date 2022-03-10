@@ -380,7 +380,41 @@
 
         <table style="width: 95%; margin: 0 auto;">
             @if (isset($contract->legalContractDest->payment_type_id))
-            @if ($contract->legalContractDest->payment_type_id == 5)
+            <tr>
+                <td style="width: 13%;" class="text-center">
+                    <h5 class="underline">Payment Terms</h5>
+                </td>
+                <td style="width: 5%;" class="text-center">
+                    <font class="underline">
+                        {{$contract->legalContractDest->legalPaymentType->name}}
+                    </font>
+                </td>
+                <td></td>
+                {{-- <td>
+                    <font class="underline">
+                        {{$contract->legalContractDest->value_of_contract[0]}}%
+                    </font>
+                </td>
+                <td>
+                    <span>of
+                        the total value of a contract within 15 days from the date of signing of the
+                        contract</span>
+                </td> --}}
+            </tr>
+            @isset($contract->legalContractDest->value_of_contract)
+            @foreach ($contract->legalContractDest->value_of_contract as $value)
+            <tr>
+                <td colspan="2"></td>
+                <td >
+                    <span><font class="underline">
+                        {{$value[0]}}%
+                    </font> of the total value of a contract within {{$value[1]}} days from the date of {{$value[2]}}
+                    </span>
+                </td>
+            </tr>
+            @endforeach
+            @endisset
+            {{-- @if ($contract->legalContractDest->payment_type_id == 5)
             <tr>
                 <td style="width: 13%;" class="text-center">
                     <h5 class="underline">Payment Terms</h5>
@@ -481,24 +515,13 @@
                     <span>of the total value of a contract within 30 days after 6 month of contract lapse.</span>
                 </td>
             </tr>
+            @endif --}}
             @endif
-            @else
             <tr>
-                <td style="width: 13%;" class="text-center">
-                    <h5 class="underline">Payment Terms</h5>
-                </td>
-                <td style="width: 5%;" class="text-center">
-                    <font class="underline"></font>
-                </td>
-            </tr>
-            @endif
-
-
-            <tr>
-                <td class="text-center">
+                <td class="text-center" colspan="2">
                     <h5 class="underline">Warranty</h5>
                 </td>
-                <td colspan="3">
+                <td >
                     <font class="underline">{{$contract->legalContractDest->warranty}}</font>
                 </td>
             </tr>

@@ -65,11 +65,11 @@
                         <label for="validationAgreements"><strong>Type</strong> <span
                                 style="color: red;">*</span></label>
                         <select name="agreement_id" id="validationAgreements" class="form-control-sm form-control"
-                            required>
-                            <option value="">Choose....</option>
+                            required >
+                            <option value="" >Choose....</option>
                             @isset($agreements)
                             @foreach ($agreements as $agreement)
-                            <option value="{{$agreement->id}}">{{$agreement->name}}</option>
+                            <option value="{{$agreement->id}}" title="{{$agreement->title}}">{{$agreement->name}}</option>
                             @endforeach
                             @endisset
                         </select>
@@ -89,7 +89,7 @@
                             Please provide a valid PO No.
                         </div>
                     </div>
-                    <div class="col-md-6 mb-6">
+                    <div class="col-md-3 mb-3">
                         <label for="validationCompanyCertificate"><strong>Company Certificate</strong> <span
                                 style="color: red;">*</span><a href="" target="_blank"
                                 rel="noopener noreferrer"></a></label>
@@ -100,6 +100,21 @@
                                 aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                         </div>
                         <input type="hidden" type="text" name="company_cer" value="">
+                        <div class="invalid-feedback">
+                            Please provide a valid Ivoice No.
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="validationRepresen"><strong> ID Card/Passport{{--Representative
+                                Certificate--}}</strong> <span style="color: red;">*</span> <a href="" target="_blank"
+                                rel="noopener noreferrer"></a></label>
+                        <input type="file" class="form-control-sm form-control" id="validationRepresen"
+                            data-name="representative_cer" onchange="uploadFileContract(this)" required>
+                        <div class="mb-3 progress hide-contract">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
+                                aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                        </div>
+                        <input type="hidden" type="text" name="representative_cer" value="">
                         <div class="invalid-feedback">
                             Please provide a valid Ivoice No.
                         </div>
@@ -115,19 +130,18 @@
                             Please provide a valid PO No.
                         </div>
                     </div>
-                    <div class="col-md-6 mb-6">
-                        <label for="validationRepresen"><strong> ID Card/Passport{{--Representative Certificate--}}</strong> <span
-                                style="color: red;">*</span> <a href="" target="_blank"
-                                rel="noopener noreferrer"></a></label>
-                        <input type="file" class="form-control-sm form-control" id="validationRepresen"
-                            data-name="representative_cer" onchange="uploadFileContract(this)" required>
-                        <div class="mb-3 progress hide-contract">
-                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
-                                aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-                        </div>
-                        <input type="hidden" type="text" name="representative_cer" value="">
-                        <div class="invalid-feedback">
-                            Please provide a valid Ivoice No.
+
+                    <div class="col-md-3 mb-3">
+                        <label for="validationPriority"><strong>Contract Priority </strong> <span
+                                style="color: red;">*</span></label>
+                        <select name="priority" id="validationPriority" class="form-control-sm form-control" required>
+                            <option value="">Choose....</option>
+                            @foreach ($prioritys as $priority)
+                            <option value="{{$priority}}">{{$priority}}</option>
+                            @endforeach
+                        </select>
+                        <div class="valid-feedback">
+                            Looks good!
                         </div>
                     </div>
                 </div>

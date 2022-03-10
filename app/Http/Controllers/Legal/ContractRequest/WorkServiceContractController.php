@@ -117,7 +117,13 @@ class WorkServiceContractController extends Controller
             $contract = $this->contractRequestService->find($id);
             $paymentType = $this->paymentTypeService->dropdown($contract->agreement_id);
             if ($contract->legalContractDest) {
-                $contract->legalContractDest->value_of_contract = explode(",", $contract->legalContractDest->value_of_contract);
+
+                $row = explode("|", $contract->legalContractDest->value_of_contract);
+                foreach ($row as $key => $value) {
+                    $row[$key] = explode(":",$value);
+                }
+                $contract->legalContractDest->value_of_contract = $row;
+                // $contract->legalContractDest->value_of_contract = explode(",", $contract->legalContractDest->value_of_contract);
                 return \view('legal.ContractRequestForm.WorkServiceContract.edit')->with(['contract' => $contract, 'paymentType' => $paymentType]);
             } else {
                 return \view('legal.ContractRequestForm.WorkServiceContract.create', \compact('contract', 'paymentType'));

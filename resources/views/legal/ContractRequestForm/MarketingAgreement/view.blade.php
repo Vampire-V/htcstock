@@ -63,12 +63,21 @@
                             <input type="text" class="form-control-sm form-control"
                                 value="{{$legalContract->company_name}}" readonly>
                         </div>
-                        <div class="col-md-6 mb-6">
+                        <div class="col-md-3 mb-3">
                             <label for="validationCompanyCertificate"><strong>Company Certificate</strong> <span
                                     style="color: red;">*</span></label>
                             <div>
                                 <a href="{{url('storage/'.$legalContract->company_cer)}}" target="_blank"
                                     rel="noopener noreferrer">{{$legalContract->company_cer ? 'view file' : ""}}</a>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="validationRepresen"><strong>Representative Certificate</strong> <span
+                                    style="color: red;">*</span> </label>
+                            <div>
+                                <a href="{{url('storage/'.$legalContract->representative_cer)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->representative_cer ? 'view file' :
+                                    ""}}</a>
                             </div>
                         </div>
                     </div>
@@ -79,14 +88,9 @@
                             <input type="text" class="form-control-sm form-control"
                                 value="{{$legalContract->representative}}" readonly>
                         </div>
-                        <div class="col-md-6 mb-6">
-                            <label for="validationRepresen"><strong>Representative Certificate</strong> <span
-                                    style="color: red;">*</span> </label>
-                            <div>
-                                <a href="{{url('storage/'.$legalContract->representative_cer)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->representative_cer ? 'view file' :
-                                    ""}}</a>
-                            </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="validationPriority"><strong>Contract Priority</strong> <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control-sm form-control" value="{{$legalContract->priority}}" readonly>
                         </div>
                     </div>
                     <div class="form-row">

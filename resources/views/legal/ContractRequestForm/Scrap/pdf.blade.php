@@ -390,45 +390,39 @@
                         {{$contract->legalContractDest->legalPaymentType->name}}
                     </font>
                 </td>
-                <td style="width: 7%;" class="text-center">
+                {{-- <td style="width: 7%;" class="text-center">
                     <font class="underline">
                         {{$contract->legalContractDest->value_of_contract[0]}}%
                     </font>
-                </td>
+                </td> --}}
                 <td>
-                    <span>of the total value of a contract from the date of delivered the scrap by HTC</span>
+                    {{-- <span>of the total value of a contract from the date of delivered the scrap by HTC</span> --}}
                 </td>
             </tr>
-            @else
+            @isset($contract->legalContractDest->value_of_contract)
+            @foreach ($contract->legalContractDest->value_of_contract as $value)
             <tr>
-                <td style="width: 13%;" class="text-center">
-                    <h5 class="underline">Payment Terms</h5>
-                </td>
-                <td style="width: 5%;" class="text-center">
-                    <font class="underline">
-
-                    </font>
-                </td>
-                <td style="width: 7%;" class="text-center">
-                    <font class="underline">
-
-                    </font>
-                </td>
-                <td>
-
+                <td colspan="2"></td>
+                <td >
+                    <p><font class="underline">
+                        {{$value[0]}}%
+                    </font> of the total value of a contract within {{$value[1]}} days from the date of {{$value[2]}}
+                    </p>
                 </td>
             </tr>
+            @endforeach
+            @endisset
             @endif
 
 
-            <tr>
+            {{-- <tr>
                 <td class="text-center">
                     <h5 class="underline">Warranty</h5>
                 </td>
                 <td colspan="3">
                     <font class="underline">{{$contract->legalContractDest->warranty}}</font>
                 </td>
-            </tr>
+            </tr> --}}
         </table>
 
         <div class="location">

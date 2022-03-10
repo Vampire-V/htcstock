@@ -45,7 +45,7 @@
                     <span class="badge badge-primary">Supporting Documents</span>
                     <div class="form-row">
                         <div class="col-md-6 mb-6">
-                            <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong> 
+                            <label for="validationPurchaseOrderFile"><strong>Purchase Order</strong>
                                 <a href="{{url('storage/'.$contract->legalContractDest->purchase_order)}}"
                                     target="_blank"
                                     rel="noopener noreferrer">{{$contract->legalContractDest->purchase_order ? 'view file' : ""}}</a></label>
@@ -285,7 +285,31 @@
                             </div>
                         </div>
                         <div class="col-md-8 mb-8" id="contractType1">
+                            @if (isset($contract->legalContractDest->value_of_contract))
                             <ul>
+                                @foreach ($contract->legalContractDest->value_of_contract as $item)
+                                <li class="li-none-type">
+                                    <input type="number" value="{{$item[0] ?? 0}}" class="type-contract-input" min="0" max="100"
+                                    onchange="changeContractValue(this)">%
+                                    <span>of the total value of a contract within</span>
+                                    <input type="number" value="{{$item[1] ?? 0}}" class="type-contract-input" min="0"
+                                    onchange="changeContractValue(this)">
+                                    <span>days</span>
+                                    <input type="text" value="{{$item[2] ?? ''}}" class="type-contract-input" style="width: 35%"
+                                    onblur="changeContractValue(this)">
+                                </li>
+                                @endforeach
+                            </ul>
+                            @endif
+                            <ul>
+                                <button class="btn-shadow btn btn-primary btn-sm" type="button" onclick="addInstallmentPayment()" >
+                                    <span class="btn-icon-wrapper pr-2 opacity-7">
+                                        <i class="pe-7s-plus"></i>
+                                    </span>
+                                    งวดจ่ายเงิน
+                                </button>
+                            </ul>
+                            {{-- <ul>
                                 <li class="li-none-type"><input type="number"
                                         value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[0]:30}}"
                                         class="type-contract-input" min="0" max="100"
@@ -318,9 +342,9 @@
                                         of a contract within 30 days after 1-2 years of warranty lapse.
                                     </span>
                                 </li>
-                            </ul>
+                            </ul> --}}
                         </div>
-                        <div class="col-md-8 mb-8" id="contractType2">
+                        {{-- <div class="col-md-8 mb-8" id="contractType2">
                             <ul>
                                 <li class="li-none-type"><input type="number"
                                         value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[0]:40}}"
@@ -343,7 +367,7 @@
                                     </span>
                                 </li>
                             </ul>
-                        </div>
+                        </div> --}}
                     </div>
                     <hr>
 

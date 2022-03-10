@@ -150,7 +150,8 @@ var comercialLists = (id) => {
                         PurchaseList.push(model)
                     });
                 }
-            }).catch(err => {
+        }).catch(err => {
+                console.error(err);
                 let errors = err.response.data.errors
                 for (const key in errors) {
                     if (errors.hasOwnProperty(key)) {
@@ -164,8 +165,8 @@ var comercialLists = (id) => {
                         })
                     }
                 }
-            })
-            .finally(() => {
+        })
+        .finally(() => {
                 let table = document.getElementById('table-comercial-lists')
                 removeAllChildNodes(table.tBodies[0])
                 if (PurchaseList.length < 1) {
@@ -187,17 +188,18 @@ var comercialLists = (id) => {
 
                     newCell0.innerHTML = index + 1
                     newCell1.innerHTML = element.desc
-                    newCell2.innerHTML = element.qty
-                    newCell3.innerHTML = element.unit_price
-                    newCell4.innerHTML = element.price
-                    newCell5.innerHTML = element.discount
-                    newCell6.innerHTML = element.amount
+                    newCell2.innerHTML = Intl.NumberFormat('th-TH', {maximumFractionDigits: 2}).format(element.qty)
+                    newCell3.innerHTML = Intl.NumberFormat('th-TH', {maximumFractionDigits: 2}).format(element.unit_price)
+                    newCell4.innerHTML = Intl.NumberFormat('th-TH', {maximumFractionDigits: 2}).format(element.price)
+                    newCell5.innerHTML = Intl.NumberFormat('th-TH', {maximumFractionDigits: 2}).format(element.discount)
+                    newCell6.innerHTML = Intl.NumberFormat('th-TH', {maximumFractionDigits: 2}).format(element.amount)
                     newCell7.innerHTML = `<a data-toggle="tooltip" title="delete contract" data-placement="bottom"
                     rel="noopener noreferrer" style="color: white;"
                     class="btn btn-danger btn-sm" onclick="deleteRow(${element.id})"><i
                         class="pe-7s-trash"> </i></a>`
                 })
-                table.querySelector('#total').textContent = PurchaseList.reduce((accumulator, item) => accumulator + item.amount,0)
+                let total = PurchaseList.reduce((accumulator, item) => accumulator + item.amount,0)
+                table.querySelector('#total').textContent = Intl.NumberFormat('th-TH', {style:"decimal", maximumFractionDigits: 2}).format(total)
             })
     }
 }

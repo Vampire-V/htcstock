@@ -64,14 +64,22 @@
                             <input type="text" class="form-control-sm form-control"
                                 value="{{$legalContract->company_name}}" readonly>
                         </div>
-                        <div class="col-md-6 mb-6">
+                        <div class="col-md-3 mb-3">
                             <label for="validationCompanyCertificate"><strong>Company Certificate</strong> <span
                                     style="color: red;">*</span></label>
                             <div>
                                 <a href="{{url('storage/'.$legalContract->company_cer)}}" target="_blank"
                                     rel="noopener noreferrer">{{$legalContract->company_cer ? 'view file' : ""}}</a>
                             </div>
-
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="validationRepresen"><strong>Representative Certificate</strong> <span
+                                    style="color: red;">*</span> </label>
+                            <div>
+                                <a href="{{url('storage/'.$legalContract->representative_cer)}}" target="_blank"
+                                    rel="noopener noreferrer">{{$legalContract->representative_cer ? 'view file' :
+                                    ""}}</a>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -81,15 +89,11 @@
                             <input type="text" class="form-control-sm form-control"
                                 value="{{$legalContract->representative}}" readonly>
                         </div>
-                        <div class="col-md-6 mb-6">
-                            <label for="validationRepresen"><strong>Representative Certificate</strong> <span
-                                    style="color: red;">*</span> </label>
-                            <div>
-                                <a href="{{url('storage/'.$legalContract->representative_cer)}}" target="_blank"
-                                    rel="noopener noreferrer">{{$legalContract->representative_cer ? 'view file' :
-                                    ""}}</a>
-                            </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="validationPriority"><strong>Contract Priority</strong> <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control-sm form-control" value="{{$legalContract->priority}}" readonly>
                         </div>
+
                     </div>
                     <div class="form-row">
                         <div class="col-md-12 mb-12">
@@ -276,7 +280,23 @@
                             </div>
                         </div>
                         <div class="col-md-8 mb-8" id="contractType1">
+                            @if (isset($legalContract->legalContractDest->value_of_contract))
                             <ul>
+                                @foreach ($legalContract->legalContractDest->value_of_contract as $item)
+                                <li class="li-none-type">
+                                    <input type="number" value="{{$item[0] ?? 0}}" class="type-contract-input" min="0" max="100"
+                                    onchange="changeContractValue(this)" readonly>%
+                                    <span>of the total value of a contract within</span>
+                                    <input type="number" value="{{$item[1] ?? 0}}" class="type-contract-input" min="0"
+                                    onchange="changeContractValue(this)" readonly>
+                                    <span>days from the date of</span>
+                                    <input type="text" value="{{$item[2] ?? ''}}" class="type-contract-input" style="width: 35%"
+                                    onblur="changeContractValue(this)" readonly>
+                                </li>
+                                @endforeach
+                            </ul>
+                            @endif
+                            {{-- <ul>
                                 <li class="li-none-type"><input type="number"
                                         value="{{isset($legalContract->legalContractDest->value_of_contract)?$legalContract->legalContractDest->value_of_contract[0]:30}}"
                                         class="type-contract-input" min="0" max="100"
@@ -302,7 +322,7 @@
                                         HTC
                                     </span>
                                 </li>
-                            </ul>
+                            </ul> --}}
                         </div>
                     </div>
                     <hr>

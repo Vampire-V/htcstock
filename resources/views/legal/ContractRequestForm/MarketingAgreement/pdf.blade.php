@@ -317,20 +317,21 @@
                 </tr>
             </tbody>
         </table>
-        
+
         <table style="width: 95%; margin: 0 auto;">
             <tr>
-                <td style="width: 13%;" class="text-center">
+                <td style="width: 13%; text-align: right; padding-right: 0.3em">
                     <h5 class="underline">Payment Terms</h5>
                 </td>
                 <td rowspan="2">
-                    <font class="underline">
-                        {{isset($contract->legalContractDest->legalPaymentTerm) ? $contract->legalContractDest->legalPaymentTerm->detail_payment_term : ""}}
-                    </font>
+                    <span>
+                        <font class="underline">
+                            {{isset($contract->legalContractDest->legalPaymentTerm) ? $contract->legalContractDest->legalPaymentTerm->detail_payment_term : ""}}
+                        </font>
+                    </span>
                 </td>
             </tr>
         </table>
-        
         <div class="location">
             <h3 class="text-center" style="margin-top: 10%">LOCATION INFORMATION</h3>
             <table style="width: 95%; margin: 0 auto;">

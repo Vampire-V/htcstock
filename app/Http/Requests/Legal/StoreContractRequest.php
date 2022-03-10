@@ -31,7 +31,8 @@ class StoreContractRequest extends FormRequest
             'company_cer' => 'required',
             'representative' => 'required',
             'representative_cer' => 'required',
-            'address' => 'required'
+            'address' => 'required',
+            'priority' => 'required'
         ];
     }
 
@@ -43,13 +44,14 @@ class StoreContractRequest extends FormRequest
     public function messages()
     {
         return [
-            'action_id.required' => 'Please enter action',
-            'agreement_id.required' => 'Please enter agreement',
+            'action_id.required' => 'Please select action',
+            'agreement_id.required' => 'Please select agreement',
             'company_name.required' => 'Please enter company name',
             'company_cer.required' => 'Please enter company file',
             'representative.required' => 'Please enter representative',
             'representative_cer.required' => 'Please enter representative file',
-            'address.required' => 'Please enter address'
+            'address.required' => 'Please enter address',
+            'priority.required' => 'Please select priority'
         ];
     }
 }

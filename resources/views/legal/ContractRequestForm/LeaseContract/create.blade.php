@@ -311,13 +311,6 @@
                             <select name="payment_type_id" id="validationContractType"
                                 class="form-control-sm form-control" onchange="changeType(this)" required>
                                 <option value="">Choose....</option>
-                                {{-- @isset($paymentType)
-                                @foreach ($paymentType as $item)
-                                <option value="{{$item->id}}">
-                                    {{$item->name}}
-                                </option>
-                                @endforeach
-                                @endisset --}}
                             </select>
                             <div class="valid-feedback">
                                 Looks good!

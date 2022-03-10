@@ -371,70 +371,125 @@
         @endif
         <table style="width: 95%; margin: 0 auto;">
             @if (isset($contract->legalContractDest->legalPaymentType))
-            @if ($contract->legalContractDest->legalPaymentType->name === 'Monthly')
             <tr>
-                <td style="width: 13%;" class="text-center">
+                <td style="width: 13%; text-align: right; vertical-align: top; padding-right: 0.3em">
                     <h5 class="underline">Payment Terms</h5>
                 </td>
-                <td style="width: 5%;" class="text-center">
+                {{-- <td style="width: 5%;" class="text-center">
                     <font class="underline">
                         {{$contract->legalContractDest->legalPaymentType->name}}
                     </font>
-                </td>
-                <td style="padding-left: 1%;">
-                    <font class="underline">
-                        {{$contract->legalContractDest->legalPaymentTerm->monthly}}
-                    </font>
+                </td> --}}
+                <td >
+                    @switch($contract->legalContractDest->legalPaymentType->name)
+                        @case("LF.")
+                            {{-- <h5 class="underline">Payment Terms</h5> --}}
+                            <span>
+                                <font class="underline">
+                                    {{$contract->legalContractDest->legalPaymentType->name}}
+                                </font> Payment shall be made every third Friday of every month for bills placed to HTC every second Tuesday of the previous month.
+                            </span>
+                            @break
+                        @case("LW.")
+                            <span>
+                                <font class="underline">
+                                    {{$contract->legalContractDest->legalPaymentType->name}} 100 %
+                                </font> of contract price as per monthly lease basis within 30 days of receipt of invoice.
+                            </span>
+                            @break
+                        @case("LS.")
+                            <span>
+                                <font class="underline">
+                                    {{$contract->legalContractDest->legalPaymentType->name}} 100 %
+                                </font> of contract price as per monthly lease basis within 30 days of receipt of invoice.
+                            </span>
+                            @break
+                        @case("LE.")
+                            <span>
+                                <font class="underline">
+                                    {{$contract->legalContractDest->legalPaymentType->name}}
+                                </font>
+                                 {{$contract->legalContractDest->legalPaymentTerm->detail_payment_term}}
+                            </span>
+                            @break
+                        @case("LIT.")
+                            <span>
+                                <font class="underline">
+                                    {{$contract->legalContractDest->legalPaymentType->name}}
+                                </font>Payment shall be made every third Friday of every month for bills placed to HTC every second Tuesday of the previous month.
+                            </span>
+                            @break
+                        @default
+                            <span>
+                                {{-- Empty... --}}
+                            </span>
+                    @endswitch
                 </td>
             </tr>
-            @endif
-            @if ($contract->legalContractDest->legalPaymentType->name === 'Other')
-            <tr>
-                <td style="width: 13%;" class="text-center">
-                    <h5 class="underline">Payment Terms</h5>
-                </td>
-                <td style="width: 5%;" class="text-center">
-                    <font class="underline">
-                        {{$contract->legalContractDest->legalPaymentType->name}}
-                    </font>
-                </td>
-                <td style="width: 7%;" class="text-center">
-                    <font class="underline">
-                        {{$contract->legalContractDest->value_of_contract[0]}}%
-                    </font>
-                </td>
-                <td>
-                    <span>of the total value of a contract within 15 days from the date of signing of the contract
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
+                {{-- @if ($contract->legalContractDest->legalPaymentType->name === 'Monthly')
+                <tr>
+                    <td style="width: 13%;" class="text-center">
+                        <h5 class="underline">Payment Terms</h5>
+                    </td>
+                    <td style="width: 5%;" class="text-center">
+                        <font class="underline">
+                            {{$contract->legalContractDest->legalPaymentType->name}}
+                        </font>
+                    </td>
+                    <td style="padding-left: 1%;">
+                        <font class="underline">
+                            {{$contract->legalContractDest->legalPaymentTerm->monthly}}
+                        </font>
+                    </td>
+                </tr>
+                @endif
+                @if ($contract->legalContractDest->legalPaymentType->name === 'Other')
+                <tr>
+                    <td style="width: 13%;" class="text-center">
+                        <h5 class="underline">Payment Terms</h5>
+                    </td>
+                    <td style="width: 5%;" class="text-center">
+                        <font class="underline">
+                            {{$contract->legalContractDest->legalPaymentType->name}}
+                        </font>
+                    </td>
+                    <td style="width: 7%;" class="text-center">
+                        <font class="underline">
+                            {{$contract->legalContractDest->value_of_contract[0]}}%
+                        </font>
+                    </td>
+                    <td>
+                        <span>of the total value of a contract within 15 days from the date of signing of the contract
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
 
-                </td>
-                <td style="width: 7%;" class="text-center">
-                    <font class="underline">
-                        {{$contract->legalContractDest->value_of_contract[1]}}%
-                    </font>
-                </td>
-                <td>
-                    <span>of the total value of a contract within 30 days from the date of delivered by Lessor and
-                        inspected by HTC
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
-                <td class="text-center">
-                    <font class="underline">
-                        {{$contract->legalContractDest->value_of_contract[2]}}%
-                    </font>
-                </td>
-                <td>
-                    <span>of the total value of a contract within 15 days from the date of contract lapse</span>
-                </td>
-            </tr>
-            @endif
+                    </td>
+                    <td style="width: 7%;" class="text-center">
+                        <font class="underline">
+                            {{$contract->legalContractDest->value_of_contract[1]}}%
+                        </font>
+                    </td>
+                    <td>
+                        <span>of the total value of a contract within 30 days from the date of delivered by Lessor and
+                            inspected by HTC
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td class="text-center">
+                        <font class="underline">
+                            {{$contract->legalContractDest->value_of_contract[2]}}%
+                        </font>
+                    </td>
+                    <td>
+                        <span>of the total value of a contract within 15 days from the date of contract lapse</span>
+                    </td>
+                </tr>
+                @endif --}}
             @endif
         </table>
 

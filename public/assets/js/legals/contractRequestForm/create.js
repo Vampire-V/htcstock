@@ -22,6 +22,19 @@
         let forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         validationForm(forms)
+
+        // tooltip บน option ของ Agreements
+        let select = this.document.getElementById("validationAgreements")
+
+        Array.from(select.options).forEach(el => {
+            el.addEventListener("onmouseover", e => {
+                console.log(e);
+            })
+        })
+        // select.addEventListener("mouseover", event => {
+        //     console.log("test");
+        // })
+        $('[data-toggle="tooltip"]').tooltip()
     }, false);
 
 })();

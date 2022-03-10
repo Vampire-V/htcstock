@@ -284,29 +284,29 @@
                             </div>
                         </div>
                         <div class="col-md-8 mb-8" id="contractType1">
+                            @if (isset($contract->legalContractDest->value_of_contract))
                             <ul>
-                                <li class="li-none-type"><input type="number"
-                                        value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[0]:30}}"
-                                        class="type-contract-input" min="0" max="100"
-                                        onchange="changeContractValue(this)">
-                                    <span>% of the total value of a contract within 15 days from the date of signing of
-                                        the
-                                        contract</span>
+                                @foreach ($contract->legalContractDest->value_of_contract as $item)
+                                <li class="li-none-type">
+                                    <input type="number" value="{{$item[0] ?? 0}}" class="type-contract-input" min="0" max="100"
+                                    onchange="changeContractValue(this)">%
+                                    <span>of the total value of a contract within</span>
+                                    <input type="number" value="{{$item[1] ?? 0}}" class="type-contract-input" min="0"
+                                    onchange="changeContractValue(this)">
+                                    <span>days from the date of</span>
+                                    <input type="text" value="{{$item[2] ?? ''}}" class="type-contract-input" style="width: 35%"
+                                    onblur="changeContractValue(this)">
                                 </li>
-                                <li class="li-none-type"><input type="number"
-                                        value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[1]:60}}"
-                                        class="type-contract-input" min="0" max="100"
-                                        onchange="changeContractValue(this)">
-                                    <span>% of the total value of a contract within 30 days from the date of delivery,
-                                        inspection and approval by HTC</span></li>
-                                <li class="li-none-type"><input type="number"
-                                        value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[2]:10}}"
-                                        class="type-contract-input" min="0" max="100" readonly> <span>% of the total
-                                        value
-                                        of a contract within 60 days from the date of the Seller has receipt the 2nd
-                                        installment as a performance bond
+                                @endforeach
+                            </ul>
+                            @endif
+                            <ul>
+                                <button class="btn-shadow btn btn-primary btn-sm" type="button" onclick="addInstallmentPayment()" >
+                                    <span class="btn-icon-wrapper pr-2 opacity-7">
+                                        <i class="pe-7s-plus"></i>
                                     </span>
-                                </li>
+                                    งวดจ่ายเงิน
+                                </button>
                             </ul>
                         </div>
                     </div>

@@ -73,7 +73,7 @@
                             <option value="">Choose....</option>
                             @isset($agreements)
                             @foreach ($agreements as $agreement)
-                            <option value="{{$agreement->id}}"
+                            <option value="{{$agreement->id}}" title="{{$agreement->title}}"
                                 {{$contract->agreement_id == $agreement->id ? "selected" : ""}}>{{$agreement->name}}
                             </option>
                             @endforeach
@@ -95,7 +95,7 @@
                             Please provide a valid PO No.
                         </div>
                     </div>
-                    <div class="col-md-6 mb-6">
+                    <div class="col-md-3 mb-3">
                         <label for="validationCompanyCertificate"><strong>Company Certificate</strong> <span
                                 style="color: red;">*</span> <a href="{{url('storage/'.$contract->company_cer)}}"
                                 target="_blank"
@@ -112,18 +112,7 @@
                             Please provide a valid Ivoice No.
                         </div>
                     </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-md-6 mb-6">
-                        <label for="validationRepresentative"><strong>Legal Representative</strong> <span
-                                style="color: red;">*</span></label>
-                        <input type="text" class="form-control-sm form-control" id="validationRepresentative"
-                            name="representative" value="{{$contract->representative}}" required>
-                        <div class="invalid-feedback">
-                            Please provide a valid PO No.
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-6">
+                    <div class="col-md-3 mb-3">
                         <label for="validationRepresen"><strong>Representative Certificate</strong> <span
                                 style="color: red;">*</span><a href="{{url('storage/'.$contract->representative_cer)}}"
                                 target="_blank"
@@ -139,6 +128,30 @@
                             value="{{$contract->representative_cer}}">
                         <div class="invalid-feedback">
                             Please provide a valid Ivoice No.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 mb-6">
+                        <label for="validationRepresentative"><strong>Legal Representative</strong> <span
+                                style="color: red;">*</span></label>
+                        <input type="text" class="form-control-sm form-control" id="validationRepresentative"
+                            name="representative" value="{{$contract->representative}}" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid PO No.
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="validationPriority"><strong>Contract Priority </strong> <span
+                                style="color: red;">*</span></label>
+                        <select name="priority" id="validationPriority" class="form-control-sm form-control" required>
+                            <option value="">Choose....</option>
+                            @foreach ($prioritys as $priority)
+                            <option value="{{$priority}}" {{$contract->priority == $priority ? "selected" : ""}}>{{$priority}}</option>
+                            @endforeach
+                        </select>
+                        <div class="valid-feedback">
+                            Looks good!
                         </div>
                     </div>
                 </div>

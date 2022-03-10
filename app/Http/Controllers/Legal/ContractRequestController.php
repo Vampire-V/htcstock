@@ -100,10 +100,11 @@ class ContractRequestController extends Controller
         try {
             $actions = $this->actionService->dropdown();
             $agreements = $this->agreementService->dropdown();
+            $prioritys = \collect(ContractEnum::$priority);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('legal.ContractRequestForm.create')->with(['actions' => $actions, 'agreements' => $agreements]);
+        return \view('legal.ContractRequestForm.create')->with(['actions' => $actions, 'agreements' => $agreements, 'prioritys' => $prioritys]);
     }
 
     /**
@@ -117,8 +118,8 @@ class ContractRequestController extends Controller
         $attributes = $request->except(['_token']);
         DB::beginTransaction();
         try {
-            $contractRequest = $this->contractRequestService->create($attributes);
 
+            $contractRequest = $this->contractRequestService->create($attributes);
             if (!$contractRequest) {
                 $request->session()->flash('error', 'error create!');
             } else {
@@ -144,10 +145,14 @@ class ContractRequestController extends Controller
             $agreements = $this->agreementService->dropdown();
             $legalContract = $this->contractRequestService->find($id);
             $subtypeContract = $this->subtypeContractService->dropdown($legalContract->agreement_id);
-
             $paymentType = $this->paymentTypeService->dropdown($legalContract->agreement_id);
             if ($legalContract->legalContractDest) {
-                $legalContract->legalContractDest->value_of_contract = explode(",", $legalContract->legalContractDest->value_of_contract);
+                // $legalContract->legalContractDest->value_of_contract = explode(",", $legalContract->legalContractDest->value_of_contract);
+                $row = explode("|", $legalContract->legalContractDest->value_of_contract);
+                foreach ($row as $key => $value) {
+                    $row[$key] = explode(":",$value);
+                }
+                $legalContract->legalContractDest->value_of_contract = $row;
             }
 
             if ($legalContract->status === ContractEnum::D) {
@@ -233,10 +238,11 @@ class ContractRequestController extends Controller
             $contract = $this->contractRequestService->find($id);
             $actions = $this->actionService->dropdown();
             $agreements = $this->agreementService->dropdown();
+            $prioritys = \collect(ContractEnum::$priority);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('legal.ContractRequestForm.edit')->with(['contract' => $contract, 'actions' => $actions, 'agreements' => $agreements]);
+        return \view('legal.ContractRequestForm.edit')->with(['contract' => $contract, 'actions' => $actions, 'agreements' => $agreements, 'prioritys' => $prioritys]);
     }
 
     /**
@@ -475,9 +481,9 @@ class ContractRequestController extends Controller
         try {
             $agreements = $this->agreementService->dropdown();
         } catch (\Exception $e) {
-            return \redirect()->back()->with('error', "Error : " . $e->getMessage());
+            throw $e;
+            // return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-
         switch ($contractRequest->agreement_id) {
             case $agreements[0]->id:
                 return PDF::loadView('legal.ContractRequestForm.WorkServiceContract.pdf', ['contract' => $contractRequest]);
@@ -597,8 +603,16 @@ class ContractRequestController extends Controller
     {
         try {
             $contract = $this->contractRequestService->find($id);
-            if ($contract->legalContractDest->value_of_contract) {
-                $contract->legalContractDest->value_of_contract = explode(",", $contract->legalContractDest->value_of_contract);
+            // if ($contract->legalContractDest->value_of_contract) {
+            //     $contract->legalContractDest->value_of_contract = explode(",", $contract->legalContractDest->value_of_contract);
+            // }
+            if ($contract->legalContractDest && $contract->legalContractDest->value_of_contract) {
+                // $legalContract->legalContractDest->value_of_contract = explode(",", $legalContract->legalContractDest->value_of_contract);
+                $row = explode("|", $contract->legalContractDest->value_of_contract);
+                foreach ($row as $key => $value) {
+                    $row[$key] = explode(":",$value);
+                }
+                $contract->legalContractDest->value_of_contract = $row;
             }
             $pdf = $this->loadViewContractByAgreement($contract);
         } catch (\Exception $e) {

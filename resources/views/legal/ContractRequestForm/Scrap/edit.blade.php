@@ -276,7 +276,31 @@
                             </div>
                         </div>
                         <div class="col-md-8 mb-8 hide-contract" id="contractType1">
+                            @if (isset($contract->legalContractDest->value_of_contract))
                             <ul>
+                                @foreach ($contract->legalContractDest->value_of_contract as $item)
+                                <li class="li-none-type">
+                                    <input type="number" value="{{$item[0] ?? 0}}" class="type-contract-input" min="0" max="100"
+                                    onchange="changeContractValue(this)">%
+                                    <span>of the total value of a contract within</span>
+                                    <input type="number" value="{{$item[1] ?? 0}}" class="type-contract-input" min="0"
+                                    onchange="changeContractValue(this)">
+                                    <span>days from the date of</span>
+                                    <input type="text" value="{{$item[2] ?? ''}}" class="type-contract-input" style="width: 35%"
+                                    onblur="changeContractValue(this)">
+                                </li>
+                                @endforeach
+                            </ul>
+                            @endif
+                            <ul>
+                                <button class="btn-shadow btn btn-primary btn-sm" type="button" onclick="addInstallmentPayment()" >
+                                    <span class="btn-icon-wrapper pr-2 opacity-7">
+                                        <i class="pe-7s-plus"></i>
+                                    </span>
+                                    งวดจ่ายเงิน
+                                </button>
+                            </ul>
+                            {{-- <ul>
                                 <li class="li-none-type">
                                     <input type="number"
                                         value="{{isset($contract->legalContractDest->value_of_contract)?$contract->legalContractDest->value_of_contract[0]:100}}"
@@ -285,7 +309,7 @@
                                     <span>% of the total value of a contract from the date of delivered the
                                         scrap by HTC</span>
                                 </li>
-                            </ul>
+                            </ul> --}}
                         </div>
                     </div>
                     <hr>

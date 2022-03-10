@@ -64,7 +64,7 @@ async function logSubmit(event) {
     } catch (error) {
         console.error(error)
     } finally {
-        if (onSubmit) {
+        if (onSubmit && document.getElementById('form-purchaseequipment').checkValidity()) {
             document.getElementById('form-purchaseequipment').submit()
         }
         toastClear()
@@ -73,29 +73,54 @@ async function logSubmit(event) {
 
 var changeType = (e) => {
     let firstContract = document.getElementById("contractType1")
-    console.log(e.value);
-    switch (e.value) {
-        case '3':
-            firstContract.classList.remove('hide-contract');
-            firstContract.classList.add('show-contract');
-            setValueOfContract(firstContract)
-            break;
-        default:
-            firstContract.classList.remove('show-contract');
-            firstContract.classList.add('hide-contract');
-            document.getElementsByName('value_of_contract')[0].value = ""
-            break;
+    if (e.value) {
+        firstContract.classList.remove('hide-contract');
+        firstContract.classList.add('show-contract');
+        setValueOfContract(firstContract)
+    } else {
+        firstContract.classList.remove('show-contract');
+        firstContract.classList.add('hide-contract');
+        document.getElementsByName('value_of_contract')[0].value = ""
     }
+    // switch (e.value) {
+    //     case '3':
+    //         firstContract.classList.remove('hide-contract');
+    //         firstContract.classList.add('show-contract');
+    //         setValueOfContract(firstContract)
+    //         break;
+    //     default:
+    //         firstContract.classList.remove('show-contract');
+    //         firstContract.classList.add('hide-contract');
+    //         document.getElementsByName('value_of_contract')[0].value = ""
+    //         break;
+    // }
 }
 var changeContractValue = (e) => {
     let el = document.getElementById(e.offsetParent.id)
     setValueOfContract(el)
-    enterNoSubmit(e)
+    // enterNoSubmit(e)
 }
 var setValueOfContract = (e) => {
     let el = e.children[0].children
-    let total = 100 - parseInt(el[0].children[0].value) - parseInt(el[1].children[0].value)
-    el[2].children[0].value = total
+    let values = []
+    Array.from(el).forEach(li => values.push(`${li.children[0].value}:${li.children[2].value}:${li.children[4].value}`))
+    document.getElementsByName('value_of_contract')[0].value = values.join('|')
+    // let total = 100 - parseInt(el[0].children[0].value) - parseInt(el[1].children[0].value)
+    // el[2].children[0].value = total
 
-    document.getElementsByName('value_of_contract')[0].value = `${el[0].children[0].value},${el[1].children[0].value},${el[2].children[0].value}`
+    // document.getElementsByName('value_of_contract')[0].value = `${el[0].children[0].value},${el[1].children[0].value},${el[2].children[0].value}`
+}
+
+var addInstallmentPayment = () => {
+    let scopeDiv = document.getElementById("contractType1")
+    let ul = scopeDiv.children[0]
+    var li = document.createElement("li");
+    li.className = 'li-none-type'
+  li.innerHTML = `<input type="number" value="0" class="type-contract-input" min="0" max="100"
+  onchange="changeContractValue(this)">%
+  <span>of the total value of a contract within</span>
+  <input type="number" value="0" class="type-contract-input" min="0" onchange="changeContractValue(this)">
+  <span>days from the date of</span>
+  <input type="text" value="" class="type-contract-input" style="width: 35%" onchange="changeContractValue(this)">`
+  ul.appendChild(li)
 }

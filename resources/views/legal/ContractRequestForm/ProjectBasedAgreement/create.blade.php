@@ -285,7 +285,8 @@
                     <input type="hidden" name="payment_term_id" value="">
                     <div class="form-row">
                         <div class="col-md-12 mb-12">
-                            <label for="validationWarranty"></label>
+                            <label for="validationWarranty"><span
+                                style="color: red;">*</span></label>
                             <textarea class="form-control-sm form-control" name="detail_payment_term"
                                 id="validationPaymentDescription" rows="3"
                                 required></textarea>

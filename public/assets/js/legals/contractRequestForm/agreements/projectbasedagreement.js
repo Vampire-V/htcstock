@@ -60,7 +60,7 @@ async function logSubmit(event) {
     } catch (error) {
         console.error(error)
     } finally {
-        if (onSubmit) {
+        if (onSubmit && document.getElementById('form-projectbasedagreement').checkValidity()) {
             document.getElementById('form-projectbasedagreement').submit()
         }
         toastClear()

@@ -253,12 +253,32 @@
                         <div class="col-md-8 mb-8 hide-contract" id="contractType1">
                             <ul>
                                 <li class="li-none-type">
+                                    <input type="number" value="" class="type-contract-input" min="0" max="100"
+                                    onchange="changeContractValue(this)">%
+                                    <span>of the total value of a contract within</span>
+                                    <input type="number" value="" class="type-contract-input" min="0"
+                                    onchange="changeContractValue(this)">
+                                    <span>days from the date of</span>
+                                    <input type="text" value="" class="type-contract-input" style="width: 35%"
+                                    onblur="changeContractValue(this)">
+                                </li>
+                            </ul>
+                            <ul>
+                                <button class="btn-shadow btn btn-primary btn-sm" type="button" onclick="addInstallmentPayment()" >
+                                    <span class="btn-icon-wrapper pr-2 opacity-7">
+                                        <i class="pe-7s-plus"></i>
+                                    </span>
+                                    งวดจ่ายเงิน
+                                </button>
+                            </ul>
+                            {{-- <ul>
+                                <li class="li-none-type">
                                     <input type="number" value="100" class="type-contract-input" min="0" max="100"
                                         onchange="changeContractValue(this)">
                                     <span>% of the total value of a contract from the date of delivered the
                                         scrap by HTC</span>
                                 </li>
-                            </ul>
+                            </ul> --}}
                         </div>
                     </div>
                     <hr>

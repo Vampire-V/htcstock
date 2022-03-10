@@ -151,7 +151,12 @@ class LeaseContractController extends Controller
 
             // dd($subtypeContract);
             if ($contract->legalContractDest) {
-                $contract->legalContractDest->value_of_contract = explode(",", $contract->legalContractDest->value_of_contract);
+                $row = explode("|", $contract->legalContractDest->value_of_contract);
+                foreach ($row as $key => $value) {
+                    $row[$key] = explode(":",$value);
+                }
+                $contract->legalContractDest->value_of_contract = $row;
+                // $contract->legalContractDest->value_of_contract = explode(",", $contract->legalContractDest->value_of_contract);
                 return \view('legal.ContractRequestForm.LeaseContract.edit')->with(['contract' => $contract, 'paymentType' => $paymentType, 'subtypeContract' => $subtypeContract]);
             } else {
                 return \view('legal.ContractRequestForm.LeaseContract.create', \compact('contract', 'paymentType', 'subtypeContract'));
@@ -226,7 +231,7 @@ class LeaseContractController extends Controller
                 $dest['insurance_policy'] = null;
                 $dest['cer_of_ownership'] = null;
             }
-            
+
             $leaseContract->fill($dest);
             $leaseContract->save();
             $request->session()->flash('success',  ' has been update');

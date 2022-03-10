@@ -55,8 +55,7 @@
 })();
 
 const form = document.getElementById('form-leasecontract');
-form.addEventListener('submit', logSubmit);
-async function logSubmit(event) {
+form.addEventListener('submit', async (event) => {
     // let onSubmit = false
     try {
         let check_list = await getComercialLists(document.getElementById('contract_id').value)
@@ -78,14 +77,13 @@ async function logSubmit(event) {
     } catch (error) {
         console.error(error)
     } finally {
-        // console.log(event)
-        // if (onSubmit) {
-        //     document.getElementById('form-leasecontract').submit()
-        // }
+        if (document.getElementById('form-leasecontract').checkValidity()) {
+            document.getElementById('form-leasecontract').submit()
+        }
         // debugger
         toastClear()
     }
-}
+});
 
 var changeType = (e) => {
     let text_search = "";
@@ -139,7 +137,7 @@ document.getElementById('validationSubType').addEventListener('change', (event) 
 
 // document.getElementById('validationSubType').addEventListener('change', (event) => {
 //     console.log('validationSubType 2');
-    
+
 // })
 
 var make_subtype = (dataset) => {

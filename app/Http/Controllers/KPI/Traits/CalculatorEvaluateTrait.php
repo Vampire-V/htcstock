@@ -78,7 +78,7 @@ trait CalculatorEvaluateTrait
             if ($item->rule->calculate_type === KPIEnum::negative) {
                 if ($ac > $tar) {
                     $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;
-                } else if ($tar === 0.00) {
+                } else if ($tar === 0.00 || $ac <= $tar) {
                     $item->ach = $item->max_result;
                 } else {
                     $item->ach = (2 - ($ac / $this->isZeroNew($tar))) * 100.00;

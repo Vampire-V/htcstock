@@ -66,7 +66,7 @@ class PurchaseEquipmentController extends Controller
      */
     public function store(StorePurchaseEquipment $request)
     {
-        $dest = $request->only('quotation', 'coparation_sheet', 'purchase_order', 'contract_id', 'value_of_contract', 'payment_type_id', 'warranty');
+        $dest = $request->only('quotation', 'coparation_sheet', 'purchase_order', 'contract_id', 'value_of_contract', 'payment_type_id', 'warranty', 'remark');
         // comercialTerm data
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'delivery_date');
 
@@ -138,7 +138,7 @@ class PurchaseEquipmentController extends Controller
      */
     public function update(StorePurchaseEquipment $request, $id)
     {
-        $dest = $request->only('quotation', 'coparation_sheet', 'purchase_order', 'contract_id', 'value_of_contract', 'payment_type_id', 'warranty');
+        $dest = $request->only('quotation', 'coparation_sheet', 'purchase_order', 'contract_id', 'value_of_contract', 'payment_type_id', 'warranty', 'remark');
         // comercialTerm data
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'delivery_date');
         DB::beginTransaction();

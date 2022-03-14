@@ -353,6 +353,13 @@
                             </div>
                         </div>
                         <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4">{{$contract->legalContractDest->remark}}</textarea>
+                            </div>
+                        </div>
                         <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
                             type="button"
                             href="{{route('legal.contract-request.edit',$contract->legalContractDest->legalcontract->id)}}">Back</a>
@@ -631,6 +638,14 @@
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4">{{$contract->legalContractDest->remark}}</textarea>
+                            </div>
+                        </div>
                         <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
                             type="button"
                             href="{{route('legal.contract-request.edit',$contract->legalContractDest->legalcontract->id)}}">Back</a>
@@ -825,6 +840,14 @@
                                 <div class="invalid-feedback">
                                     Please provide a valid Other Expense.
                                 </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4">{{$contract->legalContractDest->remark}}</textarea>
                             </div>
                         </div>
                         <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
@@ -1022,6 +1045,14 @@
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4">{{$contract->legalContractDest->remark}}</textarea>
+                            </div>
+                        </div>
                         <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
                             type="button"
                             href="{{route('legal.contract-request.edit',$contract->legalContractDest->legalcontract->id)}}">Back</a>
@@ -1215,6 +1246,14 @@
                                 <div class="invalid-feedback">
                                     Please provide a valid Monthly.
                                 </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4">{{$contract->legalContractDest->remark}}</textarea>
                             </div>
                         </div>
                         <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
@@ -1435,6 +1474,14 @@
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4">{{$contract->legalContractDest->remark}}</textarea>
+                            </div>
+                        </div>
                         <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
                             type="button"
                             href="{{route('legal.contract-request.edit',$contract->legalContractDest->legalcontract->id)}}">Back</a>
@@ -1618,6 +1665,14 @@
                                 <div class="invalid-feedback">
                                     Please provide a valid Detail Payment Term.
                                 </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4">{{$contract->legalContractDest->remark}}</textarea>
                             </div>
                         </div>
                         <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
@@ -1842,6 +1897,14 @@
                                 <div class="invalid-feedback">
                                     Please provide a valid Price of service.
                                 </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4">{{$contract->legalContractDest->remark}}</textarea>
                             </div>
                         </div>
                         <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
@@ -2157,6 +2220,13 @@
                             </div>
                         </div>
                         <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4">{{$contract->legalContractDest->remark}}</textarea>
+                            </div>
+                        </div>
                         <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
                             type="button" href="{{route('legal.contract-request.edit',$contract->id)}}">Back</a>
                         <button class="btn btn-primary" type="submit" style="margin-top: 5px">Next</button>

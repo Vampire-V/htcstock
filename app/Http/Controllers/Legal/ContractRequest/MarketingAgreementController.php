@@ -71,7 +71,7 @@ class MarketingAgreementController extends Controller
      */
     public function store(StoreMarketing $request)
     {
-        $dest = $request->only('sub_type_contract_id', 'purchase_order', 'quotation', 'payment_term_id', 'contract_id');
+        $dest = $request->only('sub_type_contract_id', 'purchase_order', 'quotation', 'payment_term_id', 'contract_id', 'remark');
         // comercialTerm data
         $term = $request->only('purpose', 'promote_a_product', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
         $payment = $request->only('detail_payment_term');
@@ -146,8 +146,8 @@ class MarketingAgreementController extends Controller
         $attributes = [];
         $comercialAttr = [];
         $paymentAttr = [];
-
-        $attributes['sub_type_contract_id'] = $data['subtype'];
+        $attributes['sub_type_contract_id'] = $data['sub_type_contract_id'];
+        $attributes['remark'] = $data['remark'];
         if (!empty($request->purchase_order)) {
             $attributes['purchase_order'] = $data['purchase_order'];
         }
@@ -162,16 +162,17 @@ class MarketingAgreementController extends Controller
         $comercialAttr['quotation_no'] = $data['quotation_no'];
         $comercialAttr['dated'] = $data['dated'];
         $comercialAttr['contract_period'] = $data['contract_period'];
-        $comercialAttr['untill'] = $data['untill'];
+        // $comercialAttr['untill'] = $data['untill'];
 
         $paymentAttr['detail_payment_term'] = $data['detail_payment_term'];
         DB::beginTransaction();
         try {
             if ($data['comercial_term_id']) {
                 $this->comercialTermService->update($comercialAttr, $data['comercial_term_id']);
-                $attributes['comercial_term_id'] = (int) $data['comercial_term_id'];
+                // $attributes['comercial_term_id'] = (int) $data['comercial_term_id'];
             } else {
-                $attributes['comercial_term_id'] = $this->comercialTermService->create($comercialAttr)->id;
+                $this->comercialTermService->create($comercialAttr);
+                // $attributes['comercial_term_id'] = $this->comercialTermService->create($comercialAttr)->id;
             }
             if ($data['payment_term_id']) {
                 $this->paymentTermService->update($paymentAttr, $request->payment_term_id);

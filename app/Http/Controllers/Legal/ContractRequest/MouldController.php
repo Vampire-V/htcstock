@@ -66,7 +66,7 @@ class MouldController extends Controller
      */
     public function store(StoreMould $request)
     {
-        $dest = $request->only('quotation', 'coparation_sheet', 'purchase_order', 'drawing', 'contract_id', 'value_of_contract', 'payment_type_id', 'warranty');
+        $dest = $request->only('quotation', 'coparation_sheet', 'purchase_order', 'drawing', 'contract_id', 'value_of_contract', 'payment_type_id', 'warranty', 'remark');
         // comercialTerm data
         $term = $request->only('scope_of_work', 'to_manufacture', 'of', 'purchase_order_no', 'quotation_no', 'dated', 'delivery_date');
 
@@ -139,7 +139,7 @@ class MouldController extends Controller
      */
     public function update(StoreMould $request, $id)
     {
-        $dest = $request->only('quotation', 'coparation_sheet', 'purchase_order', 'drawing', 'contract_id', 'value_of_contract', 'payment_type_id', 'warranty');
+        $dest = $request->only('quotation', 'coparation_sheet', 'purchase_order', 'drawing', 'contract_id', 'value_of_contract', 'payment_type_id', 'warranty', 'remark');
         // comercialTerm data
         $term = $request->only('scope_of_work', 'to_manufacture', 'of', 'purchase_order_no', 'quotation_no', 'dated', 'delivery_date');
 

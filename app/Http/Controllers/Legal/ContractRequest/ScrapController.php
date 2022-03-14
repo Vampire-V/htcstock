@@ -66,7 +66,7 @@ class ScrapController extends Controller
      */
     public function store(StoreScrap $request)
     {
-        $dest = $request->only('quotation', 'coparation_sheet', 'factory_permission', 'waste_permission', 'contract_id', 'value_of_contract', 'payment_type_id');
+        $dest = $request->only('quotation', 'coparation_sheet', 'factory_permission', 'waste_permission', 'contract_id', 'value_of_contract', 'payment_type_id', 'remark');
         // comercialTerm data
         $term = $request->only('scope_of_work', 'location', 'quotation_no', 'dated', 'delivery_date');
 
@@ -139,7 +139,7 @@ class ScrapController extends Controller
      */
     public function update(StoreScrap $request, $id)
     {
-        $dest = $request->only('quotation', 'coparation_sheet', 'factory_permission', 'waste_permission', 'contract_id', 'value_of_contract', 'payment_type_id');
+        $dest = $request->only('quotation', 'coparation_sheet', 'factory_permission', 'waste_permission', 'contract_id', 'value_of_contract', 'payment_type_id', 'remark');
         // comercialTerm data
         $term = $request->only('scope_of_work', 'location', 'quotation_no', 'dated', 'delivery_date');
 

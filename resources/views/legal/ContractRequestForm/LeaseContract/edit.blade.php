@@ -52,12 +52,12 @@
                                 <option data-id="" value="">Choose....</option>
                                 @isset($subtypeContract)
                                 @foreach ($subtypeContract as $item)
-                                
+
                                 <option value="{{$item->id}}"
                                     @if ($item->id === $contract->legalContractDest->sub_type_contract_id)
                                     selected
                                     @endif
-                                    
+
                                     data-id="{{$item->slug}}">
                                     {{$item->name}}</option>
                                 @endforeach
@@ -131,7 +131,7 @@
                                     href="#" target="_blank"
                                     rel="noopener noreferrer">{{$contract->legalContractDest->insurance_policy ? 'view file' : ""}}</a></label>
                             <input type="file" accept="application/pdf" class="form-control-sm form-control" id="InsurancePolicyFile"
-                                onchange="uploadFileContract(this)" data-name="insurance_policy" 
+                                onchange="uploadFileContract(this)" data-name="insurance_policy"
                                 data-cache="{{substr($contract->legalContractDest->insurance_policy,9)}}" required>
                             <div class="mb-3 progress hide-contract">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"
@@ -382,7 +382,13 @@
                     </div>
 
                     <hr>
-
+                    <span class="badge badge-primary">Remark</span>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-12">
+                            <label for="Remark"><strong></strong></label>
+                            <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4">{{$contract->legalContractDest->remark}}</textarea>
+                        </div>
+                    </div>
                     <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
                         href="{{route('legal.contract-request.edit',$contract->id)}}">Back</a>
                     <button class="btn btn-primary" type="submit" style="margin-top: 5px">Next</button>

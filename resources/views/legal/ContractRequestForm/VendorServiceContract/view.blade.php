@@ -342,6 +342,14 @@
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4" readonly>{{$legalContract->legalContractDest->remark}}</textarea>
+                            </div>
+                        </div>
                     </form>
                 </div>
 
@@ -592,6 +600,14 @@
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4" readonly>{{$legalContract->legalContractDest->remark}}</textarea>
+                            </div>
+                        </div>
                     </form>
                 </div>
 
@@ -763,6 +779,14 @@
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4" readonly>{{$legalContract->legalContractDest->remark}}</textarea>
+                            </div>
+                        </div>
                     </form>
                 </div>
 
@@ -919,6 +943,14 @@
                                 <div>
                                     {{-- Please provide a valid Monthly. --}}
                                 </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4" readonly>{{$legalContract->legalContractDest->remark}}</textarea>
                             </div>
                         </div>
                     </form>
@@ -1079,6 +1111,14 @@
                                 <div>
                                     {{-- Please provide a valid Monthly. --}}
                                 </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4" readonly>{{$legalContract->legalContractDest->remark}}</textarea>
                             </div>
                         </div>
                     </form>
@@ -1248,6 +1288,14 @@
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4" readonly>{{$legalContract->legalContractDest->remark}}</textarea>
+                            </div>
+                        </div>
                     </form>
                 </div>
 
@@ -1406,6 +1454,14 @@
                                 <div>
                                     {{-- Please provide a valid Detail Payment Term. --}}
                                 </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4" readonly>{{$legalContract->legalContractDest->remark}}</textarea>
                             </div>
                         </div>
                     </form>
@@ -1596,6 +1652,14 @@
                                 <div>
                                     {{-- Please provide a valid Price of service. --}}
                                 </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4" readonly>{{$legalContract->legalContractDest->remark}}</textarea>
                             </div>
                         </div>
                     </form>
@@ -1846,6 +1910,14 @@
                                 <label for="validationWarrantyForYear"><strong>Year</strong></label>
                                 <input type="number" class="form-control-sm form-control" id="validationWarrantyForYear"
                                     min="0.1" step="0.1" value="" readonly>
+                            </div>
+                        </div>
+                        <hr>
+                        <span class="badge badge-primary">Remark</span>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-12">
+                                <label for="Remark"><strong></strong></label>
+                                <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4" readonly>{{$legalContract->legalContractDest->remark}}</textarea>
                             </div>
                         </div>
                     </form>

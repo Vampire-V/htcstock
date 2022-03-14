@@ -87,7 +87,8 @@ class LeaseContractController extends Controller
             'cer_of_ownership',
 
             'payment_type_id',
-            'contract_id'
+            'contract_id',
+            'remark'
         );
         // comercialTerm data
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
@@ -185,7 +186,8 @@ class LeaseContractController extends Controller
             'cer_of_ownership',
 
             'payment_type_id',
-            'contract_id'
+            'contract_id',
+            'remark'
         );
         // comercialTerm data
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');

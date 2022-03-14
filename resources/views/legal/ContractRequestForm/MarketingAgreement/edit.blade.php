@@ -137,7 +137,7 @@
                             <input type="text" class="form-control-sm form-control" id="validationPurchaseOrderNo"
                                 name="purchase_order_no"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->purchase_order_no : ""}}"
-                                required>
+                                >
                             <div class="invalid-feedback">
                                 Please provide a valid Purchase Order No.
                             </div>
@@ -149,7 +149,7 @@
                             <input type="text" class="form-control-sm form-control" id="validationQuotationNo"
                                 name="quotation_no"
                                 value="{{isset($contract->legalContractDest->legalComercialTerm) ? $contract->legalContractDest->legalComercialTerm->quotation_no : ""}}"
-                                required>
+                                >
                             <div class="invalid-feedback">
                                 Please provide a valid Quotation No.
                             </div>
@@ -201,6 +201,13 @@
                         </div>
                     </div>
                     <hr>
+                    <span class="badge badge-primary">Remark</span>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-12">
+                            <label for="Remark"><strong></strong></label>
+                            <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4">{{$contract->legalContractDest->remark}}</textarea>
+                        </div>
+                    </div>
                     <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
                         type="button" href="{{route('legal.contract-request.edit',$contract->id)}}">Back</a>
                     <button class="btn btn-primary" type="submit" style="margin-top: 5px">Next</button>

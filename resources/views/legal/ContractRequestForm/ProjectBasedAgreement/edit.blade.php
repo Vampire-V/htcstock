@@ -316,6 +316,14 @@
                                 min="0.1" step="0.1" value="" readonly>
                         </div>
                     </div>
+                    <hr>
+                    <span class="badge badge-primary">Remark</span>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-12">
+                            <label for="Remark"><strong></strong></label>
+                            <textarea class="form-control-sm form-control" name="remark" id="remark" rows="4">{{$contract->legalContractDest->remark}}</textarea>
+                        </div>
+                    </div>
                     <a class="btn btn-primary float-rigth" style="color: white !important; margin-top: 5px"
                         type="button"
                         href="{{route('legal.contract-request.edit',$contract->id)}}">Back</a>

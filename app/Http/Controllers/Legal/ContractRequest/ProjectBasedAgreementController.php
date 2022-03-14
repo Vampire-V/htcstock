@@ -81,7 +81,8 @@ class ProjectBasedAgreementController extends Controller
             'coparation_sheet',
             'work_plan',
             'warranty',
-            'contract_id'
+            'contract_id',
+            'remark'
         );
         // comercialTerm data
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
@@ -156,7 +157,8 @@ class ProjectBasedAgreementController extends Controller
             'coparation_sheet',
             'work_plan',
             'warranty',
-            'contract_id'
+            'contract_id',
+            'remark'
         );
         // comercialTerm data
         $term = $request->only('scope_of_work', 'location', 'purchase_order_no', 'quotation_no', 'dated', 'contract_period');
@@ -173,7 +175,7 @@ class ProjectBasedAgreementController extends Controller
             if ($projectBased->legalPaymentTerm) {
                 $this->paymentTermService->update($payment, $projectBased->payment_term_id);
             }
-           
+
             $this->contractDescService->update($dest, $projectBased->id);
 
             if ($projectBased->purchase_order !== $request->purchase_order) {

@@ -459,7 +459,7 @@ class VendorServiceContractController extends Controller
 
     private function setAttributesBus(Request $request)
     {
-        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'transportation_permission', 'vehicle_registration_certificate', 'route', 'insurance', 'driver_license', 'contract_id');
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'transportation_permission', 'vehicle_registration_certificate', 'route', 'insurance', 'driver_license', 'contract_id', 'remark');
         // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
         // $attributes['quotation'] = $request->quotation;
         // $attributes['coparation_sheet'] = $request->coparation_sheet;
@@ -489,7 +489,7 @@ class VendorServiceContractController extends Controller
     }
     private function setAttributesCleaning(Request $request)
     {
-        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'contract_id');
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'contract_id', 'remark');
         // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
         // $attributes['quotation'] = $request->quotation;
         // $attributes['coparation_sheet'] = $request->coparation_sheet;
@@ -520,7 +520,7 @@ class VendorServiceContractController extends Controller
     }
     private function setAttributesCook(Request $request)
     {
-        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'contract_id');
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'contract_id', 'remark');
 
         // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
         // $attributes['quotation'] = $request->quotation;
@@ -545,7 +545,7 @@ class VendorServiceContractController extends Controller
     }
     private function setAttributesDortor(Request $request)
     {
-        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'doctor_license', 'contract_id');
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'doctor_license', 'contract_id', 'remark');
 
         // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
         // $attributes['quotation'] = $request->quotation;
@@ -568,7 +568,7 @@ class VendorServiceContractController extends Controller
     }
     private function setAttributesNurse(Request $request)
     {
-        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'nurse_license', 'contract_id');
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'nurse_license', 'contract_id', 'remark');
 
         // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
         // $attributes['quotation'] = $request->quotation;
@@ -592,7 +592,7 @@ class VendorServiceContractController extends Controller
     }
     private function setAttributesSecurity(Request $request)
     {
-        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'security_service_certification', 'security_guard_license', 'contract_id');
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'security_service_certification', 'security_guard_license', 'contract_id', 'remark');
 
         // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
         // $attributes['quotation'] = $request->quotation;
@@ -618,7 +618,7 @@ class VendorServiceContractController extends Controller
     }
     private function setAttributesSubContractor(Request $request)
     {
-        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'contract_id');
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'contract_id', 'remark');
         // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
         // $attributes['quotation'] = $request->quotation;
         // $attributes['coparation_sheet'] = $request->coparation_sheet;
@@ -640,7 +640,7 @@ class VendorServiceContractController extends Controller
     }
     private function setAttributesTransportation(Request $request)
     {
-        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'insurance', 'contract_id');
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'insurance', 'contract_id', 'remark');
         // $attributes['sub_type_contract_id'] = $request->sub_type_contract_id;
         // $attributes['quotation'] = $request->quotation;
         // $attributes['coparation_sheet'] = $request->coparation_sheet;
@@ -664,7 +664,7 @@ class VendorServiceContractController extends Controller
     }
     private function setAttributesIT(Request $request)
     {
-        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'payment_type_id', 'value_of_contract', 'warranty', 'contract_id');
+        $contract_dest = $request->only('sub_type_contract_id', 'quotation', 'coparation_sheet', 'payment_type_id', 'value_of_contract', 'warranty', 'contract_id', 'remark');
 
         $comercial_terms = $request->only(
             'scope_of_work',

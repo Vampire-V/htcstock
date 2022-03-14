@@ -1,5 +1,5 @@
 @component('mail::message')
-# Legal Reauest Contract
+# Legal Request Contract
 
 {{$message}}
 

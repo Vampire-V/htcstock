@@ -9,4 +9,5 @@ class LegalContractDest extends Model
 {
     use LegalContractDestTrait;
     protected $guarded = [];
+    protected $with = ['legalComercialTerm'];
 }

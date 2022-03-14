@@ -351,7 +351,7 @@ class ContractRequestController extends Controller
         }
     }
 
-    private  function processDraft(LegalContract $contract, Collection $levelApproval)
+    private function processDraft(LegalContract $contract, Collection $levelApproval)
     {
         $approvalDetail = $this->approvalDetailService->create(['user_id' => \auth()->id(), 'contract_id' => $contract->id, 'levels' => $contract->level, 'comment' => 'Request']);
         $approvalDetail->save();
@@ -359,12 +359,12 @@ class ContractRequestController extends Controller
         $contract->level = 1;
         $contract->save();
         $userApproval = $levelApproval->where('levels', 1)->first()->user;
-        Mail::to($userApproval->email)->send(new ContractApproval($contract->fresh(), $userApproval, "สัญญาถูกสร้าง"));
+        Mail::to($userApproval->email)->send(new ContractApproval($contract->fresh(), $userApproval, $contract->legalContractDest->legalComercialTerm->scope_of_work));
         Mail::to($contract->createdBy->email)->send(new ContractApproval($contract->fresh(), $contract->createdBy, "Your request has been received by Legal Department. You can follow the progress of this request here -link-"));
         // return $levelApproval->where('levels', 1)->first()->user;
     }
 
-    private  function processRequest(LegalContract $contract, Collection $levelApproval)
+    private function processRequest(LegalContract $contract, Collection $levelApproval)
     {
         $approvalDetail = $this->approvalDetailService->create(['user_id' => \auth()->id(), 'contract_id' => $contract->id, 'levels' => $contract->level, 'comment' => 'Checking']);
         $approvalDetail->save();
@@ -388,7 +388,7 @@ class ContractRequestController extends Controller
             $contract->save();
 
             $userApproval =  $levelApproval->where('levels', $contract->level)->first()->user;
-            Mail::to($userApproval->email)->send(new ContractApproval($contract->fresh(), $userApproval, "สัญญาที่ต้องอนุมัติ"));
+            Mail::to($userApproval->email)->send(new ContractApproval($contract->fresh(), $userApproval, $contract->legalContractDest->legalComercialTerm->scope_of_work));
             Mail::to($contract->createdBy->email)->send(new ContractApproval($contract->fresh(), $contract->createdBy, "Your request has been approved by Legal Department and is being processed."));
         }
         if ($attributes['status'] === ApprovalEnum::R) {

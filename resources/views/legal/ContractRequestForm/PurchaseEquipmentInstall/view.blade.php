@@ -240,11 +240,11 @@
                                 <tr>
                                     <td>{{$key+1}}</td>
                                     <td>{{$item->description}}</td>
-                                    <td>{{$item->qty}}</td>
-                                    <td>{{$item->unit_price}}</td>
-                                    <td>{{$item->price}}</td>
-                                    <td>{{$item->discount}}</td>
-                                    <td>{{$item->amount}}</td>
+                                    <td>{{number_format($item->qty,2)}}</td>
+                                    <td>{{number_format($item->unit_price,2)}}</td>
+                                    <td>{{number_format($item->price,2)}}</td>
+                                    <td>{{number_format($item->discount,2)}}</td>
+                                    <td>{{number_format($item->amount, 2)}}</td>
                                 </tr>
                                 @endforeach
 
@@ -253,9 +253,9 @@
                                 <tr>
                                     <th colspan="5"></th>
                                     <th class="text-right">Total: </th>
-                                    <th id="total">{{$legalContract->legalComercialList->reduce(function ($ac,$item) {
+                                    <th id="total">{{number_format($legalContract->legalComercialList->reduce(function ($ac,$item) {
                                         return $ac+=$item->amount;
-                                        },0)}}</th>
+                                        },0),2)}}</th>
                                 </tr>
                             </tfoot>
                         </table>

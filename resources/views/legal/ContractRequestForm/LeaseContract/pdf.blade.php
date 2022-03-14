@@ -341,19 +341,19 @@
                         {{$item->description}}
                     </td>
                     <td class="text-center border-cell">
-                        {{$item->qty}}
+                        {{number_format($item->qty,2)}}
                     </td>
                     <td class="text-center border-cell">
-                        {{$item->unit_price}}
+                        {{number_format($item->unit_price,2)}}
                     </td>
                     <td class="text-center border-cell">
-                        {{$item->price}}
+                        {{number_format($item->price,2)}}
                     </td>
                     <td class="text-center border-cell">
-                        {{$item->discount}}
+                        {{number_format($item->discount,2)}}
                     </td>
                     <td class="text-center border-cell">
-                        {{$item->amount}}
+                        {{number_format($item->amount,2)}}
                     </td>
                 </tr>
                 @endforeach
@@ -362,9 +362,9 @@
                 <tr>
                     <th colspan="5"></th>
                     <th>Total: </th>
-                    <th class="text-center border-cell">{{$contract->legalComercialList->reduce(function ($a, $b) {
+                    <th class="text-center border-cell">{{number_format($contract->legalComercialList->reduce(function ($a, $b) {
                     return $a + $b->amount;
-                },0)}}</th>
+                },0),2)}}</th>
                 </tr>
             </tfoot>
         </table>

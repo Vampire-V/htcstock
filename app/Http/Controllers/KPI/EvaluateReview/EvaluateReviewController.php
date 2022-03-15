@@ -65,7 +65,7 @@ class EvaluateReviewController extends Controller
         $selectedStatus = collect($request->status);
         $selectedUser = collect($request->user);
         $selectedYear = collect($request->year);
-        $selectedPeriod = collect($request->period);
+        $selectedPeriod = collect($request->month);
         $selectedDivision = \collect($request->division_id);
         $selectedDepartment = \collect($request->department_id);
         $selectedEmc = \collect($request->degree);

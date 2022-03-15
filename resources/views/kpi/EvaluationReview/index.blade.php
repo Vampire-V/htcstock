@@ -107,7 +107,7 @@
                         </div>
                         <div class="col-md-2 mb-3">
                             <label for="period">Period :</label>
-                            <select name="period[]" id="validationPeriod" class="form-control-sm form-control" multiple>
+                            <select name="month[]" id="validationPeriod" class="form-control-sm form-control" multiple>
                                 @isset($months)
                                 @foreach ($months as $month)
                                 <option value="{{date('m', strtotime($month->name." 1 2021"))}}" @if($selectedPeriod->
@@ -163,7 +163,7 @@
                             <td>
                                 @php
                                     $nextAp = $evaluate->userApprove->where('level',$evaluate->next_level)->first()
-                                    
+
                                 @endphp
                                 {{$nextAp ? $nextAp->approveBy->name : "หาไม่เจอให้ IT ตรวจสอบ"}}
                                 {{-- ->approveBy->name --}}

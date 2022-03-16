@@ -60,18 +60,27 @@ class AllEvaluationController extends Controller
                 $user->second = \false;
                 $user->third = \false;
                 if ($user->evaluates->count() > 0) {
-                    $status = $user->evaluates->first()->status;
-                    if ($firsts->contains($status)) {
+                    $form_evaluate = $user->evaluates->first();
+                    if ($firsts->contains($form_evaluate->status)) {
                         $user->first = \true;
+                        $user->time_first = $form_evaluate->created_at->format('d-M-Y H:i:s');
                     }
-                    if ($second->contains($status)) {
+                    if ($second->contains($form_evaluate->status)) {
                         $user->first = \true;
+                        $user->time_first = $form_evaluate->created_at->format('d-M-Y H:i:s');
                         $user->second = \true;
+                        $times_second = $form_evaluate->history->whereIn('status',$second->toArray());
+                        $user->time_second = $times_second->first()->created_at->format('d-M-Y H:i:s');
                     }
-                    if ($third->contains($status)) {
+                    if ($third->contains($form_evaluate->status)) {
                         $user->first = \true;
+                        $user->time_first = $form_evaluate->created_at->format('d-M-Y H:i:s');
                         $user->second = \true;
+                        $times_second = $form_evaluate->history->whereIn('status',$second->toArray());
+                        $user->time_second = $times_second->first()->created_at->format('d-M-Y H:i:s');
                         $user->third = \true;
+                        $times_third = $form_evaluate->history->whereIn('status',$third->toArray());
+                        $user->time_third = $times_third->first()->created_at->format('d-M-Y H:i:s');
                     }
                 }
             }

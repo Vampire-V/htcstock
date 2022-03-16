@@ -153,7 +153,7 @@ class UserService extends BaseService implements UserServiceInterface
             $period = TargetPeriod::where('name', $request->month ?? date('m'))->where('year', $request->year ?? date('Y'))->first();
             return User::NotResigned()
                 ->filter($request)
-                ->with(['evaluates' => fn ($query) => $query->where('period_id', $period->id)])
+                ->with(['evaluates' => fn ($query) => $query->where('period_id', $period->id),'evaluates.history'])
                 ->orderBy('department_id', 'desc')->get();
         } catch (\Throwable $th) {
             throw $th;
@@ -176,11 +176,11 @@ class UserService extends BaseService implements UserServiceInterface
             $result = User::with(['department'])->notResigned()->orderBy('divisions_id','DESC')->orderBy('department_id','DESC')->get();
             foreach ($result as $key => $item) {
                 $arra[] = [
-                    'username' => $item->username, 
-                    'name_th' => $item->translate('th')->name ?? null, 
-                    'name_en' => $item->translate('en')->name ?? null, 
-                    'email' => $item->email, 
-                    'division' => $item->divisions->name, 
+                    'username' => $item->username,
+                    'name_th' => $item->translate('th')->name ?? null,
+                    'name_en' => $item->translate('en')->name ?? null,
+                    'email' => $item->email,
+                    'division' => $item->divisions->name,
                     'department' => $item->department->name,
                     'position' => $item->positions->name,
                     'degree' => $item->degree

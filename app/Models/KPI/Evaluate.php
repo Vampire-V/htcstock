@@ -11,6 +11,7 @@ class Evaluate extends Model
 {
     use EvaluateTrait;
     protected $table = 'kpi_evaluates';
+    protected $dates = ['updated_at', 'created_at'];
     protected $casts = [
         'user_id' => 'int',
         'period_id' => 'int',

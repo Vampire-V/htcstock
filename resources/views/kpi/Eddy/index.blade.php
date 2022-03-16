@@ -159,16 +159,19 @@
                                 <td class="text-left">{{$user->positions->name}}</td>
                                 <td> @if ($user->first)
                                     &#10004;
+                                    {{$user->time_first}}
                                     @else
                                     &#x274C;
                                     @endif</td>
                                 <td>@if ($user->second)
                                     &#10004;
+                                    {{$user->time_second}}
                                     @else
                                     &#x274C;
                                     @endif</td>
                                 <td>@if ($user->third)
                                     &#10004;
+                                    {{$user->time_third}}
                                     @else
                                     &#x274C;
                                     @endif</td>

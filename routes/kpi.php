@@ -36,6 +36,8 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::get('evaluate-report', 'SelfEvaluation\SelfEvaluationController@excelevaluate');
 
     Route::resource('evaluation-review', 'EvaluateReview\EvaluateReviewController', ['only' => ['index', 'create', 'edit', 'show', 'update', 'store', 'destroy']]);
+    // forceApprove
+    Route::post('evaluation-review/force','EvaluateReview\EvaluateReviewController@forceApprove');
     Route::put('evaluation-review/{id}/evaluateEdit','EvaluateReview\EvaluateReviewController@evaluateEdit');
     Route::get('errors/evaluation-review','EvaluateReview\EvaluateReviewController@evaluateReviewErrors');
 

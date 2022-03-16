@@ -82,7 +82,7 @@ class EvaluateReviewController extends Controller
             $months = $this->targetPeriodService->dropdown()->unique('name');
             $years = $months->unique('year');
             $evaluates = $this->evaluateService->reviewFilter($request);
-            $evaluates->each(function($item) {
+            $evaluates->each(function ($item) {
                 $item->background = "";
                 if ($item->userApprove->sortBy('level')->last()->level === $item->current_level && $item->status === KPIEnum::on_process) {
                     $item->background = "greenyellow";
@@ -93,8 +93,9 @@ class EvaluateReviewController extends Controller
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
-        return \view('kpi.EvaluationReview.index',
-        \compact('emc_group','start_year', 'user', 'status_list', 'months', 'evaluates', 'query', 'users','divisions','departments', 'selectedEmc', 'selectedStatus', 'selectedYear', 'selectedPeriod', 'selectedUser','selectedDivision','selectedDepartment')
+        return \view(
+            'kpi.EvaluationReview.index',
+            \compact('emc_group', 'start_year', 'user', 'status_list', 'months', 'evaluates', 'query', 'users', 'divisions', 'departments', 'selectedEmc', 'selectedStatus', 'selectedYear', 'selectedPeriod', 'selectedUser', 'selectedDivision', 'selectedDepartment')
         );
     }
 
@@ -144,13 +145,13 @@ class EvaluateReviewController extends Controller
             // $f_evaluate->evaluateDetail->each(fn ($item) => $this->evaluateDetailService->formulaKeyTask($item));
             $current = $this->userApproveService->findCurrentLevel($f_evaluate);
             $evaluate  = new EvaluateResource($f_evaluate);
-            $canInput = Gate::any([UserEnum::ADMINKPI,UserEnum::OPERATIONKPI,UserEnum::MANAGERKPI]);
+            $canInput = Gate::any([UserEnum::ADMINKPI, UserEnum::OPERATIONKPI, UserEnum::MANAGERKPI]);
             $canAdmin = Gate::allows(UserEnum::ADMINKPI);
             $history = $this->evaluateService->history($f_evaluate);
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'category', 'current','canInput','canAdmin','history'));
+        return \view('kpi.EvaluationReview.evaluate', \compact('evaluate', 'category', 'current', 'canInput', 'canAdmin', 'history'));
     }
 
     /**
@@ -166,7 +167,7 @@ class EvaluateReviewController extends Controller
         DB::beginTransaction();
         try {
             $evaluate = $this->evaluateService->find($id);
-            $current_approve = $evaluate->userApprove()->where('level',$evaluate->current_level)->first();
+            $current_approve = $evaluate->userApprove()->where('level', $evaluate->current_level)->first();
 
             $check = $this->setting_action_service->isNextStep(KPIEnum::approve);
             if ($status_list->contains($evaluate->status) && !$check) {
@@ -265,7 +266,7 @@ class EvaluateReviewController extends Controller
     {
         $status_list = collect([KPIEnum::new, KPIEnum::ready, KPIEnum::draft, KPIEnum::on_process]);
         // dd($request->all());
-        if (Gate::none([UserEnum::SUPERADMIN,UserEnum::ADMINKPI])) {
+        if (Gate::none([UserEnum::SUPERADMIN, UserEnum::ADMINKPI])) {
             return $this->errorResponse("ไม่มีสิทธิ์", 500);
         }
         DB::beginTransaction();
@@ -318,5 +319,35 @@ class EvaluateReviewController extends Controller
             Log::error("Exception Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
             return $this->errorResponse($e->getMessage(), 500);
         }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function forceApprove(Request $request)
+    {
+        $evaluates = $this->evaluateService->reviewFilter($request);
+        DB::beginTransaction();
+        try {
+            foreach ($evaluates as $key => $value) {
+                if ($value->status === KPIEnum::on_process) {
+                    $lastLevel = $value->userApprove->last();
+                    if ($value->next_level || $value->next_level > $lastLevel->level) {
+                        $value->next_level = $lastLevel->level;
+                    }
+                    $value->current_level = $lastLevel->level;
+                    $value->status = KPIEnum::approved;
+                    $value->save();
+                }
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        DB::commit();
+        return \redirect()->back()->with('success', "Approved data success...");
     }
 }

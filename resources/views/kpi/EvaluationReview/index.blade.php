@@ -30,7 +30,7 @@
         </div>
     </div>
 </div>
-{{-- end title  --}}
+{{-- end title --}}
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
@@ -52,7 +52,8 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="department">Department :</label>
-                            <select class="form-control form-control-sm" name="department_id[]" id="department_id" multiple>
+                            <select class="form-control form-control-sm" name="department_id[]" id="department_id"
+                                multiple>
                                 <option value=""></option>
                                 @foreach ($departments as $department)
                                 <option value="{{$department->id}}" @if($selectedDepartment->contains($department->id))
@@ -129,7 +130,14 @@
 
 <div class="col-lg-12">
     <div class="main-card mb-3 card">
-        <div class="card-header">{{__('Staff List')}}</div>
+        <div class="card-header">{{__('Staff List')}}
+            <div class="btn-actions-pane-right">
+                <div role="group" class="btn-group-sm btn-group">
+                    {{-- for Eddy --}}
+                    {{-- <button class="btn btn-sm btn-success" onclick="approveAll()">Approve by search</button> --}}
+                </div>
+            </div>
+        </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="mb-0 table table-sm">
@@ -151,7 +159,7 @@
                         @foreach ($evaluates as $key => $evaluate)
                         @isset($evaluate->user)
 
-                        <tr style="background-color: {{$evaluate->background}}" >
+                        <tr style="background-color: {{$evaluate->background}}">
                             <th scope="row">{{$key+1}}</th>
                             <td>{{$evaluate->user->name }}</td>
                             <td>{{$evaluate->user->department->name}}</td>
@@ -162,7 +170,7 @@
                             </td>
                             <td>
                                 @php
-                                    $nextAp = $evaluate->userApprove->where('level',$evaluate->next_level)->first()
+                                $nextAp = $evaluate->userApprove->where('level',$evaluate->next_level)->first()
 
                                 @endphp
                                 {{$nextAp ? $nextAp->approveBy->name : "หาไม่เจอให้ IT ตรวจสอบ"}}
@@ -187,4 +195,5 @@
 
 @section('second-script')
 <script src="{{asset('assets\js\kpi\evaluationReview\index.js')}}" defer></script>
+<script src="{{asset('assets\js\kpi\evaluationReview\admin.js')}}" defer></script>
 @endsection

@@ -11,7 +11,7 @@ abstract class AbstractFilter
 {
     protected $request;
 
-    protected $filters = [];
+    protected $filters = ['_token'];
 
     public function __construct(Request $request)
     {

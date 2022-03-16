@@ -86,12 +86,20 @@ class EvaluateService extends BaseService implements EvaluateServiceInterface
     public function reviewFilter(Request $request)
     {
         try {
+            // dd($request->method(),$request->path());
             if (Gate::any([UserEnum::ADMINKPI])) {
-                $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod', 'userApprove'])
+                if ($request->isMethod('post') && \str_contains($request->path(),"force")) {
+                    $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod', 'userApprove'])
+                    // ->whereHas('nextlevel', fn ($query) => $query->where('user_approve', \auth()->user()->id))
+                    ->whereIn('status', [KPIEnum::on_process, KPIEnum::approved])
+                    ->filter($request)->orderBy('period_id', 'desc')->get();
+                } else {
+                    $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod', 'userApprove'])
                     // ->whereHas('nextlevel', fn ($query) => $query->where('user_approve', \auth()->user()->id))
                     ->whereIn('status', [KPIEnum::on_process, KPIEnum::approved])
                     ->filter($request)->orderBy('period_id', 'desc')
                     ->paginate(20);
+                }
             } else {
                 $keys = UserApprove::where('user_approve', \auth()->id())->get();
                 $result = Evaluate::with(['user.divisions', 'user.positions', 'user.department', 'targetperiod', 'userApprove'])

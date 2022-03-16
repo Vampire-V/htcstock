@@ -4,7 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
@@ -34,11 +36,15 @@
     <!-- Styles -->
     <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/index.css') }}" rel="stylesheet">
-    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" /> --}}
+    {{--
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" /> --}}
     <link rel="stylesheet" href="{{asset('assets/css/select2.min.css')}}">
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> --}}
+    {{--
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    --}}
     <link rel="stylesheet" href="{{asset('assets/css/font-awesome.min.css')}}">
-    {{-- <link rel="stylesheet"
+    {{--
+    <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.1/css/OverlayScrollbars.css"
         integrity="sha512-Ho1L8FTfzcVPAlvfkL1BV/Lmy1JDUVAP82/LkhmKbRX5PnQ7CNDHAUp2GZe7ybBpovS+ssJDf+SlBOswrpFr8g=="
         crossorigin="anonymous" /> --}}
@@ -73,7 +79,7 @@
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.1/js/OverlayScrollbars.min.js"
         integrity="sha512-B1xv1CqZlvaOobTbSiJWbRO2iM0iii3wQ/LWnXWJJxKfvIRRJa910sVmyZeOrvI854sLDsFCuFHh4urASj+qgw=="
         crossorigin="anonymous"></script> --}}
-        <script src="{{asset('assets/js/overlayscrollbars/1.13.1/OverlayScrollbars.min.js')}}"></script>
+    <script src="{{asset('assets/js/overlayscrollbars/1.13.1/OverlayScrollbars.min.js')}}"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
     </script> --}}
@@ -83,7 +89,7 @@
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script> --}}
     <script src="{{asset('assets/js/bootstrap4.5.0/bootstrap.min.js')}}"></script>
-    <script src="{{asset('assets/js/index.js')}}" ></script>
+    <script src="{{asset('assets/js/index.js')}}"></script>
     <script defer>
         var locale = {!! json_encode(session('locale')) !!};
     </script>

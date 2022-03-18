@@ -332,15 +332,31 @@ class EvaluateReviewController extends Controller
         $evaluates = $this->evaluateService->reviewFilter($request);
         DB::beginTransaction();
         try {
-            foreach ($evaluates as $key => $value) {
+            foreach ($evaluates as $value) {
                 if ($value->status === KPIEnum::on_process) {
                     $lastLevel = $value->userApprove->last();
-                    if ($value->next_level || $value->next_level > $lastLevel->level) {
-                        $value->next_level = $lastLevel->level;
+                    foreach ($value->userApprove as $itemlevel) {
+                        if ($itemlevel->level < $lastLevel->level) {
+                            if ($value->next_level || $value->next_level >= $lastLevel->level) {
+                                $value->next_level = $lastLevel->level;
+                            }else{
+                                $value->next_level = $itemlevel->level + 1;
+                            }
+                            $value->current_level = $itemlevel->level;
+                            $value->status = KPIEnum::on_process;
+                            $value->save();
+                        }
                     }
-                    $value->current_level = $lastLevel->level;
-                    $value->status = KPIEnum::approved;
-                    $value->save();
+                    // $eddy = $value->userApprove->where('user_approve',113)->first();
+                    // $befor_eddy = $value->userApprove->where('level',$eddy->level - 1)->first();
+                    // dd($befor_eddy);
+                    // $lastLevel = $value->userApprove->last();
+                    // if ($value->next_level || $value->next_level > $lastLevel->level) {
+                    //     $value->next_level = $lastLevel->level;
+                    // }
+                    // $value->current_level = $lastLevel->level;
+                    // $value->status = KPIEnum::approved;
+                    // $value->save();
                 }
             }
         } catch (\Exception $e) {

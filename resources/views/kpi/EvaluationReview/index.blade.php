@@ -134,7 +134,10 @@
             <div class="btn-actions-pane-right">
                 <div role="group" class="btn-group-sm btn-group">
                     {{-- for Eddy --}}
-                    {{-- <button class="btn btn-sm btn-success" onclick="approveAll()">Approve by search</button> --}}
+                    @if (auth()->user()->username === "70038058")
+                    <button class="btn btn-sm btn-success" onclick="approveAll()">Approve by search</button>
+                    @endif
+
                 </div>
             </div>
         </div>

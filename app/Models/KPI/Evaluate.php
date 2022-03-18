@@ -68,7 +68,7 @@ class Evaluate extends Model
             $history->comment = $model->comment;
             $history->current_level = $model->current_level;
             $history->next_level = $model->next_level;
-            $history->created_by = \auth()->id();
+            $history->created_by = $model->userApprove->where('level',$model->current_level)->first()->user_approve;
             $history->ip = \request()->ip();
             // $history->device = substr(exec('getmac'),0,17);
             $history->save();

@@ -7,6 +7,7 @@ Route::get('kpi/evaluation/{id}/verify', 'Auth\LoginController@authKpiEvaluation
 
 Route::get('/operations','Admin\UsersController@operations');
 Route::get('users/dropdown','Admin\UsersController@dropdown')->name('users.dropdown');
+Route::post('user/{id}/kpihided','Admin\UsersController@kpiHides');
 Route::get('config/users/dropdown','Admin\UsersController@dropdown_config');
 Route::get('divisions/dropdown','DivisionController@dropdown')->name('divisions.dropdown');
 Route::get('category/dropdown','KPI\CategoryController@dropdown');

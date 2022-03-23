@@ -93,30 +93,6 @@
                         </div>
                     </div>
                 </form>
-                <script>
-                    (function () {
-                        'use strict';
-                        window.addEventListener('load', function () {
-                            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                            $(".js-select-division-multiple").select2({
-                                placeholder: 'Select division',
-                                allowClear: true
-                            });
-                            $(".js-select-department-multiple").select2({
-                                placeholder: 'Select department',
-                                allowClear: true
-                            });
-                            $(".js-select-position-multiple").select2({
-                                placeholder: 'Select position',
-                                allowClear: true
-                            });
-                            $(".js-select-role-multiple").select2({
-                                placeholder: 'Select role',
-                                allowClear: true
-                            });
-                        }, false);
-                    })();
-                </script>
             </div>
         </div>
     </div>
@@ -142,10 +118,10 @@
                                 <th>Division</th>
                                 <th>Department</th>
                                 <th>Position</th>
+                                <th>(มองเห็นใน KPI)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @isset($users)
                             @foreach ($users as $user)
                             <tr>
                                 <td>
@@ -170,9 +146,13 @@
                                 <td>
                                     {{ $user->positions->name}}
                                 </td>
+                                <td>
+                                    <label class="switch" data-user="{{$user->id}}">
+                                        <input type="checkbox" @if (!$user->kpi_hided) checked @endif >
+                                    </label>
+                                </td>
                             </tr>
                             @endforeach
-                            @endisset
                         </tbody>
                     </table>
                 </div>
@@ -181,4 +161,48 @@
         </div>
     </div>
 </div>
+
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            $(".js-select-division-multiple").select2({
+                placeholder: 'Select division',
+                allowClear: true
+            });
+            $(".js-select-department-multiple").select2({
+                placeholder: 'Select department',
+                allowClear: true
+            });
+            $(".js-select-position-multiple").select2({
+                placeholder: 'Select position',
+                allowClear: true
+            });
+            $(".js-select-role-multiple").select2({
+                placeholder: 'Select role',
+                allowClear: true
+            });
+
+            $("label.switch").on("click", function(e) {
+                console.log($(this).find("[type=checkbox]").is(":checked"));
+                console.log($(this).attr("data-user"));
+                // $(this).find("[type=checkbox]").is(":checked")
+                axios.post(`/user/${$(this).attr("data-user")}/kpihided`, {
+                    kpihided: $(this).find("[type=checkbox]").is(":checked")
+                })
+                .then(function (response) {
+                    toast(response.data.message, response.data.status)
+                })
+                .catch(function (error) {
+                    toast(error, 'error')
+                })
+                .finally(function () {
+                    toastClear()
+                });
+            });
+        }, false);
+    })();
+</script>
+
 @stop

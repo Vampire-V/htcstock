@@ -459,4 +459,22 @@ class UsersController extends Controller
             throw $e;
         }
     }
+
+    public function kpiHides(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $user = User::find($id);
+            if (!$user) {
+                $this->errorResponse("Staff not found.", 500);
+            }
+            $user->kpi_hided = $request->kpihided ? 0 : 1;
+            $user->save();
+            DB::commit();
+            return $this->successResponse(true, "Success...");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
 }

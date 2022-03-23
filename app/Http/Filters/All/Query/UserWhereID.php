@@ -5,6 +5,6 @@ class UserWhereID
 {
     public function filter($builder, $value)
     {
-        return $builder->WhereIn('id',[...$value]);
+        return $builder->whereIn('id',[...$value]);
     }
 }

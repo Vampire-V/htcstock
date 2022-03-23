@@ -6,6 +6,6 @@ class PositionIn
 {
     public function filter($builder, $value)
     {
-        return $builder->orWhereIn('positions_id',[...$value]);
+        return $builder->whereIn('positions_id',[...$value]);
     }
 }

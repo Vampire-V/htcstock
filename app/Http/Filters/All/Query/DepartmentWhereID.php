@@ -6,6 +6,6 @@ class DepartmentWhereID
 {
     public function filter($builder, $value)
     {
-        return $builder->WhereIn('department_id',[...$value]);
+        return $builder->whereIn('department_id',[...$value]);
     }
 }

@@ -5,7 +5,7 @@ class UserRoleIn
 {
     public function filter($builder, $value)
     {
-        return $builder->orWhereHas('roles', function ($q) use($value){
+        return $builder->whereHas('roles', function ($q) use($value){
             $q->whereIn('roles.id',[...$value]); // or whatever constraint you need here
           });
     }

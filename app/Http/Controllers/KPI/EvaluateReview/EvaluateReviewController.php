@@ -76,7 +76,7 @@ class EvaluateReviewController extends Controller
             $keys = UserApprove::where('user_approve', \auth()->id())->get();
 
             $user = Auth::user();
-            $users = Gate::any([UserEnum::ADMINKPI]) ? $this->userService->dropdown() : $this->userService->dropdownApprovalKPI($keys->pluck('user_id'));
+            $users = Gate::any([UserEnum::ADMINKPI]) ? $this->userService->dropdownKpi() : $this->userService->dropdownApprovalKPI($keys->pluck('user_id'));
             $divisions = $this->divisionService->dropdown();
             $departments = $this->departmentService->dropdown();
             $months = $this->targetPeriodService->dropdown()->unique('name');
@@ -215,8 +215,8 @@ class EvaluateReviewController extends Controller
                     $message = "Next step send to " . $user_approve->approveBy->name;
                     $evaluate->status = KPIEnum::on_process;
 
-                    $evaluate->current_level = $user_approve->level;
-                    $evaluate->next_level = $evaluate->next_level + 1;
+                    $evaluate->current_level += 1;
+                    $evaluate->next_level += 1;
                     $next = $this->userApproveService->findNextLevel($evaluate);
                     $evaluate->next_level = $next->exists ? $next->level : $evaluate->current_level;
                 }

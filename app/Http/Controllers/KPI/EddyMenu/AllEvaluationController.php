@@ -53,7 +53,7 @@ class AllEvaluationController extends Controller
         $sel_degree = \collect($request->degree);
         try {
             $departments = $this->departmentService->dropdown();
-            $users_drop = $this->userService->dropdown();
+            $users_drop = $this->userService->dropdownKpi();
             $users = $this->userService->reportStaffEvaluate($request);
             foreach ($users as $key => $user) {
                 $user->first = \false;
@@ -174,7 +174,7 @@ class AllEvaluationController extends Controller
     public function user_evaluates(Request $request)
     {
         try {
-            $data = User::with(['evaluate.evaluateDetail'])->notResigned()->get();
+            $data = User::with(['evaluate.evaluateDetail'])->notResigned()->KpiNotHided()->get();
             return $this->successResponse(UserEvaluateResource::collection($data), "user evaluates all", Response::HTTP_OK);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

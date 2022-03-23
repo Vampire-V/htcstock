@@ -23,6 +23,7 @@ interface UserServiceInterface
     public function dropdown(): Collection;
     public function dropdown_config(Request $request): Collection;
     public function dropdownEvaluationForm(): Collection;
+    public function dropdownKpi(): Collection;
     public function filter(Request $request);
     public function filterForEvaluateForm(Request $request);
     public function email(string $email);

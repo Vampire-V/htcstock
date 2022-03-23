@@ -84,4 +84,14 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
     {
         return $query->whereIn('divisions_id', [\auth()->user()->divisions_id]);
     }
+
+    public function scopeKpiHided(Builder $query)
+    {
+        return $query->where('kpi_hided', 1);
+    }
+
+    public function scopeKpiNotHided(Builder $query)
+    {
+        return $query->where('kpi_hided', 0);
+    }
 }

@@ -63,7 +63,7 @@ class SetActualController extends Controller
         $start_year = date('Y', strtotime('-5 years'));
 
         $months = $this->targetPeriodService->dropdown()->unique('name');
-        $users = $this->userService->dropdown();
+        $users = $this->userService->dropdownKpi();
         $departments = $this->departmentService->dropdown();
         $categorys = $this->categoryService->dropdown();
         $rules = $this->ruleService->dropdown();

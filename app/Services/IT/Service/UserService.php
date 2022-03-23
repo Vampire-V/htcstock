@@ -61,10 +61,19 @@ class UserService extends BaseService implements UserServiceInterface
         }
     }
 
+    public function dropdownKpi(): Collection
+    {
+        try {
+            return User::notResigned()->kpiNotHided()->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     public function dropdown_config(Request $request): Collection
     {
         try {
-            return User::filter($request)->notResigned()->get();
+            return User::filter($request)->notResigned()->KpiNotHided()->get();
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -73,7 +82,7 @@ class UserService extends BaseService implements UserServiceInterface
     public function dropdownEvaluationForm(): Collection
     {
         try {
-            return User::notResigned()->ofDivision()->get();
+            return User::notResigned()->KpiNotHided()->ofDivision()->get();
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -86,7 +95,7 @@ class UserService extends BaseService implements UserServiceInterface
 
     public function filterForEvaluateForm(Request $request)
     {
-        return User::withTranslation()->with(['department', 'positions', 'roles', 'divisions', 'permissions', 'systems'])->filter($request)->notResigned()->ofDivision()->orderBy('divisions_id', 'desc')->paginate(10);
+        return User::withTranslation()->with(['department', 'positions', 'roles', 'divisions', 'permissions', 'systems'])->filter($request)->notResigned()->KpiNotHided()->ofDivision()->orderBy('divisions_id', 'desc')->paginate(10);
     }
 
     public function email(string $email)
@@ -123,7 +132,7 @@ class UserService extends BaseService implements UserServiceInterface
     public function evaluationOfYearReport(Collection $period): Collection
     {
         try {
-            $users = User::select('id', 'degree', 'department_id')->notResigned()
+            $users = User::select('id', 'degree', 'department_id')->notResigned()->KpiNotHided()
                 ->with([
                     'department:id,name',
                     'evaluates' => fn ($query) => $query->select('id', 'user_id', 'period_id', 'status')->whereIn('period_id',$period->pluck('id'))
@@ -151,7 +160,7 @@ class UserService extends BaseService implements UserServiceInterface
     {
         try {
             $period = TargetPeriod::where('name', $request->month ?? date('m'))->where('year', $request->year ?? date('Y'))->first();
-            return User::NotResigned()
+            return User::NotResigned()->KpiNotHided()
                 ->filter($request)
                 ->with(['evaluates' => fn ($query) => $query->where('period_id', $period->id),'evaluates.history'])
                 ->orderBy('department_id', 'desc')->get();
@@ -163,7 +172,7 @@ class UserService extends BaseService implements UserServiceInterface
     public function dropdownApprovalKPI($id): Collection
     {
         try {
-            return User::notResigned()->whereIn('id', [...$id])->get();
+            return User::notResigned()->KpiNotHided()->whereIn('id', [...$id])->get();
         } catch (\Throwable $th) {
             throw $th;
         }

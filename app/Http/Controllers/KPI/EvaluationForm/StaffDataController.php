@@ -46,7 +46,7 @@ class StaffDataController extends Controller
         $selectDegree = \collect($request->degree);
         try {
             $users = $this->userService->filter($request);
-            $dropdown_users = $this->userService->dropdown();
+            $dropdown_users = $this->userService->dropdownKpi();
             // $divisions = \collect([$this->divisionService->find(\auth()->user()->divisions_id)]);
             $divisions = $this->divisionService->dropdown();
             $departments = $this->departmentService->dropdown();

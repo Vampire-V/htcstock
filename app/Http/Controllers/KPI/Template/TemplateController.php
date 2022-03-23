@@ -209,7 +209,6 @@ class TemplateController extends Controller
             $request->only('name'),
             ['name' => 'required']
         );
-
         if ($validate->fails()) {
             return $this->errorResponse($validate->errors(), 500);
         }
@@ -217,6 +216,7 @@ class TemplateController extends Controller
         try {
             $template = Template::find($id);
             $template->name = $request->name;
+            $template->save();
             DB::commit();
             return $this->successResponse(true, "Rename template success!", 200);
         } catch (\Exception $e) {

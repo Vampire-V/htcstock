@@ -205,11 +205,12 @@ class UsersController extends Controller
             // dd(DB::connection('sqlsrv')->getQueryLog());
             // $response = Http::get(ENV('USERS_UPDATE'))->json();
             if (!\is_null($result)) {
-                $list_users = [];
+                $list_users = ['cuihp@haier.com'];
                 foreach ($result as $value) {
                     $user = User::where('username', $value->ID)->first();
                     if (\is_null($user)) {
                         $user = new User;
+                        $user->email_verifed_at = \now();
                     }
                     $user->password = $user->password ?? Hash::make(\substr($value->EMail, 0, 1) . $value->ID);
                     $user->username = $user->username ?? $value->ID;

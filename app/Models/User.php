@@ -48,6 +48,28 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
     ];
 
     /**
+     * Determine if the user has verified their email address.
+     *
+     * @return bool
+     */
+    public function hasVerifiedEmail()
+    {
+        return !is_null($this->email_verified_at);
+    }
+
+    /**
+     * Mark the given user's email as verified.
+     *
+     * @return bool
+     */
+    public function markEmailAsVerified()
+    {
+        return $this->forceFill([
+            'email_verified_at' => $this->freshTimestamp(),
+        ])->save();
+    }
+
+    /**
      * The relations to eager load on every query.
      *
      * @var array

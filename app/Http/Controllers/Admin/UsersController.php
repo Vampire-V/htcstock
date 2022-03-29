@@ -22,6 +22,7 @@ use App\Services\IT\Interfaces\SystemServiceInterface;
 use App\Services\KPI\Service\UserApproveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
@@ -210,7 +211,6 @@ class UsersController extends Controller
                     $user = User::where('username', $value->ID)->first();
                     if (\is_null($user)) {
                         $user = new User;
-                        $user->email_verifed_at = \now();
                     }
                     $user->password = $user->password ?? Hash::make(\substr($value->EMail, 0, 1) . $value->ID);
                     $user->username = $user->username ?? $value->ID;
@@ -220,6 +220,9 @@ class UsersController extends Controller
                     // $user->email_verifed_at = $user->email_verifed_at ?? \now();
                     $user->head_id = $user->head_id ?? $value->IDLeader;
                     $user->save();
+                    if (!$user->hasVerifiedEmail()) {
+                        $user->markEmailAsVerified();
+                    }
                     $list_users[] = $value->ID;
                 }
                 User::whereNotIn('username', [...$list_users])->update(['resigned' => 1]); //update user ที่ออกไปแล้ว

@@ -339,11 +339,13 @@ class EvaluateReviewController extends Controller
                         if ($itemlevel->level < $lastLevel->level) {
                             if ($value->next_level || $value->next_level >= $lastLevel->level) {
                                 $value->next_level = $lastLevel->level;
+                                $value->status = KPIEnum::approved;
                             }else{
                                 $value->next_level = $itemlevel->level + 1;
+                                $value->status = KPIEnum::on_process;
                             }
                             $value->current_level = $itemlevel->level;
-                            $value->status = KPIEnum::on_process;
+
                             $value->save();
                         }
                     }

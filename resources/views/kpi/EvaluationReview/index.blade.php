@@ -134,7 +134,7 @@
             <div class="btn-actions-pane-right">
                 <div role="group" class="btn-group-sm btn-group">
                     {{-- for Eddy --}}
-                    @if (auth()->user()->username === "70038058")
+                    @if (auth()->user()->username === "70038058" || auth()->user()->username === "70037539")
                     <button class="btn btn-sm btn-success" onclick="approveAll()">Approve by search</button>
                     @endif
 

@@ -46,7 +46,7 @@ class Evaluate extends Model
     {
         parent::boot();
 
-        static::creating(function ($model) {
+        static::created(function ($model) {
             // $model->created_by = \auth()->id();
             $history = new EvaluatesHistory();
             $history->evaluate_id = $model->id;
@@ -60,7 +60,7 @@ class Evaluate extends Model
             $history->save();
         });
 
-        static::updating(function ($model) {
+        static::updated(function ($model) {
             // $model->updated_by = \auth()->id();
             $user_app = $model->userApprove->where('level',$model->current_level)->first();
             $history = new EvaluatesHistory();

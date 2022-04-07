@@ -159,7 +159,7 @@ class EvaluationFormController extends Controller
                         Log::warning($evaluate->user->name . " ไม่มี Level approve kpi system..");
                         return $this->errorResponse($evaluate->user->name . " ไม่มี Level approve", 500);
                     }
-                    $evaluate->next_level = $user_approve->level;
+                    // $evaluate->next_level = $user_approve->level;
                     $evaluate->save();
                     # send mail to staff
                     // Mail::to($evaluate->user->email)->send(new EvaluationSelfMail($evaluate));
@@ -242,7 +242,7 @@ class EvaluationFormController extends Controller
                 // Update Header
                 $evaluate->template_id = $request->template;
                 $evaluate->status = $request->next ? KPIEnum::ready : KPIEnum::new;
-                $evaluate->next_level = 1;
+                // $evaluate->next_level = 1;
                 $evaluate->total_weight_kpi = $request->total_weight_kpi;
                 $evaluate->total_weight_key_task = $request->total_weight_key_task;
                 $evaluate->total_weight_omg = $request->total_weight_omg;

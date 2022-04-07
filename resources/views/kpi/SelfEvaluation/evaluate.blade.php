@@ -248,7 +248,8 @@
     @endif
 
     <button class="mb-2 mr-2 btn btn-primary" id="submit" onclick="submit() @if ($onSave === false) disable @endif">Save</button>
-    <button class="mb-2 mr-2 btn btn-success" id="submit-to-user" onclick="submitToManager()">Save & Send to
+
+    <button class="mb-2 mr-2 btn btn-success @if ($isAdmin === true) no-disable @endif" id="submit-to-user" onclick="submitToManager()">Save & Send to
         manager</button>
 </div>
 

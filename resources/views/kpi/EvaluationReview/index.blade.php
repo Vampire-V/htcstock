@@ -173,7 +173,7 @@
                             </td>
                             <td>
                                 @php
-                                $nextAp = $evaluate->userApprove->where('level',$evaluate->next_level)->first()
+                                $nextAp = $evaluate->userApprove->where('level',$evaluate->current_level)->first()
 
                                 @endphp
                                 {{$nextAp ? $nextAp->approveBy->name : "หาไม่เจอให้ IT ตรวจสอบ"}}

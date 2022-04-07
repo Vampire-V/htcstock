@@ -336,7 +336,7 @@ class EvaluateReviewController extends Controller
                 if ($value->status === KPIEnum::on_process) {
                     $lastLevel = $value->userApprove->last();
                     foreach ($value->userApprove as $itemlevel) {
-                        if ($itemlevel->level <= $lastLevel->level) {
+                        if ($itemlevel->level <= $lastLevel->level && $value->current_level >= $itemlevel->level) {
                             if ($value->next_level && $value->next_level >= $lastLevel->level) {
                                 $value->next_level = $lastLevel->level;
                                 $value->status = KPIEnum::approved;

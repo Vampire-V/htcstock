@@ -337,18 +337,23 @@ class EvaluateReviewController extends Controller
                     $lastLevel = $value->userApprove->last();
                     foreach ($value->userApprove as $itemlevel) {
                         if ($itemlevel->level <= $lastLevel->level && $value->current_level >= $itemlevel->level) {
+
                             if ($value->next_level && $value->next_level >= $lastLevel->level) {
                                 $value->next_level = $lastLevel->level;
                                 $value->status = KPIEnum::approved;
                             }else{
-                                $value->next_level = $itemlevel->level + 1;
+                                $value->next_level += 1;
                                 $value->status = KPIEnum::on_process;
                             }
-                            $value->current_level = $itemlevel->level;
-
+                            $value->current_level += 1;
                             $value->save();
                         }
                     }
+                    // if ($value->id !== 2029) {
+                    //     \dump($value->userApprove->pluck('level'),$lastLevel);
+                    //     exit;
+                    //     \dump("Last Lv: "+$lastLevel);
+                    // }
                     // $eddy = $value->userApprove->where('user_approve',113)->first();
                     // $befor_eddy = $value->userApprove->where('level',$eddy->level - 1)->first();
                     // dd($befor_eddy);

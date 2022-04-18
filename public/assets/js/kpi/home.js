@@ -492,13 +492,13 @@ let periodOfMonth = (first, second) => {
 };
 
 let calculator_score = (number) => {
-    if (number >= 110.0) {
+    if (number >= 100.0) {
         return "A";
-    } else if (number >= 100.0 && number < 110.0) {
-        return "B+";
     } else if (number >= 90.0 && number < 100.0) {
+        return "B+";
+    } else if (number >= 80.0 && number < 90.0) {
         return "B";
-    } else if (number >= 70.0 && number < 90.0) {
+    } else if (number >= 70.0 && number < 80.0) {
         return "C";
     } else if (number < 70.0) {
         return "D";

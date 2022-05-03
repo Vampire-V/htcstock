@@ -206,7 +206,7 @@ class UsersController extends Controller
             // dd(DB::connection('sqlsrv')->getQueryLog());
             // $response = Http::get(ENV('USERS_UPDATE'))->json();
             if (!\is_null($result)) {
-                $list_users = ['cuihp@haier.com'];
+                $list_users = ['cuihp@haier.com','liuzhr@haier.com'];
                 foreach ($result as $value) {
                     $user = User::where('username', $value->ID)->first();
                     if (\is_null($user)) {

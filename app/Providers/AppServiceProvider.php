@@ -65,6 +65,7 @@ use App\Services\Legal\Service\PaymentTermService;
 use App\Services\Legal\Service\PaymentTypeService;
 use App\Services\Legal\Service\SubtypeContractService;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -89,6 +90,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+        Paginator::useBootstrapThree();
         // JsonResource::withoutWrapping();
         // IT
         $this->app->bind(AccessoriesServiceInterface::class, AccessoriesService::class);
@@ -126,6 +128,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(TargetPeriodServiceInterface::class,TargetPeriodService::class);
         $this->app->bind(EvaluateDetailServiceInterface::class,EvaluateDetailService::class);
         $this->app->bind(RuleTypeServiceInterface::class,RuleTypeService::class);
-        
+
     }
 }

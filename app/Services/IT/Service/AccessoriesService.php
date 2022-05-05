@@ -32,7 +32,7 @@ class AccessoriesService extends BaseService implements AccessoriesServiceInterf
 
     public function filter(Request $request)
     {
-        return Accessories::filter($request)->noRemove()->orderBy('created_at', 'desc')->paginate(10);
+        return Accessories::filter($request)->noRemove()->orderBy('created_at', 'desc')->paginate(30);
     }
 
     public function sumAccessories()

@@ -79,7 +79,15 @@ class SelfEvaluationController extends Controller
         $selectedUser = collect($request->user ?? auth()->id());
         $start_year = date('Y', strtotime('-10 years'));
         try {
-            $users = $this->userService->dropdownKpi();
+            $user = $this->userService->find(\auth()->user()->id);
+            if (!$user->hasRole(UserEnum::OPERATIONKPI)) {
+                $users = $this->userService->dropdownKpi();
+            }elseif($user->hasRole(UserEnum::OPERATIONKPI)){
+                $users = $this->userService->dropdownKpiOfOperation();
+            }
+            if ($user->hasRole(UserEnum::SUPERADMIN)) {
+                $users = $this->userService->dropdown();
+            }
             // $users = Gate::allows(UserEnum::SUPERADMIN) ? $this->userService->dropdown() : $this->userService->dropdownEvaluationForm();
             $evaluates = $this->evaluateService->selfFilter($request);
         } catch (\Exception $e) {

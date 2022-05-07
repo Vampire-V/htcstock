@@ -19,4 +19,6 @@ interface DepartmentServiceInterface
     public function dropdownForUser(): Collection;
     public function dropdown_excel(): array;
 
+    public function dropdownOperation(): Collection;
+
 }

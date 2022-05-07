@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable implements MustVerifyEmail, TranslatableContract
 {
@@ -115,5 +116,11 @@ class User extends Authenticatable implements MustVerifyEmail, TranslatableContr
     public function scopeKpiNotHided(Builder $query)
     {
         return $query->where('kpi_hided', 0);
+    }
+
+    public function scopeOfOperation(Builder $query)
+    {
+        $deptInCharge = Auth::user()->operationDept->pluck('id')->toArray();
+        return $query->whereIn('department_id', $deptInCharge);
     }
 }

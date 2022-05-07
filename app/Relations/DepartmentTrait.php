@@ -25,4 +25,10 @@ trait DepartmentTrait
    {
       return $this->hasOne(Template::class)->withDefault();
    }
+
+   public function operation()
+    {
+        return $this->belongsToMany(User::class, 'kpi_operation_dept')->with('department')
+        ->withPivot(['user_id','department_id']);
+    }
 }

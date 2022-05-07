@@ -56,7 +56,7 @@ class AdminRuleController extends Controller
         $params = $request->all();
         $selectedUser = collect($request->user_actual);
         try {
-            $users = $this->userService->dropdown();
+            $users = $this->userService->dropdownOperation();
             $rules = $params ? $this->ruleService->filter($request) : $params;
         } catch (\Exception $e) {
             // return \redirect()->back()->with('error', "Error : " . $e->getMessage());

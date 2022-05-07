@@ -114,4 +114,9 @@ trait UserTrait
     {
         return $this->hasMany(UserApprove::class)->orderBy('level');
     }
+
+    public function operationDept()
+    {
+        return $this->belongsToMany(Department::class, 'kpi_operation_dept');
+    }
 }

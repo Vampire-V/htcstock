@@ -3,6 +3,7 @@
 namespace App\Services\IT\Service;
 
 use App\Enum\KPIEnum;
+use App\Enum\UserEnum;
 use App\Models\KPI\TargetPeriod;
 use App\Services\BaseService;
 use App\Services\IT\Interfaces\UserServiceInterface;
@@ -70,6 +71,22 @@ class UserService extends BaseService implements UserServiceInterface
         }
     }
 
+    public function dropdownKpiOfOperation(): Collection
+    {
+        try {
+            return User::notResigned()->kpiNotHided()->ofOperation()->get();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function dropdownOperation()
+    {
+        return User::notResigned()->whereHas('roles',function($query) {
+            return $query->where('slug',UserEnum::OPERATIONKPI);
+        })->get();
+    }
+
     public function dropdown_config(Request $request): Collection
     {
         try {
@@ -95,7 +112,7 @@ class UserService extends BaseService implements UserServiceInterface
 
     public function filterForEvaluateForm(Request $request)
     {
-        return User::withTranslation()->with(['department', 'positions', 'roles', 'divisions', 'permissions', 'systems'])->filter($request)->notResigned()->KpiNotHided()->ofDivision()->orderBy('divisions_id', 'desc')->paginate(10);
+        return User::withTranslation()->with(['department', 'positions', 'roles', 'divisions', 'permissions', 'systems'])->filter($request)->notResigned()->KpiNotHided()->ofOperation()->orderBy('divisions_id', 'desc')->paginate(10);
     }
 
     public function email(string $email)

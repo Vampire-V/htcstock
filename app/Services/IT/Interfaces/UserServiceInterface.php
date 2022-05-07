@@ -24,6 +24,7 @@ interface UserServiceInterface
     public function dropdown_config(Request $request): Collection;
     public function dropdownEvaluationForm(): Collection;
     public function dropdownKpi(): Collection;
+    public function dropdownKpiOfOperation(): Collection;
     public function filter(Request $request);
     public function filterForEvaluateForm(Request $request);
     public function email(string $email);
@@ -41,4 +42,6 @@ interface UserServiceInterface
     public function dropdownApprovalKPI($id): Collection;
 
     public function employee_excel(): array;
+
+    public function dropdownOperation();
 }

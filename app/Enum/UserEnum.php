@@ -15,6 +15,6 @@ abstract class UserEnum extends BasicEnum
     const ADMINKPI = 'parent-admin-kpi';
 
     // url profile
-    const path = "/images/avatars/unknown.jpg";
+    const path = "/images/avatars/2.jpg";
 
 }

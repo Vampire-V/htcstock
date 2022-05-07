@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\KPI\DepartmentInChargeController;
+use App\Models\Department;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // KPI
@@ -96,5 +101,9 @@ Route::namespace('KPI')->prefix('kpi')->name('kpi.')->middleware(['auth', 'verif
     Route::get('generate-month', 'SetPeriod\TargetPeriodController@generateMonth')->name('generate-month.auto');
     Route::resource('transfer-rules','TransferRules\AdminRuleController', ['only' => ['index']]);
     Route::put('transfer-rules','TransferRules\AdminRuleController@update')->name('transfer-rules.transfer');
+
+    Route::get('department-in-charge',[DepartmentInChargeController::class,'index'])->name('dept-in-charge');
+    Route::post('department-in-charge',[DepartmentInChargeController::class,'store']);
+    Route::delete('department-in-charge/{id}', [DepartmentInChargeController::class,'destroy']);
 
 });

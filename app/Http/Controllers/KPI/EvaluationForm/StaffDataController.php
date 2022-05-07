@@ -45,11 +45,11 @@ class StaffDataController extends Controller
         $selectUser = \collect($request->users);
         $selectDegree = \collect($request->degree);
         try {
-            $users = $this->userService->filter($request);
-            $dropdown_users = $this->userService->dropdownKpi();
+            $users = $this->userService->filterForEvaluateForm($request);
+            $dropdown_users = $this->userService->dropdownKpiOfOperation();
             // $divisions = \collect([$this->divisionService->find(\auth()->user()->divisions_id)]);
             $divisions = $this->divisionService->dropdown();
-            $departments = $this->departmentService->dropdown();
+            $departments = $this->departmentService->dropdownOperation();
             $positions = $this->positionService->dropdown();
             $degrees = \collect(KPIEnum::$degree);
         } catch (\Exception $e) {

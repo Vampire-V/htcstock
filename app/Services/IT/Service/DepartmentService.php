@@ -8,6 +8,7 @@ use App\Services\BaseService;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class DepartmentService extends BaseService implements DepartmentServiceInterface
 {
@@ -63,5 +64,10 @@ class DepartmentService extends BaseService implements DepartmentServiceInterfac
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    public function dropdownOperation(): Collection
+    {
+        return Department::whereIn('id',Auth::user()->operationDept->pluck('id')->toArray())->get();
     }
 }

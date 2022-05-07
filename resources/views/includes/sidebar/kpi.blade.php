@@ -83,6 +83,12 @@
                         Employee report
                     </a>
                 </li>
+                <li>
+                    <a href="{{route('kpi.dept-in-charge')}}" class="{{Helper::isActive('kpi/department-in-charge')}}">
+                        <i class="metismenu-icon pe-7s-box2"></i>
+                        Department in charge
+                    </a>
+                </li>
                 @endcanany
                 {{-- end admin --}}
 

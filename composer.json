@@ -10,7 +10,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "arcanedev/log-viewer": "^8.0",
-        "astrotomic/laravel-translatable": "^11.9",
+        "astrotomic/laravel-translatable": "11.9",
         "barryvdh/laravel-dompdf": "^0.8.7",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",

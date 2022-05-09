@@ -82,12 +82,15 @@ class SelfEvaluationController extends Controller
             $user = $this->userService->find(\auth()->user()->id);
             if (!$user->hasRole(UserEnum::OPERATIONKPI)) {
                 $users = $this->userService->dropdownKpi();
-            }elseif($user->hasRole(UserEnum::OPERATIONKPI)){
-                $users = $this->userService->dropdownKpiOfOperation();
-            }
-            if ($user->hasRole(UserEnum::SUPERADMIN)) {
+            }else {
                 $users = $this->userService->dropdown();
             }
+            // elseif($user->hasRole(UserEnum::OPERATIONKPI)){
+            //     $users = $this->userService->dropdownKpiOfOperation();
+            // }
+            // if ($user->hasRole(UserEnum::SUPERADMIN)) {
+            //     $users = $this->userService->dropdown();
+            // }
             // $users = Gate::allows(UserEnum::SUPERADMIN) ? $this->userService->dropdown() : $this->userService->dropdownEvaluationForm();
             $evaluates = $this->evaluateService->selfFilter($request);
         } catch (\Exception $e) {

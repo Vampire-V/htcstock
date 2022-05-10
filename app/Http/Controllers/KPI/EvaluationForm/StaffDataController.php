@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\KPI\EvaluationForm;
 
 use App\Enum\KPIEnum;
+use App\Enum\UserEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ALL\UserResource;
 use App\Services\IT\Interfaces\DepartmentServiceInterface;
@@ -45,8 +46,14 @@ class StaffDataController extends Controller
         $selectUser = \collect($request->users);
         $selectDegree = \collect($request->degree);
         try {
+            $user = $this->userService->find(\auth()->user()->id);
             $users = $this->userService->filterForEvaluateForm($request);
-            $dropdown_users = $this->userService->dropdownKpiOfOperation();
+            // $dropdown_users = $this->userService->dropdownKpiOfOperation();
+            if (!$user->hasRole(UserEnum::ADMINKPI)) {
+                $dropdown_users = $this->userService->dropdownKpi();
+            }else {
+                $dropdown_users = $this->userService->dropdownKpiOfOperation();
+            }
             // $divisions = \collect([$this->divisionService->find(\auth()->user()->divisions_id)]);
             $divisions = $this->divisionService->dropdown();
             $departments = $this->departmentService->dropdownOperation();

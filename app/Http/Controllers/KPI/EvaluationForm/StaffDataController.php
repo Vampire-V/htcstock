@@ -51,12 +51,14 @@ class StaffDataController extends Controller
             // $dropdown_users = $this->userService->dropdownKpiOfOperation();
             if ($user->hasRole(UserEnum::ADMINKPI)) {
                 $dropdown_users = $this->userService->dropdownKpi();
+                $departments = $this->departmentService->dropdown();
             }else {
                 $dropdown_users = $this->userService->dropdownKpiOfOperation();
+                $departments = $this->departmentService->dropdownOperation();
             }
             // $divisions = \collect([$this->divisionService->find(\auth()->user()->divisions_id)]);
             $divisions = $this->divisionService->dropdown();
-            $departments = $this->departmentService->dropdownOperation();
+
             $positions = $this->positionService->dropdown();
             $degrees = \collect(KPIEnum::$degree);
         } catch (\Exception $e) {

@@ -232,7 +232,7 @@
                         <div class="col-md-12">
                             <div class="position-relative form-group"><label for="rule-name" class="">Rule Name
                                     :</label>
-                                <select id="rule-name" class="form-control form-control-sm" name="rule_id_add">
+                                <select id="rule-name" class="form-control form-control-sm" name="rule_id_add[]" multiple>
                                 </select></div>
                         </div>
                     </div>

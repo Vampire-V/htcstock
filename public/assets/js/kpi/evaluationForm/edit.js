@@ -304,7 +304,8 @@ const dropdownRule = (category, modal) => {
 const addKeyTask = (e) => {
     let select = e.offsetParent.querySelector('select')
     // Fetch rule API and add to detail temp
-    getRule(select.options[select.selectedIndex].value)
+    $("#rule-name").val().forEach(id => {
+        getRule(id)
         .then(res => {
             if (res.status === 200) {
                 let row = evaluateForm.detail.find(obj => obj.rules.category_id === res.data.data.category_id)
@@ -335,4 +336,6 @@ const addKeyTask = (e) => {
             display_template()
             toastClear()
         })
+    });
+
 }

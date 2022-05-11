@@ -279,35 +279,39 @@ const dropdownRule = (category, modal) => {
 const addKeyTask = (e) => {
     let select = e.offsetParent.querySelector('select')
     // Fetch rule API and add to detail temp
-    getRule(select.options[select.selectedIndex].value)
-        .then(res => {
-            if (res.status === 200) {
-                let row = evaluateForm.detail.find(obj => obj.rules.category_id === res.data.data.category_id)
-                let detail = new EvaluateDetail()
-                detail.rule_id = res.data.data.id
-                detail.rules = Object.create(res.data.data)
-                detail.max = res.data.data.max
-                detail.base_line = res.data.data.base_line
-                if (!row) {
-                    detail.target = 0.00
-                    detail.weight = 0.00
-                    detail.weight_category = 0.00
-                } else {
-                    detail.target = row.target
-                    detail.weight = row.weight
-                    detail.weight_category = row.weight_category
-                }
+    // console.log(select.options[select.selectedIndex].value,$("#rule-name").val());
+    $("#rule-name").val().forEach(id => {
+        getRule(id)
+            .then(res => {
+                if (res.status === 200) {
+                    let row = evaluateForm.detail.find(obj => obj.rules.category_id === res.data.data.category_id)
+                    let detail = new EvaluateDetail()
+                    detail.rule_id = res.data.data.id
+                    detail.rules = Object.create(res.data.data)
+                    detail.max = res.data.data.max
+                    detail.base_line = res.data.data.base_line
+                    if (!row) {
+                        detail.target = 0.00
+                        detail.weight = 0.00
+                        detail.weight_category = 0.00
+                    } else {
+                        detail.target = row.target
+                        detail.weight = row.weight
+                        detail.weight_category = row.weight_category
+                    }
 
-                evaluateForm.detail.push(detail)
-                e.offsetParent.querySelector('.close').click()
-            }
-        })
-        .catch(error => {
-            console.log(error.response.data.message);
-            toast(error.response.data.message, error.response.data.status)
-        })
-        .finally(() => {
-            display_template()
-            toastClear()
-        })
+                    evaluateForm.detail.push(detail)
+                    e.offsetParent.querySelector('.close').click()
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                console.log(error.response.data.message);
+                toast(error.response.data.message, error.response.data.status)
+            })
+            .finally(() => {
+                display_template()
+                toastClear()
+            })
+    });
 }

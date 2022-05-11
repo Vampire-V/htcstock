@@ -80,7 +80,7 @@ class SelfEvaluationController extends Controller
         $start_year = date('Y', strtotime('-10 years'));
         try {
             $user = $this->userService->find(\auth()->user()->id);
-            if ($user->hasRole(UserEnum::ADMINKPI)) {
+            if ($user->hasRole([UserEnum::ADMINKPI,UserEnum::MANAGERKPI]) ) {
                 $users = $this->userService->dropdownKpi();
             }else {
                 $users = $this->userService->dropdownKpiOfOperation();

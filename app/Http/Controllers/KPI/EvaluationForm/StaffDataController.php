@@ -49,7 +49,7 @@ class StaffDataController extends Controller
             $user = $this->userService->find(\auth()->user()->id);
             $users = $this->userService->filterForEvaluateForm($request);
             // $dropdown_users = $this->userService->dropdownKpiOfOperation();
-            if ($user->hasRole(UserEnum::ADMINKPI)) {
+            if ($user->hasRole(UserEnum::ADMINKPI) || $user->hasRole(UserEnum::MANAGERKPI)) {
                 $dropdown_users = $this->userService->dropdownKpi();
                 $departments = $this->departmentService->dropdown();
             }else {

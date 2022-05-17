@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Legal\StoreApprovalContract;
 use App\Http\Requests\Legal\StoreContractRequest;
 use App\Mail\Legal\ContractApproval;
+use App\Models\Department;
 use App\Models\Legal\LegalContract;
 use App\Services\Legal\Interfaces\ActionServiceInterface;
 use App\Services\Legal\Interfaces\AgreementServiceInterface;
@@ -146,6 +147,7 @@ class ContractRequestController extends Controller
             $legalContract = $this->contractRequestService->find($id);
             $subtypeContract = $this->subtypeContractService->dropdown($legalContract->agreement_id);
             $paymentType = $this->paymentTypeService->dropdown($legalContract->agreement_id);
+            $deptOfUser = auth()->user()->department()->get();
             if ($legalContract->legalContractDest) {
                 // $legalContract->legalContractDest->value_of_contract = explode(",", $legalContract->legalContractDest->value_of_contract);
                 $row = explode("|", $legalContract->legalContractDest->value_of_contract);
@@ -162,17 +164,18 @@ class ContractRequestController extends Controller
             }
             if ($legalContract->status === ContractEnum::RQ) {
                 $text_btn = "Checking Contract";
-                $permission = $legalContract->createdBy->department->legalApprove->where('levels', $legalContract->level)->first()->user_id === \auth()->id() ? true : false;
+                $permission = $deptOfUser->where('id',240)->count() > 0 ? true : false;
                 $form_approve = false;
             }
             if ($legalContract->status === ContractEnum::CK) {
                 $text_btn = "Providing Contract";
-                $permission = $legalContract->createdBy->department->legalApprove->where('levels', $legalContract->level)->first()->user_id === \auth()->id() ? true : false;
+                $permission = $deptOfUser->where('id',240)->count() > 0 ? true : false;
                 $form_approve = $permission;
             }
             if ($legalContract->status === ContractEnum::P) {
+                // Eddy
                 $text_btn = "Complete Contract";
-                $permission = $legalContract->createdBy->department->legalApprove->where('levels', $legalContract->level)->first()->user_id === \auth()->id() ? true : false;
+                $permission = $deptOfUser->where('id',236)->count() > 0 ? true : false;
                 $form_approve = $permission;
             }
             if ($legalContract->status === ContractEnum::CP) {
@@ -326,10 +329,15 @@ class ContractRequestController extends Controller
         try {
             $contractRequest = $this->contractRequestService->find($id);
             $levelApproval = $this->approvalService->approvalByDepartment($contractRequest->createdBy->department);
+            $legals = Department::find(240)->users()->where('resigned',false)->get();
+            if (!$legals) {
+                DB::rollBack();
+                return \redirect()->back()->with('error', "Error : ไม่พบ พนักงานแผนก กฏหมาย");
+            }
             if ($contractRequest->status === ContractEnum::D) {
-                $this->processDraft($contractRequest, $levelApproval);
+                $this->processDraft($contractRequest, $legals);
             } else if ($contractRequest->status === ContractEnum::RQ) {
-                $this->processRequest($contractRequest, $levelApproval);
+                $this->processRequest($contractRequest);
             } else if ($contractRequest->status === ContractEnum::CK) {
                 $request->validate(['status' => [Rule::in(ApprovalEnum::$types), 'required']]);
                 $this->processChecking($attributes, $contractRequest, $levelApproval);
@@ -351,20 +359,22 @@ class ContractRequestController extends Controller
         }
     }
 
-    private function processDraft(LegalContract $contract, Collection $levelApproval)
+    private function processDraft(LegalContract $contract, Collection $legals)
     {
         $approvalDetail = $this->approvalDetailService->create(['user_id' => \auth()->id(), 'contract_id' => $contract->id, 'levels' => $contract->level, 'comment' => 'Request']);
         $approvalDetail->save();
         $contract->status = ContractEnum::RQ;
         $contract->level = 1;
         $contract->save();
-        $userApproval = $levelApproval->where('levels', 1)->first()->user;
-        Mail::to($userApproval->email)->send(new ContractApproval($contract->fresh(), $userApproval, $contract->legalContractDest->legalComercialTerm->scope_of_work));
+        // $userApproval = $levelApproval->where('levels', 1)->first()->user;
+        foreach ($legals as $key => $legal) {
+            Mail::to($legal->email)->send(new ContractApproval($contract->fresh(), $legal, $contract->legalContractDest->legalComercialTerm->scope_of_work));
+        }
         Mail::to($contract->createdBy->email)->send(new ContractApproval($contract->fresh(), $contract->createdBy, "Your request has been received by Legal Department. You can follow the progress of this request here -link-"));
         // return $levelApproval->where('levels', 1)->first()->user;
     }
 
-    private function processRequest(LegalContract $contract, Collection $levelApproval)
+    private function processRequest(LegalContract $contract)
     {
         $approvalDetail = $this->approvalDetailService->create(['user_id' => \auth()->id(), 'contract_id' => $contract->id, 'levels' => $contract->level, 'comment' => 'Checking']);
         $approvalDetail->save();

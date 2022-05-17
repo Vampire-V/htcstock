@@ -27,20 +27,20 @@ class StoreApprovalContract extends FormRequest
     public function authorize(Request $request)
     {
         $contract = $this->contractRequestService->find($request->route()->parameters['id']);
-        $levelApproval = $this->approvalService->approvalByDepartment($contract->createdBy->department);
-
+        // $levelApproval = $this->approvalService->approvalByDepartment($contract->createdBy->department);
+        $deptOfUser = auth()->user()->department()->get();
         if ($contract->status === ContractEnum::D && $contract->created_by === \auth()->id()) {
             return true;
         }
         if ($contract->status === ContractEnum::RQ || $contract->status === ContractEnum::CK) {
-            $userApproval = $levelApproval->where('levels', 1)->first()->user;
-            if ($userApproval->id === \auth()->id()) {
+            // $userApproval = $levelApproval->where('levels', 1)->first()->user;
+            if ($deptOfUser->where('id',240)->count() > 0) {
                 return true;
             }
         }
         if ($contract->status === ContractEnum::P) {
-            $userApproval = $levelApproval->where('levels', 2)->first()->user;
-            if ($userApproval->id === \auth()->id()) {
+            // $userApproval = $levelApproval->where('levels', 2)->first()->user;
+            if ($deptOfUser->where('id',236)->count() > 0) {
                 return true;
             }
         }

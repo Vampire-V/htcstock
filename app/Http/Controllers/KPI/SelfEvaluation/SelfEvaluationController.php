@@ -217,7 +217,10 @@ class SelfEvaluationController extends Controller
 
 
             if ($request->next) {
-                if ((\auth()->id() !== $evaluate->user_id) && !Gate::allows(UserEnum::ADMINKPI)) {
+                // if ((\auth()->id() !== $evaluate->user_id) && !Gate::allows(UserEnum::ADMINKPI)) {
+                //     return $this->errorResponse("ไม่มีสิทธิ์", 500);
+                // }
+                if ((\auth()->id() !== $evaluate->user_id)) {
                     return $this->errorResponse("ไม่มีสิทธิ์", 500);
                 }
                 # send mail to Manger

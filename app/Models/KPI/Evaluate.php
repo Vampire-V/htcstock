@@ -55,7 +55,8 @@ class Evaluate extends Model
             $history->current_level = $model->current_level;
             $history->next_level = $model->next_level;
             $history->created_by = \auth()->id();
-            $history->ip = \request()->ip();
+            $history->ip = "(เปลี่ยนทุกวันใช้อ้างอิงไม่ได้)";
+            // $history->ip = \request()->ip();
             // $history->device = substr(exec('getmac'),0,17);
             $history->save();
         });
@@ -69,8 +70,8 @@ class Evaluate extends Model
             $history->comment = $model->comment;
             $history->current_level = $model->current_level;
             $history->next_level = $model->next_level;
-            $history->created_by = $user_app ? $user_app->user_approve : \auth()->id();
-            $history->ip = \request()->ip();
+            $history->created_by = is_null($model->current_level) ? \auth()->id() : $user_app->user_approve;
+            $history->ip = "(เปลี่ยนทุกวันใช้อ้างอิงไม่ได้)";
             // $history->device = substr(exec('getmac'),0,17);
             $history->save();
         });

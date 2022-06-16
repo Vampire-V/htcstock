@@ -175,7 +175,7 @@ class EvaluateReviewController extends Controller
             }
 
             if (auth()->id() !== $current_approve->user_approve) {
-                return $this->errorResponse("คุณไม่ใช่ : " . $current_approve->approveBy->name, Response::HTTP_SERVICE_UNAVAILABLE);
+                return $this->errorResponse(auth()->user()->name." ไม่ใช่ : " . $current_approve->approveBy->name, Response::HTTP_SERVICE_UNAVAILABLE);
             }
 
             foreach ($request->detail as $value) {

@@ -63,14 +63,14 @@ class Evaluate extends Model
 
         static::updated(function ($model) {
             // $model->updated_by = \auth()->id();
-            $user_app = $model->userApprove->where('level',$model->current_level)->first();
+            // $user_app = $model->userApprove->where('level',$model->current_level)->first();
             $history = new EvaluatesHistory();
             $history->evaluate_id = $model->id;
             $history->status = $model->status;
             $history->comment = $model->comment;
             $history->current_level = $model->current_level;
             $history->next_level = $model->next_level;
-            $history->created_by = is_null($model->current_level) ? \auth()->id() : $user_app->user_approve;
+            $history->created_by =  \auth()->id();
             $history->ip = "(เปลี่ยนทุกวันใช้อ้างอิงไม่ได้)";
             // $history->device = substr(exec('getmac'),0,17);
             $history->save();

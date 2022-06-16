@@ -9,7 +9,7 @@ use App\Http\Filters\IT\Query\EndAtFilter;
 use App\Http\Filters\IT\Query\StartAtFilter;
 use App\Http\Filters\IT\Query\IrFilter;
 use App\Http\Filters\IT\Query\PoFilter;
-use App\Http\Filters\KPI\Query\UserWhereIn;
+use App\Http\Filters\IT\Query\UserWhereIn;
 
 class TransactionManagementFilter extends AbstractFilter
 {

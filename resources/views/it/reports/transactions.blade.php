@@ -68,7 +68,7 @@
                             multiple>
                             @isset($users)
                             @foreach ($users as $item)
-                            <option value="{{$item->access_id}}" @if($selectedUsers->contains($item->id))
+                            <option value="{{$item->id}}" @if($selectedUsers->contains($item->id))
                                 selected @endif>{{$item->name}}
                             </option>
                             @endforeach

@@ -11,6 +11,10 @@
             placeholder: 'Select ......',
             allowClear: true
         });
+        $(".js-select-user-multiple").select2({
+            placeholder: 'Select ......',
+            allowClear: true
+        });
         if (document.getElementById("validationSCreated_at").value) {
             document.getElementById("validationECreated_at").readOnly = false;
         }

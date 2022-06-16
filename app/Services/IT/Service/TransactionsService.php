@@ -85,6 +85,6 @@ class TransactionsService extends BaseService implements TransactionsServiceInte
     }
     public function filterForHistory(Request $request)
     {
-        return Transactions::with(['accessorie','user','transactionCreated'])->filter($request)->whereNull('ref_no')->orderBy('created_at', 'desc')->paginate(10);
+        return Transactions::with(['accessorie','user','transactionCreated'])->filter($request)->orderBy('created_at', 'desc')->paginate(10);
     }
 }

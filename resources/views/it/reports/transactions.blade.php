@@ -62,6 +62,22 @@
                             Looks good!
                         </div>
                     </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="validationUser" class="">{{ __('โดย') }}</label>
+                        <select class="form-control-sm form-control js-select-user-multiple" style="width: 100%" name="user[]"
+                            multiple>
+                            @isset($users)
+                            @foreach ($users as $item)
+                            <option value="{{$item->access_id}}" @if($selectedUsers->contains($item->id))
+                                selected @endif>{{$item->name}}
+                            </option>
+                            @endforeach
+                            @endisset
+                        </select>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
                     <div class="col-md-3 mb-3">
                         <label for="validationCreated_at">{{ __('itstock.work-history.a-date') }}</label>
                         <input type="date" class="form-control-sm form-control" id="validationSCreated_at" name="start_at"

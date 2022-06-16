@@ -96,7 +96,7 @@
                         @foreach ($transactions as $key => $item)
                         <tr>
                             <th scope="row">{{$key+1}}</th>
-                            <td>{{$item->accessorie?->access_name}}</td>
+                            <td>{{ $item->accessorie ? $item->accessorie->access_name : ""}}</td>
                             <td>{{$item->quantity}}</td>
                             {{-- <td>{{$item->created_at}}</td>
                             <td>{{$item->transactionCreated->name}}</td> --}}

@@ -151,7 +151,7 @@ class UsersController extends Controller
         try {
 
             $user = $this->userService->find($id);
-            if (Storage::disk('public')->exists($user->image)) {
+            if (Storage::disk('public')->exists($user->image) && $user->image !== UserEnum::path) {
                 Storage::disk('public')->delete($user->image);
             }
             // dd();

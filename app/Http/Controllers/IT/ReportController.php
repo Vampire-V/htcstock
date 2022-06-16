@@ -34,7 +34,7 @@ class ReportController extends Controller
         $end_at = $request->end_at;
         try {
             $accessorys = $this->accessoriesService->dropdown();
-            $users = $this.userService->dropdown();
+            $users = $this->userService->dropdown();
             $transactions = $this->transactionsService->filterForHistory($request);
             return \view('it.reports.transactions', \compact('selectedAccessorys', 'selectedUsers', 'accessorys', 'users', 'transactions', 'start_at', 'end_at', 'query'));
         } catch (\Exception $e) {

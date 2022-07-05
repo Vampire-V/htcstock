@@ -96,13 +96,15 @@ class EvaluationFormController extends Controller
             $category = $this->categoryService->all();
             $templates = $this->templateService->forCreated(\auth()->id());
             $isAdmin = Gate::allows(UserEnum::ADMINKPI);
-            $rules = $this->ruleService->dropdown($category->first(function ($value, $key) {
-                return $value->name === "key-task";
-            })->id);
+            $rules = $this->ruleService->dropdown();
+            // $rules = $this->ruleService->dropdown($category->first(function ($value, $key) {
+            //     return $value->name === "key-task";
+            // })->id);
+            // dd($rules->first());
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.EvaluationForm.create', \compact('user', 'period', 'templates', 'category', 'rules','isAdmin'));
+        return \view('kpi.EvaluationForm.create', \compact('user', 'period', 'templates', 'rules', 'category', 'isAdmin'));
     }
 
     /**

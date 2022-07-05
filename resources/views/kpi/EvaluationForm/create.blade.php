@@ -249,7 +249,7 @@
 </script>
 <script defer>
     // variable
-    const staff = {!!json_encode($user)!!}, period = {!!json_encode($period)!!}, isAdmin = {!!json_encode($isAdmin)!!}
+    const staff = {!!json_encode($user)!!}, period = {!!json_encode($period)!!}, isAdmin = {!!json_encode($isAdmin)!!}, master_rules = {!!json_encode($rules)!!}
 </script>
 <script src="{{asset('assets\js\kpi\evaluationForm\create.js')}}" defer>
     // new form object evaluateForm

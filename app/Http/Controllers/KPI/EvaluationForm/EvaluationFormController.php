@@ -208,11 +208,12 @@ class EvaluationFormController extends Controller
             $templates = $this->templateService->dropdown();
             $isAdmin = Gate::allows(UserEnum::ADMINKPI);
             $evaluate = $this->evaluateService->find($evaluate);
+            $rules = $this->ruleService->dropdown();
             // $isView = $evaluate->status === KPIEnum::ready ? true : false;
         } catch (\Exception $e) {
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        return \view('kpi.EvaluationForm.edit', \compact('user', 'period', 'templates', 'category', 'evaluate','isAdmin'));
+        return \view('kpi.EvaluationForm.edit', \compact('user', 'period', 'templates', 'category', 'evaluate','isAdmin','rules'));
     }
 
     /**

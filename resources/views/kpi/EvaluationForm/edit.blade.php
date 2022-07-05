@@ -252,7 +252,7 @@
 </script>
 <script defer>
     // variable
-    const  staff = {!!json_encode($user)!!}, period = {!!json_encode($period)!!}, evaluate = {!!json_encode($evaluate)!!}, isAdmin = {!!json_encode($isAdmin)!!}
+    const  staff = {!!json_encode($user)!!}, period = {!!json_encode($period)!!}, evaluate = {!!json_encode($evaluate)!!}, isAdmin = {!!json_encode($isAdmin)!!}, master_rules = {!!json_encode($rules)!!}
 </script>
 <script src="{{asset('assets\js\kpi\evaluationForm\edit.js')}}" defer>
     // new form object evaluateForm

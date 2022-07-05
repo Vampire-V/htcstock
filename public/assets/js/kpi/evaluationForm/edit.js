@@ -281,24 +281,40 @@ $('#rule-modal').on('hide.bs.modal', function (event) {
 const dropdownRule = (category, modal) => {
     let select = modal.find('.modal-body #rule-name')[0]
     let rule_keytask = evaluateForm.detail.filter(value => value.rules.category_id === category.id)
-    getRuleDropdown(category)
-        .then(res => {
-            if (res.status === 200) {
-                let rules = res.data.data.filter(obj => rule_keytask.some(r => r.rule_id === obj.id) ? null : obj)
-                for (let index = 0; index < rules.length; index++) {
-                    const element = rules[index];
-                    select.add(new Option(element.name, element.id, false, false))
-                }
-            }
-        })
-        .catch(error => {
-            console.log(error.response.data);
-            toast(error.response.data.message, 'error')
-            toastClear()
-        })
-        .finally(() => {
-            modal.find('.modal-body #reload').removeClass('reload')
-        })
+    let rules_category = master_rules.filter(r => r.category_id === category.id)
+    try {
+        let rules = rules_category.filter(obj => rule_keytask.some(r => r.rule_id === obj.id) ? null : obj)
+        for (let index = 0; index < rules.length; index++) {
+            const element = rules[index];
+            select.add(new Option(element.name , element.id, false, false))
+        }
+      }
+      catch(err) {
+        console.error(err, err.stack);
+        toast(err.stack, 'error')
+        toastClear()
+      }
+      finally {
+        modal.find('.modal-body #reload').removeClass('reload')
+      }
+    // getRuleDropdown(category)
+    //     .then(res => {
+    //         if (res.status === 200) {
+    //             let rules = res.data.data.filter(obj => rule_keytask.some(r => r.rule_id === obj.id) ? null : obj)
+    //             for (let index = 0; index < rules.length; index++) {
+    //                 const element = rules[index];
+    //                 select.add(new Option(element.name, element.id, false, false))
+    //             }
+    //         }
+    //     })
+    //     .catch(error => {
+    //         console.log(error.response.data);
+    //         toast(error.response.data.message, 'error')
+    //         toastClear()
+    //     })
+    //     .finally(() => {
+    //         modal.find('.modal-body #reload').removeClass('reload')
+    //     })
 }
 
 const addKeyTask = (e) => {

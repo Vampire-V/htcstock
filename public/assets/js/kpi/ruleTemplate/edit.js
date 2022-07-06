@@ -201,35 +201,62 @@ $('#modal-add-rule').on('show.bs.modal', function (event) {
     let reload = modal.find('.modal-body #reload'),
         select = modal.find('.modal-body #rule_name'),
         new_rules = []
-    getRuleDropdown(group)
-        .then(response => {
-            if (response.status === 200) {
-                if (template.ruleTemplate.length > 0) {
-                    new_rules = response.data.data.filter(value => {
-                        let rre = true
-                        template.ruleTemplate.forEach(item => {
-                            if (item.rule_id === value.id) {
-                                rre = !rre;
-                            }
-                        })
-                        return rre
-                    })
-                } else {
-                    new_rules = response.data.data
-                }
-            }
-        })
-        .catch(error => {
-            console.log(error);
-            console.log(error.response.data)
-        })
-        .finally(() => {
-            for (let i = 0; i < new_rules.length; i++) {
-                const rule = new_rules[i];
-                select[0].add(new Option(rule.name, rule.id))
-            }
-            reload.removeClass('reload')
-        })
+
+    // console.log(group,rules);
+    let rules_category = rules.filter(r => r.category_id === group.id)
+    try {
+        if (template.ruleTemplate.length > 0) {
+            new_rules = rules_category.filter(value => {
+                let rre = true
+                template.ruleTemplate.forEach(item => {
+                    if (item.rule_id === value.id) {
+                        rre = !rre;
+                    }
+                })
+                return rre
+            })
+        } else {
+            new_rules = rules_category
+        }
+    } catch (error) {
+
+    } finally {
+        for (let i = 0; i < new_rules.length; i++) {
+            const rule = new_rules[i];
+            select[0].add(new Option(rule.name, rule.id))
+        }
+        reload.removeClass('reload')
+    }
+
+    // getRuleDropdown(group)
+    //     .then(response => {
+    //         if (response.status === 200) {
+    //             if (template.ruleTemplate.length > 0) {
+    //                 new_rules = response.data.data.filter(value => {
+    //                     let rre = true
+    //                     template.ruleTemplate.forEach(item => {
+    //                         if (item.rule_id === value.id) {
+    //                             rre = !rre;
+    //                         }
+    //                     })
+    //                     return rre
+    //                 })
+    //             } else {
+    //                 new_rules = response.data.data
+    //             }
+    //         }
+    //     })
+    //     .catch(error => {
+    //         console.log(error);
+    //         console.log(error.response.data)
+    //     })
+    //     .finally(() => {
+    //         for (let i = 0; i < new_rules.length; i++) {
+    //             const rule = new_rules[i];
+    //             select[0].add(new Option(rule.name, rule.id))
+    //         }
+    //         reload.removeClass('reload')
+    //     })
 
     // fetch rules filter
 })

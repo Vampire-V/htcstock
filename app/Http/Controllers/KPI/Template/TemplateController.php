@@ -14,23 +14,26 @@ use App\Services\KPI\Service\RuleCategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Services\KPI\Interfaces\RuleServiceInterface;
 
 class TemplateController extends Controller
 {
     protected $templateService, $ruleTemplateService, $departmentService,
-        $categoryService, $userService;
+        $categoryService, $userService, $ruleService;
     public function __construct(
         TemplateServiceInterface $templateServiceInterface,
         RuleTemplateServiceInterface $ruleTemplateServiceInterface,
         DepartmentServiceInterface $departmentServiceInterface,
         RuleCategoryService $categoryServiceInterface,
-        UserService $userService
+        UserService $userService,
+        RuleServiceInterface $ruleServiceInterface,
     ) {
         $this->templateService = $templateServiceInterface;
         $this->ruleTemplateService = $ruleTemplateServiceInterface;
         $this->departmentService = $departmentServiceInterface;
         $this->categoryService = $categoryServiceInterface;
         $this->userService = $userService;
+        $this->ruleService = $ruleServiceInterface;
     }
     /**
      * Display a listing of the resource.
@@ -122,7 +125,8 @@ class TemplateController extends Controller
     {
         $template = new TemplateResource($this->templateService->find($id));
         $category = $this->categoryService->dropdown();
-        return \view('kpi.RuleTemplate.Template.edit', \compact('template', 'category'));
+        $rules = $this->ruleService->dropdown();
+        return \view('kpi.RuleTemplate.Template.edit', \compact('template', 'category', 'rules'));
     }
 
     /**

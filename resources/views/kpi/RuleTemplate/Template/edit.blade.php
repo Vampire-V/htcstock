@@ -176,6 +176,7 @@
 <script src="{{asset('assets\js\kpi\index.js')}}" defer></script>
 <script>
     var template = {!!json_encode($template)!!}
+    var rules = {!!json_encode($rules)!!}
 </script>
 <script src="{{asset('assets\js\kpi\ruleTemplate\edit.js')}}" defer></script>
 @endsection

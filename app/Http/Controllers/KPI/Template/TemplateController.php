@@ -26,7 +26,7 @@ class TemplateController extends Controller
         DepartmentServiceInterface $departmentServiceInterface,
         RuleCategoryService $categoryServiceInterface,
         UserService $userService,
-        RuleServiceInterface $ruleServiceInterface,
+        RuleServiceInterface $ruleServiceInterface
     ) {
         $this->templateService = $templateServiceInterface;
         $this->ruleTemplateService = $ruleTemplateServiceInterface;

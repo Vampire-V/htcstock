@@ -149,6 +149,7 @@
                                     <a href="{{route('kpi.rule-list.edit',$item->id)}}"
                                         class="mb-2 mr-2 border-0 btn-transition btn btn-outline-info btn-sm">Edit
                                     </a>
+                                    @can('parent-admin-kpi')
                                     <a href="{{route('kpi.rule-list.destroy',$item->id)}}"
                                         class="mb-2 mr-2 border-0 btn-danger btn btn-outline-info btn-sm" onclick="remove({{$item->id}})">Remove
                                     </a>
@@ -158,6 +159,7 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
+                                    @endcan
                                 </td>
                             </tr>
                             @endforeach

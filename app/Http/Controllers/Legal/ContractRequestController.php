@@ -287,8 +287,8 @@ class ContractRequestController extends Controller
     {
         try {
             $contract = $this->contractRequestService->find($id);
-            if (!\hash_equals($contract->status, ContractEnum::RQ)) {
-                Session::flash('error',  ' Not in a state of deletion.');
+            if (!\hash_equals($contract->status, ContractEnum::D)) {
+                Session::flash('error',  ' Not in Draft state.');
                 return \redirect()->back();
             }
             if (!\hash_equals((string) $contract->created_by, (string) \auth()->id())) {
@@ -299,16 +299,17 @@ class ContractRequestController extends Controller
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
 
-        DB::beginTransaction();
+        
         try {
+            DB::beginTransaction();
             $this->contractRequestService->update(['trash' => true], $id);
+            Session::flash('success',  ' has been delete');
+            DB::commit();
+            return \redirect()->back();
         } catch (\Exception $e) {
             DB::rollBack();
             return \redirect()->back()->with('error', "Error : " . $e->getMessage());
         }
-        Session::flash('success',  ' has been delete');
-        DB::commit();
-        return \redirect()->back();
     }
 
     /**
